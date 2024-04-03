@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'Christian' => 'Christian',
+    'Father_Birth_Date' => 'Father Birth Date',
+    'Father_Info' => 'Father Info',
+    'Father_Job' => 'Father Job',
+    'Father_Learning' => 'Father Grade',
+    'Father_Name' => 'Father Name',
+    'Father_National_Id' => 'Father National Id',
+    'Mother_Birth_Date' => 'Mother Birth Date',
+    'Mother_Info' => 'Mother Info',
+    'Mother_Job' => 'Mother Job',
+    'Mother_Name' => 'Mother Name',
+    'Mother_National_Id' => 'Mother National Id',
+    'Mother_Phone' => 'Mother Mobile Number',
+    'Muslim' => 'Muslim',
+    'New' => 'New Parent',
+    'Other_Info' => 'Another Info',
+    'Religion' => 'Religion',
+    'title' => 'Parents',
+    'Address' => 'Address',
+    'new' => 'New Parent',
+    'Father_Phone' => 'Father Mobile Number',
+];
