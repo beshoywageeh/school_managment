@@ -1,4 +1,4 @@
-@props(['edit', 'delete', 'info', 'data'])
+@props(['edit', 'delete', 'info', 'data','igonre'])
 <div {{$ignore}}>
     <div class="dropdown">
         <button class="items-center dropdown-toggle btn btn-primary btn-xs">

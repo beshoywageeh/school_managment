@@ -4,8 +4,9 @@
             <div class="flex justify-between mb-4">
                 <h4 class="card-title">{{trans($page.'.title')}}</h4>
             </div>
-            @include('livewire.Student.search')
-            <table class="table table-striped" id="Grade_Table">
+            {{-- @include('livewire.Student.search') --}}
+            <livewire:student-table/>
+            {{-- <table class="table table-striped" id="Grade_Table">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -27,7 +28,7 @@
                     @endforelse
                 </tbody>
             </table>
-            {{ $data['students']->links() }}
+            {{ $data['students']->links() }} --}}
         </div>
     </div>
 </div>

@@ -11,10 +11,10 @@ class Student extends Component
     use WithPagination;
     #[Url]
     public $Search = '';
+    public $page;
+    public function mount($page=null){$this->page=$page;}
     public function render()
     {
-        $data['students']=ModelsStudent::Search($this->Search)->with(['user','classroom','parent'])->paginate(10);
-       
-        return view('livewire.Student.index',['data'=>$data]);
+        return view('livewire.Student.index');
     }
 }

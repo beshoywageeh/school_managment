@@ -9,8 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="{{ asset('storage/attachments/schools/'.$data['school']->school_name.'/'. $data['school']->image->filename) }}" type="image/png" />
     <title>@yield('page_title')</title>
+
     @livewireStyles
     @include('layouts.header_css')
+    @vite('resources/css/app.css')
 
     <style>
         *{
@@ -50,7 +52,7 @@
       <!-- Wrapper Ends -->
     </div>
     @include('layouts.footer_script')
- 
+
     @livewireScripts
   </body>
 </html>
