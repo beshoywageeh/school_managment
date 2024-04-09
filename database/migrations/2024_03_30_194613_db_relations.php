@@ -31,6 +31,12 @@ return new class extends Migration
             $table->foreign('classroom_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('parent_id')->references('id')->on('parents')->onDelete('Cascade')->onUpdate('Cascade');
         });
+        /* school fees */
+        Schema::table('school_fees', function (Blueprint $table) {
+            $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('classroom_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
+        });
     }
 
     /**
@@ -46,6 +52,11 @@ return new class extends Migration
             $table->dropForeign('grade_id');
         });
         Schema::table('parents', function (Blueprint $table) {
+            $table->dropForeign('user_id');
+        });
+        Schema::table('school_fees', function (Blueprint $table) {
+            $table->dropForeign('grade_id');
+            $table->dropForeign('classroom_id');
             $table->dropForeign('user_id');
         });
     }

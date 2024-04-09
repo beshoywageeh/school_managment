@@ -6,10 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="/svg/logo-small.svg" type="image/svg+xml" />
     <title>@yield('page_title')</title>
-
     @include('layouts.header_css')
   </head>
-
   <body>
     <div id="app" class="flex items-center justify-center w-full min-h-screen">
         <!-- Main Content Starts -->

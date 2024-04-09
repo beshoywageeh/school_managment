@@ -1,7 +1,7 @@
 import './bootstrap';
 import Alpine from "alpinejs";
 import flatpickr from "flatpickr";
-
+import SlimSelect from "slim-select";
 
 
 window.Alpine = Alpine;

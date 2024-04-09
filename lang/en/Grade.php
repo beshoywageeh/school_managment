@@ -2,7 +2,7 @@
 
 return [
     'title' => 'Grades',
-    'name' => 'name',
+    'name' => 'grade name',
     'add_date' => 'Date Added',
     'by' => 'Added By',
     'class_count' => 'Class Count',

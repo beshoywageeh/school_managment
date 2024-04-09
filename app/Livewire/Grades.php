@@ -86,7 +86,7 @@ public function mount($page){
 
     public function render()
     {
-        $data['grades']=Grade::with('user')->withCount(['class_room', 'students'])->paginate(10);
+        $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->withSum('fees', 'amount')->paginate(10);
         return view('livewire.Grades.index', ['data' => $data]);
     }
 }

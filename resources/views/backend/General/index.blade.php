@@ -36,6 +36,9 @@
         @case(request()->is('*/students'))
             <livewire:Student :page="$page" />
         @break
+        @case(request()->is('*/school_fees'))
+            <livewire:school_fees :page="$page" />
+        @break
 
         @default
     @endswitch

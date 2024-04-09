@@ -3,7 +3,7 @@
     <a href="/">
         <div class="sidebar-header">
             <div class="sidebar-logo-icon">
-                <img src="{{ asset('storage/attachments/schools/' . $data['school']->school_name . '/' . $data['school']->image->filename) }}"
+                <img src="{{ asset('attachments/schools/' . $data['school']->school_name . '/' . $data['school']->image->filename) }}"
                     alt="logo" class="h-[45px]" />
             </div>
 
@@ -33,6 +33,9 @@
         </x-nav_link>
         <x-nav_link :href="route('Students.index')" :active="request()->is('*/students')" :image="URL::asset('assests/images/Sidebar/students.png')">
             {{ trans('sidebar.Students') }}
+        </x-nav_link>
+         <x-nav_link :href="route('schoolfees.index')" :active="request()->is('*/school_fees')" :image="URL::asset('assests/images/Sidebar/money.png')">
+            {{ trans('sidebar.schoolfees') }}
         </x-nav_link>
     </ul>
     <!-- Sidebar Menu Ends -->

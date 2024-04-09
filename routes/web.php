@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
+use App\Livewire\SchoolFees;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -44,6 +45,8 @@ Route::group(
                 Route::view('/class_rooms', 'backend.General.index')->name('class_rooms.index');
                 Route::view('/parents', 'backend.General.index')->name('parents.index');
                 Route::view('/students', 'backend.General.index')->name('Students.index');
+                Route::view('/school_fees', 'backend.General.index')->name('schoolfees.index');
+
             });
         });
         require __DIR__ . '/auth.php';

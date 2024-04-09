@@ -1,16 +1,15 @@
 @props(['edit', 'delete', 'info', 'data','igonre'])
-<div {{$ignore}}>
+<div>
     <div class="dropdown">
         <button class="items-center dropdown-toggle btn btn-primary btn-xs">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="w-4 feather feather-chevron-down">
                 <polyline points="6 9 12 15 18 9"></polyline>
-            </svg></i>
+            </svg>
         </button>
         <div class="dropdown-content">
             <ul class="dropdown-list">
-                {{ $slot }}
                 @isset($edit)
                     <li class="dropdown-list-item">
                         <button class="dropdown-link" wire:click="Edit({{ $data }})">

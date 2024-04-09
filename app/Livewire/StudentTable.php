@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Grade;
 use App\Models\Student;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,89 +11,139 @@ use PowerComponents\LivewirePowerGrid\Column;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Footer;
 use PowerComponents\LivewirePowerGrid\Header;
+use PowerComponents\LivewirePowerGrid\PowerGridColumns;
 use PowerComponents\LivewirePowerGrid\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
+use PowerComponents\LivewirePowerGrid\Responsive;
+use Illuminate\View\View;
+
+use function Laravel\Prompts\select;
 
 final class StudentTable extends PowerGridComponent
 {
-
+    public string $primaryKey = 'students.id';
+    public string $sortField = 'students.id';
+    public bool $multiSort = true;
     public bool $showFilters = true;
-
+    public bool $deferLoading = true; // default false
+    public string $loadingComponent = 'components.my-custom-loading';
     public function setUp(): array
     {
         $this->showCheckBox();
 
         return [
             Header::make()
-                ->showSearchInput()
-                ->showToggleColumns(),
+                ->showToggleColumns()
+                ->withoutLoading(),
             Footer::make()
                 ->showPerPage()
-                ->showRecordCount(),
+                ->showRecordCount()
+                ->pagination('components.Paginator'),
         ];
     }
 
     public function datasource(): Builder
     {
-        return Student::query()->with('grade');
+        return Student::query()->join('grades', 'students.grade_id', '=', 'grades.id')->select('students.*', 'grades.Grade_Name as GN', 'grades.id as Gid');
     }
 
     public function relationSearch(): array
     {
         return [];
     }
-
+    public function addColumns(): PowerGridColumns
+    {
+        return PowerGrid::columns()
+            ->addColumn('link_name', function (Student $model) {
+                return '<a class="btn btn-secondary" href="' . e($model->id) . '">' . e($model->name) . '</a>';
+            });
+    }
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
             ->add('id')
             ->add('name')
-            ->add('grade_id');
+            ->add('address')
+            ->add('gender')
+            ->add('grades.Grade_Name');
     }
 
     public function columns(): array
     {
         return [
-            Column::make('Id', 'id')
+            Column::make('#', 'id')
+                ->sortable()
+                ->searchable(),
+            Column::add()
+                ->title(trans('student.Name'))
+                ->field('link_name', 'name')
+                ->sortable()
+                ->searchable(),
+            Column::add()
+                ->title(trans('student.address'))
+                ->field('address', 'address')
+                ->sortable()
+                ->searchable(),
+            Column::add()
+                ->title(trans('student.gender'))
+                ->field('gender', 'gender')
+                ->sortable()
+                ->searchable(),
+            Column::add()
+                ->title(trans('Grades.name'))
+                ->field('GN', 'Gid')
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Name', 'name')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Grade id', 'grade.Grade_Name')
-                ->sortable()
-                ->searchable(),
-
-            Column::action('Action')
+            Column::action(trans('General.actions'))
         ];
     }
-
+    // public function actionsFromView($row): View
+    // {
+    //     return view('components.drop-down_-table', ['row' => $row]);
+    // }
     public function filters(): array
     {
         return [
-   
+            Filter::inputText('name')->operators(['contains']),
+            Filter::select('GN', 'Grade_Name')
+                ->dataSource(Grade::all())
+                ->optionLabel('Grade_Name')
+                ->optionValue('Grade_Name'),
+            Filter::select('gender', 'gender')
+                ->dataSource(Student::select('gender')->distinct()->get()->toArray())
+                ->optionLabel('gender')
+                ->optionValue('gender')
         ];
     }
-
-    #[\Livewire\Attributes\On('edit')]
-    public function edit($rowId): void
-    {
-        $this->js('alert(' . $rowId . ')');
-    }
-
-    public function actions(Student $row): array
+    public function header(): array
     {
         return [
-            Button::add('edit')
-                ->slot('Edit: ' . $row->id)
-                ->id()
-                ->class('btn btn-primary')
-                ->dispatch('edit', ['rowId' => $row->id])
+            Button::add('new-modal')
+                ->slot('New window')
+                ->class('btn-primary')
+                ->openModal('new', []),
+
+            //...
         ];
     }
+    // #[\Livewire\Attributes\On('edit')]
+    // public function edit($rowId): void
+    // {
+    //     $this->js('alert(' . $rowId . ')');
+    // }
+
+    // public function actions(Student $row): array
+    // {
+    //     return [
+    //         Button::add('edit')
+    //             ->slot('Edit: ' . $row->id)
+    //             ->id()
+    //             ->class('btn btn-primary')
+    //             ->dispatch('edit', ['rowId' => $row->id])
+    //     ];
+    // }
 
     /*
     public function actionRules($row): array

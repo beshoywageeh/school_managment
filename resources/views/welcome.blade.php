@@ -20,7 +20,7 @@
                             <div class="flex flex-col gap-5 mt-6">
                                 <!-- Fullname -->
                                 <div>
-                                    <label class="mb-1 label ">{{trans('install.school_name')}}</label>
+                                    <label class="mb-1 label">{{trans('install.school_name')}}</label>
                                     <input type="text" class="input @error('schoolname') is-invalid @enderror" name="schoolname" value="{{old('schoolname')}}"placeholder="{{trans('install.school_name')}}" />
                                     @error('schoolname')
                                    <div class="mt-1 error-message">{{ $message }}</div>
@@ -45,6 +45,9 @@
                                 <div>
                                     <label class="mb-1 label">{{trans('install.logo')}}</label>
                                     <input class="input" accept="*/image" type="file" name="logo">
+                                    @error('logo')
+                                        <span>{{$message}}</span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>

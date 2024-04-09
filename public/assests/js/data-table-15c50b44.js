@@ -80,13 +80,13 @@ import"./app-b4670975.js";/* empty css            */const ke=s=>Object.prototype
 
     async function loadTable(table) {
       const tbody = table.querySelector('tbody');
-
+    
       if(tbody) {
         const response  = await fetch('/json/table-datatable.json');
-        const results   = await response.json();
-        const records   = results.data;
-
-        if(records.length) {
+        const results   = await response.json(); 
+        const records   = results.data; 
+        
+        if(records.length) { 
           records.forEach(record => {
             tbody.innerHTML += \`
                   <tr>
@@ -172,13 +172,13 @@ import"./app-b4670975.js";/* empty css            */const ke=s=>Object.prototype
 
     async function loadTable(table) {
       const tbody = table.querySelector('tbody');
-
+    
       if(tbody) {
         const response  = await fetch('/json/table-datatable.json');
-        const results   = await response.json();
-        const records   = results.data;
-
-        if(records.length) {
+        const results   = await response.json(); 
+        const records   = results.data; 
+        
+        if(records.length) { 
           records.forEach(record => {
             tbody.innerHTML += \`
               <tr>
@@ -206,10 +206,10 @@ import"./app-b4670975.js";/* empty css            */const ke=s=>Object.prototype
           });
         }
       }
-
+    
       return table;
     }
 
-
+    
   <\/script>
 `,et=createCodeViewer("#datatable-filter-code-viewer",Ke),Ee=document.querySelector("#datatable-filter");et.render();Ee&&Ae(Ee).then(s=>new Oe(s,{tableRender:(e,t,a)=>{if(a==="print")return t;const n=t.childNodes[0],o={nodeName:"TR",childNodes:n.childNodes[0].childNodes.map((i,d)=>({nodeName:"TD",childNodes:[{nodeName:"INPUT",attributes:{class:"datatable-input input",type:"search","data-columns":`[${d}]`}}]}))};return n.childNodes.push(o),t}})).catch(s=>console.log(s));

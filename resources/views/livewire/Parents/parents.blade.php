@@ -5,19 +5,17 @@
             @if ($show_table)
                 @include('livewire.Parents.table')
             @else
-
-
                 @if ($update_mode)
-                <div class="flex items-center justify-between">
-                    <h1>{{ trans('Parents.Edit') }}</h1>
-                </div>
-                <hr>
-                    <form wire:submit="UpdateParent" id="form-with-multiple-column" class="max-w-full" action="">
-                    @else
                     <div class="flex items-center justify-between">
-                        <h1>{{ trans('Parents.New') }}</h1>
+                        <h1>{{ trans('Parents.Edit') }}</h1>
                     </div>
                     <hr>
+                    <form wire:submit="UpdateParent" id="form-with-multiple-column" class="max-w-full" action="">
+                    @else
+                        <div class="flex items-center justify-between">
+                            <h1>{{ trans('Parents.New') }}</h1>
+                        </div>
+                        <hr>
                         <form wire:submit="NewParent" id="form-with-multiple-column" class="max-w-full" action="">
                 @endif
 
@@ -27,12 +25,12 @@
                     <!-- Form Row: One -->
                     <div class="flex flex-col items-center w-full gap-4 md:flex-row">
                         <!-- Form Column: Username -->
-                        <x-input name='Father_Name' class='' data="Father_Name"
+                        <x-input name='Father_Name' class=''
                             type='text'>{{ trans('Parents.Father_Name') }}</x-input>
-                        <x-input name='Father_Phone' class='' data="Father_Phone"
+                        <x-input name='Father_Phone' class=''
                             type='text'>{{ trans('Parents.Father_Phone') }}</x-input>
                         <!-- Form Column: Father_Job -->
-                        <x-input name='Father_Job' class='' data="Father_Job"
+                        <x-input name='Father_Job' class=''
                             type='text'>{{ trans('Parents.Father_Job') }}</x-input>
                     </div>
                     <!-- Form Row: Two -->
@@ -40,9 +38,9 @@
                     <div class="flex flex-col items-center w-full gap-4 md:flex-row">
                         <x-input name='Father_National_Id' class='' data="Father_National_Id"
                             type='text'>{{ trans('Parents.Father_National_Id') }}</x-input>
-                        <x-input name='Father_Birth_Date' class="input-date" data="Father_Birth_Date"
+                        <x-input name='Father_Birth_Date' class="input-date"
                             type='date'>{{ trans('Parents.Father_Birth_Date') }}</x-input>
-                        <x-input name='Father_Learning' class="" data="Father_Learning"
+                        <x-input name='Father_Learning' class=""
                             type='text'>{{ trans('Parents.Father_Learning') }}</x-input>
                     </div>
                 </div>
@@ -54,18 +52,18 @@
                     <!-- Form Row: One -->
                     <div class="flex flex-col items-center w-full gap-4 md:flex-row">
                         <!-- Form Column: Username -->
-                        <x-input name='Mother_Name' class='' data="Mother_Name"
+                        <x-input name='Mother_Name' class=''
                             type='text'>{{ trans('Parents.Mother_Name') }}</x-input>
-                        <x-input name='Mother_Phone' class='' data="Mother_Phone"
+                        <x-input name='Mother_Phone' class=''
                             type='text'>{{ trans('Parents.Mother_Phone') }}</x-input>
-                        <x-input name='Mother_Job' class='' data="Mother_Job"
+                        <x-input name='Mother_Job' class=''
                             type='text'>{{ trans('Parents.Mother_Job') }}</x-input>
                     </div>
                     <!-- Form Row: Two -->
                     <div class="flex flex-col items-center w-full gap-4 md:flex-row">
-                        <x-input name='Mother_National_Id' class='' data="Mother_National_Id"
+                        <x-input name='Mother_National_Id' class=''
                             type='text'>{{ trans('Parents.Mother_National_Id') }}</x-input>
-                        <x-input name='Mother_Birth_Date' class='input-date' data="Mother_Birth_Date"
+                        <x-input name='Mother_Birth_Date' class='input-date'
                             type='date'>{{ trans('Parents.Mother_Birth_Date') }}</x-input>
                     </div>
                 </div>

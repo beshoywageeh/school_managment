@@ -23,7 +23,7 @@ class Student extends Model
     }
         public function grade()
     {
-        return $this->belongsTo('App\Models\Grade');
+        return $this->belongsTo('App\Models\Grade', 'grade_id', 'id');
     }
     public function classroom()
     {

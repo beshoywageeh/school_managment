@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NewSchoolRequest;
 use App\Http\Traits\ImageTrait;
-use App\Models\Image;
+
 use App\Models\settings;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +16,7 @@ class SettingsController extends Controller
     public function index()
     {
         $school = settings::count() > 0;
-        if (! $school) {
+        if (!$school) {
             return view('welcome');
         } else {
             return redirect(route('login'));
@@ -33,14 +33,8 @@ class SettingsController extends Controller
             $school->phone = $request->phone;
             $school->address = $request->address;
             $school->save();
-            if ($request->hasfile('logo')) {
-                $this->uploadImage('schools/'.$request->schoolname, $request->logo, 'logo');
-                $image = new Image();
-                $image->filename = $this->uploadImage('schools/'.$request->schoolname, $request->logo, 'logo');
-                $image->imageable_id = $school->id;
-                $image->imageable_type = 'App\Models\settings';
-                $image->save();
-            }
+            $this->verifyAndStoreImage($request, 'logo', $request->schoolname, 'upload_attachments', $school->id, 'App\Models\settings');
+
             $user = new User();
             $user->first_name = $request->first_name;
             $user->second_name = $request->second_name;
@@ -49,12 +43,11 @@ class SettingsController extends Controller
             $user->login_allow = $request->loginAllow;
             $user->password = Hash::make($request->password);
             $user->save();
-            \DB::commit();
 
+            \DB::commit();
             return redirect(route('dashboard'));
         } catch (\Exception $e) {
             \DB::rollBack();
-
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }

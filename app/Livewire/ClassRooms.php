@@ -83,7 +83,7 @@ class ClassRooms extends Component
     {
         $data['class_rooms'] = class_room::with(['user', 'grade'])->withCount('students')->orderBy('grade_id', 'asc')->paginate(10);
         $data['grades'] = Grade::get();
-        
+
         return view('livewire.ClassRooms.index', ['data' => $data]);
     }
 }

@@ -28,10 +28,13 @@
         @endif
 
     </td>
-    <td>{{ $grade->created_at->format('Y/m/d') }}</td>
     <td>{{ $grade->user->first_name . ' ' . $grade->user->second_name }}</td>
+    <td>{{ $grade->created_at->format('Y/m/d') }}</td>
     <td>{{ $grade->class_room_count }}</td>
     <td>{{ $grade->students_count }}</td>
+    <td>{{number_format($grade->fees_sum_amount,2) }}&nbsp;ج.م</td>
+
+
     <td>
         <x-drop-down_-table data="wire:ignore" edit delete info :data="$grade->id">
         </x-drop-down_-table>

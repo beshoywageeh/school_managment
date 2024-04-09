@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Livewire;
-
 use App\Models\Student as ModelsStudent;
 use Livewire\Component;
 use Livewire\WithPagination;

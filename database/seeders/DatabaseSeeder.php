@@ -21,9 +21,10 @@ class DatabaseSeeder extends Seeder
           class_roomTableSeeder::class,
           My_parentsTableSeeder::class,
           ImageTableSeeder::class,
+            SchoolFeeSeeder::class,
           StudentsTableSeeder::class
         ]);
-        
+
     }
 
 }

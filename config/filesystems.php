@@ -45,7 +45,7 @@ return [
         ],
         'upload_attachments' => [
             'driver' => 'local',
-            'root' => storage_path('/attachments'),
+            'root' => public_path('/attachments/schools'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
