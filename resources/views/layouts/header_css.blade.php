@@ -9,5 +9,6 @@
 <link rel="modulepreload" crossorigin href="{{URL::asset('assests/js/app-b4670975.js')}}">
 <link rel="modulepreload" crossorigin href="{{URL::asset('assests/js/tailwind.config-687e688e.js')}}">
 <link rel="stylesheet" href="{{URL::asset('assests/css/app.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assests/css/custom.css')}}">
 
 @stack('css')

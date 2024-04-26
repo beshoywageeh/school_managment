@@ -6,9 +6,12 @@ use App\Models\class_room;
 use App\Models\Grade;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 class ClassRooms extends Component
 {
     use WithPagination;
+    #[Title('Class_Rooms')]
+    public $title = 'Class_Rooms';
     public $grade_id;
 
     public $Class_Name;
@@ -84,6 +87,6 @@ class ClassRooms extends Component
         $data['class_rooms'] = class_room::with(['user', 'grade'])->withCount('students')->orderBy('grade_id', 'asc')->paginate(10);
         $data['grades'] = Grade::get();
 
-        return view('livewire.ClassRooms.index', ['data' => $data]);
+        return view('livewire.ClassRooms.index', ['data' => $data], ['title' => $this->title]);
     }
 }

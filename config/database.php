@@ -76,6 +76,11 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => 'prefer',
+            'dump' => [
+                'dump_binary_path' => 'C:\Program Files\PostgreSQL\16\bin',
+                'use_single_transaction',
+                'timeout' => 60 * 5,
+            ]
         ],
 
         'sqlsrv' => [

@@ -1,7 +1,7 @@
 <div>
-<x-card :page="$page">
+<x-card :page="$title">
     <x-slot name="button">
-        <x-button :target="'#drawer-basic'">{{ trans('General.new') }}</x-button>
+<x-button class="primary" :target="'#drawer-basic'">{{ trans('General.new') }}</x-button>
     </x-slot>
     <x-table.table>
 
@@ -56,7 +56,7 @@
                     <td>{{ $classroom->user->first_name . ' ' . $classroom->user->second_name }}</td>
                     <td>{{ $classroom->grade->Grade_Name }}</td>
                     <td>{{ $classroom->students_count }}</td>
-                    <td>
+<td>
                         <x-drop-down_-table edit delete info :data="$classroom->id">
                         </x-drop-down_-table>
 

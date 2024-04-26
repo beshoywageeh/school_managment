@@ -4,14 +4,18 @@ namespace App\Livewire;
 
 use App\Models\Grade;
 use App\Models\school_fee;
+use App\Models\class_room;
 use Livewire\Component;
 use Livewire\Attributes\On;
+use Livewire\WithPagination;
 
 class SchoolFees extends Component
 {
+    use WithPagination;
     public $page;
     public $title = "school_fees.create";
-    public $event = 'new_fess';
+    public $event = 'New_fees';
+    public $grade_id;
     public function mount($page)
     {
         $this->page = $page;
@@ -19,12 +23,14 @@ class SchoolFees extends Component
     #[On('New_fees')]
     public function updateDataCreate()
     {
-        $data['grade'] = Grade::all(['id', 'Grade_Name']);
+
     }
 
     public function render()
     {
-        $data['fees'] = school_fee::with(['user', 'grade', 'classroom'])->get();
+        $data['fees'] = school_fee::with(['user', 'grade', 'classroom'])->paginate(env('PAGINATE_COUNT'));
+        $data['grade'] = Grade::all(['id', 'Grade_Name']);
+        $data['class_room'] = class_room::where('grade_id', 'LIKE', '%' . $this->grade_id . '%')->get();
         return view('livewire.school_fees.school-fees', ['data' => $data]);
     }
 }

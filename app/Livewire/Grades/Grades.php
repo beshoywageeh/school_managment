@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Grades;
 
 use App\Models\class_room;
 use App\Models\Grade;
 use Exception;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 
 class Grades extends Component
 {
@@ -17,10 +18,11 @@ class Grades extends Component
     public $editId;
 
     public $EditName;
-    public $page;
-public function mount($page){
-    $this->page=$page;
-}
+    public $title = 'grades';
+    #[Title('Grades')]
+    public $reportview = false;
+
+    public $report_data = null;
     public function CreateNewGrade()
     {
         try {
@@ -49,7 +51,6 @@ public function mount($page){
             } else {
                 flash()->addError(trans('general.error_delete'));
             }
-
         } catch (Exception $e) {
             flash()->addError($e);
         }
@@ -79,14 +80,17 @@ public function mount($page){
             flash()->addSuccess(trans('general.success'));
         } catch (Exception $e) {
             flash()->addError($e);
-
         }
-
     }
-
+    public function Information($id)
+    {
+        $this->reportview = true;
+        $this->report_data = Grade::where('id', $id)->with(['class_room', 'class_room.students'])->withCount(['class_room', 'students'])->first();
+        //  dd($this->report_data->class_room);
+    }
     public function render()
     {
-        $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->withSum('fees', 'amount')->paginate(10);
-        return view('livewire.Grades.index', ['data' => $data]);
+
+        return view('livewire.Grades.index', ['title' => $this->title]);
     }
 }

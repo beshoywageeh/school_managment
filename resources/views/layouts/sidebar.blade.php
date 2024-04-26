@@ -22,7 +22,8 @@
         <x-nav_link :href="route('dashboard')" :active="request()->is('*/dashboard')" :image="URL::asset('assests/images/Sidebar/dashboard.png')">
             {{ trans('Sidebar.Dashboard') }}
         </x-nav_link>
-        <x-nav_link :href="route('grades.index')" :active="request()->is('*/grades')" :image="URL::asset('assests/images/Sidebar/score.png')">
+<x-nav_link :href="route('grade.index')" :active="request()->is('*/grade')"
+    :image="URL::asset('assests/images/Sidebar/score.png')">
             {{ trans('sidebar.Grade') }}
         </x-nav_link>
         <x-nav_link :href="route('class_rooms.index')" :active="request()->is('*/class_rooms')" :image="URL::asset('assests/images/Sidebar/classroom.png')">
@@ -37,6 +38,10 @@
          <x-nav_link :href="route('schoolfees.index')" :active="request()->is('*/school_fees')" :image="URL::asset('assests/images/Sidebar/money.png')">
             {{ trans('sidebar.schoolfees') }}
         </x-nav_link>
+<x-nav_link :href="route('backup.index')" :active="request()->is('*/backup')"
+    :image="URL::asset('assests/images/Sidebar/data-recovery.png')">
+    {{ trans('sidebar.backup') }}
+</x-nav_link>
     </ul>
     <!-- Sidebar Menu Ends -->
 </aside>

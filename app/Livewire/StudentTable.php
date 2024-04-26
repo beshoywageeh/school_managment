@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Models\Grade;
 use App\Models\Student;
-use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
@@ -15,13 +14,13 @@ use PowerComponents\LivewirePowerGrid\PowerGridColumns;
 use PowerComponents\LivewirePowerGrid\PowerGrid;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
-use PowerComponents\LivewirePowerGrid\Responsive;
-use Illuminate\View\View;
+use PowerComponents\LivewirePowerGrid\Traits\WithExport;
+use PowerComponents\LivewirePowerGrid\Exportable;
 
-use function Laravel\Prompts\select;
 
 final class StudentTable extends PowerGridComponent
 {
+    use WithExport;
     public string $primaryKey = 'students.id';
     public string $sortField = 'students.id';
     public bool $multiSort = true;
@@ -33,6 +32,9 @@ final class StudentTable extends PowerGridComponent
         $this->showCheckBox();
 
         return [
+            Exportable::make('export')
+                ->striped()
+                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
             Header::make()
                 ->showToggleColumns()
                 ->withoutLoading(),
@@ -121,13 +123,14 @@ final class StudentTable extends PowerGridComponent
     {
         return [
             Button::add('new-modal')
-                ->slot('New window')
-                ->class('btn-primary')
+                ->slot(trans('general.new'))
+                ->class('btn btn-primary')
                 ->openModal('new', []),
 
             //...
         ];
     }
+}
     // #[\Livewire\Attributes\On('edit')]
     // public function edit($rowId): void
     // {
@@ -156,4 +159,3 @@ final class StudentTable extends PowerGridComponent
         ];
     }
     */
-}

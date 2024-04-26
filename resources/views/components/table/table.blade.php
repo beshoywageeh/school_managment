@@ -1,15 +1,13 @@
-<div>
-    <div class="table-resposive">
-        <table class="table table-striped">
+<div class="table-resposive">
+<table class="table table-striped table-bordered ">
 
-                {{$head}}
+{{$head}}
 
-            <tbody>
+<tbody>
 
-                {{$slot}}
+{{$slot}}
             </tbody>
-        </table>
+</table>
 
-    {{$pages ?? ''}}
-    </div>
 </div>
+{{$pages ?? ''}}

@@ -7,23 +7,14 @@
 @endsection
 @push('css')
     <style>
-        table,
-        thead,
-        tbody,
-        tr,
-        td,
-        th {
-            text-align: center !important;
-        }
+
     </style>
 @endpush
 @section('main_content')
 @include('backend.msg')
 
     @switch($page)
-        @case(request()->is('*/grades'))
-            <livewire:Grades :page="$page" />
-        @break
+
 
         @case(request()->is('*/class_rooms'))
             <livewire:ClassRooms :page="$page" />

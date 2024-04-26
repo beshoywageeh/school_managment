@@ -1,0 +1,76 @@
+@extends('layouts.app')
+@section('title')
+{{trans('Grades.title')}}
+@endsection
+@section('content')
+<div>
+    <div class="card">
+        <div class="card-body">
+            <div class="flex justify-between mb-4">
+                <h4 class="card-title">{{ trans('Grades.title') }}</h4>
+                <x-button data-toggle="drawer" data-target="#Create_Grade" class="primary">
+                    <i class="w-4" data-feather="plus-square"></i>
+                    {{ trans('Grades.new') }}
+                </x-button>
+            </div>
+            <div class="table-resposive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>{{ trans('Grades.name') }}</th>
+                            <th>{{ trans('grades.by') }}</th>
+                            <th>{{ trans('grades.add_date') }}</th>
+                            <th>{{ trans('grades.class_count') }}</th>
+                            <th>{{ trans('grades.student_count') }}</th>
+                            <th>{{ trans('grades.total_fees') }}</th>
+                            <th>{{ trans('general.actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($data['grades'] as $grade)
+                        <tr wire:key='{{$grade->id}}'>
+                            <td> {{ $loop->iteration }}</td>
+                            <td>{{ $grade->Grade_Name }}</td>
+                            <td>{{ $grade->user->first_name . ' ' . $grade->user->second_name }}</td>
+                            <td>{{ $grade->created_at->format('Y/m/d') }}</td>
+                            <td>{{ $grade->class_room_count }}</td>
+                            <td>{{ $grade->students_count }}</td>
+                            <td>{{number_format($grade->fees_sum_amount,2) }}&nbsp;ج.م</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="items-center dropdown-toggle btn btn-primary btn-xs"><i class="w-4"
+                                            data-feather="chevron-down"></i>
+                                    </button>
+                                    <div class="dropdown-content">
+                                        <ul class="dropdown-list">
+                                            <li class="dropdown-list-item">
+                                                <button class="dropdown-link">
+                                                    <i class="w-4" data-feather="edit"></i>
+                                                    {{ trans('general.edit') }}
+                                                </button>
+                                            </li>
+                                            <li class="dropdown-list-item">
+                                                <button class="dropdown-link">
+                                                    <i class="w-4" data-feather="trash-2"></i>
+                                                    {{ trans('general.delete') }} </button>
+                                            </li>
+                                            <li class="dropdown-list-item">
+                                                <button class="dropdown-link">
+                                                    <i class="w-4" data-feather="info"></i>
+                                                    {{ trans('general.info') }} </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @include('livewire.Grades.create')
+</div>
+@endsection

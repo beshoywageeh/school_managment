@@ -5,13 +5,15 @@ namespace App\Livewire;
 use App\Models\My_parents;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Validate;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Parents extends Component
 {
     use WithPagination;
-
+    public $title = 'parents';
+    #[Title('parents')]
     public $show_table = true;
 
     public $update_mode = false;
@@ -47,11 +49,7 @@ class Parents extends Component
 
     #[Url]
     public $Search = '';
-    public $page;
-    public function mount($page)
-    {
-        $this->page = $page;
-    }
+
     public function rules()
     {
         return [

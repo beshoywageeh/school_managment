@@ -8,11 +8,9 @@ use Illuminate\View\Component;
 
 class button extends Component
 {
-    public $target;
 
-    public function __construct($target)
+    public function __construct()
     {
-        $this->target = $target;
     }
 
     /**

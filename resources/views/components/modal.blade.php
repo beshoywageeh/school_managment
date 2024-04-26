@@ -1,5 +1,5 @@
-@props(['size', 'iden', 'modalTitle', 'eventName'])
-<div class="modal {{ $size ?? '' }}" id="{{ $iden }}">
+@props(['size', 'modalTitle', 'eventName'])
+<div wire:ignore class="modal {{ $size ?? '' }}" id="{{ $eventName }}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -19,7 +19,7 @@
                 <div class="flex items-center justify-end gap-4">
                     <button x-on:click="$dispatch('{{ $eventName }}-close')" type="button" class="btn btn-secondary"
                         data-dismiss="modal">{{ trans('General.close') }}</button>
-                    <button x-on:click="$dispatch('{{ $eventName }}')" type="button"
+<button type="submit"
                         class="btn btn-primary">{{ trans('general.save') }}</button>
                 </div>
             </div>

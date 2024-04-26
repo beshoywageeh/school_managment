@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider::class,
         Mckenziearts\Notify\LaravelNotifyServiceProvider::class,
+        Alkoumi\LaravelArabicNumbers\LaravelArabicNumbersServiceProvider::class,
     ])->toArray(),
 
     /*
