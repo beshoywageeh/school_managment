@@ -1,3 +1,4 @@
+@stack('css')
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -8,7 +9,7 @@
 <script type="module" crossorigin src="{{URL::asset('assests/js/index-57787c39.js')}}"></script>
 <link rel="modulepreload" crossorigin href="{{URL::asset('assests/js/app-b4670975.js')}}">
 <link rel="modulepreload" crossorigin href="{{URL::asset('assests/js/tailwind.config-687e688e.js')}}">
+<link rel="stylesheet" href="{{URL::asset('assests/css/slimselect.css')}}">
 <link rel="stylesheet" href="{{URL::asset('assests/css/app.css')}}">
 <link rel="stylesheet" href="{{URL::asset('assests/css/custom.css')}}">
 
-@stack('css')

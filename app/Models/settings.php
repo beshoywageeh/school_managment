@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class settings extends Model
 {
     use HasFactory;
+    //public $table='settings';
 
     public function image()
     {

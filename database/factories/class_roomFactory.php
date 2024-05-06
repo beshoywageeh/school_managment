@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Factories;
-use App\Models\Grade;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +19,7 @@ class class_roomFactory extends Factory
         return [
             'class_name' => $this->faker->words(1, true),
             'grade_id' => $this->faker->numberBetween(1, 4),
-            'user_id' => '1'
+            'user_id' => '1',
         ];
     }
 }

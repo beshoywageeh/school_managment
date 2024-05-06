@@ -12,6 +12,7 @@ class card extends Component
      * Create a new component instance.
      */
     public $page;
+
     public function __construct($page)
     {
         $this->page = $page;

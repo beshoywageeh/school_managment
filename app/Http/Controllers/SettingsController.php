@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NewSchoolRequest;
 use App\Http\Traits\ImageTrait;
-
 use App\Models\settings;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +15,7 @@ class SettingsController extends Controller
     public function index()
     {
         $school = settings::count() > 0;
-        if (!$school) {
+        if (! $school) {
             return view('welcome');
         } else {
             return redirect(route('login'));
@@ -45,9 +44,11 @@ class SettingsController extends Controller
             $user->save();
 
             \DB::commit();
+
             return redirect(route('dashboard'));
         } catch (\Exception $e) {
             \DB::rollBack();
+
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }

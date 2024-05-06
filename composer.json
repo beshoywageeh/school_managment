@@ -22,6 +22,7 @@
         "openspout/openspout": "^4.23",
         "outhebox/laravel-translations": "^1.0",
         "php-flasher/flasher-laravel": "^1.15",
+        "php-flasher/flasher-sweetalert-laravel": "^1.15",
         "power-components/livewire-powergrid": "^5.4",
         "spatie/laravel-backup": "^8.6"
     },
@@ -29,7 +30,7 @@
         "barryvdh/laravel-debugbar": "^3.10",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^1.29",
-        "laravel/pint": "^1.0",
+        "laravel/pint": "^1.15",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",

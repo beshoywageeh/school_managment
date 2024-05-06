@@ -19,12 +19,15 @@ class My_parents extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
-    public function Student()
-    {
-        return $this->hasMany('App\Models\Student','parent_id');
-    }
-public function scopeSearch($query,$Search){
 
-    return $query->where('Father_Name', 'LIKE', '%' . $Search . '%');
-}
+    public function Students()
+    {
+        return $this->hasMany('App\Models\Student', 'parent_id')->orderBy('join_date','ASC');
+    }
+
+    public function scopeSearch($query, $Search)
+    {
+
+        return $query->where('Father_Name', 'LIKE', '%'.$Search.'%');
+    }
 }

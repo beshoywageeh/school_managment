@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\settings;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class settingsTableSeeder extends Seeder

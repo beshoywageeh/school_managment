@@ -1,13 +1,17 @@
 <?php
 
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\ClassRooms\ClassRoomsController;
+use App\Http\Controllers\Grades\GradesController;
+use App\Http\Controllers\Parents\MyParentsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\Students\StudentsController;
+use App\Livewire\Dashboard\Dashboard;
+use App\Livewire\SchoolFees;
+use App\Livewire\Student;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
-use App\Livewire\{Parents, ClassRooms, Student, SchoolFees};
-use App\Livewire\Dashboard\Dashboard;
-
 
 /*
  |
@@ -19,7 +23,6 @@ use App\Livewire\Dashboard\Dashboard;
  | be assigned to the "web" middleware group. Make something great!
  |
  */
-
 
 Route::group(
 
@@ -36,27 +39,62 @@ Route::group(
         Route::get('/', [SettingsController::class, 'index'])->name('create_new_school');
         Route::post('/new', [SettingsController::class, 'store'])->name('new_school');
 
-
         Route::middleware('auth')->group(function () {
             //Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
             Route::get('/dashboard', Dashboard::class)->name('dashboard');
-            Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-            Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-            Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-            Route::resource('grade', \App\Http\Controllers\Grades\GradesController::class);
-            //   Route::get('/grades', Grades::class)->name('grades.index');
-            Route::get('/class_rooms', ClassRooms::class)->name('class_rooms.index');
-            Route::get('/parents', Parents::class)->name('parents.index');
-            Route::get('/students', Student::class)->name('Students.index');
+            Route::group(['controller' => ProfileController::class], function () {
+                Route::get('/profile', 'edit')->name('profile.edit');
+                Route::patch('/profile', 'update')->name('profile.update');
+                Route::delete('/profile', 'destroy')->name('profile.destroy');
+            });
+            Route::group(['prefix' => 'grade', 'controller' => GradesController::class], function () {
+                Route::get('/index', 'index')->name('grade.index');
+                Route::get('/{id}/destroy', 'destroy')->name('grade.destroy');
+                Route::get('/{id}/show', 'show')->name('grade.show');
+                Route::post('/store', 'store')->name('grade.store');
+                Route::post('/update', 'update')->name('grade.update');
+            });
+            Route::group(['prefix' => 'class_rooms', 'controller' => ClassRoomsController::class], function () {
+                Route::get('/index', 'index')->name('class_rooms.index');
+                Route::get('/{id}/destroy', 'destroy')->name('class_rooms.destroy');
+                Route::get('/{id}/show', 'show')->name('class_room.show');
+                Route::post('/store', 'store')->name('class_rooms.store');
+                Route::post('/update', 'update')->name('class_rooms.update');
+            });
+            Route::group(['prefix' => 'parents', 'controller' => MyParentsController::class], function () {
+                Route::get('/index', 'index')->name('parents.index');
+                Route::get('/create', 'create')->name('parents.create');
+                Route::get('{id}/edit', 'edit')->name('parents.edit');
+                Route::get('/{id}/destroy', 'destroy')->name('parents.destroy');
+                Route::get('/{id}/show', 'show')->name('parent.show');
+                Route::post('/store', 'store')->name('parents.store');
+                Route::post('/update', 'update')->name('parents.update');
+            });
+            Route::group(['prefix' => 'students', 'controller' => StudentsController::class], function () {
+                Route::get('/index', 'index')->name('Students.index');
+                Route::get('/create', 'create')->name('Students.create');
+                Route::get('{id}/edit', 'edit')->name('Students.edit');
+                Route::get('/{id}/destroy', 'destroy')->name('Students.destroy');
+                Route::get('/{id}/show', 'show')->name('Students.show');
+                Route::post('/store', 'store')->name('Students.store');
+                Route::post('/update', 'update')->name('Students.update');
+            });
+
             Route::get('/school_fees', SchoolFees::class)->name('schoolfees.index');
-            Route::get('/backup', [BackupController::class, 'index'])->name('backup.index');
-            Route::get('/backup/create', [BackupController::class, 'create'])->name('backup.create');
+            Route::group(['prefix' => 'backup', 'controller' => BackupController::class], function () {
+                Route::get('/index', 'index')->name('backup.index');
+                Route::get('/create', 'create')->name('backup.create');
+                Route::get('/download/{file_name}', 'download')->name('backup.download');
+                Route::get('/delete/{file_name}', 'delete')->name('backup.delete');
+            });
+            Route::group(['prefix'=>'ajax'],function(){
+                Route::get('/get_classRooms/{id}',[StudentsController::class,'getclasses']);
+            });
         });
     }
 );
-require __DIR__ . '/auth.php';
-
+require __DIR__.'/auth.php';
 
 if (config('app.env') == 'local') {
-    require __DIR__ . '/local.php';
+    require __DIR__.'/local.php';
 }

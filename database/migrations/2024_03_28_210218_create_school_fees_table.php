@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('school_fees', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('grade_id')->nullable();
-            $table->bigInteger('classroom_id')->nullable();
-            $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('grade_id')->unsigned()->nullable();
+            $table->bigInteger('classroom_id')->unsigned()->nullable();
+            $table->bigInteger('user_id')->unsigned()->nullable();
             $table->string('description')->require();
             $table->decimal('amount', 8, 2)->require();
             $table->timestamps();

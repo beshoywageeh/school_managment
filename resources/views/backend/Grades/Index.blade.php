@@ -8,7 +8,7 @@
         <div class="card-body">
             <div class="flex justify-between mb-4">
                 <h4 class="card-title">{{ trans('Grades.title') }}</h4>
-                <x-button data-toggle="drawer" data-target="#Create_Grade" class="primary">
+<x-button data-toggle="modal" data-target="#CreateGrade" class="primary">
                     <i class="w-4" data-feather="plus-square"></i>
                     {{ trans('Grades.new') }}
                 </x-button>
@@ -29,10 +29,17 @@
                     </thead>
                     <tbody>
                         @foreach ($data['grades'] as $grade)
-                        <tr wire:key='{{$grade->id}}'>
-                            <td> {{ $loop->iteration }}</td>
-                            <td>{{ $grade->Grade_Name }}</td>
-                            <td>{{ $grade->user->first_name . ' ' . $grade->user->second_name }}</td>
+<tr>
+<td> {{ $data['grades']->firstItem()+$loop->index }}</td>
+<td>
+    <a target='_blank' href="{{route('grade.show',$grade->id)}}">{{ $grade->Grade_Name
+        }}</a>
+
+</td>
+<td>
+
+
+    {{ $grade->user->first_name . ' ' . $grade->user->second_name }}</td>
                             <td>{{ $grade->created_at->format('Y/m/d') }}</td>
                             <td>{{ $grade->class_room_count }}</td>
                             <td>{{ $grade->students_count }}</td>
@@ -45,32 +52,59 @@
                                     <div class="dropdown-content">
                                         <ul class="dropdown-list">
                                             <li class="dropdown-list-item">
-                                                <button class="dropdown-link">
+<button class="dropdown-link" data-toggle="modal" data-target="#grade-edit-{{$grade->id}}">
                                                     <i class="w-4" data-feather="edit"></i>
                                                     {{ trans('general.edit') }}
                                                 </button>
                                             </li>
                                             <li class="dropdown-list-item">
-                                                <button class="dropdown-link">
-                                                    <i class="w-4" data-feather="trash-2"></i>
-                                                    {{ trans('general.delete') }} </button>
+<a href="{{ route('grade.destroy', $grade->id) }}" class="dropdown-link" onclick="confirmation(event)"><i class="w-4"
+        data-feather="trash-2"></i>
+    {{ trans('general.delete') }}</a>
                                             </li>
                                             <li class="dropdown-list-item">
-                                                <button class="dropdown-link">
+<a target="_blank" href="{{route('grade.show',$grade->id)}}" class="dropdown-link">
                                                     <i class="w-4" data-feather="info"></i>
-                                                    {{ trans('general.info') }} </button>
+{{ trans('general.info') }} </a>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
                             </td>
                         </tr>
+@include('backend.Grades.edit')
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    @include('livewire.Grades.create')
+@include('backend.Grades.Create')
 </div>
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">
+</script>
+<script>
+    //  import Swal from 'sweetalert2/dist/sweetalert2.js';
+
+function confirmation(ev){
+ev.preventDefault();
+const urlToRedirect = ev.currentTarget.getAttribute('href');
+console.log(urlToRedirect);
+Swal.fire({
+title:"{{trans('general.confirm')}}",
+text:"{{trans('general.confirmation')}}",
+icon:"warning",
+showConfirmButton:true,
+shoCancelButton:true,
+dangerMode: true,
+}).then((result)=>{
+if(result.isConfirmed){
+window.location.href=urlToRedirect;
+}
+});
+}
+</script>
+
+@endpush
 @endsection

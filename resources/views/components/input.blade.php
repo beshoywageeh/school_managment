@@ -1,11 +1,9 @@
-@props(['name','type'])
+@props(['name', 'type'])
 <div class="w-full md:w-1/3">
-    <label class="mb-1 label label-required" for="form-with-multiple-column-username">
-        {{$slot}}
-    </label>
-<input class="input" name="{{$name}}" id="form-with-multiple-column-username" type="{{$type}}" placeholder=""
-    {{$attributes}}>
+<label for="{{ $name }}" class="mb-1 label label-required">{{ $slot }}</label>
+    <input {{ $attributes->class(['input', 'is-invalid' => $errors->has($name)])->merge(['name' => $name, 'id' => $name,
+    'type' => $type]) }}>
     @error($name)
-<div class="error-message">{{ $message }}</div>
+<div class="mt-1 error-message">{{ $message }}</div>
     @enderror
 </div>

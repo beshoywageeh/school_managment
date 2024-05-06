@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'gender',
@@ -15,26 +16,33 @@ class Student extends Model
         'parent_id',
         'user_id',
         'grade_id',
-        'class_room_id',
+        'classroom_id',
+        'address','join_date'
     ];
+
     public function user()
     {
         return $this->belongsTo('App\Models\User');
     }
-        public function grade()
+
+    public function grade()
     {
         return $this->belongsTo('App\Models\Grade', 'grade_id', 'id');
     }
+
     public function classroom()
     {
         return $this->belongsTo('App\Models\class_room');
     }
+
     public function parent()
     {
         return $this->belongsTo('App\Models\My_parents');
     }
-    public function scopeSearch($query,$Search){
 
-        return $query->where('name', 'LIKE', '%' . $Search . '%');
+    public function scopeSearch($query, $Search)
+    {
+
+        return $query->where('name', 'LIKE', '%'.$Search.'%');
     }
 }

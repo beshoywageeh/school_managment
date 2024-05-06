@@ -51,10 +51,10 @@ return [
         ],
         'backup' => [
             'driver' => 'local',
-            'root' => public_path('/backup'),
-            'url' => env('APP_URL') . '/backup',
+            'root' => storage_path('app/backup'),
+            'url' => env('APP_URL').'/backup',
             'visibility' => 'public',
-            'trow' => false
+            'trow' => false,
         ],
 
         's3' => [

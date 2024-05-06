@@ -24,6 +24,7 @@ class class_room extends Model
     {
         return $this->belongsTo('App\Models\Grade', 'grade_id');
     }
+
     public function students()
     {
         return $this->hasMany('App\Models\Student', 'classroom_id');

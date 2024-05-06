@@ -17,7 +17,9 @@
     },
     "dependencies": {
         "flatpickr": "^4.6.13",
+        "print-js": "^1.6.0",
         "slim-select": "^2.8.2",
+        "sweetalert2": "^11.6.13",
         "tom-select": "^2.3.1"
     }
 }

@@ -24,10 +24,12 @@ class Grade extends Model
     {
         return $this->hasMany(class_room::class, 'grade_id');
     }
+
     public function students()
     {
         return $this->hasMany('App\Models\Student', 'grade_id');
     }
+
     public function fees()
     {
         return $this->hasMany('App\Models\school_fee', 'grade_id');

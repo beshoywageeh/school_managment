@@ -33,9 +33,6 @@ class UserFactory extends Factory
             'login_allow' => '1',
             'password' => \Hash::make('hypervision'),
 
-
-
-
         ];
     }
 }

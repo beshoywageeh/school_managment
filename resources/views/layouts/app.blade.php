@@ -1,6 +1,3 @@
-@php
-    $data['school'] = App\Models\settings::with('image')->first();
-@endphp
 <!DOCTYPE html>
 <html lang="{{str_replace('_','-',app()->getLocale())}}" dir="rtl">
 
@@ -9,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon"
-        href="{{ asset('storage/attachments/schools/' . $data['school']->school_name . '/' . $data['school']->image->filename) }}"
+href="{{ asset('storage/attachments/schools/' . $school->school_name . '/' . $school->image->filename) }}"
         type="image/png" />
 <title>@yield('title')</title>
 
@@ -22,14 +19,14 @@
 
 <body>
 <div id='loader' class="flex items-center justify-center w-full min-h-screen">
-    <div class="sk-chase">
-        <div class="sk-chase-dot before:bg-primary-500"></div>
-        <div class="sk-chase-dot before:bg-primary-500"></div>
-        <div class="sk-chase-dot before:bg-primary-500"></div>
-        <div class="sk-chase-dot before:bg-primary-500"></div>
-        <div class="sk-chase-dot before:bg-primary-500"></div>
-        <div class="sk-chase-dot before:bg-primary-500"></div>
-    </div>
+<div class="sk-chase">
+    <div class="sk-chase-dot before:bg-primary-500"></div>
+    <div class="sk-chase-dot before:bg-primary-500"></div>
+    <div class="sk-chase-dot before:bg-primary-500"></div>
+    <div class="sk-chase-dot before:bg-primary-500"></div>
+    <div class="sk-chase-dot before:bg-primary-500"></div>
+    <div class="sk-chase-dot before:bg-primary-500"></div>
+</div>
 </div>
 
 <div id="app" style="display:none;">
@@ -61,6 +58,7 @@
     </div>
 
     @livewireScripts
+
     @include('layouts.footer_script')
 </body>
 

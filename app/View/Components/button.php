@@ -8,7 +8,6 @@ use Illuminate\View\Component;
 
 class button extends Component
 {
-
     public function __construct()
     {
     }

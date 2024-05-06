@@ -17,9 +17,10 @@ class GradeFactory extends Factory
     const GRADENAMES = [
         'الابتدائية', 'الاعدادية', 'الثانوي', 'حضانة',
     ];
+
     public function definition(): array
     {
-       
+
         return [
             'Grade_Name' => static::GRADENAMES[array_rand(static::GRADENAMES)],
             'user_id' => '1',
