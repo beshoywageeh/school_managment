@@ -45,7 +45,7 @@ return [
         ],
         'upload_attachments' => [
             'driver' => 'local',
-            'root' => public_path('/attachments/schools'),
+            'root' => storage_path('/attachments/schools'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
@@ -56,7 +56,13 @@ return [
             'visibility' => 'public',
             'trow' => false,
         ],
-
+        'logs' => [
+            'driver' => 'local',
+            'root' => storage_path('logs'),
+            'url' => env('APP_URL').'/logs',
+            'visibility' => 'public',
+            'trow' => false,
+        ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

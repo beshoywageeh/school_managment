@@ -7,9 +7,8 @@ use App\Http\Controllers\Parents\MyParentsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\Students\StudentsController;
-use App\Livewire\Dashboard\Dashboard;
+use App\Http\Controllers\HomeController;
 use App\Livewire\SchoolFees;
-use App\Livewire\Student;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -40,8 +39,8 @@ Route::group(
         Route::post('/new', [SettingsController::class, 'store'])->name('new_school');
 
         Route::middleware('auth')->group(function () {
-            //Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-            Route::get('/dashboard', Dashboard::class)->name('dashboard');
+            Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+            //Route::get('/dashboard', Dashboard::class)->name('dashboard');
             Route::group(['controller' => ProfileController::class], function () {
                 Route::get('/profile', 'edit')->name('profile.edit');
                 Route::patch('/profile', 'update')->name('profile.update');

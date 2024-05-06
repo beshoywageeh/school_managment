@@ -1,27 +1,27 @@
 @extends('layouts.app')
 @section('title')
-{{trans('parents.show')}} | {{ $parent->Father_Name }}
+{{trans('student.show')}} | {{ $student->name }}
 @endsection
 @section('content')
 <div class="card">
     <div class="card-body">
         <div class="flex justify-between mb-4">
-            <h4 class="card-title">{{ $parent->Father_Name }}</h4>
+            <h4 class="card-title">{{ $student->name }}</h4>
         </div>
         @include('backend.msg')
         <div class="mb-4 table-responsive">
             <table class="table table-striped table-bordered">
                 <tr>
-                    <th>{{ trans('Parents.Father_Name') }}</th>
-                    <td>{{ $parent->Father_Name }}</td>
-                    <th>{{ trans('Parents.Father_Phone') }}</th>
-                    <td>{{ $parent->Father_Phone }}</td>
+                    <th>{{ trans('parents.Father_Name') }}</th>
+                    <td>{{ $student->parent->Father_Name }}</td>
+                    <th>{{ trans('parents.Father_Phone') }}</th>
+                    <td>{{ $student->parent->Father_Phone }}</td>
                 </tr>
                 <tr>
-                    <th>{{ trans('Parents.Mother_Name') }}</th>
-                    <td>{{ $parent->Mother_Name }}</td>
-                    <th>{{ trans('Parents.Mother_Phone') }}</th>
-                    <td>{{ $parent->Mother_Phone }}</td>
+                    <th>{{ trans('parents.Mother_Name') }}</th>
+                    <td>{{ $student->parent->Mother_Name }}</td>
+                    <th>{{ trans('parents.Mother_Phone') }}</th>
+                    <td>{{ $student->parent->Mother_Phone }}</td>
                 </tr>
             </table>
         </div>
@@ -34,14 +34,13 @@
                     <th>{{trans('student.gender')}}</th>
                     <th>{{trans('student.grade')}}</th>
                 </tr>
-                @foreach ($parent->students as $student )
                 <tr>
                     <td>{{$student->name}}</td>
                     <td>{{$student->birth_date}}</td>
                     <td>{{$student->gender}}</td>
                     <td>{{$student->grade->Grade_Name}}</td>
                 </tr>
-                @endforeach
+
             </table>
         </div>
     </div>

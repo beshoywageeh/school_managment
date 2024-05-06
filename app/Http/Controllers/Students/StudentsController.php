@@ -32,7 +32,7 @@ class StudentsController extends Controller
      */
     public function store(StudentRequest $request)
     {
-        
+
          try{
             Student::create([
                 'name'=>$request->student_name,
@@ -57,7 +57,13 @@ class StudentsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try{
+            $student = Student::where('id',$id)->with(['user','grade','classroom','parent'])->first();
+            return view('backend.Students.show',get_defined_vars());
+        }catch(\Exception $e){
+            session()->flash('error',$e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
@@ -65,15 +71,41 @@ class StudentsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        try{
+            $grades=Grade::all(['id','Grade_Name']);
+        $parents=My_parents::all(['id','Father_Name']);
+            $student = Student::findorfail($id);
+            return view('backend.Students.edit',get_defined_vars());
+        }catch(\Exception $e){
+            session()->flash('error',$e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StudentRequest $request)
     {
-        //
+        try{
+            $student = student::findorfail($request->id);
+            $student->update([
+                'name'=>$request->student_name,
+                'birth_date'=>$request->birth_date,
+                'join_date'=>$request->join_date,
+                'gender'=>($request->gender =="" )?$student->gender:$request->gender,
+                'grade_id'=>$request->grade,
+                'parent_id'=>$request->parents,
+                'classroom_id'=>($request->class_room =="" )?$student->classroom_id:$request->class_room,
+                'address'=>$request->address,
+                'user_id'=>\Auth::Id(),
+            ]);
+            session()->flash('success',trans('general.success'));
+             return redirect()->route('Students.index');
+         }catch(\Exception $e){
+             session()->flash('error', $e->getMessage());
+             return redirect()->back()->withInput();
+         }
     }
 
     /**
@@ -81,7 +113,13 @@ class StudentsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{
+            Student::where('id',$id)->delete();
+            return redirect()->back()->with('success',trans('general.success'));
+        }catch(\Exception $e){
+            session()->flash('error',$e->getMessage());
+            return redirect()->back();
+        }
     }
 
 

@@ -41,10 +41,6 @@ $files=$disk->files(config('backup.backup.name'));
             $files = array_map('basename', $status->backupDestination()->disk()->files($name));
             $rows[$index]['files'] = array_slice(array_reverse($files), 0, 30);
         }
-
-
-//return $rows;
-
         return view('backend.backup.index', compact('backups','rows'));
     }
 

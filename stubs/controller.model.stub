@@ -13,7 +13,8 @@ class {{ class }} extends Controller
      */
     public function index()
     {
-        //
+         ${{model}}={{model}}::all();
+         return view('.index',get_defined_vars());
     }
 
     /**
@@ -21,7 +22,13 @@ class {{ class }} extends Controller
      */
     public function create()
     {
-        //
+        try{
+
+            return view('',get_defined_vars());
+        }catch(\Exception $e){
+            session()->flash('error',$e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
@@ -29,7 +36,14 @@ class {{ class }} extends Controller
      */
     public function store({{ storeRequest }} $request)
     {
-        //
+         try{
+
+            session()->flash('success',trans('general_success'));
+            return view('',get_defined_vars());
+        }catch(\Exception $e){
+            session()->flash('error',$e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
@@ -45,7 +59,14 @@ class {{ class }} extends Controller
      */
     public function edit({{ model }} ${{ modelVariable }})
     {
-        //
+        try{
+            ${{modelVariable}}= {{model}}::findorFail(${{modelVariable}})
+            session()->flash('success',trans('general_success'));
+            return view('',get_defined_vars());
+        }catch(\Exception $e){
+            session()->flash('error',$e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
@@ -53,7 +74,15 @@ class {{ class }} extends Controller
      */
     public function update({{ updateRequest }} $request, {{ model }} ${{ modelVariable }})
     {
-        //
+        try{
+
+            session()->flash('success',trans('general_success'));
+            return view('',get_defined_vars());
+        }catch(\Exception $e){
+
+            session()->flash('error',$e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**
@@ -61,6 +90,14 @@ class {{ class }} extends Controller
      */
     public function destroy({{ model }} ${{ modelVariable }})
     {
-        //
+        try{
+
+            {{ model }}::destroy(${{ modelVariable }});
+            session()->flash('success',trans('general_success'));
+            return view('',get_defined_vars());
+        }catch(\Exception $e){
+            session()->flash('error',$e->getMessage());
+            return redirect()->back();
+        }
     }
 }

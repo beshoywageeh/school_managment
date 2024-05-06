@@ -1,8 +1,8 @@
 @extends('layouts.app')
-@section('page_title')
-
+@section('title')
+{{trans('Sidebar.Dashboard')}}
 @endsection
 
-@section('main_content')
+@section('content')
 
 @endsection

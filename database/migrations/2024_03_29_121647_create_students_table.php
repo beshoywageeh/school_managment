@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('birth_date');
             $table->string('address');
             $table->date('join_date');
+            $table->string('national_id');
             $table->enum('gender', ['male', 'female']);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('grade_id');

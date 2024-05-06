@@ -5,9 +5,7 @@ namespace App\Livewire;
 use App\Models\Grade;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Builder;
-use PowerComponents\LivewirePowerGrid\Button;
 use PowerComponents\LivewirePowerGrid\Column;
-use PowerComponents\LivewirePowerGrid\Exportable;
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
 use PowerComponents\LivewirePowerGrid\Footer;
 use PowerComponents\LivewirePowerGrid\Header;
@@ -16,7 +14,7 @@ use PowerComponents\LivewirePowerGrid\PowerGridColumns;
 use PowerComponents\LivewirePowerGrid\PowerGridComponent;
 use PowerComponents\LivewirePowerGrid\PowerGridFields;
 use PowerComponents\LivewirePowerGrid\Traits\WithExport;
-
+use Illuminate\View\View;
 final class StudentTable extends PowerGridComponent
 {
     use WithExport;
@@ -35,8 +33,6 @@ final class StudentTable extends PowerGridComponent
 
     public function setUp(): array
     {
-        $this->showCheckBox();
-
         return [
             Header::make()
                 ->showToggleColumns()
@@ -107,10 +103,10 @@ final class StudentTable extends PowerGridComponent
         ];
     }
 
-    // public function actionsFromView($row): View
-    // {
-    //     return view('components.drop-down_-table', ['row' => $row]);
-    // }
+     public function actionsFromView($row): View
+     {
+         return view('components.student_-table_-action', ['row' => $row]);
+     }
     public function filters(): array
     {
         return [
@@ -125,44 +121,4 @@ final class StudentTable extends PowerGridComponent
                 ->optionValue('gender'),
         ];
     }
-
-    // public function header(): array
-    // {
-    //     return [
-    //         Button::add('new-modal')
-    //             ->slot(trans('general.new'))
-    //             ->class('btn btn-primary')
-    //             ->openModal('new', []),
-
-    //         //...
-    //     ];
-    // }
-}
-// #[\Livewire\Attributes\On('edit')]
-// public function edit($rowId): void
-// {
-//     $this->js('alert(' . $rowId . ')');
-// }
-
-// public function actions(Student $row): array
-// {
-//     return [
-//         Button::add('edit')
-//             ->slot('Edit: ' . $row->id)
-//             ->id()
-//             ->class('btn btn-primary')
-//             ->dispatch('edit', ['rowId' => $row->id])
-//     ];
-// }
-
-/*
-public function actionRules($row): array
-{
-   return [
-        // Hide button edit for ID 1
-        Rule::button('edit')
-            ->when(fn($row) => $row->id === 1)
-            ->hide(),
-    ];
-}
-*/
+  }
