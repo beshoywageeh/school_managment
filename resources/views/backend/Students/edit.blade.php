@@ -19,7 +19,7 @@
 
                     <x-input type="text" name="student_name" value="{{$student->name}}">{{ trans('student.name') }}
                     </x-input>
-                    <x-input type="date" name="birth_date" value="{{$student->birth_date}}">
+                    <x-input type="date" name="birth_date" class="input-date" value="{{$student->birth_date}}">
                     {{ trans('student.birth_date')}}
                     </x-input>
                     <div class="w-full md:w-1/3">
@@ -34,7 +34,7 @@
                     <x-input type="text" name="national_id" value="{{$student->national_id}}">{{
                         trans('student.national_id') }}
                     </x-input>
-                    <x-input type="date" name="join_date" value="{{$student->join_date}}">{{ trans('student.join_date')
+                    <x-input type="date" name="join_date" class="input-date" value="{{$student->join_date}}">{{ trans('student.join_date')
                         }}
                     </x-input>
                     <x-input.gender-select name="gender">
@@ -60,7 +60,7 @@
                         <select class='select' name="grade" id="grades">
                             <option> {{trans('student.choose_grade')}}</option>
                             @foreach ($grades as $grade)
-                            <option @selected($grade->id == $student->grade_id) value="{{ $grade->id }}">{{ $grade->Grade_Name }}</option>
+                            <option @selected($student->grade_id==$grade->id) value="{{ $grade->id }}">{{ $grade->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -69,16 +69,16 @@
                             {{trans('student.choose_classroom')}}
                         </label>
                         <select class='select' name="class_room" id="classrooms">
-                            <option selected>{{$student->classroom->name}}</option>
+                            <option selected value="{{$student->classroom_id}}">{{$student->classroom->name}}</option>
                         </select>
                     </div>
                     <div class="w-full md:w-1/3">
                         <label for="parent" class="mb-1 label">{{trans('student.parent')}}</label>
-                        <select name="parents" id="parents" class="w-full input input-bordered bg-slate-100">
+                        <select name="parents" id="" class="w-full input input-bordered tom-select">
                             <option> {{trans('student.parent')}}</option>
 
                             @foreach ($parents as $parent)
-                            <option @selected($parent->id == $student->parent_id) value="{{$parent->id}}">{{ $parent->Father_Name }}</option>
+                            <option @selected($student->parent_id==$parent->id) value="{{$parent->id}}">{{ $parent->Father_Name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -96,13 +96,6 @@
 </div>
 
 @push('scripts')
-<script>
-    new SlimSelect({
-	select: '#parents',
-});
-
-
-</script>
 <script>
     const birthDateInput = document.querySelector('input[name="birth_date"]');
     const checkBirthInput = document.querySelector('input[name="check_birth"]');

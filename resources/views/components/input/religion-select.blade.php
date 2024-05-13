@@ -1,12 +1,10 @@
-<select class="select" {{$attributes}}>
-    <option value="">{{ trans('Parents.Religion') }}</option>
-
-    @php($religionOptions = [
-    'Christian' => trans('Parents.Christian'),
-    'Muslim' => trans('Parents.Muslim')
-    ])
-
-    @foreach($religionOptions as $value => $label)
-    <option value="{{ $value }}">{{ $label }}</option>
-    @endforeach
-</select>
+<div class="w-full md:w-1/3">
+    <label for="religion" class="mb-1 label label-required">{{ trans('general.gender') }}</label>
+    <select id="gender" class="select" name="religion" {{$attributes}}>
+        <option value="">{{ trans('general.religion') }}</option>
+        @foreach(\App\Enums\user_religion
+        ::cases() as $religion)
+            <option value="{{ $religion->value }}" @selected(old('gender', $religion->value) == $religion->value)>{{ $religion->lang() }}</option>
+        @endforeach
+    </select>
+</div>

@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="flex items-center justify-between">
-                    <h6>{{ trans('general.add') }}</h6>
+                    <h6>{{ trans('general.new') }}</h6>
                     <button type="button"
                         class="btn btn-plain-secondary dark:text-slate-300 dark:hover:bg-slate-700 dark:focus:bg-slate-700"
                         data-dismiss="modal">

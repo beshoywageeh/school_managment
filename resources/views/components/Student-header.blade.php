@@ -8,7 +8,7 @@
         <i data-feather="download"></i>
         {{trans('general.Export_Excel')}}
     </button>
-    <a href="#" class="btn btn-primary" download>
+    <a href="{{route('Students.pdf','test')}}" target="_new" class="btn btn-primary">
         <i data-feather="file-plus"></i>
         {{trans('general.Export_PDF')}}
     </a>

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\settings;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,16 +16,16 @@ class GradeFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    const GRADENAMES = [
-        'الابتدائية', 'الاعدادية', 'الثانوي', 'حضانة',
-    ];
 
     public function definition(): array
     {
 
         return [
-            'Grade_Name' => static::GRADENAMES[array_rand(static::GRADENAMES)],
-            'user_id' => '1',
+            'name' => $this->faker->unique()->randomElement([
+                'المرحلة الابتدائية', 'المرحلة الاعدادية', 'المرحلة الثانوية', 'مرحلة حضانة',
+            ]),
+            'user_id' => User::all()->random()->id,
+            'slug'=>$this->faker->slug()
         ];
     }
 }

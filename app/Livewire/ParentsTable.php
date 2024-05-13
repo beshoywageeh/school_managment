@@ -6,7 +6,6 @@ use App\Models\My_parents;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
-
 class ParentsTable extends Component
 {
     use WithPagination;

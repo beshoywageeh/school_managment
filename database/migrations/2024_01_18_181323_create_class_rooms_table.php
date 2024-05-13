@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('class_rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('class_name');
+            $table->string('name');
             $table->bigInteger('grade_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
+            $table->string('slug')->nullable();
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

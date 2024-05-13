@@ -42,7 +42,7 @@
                     <tbody>
                         @foreach ($rows as $index => $backup)
                             <tr>
-                                <td>{{ $loop->index + 1 }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $backup[0] }}</td>
                                 <td>{{ $backup['disk'] }}</td>
                                 <td>{{ $backup[1] }}</td>
@@ -102,7 +102,7 @@
                     <tbody>
                         @forelse ($backups as $backup)
                             <tr>
-                                <td> {{ $loop->index + 1 }}</td>
+                                <td> {{ $loop->index+1 }}</td>
                                 <td>{{ $backup['file_name'] }}</td>
                                 <td>{{ $backup['file_date']->format('Y-m-d') }}</td>
                                 <td>{{ $backup['file_size'] }}</td>

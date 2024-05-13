@@ -31,6 +31,8 @@ return new class extends Migration
             $table->string('Address')->nullable();
             $table->date('Mother_Birth_Date')->nullable();
             $table->bigInteger('user_id')->unsigned();
+            $table->string('slug')->nullable();
+
 
             $table->softDeletes();
             $table->timestamps();

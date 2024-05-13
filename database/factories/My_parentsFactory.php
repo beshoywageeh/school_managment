@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Factories;
-
+use App\Models\settings;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -29,10 +29,12 @@ class My_parentsFactory extends Factory
             'Mother_National_Id' => $this->faker->numerify('############'),
             'Mother_Phone' => $this->faker->phoneNumber,
             'Mother_Job' => $this->faker->jobTitle,
-            'Religion' => $this->faker->randomElement(['Muslim', 'Christian']),
+            'Religion' => $this->faker->numberBetween(0,1),
             'Address' => $this->faker->address,
             'Mother_Birth_Date' => $this->faker->date(),
             'user_id' => '1',
+            'slug'=>$this->faker->slug()
+
         ];
     }
 }

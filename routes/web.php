@@ -1,14 +1,6 @@
 <?php
 
-use App\Http\Controllers\BackupController;
-use App\Http\Controllers\ClassRooms\ClassRoomsController;
-use App\Http\Controllers\Grades\GradesController;
-use App\Http\Controllers\Parents\MyParentsController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\Students\StudentsController;
-use App\Http\Controllers\HomeController;
-use App\Livewire\SchoolFees;
+use App\Http\Controllers\{ProfileController, BackupController, AcadmiceYearController, SettingsController, Students\StudentsController, HomeController, MonitorSystemController, ClassRooms\ClassRoomsController, Grades\GradesController, SchoolFeeController, Parents\MyParentsController, JobController};
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -40,7 +32,6 @@ Route::group(
 
         Route::middleware('auth')->group(function () {
             Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-            //Route::get('/dashboard', Dashboard::class)->name('dashboard');
             Route::group(['controller' => ProfileController::class], function () {
                 Route::get('/profile', 'edit')->name('profile.edit');
                 Route::patch('/profile', 'update')->name('profile.update');
@@ -77,18 +68,50 @@ Route::group(
                 Route::get('/{id}/show', 'show')->name('Students.show');
                 Route::post('/store', 'store')->name('Students.store');
                 Route::post('/update', 'update')->name('Students.update');
+                Route::get('/{id?}/pdf', 'pdf')->name('Students.pdf');
             });
-
-            Route::get('/school_fees', SchoolFees::class)->name('schoolfees.index');
+            Route::group(['prefix' => 'academic_year', 'controller' => AcadmiceYearController::class], function () {
+                Route::get('/index', 'index')->name('academic_year.index');
+                Route::get('{id}/edit', 'edit')->name('academic_year.edit');
+                Route::get('/{id}/destroy', 'destroy')->name('academic_year.destroy');
+                Route::get('/{id}/show', 'show')->name('academic_year.show');
+                Route::post('/store', 'store')->name('academic_year.store');
+                Route::post('/update', 'update')->name('academic_year.update');
+            });
+            Route::group(['prefix' => 'jobs', 'controller' => JobController::class], function () {
+                Route::get('/index', 'index')->name('jobs.index');
+                Route::get('/create', 'create')->name('jobs.create');
+                Route::get('{id}/edit', 'edit')->name('jobs.edit');
+                Route::get('/{id}/destroy', 'destroy')->name('jobs.destroy');
+                Route::get('/{id}/show', 'show')->name('jobs.show');
+                Route::post('/store', 'store')->name('jobs.store');
+                Route::post('/update', 'update')->name('jobs.update');
+            });
+            Route::group(['prefix' => 'school_fees', 'controller' => SchoolFeeController::class], function () {
+                Route::get('/index', 'index')->name('schoolfees.index');
+                 Route::get('/create', 'create')->name('schoolfees.create');
+                // Route::get('{id}/edit', 'edit')->name('Students.edit');
+                // Route::get('/{id}/destroy', 'destroy')->name('Students.destroy');
+                // Route::get('/{id}/show', 'show')->name('Students.show');
+                 Route::post('/store', 'store')->name('schoolfees.store');
+                // Route::post('/update', 'update')->name('Students.update');
+                // Route::get('/{id?}/pdf', 'pdf')->name('Students.pdf');
+            });
+            Route::group(['prefix' => 'ajax'], function () {
+                Route::get('/get_classRooms/{id}', [StudentsController::class, 'getclasses']);
+                Route::get('/get_classRooms_fee/{id}', [SchoolFeeController::class, 'getclasses']);
+            });
             Route::group(['prefix' => 'backup', 'controller' => BackupController::class], function () {
                 Route::get('/index', 'index')->name('backup.index');
                 Route::get('/create', 'create')->name('backup.create');
                 Route::get('/download/{file_name}', 'download')->name('backup.download');
                 Route::get('/delete/{file_name}', 'delete')->name('backup.delete');
             });
-            Route::group(['prefix'=>'ajax'],function(){
-                Route::get('/get_classRooms/{id}',[StudentsController::class,'getclasses']);
+            Route::group(['prefix' => 'settings', 'controller' => SettingsController::class], function () {
+                Route::get('/index', 'edit')->name('setting.index');
+                Route::post('/update_password', 'update_password')->name('setting.update_password');
             });
+            Route::get('/monitor', MonitorSystemController::class)->name('system_lookup');
         });
     }
 );

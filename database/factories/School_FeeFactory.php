@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\class_room;
 use App\Models\Grade;
+use App\Models\settings;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,6 +25,8 @@ class School_FeeFactory extends Factory
             'user_id' => '1',
             'description' => $this->faker->words(1, true),
             'amount' => $this->faker->numberBetween('1000', '9999'),
+
+
         ];
     }
 }

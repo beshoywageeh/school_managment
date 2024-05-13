@@ -22,7 +22,7 @@
                             @foreach ($data['grades'] as $grade)
                             <option @selected($grade->id==$class_room->grade_id) value="{{ $grade->id
                                 }}">{{
-                                $grade->Grade_Name }}</option>
+                                $grade->name }}</option>
                             @endforeach
                         </select>
                     </div>

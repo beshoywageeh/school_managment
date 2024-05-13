@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="flex items-center justify-between">
-                    <h6>{{ trans('class_rooms.new') }}</h6>
+                    <h6>{{ trans('general.new') }}</h6>
                     <button type="button"
                         class="btn btn-plain-secondary dark:text-slate-300 dark:hover:bg-slate-700 dark:focus:bg-slate-700"
                         data-dismiss="modal">
@@ -20,13 +20,13 @@
                             <option value="" @disabled(true)>{{ trans('class_rooms.select_grade') }}</option>
                             @foreach ($data['grades'] as $grade)
                             <option @selected($grade->id == $class_room->grade_id) value="{{ $grade->id }}">{{
-                                $grade->Grade_Name }}</option>
+                                $grade->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class='input-group'>
                         <label for="" class="input-group-text">{{ trans('class_rooms.new') }}</label>
-                        <input type="text" class="input" placeholder="{{ trans('classroom.new') }}" name="class_name"
+                        <input type="text" class="input" placeholder="{{ trans('general.new') }}" name="class_name"
                             value={{ old('class_name') }}>
                     </div>
                 </div>

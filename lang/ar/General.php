@@ -18,7 +18,10 @@ return [
 	'Import_Excel'=>'إستيراد إكسيل',
 	'Export_PDF'=>'تصدير PDF',
 	'day'=>'يوم',
-'gender'=>'النوع',
-'male'=>'ذكر',
-'female'=>'أنثى'
+    'update' => 'تحديث',
+    'created_by' => 'تم الإضافة بواسطة',
+    'created_at' => 'تم الإضافة في',
+    'updated_by' => 'تم التحديث بواسطة',
+    'updated_at' => 'تم التحديث في',
+	
 ];

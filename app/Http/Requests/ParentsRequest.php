@@ -23,9 +23,9 @@ class ParentsRequest extends FormRequest
     {
         return [
             'Father_Name' => 'required',
-            'Mother_National_Id' => 'required|string|min:10|max:10|regex:/[0-9]{9}/',
-            'Father_Phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
-            'Father_National_Id' => 'required|string|min:10|max:10|regex:/[0-9]{9}/',
+            'Mother_National_Id' => 'required|string|min:14|max:14|regex:/[0-9]{9}/',
+            'Father_Phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:12',
+            'Father_National_Id' => 'required|string|min:14|max:14|regex:/[0-9]{9}/',
             'Mother_Phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
             'Mother_Job' => 'nullable|string|min:2|max:20',
             'Father_Job' => 'nullable|string|min:2|max:20',

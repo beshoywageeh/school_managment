@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Factories;
-
+use App\Models\settings;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,11 +21,13 @@ class StudentFactory extends Factory
             'birth_date' => $this->faker->date(),
             'address' => $this->faker->address(),
             'join_date' => $this->faker->date(),
-            'gender' => $this->faker->randomElement(['male', 'female']),
+            'gender' => $this->faker->numberBetween(0,1),
             'user_id' => '1',
             'grade_id' => $this->faker->numberBetween(1, 4),
-            'classroom_id' => $this->faker->numberBetween(1, 50),
+            'classroom_id' => $this->faker->numberBetween(1, 6),
             'parent_id' => $this->faker->numberBetween(1, 200),
+            'slug'=>$this->faker->slug()
+
         ];
     }
 }

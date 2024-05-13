@@ -8,7 +8,7 @@
         <div class="card-body">
             <div class="flex justify-between mb-4">
                 <h4 class="card-title">{{ trans('Grades.title') }}</h4>
-<x-button data-toggle="modal" data-target="#CreateGrade" class="primary">
+<x-button data-toggle="modal" data-target="#CreateGrade" type="" class="primary">
                     <i class="w-4" data-feather="plus-square"></i>
                     {{ trans('Grades.new') }}
                 </x-button>
@@ -30,9 +30,9 @@
                     <tbody>
                         @foreach ($data['grades'] as $grade)
 <tr>
-<td> {{ $data['grades']->firstItem()+$loop->index }}</td>
+<td> {{ $data['grades']->firstItem() + $loop->index }}</td>
 <td>
-    <a target='_blank' href="{{route('grade.show',$grade->id)}}">{{ $grade->Grade_Name
+    <a target='_blank' href="{{route('grade.show',$grade->id)}}">{{ $grade->name
         }}</a>
 
 </td>

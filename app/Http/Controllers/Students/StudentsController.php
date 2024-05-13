@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
 use Illuminate\Http\Request;
 use App\Models\{Grade,My_parents,class_room, Student};
+use PDF;
+use App\Http\Traits\systemLogTrait;
 class StudentsController extends Controller
 {
+    use systemLogTrait;
     /**
      * Display a listing of the resource.
      */
@@ -21,9 +24,10 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        $grades=Grade::all(['id','Grade_Name']);
+        $grades=Grade::all(['id','name']);
         $parents=My_parents::all(['id','Father_Name']);
-        //return get_defined_vars();
+
+         //return get_defined_vars();
         return view('backend.Students.create',get_defined_vars());
     }
 
@@ -44,7 +48,9 @@ class StudentsController extends Controller
                 'classroom_id'=>$request->class_room,
                 'address'=>$request->address,
                 'user_id'=>\Auth::Id(),
-            ]);     session()->flash('success',trans('general.success'));
+            ]);
+            $this->syslog('','App\Models\Student',\Auth::id(),$request->input(),$request->ip());
+            session()->flash('success',trans('general.success'));
              return redirect()->route('Students.index');
          }catch(\Exception $e){
              session()->flash('error', $e->getMessage());
@@ -72,7 +78,7 @@ class StudentsController extends Controller
     public function edit(string $id)
     {
         try{
-            $grades=Grade::all(['id','Grade_Name']);
+            $grades=Grade::all(['id','name']);
         $parents=My_parents::all(['id','Father_Name']);
             $student = Student::findorfail($id);
             return view('backend.Students.edit',get_defined_vars());
@@ -86,9 +92,9 @@ class StudentsController extends Controller
      * Update the specified resource in storage.
      */
     public function update(StudentRequest $request)
-    {
-        try{
+    {        try{
             $student = student::findorfail($request->id);
+            $this->syslog('','App\Models\Student',\Auth::id(),[$student,$request->input()],$request->ip());
             $student->update([
                 'name'=>$request->student_name,
                 'birth_date'=>$request->birth_date,
@@ -98,6 +104,7 @@ class StudentsController extends Controller
                 'parent_id'=>$request->parents,
                 'classroom_id'=>($request->class_room =="" )?$student->classroom_id:$request->class_room,
                 'address'=>$request->address,
+                'national_id'=>$request->national_id,
                 'user_id'=>\Auth::Id(),
             ]);
             session()->flash('success',trans('general.success'));
@@ -111,10 +118,12 @@ class StudentsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id,Request $request)
     {
         try{
-            Student::where('id',$id)->delete();
+            $student=Student::findorfail($id);
+            $this->syslog('','App\Models\Student',\Auth::id(),$student,$request->ip());
+            $student->delete();
             return redirect()->back()->with('success',trans('general.success'));
         }catch(\Exception $e){
             session()->flash('error',$e->getMessage());
@@ -123,9 +132,25 @@ class StudentsController extends Controller
     }
 
 
-public function getclasses($id){
-    $class_rooms = class_room::where('grade_id',$id)->get(['id','class_name']);
-    return response()->json($class_rooms);
-}
+    public function getclasses($id){
+        $class_rooms = class_room::where('grade_id',$id)->get(['id','name']);
+        return response()->json($class_rooms);
+    }
+    public function pdf($id){
+        $data['students'] = Grade::with(['students'])->withcount('students')->get();
+      //  return $data['students'];
+       $pdf = PDF::loadView('backend.Students.pdf' , ['data' => $data],[],[
+        'format' => 'A4',
+            'margin_left' => 4,
+            'margin_right' => 4,
+            'margin_top' => 4,
+            'margin_bottom' => 4,
+            'margin_header' => 0,
+            'margin_footer' => 0,
+            'orientation' => 'L',
+       ]);
+        // $pdf = PDF::loadView('backend.Students.pdf', ['students'=>$students]);
+        return $pdf->stream(trans('student.info').'.pdf');
 
+    }
 }

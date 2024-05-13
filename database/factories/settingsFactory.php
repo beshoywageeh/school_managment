@@ -17,9 +17,12 @@ class settingsFactory extends Factory
     public function definition(): array
     {
         return [
-            'school_name' => $this->faker->company(),
+            'name' => $this->faker->company(),
             'phone' => $this->faker->phoneNumber(),
             'address' => $this->faker->address(),
+            'slug'=> $this->faker->slug(),
+            'heading_right'=> $this->faker->word(),
+            'heading_left'=>$this->faker->word()
         ];
     }
 }

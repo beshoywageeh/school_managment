@@ -17,13 +17,15 @@ return new class extends Migration
             $table->date('birth_date');
             $table->string('address');
             $table->date('join_date');
-            $table->string('national_id');
-            $table->enum('gender', ['male', 'female']);
+            $table->string('national_id')->nullable();
+            $table->tinyInteger('gender')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('classroom_id');
             $table->unsignedBigInteger('parent_id')->nullable();
+            $table->string('slug')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 @section('title')
-{{trans('parents.edit')}}
+{{trans('general.edit')}}
 @endsection
 @section('content')
 <div class="card">
     <div class="card-body">
         <div class="flex justify-between mb-4">
-            <h4 class="card-title">{{ trans('parents.edit') }}</h4>
+            <h4 class="card-title">{{ trans('general.edit') }}</h4>
         </div>
         @include('backend.msg')
         <form id="form-with-multiple-column" class="max-w-full" action="{{route('parents.update')}}" method="post">
@@ -83,10 +83,8 @@
                             <textarea class="textarea" name="Address"
                                 placeholder="{{ trans('Parents.Address') }}">{{ $parent->Address }}</textarea>
                         </div>
-                        <div class="w-full md:w-1/2">
 
                             <x-input.religion-select name="Religion"></x-input.religion-select>
-                        </div>
                     </div>
 
                 </div>

@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Grades;
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
 use Illuminate\Http\Request;
-
+use App\Http\Traits\systemLogTrait;
 class GradesController extends Controller
 {
+    use systemLogTrait;
     public function index()
     {
-        $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->withSum('fees', 'amount')->paginate(10);
 
+        $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->withSum('fees', 'amount')->paginate(10);
         return view('backend.Grades.index', ['data' => $data]);
     }
 
@@ -26,10 +27,11 @@ class GradesController extends Controller
             $request->validate([
                 'Grade_Name' => ['required', 'string', 'max:255'],
             ]);
-            Grade::create([
-                'Grade_Name' => $request->Grade_Name,
+            $grade = Grade::create([
+                'name' => $request->Grade_Name,
                 'user_id' => \Auth::Id(),
             ]);
+            $this->syslog('create','App\Models\Grades',\Auth::Id(),$grade,$request->ip());
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
@@ -66,9 +68,11 @@ class GradesController extends Controller
                 'Grade_Name' => ['required', 'string', 'max:255'],
             ]);
             $grade = Grade::where('id', $request->id)->first();
+            $this->syslog('update','App\Models\Grades',\Auth::Id(),['id'=>$grade->id,'old_name'=>$grade->name,'new_name'=>$request->Grade_Name],$request->ip());
             $grade->update([
-                'Grade_Name' => $request->Grade_Name,
+                'name' => $request->Grade_Name,
             ]);
+
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
@@ -83,12 +87,12 @@ class GradesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id,Request $request)
     {
 
         $grade = Grade::where('id', $id)->withcount('class_room')->first();
         if ($grade->class_room_count == 0) {
-
+            $this->syslog('delete','App\Models\Grades',\Auth::Id(),['id'=>$grade->id,'name'=>$grade->name],$request->ip());
             $grade->delete();
 
             return redirect()->back()->with('success', trans('general.success'));

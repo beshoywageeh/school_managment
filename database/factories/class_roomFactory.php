@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Grade;
+use App\Models\User;
+use App\Models\settings;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,9 +20,11 @@ class class_roomFactory extends Factory
     public function definition(): array
     {
         return [
-            'class_name' => $this->faker->words(1, true),
-            'grade_id' => $this->faker->numberBetween(1, 4),
-            'user_id' => '1',
+            'name' => $this->faker->randomElement(['الصف الاول',"الصف الثاني","الصف الثالث","الصف الخامس","الصف السادس"]),
+            'grade_id' => Grade::all()->random()->id,
+            'user_id' => User::all()->random()->id,
+            'slug'=>$this->faker->slug()
         ];
+
     }
 }

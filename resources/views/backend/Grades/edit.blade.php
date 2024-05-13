@@ -19,10 +19,10 @@
                     <div class="input-group input-group-disabled mb-2">
                         <label for="" class="input-group-text">{{ trans('grade.old_name')
                             }}</label>
-                        <input type="text" disabled class="input" value="{{ $grade->Grade_Name }}">
+                        <input type="text" disabled class="input" value="{{ $grade->name }}">
                     </div>
                     <div class='input-group'>
-                        <label for="" class="input-group-text">{{ trans('grades.new_name') }}</label>
+                        <label for="" class="input-group-text">{{ trans('general.new') }}</label>
                         <input type="text" name="Grade_Name" class="input"
                             placeholder="{{ trans('grades.grade_name') }}" value={{ old('grade_name') }}>
                     </div>

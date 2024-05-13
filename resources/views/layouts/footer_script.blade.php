@@ -32,12 +32,11 @@ const urlToRedirect = ev.currentTarget.getAttribute('href');
         function confirmation(ev) {
             ev.preventDefault();
             const urlToRedirect = ev.currentTarget.getAttribute('href');
-            let conf = confirm({{ trans('general.confirmation') }});
+            let conf = confirm("{{ trans('general.confirmation') }}");
             if (conf) {
                 window.location.href = urlToRedirect;
             }
         };
     }
 </script>
-<script src="{{URL::asset('assests/js/slimselect.min.js')}}"></script>
 @stack('scripts')

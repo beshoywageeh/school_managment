@@ -3,7 +3,6 @@
 {{trans('class_rooms.title')}}
 @endsection
 @push('css')
-<script type="module" crossorigin src="{{URL::asset('assests/js/data-table-15c50b44.js')}}"></script>
 
 @endpush
 @section('content')
@@ -12,7 +11,7 @@
         <div class="card-body">
             <div class="flex justify-between mb-4">
                 <h4 class="card-title">{{ trans('class_rooms.title') }}</h4>
-                <x-button data-toggle="modal" data-target="#CreateClassRoom" class="primary">
+                <x-button type="" data-toggle="modal" data-target="#CreateClassRoom" class="primary">
                     <i class="w-4" data-feather="plus-square"></i>
                     {{ trans('class_rooms.new') }}
                 </x-button>
@@ -35,17 +34,17 @@
                         <tr>
 <td> {{ $data['class_rooms']->firstItem()+$loop->index }}</td>
                             <td><a target='_blank'
-                                    href="{{route('class_room.show',$class_room->id)}}">{{$class_room->class_name}}</a>
+                                    href="{{route('class_room.show',$class_room->id)}}">{{$class_room->name}}</a>
                             </td>
-                            <td> {{ $class_room->grade->Grade_Name }}</td>
+                            <td> {{ $class_room->grade->name }}</td>
                             <td>{{ $class_room->user->first_name . ' ' . $class_room->user->second_name }}</td>
                             <td>{{ $class_room->created_at->format('Y/m/d') }}</td>
                             <td>{{ $class_room->students_count }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="items-center dropdown-toggle btn btn-primary btn-xs"><i class="w-4"
-                                            data-feather="chevron-down"></i>
-                                    </button>
+                                        data-feather="chevron-down"></i>
+                                </button>
                                     <div class="dropdown-content">
                                         <ul class="dropdown-list">
                                             <li class="dropdown-list-item">

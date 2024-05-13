@@ -9,16 +9,15 @@
             <h4 class="card-title">{{trans('student.title')}} | {{trans('general.new')}}</h4>
         </div>
         @include('backend.msg')
-
         <form action="{{route('Students.store')}}" method="post">
             @csrf
             <fieldset class='p-4 border-2 border-indigo-600 border-solid rounded'>
                 <legend class='m-auto text-center text-muted'>{{trans('student.student_info')}}</legend>
                 <div class="flex flex-col items-center w-full gap-1 md:flex-row md:gap-2">
 
-                    <x-input type="text" name="student_name">{{ trans('student.name') }}
+                    <x-input type="text" name="student_name" value="{{old('student_name')}}">{{ trans('student.name') }}
                     </x-input>
-                    <x-input type="date" name="birth_date">{{ trans('student.birth_date')
+                    <x-input type="date" class="input-date" value="{{old('birth_date')}}" name="birth_date">{{ trans('student.birth_date')
                         }}
                     </x-input>
                     <div class="w-full md:w-1/3">
@@ -30,19 +29,19 @@
                     </div>
                 </div>
                 <div class="flex flex-col items-center w-full gap-1 md:flex-row md:gap-2">
-                    <x-input type="text" name="national_id">{{
+                    <x-input type="text" value="{{old('national_id')}}" name="national_id">{{
                         trans('student.national_id') }}
                     </x-input>
-                    <x-input type="date" name="join_date">{{ trans('student.join_date')
+                    <x-input type="date" value="{{old('join_date')}}" class="input-date" name="join_date">{{ trans('student.join_date')
                         }}
                     </x-input>
-                    <x-input.gender-select name="gender">
+                    <x-input.gender-select >
                         </x-input.gender-sele>
                 </div>
                 <div class="flex flex-col items-center w-full gap-1 md:fkex-row md:gap-2">
                     <div class="w-full">
                         <lable>{{trans('student.address')}}</lable>
-                        <textarea class="input" name="address" id="" cols="30" rows="5"></textarea>
+                        <textarea class="input" name="address" id="" cols="30" rows="5">{{old('address')}}</textarea>
                     </div>
                 </div>
             </fieldset>
@@ -59,7 +58,7 @@
                         <select class='select' name="grade" id="grades">
                             <option> {{trans('student.choose_grade')}}</option>
                             @foreach ($grades as $grade)
-                            <option value="{{ $grade->id }}">{{ $grade->Grade_Name }}</option>
+                            <option value="{{ $grade->id }}">{{ $grade->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -73,7 +72,7 @@
                     </div>
                     <div class="w-full md:w-1/3">
                         <label for="parent" class="mb-1 label">{{trans('student.parent')}}</label>
-                        <select name="parents" id="parents" class="w-full input input-bordered bg-slate-100">
+                        <select name="parents" id="" class="w-full tom-select">
                             <option> {{trans('student.parent')}}</option>
 
                             @foreach ($parents as $parent)
@@ -90,51 +89,41 @@
                 <x-button accesskey="s" class="primary" type="submit"> {{ trans('General.Submit') }}</x-button>
             </div>
         </form>
-
     </div>
 </div>
-
 @push('scripts')
-<script>
-    new SlimSelect({
-	select: '#parents',
-});
 
-
-</script>
-<script>
-    const birthDateInput = document.querySelector('input[name="birth_date"]');
-    const checkBirthInput = document.querySelector('input[name="check_birth"]');
-
-    const makeDate = () => {
-        const date = new Date();
-        date.setMonth(9);
-        date.setDate(1);
-        return date;
-    };
-
-    birthDateInput.addEventListener('change', () => {
-        const birthDate = new Date(birthDateInput.value);
-        const checkDate = new Date(makeDate());
-        checkBirthInput.value = Math.ceil((checkDate - birthDate) / (1000 * 3600 * 24));
-    });
-</script>
-<script>
-    const classrooms = document.querySelector('#classrooms');
-    const grades=document.querySelector('#grades')
-    grades.addEventListener('change', async () => {
-
-        classrooms.innerHTML = '<option>{{trans('student.choose_classroom')}}</option>';
-        const response = await fetch(`/ajax/get_classRooms/${grades.value}`)
-        const data = await response.json();
-        data.forEach(class_rooms => {
-            const option = document.createElement('option');
-            option.value = class_rooms.id;
-            option.text = class_rooms.class_name;
-            classrooms.appendChild(option);
+    <script>
+        const birthDateInput = document.querySelector('input[name="birth_date"]');
+        const checkBirthInput = document.querySelector('input[name="check_birth"]');
+        const makeDate = () => {
+            const date = new Date();
+            date.setMonth(9);
+            date.setDate(1);
+            return date;
+        };
+        birthDateInput.addEventListener('change', () => {
+            const birthDate = new Date(birthDateInput.value);
+            const checkDate = new Date(makeDate());
+            checkBirthInput.value = Math.ceil((checkDate - birthDate) / (1000 * 3600 * 24));
         });
+    </script>
+    <script>
+        const classrooms = document.querySelector('#classrooms');
+        const grades=document.querySelector('#grades')
+        grades.addEventListener('change', async () => {
 
-    });
-</script>
+            classrooms.innerHTML = '<option>{{trans('student.choose_classroom')}}</option>';
+            const response = await fetch(`/ajax/get_classRooms/${grades.value}`)
+            const data = await response.json();
+            data.forEach(class_rooms => {
+                const option = document.createElement('option');
+                option.value = class_rooms.id;
+                option.text = class_rooms.name;
+                classrooms.appendChild(option);
+            });
+
+        });
+    </script>
 @endpush
 @endsection

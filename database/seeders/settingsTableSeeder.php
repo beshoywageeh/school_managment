@@ -12,6 +12,6 @@ class settingsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        settings::factory(1)->create();
+        settings::factory(5)->create();
     }
 }

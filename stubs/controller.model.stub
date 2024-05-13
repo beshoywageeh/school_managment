@@ -5,15 +5,17 @@ namespace {{ namespace }};
 use {{ namespacedModel }};
 use {{ rootNamespace }}Http\Controllers\Controller;
 use {{ namespacedRequests }}
+use App\Http\Traits\systemLogTrait;
 
 class {{ class }} extends Controller
 {
+    use systemLogTrait;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-         ${{model}}={{model}}::all();
+         ${{model}}={{model}}::where('setting_id',$this->user_data())->get();
          return view('.index',get_defined_vars());
     }
 
@@ -37,7 +39,7 @@ class {{ class }} extends Controller
     public function store({{ storeRequest }} $request)
     {
          try{
-
+                $this->syslog('','App\Models\{{model}}',\Auth::id(),$request->input(),$request->ip());
             session()->flash('success',trans('general_success'));
             return view('',get_defined_vars());
         }catch(\Exception $e){
@@ -76,6 +78,7 @@ class {{ class }} extends Controller
     {
         try{
 
+             $this->syslog('','App\Models\{{model}}',\Auth::id(),[$old,$request->input()],$request->ip());
             session()->flash('success',trans('general_success'));
             return view('',get_defined_vars());
         }catch(\Exception $e){
@@ -88,11 +91,12 @@ class {{ class }} extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy({{ model }} ${{ modelVariable }})
+    public function destroy({{ model }} ${{ modelVariable }},Request $request)
     {
         try{
 
-            {{ model }}::destroy(${{ modelVariable }});
+            ${{model}}={{ model }}::findorFail(${{ modelVariable }});
+             $this->syslog('','App\Models\{{model}}',\Auth::id(),${{model}},$request->ip());
             session()->flash('success',trans('general_success'));
             return view('',get_defined_vars());
         }catch(\Exception $e){

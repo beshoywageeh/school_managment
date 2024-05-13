@@ -11,6 +11,6 @@ class class_roomTableSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\class_room::factory()->count(50)->create();
+        \App\Models\class_room::factory()->count(24)->create();
     }
 }

@@ -2,33 +2,20 @@
 
 namespace App\Livewire;
 
-use App\Models\Grade;
-use App\Models\Student;
-use Illuminate\Database\Eloquent\Builder;
-use PowerComponents\LivewirePowerGrid\Column;
+use App\Enums\UserGender;
+use App\Models\{Grade,Student};
+use PowerComponents\LivewirePowerGrid\{Column,Footer,Header,PowerGrid,PowerGridColumns,PowerGridComponent,PowerGridFields};
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
-use PowerComponents\LivewirePowerGrid\Footer;
-use PowerComponents\LivewirePowerGrid\Header;
-use PowerComponents\LivewirePowerGrid\PowerGrid;
-use PowerComponents\LivewirePowerGrid\PowerGridColumns;
-use PowerComponents\LivewirePowerGrid\PowerGridComponent;
-use PowerComponents\LivewirePowerGrid\PowerGridFields;
-use PowerComponents\LivewirePowerGrid\Traits\WithExport;
 use Illuminate\View\View;
+use Illuminate\Database\Eloquent\Collection;
+
 final class StudentTable extends PowerGridComponent
 {
-    use WithExport;
-
     public string $primaryKey = 'students.id';
-
     public string $sortField = 'students.id';
-
     public bool $multiSort = true;
-
     public bool $showFilters = true;
-
     public bool $deferLoading = true; // default false
-
     public string $loadingComponent = 'components.my-custom-loading';
 
     public function setUp(): array
@@ -44,9 +31,9 @@ final class StudentTable extends PowerGridComponent
         ];
     }
 
-    public function datasource(): Builder
+    public function datasource(): Collection
     {
-        return Student::query()->join('grades', 'students.grade_id', '=', 'grades.id')->select('students.*', 'grades.Grade_Name as GN', 'grades.id as Gid');
+        return Student::with('grade')->get();
     }
 
     public function relationSearch(): array
@@ -58,7 +45,13 @@ final class StudentTable extends PowerGridComponent
     {
         return PowerGrid::columns()
             ->addColumn('link_name', function (Student $model) {
-                return '<a class="btn btn-priamry" href="'.route('Students.show',e($model->id)).'">'.e($model->name).'</a>';
+                return '<a class="btn btn-primary" href="'.route('Students.show',e($model->id)).'">'.e($model->name).'</a>';
+            })
+            ->addColumn('gen',function(Student $model){
+                return $model->gender;
+            })
+            ->addColumn('student_grade_name',function(Student $model){
+                return $model->grade->name;
             });
     }
 
@@ -68,8 +61,8 @@ final class StudentTable extends PowerGridComponent
             ->add('id')
             ->add('name')
             ->add('address')
-            ->add('gender')
-            ->add('grades.Grade_Name');
+            ->add('gen')
+            ->add('grade');
     }
 
     public function columns(): array
@@ -88,14 +81,14 @@ final class StudentTable extends PowerGridComponent
                 ->field('address', 'address')
                 ->sortable()
                 ->searchable(),
-            Column::add()
-                ->title(trans('student.gender'))
-                ->field('gender', 'gender')
-                ->sortable()
-                ->searchable(),
+            // Column::add()
+            //     ->title(trans('student.gender'))
+            //      ->field('gen','gen')
+            //     ->sortable()
+            //     ->searchable(),
             Column::add()
                 ->title(trans('Grades.name'))
-                ->field('GN', 'Gid')
+                ->field('student_grade_name','grade_id')
                 ->sortable()
                 ->searchable(),
 
@@ -111,14 +104,14 @@ final class StudentTable extends PowerGridComponent
     {
         return [
             Filter::inputText('name')->operators(['contains']),
-            Filter::select('GN', 'Grade_Name')
+            Filter::select('student_grade_name', 'grade')
                 ->dataSource(Grade::all())
-                ->optionLabel('Grade_Name')
-                ->optionValue('Grade_Name'),
-            Filter::select('gender', 'gender')
-                ->dataSource(Student::select('gender')->distinct()->get()->toArray())
+                ->optionLabel('name')
+                ->optionValue('id'),
+                Filter::enumSelect('gender','gender')
+                ->dataSource(UserGender::cases())
                 ->optionLabel('gender')
-                ->optionValue('gender'),
+
         ];
     }
   }

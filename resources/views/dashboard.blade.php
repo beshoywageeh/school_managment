@@ -4,5 +4,8 @@
 @endsection
 
 @section('content')
+<pre>
+{{\App\Enums\UserGender::MALE->lang()}}
 
+</pre>
 @endsection

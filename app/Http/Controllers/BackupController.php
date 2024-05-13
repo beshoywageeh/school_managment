@@ -5,11 +5,9 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\Backup\Helpers\Format;
 use Carbon\Carbon;
 use Log;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\File;
 use Spatie\Backup\Commands\ListCommand;
-        use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
-        use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
+use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
+use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
 use Artisan;
 class BackupController extends Controller
 {
@@ -55,7 +53,7 @@ $files=$disk->files(config('backup.backup.name'));
             session()->flash('success',trans('notifications.backup_successful_body'));
             return redirect()->back();
         } catch (\Exception $e) {
-session()->flash('error',$e->getMessage());
+        session()->flash('error',$e->getMessage());
             return redirect()->back();
         }
     }

@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('school_name');
+            $table->string('name');
             $table->string('phone');
             $table->string('address');
+            $table->string('heading_right')->nullable();
+            $table->string('heading_left')->nullable();
+            $table->string('slug')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

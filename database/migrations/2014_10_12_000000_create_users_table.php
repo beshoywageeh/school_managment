@@ -22,15 +22,19 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->date('date_of_hiring')->nullable();
             $table->string('learning')->nullable();
-            $table->string('reiligon')->nullable();
-            $table->boolean('postion')->nullable();
+            $table->tinyInteger('reiligon')->nullable();
+            $table->tinyInteger('gender')->nullable();
+            $table->unsignedBigInteger('job_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('email')->unique();
             $table->boolean('isAdmin')->default('0');
             $table->boolean('login_allow')->default('0');
             $table->string('password');
+            $table->string('slug')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
