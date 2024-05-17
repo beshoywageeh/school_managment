@@ -8,8 +8,11 @@ return [
 	'date_time'=>'التاريخ و الوقت',
 	'data'=>'البيانات',
 	'user'=>'اسم المستخدم',
-	'create'=>'إضافة',
-	'update'=>'تعديل',
-	'delete'=>'حذف',
-	'created_at'=>'تمت في'
+	'created'=>'إضافة',
+	'updated'=>'تعديل',
+	'deleted'=>'حذف',
+	'created_at'=>'تمت في',
+	'field_change' => 'الحقل :field تم تعير من :old_value إلى :new_value.',
+	'field_create' => 'تم إضافة الحقول التالية :value.',
+	
 ];

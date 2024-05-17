@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Traits\systemLogTrait;
 use App\Models\Job;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-    use systemLogTrait;
+
     /**
      * Display a listing of the resource.
      */
@@ -27,7 +26,6 @@ class JobController extends Controller
                 'status' => ($request->status == 'on') ? 0 : 1,
                 'created_by' => \Auth::id()
             ]);
-            $this->syslog('', 'Job', \Auth::id(), [$request->input()], $request->ip());
             session()->flash('success', trans('general.success'));
             return redirect()->route('jobs.index');
         } catch (\Exception $e) {
@@ -59,7 +57,6 @@ class JobController extends Controller
                 'status' => ($request->status == 'on') ? 0 : 1,
                 'updated_by' => \Auth::id()
             ]);
-            $this->syslog('', 'Job', \Auth::id(), [$Job, $request->input()], $request->ip());
             session()->flash('success', trans('general.success'));
             return redirect()->route('jobs.index');
         } catch (\Exception $e) {
@@ -79,7 +76,6 @@ class JobController extends Controller
             $Job = Job::findorFail($id);
             $this->syslog('', 'Job', \Auth::id(), [$Job], $request->ip());
             $Job->delete();
-            session()->flash('success', trans('general.success'));
             return redirect()->back();
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

@@ -16,7 +16,7 @@
 </head>
 
 <body>
-    <div id='loader' class="flex items-center justify-center w-full min-h-screen">
+    <div id='loader' class="flex justify-center items-center w-full min-h-screen">
         <div class="sk-chase">
             <div class="sk-chase-dot before:bg-primary-500"></div>
             <div class="sk-chase-dot before:bg-primary-500"></div>
@@ -41,9 +41,9 @@
             <!-- Page Content Starts -->
             <div class="content">
                 <!-- Main Content Starts -->
-                <main class="container flex-grow p-4 sm:p-6">
+                <main class="flex-grow p-4 container-fluid sm:p-6">
                     <!-- Page Title Starts -->
-                    <div class="mb-6 flex flex-col justify-between gap-y-1 sm:flex-row sm:gap-y-0">
+                    <div class="flex flex-col gap-y-1 justify-between mb-6 sm:flex-row sm:gap-y-0">
                         <h5>@yield('title') | {{ $school->name }}</h5>
                     </div>
                     @yield('content')

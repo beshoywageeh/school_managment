@@ -6,6 +6,10 @@ return [
 'christian'=>'مسيحي',
 'muslim'=>'مسلم',
 'open'=>'مفتوح',
-	'close'=>'مغلق'
+    'close' => 'مغلق',
+    'teacher' => 'مدرس',
+    'worker' => 'عامل',
+    'accountant' => 'محاسب',
+    'manegment' => 'إدارة'
 
 ];

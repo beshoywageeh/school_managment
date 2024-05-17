@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Enums\{UserGender,UserReligion};
+use App\Enums\{UserGender, user_religion};
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 class Student extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'name',
@@ -23,7 +25,7 @@ class Student extends Model
     ];
     protected $casts = [
         'gender'=>UserGender::class,
-        'religion'=>UserReligion::class
+        'religion' => user_religion::class
 
     ];
     public function user()
@@ -50,5 +52,11 @@ class Student extends Model
     {
 
         return $query->where('name', 'LIKE', '%'.$Search.'%');
+    }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])->logOnlyDirty();
+        // Chain fluent methods for configuration options
     }
 }

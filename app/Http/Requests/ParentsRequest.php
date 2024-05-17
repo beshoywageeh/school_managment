@@ -22,16 +22,20 @@ class ParentsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'Father_Name' => 'required',
-            'Mother_National_Id' => 'required|string|min:14|max:14|regex:/[0-9]{9}/',
-            'Father_Phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:12',
-            'Father_National_Id' => 'required|string|min:14|max:14|regex:/[0-9]{9}/',
-            'Mother_Phone' => 'regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
-            'Mother_Job' => 'nullable|string|min:2|max:20',
-            'Father_Job' => 'nullable|string|min:2|max:20',
-            'Religion' => 'nullable|string|min:2|max:20',
-            'Father_Learning' => 'nullable|string|min:2|max:20',
-            'Address' => 'nullable|string|min:2|max:100',
+            'Father_Name' => 'nullable|string|max:255',
+            'Father_National_Id' => 'nullable|string|min:14|max:14|regex:/[0-9]{14}/',
+            'Father_Phone' => 'nullable|numeric|digits:11|regex:/^01[1-9]\d{8}$/',
+            'Father_Job' => 'nullable|string|max:255',
+            'Father_Birth_Date' => 'nullable|date',
+            'Father_Learning' => 'nullable|string|max:255',
+            'Mother_Name' => 'nullable|string|max:255',
+            'Mother_National_Id' => 'nullable|string|min:14|max:14|regex:/[0-9]{14}/',
+            'Mother_Phone' => 'nullable|numeric|digits:11|regex:/^01[1-9]\d{8}$/',
+            'Mother_Job' => 'nullable|string|max:255',
+            'Religion' => 'nullable|string|max:255',
+            'Address' => 'nullable|string|max:255',
+            'Mother_Birth_Date' => 'nullable|date',
+            'slug' => 'nullable|string|max:255'
         ];
     }
 

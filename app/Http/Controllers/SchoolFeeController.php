@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\School_Fee;
+use App\Models\{School_Fee, Grade, acadmice_year, class_room};
 use App\Http\Requests\StoreSchool_FeeRequest;
 use App\Http\Requests\UpdateSchool_FeeRequest;
-use App\Models\Grade;
-use App\Models\class_room;
+use Carbon\Carbon;
+
 class SchoolFeeController extends Controller
 {
     /**
@@ -14,7 +14,8 @@ class SchoolFeeController extends Controller
      */
     public function index()
     {
-        $School_Fees = School_Fee::with('grade', 'classroom')->paginate(10);
+        $School_Fees = School_Fee::with('grade', 'classroom', 'academic_year_formated', 'user')->paginate(10);
+       // return $School_Fees;
          return view('backend.school_fees.index',get_defined_vars());
     }
 
@@ -25,6 +26,14 @@ class SchoolFeeController extends Controller
     {
         try{
             $grades = Grade::get();
+            $years = acadmice_year::where('status', 1)->get();
+            $academic_years =
+                $years->map(function ($year) {
+                    return [
+                        'id' => $year->id,
+                        'academic_year' => Carbon::parse($year->year_start)->format('Y') . '-' . Carbon::parse($year->year_end)->format('Y'),
+                    ];
+                });
             return view('backend.school_fees.create',get_defined_vars());
         }catch(\Exception $e){
             session()->flash('error',$e->getMessage());
@@ -37,19 +46,21 @@ class SchoolFeeController extends Controller
      */
     public function store(StoreSchool_FeeRequest $request)
     {
+        //return $request->all();
          try{
             $school_fee = new School_Fee();
             $school_fee->grade_id = $request->grade_id;
             $school_fee->classroom_id = $request->classroom_id;
-            $school_fee->user_id = $request->user()->id; // Assuming user() method returns the authenticated user
+            $school_fee->user_id = $request->user()->id;
+            $school_fee->academic_year_id = $request->academic_year_id;
             $school_fee->description = $request->description;
             $school_fee->amount = $request->amount;
             $school_fee->save();
-            session()->flash('success',trans('general_success'));
-            return view('',get_defined_vars());
+            session()->flash('success', trans('General.success'));
+            return redirect()->route('schoolfees.index');
         }catch(\Exception $e){
             session()->flash('error',$e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
     }
 
@@ -108,7 +119,7 @@ class SchoolFeeController extends Controller
         }
     }
     public function getclasses($id){
-        $class_rooms = class_room::where('grade_id',$id)->get(['id','class_name']);
+        $class_rooms = class_room::where('grade_id', $id)->get(['id', 'name']);
         return response()->json($class_rooms);
     }
 }

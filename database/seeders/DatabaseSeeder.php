@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             ImageTableSeeder::class,
             SchoolFeeSeeder::class,
             StudentsTableSeeder::class,
+            JobsSeeder::class,
         ]);
 
     }

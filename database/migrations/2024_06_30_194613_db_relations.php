@@ -39,11 +39,14 @@ return new class extends Migration
             $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('classroom_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('academic_year_id')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
         });
         /* acadmice_years */
         Schema::table('acadmice_years', function (Blueprint $table) {
             $table->foreign('created_by')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
+
+
         });
         Schema::table('teacher_grade', function (Blueprint $table) {
             $table->foreign('teacher_id')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
@@ -74,6 +77,7 @@ return new class extends Migration
             $table->dropForeign('grade_id');
             $table->dropForeign('classroom_id');
             $table->dropForeign('user_id');
+            $table->dropForeign('academic_year_id');
         });
         Schema::table('acadmice_years', function (Blueprint $table) {
             $table->dropForeign('updated_by');

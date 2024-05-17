@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{ProfileController, BackupController, AcadmiceYearController, SettingsController, Students\StudentsController, HomeController, MonitorSystemController, ClassRooms\ClassRoomsController, Grades\GradesController, SchoolFeeController, Parents\MyParentsController, JobController};
+use App\Http\Controllers\{ProfileController, BackupController, AcadmiceYearController, SettingsController, Students\StudentsController, HomeController, MonitorSystemController, ClassRooms\ClassRoomsController, Grades\GradesController, SchoolFeeController, Parents\MyParentsController, JobController, UserController};
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -14,6 +14,8 @@ use Livewire\Livewire;
  | be assigned to the "web" middleware group. Make something great!
  |
  */
+
+
 
 Route::group(
 
@@ -87,6 +89,15 @@ Route::group(
                 Route::post('/store', 'store')->name('jobs.store');
                 Route::post('/update', 'update')->name('jobs.update');
             });
+            Route::group(['prefix' => 'employees', 'controller' => UserController::class], function () {
+                Route::get('/index', 'index')->name('employees.index');
+                Route::get('/create', 'create')->name('employees.create');
+                Route::get('{id}/edit', 'edit')->name('employees.edit');
+                Route::get('/{id}/destroy', 'destroy')->name('employees.destroy');
+                Route::get('/{id}/show', 'show')->name('employees.show');
+                Route::post('/store', 'store')->name('employees.store');
+                Route::post('/update', 'update')->name('employees.update');
+            });
             Route::group(['prefix' => 'school_fees', 'controller' => SchoolFeeController::class], function () {
                 Route::get('/index', 'index')->name('schoolfees.index');
                  Route::get('/create', 'create')->name('schoolfees.create');
@@ -100,6 +111,7 @@ Route::group(
             Route::group(['prefix' => 'ajax'], function () {
                 Route::get('/get_classRooms/{id}', [StudentsController::class, 'getclasses']);
                 Route::get('/get_classRooms_fee/{id}', [SchoolFeeController::class, 'getclasses']);
+                Route::get('/get_jobs/{id}', [UserController::class, 'getjobs']);
             });
             Route::group(['prefix' => 'backup', 'controller' => BackupController::class], function () {
                 Route::get('/index', 'index')->name('backup.index');

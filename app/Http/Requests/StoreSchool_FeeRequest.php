@@ -11,7 +11,7 @@ class StoreSchool_FeeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreSchool_FeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'academic_year_id' => 'required',
+            'grade_id' => 'required|exists:grades,id',
+            'classroom_id' => 'required|exists:class_rooms,id',
+            'description' => 'required|string|max:255',
+            'amount' => 'required|numeric',
         ];
     }
 }

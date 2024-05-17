@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 class My_parents extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes,LogsActivity;
 
     protected $table = 'parents';
 
@@ -29,5 +29,11 @@ class My_parents extends Model
     {
 
         return $query->where('Father_Name', 'LIKE', '%'.$Search.'%');
+    }
+	   public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])->logOnlyDirty();
+        // Chain fluent methods for configuration options
     }
 }

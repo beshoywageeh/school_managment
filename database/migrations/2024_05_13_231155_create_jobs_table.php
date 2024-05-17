@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('name');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('type')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

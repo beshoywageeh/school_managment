@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Parents;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ParentsRequest;
 use App\Models\My_parents;
-use App\Http\Traits\systemLogTrait;
 use Illuminate\Http\Request;
 class MyParentsController extends Controller
 {
-    use systemLogTrait;
     public function index()
     {
         return view('backend.Parents.index');
@@ -21,7 +19,7 @@ class MyParentsController extends Controller
     public function store(ParentsRequest $request)
     {
         try {
-            $pp=My_parents::create([
+            My_parents::create([
                 'Father_Name' => $request->Father_Name,
                 'Father_Phone' => $request->Father_Phone,
                 'Father_Job' => $request->Father_Job,
@@ -37,7 +35,6 @@ class MyParentsController extends Controller
                 'user_id' => \Auth::Id(),
                 'Father_Learning' => $request->Father_Learning,
             ]);
-            $this->syslog('create','App\Models\Parents',\Auth::id(),$pp,$request->ip());
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -62,8 +59,7 @@ class MyParentsController extends Controller
     public function update(ParentsRequest $request)
     {
         try {
-            $before=My_parents::find($request->id);
-            $af=My_parents::find($request->id)->update([
+			My_parents::find($request->id)->update([
                 'Father_Name' => $request->Father_Name,
                 'Father_Phone' => $request->Father_Phone,
                 'Father_Job' => $request->Father_Job,
@@ -79,7 +75,6 @@ class MyParentsController extends Controller
                 'Father_Learning' => $request->Father_Learning,
             ]);
 
-            $this->syslog('update','App\Models\Parents',\Auth::id(),[$before,$af],$request->ip());
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -95,7 +90,6 @@ class MyParentsController extends Controller
             $d =My_parents::withCount('Students')->findorfail($id);
             if($d->Students_count == 0){
 
-                $this->syslog('delete','App\Models\Parents',\Auth::id(),$d,$request->ip());
                 $d->delete();
                 session()->flash('success', trans('general.deleted'));
                 return redirect()->route('parents.index');

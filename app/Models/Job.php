@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Enums\Status;
-
+use App\Enums\{Status, Jobs_types};
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 class Job extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
-    protected $casts = ['status' => Status::class];
-    protected $fillable = ['status', 'title', 'created_by', 'updated_by'];
+    use HasFactory,LogsActivity, SoftDeletes;
+    protected $casts = ['status' => Status::class, 'type' => Jobs_types::class];
+    protected $fillable = ['status', 'title', 'created_by', 'updated_by', 'type'];
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -20,5 +20,11 @@ class Job extends Model
     public function updator()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+	   public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])->logOnlyDirty();
+        // Chain fluent methods for configuration options
     }
 }

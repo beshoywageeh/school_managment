@@ -31,7 +31,10 @@
         <x-nav_link :href="route('jobs.index')" :active="request()->is('*/jobs/*')" :image="URL::asset('assests/images/Sidebar/job.png')">
             {{ trans('sidebar.jobs') }}
         </x-nav_link>
-        <x-nav_link :href="route('parents.index')" :active="request()->is('*/parents/*')" :image="URL::asset('assests/images/Sidebar/parents.png')">
+          <x-nav_link :href="route('employees.index')" :active="request()->is('*/employees/*')" :image="URL::asset('assests/images/Sidebar/employees.png')">
+            {{ trans('sidebar.employees') }}
+        </x-nav_link>
+          <x-nav_link :href="route('parents.index')" :active="request()->is('*/parents/*')" :image="URL::asset('assests/images/Sidebar/parents.png')">
             {{ trans('sidebar.parents') }}
         </x-nav_link>
         <x-nav_link :href="route('Students.index')" :active="request()->is('*/students/*')" :image="URL::asset('assests/images/Sidebar/students.png')">

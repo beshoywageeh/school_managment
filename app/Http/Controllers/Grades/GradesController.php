@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Grades;
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
 use Illuminate\Http\Request;
-use App\Http\Traits\systemLogTrait;
 class GradesController extends Controller
 {
-    use systemLogTrait;
     public function index()
     {
 
@@ -31,7 +29,6 @@ class GradesController extends Controller
                 'name' => $request->Grade_Name,
                 'user_id' => \Auth::Id(),
             ]);
-            $this->syslog('create','App\Models\Grades',\Auth::Id(),$grade,$request->ip());
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
@@ -68,7 +65,6 @@ class GradesController extends Controller
                 'Grade_Name' => ['required', 'string', 'max:255'],
             ]);
             $grade = Grade::where('id', $request->id)->first();
-            $this->syslog('update','App\Models\Grades',\Auth::Id(),['id'=>$grade->id,'old_name'=>$grade->name,'new_name'=>$request->Grade_Name],$request->ip());
             $grade->update([
                 'name' => $request->Grade_Name,
             ]);
@@ -92,7 +88,6 @@ class GradesController extends Controller
 
         $grade = Grade::where('id', $id)->withcount('class_room')->first();
         if ($grade->class_room_count == 0) {
-            $this->syslog('delete','App\Models\Grades',\Auth::Id(),['id'=>$grade->id,'name'=>$grade->name],$request->ip());
             $grade->delete();
 
             return redirect()->back()->with('success', trans('general.success'));

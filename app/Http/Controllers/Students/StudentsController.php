@@ -7,13 +7,8 @@ use App\Http\Requests\StudentRequest;
 use Illuminate\Http\Request;
 use App\Models\{Grade,My_parents,class_room, Student};
 use PDF;
-use App\Http\Traits\systemLogTrait;
 class StudentsController extends Controller
 {
-    use systemLogTrait;
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         return view('backend.Students.Index');
@@ -49,7 +44,6 @@ class StudentsController extends Controller
                 'address'=>$request->address,
                 'user_id'=>\Auth::Id(),
             ]);
-            $this->syslog('','App\Models\Student',\Auth::id(),$request->input(),$request->ip());
             session()->flash('success',trans('general.success'));
              return redirect()->route('Students.index');
          }catch(\Exception $e){
@@ -93,8 +87,6 @@ class StudentsController extends Controller
      */
     public function update(StudentRequest $request)
     {        try{
-            $student = student::findorfail($request->id);
-            $this->syslog('','App\Models\Student',\Auth::id(),[$student,$request->input()],$request->ip());
             $student->update([
                 'name'=>$request->student_name,
                 'birth_date'=>$request->birth_date,
@@ -122,7 +114,6 @@ class StudentsController extends Controller
     {
         try{
             $student=Student::findorfail($id);
-            $this->syslog('','App\Models\Student',\Auth::id(),$student,$request->ip());
             $student->delete();
             return redirect()->back()->with('success',trans('general.success'));
         }catch(\Exception $e){

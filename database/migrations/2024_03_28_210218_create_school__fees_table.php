@@ -16,6 +16,7 @@ return new class extends Migration
             $table->bigInteger('grade_id')->unsigned()->nullable();
             $table->bigInteger('classroom_id')->unsigned()->nullable();
             $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->bigInteger('academic_year_id')->unsigned()->nullable();
             $table->string('description')->require();
             $table->decimal('amount', 8, 2)->require();
             $table->timestamps();

@@ -5,20 +5,29 @@
 @push('css')
 @endpush
 @section('content')
-<div class="card mb-4">
+<div class="mb-4 card">
     <div class="card-body">
             <form action="{{route('academic_year.store')}}" method="post">
                 @csrf
-                <div class="flex w-full flex-col items-center gap-1 md:flex-row md:gap-2">
+                <div class="flex flex-col gap-1 items-center w-full md:flex-row md:gap-2">
                     <div class="w-full md:w-1/3">
                         <label class="label label-required" for="year_end">{{ trans('academic_year.year_end') }}</label>
                     </div>
+
                     <div class="w-full md:w-1/3">
                         <input class="input input-date" id="year_end" name="year_end" type="date" >
                     </div>
                     <div class="w-full md:w-1/3">
+                        <label for="toggle-success" class="toggle toggle-success group reverse">
+                            <span class="label">{{ trans('academic_year.status') }}</span>
+                            <input class="sr-only toggle-input peer" id="toggle-success" name="status" type="checkbox"
+                                checked="">
+                            <div class="toggle-body"></div>
+                        </label>
+                    </div>
+                    <div class="w-full md:w-1/3">
 
-                        <button type="submit" class="btn btn-primary w-full">{{ trans('general.Submit') }}</button>
+                        <button type="submit" class="w-full btn btn-primary">{{ trans('general.Submit') }}</button>
                     </div>
                 </div>
             </form>
@@ -27,7 +36,7 @@
         <div class="card">
             <div class="card-body">
 
-                <div class="table-resposive my-4">
+                <div class="my-4 table-resposive">
                     <table class="table table-striped table-bordered" id="datatable-filter">
                         <thead>
                             <tr>
@@ -48,7 +57,7 @@
                                     <td> {{ $acadmice_years->firstItem() + $loop->index }}</td>
                                     <td>{{ \Carbon\Carbon::parse($acadmice_year->year_start)->format('Y-m') }}</td>
                                     <td> {{ \Carbon\Carbon::parse($acadmice_year->year_end)->format('Y-m') }}</td>
-                                    <td>{{ $acadmice_year->creator->first_name }}</td>
+                                    <td>{{ $acadmice_year->creator->name }}</td>
                                     <td>{{ $acadmice_year->created_at->format('Y-m-d') }}</td>
                                     <td>
                                         <div
@@ -57,7 +66,7 @@
                                         </div>
                                     </td>
 
-                                    <td>{{ ($acadmice_year->updator)?$acadmice_year->updator->first_name:'' }}</td>
+                                    <td>{{ ($acadmice_year->updator)?$acadmice_year->updator->name:'' }}</td>
                                     <td>{{ ($acadmice_year->updator)?$acadmice_year->updated_at->format('Y-m-d'):'' }}</td>
 
                                     <td>

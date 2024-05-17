@@ -13,25 +13,27 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('second_name');
-            $table->string('third_name')->nullable();
-            $table->string('forth_name')->nullable();
+            $table->string('name');
+            $table->string('code');
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->date('date_of_birth')->nullable();
+            $table->string('grade_year')->nullable();
             $table->date('date_of_hiring')->nullable();
             $table->string('learning')->nullable();
             $table->tinyInteger('reiligon')->nullable();
             $table->tinyInteger('gender')->nullable();
+            $table->tinyInteger('type')->nullable();
             $table->unsignedBigInteger('job_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->boolean('isAdmin')->default('0');
             $table->boolean('login_allow')->default('0');
-            $table->string('password');
-            $table->string('slug')->nullable();
-
+            $table->string('password')->nullable();
+            $table->boolean('insurance')->default('0');
+            $table->string('insurance_number')->nullable();
+            $table->date('insurance_date')->nullable();
+            $table->string('national_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

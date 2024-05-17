@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Traits\systemLogTrait;
 use App\Models\acadmice_year;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AcadmiceYearController extends Controller
 {
-    use systemLogTrait;
     /**
      * Display a listing of the resource.
      */
@@ -23,23 +21,28 @@ class AcadmiceYearController extends Controller
      */
     public function store(Request $request)
     {
+       // return $request;
 
         try {
             $validated = $request->validate([
                 'year_end' => 'required|date|unique:acadmice_years,year_end',
             ]);
             $latest_year = acadmice_year::latest()->first();
-            if ($latest_year->status == 0) {
-                session()->flash('error', trans('general.active_year'));
-                return redirect()->back();
+            if ($latest_year == null) {
+                $year_start = date('Y-m-d');
+            } else {
+                if ($latest_year->status == 0) {
+                    session()->flash('error', trans('general.active_year'));
+                    return redirect()->back();
+                }
+                $year_start = date('Y-m-d', strtotime($latest_year->year_end . '+1 day'));
             }
             acadmice_year::create([
-                'year_start' => \Carbon\Carbon::parse($latest_year->year_end)->addDays(1),
+                'year_start' => $year_start,
                 'year_end' => $request->year_end,
                 'created_by' => Auth::id(),
-                'status' => 0
+                'status' => ($request->status == 'on') ? 0 : 1
             ]);
-            $this->syslog('', 'acadmice_year', Auth::id(), ['year_start' => $latest_year->year_end, 'year_end' => $request->year_end], $request->ip());
             session()->flash('success', trans('general.success'));
             return redirect()->back();
         } catch (\Exception $e) {
@@ -66,7 +69,6 @@ class AcadmiceYearController extends Controller
             $acadmice_year = acadmice_year::findorFail($id);
             $acadmice_year->status = ($acadmice_year->status == 0) ? 1 : 0;
             $acadmice_year->save();
-            $this->syslog('', 'acadmice_year', Auth::id(), ['status-before' => $before->status, 'status-after' => $acadmice_year->status], $request->ip());
             session()->flash('success', trans('general.success'));
             return redirect()->back();
         } catch (\Exception $e) {
@@ -83,7 +85,6 @@ class AcadmiceYearController extends Controller
         try {
 
             $acadmice_year = acadmice_year::findorFail($id);
-            $this->syslog('', 'App\Models\acadmice_year', \Auth::id(), [$acadmice_year], $request->ip());
             $acadmice_year->delete();
             session()->flash('success', trans('general_success'));
             return redirect()->back();

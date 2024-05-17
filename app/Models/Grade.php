@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 class Grade extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory,SoftDeletes,LogsActivity;
 
     protected $fillable = [
         'name',
@@ -33,5 +35,11 @@ class Grade extends Model
     public function fees()
     {
         return $this->hasMany('App\Models\school_fee', 'grade_id');
+    }
+	   public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])->logOnlyDirty();
+        // Chain fluent methods for configuration options
     }
 }

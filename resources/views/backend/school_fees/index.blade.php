@@ -20,9 +20,10 @@
                                 <th>#</th>
                                 <th>{{ trans('fees.grade') }}</th>
                                 <th>{{ trans('fees.classroom') }}</th>
-                                <th>{{ trans('fees.by') }}</th>
+                                <th>{{trans('academic_year.title')}}</th>
                                 <th>{{ trans('fees.desc') }}</th>
                                 <th>{{ trans('fees.amount') }}</th>
+                                <th>{{ trans('fees.by') }}</th>
                                 <th>{{ trans('general.created_at') }}</th>
                                 <th>{{ trans('general.actions') }}</th>
                             </tr>
@@ -33,7 +34,8 @@
                                     <td> {{ $School_Fees->firstItem()+$loop->index }}</td>
                                     <td>{{ $fee->grade->name }}</td>
                                     <td>{{ $fee->classroom->name }}</td>
-                                    <td>{{ $fee->user->first_name }}</td>
+                                    <td></td>
+                                    <td>{{ $fee->user->name }}</td>
                                     <td>{{ $fee->description }}</td>
                                     <td>{{ number_format($fee->amount, 2) }}&nbsp;ج.م</td>
                                     <td>{{$fee->created_at->format('Y-m-d')}}</td>

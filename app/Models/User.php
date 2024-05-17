@@ -4,17 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Enums\{UserGender,UserReligion};
+use App\Enums\{user_religion, UserGender, Jobs_types};
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-    use SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +26,22 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'code',
+        'phone',
+        'address',
+        'date_of_birth',
+        'date_of_hiring',
+        'learning',
+        'reiligon',
+        'gender',
+        'type',
+        'job_id',
+        'isAdmin',
+        'login_allow',
+        'insurance',
+        'insurance_date',
+        'national_id',
+        'grade_year'
     ];
 
     /**
@@ -46,7 +63,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'gender'=>UserGender::class,
-        'religion'=>UserReligion::class
+        'religion' => user_religion::class,
+        'type' => Jobs_types::class
 
     ];
 
@@ -56,5 +74,15 @@ class User extends Authenticatable
     }
     public function settings(){
         return $this->belongsToMany('App\Models\settings','setting_user','id','setting_id');
+    }
+    public function job()
+    {
+        return $this->belongsTo('App\Models\Job');
+    }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])->logOnlyDirty();
+        // Chain fluent methods for configuration options
     }
 }

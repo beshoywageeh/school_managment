@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 class class_room extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory,SoftDeletes,LogsActivity;
 
     protected $fillable = [
         'name',
@@ -28,5 +30,11 @@ class class_room extends Model
     public function students()
     {
         return $this->hasMany('App\Models\Student', 'classroom_id');
+    }
+	   public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])->logOnlyDirty();
+        // Chain fluent methods for configuration options
     }
 }
