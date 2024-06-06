@@ -22,5 +22,6 @@ return [
 	'insurance_date'=>'تاريخ بداية التأمين',
 	'insurance_number'=>'الرقم التأميني',
 	'select_worker_type'=>'إختر الوظيفة'
+    
 	
 ];

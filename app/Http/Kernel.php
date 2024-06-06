@@ -72,6 +72,11 @@ class Kernel extends HttpKernel
         'localeCookieRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
         'localeViewPath' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
         'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
+        'setup' => \App\Http\Middleware\EnsureSetupIsNotCompleted::class,
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+
 
     ];
 }

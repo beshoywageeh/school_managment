@@ -10,8 +10,8 @@ enum Status: int
     public function color(): string
     {
         return match ($this) {
-            self::OPEN => 'badge-soft-success',
-            self::CLOSE => 'badge-soft-danger',
+            self::OPEN => 'badge badge-pill badge-success',
+            self::CLOSE => 'badge badge-pill badge-danger',
         };
     }
     public function lang(): string

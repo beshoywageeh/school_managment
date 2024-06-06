@@ -172,6 +172,8 @@ return [
         Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider::class,
         Mckenziearts\Notify\LaravelNotifyServiceProvider::class,
         Alkoumi\LaravelArabicNumbers\LaravelArabicNumbersServiceProvider::class,
+        Yajra\DataTables\DataTablesServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -188,7 +190,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'PDF' => Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::class,
-
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ])->toArray(),
 
 ];

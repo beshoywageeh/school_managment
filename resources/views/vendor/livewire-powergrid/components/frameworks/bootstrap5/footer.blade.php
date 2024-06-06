@@ -1,4 +1,4 @@
-<div>
+
     @includeIf(data_get($setUp, 'footer.includeViewOnTop'))
     @if (filled(data_get($setUp, 'footer.perPage')) &&
             count(data_get($setUp, 'footer.perPageValues')) > 1 &&
@@ -12,7 +12,7 @@
                         <label class="w-auto">
                             <select
                                     wire:model.live="setUp.footer.perPage"
-                                    class="form-select {{ data_get($theme, 'footer.selectClass') }}"
+                                    class="custom-select {{ data_get($theme, 'footer.selectClass') }}"
                                     style="{{ data_get($theme, 'footer.selectStyle') }}"
                             >
                                 @foreach (data_get($setUp, 'footer.perPageValues') as $value)
@@ -42,4 +42,4 @@
         </footer>
     @endif
     @includeIf(data_get($setUp, 'footer.includeViewOnBottom'))
-</div>
+

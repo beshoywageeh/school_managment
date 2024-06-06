@@ -1,6 +1,23 @@
 <?php
 
-use App\Http\Controllers\{ProfileController, BackupController, AcadmiceYearController, SettingsController, Students\StudentsController, HomeController, MonitorSystemController, ClassRooms\ClassRoomsController, Grades\GradesController, SchoolFeeController, Parents\MyParentsController, JobController, UserController};
+use App\Http\Controllers\{AcadmiceYearController,
+    BackupController,
+    ClassRooms\ClassRoomsController,
+    ExcptionFeesController,
+    fee_invoiceController,
+    Grades\GradesController,
+    HomeController,
+    JobController,
+    MonitorSystemController,
+    Parents\MyParentsController,
+    ProfileController,
+    promotionController,
+    ReciptPaymentController,
+    SchoolFeeController,
+    SettingsController,
+    SetupController,
+    Students\StudentsController,
+    UserController,PaymentPartsController,ReportController,RoleController};
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -16,7 +33,6 @@ use Livewire\Livewire;
  */
 
 
-
 Route::group(
 
     [
@@ -29,8 +45,6 @@ Route::group(
             return Route::post('/livewire/update', $handle);
         });
 
-        Route::get('/', [SettingsController::class, 'index'])->name('create_new_school');
-        Route::post('/new', [SettingsController::class, 'store'])->name('new_school');
 
         Route::middleware('auth')->group(function () {
             Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
@@ -100,13 +114,63 @@ Route::group(
             });
             Route::group(['prefix' => 'school_fees', 'controller' => SchoolFeeController::class], function () {
                 Route::get('/index', 'index')->name('schoolfees.index');
-                 Route::get('/create', 'create')->name('schoolfees.create');
-                // Route::get('{id}/edit', 'edit')->name('Students.edit');
-                // Route::get('/{id}/destroy', 'destroy')->name('Students.destroy');
-                // Route::get('/{id}/show', 'show')->name('Students.show');
-                 Route::post('/store', 'store')->name('schoolfees.store');
-                // Route::post('/update', 'update')->name('Students.update');
-                // Route::get('/{id?}/pdf', 'pdf')->name('Students.pdf');
+                Route::get('/create', 'create')->name('schoolfees.create');
+                Route::get('{id}/edit', 'edit')->name('schoolfees.edit');
+                Route::get('/{id}/destroy', 'destroy')->name('schoolfees.destroy');
+                Route::get('/{id}/show', 'show')->name('schoolfees.show');
+                Route::post('/store', 'store')->name('schoolfees.store');
+                Route::post('/update', 'update')->name('schoolfees.update');
+            });
+            Route::group(['prefix' => 'promotion', 'controller' => promotionController::class], function () {
+                Route::get('/index', 'index')->name('promotion.index');
+                Route::get('/create', 'create')->name('promotion.create');
+                Route::post('/store', 'store')->name('promotion.store');
+                Route::get('/{id}/destroy', 'destroy')->name('promotions.destroy');
+            });
+            Route::group(['prefix' => 'fee_invoice', 'controller' => fee_invoiceController::class], function () {
+                Route::get('/index', 'index')->name('fee_invoice.index');
+                Route::get('/{student_id}/create', 'create')->name('fee_invoice.create');
+                Route::post('/store', 'store')->name('fee_invoice.store');
+                Route::get('/{id}/edit', 'edit')->name('fee_invoice.edit');
+                Route::post('/update', 'update')->name('fee_invoice.update');
+                Route::get('/{id}/destroy', 'destroy')->name('fee_invoice.destroy');
+                Route::get('/{id?}/show', 'show')->name('fee_invoice.show');
+
+            });
+            Route::group(['prefix' => 'Recipt_Payment', 'controller' => ReciptPaymentController::class], function () {
+                Route::get('/index', 'index')->name('Recipt_Payment.index');
+                Route::get('/{id}/create', 'create')->name('Recipt_Payment.create');
+                Route::post('/store', 'store')->name('Recipt_Payment.store');
+                Route::get('/{id}/edit', 'edit')->name('Recipt_Payment.edit');
+                Route::post('/update', 'update')->name('Recipt_Payment.update');
+                Route::get('/{id}/destroy', 'destroy')->name('Recipt_Payment.destroy');
+                Route::get('/{id?}/show', 'show')->name('Recipt_Payment.show');
+                Route::get('/{id?}/print', 'print')->name('Recipt_Payment.print');
+
+            });
+            Route::group(['prefix' => 'except_fee', 'controller' => ExcptionFeesController::class], function () {
+                Route::get('/index', 'index')->name('except_fee.index');
+                Route::get('{id}/create', 'create')->name('except_fee.create');
+                Route::post('/store', 'store')->name('except_fee.store');
+                Route::get('/{id}/edit', 'edit')->name('except_fee.edit');
+                Route::post('/update', 'update')->name('except_fee.update');
+                Route::get('/{id}/destroy', 'destroy')->name('except_fee.destroy');
+                Route::get('/{id?}/show', 'show')->name('except_fee.show');
+            });
+            Route::group(['prefix' => 'payment_parts', 'controller' => PaymentPartsController::class], function () {
+                Route::get('/index', 'index')->name('payment_parts.index');
+                Route::get('{id}/create', 'create')->name('payment_parts.create');
+                Route::post('/store', 'store')->name('payment_parts.store');
+                Route::get('/{id}/edit', 'edit')->name('payment_parts.edit');
+                Route::post('/update', 'update')->name('payment_parts.update');
+                Route::get('/{id}/destroy', 'destroy')->name('payment_parts.destroy');
+                Route::get('/{id?}/show', 'show')->name('payment_parts.show');
+                Route::get('/{id?}/pay', 'pay')->name('payment_parts.pay');
+                Route::post('/submit_pay', 'submit_pay')->name('payment_parts.submit_pay');
+            });
+            Route::group(['prefix'=>'reports','controller'=>ReportController::class],function (){
+                Route::get('report','index')->name('report.index');
+                Route::get('Students','ExportStudents')->name('student.excel');
             });
             Route::group(['prefix' => 'ajax'], function () {
                 Route::get('/get_classRooms/{id}', [StudentsController::class, 'getclasses']);
@@ -119,16 +183,24 @@ Route::group(
                 Route::get('/download/{file_name}', 'download')->name('backup.download');
                 Route::get('/delete/{file_name}', 'delete')->name('backup.delete');
             });
+            Route::group(['prefix' => 'permission', 'controller' => RoleController::class], function () {
+                Route::get('/index', 'index')->name('roles.index');
+                Route::get('/create', 'create')->name('roles.create');
+
+
+            });
             Route::group(['prefix' => 'settings', 'controller' => SettingsController::class], function () {
-                Route::get('/index', 'edit')->name('setting.index');
+                Route::get('/index', 'index')->name('setting.index');
                 Route::post('/update_password', 'update_password')->name('setting.update_password');
             });
+            Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', MonitorSystemController::class)->name('system_lookup');
         });
     }
 );
-require __DIR__.'/auth.php';
-
+require __DIR__ . '/auth.php';
+Route::get('/', [SetupController::class, 'showSetupForm'])->name('setup')->middleware('setup');
+Route::post('/setup', [SetupController::class, 'processSetup'])->name('config')->middleware('setup');
 if (config('app.env') == 'local') {
-    require __DIR__.'/local.php';
+    require __DIR__ . '/local.php';
 }

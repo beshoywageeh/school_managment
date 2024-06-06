@@ -12,15 +12,16 @@
             header: page-header;
             footer: page-footer;
         }
-.grade_table{
-    width: 100vw;
-}
+
+        .grade_data {
+            width: 100%;
+        }
+
         table,
         .grade_data,
         tr,
         td,
         th {
-
             margin: auto;
             border-collapse: collapse;
             text-align: center;
@@ -39,9 +40,11 @@
             border-collapse: collapse;
             text-align: center;
         }
+
         .data thead tr {
             background-color: black;
         }
+
         .data thead tr th {
             color: white;
         }
@@ -49,39 +52,51 @@
 </head>
 
 <body>
-    @foreach ($data['students'] as $students)
+@foreach ($data['students'] as $students)
     <table class="grade_data">
+        <tr>
+            <th>{{ trans('Grades.name') }}</th>
+            <th>{{ $students->name }}</th>
+            <th>{{ trans('Grades.student_count') }}</th>
+            <th>{{ $students->students_count }}</th>
+        </tr>
+    </table>
+    <table class="data">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>{{ trans('student.name') }}</th>
+            <th>{{ trans('student.national_id') }}</th>
+            <th>{{ trans('student.birth_date') }}</th>
+            <th>{{ trans('student.checkbirth_date') }}</th>
+            <th>{{ trans('student.join_date') }}</th>
+            <th>{{ trans('student.gender') }}</th>
+            <th>{{ trans('Parents.Father_Name') }}</th>
+            <th>{{ trans('General.std_status') }}</th>
+            <th>{{ trans('general.religion') }}</th>
+            <th>{{ trans('class_rooms.Name') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach ($students->students as $student)
             <tr>
-                <th>{{ trans('Grades.name') }}</th>
-                <th>{{ $students->Grade_Name }}</th>
-                <th>{{ trans('Grades.student_count') }}</th>
-                <th>{{ $students->students_count }}</th>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $student->name }}</td>
+                <td>{{ $student->national_id }}</td>
+                <td>{{ $student->birth_date }}</td>
+                <td>{{ $student->birth_at_begin }}</td>
+                <td>{{ $student->join_date }}</td>
+                <td>{{ $student->gender->lang() }}</td>
+                <td>{{ $student->parent->Father_Name }}</td>
+                <td>{{ $student->student_status->lang() }}</td>
+                <td>{{ $student->religion->lang() }}</td>
+                <td>{{ $student->classroom->name }}</td>
             </tr>
-        </table>
-        <table class="data">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>{{ trans('student.name') }}</th>
-                    <th>{{ trans('student.birth_date') }}</th>
-                    <th>{{ trans('student.gender') }}</th>
-                    <th>{{ trans('class_rooms.Name') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($students->students as $student)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $student->name }}</td>
-                        <td>{{ $student->birth_date }}</td>
-                        <td>{{ $student->gender }}</td>
-                        <td>{{ $student->classroom->class_name }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <pagebreak />
-    @endforeach
+        @endforeach
+        </tbody>
+    </table>
+    <pagebreak/>
+@endforeach
 </body>
 
 </html>

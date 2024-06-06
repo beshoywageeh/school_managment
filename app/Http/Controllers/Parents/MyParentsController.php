@@ -10,7 +10,8 @@ class MyParentsController extends Controller
 {
     public function index()
     {
-        return view('backend.Parents.index');
+        $parents = My_parents::with('students')->get();
+        return view('backend.Parents.index', get_defined_vars());
     }
     public function create()
     {

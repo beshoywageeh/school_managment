@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Students;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
+use App\Models\{class_room, Grade, My_parents, Student};
 use Illuminate\Http\Request;
-use App\Models\{Grade,My_parents,class_room, Student};
 use PDF;
+
 class StudentsController extends Controller
 {
     public function index()
+
     {
         return view('backend.Students.Index');
     }
@@ -19,11 +21,11 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        $grades=Grade::all(['id','name']);
-        $parents=My_parents::all(['id','Father_Name']);
+        $grades = Grade::all(['id', 'name']);
+        $parents = My_parents::all(['id', 'Father_Name']);
 
-         //return get_defined_vars();
-        return view('backend.Students.create',get_defined_vars());
+        //return get_defined_vars();
+        return view('backend.Students.create', get_defined_vars());
     }
 
     /**
@@ -32,24 +34,36 @@ class StudentsController extends Controller
     public function store(StudentRequest $request)
     {
 
-         try{
+        try {
+
+            $inputDate = \Carbon\Carbon::parse($request->birth_date);
+            $firstOfOctober = \Carbon\Carbon::create($inputDate->year, 10, 1);
+
+            $years = $inputDate->diffInYears($firstOfOctober);
+            $months = $inputDate->diffInMonths($firstOfOctober) % 12;
+            $days = $inputDate->diffInDays($firstOfOctober->copy()->subYears($years)->subMonths($months));
+            $final_date = "{$years}-{$months}-{$days}";
             Student::create([
-                'name'=>$request->student_name,
-                'birth_date'=>$request->birth_date,
-                'join_date'=>$request->join_date,
-                'gender'=>$request->gender,
-                'grade_id'=>$request->grade,
-                'parent_id'=>$request->parents,
-                'classroom_id'=>$request->class_room,
-                'address'=>$request->address,
-                'user_id'=>\Auth::Id(),
+                'name' => $request->student_name,
+                'birth_date' => $request->birth_date,
+                'join_date' => $request->join_date,
+                'gender' => $request->gender,
+                'grade_id' => $request->grade,
+                'parent_id' => $request->parents,
+                'classroom_id' => $request->class_room,
+                'address' => $request->address,
+                'national_id' => $request->national_id,
+                'student_status' => $request->std_status,
+                'religion'=>My_parents::findorfail($request->parents)->Religion,
+                'birth_at_begin' => $final_date,
+                'user_id' => \Auth::Id(),
             ]);
-            session()->flash('success',trans('general.success'));
-             return redirect()->route('Students.index');
-         }catch(\Exception $e){
-             session()->flash('error', $e->getMessage());
-             return redirect()->back()->withInput();
-         }
+            session()->flash('success', trans('general.success'));
+            return redirect()->route('Students.index');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
@@ -57,11 +71,12 @@ class StudentsController extends Controller
      */
     public function show(string $id)
     {
-        try{
-            $student = Student::where('id',$id)->with(['user','grade','classroom','parent'])->first();
-            return view('backend.Students.show',get_defined_vars());
-        }catch(\Exception $e){
-            session()->flash('error',$e->getMessage());
+        try {
+            $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone', 'StudentAccount'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();
+           // return $student;
+            return view('backend.Students.show', get_defined_vars());
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
             return redirect()->back();
         }
     }
@@ -71,13 +86,13 @@ class StudentsController extends Controller
      */
     public function edit(string $id)
     {
-        try{
-            $grades=Grade::all(['id','name']);
-        $parents=My_parents::all(['id','Father_Name']);
+        try {
+            $grades = Grade::all(['id', 'name']);
+            $parents = My_parents::all(['id', 'Father_Name']);
             $student = Student::findorfail($id);
-            return view('backend.Students.edit',get_defined_vars());
-        }catch(\Exception $e){
-            session()->flash('error',$e->getMessage());
+            return view('backend.Students.edit', get_defined_vars());
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
             return redirect()->back();
         }
     }
@@ -86,52 +101,60 @@ class StudentsController extends Controller
      * Update the specified resource in storage.
      */
     public function update(StudentRequest $request)
-    {        try{
+    {
+        try {
+            $student = Student::findorfail($request->id);
             $student->update([
-                'name'=>$request->student_name,
-                'birth_date'=>$request->birth_date,
-                'join_date'=>$request->join_date,
-                'gender'=>($request->gender =="" )?$student->gender:$request->gender,
-                'grade_id'=>$request->grade,
-                'parent_id'=>$request->parents,
-                'classroom_id'=>($request->class_room =="" )?$student->classroom_id:$request->class_room,
-                'address'=>$request->address,
-                'national_id'=>$request->national_id,
-                'user_id'=>\Auth::Id(),
+                'name' => $request->student_name,
+                'birth_date' => $request->birth_date,
+                'join_date' => $request->join_date,
+                'gender' => $request->gender,
+                'grade_id' => $request->grade,
+                'parent_id' => $request->parents,
+                'classroom_id' => $request->class_room,
+                'address' => $request->address,
+                'student_status' => $request->std_status,
+                'national_id' => $request->national_id,
+                'religion'=>My_parents::findorfail($request->parents)->Religion,
+
+                'user_id' => \Auth::Id(),
             ]);
-            session()->flash('success',trans('general.success'));
-             return redirect()->route('Students.index');
-         }catch(\Exception $e){
-             session()->flash('error', $e->getMessage());
-             return redirect()->back()->withInput();
-         }
+            session()->flash('success', trans('general.success'));
+            return redirect()->route('Students.index');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id,Request $request)
+    public function destroy(string $id, Request $request)
     {
-        try{
-            $student=Student::findorfail($id);
+        try {
+            $student = Student::findorfail($id);
             $student->delete();
-            return redirect()->back()->with('success',trans('general.success'));
-        }catch(\Exception $e){
-            session()->flash('error',$e->getMessage());
+            return redirect()->back()->with('success', trans('general.success'));
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
             return redirect()->back();
         }
     }
 
 
-    public function getclasses($id){
-        $class_rooms = class_room::where('grade_id',$id)->get(['id','name']);
+    public function getclasses($id)
+    {
+        $class_rooms = class_room::where('grade_id', $id)->get(['id', 'name']);
         return response()->json($class_rooms);
     }
-    public function pdf($id){
+
+    public function pdf($id)
+    {
         $data['students'] = Grade::with(['students'])->withcount('students')->get();
-      //  return $data['students'];
-       $pdf = PDF::loadView('backend.Students.pdf' , ['data' => $data],[],[
-        'format' => 'A4',
+        //  return $data['students'];
+        $pdf = PDF::loadView('backend.Students.pdf', ['data' => $data], [], [
+            'format' => 'A4',
             'margin_left' => 4,
             'margin_right' => 4,
             'margin_top' => 4,
@@ -139,9 +162,9 @@ class StudentsController extends Controller
             'margin_header' => 0,
             'margin_footer' => 0,
             'orientation' => 'L',
-       ]);
+        ]);
         // $pdf = PDF::loadView('backend.Students.pdf', ['students'=>$students]);
-        return $pdf->stream(trans('student.info').'.pdf');
+        return $pdf->stream(trans('student.info') . '.pdf');
 
     }
 }

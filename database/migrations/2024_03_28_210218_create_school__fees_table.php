@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('school__fees', function (Blueprint $table) {
             $table->id();
+            $table->string('title',100)->required();
             $table->bigInteger('grade_id')->unsigned()->nullable();
             $table->bigInteger('classroom_id')->unsigned()->nullable();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->bigInteger('academic_year_id')->unsigned()->nullable();
             $table->string('description')->require();
-            $table->decimal('amount', 8, 2)->require();
+            $table->decimal('amount', 10, 2)->require();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -1,38 +1,43 @@
-<div class="modal modal-centered" id="grade-edit-{{ $grade->id }}">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="flex items-center justify-between">
-                    <h6>{{ trans('general.edit') }}</h6>
-                    <button type="button"
-                        class="btn btn-plain-secondary dark:text-slate-300 dark:hover:bg-slate-700 dark:focus:bg-slate-700"
-                        data-dismiss="modal">
-                        <i data-feather="x" width="1.5rem" height="1.5rem"></i>
-                    </button>
-                </div>
-            </div>
-            <form action="{{ route('grade.update') }}" method="POST">
-                @csrf
-                <input type="hidden" name="id" value="{{ $grade->id }}">
-                <div class="modal-body">
-
-                    <div class="input-group input-group-disabled mb-2">
-                        <label for="" class="input-group-text">{{ trans('grade.old_name')
-                            }}</label>
-                        <input type="text" disabled class="input" value="{{ $grade->name }}">
-                    </div>
-                    <div class='input-group'>
-                        <label for="" class="input-group-text">{{ trans('general.new') }}</label>
-                        <input type="text" name="Grade_Name" class="input"
-                            placeholder="{{ trans('grades.grade_name') }}" value={{ old('grade_name') }}>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
-                    <button class="btn btn-secondary" data-dismiss="modal">{{ trans('general.Cancel') }}</button>
-                </div>
-            </form>
-
+<div class="modal fade" id="grade-edit-{{ $grade->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title"><div class="mb-30">
+          <h6>{{ trans('general.edit') }}</h6>
         </div>
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form action="{{ route('grade.update') }}" method="POST">
+        @csrf
+        <input type="hidden" name="id" value="{{ $grade->id }}">
+
+        <div class="modal-body">
+
+            <x-input name='Grade_Name' class='' type='text'  value='{{$grade->name}}'>{{
+                trans('grades.name') }}</x-input>
+                   <div class="form-group">
+                    <label for="exampleFormControlSelect2">{{ trans('Grades.select_res') }}</label>
+                    <select multiple="" name="user_id[]" class="form-control" id="tom-select">
+                        @foreach ($grade->users as $user)
+                            <option value="{{$user->id}}" selected>{{$user->name}}</option>
+                        @endforeach
+                        @foreach ($data['users'] as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
+            <button class="btn btn-secondary" data-dismiss="modal">{{ trans('general.Cancel') }}</button>
+        </div>
+        </form>
+
+
     </div>
-</div>
+    </div>
+  </div>
+

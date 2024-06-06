@@ -1,6 +1,6 @@
-<div class="w-full md:w-1/3">
-    <label for="gender" class="mb-1 label label-required">{{ trans('general.gender') }}</label>
-    <select id="gender" class="select reverse" name="gender" {{$attributes}}>
+<div class="col">
+    <label for="gender" class="">{{ trans('general.gender') }}</label>
+    <select id="gender" class="form-control" name="gender" {{$attributes}}>
         <option value="" selected>{{ trans('general.gender') }}</option>
         @foreach(\App\Enums\UserGender::cases() as $gender)
             <option value="{{ $gender->value }}" @selected(old('gender', $gender->value) == $gender->value)>{{ $gender->lang() }}</option>

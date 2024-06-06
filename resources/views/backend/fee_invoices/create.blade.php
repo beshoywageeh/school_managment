@@ -1,127 +1,66 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('parents.new') }}
+    {{ trans('general.new') }} | {{trans('fee_invoice.title')}}
 @endsection
 @section('content')
     <div class="mb-4 row">
         <div class="col">
+            @include('backend.msg')
             <div class="card">
                 <div class="card-body">
                     <div class="row card-title">
                         <div class="col">
-                            <h4>{{ trans('parents.new') }}</h4>
+                            <h4>{{$student->name}}</h4>
                         </div>
                     </div>
-                    <form id="form-with-multiple-column" class="max-w-full" action="{{ route('parents.store') }}"
-                        method="post">
+                    <form id="form-with-multiple-column" class="max-w-full" action="{{ route('fee_invoice.store') }}"
+                          method="post">
                         @csrf
-                        <fieldset class=''>
-                            <legend class='m-auto text-center text-muted'>{{ trans('Parents.Father_Info') }}</legend>
-                            <!-- Father Info -->
-                            <!-- Form Row: One -->
-                            <div class="row">
-                                <div class="col">
-                                    <!-- Form Coumn: Username -->
-                                    <x-input name='Father_Name' class=''
-                                        type='text'>{{ trans('Parents.Father_Name') }}</x-input>
-                                </div>
-                                <div class="col">
-                                    <x-input name='Father_Phone' class=''
-                                        type='text'>{{ trans('Parents.Father_Phone') }}</x-input>
-                                </div>
-                                <div class="col">
-                                    <!-- Form Column: Father_Job -->
-                                    <x-input name='Father_Job' type='text'>{{ trans('Parents.Father_Job') }}</x-input>
-                                </div>
-                            </div>
-                            <!-- Form Row: Two -->
-                            <div class="row">
-                                <div class="col">
-                                    <x-input name='Father_National_Id' class='' data="Father_National_Id"
-                                        type='text'>{{ trans('Parents.Father_National_Id') }}
-                                    </x-input>
+                        <input type="hidden" name="student_id" value="{{$student->id}}">
+                        <div class="repeater">
+                            <div data-repeater-list="list_fees">
+                                <div data-repeater-item>
+                                    <div class="row mb-30">
+                                        <div class="col">
+                                            <label for="">{{trans('fee_invoice.name')}}</label>
+                                            <select class="custom-select" name="student_id">
+                                                <option value="{{$student->id}}" selected>{{$student->name}}</option>
+                                            </select>
 
-                                </div>
-                                <div class="col form-group">
-                                    <label>
-                                        {{ trans('Parents.Father_Birth_Date') }}
-                                    </label>
-                                    <div class="input-group date" id="datepicker-action">
-                                        <input class="form-control" name="Father_Birth_Date" type="text"
-                                            value="dd/mm/yyyy">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
+                                        </div>
+                                        <div class="col">
+                                            <label for="">{{trans('fee_invoice.selectschool')}}</label>
+
+                                            <select class="custom-select" name="fee">
+                                                <option value="" selected>{{trans('fee_invoice.selectschool')}}</option>
+                                                @foreach($School_Fees as $fee)
+                                                    <option value="{{$fee->id}}">
+                                                        {{$fee->title}} - {{number_format($fee->amount,2)}}&nbsp;ج.م
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <input class="btn btn-danger btn-block" data-repeater-delete type="button"
+                                                   value="{{trans('General.delete')}}"/>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <x-input name='Father_Learning' class=""
-                                        type='text'>{{ trans('Parents.Father_Learning') }}</x-input>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <hr>
-                        <fieldset class=''>
-                            <legend class='m-auto text-center text-muted'>{{ trans('Parents.Mother_Info') }}</legend>
-                            <!-- Mother Info -->
-                            <!-- Form Row: One -->
-                            <div class="row">
-                                <div class="col">
-                                    <!-- Form Column: Username -->
-                                    <x-input name='Mother_Name' class=''
-                                        type='text'>{{ trans('Parents.Mother_Name') }}</x-input>
-                                </div>
-                                <div class="col">
-                                    <x-input name='Mother_Phone' class=''
-                                        type='text'>{{ trans('Parents.Mother_Phone') }}</x-input>
-                                </div>
-                                <div class="col">
-                                    <x-input name='Mother_Job' class=''
-                                        type='text'>{{ trans('Parents.Mother_Job') }}</x-input>
-                                </div>
-                            </div>
-                            <!-- Form Row: Two -->
-                            <div class="row">
-                                <div class="col">
-                                    <x-input name='Mother_National_Id' class=''
-                                        type='text'>{{ trans('Parents.Mother_National_Id') }}</x-input>
-                                </div>
-                                <div class="col form-group">
-                                    <label>
-                                        {{ trans('Parents.Mother_Birth_Date') }}
-                                    </label>
-                                    <div class="input-group date" id="datepicker-action">
-                                        <input class="form-control" name="Mother_Birth_Date" type="text"
-                                            value="dd/mm/yyyy">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                        <hr>
-                        <fieldset class=''>
-                            <legend class='m-auto text-center text-muted'>{{ trans('Parents.Other_Info') }}</legend>
-                            <!-- Other Info -->
 
-                            <!-- Form Row: One -->
-                            <div class="row">
-                                <!-- Form Column: Father_Job -->
-                                <div class="col">
-                                    <label class="">{{ trans('Parents.Address') }}</label>
-                                    <textarea class="form-control" name="Address" placeholder="{{ trans('Parents.Address') }}"></textarea>
-                                </div>
-                                <div class="col">
-
-                                    <x-input.religion-select name="Religion"></x-input.religion-select>
+                            </div>
+                            <div class="row mt-20">
+                                <div class="col-12">
+                                    <input class="btn btn-primary" data-repeater-create type="button"
+                                           value="{{trans('general.new')}}"/>
                                 </div>
                             </div>
-
-                        </fieldset>
+                        </div>
                         <hr>
+
+                        <input type="hidden" name="grade_id" value="{{$student->grade_id}}"><input type="hidden"
+                                                                                                   value="{{$student->classroom_id}}"
+                                                                                                   name="classroom_id">
                         <div class="row">
-                            <div class="col"></div>
                             <div class="col text-md-right">
                                 <button class="button" type="submit">{{ trans('General.Submit') }}</button>
                             </div>

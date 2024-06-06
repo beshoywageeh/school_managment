@@ -1,108 +1,143 @@
 @extends('layouts.app_login')
 @section('page_title')
     {{trans('install.new_school')}}
-
 @endsection
 @section('login')
-    <div class="w-full mx-auto card">
-        <div class="px-10 py-12 card-body">
-            <form action="{{ route('new_school') }}" method="post" enctype="multipart/form-data">
-                <section class="grid grid-cols-4 gap-6 sm:grid-cols-2 xl:grid-cols-1">
-                    @csrf
-                    <!-- school data  -->
-                    <div class="card">
-                        <div class="flex flex-col items-center justify-center">
-                            <h5 class="mt-4">    {{trans('install.new_school')}}
-                            </h5>
-                        </div>
-                        <div class="flex items-center justify-center gap-4 card-body">
-
-                            <div class="flex flex-col gap-5 mt-6">
-                                <!-- Fullname -->
-                                <div>
-                                    <label class="mb-1 label">{{trans('install.school_name')}}</label>
-                                    <input type="text" class="input @error('schoolname') is-invalid @enderror" name="schoolname" value="{{old('schoolname')}}"placeholder="{{trans('install.school_name')}}" />
-                                    @error('schoolname')
-                                   <div class="mt-1 error-message">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <!-- Email -->
-                                <div>
-                                    <label class="mb-1 label">{{trans('install.address')}}</label>
-                                    <input type="text" class="input @error('title') is-invalid @enderror" name="address" placeholder="{{trans('install.address')}}" value="{{old('address')}}" />
-                                    @error('address')
-                                    <div class="mt-1 error-message">{{ $message }}</div>
-                                @enderror
-                                </div>
-                                <!-- Password -->
-                                <div>
-                                    <label class="mb-1 label">{{trans('install.phone')}}</label>
-                                    <input type="text" class="input @error('phone') is-invalid @enderror" name="phone" value="{{old('phone')}}" placeholder="{{trans('install.phone')}}" />
-                                    @error('phone')
-                                    <div class="mt-1 error-message">{{ $message }}</div>
-                                @enderror
-                                </div>
-                                <div>
-                                    <label class="mb-1 label">{{trans('install.logo')}}</label>
-                                    <input class="input" accept="*/image" type="file" name="logo">
-                                    @error('logo')
-                                        <span>{{$message}}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- admin data  -->
-                    <div class="card">
-                        <div class="flex flex-col items-center justify-center">
-                            <h5 class="mt-4">{{trans('install.admin')}}</h5>
-                        </div>
-                        <div class="flex items-center justify-center gap-4 card-body">
-
-                            <div class="flex flex-col gap-5 mt-6">
-
-                                <div>
-                                    <label class="mb-1 label">{{trans('install.first_name')}} </label>
-                                    <input type="text" class="input @error('first_name') is-invalid @enderror" name="first_name"  value="{{old('first_name')}}"placeholder="{{trans('install.first_name')}} " />
-                                    @error('first_name')
-                                    <div class="mt-1 error-message">{{ $message }}</div>
-                                @enderror
-                                </div>
-                                <div>
-                                    <label class="mb-1 label">{{trans('install.second_name')}} </label>
-                                    <input type="text" class="input @error('second_name') is-invalid @enderror" name="second_name" value="{{old('second_name')}}" placeholder="{{trans('install.second_name')}} " />
-                                    @error('second_name')
-                                    <div class="mt-1 error-message">{{ $message }}</div>
-                                @enderror
-                                </div>
-                                <div>
-                                    <label class="mb-1 label">{{trans('install.email')}}</label>
-                                    <input type="email" class="input @error('email') is-invalid @enderror" name="email" value="{{old('email')}}" placeholder="{{trans('install.email')}}" />
-                                    @error('email')
-                                    <div class="mt-1 error-message">{{ $message }}</div>
-                                @enderror
-                                </div>
-                                <div>
-                                    <label class="mb-1 label">{{trans('install.password')}} </label>
-                                    <input type="password" class="input @error('password') is-invalid @enderror" name="password" value="{{old('password')}}" placeholder="{{trans('install.password')}} " />
-                                    @error('password')
-                                    <div class="mt-1 error-message">{{ $message }}</div>
-                                @enderror
-                                </div>
-                                <input type="hidden" name="isAdmin" value="1">
-                                <input type="hidden" name="loginAllow" value="1">
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <div class="mt-8">
-                    <button type="submit" class="btn btn-primary w-full py-2.5">{{trans('install.register')}}</button>
+    <div class="card">
+        <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
+            @endif
+            <div class="card-title text-center">
+                <h4>{{trans('install.new_school')}}</h4>
             </div>
-        </form>
+            <form action="{{ route('config') }}" method="post" enctype="multipart/form-data">
+
+                @csrf
+                <div class="row">
+                    <div class="col">
+                        <fieldset class='p-4 rounded border border-primary'>
+                            <legend class="m-auto text-center text-muted">{{trans('install.school_details')}}</legend>
+
+                            <div class="form-group">
+                                <label class="">{{trans('install.school_name')}}</label>
+                                <input type="text" class="form-control @error('schoolname') is-invalid @enderror"
+                                       name="schoolname"
+                                       value="{{old('schoolname')}}" placeholder="{{trans('install.school_name')}}"/>
+                                @error('schoolname')
+                                <div class="mt-1 error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="">{{trans('install.address')}}</label>
+                                <input type="text" class="form-control @error('title') is-invalid @enderror"
+                                       name="address"
+                                       placeholder="{{trans('install.address')}}" value="{{old('address')}}"/>
+                                @error('address')
+                                <div class="mt-1 error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="">{{trans('install.phone')}}</label>
+                                <input type="text" class="form-control @error('phone') is-invalid @enderror"
+                                       name="phone"
+                                       value="{{old('phone')}}" placeholder="{{trans('install.phone')}}"/>
+                                @error('phone')
+                                <div class="mt-1 error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="">{{trans('install.logo')}}</label>
+                                <input class="form-control" accept="*/image" type="file" name="logo">
+                                @error('logo')
+                                <span>{{$message}}</span>
+                                @enderror
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col">
+                        <fieldset class='p-4 rounded border border-primary'>
+                            <legend class="m-auto text-center text-muted">{{trans('install.admin')}}</legend>
+                            <div class="form-group">
+                                <label class="">{{trans('install.name')}} </label>
+                                <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                       name="name"
+                                       value="{{old('name')}}" placeholder="{{trans('install.name')}} "/>
+                                @error('name')
+                                <div class="mt-1 error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="">{{trans('install.email')}}</label>
+                                <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                       name="email"
+                                       value="{{old('email')}}" placeholder="{{trans('install.email')}}"/>
+                                @error('email')
+                                <div class="mt-1 error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label class="">{{trans('install.password')}} </label>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                       name="password"
+                                       value="{{old('password')}}" placeholder="{{trans('install.password')}} "/>
+                                @error('password')
+                                <div class="mt-1 error-message">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <input type="hidden" name="isAdmin" value="1">
+                            <input type="hidden" name="loginAllow" value="1">
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="row mt-40">
+                    <div class="col">
+                        <fieldset class='p-4 rounded border border-primary'>
+                            <legend class="m-auto text-center text-muted">{{trans('install.db_details')}}</legend>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="database_name">{{trans('install.db_name')}}</label>
+                                        <input type="text" class="form-control" id="database_name" name="database_name"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="database_user">{{trans('install.db_user')}}</label>
+                                        <input type="text" class="form-control" id="database_user" name="database_user"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="database_password">{{trans('install.db_password')}}</label>
+                                        <input type="password" class="form-control" id="database_password"
+                                               name="database_password" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="row mt-40">
+                    <div class="col text-md-right">
+                        <button type="submit" class="button">{{trans('install.register')}}</button>
+
+                    </div>
+                </div>
+
+            </form>
+        </div>
 
     </div>
-    </div>
+
 @endsection
 @push('js')
 @endpush

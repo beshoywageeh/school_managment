@@ -14,7 +14,7 @@ class SchoolFeeController extends Controller
      */
     public function index()
     {
-        $School_Fees = School_Fee::with('grade', 'classroom', 'academic_year_formated', 'user')->paginate(10);
+        $School_Fees = School_Fee::with('grade', 'classroom', 'user')->get();
        // return $School_Fees;
          return view('backend.school_fees.index',get_defined_vars());
     }
@@ -26,7 +26,7 @@ class SchoolFeeController extends Controller
     {
         try{
             $grades = Grade::get();
-            $years = acadmice_year::where('status', 1)->get();
+            $years = acadmice_year::where('status', 0)->get();
             $academic_years =
                 $years->map(function ($year) {
                     return [
@@ -55,6 +55,7 @@ class SchoolFeeController extends Controller
             $school_fee->academic_year_id = $request->academic_year_id;
             $school_fee->description = $request->description;
             $school_fee->amount = $request->amount;
+            $school_fee->title = $request->title;
             $school_fee->save();
             session()->flash('success', trans('General.success'));
             return redirect()->route('schoolfees.index');
@@ -75,12 +76,20 @@ class SchoolFeeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(School_Fee $school_Fee)
+    public function edit($id)
     {
         try{
-            $school_Fee= School_Fee::findorFail($school_Fee);
-            session()->flash('success',trans('general_success'));
-            return redirect()->back();
+            $school_Fee = School_Fee::findorFail($id);
+            $grades = Grade::get();
+            $years = acadmice_year::where('status', 1)->get();
+            $academic_years =
+                $years->map(function ($year) {
+                    return [
+                        'id' => $year->id,
+                        'academic_year' => Carbon::parse($year->year_start)->format('Y') . '-' . Carbon::parse($year->year_end)->format('Y'),
+                    ];
+                });
+            return view('backend.school_fees.edit', get_defined_vars());
         }catch(\Exception $e){
             session()->flash('error',$e->getMessage());
             return redirect()->back();
@@ -90,29 +99,36 @@ class SchoolFeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSchool_FeeRequest $request, School_Fee $school_Fee)
+    public function update(UpdateSchool_FeeRequest $request)
     {
+
         try{
-
+            $school_fee = School_Fee::findorFail($request->id);
+            $school_fee->update([
+                'grade_id' => $request->grade_id,
+                'classroom_id' => $request->classroom_id,
+                'academic_year_id' => $request->academic_year_id,
+                'description' => $request->description,
+                'amount' => $request->amount,
+            ]);
             session()->flash('success',trans('general_success'));
-            return view('',get_defined_vars());
-        }catch(\Exception $e){
+            return redirect()->route('schoolfees.index');
 
+        }catch(\Exception $e){
             session()->flash('error',$e->getMessage());
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(School_Fee $school_Fee)
+    public function destroy($id)
     {
         try{
-
-            School_Fee::destroy($school_Fee);
+            School_Fee::destroy($id);
             session()->flash('success',trans('general_success'));
-            return view('',get_defined_vars());
+            return redirect()->route('schoolfees.index');
         }catch(\Exception $e){
             session()->flash('error',$e->getMessage());
             return redirect()->back();

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('ExcptionFee.title') }}
+    {{ trans('PaymentParts.title') }}
 @endsection
 @section('content')
     <div class="row">
@@ -10,66 +10,78 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col">
-                                <h4>{{ trans('ExcptionFee.title') }}</h4>
+                                <h4>{{ trans('PaymentParts.title') }}</h4>
                             </div>
                             <div class="col text-md-right">
                             </div>
                         </div>
                     </div>
                     <div class="table-responsive">
+                        @can('payment_parts-list')
                         <table id="datatable" class="table text-center table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>#</th>
                                 <th>{{ trans('general.created_at') }}</th>
                                 <th>{{ trans('Recipt_Payments.name') }}</th>
+                                <th>{{ trans('PaymentParts.status') }}</th>
                                 <th>{{ trans('Recipt_Payments.amount') }}</th>
                                 <th>{{ trans('general.actions') }}</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach ($ExcptionFees as $ExcptionFee)
+                            @foreach ($PaymentParts as $PaymentPart)
                                 <tr>
                                     <td> {{ $loop->iteration }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($PaymentPart->date)->format('Y-m-d') }}</td>
                                     <td><a target='_blank'
-                                           href="{{ route('except_fee.show', $ExcptionFee->students->id) }}">{{ $ExcptionFee->students->name }}</a>
+                                           href="{{ route('payment_parts.show', $PaymentPart->students->id) }}">{{ $PaymentPart->students->name }}</a>
                                     </td>
-                                    <td>{{ number_format($ExcptionFee->amount, 2) }}&nbsp;ج.م</td>
-
                                     <td>
-
+                                        @can('payment_parts-status')
+                                        <a class="btn {{ $PaymentPart->payment_status->color() }} btn-sm"
+                                           href="{{route('payment_parts.pay', $PaymentPart->id)}}"> {{ $PaymentPart->payment_status->lang() }}
+                                            <img src="{{asset('assests/images/load.gif')}}" alt=""> </a>
+                                    </td>
+                                    <td>{{ number_format($PaymentPart->amount, 2) }}&nbsp;ج.م</td>
+                                    <td>
                                         <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+
                                                 [
-                                                    'url' => route('except_fee.destroy', $ExcptionFee->id),
-                                                    'text' => trans('general.delete'),
-                                                    'icon' => 'ti-trash',
-                                                    'onclick' => 'confirmation(event)',
-                                                ],
-                                                [
-                                                    'url' => route('except_fee.show', $ExcptionFee->id),
+                                                    'url' => route('payment_parts.show', $PaymentPart->id),
                                                     'text' => trans('general.info'),
                                                     'icon' => 'ti-info-alt',
                                                     'target' => '_blank',
+                                                    'can'=>'payment_parts-info'
+                                                ],
+                                                 [
+                                                    'url' => route('payment_parts.destroy', $PaymentPart->id),
+                                                    'text' => trans('general.delete'),
+                                                    'icon' => 'ti-trash',
+                                                    'onclick' => 'confirmation(event)',
+                                                    'can'=>'payment_parts-delete'
                                                 ],
                                                 [
-                                            'url' => route('except_fee.edit', $ExcptionFee->id),
+                                            'url' => route('payment_parts.edit', $PaymentPart->id),
                                             'text' => trans('general.edit'),
                                             'icon' => 'ti-pencil',
+                                            'can' => 'payment_parts-edit',
 
                                         ],
-                                                [
-                                                    'url' => route('Recipt_Payment.print', $ExcptionFee->id),
-                                                    'text' => trans('general.print'),
-                                                    'icon' => 'ti-printer',
-                                                    'target' => '_blank',
-                                                ],
+                                        [
+                                            'url' => route('payment_parts.pay', $PaymentPart->id),
+                                            'text' => trans('general.pay'),
+                                            'icon' => 'ti-pencil',
+                                            'can' => 'payment_parts-pay',
+
+                                        ],
                                             ]"/>
                                     </td>
                                 </tr>
                             @endforeach
                             </tbody>
                         </table>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -78,5 +90,6 @@
     </div>
 
     @push('scripts')
+
     @endpush
 @endsection

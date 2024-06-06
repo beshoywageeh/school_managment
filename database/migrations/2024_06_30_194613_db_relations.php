@@ -56,7 +56,46 @@ return new class extends Migration
             $table->foreign('created_by')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
         });
+        Schema::table('promotions', function (Blueprint $table) {
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('from_grade')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('to_grade')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('from_class')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('to_class')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
+        });
+        Schema::table('fee_invoices', function (Blueprint $table) {
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('classroom_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('academic_year_id')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('school_fee_id')->references('id')->on('school__fees')->onDelete('Cascade')->onUpdate('Cascade');
+        });
+        Schema::table('student_accounts', function (Blueprint $table) {
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('classroom_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('recipt__payments_id')->references('id')->on('recipt__payments')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('excpetion_id')->references('id')->on('excption_fees')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('fee_invoices_id')->references('id')->on('fee_invoices')->onDelete('Cascade')->onUpdate('Cascade'); $table->foreign('academic_year_id')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
+        });
+        Schema::table('recipt__payments', function (Blueprint $table) {
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('academic_year_id')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
+        });
+        Schema::table('excption_fees', function (Blueprint $table) {
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('class_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('fee_id')->references('id')->on('fee_invoices')->onDelete('Cascade')->onUpdate('Cascade');$table->foreign('academic_year_id')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
+            });
+        Schema::table('payment_parts', function (Blueprint $table) {
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('class_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('academic_year_id')->references('id')->on('fee_invoices')->onDelete('Cascade')->onUpdate('Cascade');
+        });
     }
+
 
     /**
      * Reverse the migrations.
@@ -93,6 +132,46 @@ return new class extends Migration
         });
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign('job_id');
+        });
+        Schema::table('promotions', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('from_grade');
+            $table->dropForeign('to_grade');
+            $table->dropForeign('from_class');
+            $table->dropForeign('to_class');
+        });
+        Schema::table('fee_invoices', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('grade_id');
+            $table->dropForeign('classroom_id');
+            $table->dropForeign('academic_year_id');
+            $table->dropForeign('school_fee_id');
+        });
+        Schema::table('student_accounts', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('grade_id');
+            $table->dropForeign('classroom_id');
+            $table->dropForeign('recipt__payments_id');
+            $table->dropForeign('fee_invoices_id');
+            $table->dropForeign('excpetion_id');
+            $table->dropForeign('academic_year_id');
+
+        });
+        Schema::table('recipt__payments', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('academic_year_id');
+        });
+        Schema::table('excption_fees', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('class_id');
+            $table->dropForeign('fee_id');
+            $table->dropForeign('grade_id');
+        });
+        Schema::table('payment_parts', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('class_id');
+            $table->dropForeign('grade_id');
+            $table->dropForeign('academic_year_id');
         });
     }
 };

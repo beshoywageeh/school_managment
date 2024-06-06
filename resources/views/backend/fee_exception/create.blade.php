@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('general.new') }} | {{trans('Recipt_payments.title')}}
+    {{ trans('general.new') }} | {{trans('ExcptionFee.title')}}
 @endsection
 @section('content')
     <div class="mb-4 row">
@@ -13,34 +13,31 @@
                             <h4></h4>
                         </div>
                     </div>
-                    <form id="form-with-multiple-column" class="max-w-full" action="{{ route('Recipt_Payment.store') }}"
+                    <form id="form-with-multiple-column" class="max-w-full" action="{{ route('except_fee.store') }}"
                           method="post">
                         @csrf
-                        <div class="row">
-                            <div class="col">
-                                <label for="">{{trans('Recipt_payments.man')}}</label>
-                                <input type="text" class="form-control" disabled value="{{$invoice_manual}}">
 
-                            </div>
-                            <div class="col">
-                                <label for="">{{trans('Recipt_payments.total')}}</label>
-                                <input type="text" class="form-control" disabled
-                                       value="{{$Student->fees->sum('debit')-$Student->fees->sum('credit'),2}}">
-
-                            </div>
-                        </div>
-                        <br>
                         <div class="row">
                             <div class="col">
                                 <label for="">{{trans('Recipt_payments.name')}}</label>
-                                <select name="student_id" id="tom-select" class="form-control">
-
-                                    <option value="{{$Student->id}}">{{$Student->name}}</option>
+                                <select name="student_id" id="" class="custom-select">
+                                    <option value="{{$Excpetion->id}}">{{$Excpetion->name}}</option>
 
                                 </select>
                             </div>
                             <div class="col">
-                                <label for="">{{trans('Recipt_payments.amount')}}</label>
+                                <label for="">{{trans('academic_year.title')}}</label>
+                                <select name="acadmic_id" id="" class="custom-select">
+                                    @forelse ($acadmincs as $acadminc)
+                                    <option value="{{$acadminc->id}}">{{\Carbon\Carbon::parse($acadminc->year_start)->format('Y')}} - {{\Carbon\Carbon::parse($acadminc->year_end)->format('Y')}}</option>
+                                    @empty
+
+                                    @endforelse
+
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label for="">{{trans('ExcptionFee.amount')}}</label>
                                 <input type="number" class="form-control" name="amount">
                             </div>
 
@@ -52,26 +49,6 @@
                             </div>
                         </div>
                     </form>
-
-                    <hr>
-                    <div class="row">
-                        <div class="col">
-                            <h4 class="bg-info text-center my-4 py-2">{{trans('Recipt_Payments.mini_report')}}</h4>
-                            <table class="table table-active table-bordered">
-                                <tr>
-                                    <th>{{trans('Recipt_Payments.total_debit')}}</th>
-                                    <th>{{trans('Recipt_Payments.total_credit')}}</th>
-                                    <th>{{trans('Recipt_Payments.total_final')}}</th>
-                                </tr>
-                                <tr>
-                                    <td>{{number_format($Student->fees->sum('debit'),2)}}&nbsp;ج.م</td>
-                                    <td>{{number_format($Student->fees->sum('credit'),2)}}&nbsp;ج.م</td>
-                                    <td>{{number_format($Student->fees->sum('debit')-$Student->fees->sum('credit'),2)}}&nbsp;ج.م</td>
-                                </tr>
-                            </table>
-                        </div>
-
-                    </div>
                 </div>
             </div>
         </div>

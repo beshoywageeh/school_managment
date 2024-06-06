@@ -1,30 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Storage;
-use Spatie\Backup\Helpers\Format;
+
+use Artisan;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Log;
 use Spatie\Backup\Commands\ListCommand;
+use Spatie\Backup\Helpers\Format;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
-use Artisan;
+
 class BackupController extends Controller
 {
-   public function index()
+    public function index()
     {
         $disk = Storage::disk('backup');
-$files=$disk->files(config('backup.backup.name'));
+        $files = $disk->files(config('backup.backup.name'));
         $backups = [];
-         foreach ($files as $k=>$f) {
-      if(substr($f,-4)=='.zip'&&$disk->exists($f)){
-        $backups[]=[
-            'file_path' => $f,
-            'file_name' => str_replace(config('backup.backup.name') . '/', '', $f),
-            'file_size' => Format::humanReadableSize($disk->size($f)),
-            'file_date'=>Carbon::createFromTimestamp($disk->lastModified($f)),];
-      }
-         }
+        foreach ($files as $k => $f) {
+            if (substr($f, -4) == '.zip' && $disk->exists($f)) {
+                $backups[] = [
+                    'file_path' => $f,
+                    'file_name' => str_replace(config('backup.backup.name') . '/', '', $f),
+                    'file_size' => Format::humanReadableSize($disk->size($f)),
+                    'file_date' => Carbon::createFromTimestamp($disk->lastModified($f)),];
+            }
+        }
         $backups = array_reverse($backups);
 
         $statuses = BackupDestinationStatusFactory::createForMonitorConfig(config('backup.monitor_backups'));
@@ -39,7 +41,7 @@ $files=$disk->files(config('backup.backup.name'));
             $files = array_map('basename', $status->backupDestination()->disk()->files($name));
             $rows[$index]['files'] = array_slice(array_reverse($files), 0, 30);
         }
-        return view('backend.backup.index', compact('backups','rows'));
+        return view('backend.backup.index', compact('backups', 'rows'));
     }
 
     public function create()
@@ -50,13 +52,14 @@ $files=$disk->files(config('backup.backup.name'));
             $output = Artisan::output();
             // log the results
             Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n" . $output);
-            session()->flash('success',trans('notifications.backup_successful_body'));
+            session()->flash('success', trans('notifications.backup_successful_body'));
             return redirect()->back();
         } catch (\Exception $e) {
-        session()->flash('error',$e->getMessage());
+            session()->flash('error', $e->getMessage());
             return redirect()->back();
         }
     }
+
     public function download($file_name)
     {
         $file = config('backup.backup.name') . '/' . $file_name;
@@ -75,20 +78,23 @@ $files=$disk->files(config('backup.backup.name'));
             abort(404, "The backup file doesn't exist.");
         }
     }
+
     public function delete($file_name)
-    {try{
+    {
+        try {
 
-        $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
-        if ($disk->exists(config('backup.backup.name') . '/' . $file_name)) {
-            $disk->delete(config('backup.backup.name') . '/' . $file_name);
-            session()->flash('success',trans('notifications.cleanup_successful_subject_title'));
+            $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
+            if ($disk->exists(config('backup.backup.name') . '/' . $file_name)) {
+                $disk->delete(config('backup.backup.name') . '/' . $file_name);
+                session()->flash('success', trans('notifications.cleanup_successful_subject_title'));
+                return redirect()->back();
+            } else {
+                abort(404, "The backup file doesn't exist.");
+            }
+
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
             return redirect()->back();
-        } else {
-            abort(404, "The backup file doesn't exist.");
         }
-
-    }catch(\Exception $e){
-        session()->flash('error',$e->getMessage());
-        return redirect()->back();
     }
-}}
+}

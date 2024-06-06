@@ -21,7 +21,7 @@ class class_roomFactory extends Factory
     {
         return [
             'name' => $this->faker->randomElement(['الصف الاول',"الصف الثاني","الصف الثالث","الصف الخامس","الصف السادس"]),
-            'grade_id' => Grade::all()->random()->id,
+            'grade_id' => Grade::all()->unique()->random()->id,
             'user_id' => User::all()->random()->id,
             'slug'=>$this->faker->slug()
         ];

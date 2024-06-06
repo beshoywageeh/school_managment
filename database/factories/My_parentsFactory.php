@@ -18,7 +18,7 @@ class My_parentsFactory extends Factory
     {
         return [
             'Father_Name' => $this->faker->firstName,
-            'Father_National_Id' => $this->faker->numerify('############'),
+            'Father_National_Id' => $this->faker->numerify('##############'),
             'Father_Phone' => $this->faker->phoneNumber,
             'Father_Job' => $this->faker->jobTitle,
             'Father_Birth_Date' => $this->faker->date(),

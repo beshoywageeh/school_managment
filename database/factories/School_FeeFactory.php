@@ -24,7 +24,9 @@ class School_FeeFactory extends Factory
             'classroom_id' => class_room::all('id')->random(),
             'user_id' => '1',
             'description' => $this->faker->words(1, true),
-            'amount' => $this->faker->numberBetween('1000', '9999'),
+            'amount' => $this->faker->numberBetween('1000', '8000'),
+            'title'=>$this->faker->randomElement(['قسط اول', 'قسط ثاني', 'قسط ثالث']),
+            'academic_year_id'=>'1'
 
 
         ];

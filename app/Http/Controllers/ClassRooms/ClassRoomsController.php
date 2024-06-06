@@ -11,7 +11,7 @@ class ClassRoomsController extends Controller
 {
     public function index()
     {
-        $data['class_rooms'] = class_room::with(['user', 'grade'])->withCount('students')->orderBy('grade_id', 'asc')->paginate(10);
+        $data['class_rooms'] = class_room::with(['user', 'grade'])->withCount('students')->orderBy('grade_id', 'asc')->get();
         $data['grades'] = Grade::get();
 
         //return $data;
@@ -31,12 +31,15 @@ class ClassRoomsController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         try {
-            $class_name=class_room::create([
-                'name' => $request->class_name,
-                'grade_id' => $request->grade_name,
-                'user_id' => \Auth::Id(),
-            ]);
+            foreach ($request->list_classes as $class) {
+                class_room::create([
+                    'name' => $class['class_name'],
+                    'grade_id' => $class['grade_name'],
+                    'user_id' => \Auth::Id(),
+                ]);
+            }
             session()->flash('success', trans('general.success'));
             return redirect()->back();
         } catch (\Exception $e) {
@@ -79,7 +82,6 @@ class ClassRoomsController extends Controller
     {
         try {
             $class_room = class_room::find($request->id);
-            $this->syslog('update','App\Models\class_room',$request->id,['id'=>$request->id,'class_room_old'=>$class_room->name,'class_room_new'=>$request->class_name,'old_grade'=>$class_room->grade_id,'new_grade'=>$request->grade_name],$request->ip);
             $class_room->name = $request->class_name;
             $class_room->grade_id = $request->grade_name;
             $class_room->save();
@@ -96,7 +98,7 @@ class ClassRoomsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id,Request $request)
+    public function destroy(string $id, Request $request)
     {
         try {
             $class_room = class_room::where('id', $id)->withcount('students')->first();

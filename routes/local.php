@@ -29,3 +29,4 @@ Route::get('mif', function () {
     \Artisan::call('migrate:fresh --seed');
     dd(\Artisan::output());
 });
+

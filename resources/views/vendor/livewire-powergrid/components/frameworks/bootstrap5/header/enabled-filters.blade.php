@@ -9,19 +9,8 @@
                 style="cursor: pointer; padding-right: 4px"
             >
                 <span
-                    class="badge rounded-pill bg-secondary">{{ trans('livewire-powergrid::datatable.buttons.clear_all_filters') }}
-                    <svg
-                        width="10"
-                        stroke="currentColor"
-                        fill="none"
-                        viewBox="0 0 8 8"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-width="1.5"
-                            d="M1 1l6 6m0-6L1 7"
-                        />
-                    </svg>
+                    class="badge badge-dark">{{ trans('livewire-powergrid::datatable.buttons.clear_all_filters') }}
+                    <i class="ti-close p-2"></i>
                 </span>
             </div>
         @endif
@@ -31,19 +20,9 @@
                     wire:click.prevent="clearFilter('{{ $filter['field'] }}')"
                     style="cursor: pointer; padding-right: 4px"
                 >
-                    <span class="badge rounded-pill bg-light text-dark">{{ $filter['label'] }}
-                        <svg
-                            width="10"
-                            stroke="currentColor"
-                            fill="none"
-                            viewBox="0 0 8 8"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-width="1.5"
-                                d="M1 1l6 6m0-6L1 7"
-                            />
-                        </svg>
+                    <span class="badge badge-info">{{ $filter['label'] }}
+                                            <i class="ti-close p-2"></i>
+
                     </span>
                 </div>
             @endisset

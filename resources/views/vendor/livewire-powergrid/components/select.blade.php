@@ -5,7 +5,7 @@
     'theme' => null,
 ])
 <div class="relative">
-    <select>
+    <select class="custom-select">
         <option value="">{{ $empty }}</option>
         @foreach ($data as $value => $label)
             <option

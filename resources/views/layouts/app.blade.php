@@ -5,63 +5,62 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="{{ asset('storage/attachments/schools/' . $school->image->filename) }}" type="image/png" />
+    <link rel="icon" href="{{asset('storage/attachments/schools/'.$school->slug.'/'. $school->image->filename)}}" type="image/png" />
     <title>@yield('title')</title>
 
-    @Vite(['resources/css/app.css', 'resources/js/app.js'])
-    @livewireStyles
     @include('layouts.header_css')
+    @livewireStyles
 
 
 </head>
 
 <body>
-    <div id='loader' class="flex justify-center items-center w-full min-h-screen">
-        <div class="sk-chase">
-            <div class="sk-chase-dot before:bg-primary-500"></div>
-            <div class="sk-chase-dot before:bg-primary-500"></div>
-            <div class="sk-chase-dot before:bg-primary-500"></div>
-            <div class="sk-chase-dot before:bg-primary-500"></div>
-            <div class="sk-chase-dot before:bg-primary-500"></div>
-            <div class="sk-chase-dot before:bg-primary-500"></div>
+    <!-- Wrapper Starts -->
+    <div class="wrapper">
+        <div id="pre-loader">
+            <img src="{{ asset('assests/images/pre-loader/loader-01.svg') }}" alt="">
         </div>
-    </div>
+        <!-- Header Starts -->
+        @include('layouts.header')
+        <div class="container-fluid">
+            <div class="row">
 
-    <div id="app" style="display:none;">
-
-        <!-- Sidebar Starts -->@include('layouts.sidebar')
-        <!-- Sidebar Ends -->
-        <!-- Wrapper Starts -->
-        <div class="wrapper" id='customwrapper'>
-
-            <!-- Header Starts -->
-            @include('layouts.header')
-            <!-- Header Ends -->
-
-            <!-- Page Content Starts -->
-            <div class="content">
-                <!-- Main Content Starts -->
-                <main class="flex-grow p-4 container-fluid sm:p-6">
-                    <!-- Page Title Starts -->
-                    <div class="flex flex-col gap-y-1 justify-between mb-6 sm:flex-row sm:gap-y-0">
-                        <h5>@yield('title') | {{ $school->name }}</h5>
+                @include('layouts.sidebar')
+                <div class="content-wrapper">
+                    <!-- Sidebar Starts -->
+                    <!-- Sidebar Ends -->
+                    <div class="page-title mb-30">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h4 class="mb-0 font_cairo">@yield('title')</h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <ol class="float-left pt-0 pr-0 breadcrumb float-sm-right">
+                                    <li class="breadcrumb-item"></li>
+                                </ol>
+                            </div>
+                        </div>
                     </div>
-                    @yield('content')
-                </main>
-                <!-- Main Content Ends -->
+                    <!-- Page Title Ends -->
 
-                <!-- Footer Starts -->
-                @include('layouts.footer')
-                <!-- Footer Ends -->
+                    @yield('content')
+                    <!-- Footer Starts -->
+                    @include('layouts.footer')
+                    <!-- Footer Ends -->
+                </div>
             </div>
-            <!-- Page Content Ends -->
+
         </div>
-        <!-- Wrapper Ends -->
+        <!-- Header Ends -->
+
+
+
     </div>
 
-    @livewireScripts
+    <!-- Page Content Ends -->
 
     @include('layouts.footer_script')
+    @livewireScripts
 </body>
 
 </html>

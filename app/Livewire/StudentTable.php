@@ -2,116 +2,107 @@
 
 namespace App\Livewire;
 
-use App\Enums\UserGender;
-use App\Models\{Grade,Student};
-use PowerComponents\LivewirePowerGrid\{Column,Footer,Header,PowerGrid,PowerGridColumns,PowerGridComponent,PowerGridFields};
-use PowerComponents\LivewirePowerGrid\Facades\Filter;
-use Illuminate\View\View;
+use App\Models\{class_room, Grade, Student};
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\View\View;
+use PowerComponents\LivewirePowerGrid\{Column, Footer, Header, PowerGrid, PowerGridComponent, PowerGridFields};
+use PowerComponents\LivewirePowerGrid\Facades\Filter;
 
 final class StudentTable extends PowerGridComponent
 {
     public string $primaryKey = 'students.id';
-    public string $sortField = 'students.id';
+    public string $sortField = 'students.name';
     public bool $multiSort = true;
     public bool $showFilters = true;
-    public bool $deferLoading = true; // default false
+    public bool $deferLoading = true;
     public string $loadingComponent = 'components.my-custom-loading';
-
     public function setUp(): array
     {
         return [
             Header::make()
-                ->showToggleColumns()
-                ->withoutLoading(),
+                ->withoutLoading()
+                ->showSearchInput(),
             Footer::make()
                 ->showPerPage()
-                ->showRecordCount()
-                ->pagination('components.Paginator'),
+                ->showRecordCount(),
         ];
     }
-
     public function datasource(): Collection
     {
-        return Student::with('grade')->get();
+        return Student::with('grade:id,name', 'classroom:id,name','parent:id,Father_Name')->get();
     }
-
     public function relationSearch(): array
     {
         return [];
     }
-
-    public function addColumns(): PowerGridColumns
-    {
-        return PowerGrid::columns()
-            ->addColumn('link_name', function (Student $model) {
-                return '<a class="btn btn-primary" href="'.route('Students.show',e($model->id)).'">'.e($model->name).'</a>';
-            })
-            ->addColumn('gen',function(Student $model){
-                return $model->gender;
-            })
-            ->addColumn('student_grade_name',function(Student $model){
-                return $model->grade->name;
-            });
-    }
-
     public function fields(): PowerGridFields
     {
         return PowerGrid::fields()
             ->add('id')
-            ->add('name')
+            ->add('name', fn($model) => '<a class="btn btn-link" href="' . route('Students.show', e($model->id)) . '">' . e($model->name) . '</a>')
+            ->add('parent', fn($model) => $model->parent->Father_Name)
             ->add('address')
-            ->add('gen')
-            ->add('grade');
-    }
+            ->add('join_date')
+            ->add('birth_date')
+            ->add('grade', fn($model) => $model->grade->name)
+            ->add('class', fn($model) => $model->classroom->name);
 
+    }
     public function columns(): array
     {
         return [
-            Column::make('#', 'id')
+            Column::make('#', 'id')->index(),
+            Column::add()
+                ->title(trans('student.name'))
+                ->field('name')
                 ->sortable()
                 ->searchable(),
             Column::add()
-                ->title(trans('student.name'))
-                ->field('link_name', 'name')
+                ->title(trans('Parents.Father_Name'))
+                ->field('parent')
                 ->sortable()
                 ->searchable(),
             Column::add()
                 ->title(trans('student.address'))
-                ->field('address', 'address')
+                ->field('address')
                 ->sortable()
                 ->searchable(),
-            // Column::add()
-            //     ->title(trans('student.gender'))
-            //      ->field('gen','gen')
-            //     ->sortable()
-            //     ->searchable(),
             Column::add()
-                ->title(trans('Grades.name'))
-                ->field('student_grade_name','grade_id')
+                ->title(trans('student.join_date'))
+                ->field('join_date'),
+            Column::add()
+                ->title(trans('student.birth_date'))
+                ->field('birth_date'),
+            Column::add()
+                ->title(trans('student.grade'))
+                ->field('grade')
                 ->sortable()
                 ->searchable(),
-
+            Column::add()
+                ->title(trans('student.class'))
+                ->field('class')
+                ->sortable()
+                ->searchable(),
             Column::action(trans('General.actions')),
         ];
     }
-
-     public function actionsFromView($row): View
-     {
-         return view('components.student_-table_-action', ['row' => $row]);
-     }
+    public function actionsFromView($row): View
+    {
+        return view('components.student_-table_-action', ['row' => $row]);
+    }
     public function filters(): array
     {
         return [
             Filter::inputText('name')->operators(['contains']),
-            Filter::select('student_grade_name', 'grade')
+            Filter::inputText('parent')->operators(['contains']),
+            Filter::select('grade', 'grade_id')
                 ->dataSource(Grade::all())
                 ->optionLabel('name')
                 ->optionValue('id'),
-                Filter::enumSelect('gender','gender')
-                ->dataSource(UserGender::cases())
-                ->optionLabel('gender')
-
+            Filter::select('class', 'classroom_id')
+                ->dataSource(class_room::all())
+                ->optionLabel('name')
+                ->optionValue('id'),
         ];
     }
-  }
+}

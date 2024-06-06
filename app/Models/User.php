@@ -13,9 +13,11 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Permission\Traits\HasRoles;
+
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, LogsActivity;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, LogsActivity,HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -78,6 +80,10 @@ class User extends Authenticatable
     public function job()
     {
         return $this->belongsTo('App\Models\Job');
+    }
+    public function grades()
+    {
+        return $this->belongsToMany('App\Models\Grade', 'teacher_grade', 'teacher_id', 'grade_id');
     }
     public function getActivitylogOptions(): LogOptions
     {

@@ -55,7 +55,7 @@
             @if ($showSelectOptions)
                 <div class="relative">
                     <select
-                        class="{{ $selectClasses }}"
+                        class="custom-select"
                         style="{{ data_get($column, 'headerStyle') }}"
                         {{ $defaultAttributes['selectAttributes'] }}
                     >

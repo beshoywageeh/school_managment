@@ -22,11 +22,16 @@ class StudentFactory extends Factory
             'address' => $this->faker->address(),
             'join_date' => $this->faker->date(),
             'gender' => $this->faker->numberBetween(0,1),
+            'national_id'=>$this->faker->numerify('##############'),
             'user_id' => '1',
             'grade_id' => $this->faker->numberBetween(1, 4),
             'classroom_id' => $this->faker->numberBetween(1, 6),
             'parent_id' => $this->faker->numberBetween(1, 200),
-            'slug'=>$this->faker->slug()
+            'slug'=>$this->faker->slug(),
+            'student_status'=>$this->faker->numberBetween(0,3 ),
+            'birth_at_begin'=>$this->faker->date(),
+            'religion'=> $this->faker->numberBetween(0,1),
+
 
         ];
     }

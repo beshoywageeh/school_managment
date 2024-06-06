@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 trait ImageTrait
 {
-    public function verifyAndStoreImage(Request $request, $input_name, $folder_name, $disk, $imageable_id, $imageable_type)
+    public function verifyAndStoreImage(Request $request, $input_name, $folder_name, $disk, $imageable_id, $imageable_type, $f_name)
     {
         if ($request->hasFile($input_name)) {
             if (! $request->file($input_name)->isValid()) {
@@ -16,7 +16,7 @@ trait ImageTrait
                 return redirect()->back()->withInput();
             }
             $photo = $request->file($input_name);
-            $name = \Str::slug($request->input('schoolname'));
+            $name = \Str::slug($f_name);
             $filename = $name.'.'.$photo->getClientOriginalExtension();
             $Image = new Image();
             $Image->filename = $filename;

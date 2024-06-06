@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\{User, Job};
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
-
+use App\Http\Traits\ImageTrait;
 class UserController extends Controller
 {
+    use ImageTrait;
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $employees = User::with('job')->paginate(10);
+        $employees = User::with('job')->get();
         return view('backend.employees.index', get_defined_vars());
     }
 
@@ -31,7 +32,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-
+        \DB::beginTransaction();
         try {
             $generate_code = User::max('code') + 1;
             $user = new User();
@@ -56,9 +57,12 @@ class UserController extends Controller
             $user->insurance_date = $request->insurance_date ? $request->insurance_date : null;
             $user->national_id = $request->national_id;
             $user->save();
+            $this->verifyAndStoreImage($request, 'file', 'employees' . '/' . $request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
+            \DB::commit();
             session()->flash('success', trans('General.success'));
             return redirect()->route('employees.index');
         } catch (\Exception $e) {
+            \DB::rollBack();
             session()->flash('error', $e->getMessage());
             return redirect()->back()->withInput();
         }

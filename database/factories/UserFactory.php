@@ -19,7 +19,7 @@ class UserFactory extends Factory
         return [
             'code' => $this->faker->unique()->numberBetween(100000, 9999999999),
             'name' => $this->faker->firstName(),
-            'phone' => $this->faker->optional()->phoneNumber(),
+            'phone' => '01201026745',
             'address' => $this->faker->optional()->address(),
             'date_of_birth' => $this->faker->optional()->date(),
             'date_of_hiring' => $this->faker->optional()->date(),

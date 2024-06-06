@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NewSchoolRequest;
 use App\Http\Traits\ImageTrait;
-use App\Models\{Grade, acadmice_year, settings, User};
+use App\Models\{class_room, Grade, acadmice_year, settings, Student, User};
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +16,14 @@ class SettingsController extends Controller
 
     public function index()
     {
-        $school = settings::count() > 0;
-        if (!$school) {
-            return view('welcome');
-        } else {
-            return redirect(route('login'));
-        }
+        $school = settings::with('image')->first();
+        $grades = Grade::withCount('students')->get();
+        $std_count = Student::count();
+        $grd_count = Grade::count();
+        $teach_count = User::count();
+        $user = Auth::user();
+        $academic_years = acadmice_year::get();
+        return view('backend.setting.index', get_defined_vars());
     }
 
     public function store(NewSchoolRequest $request)
@@ -34,7 +36,7 @@ class SettingsController extends Controller
             $school->phone = $request->phone;
             $school->address = $request->address;
             $school->save();
-            $this->verifyAndStoreImage($request, 'logo', $request->schoolname, 'upload_attachments', $school->id, 'App\Models\settings');
+            $this->verifyAndStoreImage($request, 'logo', $request->schoolname, 'upload_attachments', $school->id, 'App\Models\settings', $request->schoolname);
 
             $user = new User();
             $user->first_name = $request->first_name;
@@ -56,11 +58,7 @@ class SettingsController extends Controller
     }
     public function edit()
     {
-        $school = settings::with('image')->first();
-        $grades = Grade::all();
-        $user = Auth::user();
-        $academic_years = acadmice_year::paginate(10);
-        return view('backend.setting.index', get_defined_vars());
+
     }
     public function update_password(Request $request)
     {

@@ -3,40 +3,46 @@
     {{trans('login.login')}}
 @endsection
 @section('login')
-<div class="w-full max-w-md mx-auto card">
-    <div class="px-10 py-12 card-body">
-      <div class="flex flex-col items-center justify-center">
-        <img src="{{URL::asset('assests/svg/logo-small.svg')}}" alt="logo" class="h-[50px]" />
-        <h5 class="mt-4">{{ trans('login.msg') }}</h5>
-        <p class="text-sm text-slate-500 dark:text-slate-400">{{trans('login.enter_data')}} </p>
+<div class="row justify-content-center no-gutters vertical-align">
+    <div class="col-lg-4 col-md-6 login-fancy-bg bg" style="background-image: url({{asset('storage/attachments/schools/'.$school->slug.'/'. $school->image->filename)}});">
+      <div class="login-fancy">
+       <h2 class="text-white mb-20"></h2>
+       <p class="mb-20 text-white"></p>
+       <ul class="list-unstyled  pos-bot pb-30">
+         <li class="list-inline-item"></li>
+         <li class="list-inline-item"></li>
+       </ul>
       </div>
-
-      <form method="POST" action="{{ route('login') }}">
-        @csrf
-    <div class="flex flex-col gap-5 mt-6">
-        <!-- Email -->
-        <div>
-          <label class="mb-1 label">{{trans('login.email')}}</label>
-          <input type="text" class="input" name="email" placeholder="{{trans('login.email')}} " />
-          @error('email')
-          <div class="alert alert-danger">{{ $message }}</div>
-      @enderror
-        </div>
-        <!-- Password-->
-        <div class="">
-          <label class="mb-1 label">{{trans('login.password')}} </label>
-          <input type="password" class="input" name="password" placeholder="{{trans('login.password')}}  " />
-          @error('password')
-          <div class="alert alert-danger">{{ $message }}</div>
-      @enderror
-        </div>
-      </div>
-      <!-- Login Button -->
-      <div class="mt-8">
-        <button type="submit" class="btn btn-primary w-full py-2.5">{{trans('login.login')}} </button>
-      </div>
-  </form>
     </div>
-  </div>
+    <div class="col-lg-4 col-md-6 bg-white">
+     <div class="login-fancy pb-40 clearfix">
+     <h3 class="mb-30">{{trans('login.enter_data')}}</h3>
+     <form method="POST" action="{{ route('login') }}" autocomplete="off">
+        @csrf
+      <div class="section-field mb-20">
+
+          <label class="mb-10" for="name">{{trans('login.email')}}</label>
+            <input id="name" class="web form-control" type="email" name="email" placeholder="{{trans('login.email')}} ">
+            @error('email')
+            <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
+         </div>
+         <div class="section-field mb-20">
+
+          <label class="mb-10" for="Password">{{trans('login.password')}} </label>
+            <input id="Password" class="Password form-control" type="password" placeholder="{{trans('login.password')}}" name="password">
+            @error('password')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+         </div>
+
+         <button type="submit" class="button">{{trans('login.login')}} </button>
+
+       </div>
+     </div>
+     </form>
+   </div>
+
+
 @endsection
 

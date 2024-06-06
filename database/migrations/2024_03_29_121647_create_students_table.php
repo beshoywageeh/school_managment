@@ -19,6 +19,9 @@ return new class extends Migration
             $table->date('join_date');
             $table->string('national_id')->nullable();
             $table->tinyInteger('gender')->nullable();
+            $table->tinyInteger('student_status')->nullable();
+            $table->string('birth_at_begin',50)->nullable();
+            $table->tinyInteger('religion');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('classroom_id');

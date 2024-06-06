@@ -12,7 +12,7 @@ class Job extends Model
 {
     use HasFactory,LogsActivity, SoftDeletes;
     protected $casts = ['status' => Status::class, 'type' => Jobs_types::class];
-    protected $fillable = ['status', 'title', 'created_by', 'updated_by', 'type'];
+    protected $fillable = ['status', 'name', 'created_by', 'updated_by', 'type'];
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');

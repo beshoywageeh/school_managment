@@ -12,6 +12,6 @@ class SchoolFeeSeeder extends Seeder
      */
     public function run(): void
     {
-        school_fee::factory(12)->create();
+        school_fee::factory(50)->create();
     }
 }

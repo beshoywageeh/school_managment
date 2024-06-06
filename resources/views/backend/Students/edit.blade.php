@@ -3,78 +3,88 @@
 {{trans('student.title')}} | {{trans('general.edit')}}
 @endsection
 @section('content')
-<div class="card">
+<div class="card mb-30">
     <div class="card-body">
-        <div class="flex justify-between mb-4">
-            <h4 class="card-title">{{trans('student.title')}} | {{trans('general.edit')}}</h4>
+        <div class="card-title">
+            <h4>{{trans('student.title')}} | {{trans('general.edit')}}</h4>
         </div>
         @include('backend.msg')
 
-        <form action="{{route('Students.update',)}}" method="post">
+        <form action="{{route('Students.update','test')}}" method="post">
             <input type="hidden" name="id" value="{{$student->id}}">
             @csrf
-            <fieldset class='p-4 border-2 border-indigo-600 border-solid rounded'>
-                <legend class='m-auto text-center text-muted'>{{trans('student.student_info')}}</legend>
-                <div class="flex flex-col items-center w-full gap-1 md:flex-row md:gap-2">
+            <fieldset class='p-4 rounded border border-primary'>
+                <legend class='w-auto text-center text-muted'>{{trans('student.student_info')}}</legend>
+                <div class="row">
 
-                    <x-input type="text" name="student_name" value="{{$student->name}}">{{ trans('student.name') }}
-                    </x-input>
-                    <x-input type="date" name="birth_date" class="input-date" value="{{$student->birth_date}}">
-                    {{ trans('student.birth_date')}}
-                    </x-input>
-                    <div class="w-full md:w-1/3">
-                        <label for="check_birth" class="mb-1 label">{{trans('student.checkbirth_date')}}</label>
+                    <div class="col">
+                        <x-input type="text" name="student_name" value="{{$student->name}}">{{ trans('student.name') }}
+                        </x-input>
+                    </div>
+                    <div class="col form-group">
+                        <x-input type="date" name="birth_date" class="form-control" value="{{$student->birth_date}}">
+                            {{ trans('student.birth_date') }}
+                        </x-input>
+                    </div>
+                    <div class="col">
+                        <label for="check_birth" class="">{{trans('student.checkbirth_date')}}</label>
                         <div class="input-group" style="flex-direction: row-reverse">
                             <span class="input-group-text">{{ trans('general.day') }}</span>
-                            <input type="text" disabled name="check_birth" class="w-full input input-bordered">
+                            <input type="text" disabled name="check_birth" class="form-control">
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-col items-center w-full gap-1 md:flex-row md:gap-2">
-                    <x-input type="text" name="national_id" value="{{$student->national_id}}">{{
-                        trans('student.national_id') }}
-                    </x-input>
-                    <x-input type="date" name="join_date" class="input-date" value="{{$student->join_date}}">{{ trans('student.join_date')
-                        }}
-                    </x-input>
-                    <x-input.gender-select name="gender">
-                        </x-input.gender-sele>
+                <div class="row">
+                    <div class="col">
+                        <x-input type="text" name="national_id" value="{{$student->national_id}}">{{
+                            trans('student.national_id') }}
+                        </x-input>
+                    </div>
+                    <div class="col form-group">
+                        <x-input type="date" name="join_date" class="form-control" value="{{$student->join_date}}">{{ trans('student.join_date')
+                            }}
+                        </x-input>
+                    </div>
+                    <div class="col">
+                        <x-input.gender-select name="gender"/>
+                            <x-input.Student_Status/>
+                    </div>
                 </div>
-                <div class="flex flex-col items-center w-full gap-1 md:fkex-row md:gap-2">
-                    <div class="w-full">
-                        <lable>{{trans('student.address')}}</lable>
-                        <textarea class="input" name="address" id="" cols="30" rows="5">{{$student->address}}</textarea>
+                <div class="row">
+                    <div class="col">
+                        <label>{{trans('student.address')}}</label>
+                        <textarea class="form-control" name="address" id="" cols="30" rows="5">{{$student->address}}</textarea>
                     </div>
                 </div>
             </fieldset>
             <br>
             <hr><br>
-            <fieldset class='p-4 border-2 border-indigo-600 border-solid rounded'>
-                <legend class='m-auto text-center text-muted'>{{trans('student.study_info')}}</legend>
-                <div class="flex flex-col items-center w-full gap-1 md:flex-row md:gap-2">
+            <fieldset class='p-4 rounded border border-primary'>
+                <legend class='w-auto text-center text-muted'>{{trans('student.study_info')}}</legend>
+                <div class="row">
 
-                    <div class="w-full md:w-1/3">
-                        <label class="label label-required" for="form-horizontal-full-name">
+                    <div class="col">
+                        <label class="required" for="form-horizontal-full-name">
                             {{trans('student.choose_grade')}}
                         </label>
-                        <select class='select' name="grade" id="grades">
+                        <select class='custom-select' name="grade" id="grades">
                             <option> {{trans('student.choose_grade')}}</option>
                             @foreach ($grades as $grade)
                             <option @selected($student->grade_id==$grade->id) value="{{ $grade->id }}">{{ $grade->name }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="w-full md:w-1/3">
-                        <label class="label label-required" for="form-horizontal-full-name">
+                    <div class="col">
+                        <label class="required" for="form-horizontal-full-name">
                             {{trans('student.choose_classroom')}}
                         </label>
-                        <select class='select' name="class_room" id="classrooms">
+                        <select class='custom-select' name="class_room" id="classrooms">
                             <option selected value="{{$student->classroom_id}}">{{$student->classroom->name}}</option>
                         </select>
                     </div>
-                    <div class="w-full md:w-1/3">
-                        <label for="parent" class="mb-1 label">{{trans('student.parent')}}</label>
-                        <select name="parents" id="" class="w-full input input-bordered tom-select">
+                    <div class="col">
+                        <label for="parent" class="mb-1">{{trans('student.parent')}}</label>
+                        <select name="parents" id="tom-select" class="form-control tom-select">
                             <option> {{trans('student.parent')}}</option>
 
                             @foreach ($parents as $parent)
@@ -84,11 +94,11 @@
                     </div>
                 </div>
             </fieldset>
-            <br>
+
             <hr>
-            <br>
-            <div class="flex items-center justify-end w-full gap-2">
-                <x-button accesskey="s" class="primary" type="submit"> {{ trans('General.Submit') }}</x-button>
+
+            <div class="gap-2 d-flex justify-content-end">
+                <x-button accesskey="s" class="btn btn-primary" type="submit"> {{ trans('General.Submit') }}</x-button>
             </div>
         </form>
 

@@ -13,5 +13,19 @@ return [
 	'look_up'=>'مراقية النظام',
 	'jobs'=>'الوظائف',
 	'employees'=>'الموظفين',
-	'teachers'=>'المدرسين'
-];
+    'teachers' => 'المدرسين',
+    'student_info' => 'شئون الطلبة',
+    'employee_info' => 'شئون العاملين',
+    'accounting' => 'حسابات',
+    'security' => 'حماية النظام',
+    'grades_setting' => 'إعدادت المراحل',
+    'promotion'=>'ترقية الطلاب',
+    'fees_invoice'=>'الفواتير الدراسية',
+    'Recipt_Payment'=>'مدفوعات',
+    'except_fee'=>'الإعفاءات',
+    'payment_parts'=>'تقسيط',
+    'credit'=>'مستحقات',
+    'fast_method'=>'حركات سريعة',
+    'permission'=>'الأدوار والصلاحيات',
+    'report'=>'التقارير'
+    ];

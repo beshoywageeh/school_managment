@@ -3,18 +3,26 @@
     {{ trans('fees.title') }}
 @endsection
 @section('content')
-    <div>
+    <div class="mb-4 row">
+        <div class="col">
         <div class="card">
             <div class="card-body">
-                <div class="flex justify-between mb-4">
-                    <h4 class="card-title">{{ trans('fees.title') }}</h4>
-                    <a class="btn btn-primary" href={{route('schoolfees.create')}}>
-                        <i class="w-4" data-feather="plus-square"></i>
-                        {{ trans('General.new') }}
-                    </a>
+                <div class="row card-title">
+                    <div class="col">
+                        <h4 >{{ trans('fees.title') }}</h4>
+                    </div>
+                    <div class="col text-md-right">
+                        @can('schoolfees-list')
+                        <a class="button" href={{route('schoolfees.create')}}>
+                            <i class="ti-plus"></i>
+                            {{ trans('General.new') }}
+                        </a>
+                        @endcan
+                    </div>
                 </div>
-                <div class="table-resposive">
-                    <table class="table table-striped table-bordered" id="table">
+                <div class="table-responsive">
+                    @can('schoolfees-list')
+                    <table class="table table-striped table-bordered" id="datatable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -31,16 +39,37 @@
                         <tbody>
                             @forelse ($School_Fees as $fee)
                                 <tr>
-                                    <td> {{ $School_Fees->firstItem()+$loop->index }}</td>
+                                    <td> {{ $loop->iteration }}</td>
                                     <td>{{ $fee->grade->name }}</td>
                                     <td>{{ $fee->classroom->name }}</td>
-                                    <td></td>
-                                    <td>{{ $fee->user->name }}</td>
+                                    <td>{{$fee->academic_year_formated()}}</td>
                                     <td>{{ $fee->description }}</td>
                                     <td>{{ number_format($fee->amount, 2) }}&nbsp;ج.م</td>
+                                    <td>{{ $fee->user->name }}</td>
                                     <td>{{$fee->created_at->format('Y-m-d')}}</td>
                                     <td>
-                                        -
+                                        <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                        [
+                                            'url' => route('schoolfees.destroy', $fee->id),
+                                            'text' => trans('general.delete'),
+                                            'icon' => 'ti-trash',
+                                            'onclick' => 'confirmation(event)',
+                                            'can'=>'schoolfees-delete'
+                                        ],
+                                        [
+                                            'url' => route('schoolfees.show', $fee->id),
+                                            'text' => trans('general.info'),
+                                            'icon' => 'ti-info-alt',
+                                            'target' => '_blank',
+                                            'can'=>'schoolfees-info'
+                                        ],
+                                        [
+                                            'url' => route('schoolfees.edit', $fee->id),
+                                            'text' => trans('general.edit'),
+                                            'icon' => 'ti-pencil',
+                                            'can'=>'schoolfees-edit'
+                                        ],
+                                    ]" />
                                     </td>
                                 </tr>
                             @empty
@@ -50,35 +79,14 @@
                             @endforelse
                         </tbody>
                     </table>
-                    {{ $School_Fees->links('components.Paginatortion') }}
+                    @endcan
                 </div>
             </div>
         </div>
-        @include('backend.Grades.Create')
+    </div>
     </div>
     @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            //  import Swal from 'sweetalert2/dist/sweetalert2.js';
 
-            function confirmation(ev) {
-                ev.preventDefault();
-                const urlToRedirect = ev.currentTarget.getAttribute('href');
-                console.log(urlToRedirect);
-                Swal.fire({
-                    title: "{{ trans('general.confirm') }}",
-                    text: "{{ trans('general.confirmation') }}",
-                    icon: "warning",
-                    showConfirmButton: true,
-                    shoCancelButton: true,
-                    dangerMode: true,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = urlToRedirect;
-                    }
-                });
-            }
-        </script>
 
     @endpush
 @endsection

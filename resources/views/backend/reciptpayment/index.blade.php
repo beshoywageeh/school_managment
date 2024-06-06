@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('fee_invoice.title') }}
+    {{ trans('Recipt_Payments.title') }}
 @endsection
 @section('content')
     <div class="row">
@@ -10,62 +10,76 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col">
-                                <h4>{{ trans('fee_invoice.title') }}</h4>
+                                <h4>{{ trans('Recipt_Payments.title') }}</h4>
                             </div>
                             <div class="col text-md-right">
-
                             </div>
                         </div>
                     </div>
-                    <div class="table-resposive">
+                    <div class="table-responsive">
+                        @can('Recipt_Payment-list')
                         <table id="datatable" class="table text-center table-striped table-bordered">
                             <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>{{ trans('fee_invoice.date') }}</th>
-                                    <th>{{ trans('fee_invoice.name') }}</th>
-                                    <th>{{ trans('General.created_at') }}</th>
-                                    <th>{{ trans('fee_invoice.amount') }}</th>
-                                    <th>{{ trans('fee_invoice.grade') }}</th>
-                                    <th>{{ trans('fee_invoice.class') }}</th>
-                                    <th>{{ trans('fee_invoice.acadmic') }}</th>
-                                    <th>{{ trans('general.actions') }}</th>
-                                </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>{{ trans('Recipt_Payments.maual') }}</th>
+                                <th>{{ trans('general.created_at') }}</th>
+                                <th>{{ trans('Recipt_Payments.name') }}</th>
+                                <th>{{ trans('Recipt_Payments.amount') }}</th>
+                                <th>{{ trans('general.actions') }}</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach ($fee_invoices as $fee_invoice)
-                                    <tr>
-                                        <td> {{ $loop->iteration }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($fee_invoice->invoice_date)->format('Y-m-d') }}</td>
-                                        <td><a target='_blank'
-                                                href="{{ route('fee_invoice.show', $fee_invoice->student_id) }}">{{ $fee_invoice->students->name }}</a>
-                                        </td>
-                                        <td>{{$fee_invoice->created_at->format('Y-m-d')}}</td>
-                                        <td>{{ number_format($fee_invoice->fees_sum_amount, 2) }}&nbsp;ج.م</td>
-                                        <td>{{ $fee_invoice->grades->name }}</td>
-                                        <td>{{ $fee_invoice->classes->name }}</td>
-                                        <td>{{$fee_invoice->acd_year->year_start}}</td>
-                                        <td>
+                            @foreach ($Recipt_Payments as $Recipt_Payment)
+                                <tr>
+                                    <td> {{ $loop->iteration }}</td>
+                                    <td> {{ $Recipt_Payment->manual }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($Recipt_Payment->date)->format('Y-m-d') }}</td>
+                                    <td>
+                                        @can('Recipt_Payment-info')
+                                        <a target='_blank'
+                                           href="{{ route('Recipt_Payment.show', $Recipt_Payment->student->id) }}">{{ $Recipt_Payment->student->name }}</a>
+                                           @endcan
+                                    </td>
+                                    <td>{{ number_format($Recipt_Payment->Debit, 2) }}&nbsp;ج.م</td>
 
-                                            <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                    <td>
+
+                                        <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                 [
-                                                    'url' => route('fee_invoice.destroy', $fee_invoice->id),
+                                                    'url' => route('Recipt_Payment.destroy', $Recipt_Payment->id),
                                                     'text' => trans('general.delete'),
                                                     'icon' => 'ti-trash',
                                                     'onclick' => 'confirmation(event)',
+                                                    'can'=>'Recipt_Payment-delete'
                                                 ],
                                                 [
-                                                    'url' => route('fee_invoice.show', $fee_invoice->id),
+                                                    'url' => route('Recipt_Payment.show', $Recipt_Payment->id),
                                                     'text' => trans('general.info'),
                                                     'icon' => 'ti-info-alt',
                                                     'target' => '_blank',
+                                                    'can'=>'Recipt_Payment-info'
                                                 ],
-                                            ]" />
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                                [
+                                            'url' => route('Recipt_Payment.edit', $Recipt_Payment->id),
+                                            'text' => trans('general.edit'),
+                                            'icon' => 'ti-pencil',
+                                            'can'=>'Recipt_Payment-edit'
+
+                                        ],
+                                                [
+                                                    'url' => route('Recipt_Payment.print', $Recipt_Payment->id),
+                                                    'text' => trans('general.print'),
+                                                    'icon' => 'ti-printer',
+                                                    'target' => '_blank',
+                                                ],
+                                            ]"/>
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
+                        @endcan
                     </div>
                 </div>
             </div>

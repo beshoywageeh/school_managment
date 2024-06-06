@@ -30,7 +30,7 @@
         style="{{ data_get($theme, 'baseStyle') }}"
     >
         <select
-            class="{{ $filterClasses }}"
+            class="custom-select"
             style="{{ data_get($column, 'headerStyle') }}"
             {{ $defaultAttributes['selectAttributes'] }}
         >

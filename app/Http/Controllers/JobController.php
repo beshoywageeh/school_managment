@@ -13,7 +13,7 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::paginate(10);
+        $jobs = Job::get();
         $create = true;
         return view('backend.Job.index', get_defined_vars());
     }
@@ -22,8 +22,9 @@ class JobController extends Controller
     {
         try {
             Job::create([
-                'title' => $request->job_name,
+                'name' => $request->job_name,
                 'status' => ($request->status == 'on') ? 0 : 1,
+                'type' => $request->type,
                 'created_by' => \Auth::id()
             ]);
             session()->flash('success', trans('general.success'));
@@ -53,8 +54,9 @@ class JobController extends Controller
         try {
             $Job = Job::findorFail($request->id);
             $Job->update([
-                'title' => $request->job_name,
+                'name' => $request->job_name,
                 'status' => ($request->status == 'on') ? 0 : 1,
+                'type' => $request->type,
                 'updated_by' => \Auth::id()
             ]);
             session()->flash('success', trans('general.success'));

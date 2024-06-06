@@ -13,29 +13,25 @@
                             <h4></h4>
                         </div>
                     </div>
-                    <form id="form-with-multiple-column" class="max-w-full" action="{{ route('Recipt_Payment.update') }}"
+                    <form id="form-with-multiple-column" class="max-w-full" action="{{ route('except_fee.update') }}"
                           method="post">
+
                         @csrf
-                        <input type="hidden" name="id" value="{{$recipt_Payment->id}}">
-                        <div class="row">
-                            <div class="col">
-                                <label for="">{{trans('Recipt_payments.man')}}</label>
-                                <input type="text" class="form-control" disabled value="{{$recipt_Payment->manual}}">
-                            </div>
-                        </div>
-                        <br>
+
+                        <input type="hidden" name="id" value="{{$excptionFees->id}}">
+
                         <div class="row">
                             <div class="col">
                                 <label for="">{{trans('Recipt_payments.name')}}</label>
                                 <select name="student_id" id="tom-select" class="form-control">
 
-                                    <option value="{{$recipt_Payment->student->id}}">{{$recipt_Payment->student->name}}</option>
+                                    <option value="{{$excptionFees->students->id}}">{{$excptionFees->students->name}}</option>
 
                                 </select>
                             </div>
                             <div class="col">
-                                <label for="">{{trans('Recipt_payments.amount')}}</label>
-                                <input type="number" class="form-control" name="amount" value="{{$recipt_Payment->Debit}}">
+                                <label for="">{{trans('ExcptionFee.amount')}}</label>
+                                <input type="number" class="form-control" name="amount" value="{{$excptionFees->amount}}">
                             </div>
 
                         </div>

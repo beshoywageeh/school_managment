@@ -4,13 +4,21 @@ namespace App\Http\Controllers\Grades;
 
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
+use App\Models\User;
 use Illuminate\Http\Request;
 class GradesController extends Controller
 {
     public function index()
     {
+        $auth = \Auth::id();
+        /*$data['grades'] = Grade::whereHas('users', function ($query) use ($auth) {
+            $query->where('teacher_id', $auth);
+        })->with('user')->withCount(['class_room', 'students'])->withSum('fees.amount')->paginate(10);*/
 
-        $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->withSum('fees', 'amount')->paginate(10);
+        $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->paginate(10);
+
+        $data['users'] = User::whereIn('id', [1, 3, 4])->get();
+
         return view('backend.Grades.index', ['data' => $data]);
     }
 
@@ -21,6 +29,8 @@ class GradesController extends Controller
 
     public function store(Request $request)
     {
+        // return $request;
+        \DB::beginTransaction();
         try {
             $request->validate([
                 'Grade_Name' => ['required', 'string', 'max:255'],
@@ -29,10 +39,13 @@ class GradesController extends Controller
                 'name' => $request->Grade_Name,
                 'user_id' => \Auth::Id(),
             ]);
+            $grade->users()->attach($request->user_id);
+            \DB::commit();
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
         } catch (\Exception $e) {
+            \DB::rollBack();
             session()->flash('error', $e->getMessage());
 
             return redirect()->back()->withInput();
@@ -60,6 +73,7 @@ class GradesController extends Controller
 
     public function update(Request $request)
     {
+        \DB::beginTransaction();
         try {
             $request->validate([
                 'Grade_Name' => ['required', 'string', 'max:255'],
@@ -68,11 +82,17 @@ class GradesController extends Controller
             $grade->update([
                 'name' => $request->Grade_Name,
             ]);
-
+            if (isset($request->user_id)) {
+                $grade->users()->sync($request->user_id);
+            } else {
+                $grade->users()->sync(array());
+            }
+            \DB::commit();
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
         } catch (\Exception $e) {
+            \DB::rollBack();
             session()->flash('error', $e->getMessage());
 
             return redirect()->back()->withInput();
