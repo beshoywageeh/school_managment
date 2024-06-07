@@ -32,16 +32,16 @@
         <tbody>
         @foreach($roles as $role)
             <tr>
-                <td>{{$role->name}}</td>
+                <td>{{trans('permissions.'.$role->name)}}</td>
                 <td>
                     @foreach($role->permissions as $permission)
-                        <span class='badge badge-primary'>{{$permission->name}}</span>
+                        <span class='badge badge-primary'>{{trans('permissions.'.$permission->name)}}</span>
                     @endforeach
                 </td>
                 <td>
                     <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                         [
-                            'url' => '#',
+                            'url' => route('roles.delete',$role->id),
                             'text' => trans('general.delete'),
                             'icon' => 'ti-trash',
                             'onclick' => 'confirmation(event)',
@@ -55,7 +55,7 @@
                             'can'=>'role-info'
                         ],
                         [
-                            'url' => '#',
+                            'url' => route('roles.edit',$role->id),
                             'text' => trans('general.edit'),
                             'icon' => 'ti-pencil',
                             'can'=>'role-edit'

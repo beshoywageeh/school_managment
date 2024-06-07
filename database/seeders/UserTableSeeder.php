@@ -30,7 +30,8 @@ class UserTableSeeder extends Seeder
             'email' => 'a@a.com',
             'isAdmin' => '1',
             'login_allow' => '1',]);
-        $role = Role::create(['name' => 'Admin']);$permissions = Permission::pluck('id','id')->all();$role->syncPermissions($permissions);
+        $role = Role::create(['name' => 'Admin']);
+        $permissions = Permission::pluck('id','id')->all();$role->syncPermissions($permissions);
         $user->assignRole([$role->id]);
     }
 }

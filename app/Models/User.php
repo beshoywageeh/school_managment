@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
+
 
 class User extends Authenticatable
 {
@@ -85,6 +87,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Grade', 'teacher_grade', 'teacher_id', 'grade_id');
     }
+ 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

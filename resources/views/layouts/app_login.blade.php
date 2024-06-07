@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-@if(isset($school))
+@if(isset($school)&& $school->slug != null)
     <link rel="icon" href="{{asset('storage/attachments/schools/'.$school->slug.'/'. $school->image->filename)}}" type="image/png" /> <title>@yield('page_title')</title>
 @else
         <link rel="icon" href="" type="image/png" /> <title>@yield('page_title')</title>

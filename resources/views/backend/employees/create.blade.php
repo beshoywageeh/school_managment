@@ -3,6 +3,7 @@
     {{ trans('employees.title') }} | {{ trans('general.new') }}
 @endsection
 @section('content')
+@include('backend.msg')
 <div class="mb-4 row">
     <div class="col">
     <div class="card">

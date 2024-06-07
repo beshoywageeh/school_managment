@@ -130,6 +130,8 @@
                         </x-nav_link>
                         <x-nav_link :href="route('roles.index')" :active="request()->is('*/permission/*')" :image="URL::asset('assests/images/Sidebar/shield.png')">
                             {{ trans('sidebar.permission') }}
+                        </x-nav_link> <x-nav_link :href="route('admin_era.index')" :active="request()->is('*/admin_era/*')" :image="URL::asset('assests/images/Sidebar/admin.png')">
+                            {{ trans('sidebar.admin_era') }}
                         </x-nav_link>
                     </ul>
                 </li>

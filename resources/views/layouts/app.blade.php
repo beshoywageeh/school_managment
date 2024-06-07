@@ -5,7 +5,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="{{asset('storage/attachments/schools/'.$school->slug.'/'. $school->image->filename)}}" type="image/png" />
+    @if (isset($school) && $school->slug != null)
+        <link rel="icon"
+            href="{{ asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
+            type="image/png" />
+    @else
+        <link rel="icon" href="" type="image/png" />
+    @endif
     <title>@yield('title')</title>
 
     @include('layouts.header_css')

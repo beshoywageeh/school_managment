@@ -18,67 +18,66 @@
                     </div>
                     <div class="table-responsive">
                         @can('Recipt_Payment-list')
-                        <table id="datatable" class="table text-center table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>{{ trans('Recipt_Payments.maual') }}</th>
-                                <th>{{ trans('general.created_at') }}</th>
-                                <th>{{ trans('Recipt_Payments.name') }}</th>
-                                <th>{{ trans('Recipt_Payments.amount') }}</th>
-                                <th>{{ trans('general.actions') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($Recipt_Payments as $Recipt_Payment)
-                                <tr>
-                                    <td> {{ $loop->iteration }}</td>
-                                    <td> {{ $Recipt_Payment->manual }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($Recipt_Payment->date)->format('Y-m-d') }}</td>
-                                    <td>
-                                        @can('Recipt_Payment-info')
-                                        <a target='_blank'
-                                           href="{{ route('Recipt_Payment.show', $Recipt_Payment->student->id) }}">{{ $Recipt_Payment->student->name }}</a>
-                                           @endcan
-                                    </td>
-                                    <td>{{ number_format($Recipt_Payment->Debit, 2) }}&nbsp;ج.م</td>
+                            <table id="datatable" class="table text-center table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>{{ trans('Recipt_Payments.maual') }}</th>
+                                        <th>{{ trans('general.created_at') }}</th>
+                                        <th>{{ trans('Recipt_Payments.name') }}</th>
+                                        <th>{{ trans('Recipt_Payments.amount') }}</th>
+                                        <th>{{ trans('general.actions') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($Recipt_Payments as $Recipt_Payment)
+                                        <tr>
+                                            <td> {{ $loop->iteration }}</td>
+                                            <td> {{ $Recipt_Payment->manual }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($Recipt_Payment->date)->format('Y-m-d') }}</td>
+                                            <td>
+                                                @can('Recipt_Payment-info')
+                                                    <a target='_blank'
+                                                        href="{{ route('Recipt_Payment.show', $Recipt_Payment->student->id) }}">{{ $Recipt_Payment->student->name }}</a>
+                                                @endcan
+                                            </td>
+                                            <td>{{ number_format($Recipt_Payment->Debit, 2) }}&nbsp;ج.م</td>
 
-                                    <td>
+                                            <td>
 
-                                        <x-dropdown-table :buttonText="trans('general.actions')" :items="[
-                                                [
-                                                    'url' => route('Recipt_Payment.destroy', $Recipt_Payment->id),
-                                                    'text' => trans('general.delete'),
-                                                    'icon' => 'ti-trash',
-                                                    'onclick' => 'confirmation(event)',
-                                                    'can'=>'Recipt_Payment-delete'
-                                                ],
-                                                [
-                                                    'url' => route('Recipt_Payment.show', $Recipt_Payment->id),
-                                                    'text' => trans('general.info'),
-                                                    'icon' => 'ti-info-alt',
-                                                    'target' => '_blank',
-                                                    'can'=>'Recipt_Payment-info'
-                                                ],
-                                                [
-                                            'url' => route('Recipt_Payment.edit', $Recipt_Payment->id),
-                                            'text' => trans('general.edit'),
-                                            'icon' => 'ti-pencil',
-                                            'can'=>'Recipt_Payment-edit'
-
-                                        ],
-                                                [
-                                                    'url' => route('Recipt_Payment.print', $Recipt_Payment->id),
-                                                    'text' => trans('general.print'),
-                                                    'icon' => 'ti-printer',
-                                                    'target' => '_blank',
-                                                ],
-                                            ]"/>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                                <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                    [
+                                                        'url' => route('Recipt_Payment.destroy', $Recipt_Payment->id),
+                                                        'text' => trans('general.delete'),
+                                                        'icon' => 'ti-trash',
+                                                        'onclick' => 'confirmation(event)',
+                                                        'can' => 'Recipt_Payment-delete',
+                                                    ],
+                                                    [
+                                                        'url' => route('Recipt_Payment.show', $Recipt_Payment->id),
+                                                        'text' => trans('general.info'),
+                                                        'icon' => 'ti-info-alt',
+                                                        'target' => '_blank',
+                                                        'can' => 'Recipt_Payment-info',
+                                                    ],
+                                                    [
+                                                        'url' => route('Recipt_Payment.edit', $Recipt_Payment->id),
+                                                        'text' => trans('general.edit'),
+                                                        'icon' => 'ti-pencil',
+                                                        'can' => 'Recipt_Payment-edit',
+                                                    ],
+                                                    [
+                                                        'url' => route('Recipt_Payment.print', $Recipt_Payment->id),
+                                                        'text' => trans('general.print'),
+                                                        'icon' => 'ti-printer',
+                                                        'target' => '_blank',
+                                                    ],
+                                                ]" />
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         @endcan
                     </div>
                 </div>

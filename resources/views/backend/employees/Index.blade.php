@@ -12,7 +12,7 @@
                             <h4>{{ trans('employees.title') }}</h4>
                         </div>
                         <div class="col text-md-right">
-                            @can('employees.create')
+                            @can('employees-create')
                             <a href="{{ route('employees.create') }}" class="button">
                                 <i class="ti-plus"></i>
                                 {{ trans('general.new') }}

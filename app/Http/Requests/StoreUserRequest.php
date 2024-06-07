@@ -23,7 +23,7 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'required|numeric|digits:11|regex:/^01[1-9]\d{8}$/',
+            'phone' => 'required|numeric|digits:11|regex:/^01[0-9]\d{8}$/',
             'address' => 'required|string|max:255',
             'birth_date' => 'required|date',
             'date_of_hiring' => 'required|date',

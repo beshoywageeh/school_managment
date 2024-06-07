@@ -23,7 +23,7 @@
         'url' => route('fee_invoice.create', $row->id),
         'text' => trans('general.fee_invoice'),
         'icon' => 'ti-money',
-        'can'=>'Students-create'
+        'can'=>'fee_invoice-create'
     ],[
         'url' => route('Recipt_Payment.create', $row->id),
         'text' => trans('general.Recipt_Payment'),

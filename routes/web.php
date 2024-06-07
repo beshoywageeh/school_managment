@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\{AcadmiceYearController,
+    AdminEraControllerController,
     BackupController,
     ClassRooms\ClassRoomsController,
     ExcptionFeesController,
@@ -17,7 +18,7 @@ use App\Http\Controllers\{AcadmiceYearController,
     SettingsController,
     SetupController,
     Students\StudentsController,
-    UserController,PaymentPartsController,ReportController,RoleController};
+    UserController,PaymentPartsController,ReportController,RoleController,AdminEraController};
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -186,8 +187,15 @@ Route::group(
             Route::group(['prefix' => 'permission', 'controller' => RoleController::class], function () {
                 Route::get('/index', 'index')->name('roles.index');
                 Route::get('/create', 'create')->name('roles.create');
+                Route::post('/store', 'store')->name('roles.store');
+                Route::get('/{id}/edit', 'edit')->name('roles.edit');
+                Route::post('/update', 'update')->name('roles.update');
+                Route::get('/destroy/{id}', 'destroy')->name('roles.delete');
 
-
+            });
+            Route::group(['prefix'=>'admin_era','controller'=>AdminEraController::class],function(){
+                Route::get('/index','index')->name('admin_era.index');
+                Route::post('/employee/{id}', 'emp_active')->name('employee.update');
             });
             Route::group(['prefix' => 'settings', 'controller' => SettingsController::class], function () {
                 Route::get('/index', 'index')->name('setting.index');
