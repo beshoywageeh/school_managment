@@ -14,6 +14,7 @@ class Fee_invoice extends Model
     use HasFactory;
     use SoftDeletes, LogsActivity;
     protected $table='fee_invoices';
+    protected $fillable=['status'];
     public function students()
     {
 
@@ -36,7 +37,7 @@ class Fee_invoice extends Model
     }public function acd_year()
     {
 
-        return $this->belongsTo(acadmice_year::class, 'acadmiceyear_id');
+        return $this->belongsTo(acadmice_year::class,'academic_year_id');
     }
     public function getActivitylogOptions(): LogOptions
     {

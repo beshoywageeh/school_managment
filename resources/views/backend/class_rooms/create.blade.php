@@ -24,7 +24,7 @@
                                                 value="" @disabled(true)>{{ trans('class_rooms.select_grade') }}</option>
                                             @foreach ($data['grades'] as $grade)
                                                 <option
-                                                    @selected($grade->id == $class_room->grade_id) value="{{ $grade->id }}">{{
+                                                   value="{{ $grade->id }}">{{
                                 $grade->name }}</option>
                                             @endforeach
                                         </select>

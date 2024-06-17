@@ -13,17 +13,19 @@
                         </div>
                         <div class="col text-md-right">
                             @can('promotion-create')
-                            <a href="{{ route('promotion.create') }}" class="button">
-                                <i class="ti-plus"></i>
-                                {{ trans('general.new') }}
-                            </a>
+                                <a href="{{ route('promotion.create') }}"
+                                   class="btn btn-success">
+                                    <i class="ti-plus"></i>
+                                    {{ trans('general.new') }}
+                                </a>
                             @endcan
                         </div>
                     </div>
                     <div class="table-responsive">
                         @can('promotion-list')
-                        <table class="table table-striped table-bordered" id="datatable">
-                            <thead>
+                            <table class="table table-striped table-bordered"
+                                   id="datatable">
+                                <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>{{ trans('promotions.student') }}</th>
@@ -33,8 +35,8 @@
                                     <th>{{ trans('promotions.to_classroom') }}</th>
                                     <th>{{ trans('general.actions') }}</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 @forelse ($promotions as $promotion)
                                     <tr>
                                         <td> {{ $loop->iteration }}</td>
@@ -44,7 +46,8 @@
                                         <td>{{ $promotion->t_grade->name }}</td>
                                         <td>{{ $promotion->t_class->name }}</td>
                                         <td>
-                                            <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                            <x-dropdown-table :buttonText="trans('general.actions')"
+                                                              :items="[
                                                 [
                                                     'url' => route('promotions.destroy', $promotion->id),
                                                     'text' => trans('general.delete'),
@@ -53,7 +56,7 @@
                                                     'can'=>'promotion-delete'
                                                 ],
 
-                                            ]" />
+                                            ]"/>
 
                                         </td>
                                     </tr>
@@ -62,8 +65,8 @@
                                         <td colspan="9">{{ trans('general.Msg') }}</td>
                                     </tr>
                                 @endforelse
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
                         @endcan
                     </div>
                 </div>

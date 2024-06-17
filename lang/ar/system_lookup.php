@@ -2,17 +2,17 @@
 
 return [
     'title' => 'مراقبة النظام',
-	'action'=>'نوع العملية',
+	'action'=>'الوصف',
 	'model'=>'جدول البيانات',
 	'ip'=>'أى بي الجهاز',
-	'date_time'=>'التاريخ و الوقت',
+	'date_time'=>'التوقيت',
 	'data'=>'البيانات',
 	'user'=>'اسم المستخدم',
 	'created'=>'إضافة',
 	'updated'=>'تعديل',
 	'deleted'=>'حذف',
 	'created_at'=>'تمت في',
-	'field_change' => 'الحقل :field تم تعير من :old_value إلى :new_value.',
-	'field_create' => 'تم إضافة الحقول التالية :value.',
-	
+    'field_create' => 'تم إنشاء العنصر برقم :value',
+    'field_change' => 'تم تعديل العنصر برقم :value من :old_value إلى :new_value',
+    'field_delete' => 'تم حذف العنصر برقم :value',
 ];

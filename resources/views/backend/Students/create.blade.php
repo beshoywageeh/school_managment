@@ -84,7 +84,7 @@
                                 </div>
                                 <div class="col">
                                     <label for="parent" class="">{{ trans('student.parent') }}</label>
-                                    <select name="parents" id="tom-select" class="form-control">
+                                    <select name="parents" id="tom-select" class="custom-select">
                                         <option> {{ trans('student.parent') }}</option>
 
                                         @foreach ($parents as $parent)

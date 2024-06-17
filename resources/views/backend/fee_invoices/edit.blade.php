@@ -48,7 +48,7 @@
                         <input type="hidden"value="{{$fee->students->classroom_id}}"name="classroom_id">
                         <div class="row">
                             <div class="col text-md-right">
-                                <button class="button" type="submit">{{ trans('General.Submit') }}</button>
+                                <button class="btn btn-success" type="submit">{{ trans('General.Submit') }}</button>
                             </div>
                         </div>
                     </form>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Spatie\Permission\Models\Role;
 
 class AdminEraController extends Controller
@@ -11,7 +12,8 @@ class AdminEraController extends Controller
     public function Index(){
         $Employees = User::whereIn('type',['1','3','4'])->get(['id','code','name','email','isAdmin','login_allow','password','type']);
         $Permissions = Role::get();
-       // return $Employees;
+
+
         return view('backend.AdminEra.Index',get_defined_vars());
     }
     public function emp_active($id,Request $request){
@@ -26,6 +28,6 @@ class AdminEraController extends Controller
     ]);
     $employee->assignRole([$request->role]);
     return redirect()->back()->with('success', trans('General.success'));
-        
+
     }
 }

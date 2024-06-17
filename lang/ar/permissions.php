@@ -95,13 +95,15 @@ return [
     'Students' => 'الطلاب',
     'Students-list' => 'قائمة الطلاب',
     'Students-create' => 'إضافة طالب جديد',
-    'Students-Inport_Excel' => 'إستيراد إكسيل',
+    'Students-Import_Excel' => 'إستيراد إكسيل',
     'Students-Export_Excel' => 'تصدير إكسيل',
     'Students-pdf' => 'تصدير PDF',
     'Students-delete' => 'حذف الطالب',
     'Students-info' => 'تفاصيل الطالب',
     'Students-edit' => 'تعديل الطالب',
     'fee_invoice-create' => 'إضافة فاتورة مصاريف',
-    'create'=>'إسم الصلاحية'
+    'create'=>'إسم الصلاحية',
+    'employees-import_Excel' => 'إستيراد إكسيل',
+    'Parents-import_Excel' => 'إستيراد إكسيل',
 
 ];

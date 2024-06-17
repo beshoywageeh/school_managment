@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('Father_Job')->nullable();
             $table->date('Father_Birth_Date')->nullable();
             $table->string('Father_Learning')->nullable();
+            $table->string('Father_Birth_Location')->nullable();
 
             //Mother information
             $table->string('Mother_Name')->nullable();

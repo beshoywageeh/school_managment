@@ -16,9 +16,9 @@ class UserTableSeeder extends Seeder
     {
 
         $user = User::create([
-            'name' => 'Rahul Shukla',
-            'password' => bcrypt('123456'),
-            'code' =>'11111',
+            'name' => 'Admin',
+            'password' => bcrypt('hypervisio2020'),
+            'code' =>'000001',
             'phone' => '01201026745',
             'address' =>'fafa',
             'date_of_birth' => now()->format('Y-m-d'),
@@ -27,9 +27,9 @@ class UserTableSeeder extends Seeder
             'reiligon' => '1',
             'type' => '1',
             'email_verified_at' => now(),
-            'email' => 'a@a.com',
+            'email' => 'admin@school_stepup.com',
             'isAdmin' => '1',
-            'login_allow' => '1',]);
+            'login_allow' => '1']);
         $role = Role::create(['name' => 'Admin']);
         $permissions = Permission::pluck('id','id')->all();$role->syncPermissions($permissions);
         $user->assignRole([$role->id]);

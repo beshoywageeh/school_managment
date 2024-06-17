@@ -18,4 +18,14 @@ enum Jobs_types: int
             self::MANEGMENT => trans('enums.manegment'),
         };
     }
+
+    public static function fromString(string $std_status): ?self
+    {
+        return match (strtolower($std_status)) {
+            'TEACHER' => Self::TEACHER,
+            'WORKER' => Self::WORKER,
+            'ACCOUNTANT' => Self::ACCOUNTANT,
+            'MANEGMENT' => Self::MANEGMENT,
+        };
+    }
 }

@@ -71,6 +71,7 @@
                                                         'text' => trans('general.print'),
                                                         'icon' => 'ti-printer',
                                                         'target' => '_blank',
+                                                       'can'=>'Recipt_Payment-edit'
                                                     ],
                                                 ]" />
                                             </td>

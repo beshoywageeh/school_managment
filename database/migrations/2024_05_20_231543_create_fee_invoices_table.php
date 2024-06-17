@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('classroom_id');
             $table->unsignedBigInteger('academic_year_id');
             $table->unsignedBigInteger('school_fee_id');
+            $table->boolean('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

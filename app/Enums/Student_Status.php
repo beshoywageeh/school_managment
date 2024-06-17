@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum Student_Status : int
+enum Student_Status: int
 {
     case NEW = 0;
     case TRASPORT_FROM = 1;
@@ -25,6 +25,7 @@ enum Student_Status : int
             self::TOTAL_ABSENT => 'badge badge-pill badge-danger',
         };
     }
+
     public function lang(): string
     {
         return match ($this) {
@@ -38,6 +39,23 @@ enum Student_Status : int
             self::REJECTED => trans('enums.REJECTED'),
             self::FREEZED => trans('enums.FREEZED'),
             self::TOTAL_ABSENT => trans('enums.TOTAL_ABSENT'),
+        };
+    }
+
+    public static function fromString(string $std_status): ?self
+    {
+        return match (strtolower($std_status)) {
+            'new' => self::NEW,
+            'transport_from' => self::TRASPORT_FROM,
+            'transport_to' => self::TRASPORT_TO,
+            'change_path' => self::CHANGE_PATH,
+            'merge' => self::MERGE,
+            'second_try' => self::SECOND_TRY,
+            'pass_on_low' => self::PASS_ON_LOW,
+            'reject' => self::REJECTED,
+            'freeze' => self::FREEZED,
+            'total_absent' => self::TOTAL_ABSENT,
+            default => null,
         };
     }
 

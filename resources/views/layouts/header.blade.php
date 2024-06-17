@@ -2,13 +2,13 @@
     <!-- logo -->
 
     <div class="text-left navbar-brand-wrapper">
-        @if (isset($school) && $school->slug != null)
+        @if (isset($school) && $school->slug != null && $school->image !=null)
             <a class="navbar-brand brand-logo" href="index.html"><img
                     src="{{ asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                    alt="">{{ $school->name }}</a>
+                    alt=""></a>
             <a class="navbar-brand brand-logo-mini" href="index.html"><img
                     src="{{ asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                    alt="">{{ $school->name }}</a>
+                    alt=""></a>
         @else
             <link rel="icon" href="" type="image/png" />
         @endif

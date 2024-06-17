@@ -11,6 +11,7 @@ class ExcptionFees extends Model
 {
     use HasFactory,SoftDeletes,LogsActivity;
     protected $guarded=[];
+    protected static $logOnlyDirty = true;
     public function students()
     {
         return $this->belongsTo('App\Models\Student','student_id');
@@ -21,5 +22,4 @@ class ExcptionFees extends Model
             ->logOnly(['*'])->logOnlyDirty();
         // Chain fluent methods for configuration options
     }
-
 }

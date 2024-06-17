@@ -58,7 +58,7 @@ class ClassRoomsController extends Controller
         try {
             $data['class_room'] = class_room::where('id', $id)->with(['user', 'grade', 'students'])->first();
 
-            //return $data;
+           // return $data;
             return view('backend.class_rooms.show', ['data' => $data]);
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

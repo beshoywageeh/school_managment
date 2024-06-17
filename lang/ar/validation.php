@@ -12,7 +12,7 @@ return [
     'before' => 'يجب أن يكون :attribute تاريخًا قبل :date.',
     'before_or_equal' => 'يجب أن يكون :attribute تاريخًا يسبق أو يساوي :date.',
     'between' => [
-        'numeric' => 'يجب أن يكون :attribute بين: min و: max.',
+        'numeric' => 'يجب أن يكون :attribute بين :min و :max.',
         'file' => 'يجب أن يكون :attribute بين: min و: max كيلوبايت.',
         'string' => 'يجب أن يكون :attribute بين: min و: max أحرف.',
         'array' => 'يجب أن تحتوي :attribute على ما بين: min و: max items.',

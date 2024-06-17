@@ -18,34 +18,38 @@
                     </div>
                     <div class="table-responsive">
                         @can('payment_parts-list')
-                        <table id="datatable" class="table text-center table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>{{ trans('general.created_at') }}</th>
-                                <th>{{ trans('Recipt_Payments.name') }}</th>
-                                <th>{{ trans('PaymentParts.status') }}</th>
-                                <th>{{ trans('Recipt_Payments.amount') }}</th>
-                                <th>{{ trans('general.actions') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($PaymentParts as $PaymentPart)
+                            <table id="datatable"
+                                   class="table text-center table-striped table-bordered">
+                                <thead>
                                 <tr>
-                                    <td> {{ $loop->iteration }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($PaymentPart->date)->format('Y-m-d') }}</td>
-                                    <td><a target='_blank'
-                                           href="{{ route('payment_parts.show', $PaymentPart->students->id) }}">{{ $PaymentPart->students->name }}</a>
-                                    </td>
-                                    <td>
-                                        @can('payment_parts-status')
-                                        <a class="btn {{ $PaymentPart->payment_status->color() }} btn-sm"
-                                           href="{{route('payment_parts.pay', $PaymentPart->id)}}"> {{ $PaymentPart->payment_status->lang() }}
-                                            <img src="{{asset('assests/images/load.gif')}}" alt=""> </a>
-                                    </td>
-                                    <td>{{ number_format($PaymentPart->amount, 2) }}&nbsp;ج.م</td>
-                                    <td>
-                                        <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                    <th>#</th>
+                                    <th>{{ trans('general.created_at') }}</th>
+                                    <th>{{ trans('Recipt_Payments.name') }}</th>
+                                    <th>{{ trans('PaymentParts.status') }}</th>
+                                    <th>{{ trans('Recipt_Payments.amount') }}</th>
+                                    <th>{{ trans('general.actions') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($PaymentParts as $PaymentPart)
+                                    <tr>
+                                        <td> {{ $loop->iteration }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($PaymentPart->date)->format('Y-m-d') }}</td>
+                                        <td><a target='_blank'
+                                               href="{{ route('payment_parts.show', $PaymentPart->students->id) }}">{{ $PaymentPart->students->name }}</a>
+                                        </td>
+                                        <td>
+                                            @can('payment_parts-status')
+                                                <a class="btn {{ $PaymentPart->payment_status->color() }} btn-sm"
+                                                   href="{{route('payment_parts.pay', $PaymentPart->id)}}"> {{ $PaymentPart->payment_status->lang() }}
+                                                    <img src="{{asset('assests/images/load.gif')}}"
+                                                         alt=""> </a>
+                                            @endcan
+                                        </td>
+                                        <td>{{ number_format($PaymentPart->amount, 2) }}&nbsp;ج.م</td>
+                                        <td>
+                                            <x-dropdown-table :buttonText="trans('general.actions')"
+                                                              :items="[
 
                                                 [
                                                     'url' => route('payment_parts.show', $PaymentPart->id),
@@ -76,11 +80,11 @@
 
                                         ],
                                             ]"/>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         @endcan
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\WorkersImport;
 use App\Models\{User, Job};
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
@@ -147,5 +148,17 @@ class UserController extends Controller
     {
         $jobs = Job::where('type', $id)->get(['id', 'name']);
         return response()->json($jobs);
+    }
+    public function Excel_Import(Request $request)
+    {
+        try {
+            $path = $request->file('excel')->getRealPath();
+            \Excel::import(new WorkersImport, $path);
+            session()->flash('success', trans('general.success'));
+            return redirect()->route('Students.index');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 }

@@ -12,7 +12,7 @@
                         <h4>{{ trans('employees.title') }} | {{ trans('general.edit') }}</h4>
                     </div>
                     <div class="col text-md-right">
-                        <a href="{{route('employees.index')}}" class="button">{{ trans('general.back') }}</a>
+                        <a href="{{route('employees.index')}}" class="btn btn-success">{{ trans('general.back') }}</a>
                     </div>
                 </div>
                 <form id="form-with-multiple-column" action="{{ route('employees.update','test') }}" method="post" enctype="multipart/form-data">
@@ -35,7 +35,7 @@
                             <div class="col form-group">
                                 <label for="religion" class="">{{ trans('employees.grade_year') }}</label>
 
-                                <select name="grade_year" id="grade_year" class="form-control">
+                                <select name="grade_year" id="grade_year" class="custom-select">
                                     <option value="" >{{ trans('employees.grade_year') }}</option>
                                     @foreach ($years as $year)
                                     <option value="{{ $year }}" {{$user->grade_year == $year ? 'selected' : ''}}>{{ $year }}</option>
@@ -83,17 +83,10 @@
                     <fieldset class=''>
                         <legend class='m-auto text-center text-muted'>{{ trans('employees.job_info') }}</legend>
                         <div class="row">
-                            <div class="col form-group">
-                                <label>
+                            <div class="col">
+                                <x-input name="date_of_hiring" value="{{$user->date_of_hiring}}"
+                                         type="date">{{ trans('employees.join_date') }}</x-input>
 
-                                    {{ trans('employees.join_date') }}
-                                </label>
-                                <div class="input-group date" id="datepicker-action">
-                                    <input class="form-control" name="date_of_hiring" type="text" value="{{$user->date_of_hiring}}">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </span>
-                                </div>
                             </div>
                             <div class="col">
 
@@ -101,7 +94,7 @@
                             </div>
                             <div class="col form-group">
                                 <label for="jobs" class="">{{ trans('employees.job_title') }}</label>
-                                <select name="job_id" id="jobs" class="form-control">
+                                <select name="job_id" id="jobs" class="custom-select">
                                     <option> {{ trans('employees.select_worker_title') }}</option>
                                 </select>
                             </div>
@@ -118,7 +111,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <x-input name="insurance_date" class="input input-date" type="text" value="{{$user->insurance_date}}">{{ trans('employees.insurance_date') }}</x-input>
+                                <x-input name="insurance_date" class="input input-date" type="date" value="{{$user->insurance_date}}">{{ trans('employees.insurance_date') }}</x-input>
                             </div>
                             <div class="col">
 
@@ -146,7 +139,7 @@
                         <div class="col text-md-right">
 
                             <button class="btn btn-secondary" type="button">{{ trans('General.Cancel') }}</button>
-                            <button class="button" type="submit">{{ trans('General.Submit') }}</button>
+                            <button class="btn btn-success" type="submit">{{ trans('General.Submit') }}</button>
                         </div>
                     </div>
                 </form>

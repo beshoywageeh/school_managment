@@ -6,7 +6,8 @@
     <div class="row mb-30">
         <div class="col-xl-4">
             <div class="card card-statistics h-100">
-                <div class="p-4 text-center bg" style="background: url({{ asset('assests/images/bg/01.jpg') }})">
+                <div class="p-4 text-center bg"
+                     style="background: url({{ asset('assests/images/bg/01.jpg') }})">
                     <h5 class="text-white mb-70 position-relative">
                         {{ $school->name }}
                     </h5>
@@ -15,8 +16,8 @@
                 <div class="text-center card-body position-relative">
                     <div class="avatar-top">
                         <img class="img-fluid w-25 rounded-circle"
-                            src="{{ asset('storage/attachments/schools/'.$school->slug .'/'. $school->image->filename) }}"
-                            alt="{{ $school->name }}">
+                             src="{{ asset('storage/attachments/schools/'.$school->slug .'/'. $school->image->filename) }}"
+                             alt="{{ $school->name }}">
                     </div>
                     <div class="row">
                         <div class="col-sm-4 mt-30">
@@ -46,48 +47,90 @@
                 <div class="card-body">
                     <h2 class="card-title">
                         {{ trans('setting.school_details') }}</h2>
-                    <!-- Name  -->
-                    <div class="row">
-                        <div class="col">
-                            <label class="" for="first-name">{{ trans('setting.name') }}</label>
-                            <input type="text" class="form-control" value="{{ $school->name }}" disabled />
+                    <form action="{{route('settings.update')}}"
+                          method="post" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden"
+                               name="id"
+                               value="{{$school->id}}">
+                        <!-- Name  -->
+                        <div class="row">
+                            <div class="col">
+                                <label class=""
+                                       for="first-name">{{ trans('setting.name') }}</label>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ $school->name }}"
+                                       name="school_name"/>
+                                @error('school_name')
+                                <div class="mt-1 alert alert-error">{{$message}}</div>
+                                @enderror
+                            </div>
+                            <div class="col">
+                                <label class=""
+                                       for="last-name">{{ trans('setting.phone') }}</label>
+                                <input type="text"
+                                       class="form-control"
+                                       value="{{ $school->phone }}"
+                                       name="school_phone"/>
+                                @error('school_phone')
+                                <div class="mt-1 alert alert-error">{{$message}}</div>
+                                @enderror
+                            </div>
+
                         </div>
-                        <div class="col">
-                            <label class="" for="last-name">{{ trans('setting.phone') }}</label>
-                            <input type="tell" class="form-control" value="{{ $school->phone }}" disabled />
+                        <!-- address  -->
+                        <div class="row mt-4">
+                            <div class="col">
+                                <label>{{ trans('setting.address') }}
+                                </label>
+                                <textarea class="form-control" rows="5"
+                                          name="address">{{ $school->address }}</textarea>
+                                @error('address')
+                                <div class="mt-1 alert alert-error">{{$message}}</div>
+                                @enderror
+                            </div>
+                            <div class="col">
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file"
+                                               name="file"
+                                               multiple
+                                               accept="image/png,image/jpeg"
+                                               class="custom-file-input"
+                                               id="inputGroupFile02">
+                                        <label class="custom-file-label"
+                                               for="inputGroupFile02">{{trans('general.choose_file')}}</label>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">{{trans('general.upload')}}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>
+                                    {{ trans('setting.heading_right') }}
+                                </label>
+                                <textarea class="form-control" id="summernote"
+                                          name="head_right">{{ $school->heading_right }}</textarea>
+                                @error('head_right')
+                                <div class="mt-1 alert alert-error">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <!-- heading  -->
+                        <div class="row mt-4">
+                            <div class="col text-right">
+                                <button type="submit"
+                                        class="btn btn-primary">{{trans('General.Submit')}}</button>
+                            </div>
 
 
-                    </div>
-                    <!-- address  -->
-                    <div class="row">
-                        <div class="col">
-                            <label class="label" for="phone">{{ trans('setting.address') }}
-                            </label>
-                            <input type="text" class="form-control" value="{{ $school->address }}" id="phone"
-                                disabled />
                         </div>
-                        <div class="col"></div>
-                    </div>
-                    <!-- heading  -->
-                    <div class="row">
-                        <div class="col">
-                            <label class="label" for="country">
-                                {{ trans('setting.heading_right') }}
-                            </label>
-                            <input type="text" class="form-control" value="{{ $school->heading_right }}" id="country"
-                                disabled />
-                        </div>
-                        <div class="col">
-                            <label class="label" for="country">{{ trans('setting.heading_left') }}
+                    </form>
 
-                            </label>
-                            <input type="text" class="form-control" value="{{ $school->heading_left }}"
-                                id="country"disabled />
-                        </div>
-
-
-                    </div>
                 </div>
             </div>
         </div>
@@ -122,7 +165,8 @@
                 <div class="card-body">
                     <h2 class="card-title">{{ trans('academic_year.title') }}</h2>
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="datatable">
+                        <table class="table table-bordered"
+                               id="datatable">
                             <tr>
                                 <th>#</th>
                                 <th>{{ trans('academic_year.year_start') }}</th>
@@ -143,8 +187,11 @@
                                     <td>{{ $acadmic_year->created_at->format('Y-m-d') }}</td>
                                 </tr>
                             @empty
-                                <div class="alert alert-primary" role="alert">
-                                    <i width="1rem" height="1rem" data-feather="alert-circle"></i>
+                                <div class="alert alert-primary"
+                                     role="alert">
+                                    <i width="1rem"
+                                       height="1rem"
+                                       data-feather="alert-circle"></i>
                                     <p>{{ trans('general.Msg') }}</p>
                                 </div>
                             @endforelse
@@ -162,7 +209,7 @@
                 <div class="card-body">
                     <div class="row card-title">
                         <div class="col">
-                            <h2 >
+                            <h2>
                                 {{ trans('setting.auth_details') }}</h2>
                             <p class="mb-4 text-sm font-normal text-slate-400">
                                 {{ trans('setting.auth_details_desc') }}
@@ -174,23 +221,32 @@
                         </div>
                     </div>
 
-                    <form method="post" action="{{ route('setting.update_password') }}">
+                    <form method="post"
+                          action="{{ route('setting.update_password') }}">
                         @csrf
                         <div class="row">
                             <div class="col">
                                 <label class="block my-1">{{ trans('setting.old_password') }}</label>
-                                <input type="password" name="old_password" class="form-control" id="old_password" />
+                                <input type="password"
+                                       name="old_password"
+                                       class="form-control"
+                                       id="old_password"/>
                             </div>
                             <div class="col">
 
-                                <label class="block my-1" for="new-password">
+                                <label class="block my-1"
+                                       for="new-password">
                                     {{ trans('setting.new_password') }}
                                 </label>
-                                <input type="password" name="new_password" class="form-control" id="new-password" />
+                                <input type="password"
+                                       name="new_password"
+                                       class="form-control"
+                                       id="new-password"/>
                             </div>
                             <div class="col text-md-right">
                                 <!-- Button  -->
-                                <button type="submit" class="btn btn-danger btn-block">{{ trans('general.update') }}</button>
+                                <button type="submit"
+                                        class="btn btn-danger btn-block">{{ trans('general.update') }}</button>
 
                             </div>
                         </div>

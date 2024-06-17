@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fee_invoice;
+use App\Models\PaymentParts;
 use App\Models\Recipt_Payment;
 use App\Models\acadmice_year;
 use App\Models\settings;
@@ -32,8 +34,9 @@ class ReciptPaymentController extends Controller
             $Student = Student::where('id',$id)->with('fees')->first();
             $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
             $invoice_manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
-         //   return $Students;
-            //$invoice_manual='';
+            $feeInvoices = Fee_invoice::where('student_id',$id)->where('status',0)->with('fees:id,title,amount')->get(['id','invoice_date','school_fee_id']);
+            $parts = PaymentParts::where('student_id',$id)->where('payment_status',0)->get();
+            //return $parts;
             return view('backend.reciptpayment.create', get_defined_vars());
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -46,30 +49,37 @@ class ReciptPaymentController extends Controller
     public function store(Request $request)
     {
         try {
-            \DB::beginTransaction();
-            $pay = new Recipt_Payment();
-            $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
-            $pay->manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
-            $pay->date = date('Y-m-d');
-            $pay->student_id = $request->student_id;
-            $pay->Debit = $request->amount;
-            $pay->academic_year_id = acadmice_year::where('status', '0')->first()->id;
+            if($request->type == 'full') {
+                \DB::beginTransaction();
+                $invoice=Fee_invoice::where('id',$request->feeInvoice)->with('fees:id,title,amount')->first();
+                $pay = new Recipt_Payment();
+                $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
+                $pay->manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
+                $pay->date = date('Y-m-d');
+                $pay->student_id = $request->student_id;
+                $pay->Debit = $invoice->fees->amount;
+                $pay->academic_year_id = acadmice_year::where('status', '0')->first()->id;
 
-            $pay->save();
-            $std = new StudentAccount();
-            $std->date = date('Y-m-d');
-            $std->academic_year_id = acadmice_year::where('status', '0')->first()->id;
+                $pay->save();
+                $std = new StudentAccount();
+                $std->date = date('Y-m-d');
+                $std->academic_year_id = acadmice_year::where('status', '0')->first()->id;
+                $std->student_id = $request->student_id;
+                $std->type = '2';
+                $std->credit = $invoice->fees->amount;
+                $std->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
+                $std->classroom_id = Student::where('id', $request->student_id)->first()->classroom_id;
+                $std->debit = 0.00;
+                $std->recipt__payments_id = $pay->id;
+                $std->save();
+                $invoice->update(['status'=>1]);
+                \DB::commit();
+                return redirect()->route('Recipt_Payment.print',$pay->id);
 
-            $std->student_id = $request->student_id;
-            $std->type = '2';
-            $std->credit = $request->amount;
-            $std->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
-            $std->classroom_id = Student::where('id', $request->student_id)->first()->classroom_id;
-            $std->debit = 0.00;
-            $std->recipt__payments_id = $pay->id;
-            $std->save();
-            \DB::commit();
-            return redirect()->route('Recipt_Payment.index')->with('success', trans('general.success'));
+            }else{
+
+            }
+
         } catch (\Exception $e) {
             \DB::rollback();
             return redirect()->back()->with('error', $e->getMessage());

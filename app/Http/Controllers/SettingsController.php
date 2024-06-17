@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NewSchoolRequest;
 use App\Http\Traits\ImageTrait;
-use App\Models\{class_room, Grade, acadmice_year, settings, Student, User};
-
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use App\Models\{acadmice_year, Grade, settings, Student, User};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class SettingsController extends Controller
 {
@@ -32,7 +31,7 @@ class SettingsController extends Controller
         \Illuminate\Support\Facades\DB::beginTransaction();
         try {
             $school = new settings();
-            $school->school_name = $request->schoolname;
+            $school->name = $request->schoolname;
             $school->phone = $request->phone;
             $school->address = $request->address;
             $school->save();
@@ -56,10 +55,27 @@ class SettingsController extends Controller
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
-    public function edit()
+
+    public function update(Request $request)
     {
+//return $request;
+        try {
+            $school = settings::findorfail($request->id);
+            $school->name = $request->school_name;
+            $school->phone = $request->school_phone;
+            $school->address = $request->address;
+            $school->heading_right = $request->head_right;
+            $school->slug=\Str::slug($school->name);
+            $school->save();
+            $this->verifyAndStoreImage($request, 'file', $request->school_name, 'upload_attachments', $request->id, 'App\Models\settings', $request->school_name);
+            session()->flash('success', trans('general.success'));
+            return redirect()->back();
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+        }
 
     }
+
     public function update_password(Request $request)
     {
         try {

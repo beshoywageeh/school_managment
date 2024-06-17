@@ -13,19 +13,21 @@ class JobController extends Controller
      */
     public function index()
     {
-        $jobs = Job::get();
-        $create = true;
+        $jobs = Job::with('jobs')->get();
+        $jobs_main = Job::where('is_main', 1)->get();
         return view('backend.Job.index', get_defined_vars());
     }
 
     public function store(Request $request)
     {
+
         try {
             Job::create([
                 'name' => $request->job_name,
                 'status' => ($request->status == 'on') ? 0 : 1,
-                'type' => $request->type,
-                'created_by' => \Auth::id()
+                'is_main' => ($request->is_main == 'on') ? 1 : 0,
+                'main_job_id' => ($request->status == 'on') ? $request->type : null,
+                'created_by' => \Auth::id(),
             ]);
             session()->flash('success', trans('general.success'));
             return redirect()->route('jobs.index');
@@ -42,6 +44,7 @@ class JobController extends Controller
     {
         //
     }
+
     public function edit($id)
     {
         $create = false;
@@ -49,6 +52,7 @@ class JobController extends Controller
         $jobs = Job::paginate(10);
         return view('backend.Job.index', get_defined_vars());
     }
+
     public function update(Request $request, Job $job)
     {
         try {

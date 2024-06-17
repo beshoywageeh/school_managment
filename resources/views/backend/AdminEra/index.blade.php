@@ -48,7 +48,7 @@
                                             <td>{{ $employee->type->lang() }}</td>
                                             <td>
 
-                                                <input type="password" name="password"class="form-control" />
+                                                <input type="password" name="password" class="form-control" />
 
                                             </td>
                                             <td>

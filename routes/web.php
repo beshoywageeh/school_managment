@@ -76,6 +76,7 @@ Route::group(
                 Route::get('/{id}/show', 'show')->name('parent.show');
                 Route::post('/store', 'store')->name('parents.store');
                 Route::post('/update', 'update')->name('parents.update');
+                Route::post('/Import_Excel','Excel_Import')->name('parents.import_excel');
             });
             Route::group(['prefix' => 'students', 'controller' => StudentsController::class], function () {
                 Route::get('/index', 'index')->name('Students.index');
@@ -86,15 +87,16 @@ Route::group(
                 Route::post('/store', 'store')->name('Students.store');
                 Route::post('/update', 'update')->name('Students.update');
                 Route::get('/{id?}/pdf', 'pdf')->name('Students.pdf');
+                Route::post('/Import_Excel', 'Excel_Import')->name('Students.import_excel');
+
             });
             Route::group(['prefix' => 'academic_year', 'controller' => AcadmiceYearController::class], function () {
                 Route::get('/index', 'index')->name('academic_year.index');
-                Route::get('{id}/edit', 'edit')->name('academic_year.edit');
                 Route::get('/{id}/destroy', 'destroy')->name('academic_year.destroy');
                 Route::get('/{id}/show', 'show')->name('academic_year.show');
                 Route::post('/store', 'store')->name('academic_year.store');
                 Route::post('/update', 'update')->name('academic_year.update');
-            });
+             });
             Route::group(['prefix' => 'jobs', 'controller' => JobController::class], function () {
                 Route::get('/index', 'index')->name('jobs.index');
                 Route::get('/create', 'create')->name('jobs.create');
@@ -112,6 +114,7 @@ Route::group(
                 Route::get('/{id}/show', 'show')->name('employees.show');
                 Route::post('/store', 'store')->name('employees.store');
                 Route::post('/update', 'update')->name('employees.update');
+                Route::post('/Import_Excel', 'Excel_Import')->name('employees.import_excel');
             });
             Route::group(['prefix' => 'school_fees', 'controller' => SchoolFeeController::class], function () {
                 Route::get('/index', 'index')->name('schoolfees.index');
@@ -199,6 +202,7 @@ Route::group(
             });
             Route::group(['prefix' => 'settings', 'controller' => SettingsController::class], function () {
                 Route::get('/index', 'index')->name('setting.index');
+                Route::post('/update','update')->name('settings.update');
                 Route::post('/update_password', 'update_password')->name('setting.update_password');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');

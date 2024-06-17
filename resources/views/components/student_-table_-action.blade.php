@@ -39,6 +39,6 @@
         'url' => route('payment_parts.create', $row->id),
         'text' => trans('PaymentParts.title'),
         'icon' => 'fa fa-money',
-        'can'=>'payment_parts-can'
+        'can'=>'payment_parts-create'
     ],
 ]" />

@@ -13,7 +13,6 @@ return [
 	'look_up'=>'مراقية النظام',
 	'jobs'=>'الوظائف',
 	'employees'=>'الموظفين',
-    'teachers' => 'المدرسين',
     'student_info' => 'شئون الطلبة',
     'employee_info' => 'شئون العاملين',
     'accounting' => 'حسابات',
@@ -28,5 +27,6 @@ return [
     'fast_method'=>'حركات سريعة',
     'permission'=>'الأدوار والصلاحيات',
     'report'=>'التقارير',
-    'admin_era'=>'تفعيل الحسابات'
+    'admin_era'=>'تفعيل الحسابات',
+    'Clothes_Books'=>'الزي و الكتب'
     ];

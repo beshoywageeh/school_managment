@@ -11,5 +11,14 @@ enum UserGender: int
             self::FEMALE=>trans('enums.female'),
         };
     }
+
+    public static function fromString(string $gender): ?self
+    {
+        return match (strtolower($gender)) {
+            'male' => self::MALE,
+            'female' => self::FEMALE,
+            default => null,
+        };
+    }
 }
 ?>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Parents;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ParentsRequest;
+use App\Imports\ParentsImport;
+use App\Imports\StudentImport;
 use App\Models\My_parents;
 use Illuminate\Http\Request;
 class MyParentsController extends Controller
@@ -98,6 +100,18 @@ class MyParentsController extends Controller
         }catch(\Exception $e){
             session()->flash('error', $e->getMessage());
             return redirect()->route('parents.index');
+        }
+    }
+    public function Excel_Import(Request $request)
+    {
+        try {
+            $path = $request->file('excel')->getRealPath();
+            \Excel::import(new ParentsImport(), $path);
+            session()->flash('success', trans('general.success'));
+            return redirect()->route('parents.index');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 }

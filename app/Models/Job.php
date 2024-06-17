@@ -11,8 +11,9 @@ use Spatie\Activitylog\LogOptions;
 class Job extends Model
 {
     use HasFactory,LogsActivity, SoftDeletes;
-    protected $casts = ['status' => Status::class, 'type' => Jobs_types::class];
-    protected $fillable = ['status', 'name', 'created_by', 'updated_by', 'type'];
+    protected $casts = ['status' => Status::class];
+    protected $table='work_jobs';
+    protected $fillable = ['status', 'name', 'created_by', 'updated_by', 'main_job_id','is_main'];
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -20,6 +21,9 @@ class Job extends Model
     public function updator()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+    public function jobs(){
+        return $this->belongsTo(Job::class,'main_job_id');
     }
 	   public function getActivitylogOptions(): LogOptions
     {

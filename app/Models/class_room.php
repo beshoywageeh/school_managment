@@ -16,7 +16,8 @@ class class_room extends Model
         'grade_id',
         'user_id',
     ];
-
+    protected static $logAttributes = ['name'];
+    protected static $logOnlyDirty = true;
     public function user()
     {
         return $this->belongsTo('App\Models\User');
@@ -34,7 +35,25 @@ class class_room extends Model
 	   public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['*'])->logOnlyDirty();
+            ->logOnly(['name'])->logOnlyDirty();
         // Chain fluent methods for configuration options
+    }
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        $changes = $this->getChanges();
+        $oldname = $this->getOriginal('name');
+
+
+        if ($eventName == 'created') {
+            return trans('system_lookup.field_create', ['value' => $this->id]);
+        } elseif ($eventName == 'updated') {
+            return trans('system_lookup.field_change', [
+                'value' => $this->id,
+                'old_value' => $oldname,
+                'new_value' => $changes
+            ]);
+        } else {
+            return trans('system_lookup.field_delete', ['value' => $this->id]);
+        }
     }
 }

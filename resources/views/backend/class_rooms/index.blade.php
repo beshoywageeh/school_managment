@@ -14,7 +14,7 @@
                             <h4>{{ trans('class_rooms.title') }}</h4>
                         </div>
                         <div class="col-lg text-md-right">
-                            @can('class_rooms.create')
+                            @can('class_rooms-create')
                             <x-button type="" data-toggle="modal" data-target="#CreateClassRoom" class="primary">
                             <i class="ti-plus"></i>
                             {{ trans('class_rooms.new') }}
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        @can('class_rooms.list')
+                        @can('class_rooms-list')
                         <table class="table table-striped table-bordered" id="datatable">
                             <thead>
                                 <tr>
@@ -61,18 +61,16 @@
                                                     'text' => trans('general.delete'),
                                                     'icon' => 'ti-trash',
                                                     'onclick' => 'confirmation(event)',
-                                                    'can'=>'class_rooms.delete'
+                                                    'can'=>'class_rooms-delete'
                                                 ],
                                                 [
                                                     'url' =>  route('class_room.show', $class_room->id) ,
                                                     'text' => trans('general.info'),
                                                     'icon' => 'ti-info-alt',
                                                     'target' =>'_blank',
-                                                    'can'=>'class_rooms.info'
+                                                    'can'=>'class_rooms-info'
                                                 ],
                                             ]" />
-
-                                        </div>
                                         </td>
                                     </tr>
                                     @include('backend.class_rooms.edit')
@@ -88,6 +86,6 @@
 
     </div>
     @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @endpush
 @endsection

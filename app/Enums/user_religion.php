@@ -11,4 +11,12 @@ enum user_religion : string
             self::MUSLIM=>trans('enums.muslim'),
         };
     }
+    public static function fromString(string $religion): ?self
+    {
+        return match (strtolower($religion)) {
+            'christian' => self::CHRISTIAN,
+            'muslim' => self::MUSLIM,
+            default => null,
+        };
+    }
 }

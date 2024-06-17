@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->foreign('job_id')->references('id')->on('jobs')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('job_id')->references('id')->on('work_jobs')->onDelete('Cascade')->onUpdate('Cascade');
         });
         /* Grades Relation */
         Schema::table('grades', function (Blueprint $table) {
@@ -52,9 +52,10 @@ return new class extends Migration
             $table->foreign('teacher_id')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
         });
-        Schema::table('jobs', function (Blueprint $table) {
+        Schema::table('work_jobs', function (Blueprint $table) {
             $table->foreign('created_by')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('main_job_id')->references('id')->on('work_jobs')->onDelete('Cascade')->onUpdate('Cascade');
         });
         Schema::table('promotions', function (Blueprint $table) {
             $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
@@ -126,7 +127,7 @@ return new class extends Migration
             $table->dropForeign('teacher_id');
             $table->dropForeign('grade_id');
         });
-        Schema::table('jobs', function (Blueprint $table) {
+        Schema::table('work_jobs', function (Blueprint $table) {
             $table->dropForeign('created_by');
             $table->dropForeign('updated_by');
         });

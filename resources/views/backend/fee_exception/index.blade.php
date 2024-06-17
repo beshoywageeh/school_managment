@@ -18,63 +18,58 @@
                     </div>
                     <div class="table-responsive">
                         @can('except_fee-list')
-                        <table id="datatable" class="table text-center table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>{{ trans('general.created_at') }}</th>
-                                <th>{{ trans('Recipt_Payments.name') }}</th>
-                                <th>{{ trans('Recipt_Payments.amount') }}</th>
-                                <th>{{ trans('general.actions') }}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($ExcptionFees as $ExcptionFee)
+                            <table id="datatable"
+                                   class="table text-center table-striped table-bordered">
+                                <thead>
                                 <tr>
-                                    <td> {{ $loop->iteration }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
-                                    <td><a target='_blank'
-                                           href="{{ route('except_fee.show', $ExcptionFee->students->id) }}">{{ $ExcptionFee->students->name }}</a>
-                                    </td>
-                                    <td>{{ number_format($ExcptionFee->amount, 2) }}&nbsp;ج.م</td>
+                                    <th>#</th>
+                                    <th>{{ trans('general.created_at') }}</th>
+                                    <th>{{ trans('Recipt_Payments.name') }}</th>
+                                    <th>{{ trans('Recipt_Payments.amount') }}</th>
+                                    <th>{{ trans('general.actions') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($ExcptionFees as $ExcptionFee)
+                                    <tr>
+                                        <td> {{ $loop->iteration }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
+                                        <td><a target='_blank'
+                                               href="{{ route('except_fee.show', $ExcptionFee->students->id) }}">{{ $ExcptionFee->students->name }}</a>
+                                        </td>
+                                        <td>{{ number_format($ExcptionFee->amount, 2) }}&nbsp;ج.م</td>
 
-                                    <td>
+                                        <td>
 
-                                        <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                            <x-dropdown-table :buttonText="trans('general.actions')"
+                                                              :items="[
                                                 [
                                                     'url' => route('except_fee.destroy', $ExcptionFee->id),
                                                     'text' => trans('general.delete'),
                                                     'icon' => 'ti-trash',
                                                     'onclick' => 'confirmation(event)',
-                                                    'can'="except_fee-delete"
-                                                ],
-                                                [
-                                                    'url' => route('except_fee.show', $ExcptionFee->id),
-                                                    'text' => trans('general.info'),
-                                                    'icon' => 'ti-info-alt',
-                                                    'target' => '_blank',
-                                                    'can' => 'except_fee-info',
-                                                ],
-                                                [
+                                                    'can' => 'except_fee-delete'
+                                            ],
+                                            [
+                                            'url' => route('except_fee.show', $ExcptionFee->id),
+                                            'text' => trans('general.info'),
+                                            'icon' => 'ti-info-alt',
+                                            'target' => '_blank',
+                                            'can' => 'except_fee-info',
+                                            ],
+                                            [
                                             'url' => route('except_fee.edit', $ExcptionFee->id),
                                             'text' => trans('general.edit'),
                                             'icon' => 'ti-pencil',
                                             'can'=>'except_fee-edit'
 
-                                        ],
-                                                [
-                                                    'url' => route('Recipt_Payment.print', $ExcptionFee->id),
-                                                    'text' => trans('general.print'),
-                                                    'icon' => 'ti-printer',
-                                                    'target' => '_blank',
-                                                    'can' => 'except_fee-print',
-                                                ],
+                                            ]
                                             ]"/>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         @endcan
                     </div>
                 </div>

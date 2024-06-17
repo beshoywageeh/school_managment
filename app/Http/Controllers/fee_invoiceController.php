@@ -19,7 +19,6 @@ class fee_invoiceController extends Controller
     public function index()
     {
         $fee_invoices = Fee_invoice::with(['students:id,name', 'grades:id,name', 'classes:id,name','acd_year'])->withSum('fees','amount')->get();
-
         return view('backend.fee_invoices.index', compact('fee_invoices'));
     }
 

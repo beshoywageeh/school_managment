@@ -21,7 +21,13 @@ class PaymentPartsController extends Controller
     {
         try {
             $student = Fee_invoice::where('student_id', $id)->with(['students', 'grades', 'classes', 'acd_year'])->withSum('fees', 'amount')->first();
+         // return $student;
+            if($student == null){
+                session()->flash('info', trans('general.noInvoiceToPart'));
+                return redirect()->back();
+            }else{
             return view('backend.payment_parts.create', get_defined_vars());
+            }
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
             return redirect()->back();
@@ -132,6 +138,7 @@ class PaymentPartsController extends Controller
                 $recipt->manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
                 $recipt->date = date('Y-m-d');
                 $recipt->student_id = $student->id;
+                $recipt->academic_year_id = acadmice_year::where('status', '0')->first()->id;
                 $recipt->Debit = $request->amount;
                 $recipt->save();
                 $std = new StudentAccount();
@@ -159,13 +166,11 @@ class PaymentPartsController extends Controller
                 $recipt->student_id = $student->id;
                 $recipt->Debit = $part->amount;
                 $recipt->academic_year_id = acadmice_year::where('status', '0')->first()->id;
-
                 $recipt->save();
                 $std = new StudentAccount();
                 $std->date = $recipt->date;
                 $std->type = '2';
                 $std->academic_year_id = acadmice_year::where('status', '0')->first()->id;
-
                 $std->student_id = $request->student_id;
                 $std->credit = $part->amount;
                 $std->grade_id = $student->grade_id;

@@ -86,17 +86,9 @@
                                 <x-input name='Mother_National_Id' class=''
                                     type='text' value="{{$parent->Mother_National_Id}}">{{ trans('Parents.Mother_National_Id') }}</x-input>
                             </div>
-                            <div class="col form-group">
-                                <label>
-                                    {{ trans('Parents.Mother_Birth_Date') }}
-                                </label>
-                                <div class="input-group date" id="datepicker-action">
-                                    <input class="form-control" name="Mother_Birth_Date" type="text"
-                                        value="{{$parent->Mother_Birth_Date}}">
-                                    <span class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </span>
-                                </div>
+                            <div class="col">
+                                <x-input name='Mother_Birth_Date' class=''
+                                         type='date' value="{{$parent->Mother_Birth_Date}}">{{ trans('Parents.Mother_Birth_Date') }}</x-input>
                             </div>
                         </div>
                     </fieldset>
@@ -123,7 +115,7 @@
                     <div class="row">
                         <div class="col"></div>
                         <div class="col text-md-right">
-                            <button class="button" type="submit">{{ trans('General.Submit') }}</button>
+                            <button class="btn btn-success" type="submit">{{ trans('General.Submit') }}</button>
                         </div>
                     </div>
                 </form>

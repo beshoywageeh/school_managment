@@ -2,13 +2,10 @@
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
       <div class="modal-header">
-        <div class="modal-title"><div class="mb-30">
-          <h6>{{ trans('general.edit') }}</h6>
-        </div>
-        </div>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
+          <div class="modal-title"> <h6>{{ trans('general.edit') }}</h6></div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+          </button>
       </div>
       <form action="{{ route('grade.update') }}" method="POST">
         @csrf
@@ -16,7 +13,7 @@
 
         <div class="modal-body">
 
-            <x-input name='Grade_Name' class='' type='text'  value='{{$grade->name}}'>{{
+            <x-input name='Grade_Name' class='' type='text' value='{{$grade->name}}'>{{
                 trans('grades.name') }}</x-input>
                    <div class="form-group">
                     <label for="exampleFormControlSelect2">{{ trans('Grades.select_res') }}</label>

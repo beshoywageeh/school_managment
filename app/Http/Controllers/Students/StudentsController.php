@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Students;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
+use App\Imports\StudentImport;
 use App\Models\{class_room, Grade, My_parents, Student};
 use Illuminate\Http\Request;
 use PDF;
@@ -33,11 +34,10 @@ class StudentsController extends Controller
      */
     public function store(StudentRequest $request)
     {
-
         try {
 
             $inputDate = \Carbon\Carbon::parse($request->birth_date);
-            $firstOfOctober = \Carbon\Carbon::create($inputDate->year, 10, 1);
+            $firstOfOctober = \Carbon\Carbon::create(date('Y'), 10, 1);
 
             $years = $inputDate->diffInYears($firstOfOctober);
             $months = $inputDate->diffInMonths($firstOfOctober) % 12;
@@ -54,7 +54,7 @@ class StudentsController extends Controller
                 'address' => $request->address,
                 'national_id' => $request->national_id,
                 'student_status' => $request->std_status,
-                'religion'=>My_parents::findorfail($request->parents)->Religion,
+                'religion' => My_parents::findorfail($request->parents)->Religion,
                 'birth_at_begin' => $final_date,
                 'user_id' => \Auth::Id(),
             ]);
@@ -73,7 +73,7 @@ class StudentsController extends Controller
     {
         try {
             $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone', 'StudentAccount'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();
-           // return $student;
+            // return $student;
             return view('backend.Students.show', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -115,7 +115,7 @@ class StudentsController extends Controller
                 'address' => $request->address,
                 'student_status' => $request->std_status,
                 'national_id' => $request->national_id,
-                'religion'=>My_parents::findorfail($request->parents)->Religion,
+                'religion' => My_parents::findorfail($request->parents)->Religion,
 
                 'user_id' => \Auth::Id(),
             ]);
@@ -152,13 +152,15 @@ class StudentsController extends Controller
     public function pdf($id)
     {
         $data['students'] = Grade::with(['students'])->withcount('students')->get();
+
+
         //  return $data['students'];
         $pdf = PDF::loadView('backend.Students.pdf', ['data' => $data], [], [
             'format' => 'A4',
-            'margin_left' => 4,
-            'margin_right' => 4,
-            'margin_top' => 4,
-            'margin_bottom' => 4,
+            'margin_left' => 6,
+            'margin_right' => 6,
+            'margin_top' => 6,
+            'margin_bottom' => 6,
             'margin_header' => 0,
             'margin_footer' => 0,
             'orientation' => 'L',
@@ -166,5 +168,18 @@ class StudentsController extends Controller
         // $pdf = PDF::loadView('backend.Students.pdf', ['students'=>$students]);
         return $pdf->stream(trans('student.info') . '.pdf');
 
+    }
+
+    public function Excel_Import(Request $request)
+    {
+        try {
+            $path = $request->file('excel')->getRealPath();
+            \Excel::import(new StudentImport, $path);
+            session()->flash('success', trans('general.success'));
+            return redirect()->route('Students.index');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 }
