@@ -48,12 +48,14 @@ Route::group(
 
 
         Route::middleware('auth')->group(function () {
+
             Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
             Route::group(['controller' => ProfileController::class], function () {
                 Route::get('/profile', 'edit')->name('profile.edit');
                 Route::patch('/profile', 'update')->name('profile.update');
                 Route::delete('/profile', 'destroy')->name('profile.destroy');
             });
+
             Route::group(['prefix' => 'grade', 'controller' => GradesController::class], function () {
                 Route::get('/index', 'index')->name('grade.index');
                 Route::get('/{id}/destroy', 'destroy')->name('grade.destroy');
@@ -174,8 +176,10 @@ Route::group(
             });
             Route::group(['prefix'=>'reports','controller'=>ReportController::class],function (){
                 Route::get('report','index')->name('report.index');
-                Route::get('Students','ExportStudents')->name('student.excel');
+                Route::get('Students_export','ExportStudents')->name('reports.export_student');
+                Route::post('/export','export_submit')->name('export.submit');
             });
+
             Route::group(['prefix' => 'ajax'], function () {
                 Route::get('/get_classRooms/{id}', [StudentsController::class, 'getclasses']);
                 Route::get('/get_classRooms_fee/{id}', [SchoolFeeController::class, 'getclasses']);

@@ -3,29 +3,20 @@
 namespace App\Exports;
 
 use App\Models\Student;
-use App\Models\User;
-use Maatwebsite\Excel\Concerns\FromArray;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class StudentsExport implements FromArray,WithHeadings,ShouldAutoSize
+class StudentsExport implements FromView
 {
   protected $data;
   public function __construct($data)
   {
       $this->data=$data;
   }
-  public function headings(): array
-  {
-     $headings=[];
-     foreach ($this->data->toArray()[0]as $key=>$value){
-         $headings[]=Student::HEADINGS[$key];
-     }
-     return $headings;
-  }
-
-    public function array(): array
-  {
-      return $this->data->toArray();
-  }
+    public function view(): View
+    {
+        return view('backend.report.students', [
+            'students' => $this->data
+        ]);
+    }
 }

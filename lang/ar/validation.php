@@ -27,7 +27,10 @@ return [
     'digits_between' => ' :attribute يجب أن تكون بين: min و:maxdigits.',
     'dimensions' => ': السمة لها أبعاد صورة غير صالحة.',
     'distinct' => 'يحتوي حقل السمة على قيمة مكررة.',
-    'email' => 'يجب أن يكون :attribute عنوان بريد إلكتروني صالحًا.',
+    'email' => [
+        'required'=>'يجب أن يحتوي علي بريد إلكتروني',
+        'invalid'=>'بريد ألكتروني غير صالح',
+    ],
     'end_with' => ': يجب أن تنتهي السمة بواحد مما يلي: القيم.',
     'exists' => 'المحدد: السمة غير صالحة.',
     'file' => 'يجب أن يكون :attribute ملفًا.',
@@ -88,6 +91,7 @@ return [
         'mixed' => 'The :attribute field must contain at least one uppercase and one lowercase letter.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
     ],
+
     'present' => 'يجب أن يكون حقل :attribute موجودًا.',
     'regex' => 'تنسيق :attribute غير صالح.',
     'required' => ' :attribute حقل مطلوب.',

@@ -6,12 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\class_room;
 use App\Models\Grade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ClassRoomsController extends Controller
 {
     public function index()
-    {
-        $data['class_rooms'] = class_room::with(['user', 'grade'])->withCount('students')->orderBy('grade_id', 'asc')->get();
+    {     $id = \Auth::id();
+        if (Auth::user()->hasRole('Admin')) {
+            $data['class_rooms'] = class_room::with(['user', 'grade'])->withCount('students')->orderBy('grade_id', 'asc')->get();
+        } else {
+            $grade = DB::Table('teacher_grade')->where('teacher_id', $id)->pluck('grade_id');
+            $data['class_rooms'] = class_room::whereIn('grade_id', $grade)->with('user')->withCount(['students'])->paginate(10);
+        }
+
         $data['grades'] = Grade::get();
 
         //return $data;

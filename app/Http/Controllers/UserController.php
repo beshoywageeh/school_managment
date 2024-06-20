@@ -24,6 +24,7 @@ class UserController extends Controller
      */
     public function create()
     {
+        $jobs_main = Job::where('is_main', 1)->get();
         $years = range(date('Y'), date('Y') - 10);
         return view('backend.employees.create', get_defined_vars());
     }
@@ -35,10 +36,10 @@ class UserController extends Controller
     {
         \DB::beginTransaction();
         try {
-            $generate_code = User::max('code') + 1;
+            $generate_code = User::orderBy('code', 'desc')->first();
             $user = new User();
             $user->name = $request->name;
-            $user->code = $generate_code ?? 1;
+            $user->code = isset($generate_code) ? str_pad($generate_code->code + 1, 6, '0', STR_PAD_LEFT) : '000001';
             $user->phone = $request->phone;
             $user->address = $request->address;
             $user->date_of_birth = $request->birth_date;
@@ -84,6 +85,8 @@ class UserController extends Controller
     {
 
         try {
+
+            $jobs_main = Job::where('is_main', 1)->get();
             $user = User::findOrFail($id);
             $years = range(date('Y'), date('Y') - 10);
             return view('backend.employees.edit', get_defined_vars());
@@ -146,7 +149,7 @@ class UserController extends Controller
     }
     public function getjobs($id)
     {
-        $jobs = Job::where('type', $id)->get(['id', 'name']);
+        $jobs = Job::where('main_job_id', $id)->get(['id', 'name']);
         return response()->json($jobs);
     }
     public function Excel_Import(Request $request)

@@ -6,19 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\Grade;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class GradesController extends Controller
 {
     public function index()
     {
-        $auth = \Auth::id();
-        /*$data['grades'] = Grade::whereHas('users', function ($query) use ($auth) {
-            $query->where('teacher_id', $auth);
-        })->with('user')->withCount(['class_room', 'students'])->withSum('fees.amount')->paginate(10);*/
-
-        $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->paginate(10);
-
-        $data['users'] = User::whereIn('id', [1, 3, 4])->get();
-
+        $id = \Auth::id();
+        if (Auth::user()->hasRole('Admin')) {
+            $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->paginate(10);
+        } else {
+            $grade = DB::Table('teacher_grade')->where('teacher_id', $id)->pluck('grade_id');
+            $data['grades'] = Grade::whereIn('id', $grade)->with('user')->withCount(['class_room', 'students'])->paginate(10);
+        }
+        $data['users'] = User::get();
         return view('backend.Grades.index', ['data' => $data]);
     }
 
@@ -62,7 +64,7 @@ class GradesController extends Controller
         //    return $data;
         $pdf = \PDF::loadView('backend.grades.report', ['report_data' => $report_data]);
 
-        return $pdf->stream($report_data->Grade_Name.'.pdf');
+        return $pdf->stream($report_data->Grade_Name . '.pdf');
         //  return view('backend.grades.report', compact('report_data'));
     }
 
@@ -103,7 +105,7 @@ class GradesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id,Request $request)
+    public function destroy(string $id, Request $request)
     {
 
         $grade = Grade::where('id', $id)->withcount('class_room')->first();

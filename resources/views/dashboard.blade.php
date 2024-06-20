@@ -70,42 +70,47 @@
     </div>
 
     <div class="row mb-4">
-        <div class="col">
+        <div class="col-2 bg-primary text-center mx-2">
             <a href="{{ route('Students.create') }}"
-               class="btn btn-primary big-button w-100"> <img
+               class="btn big-button btn-light m-3 rounded-circle"> <img
                     class="img-fluid"
                     width="100"
                     height="100"
-                    src="{{ asset('assests\images\sidebar\students.png') }}"/></a>
-
+                    src="{{ asset('assests\images\sidebar\students.png') }}"/>
+            </a>
+            <h5 class="text-center text-white font-bold">{{trans('student.title') .' | '. trans('general.new')}}</h5>
         </div>
-        <div class="col">
+        <div class="col-2 bg-primary text-center mx-2">
             <a href="{{ route('employees.create') }}"
-               class="btn btn-primary big-button w-100"> <img
+               class="btn big-button btn-light m-3 rounded-circle"> <img
                     class="img-fluid"
                     width="100"
                     height="100"
-                    src="{{ asset('assests\images\sidebar\employees.png') }}"/></a>
-
+                    src="{{ asset('assests\images\sidebar\employees.png') }}"/>
+            </a>
+            <h5 class="text-center text-white font-bold">{{trans('employees.title') .' | '. trans('general.new')}}</h5>
         </div>
-        <div class="col">
+        <div class="col-2 bg-primary text-center mx-2">
             <a href="{{ route('schoolfees.create') }}"
-               class="btn btn-primary big-button w-100"> <img
+               class="btn big-button btn-light m-3 rounded-circle"> <img
                     class="img-fluid"
                     width="100"
                     height="100"
-                    src="{{ asset('assests\images\sidebar\money.png') }}"/></a>
-
+                    src="{{ asset('assests\images\sidebar\money.png') }}"/>
+            </a>
+            <h5 class="text-center text-white font-bold">{{trans('fees.title') .' | '. trans('general.new')}}</h5>
         </div>
-        <div class="col">
+        <div class="col-2 bg-primary text-center mx-2">
             <a href="{{ route('parents.create') }}"
-               class="btn btn-primary big-button w-100"> <img
+               class="btn big-button btn-light m-3 rounded-circle"> <img
                     class="img-fluid"
                     width="100"
                     height="100"
-                    src="{{ asset('assests\images\sidebar\parents.png') }}"/></a>
-
+                    src="{{ asset('assests\images\sidebar\parents.png') }}"/>
+            </a>
+            <h5 class="text-center text-white font-bold">{{trans('parents.title') .' | '. trans('general.new')}}</h5>
         </div>
+
     </div>
     <div class="row mb-40">
         <div class="col-md-4">

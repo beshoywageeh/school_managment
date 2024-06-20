@@ -3,6 +3,33 @@
     {{ trans('jobs.title') }}
 @endsection
 @push('css')
+    <style>
+        .spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999; /* Ensure the spinner is above other elements */
+        }
+
+        .loader {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 @endpush
 @section('content')
     <div class="mb-4 row">
@@ -33,7 +60,7 @@
                                         <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>{{ trans('jobs.job_name') }}</th>
+                                            <th>{{ trans('jobs.title_name') }}</th>
                                             <th>{{ trans('academic_year.status') }}</th>
                                             <th>{{ trans('general.actions') }}</th>
                                         </tr>
@@ -49,23 +76,15 @@
                                             </span>
                                                 </td>
                                                 <td>
-                                                    <a href="route('jobs.edit', $job->id)"></a>
-
                                                     <x-dropdown-table :buttonText="trans('general.actions')"
                                                                       :items="[
-                                                [
-                                                    'url' => route('jobs.destroy', $job->id),
-                                                    'text' => trans('general.delete'),
-                                                    'icon' => 'ti-trash',
-                                                    'onclick' => 'confirmation(event)',
-                                                    'can' => 'jobs-delete',
-                                                ],
+
                                                 [
                                                     'url' => route('jobs.show', $job->id),
                                                     'text' => trans('general.info'),
                                                     'icon' => 'ti-info-alt',
-                                                 
-                                                    'can'=>'jobs-info'
+                                                    'can'=>'jobs-info',
+                                                    'className'=>'show_jobs'
                                                 ],
                                                 [
                                                     'url' => route('jobs.edit', $job->id),
@@ -73,6 +92,13 @@
                                                     'icon' => 'ti-pencil',
                                                     'can'=>'jobs-edit'
 
+                                                ],
+                                                [
+                                                    'url' => route('jobs.destroy', $job->id),
+                                                    'text' => trans('general.delete'),
+                                                    'icon' => 'ti-trash',
+                                                    'onclick' => 'confirmation(event)',
+                                                    'can' => 'jobs-delete',
                                                 ],
                                             ]"/>
                                                 </td>
@@ -88,7 +114,28 @@
                                 @endcan
                             </div>
                         </div>
-                        <div class="col"></div>
+                        <div class="col">
+
+                            <div id="loadingSpinner"
+                                 class="spinner col "
+                                 style="display: none;">
+                                <!-- You can customize this spinner as per your requirement -->
+                                <div class="loader text-center"></div>
+                            </div>
+                            <table id="jobs_table"
+                                   style="display: none"
+                                   class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>{{trans('jobs.job_name')}}</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            @include('backend.Job.edit')
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,6 +153,71 @@
 
                 }
             })
+        </script>
+        <script>
+            let show_jobs = document.querySelectorAll('.show_jobs');
+            let loadingSpinner = document.getElementById('loadingSpinner');
+            let table = document.getElementById('jobs_table');
+            show_jobs.forEach(function (job) {
+                job.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Show the spinner
+                    loadingSpinner.style.display = 'block';
+                    table.style.display = 'none';
+                    fetch(this.href)
+                        .then(response => response.json())
+                        .then(data => {
+                            const tbody = document.querySelector('#jobs_table tbody');
+                            // Remove all existing rows
+                            tbody.innerHTML = '';
+                            if (data.length === 0) {
+                                // Display a message if no jobs are found
+                                const tr = `<tr><td colspan="3">{{ trans('General.Msg') }}</td></tr>`;
+                                tbody.insertAdjacentHTML('beforeend', tr);
+                            } else {
+                                // Add new rows
+                                data.forEach((job, index) => {
+                                    const tr = `<tr>
+                            <td>${index + 1}</td>
+                            <td>${job.name}</td>
+                            <td>
+                                <button data-id="${job.id}" class="btn btn-warning btn-sm edit-btn" data-toggle="modal">
+                                    <i class="ti-pencil"></i>
+                                </button>
+                            </td>
+                        </tr>`;
+                                    tbody.insertAdjacentHTML('beforeend', tr);
+                                });
+                            }
+
+                            // Add event listeners for edit buttons after rendering
+                            document.querySelectorAll('.edit-btn').forEach(function (btn) {
+                                btn.addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    const jobId = this.dataset.id;
+                                    // Open edit modal with jobId
+                                    $('#Edit_Job').modal('show');
+                                    // Populate modal fields with job data
+                                    const jobData = data.find(j => j.id == jobId);
+                                    $('#Edit_Job #job_id').val(jobId);
+                                    $('#Edit_Job #job_name').val(jobData.name); // Adjust to match your data structure
+                                    $('#Edit_Job #worker_type').val(jobData.type); // Adjust to match your data structure
+                                    $('#Edit_Job #is_main').prop('checked', jobData.is_main == 1); // Adjust to match your data structure
+                                });
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching jobs:', error);
+                        })
+                        .finally(() => {
+                            // Hide the spinner after the fetch is complete
+                            loadingSpinner.style.display = 'none';
+                            table.style.display = "";
+                        });
+                });
+            });
+
         </script>
     @endpush
 @endsection

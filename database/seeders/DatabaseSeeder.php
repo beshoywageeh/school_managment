@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
             settingsTableSeeder::class,
             PermissionTableSeeder::class,
             UserTableSeeder::class,
+            My_parentsTableSeeder::class,
+            GradeTableSeeder::class,
+            class_roomTableSeeder::class,
+            StudentsTableSeeder::class,
         ]);
 
     }

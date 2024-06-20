@@ -15,7 +15,7 @@
                             </div>
                             <div class="col text-md-right">
                                 @can('grade-create')
-                                <x-button data-toggle="modal" data-target="#CreateGrade" type="" class="">
+                                <x-button data-toggle="modal" data-target="#CreateGrade" type="" class="primary">
                                     <i class="ti-plus"></i>
                                     {{ trans('Grades.new') }}
                                 </x-button>

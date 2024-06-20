@@ -24,6 +24,7 @@
         "outhebox/laravel-translations": "^1.0",
         "php-flasher/flasher-laravel": "^1.15",
         "php-flasher/flasher-sweetalert-laravel": "^1.15",
+        "phpoffice/phpword": "^1.2",
         "power-components/livewire-powergrid": "^5.4",
         "spatie/laravel-activitylog": "^4.8",
         "spatie/laravel-backup": "^8.6",

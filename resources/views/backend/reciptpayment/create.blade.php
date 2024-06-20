@@ -73,7 +73,7 @@
                                         <th></th>
                                     </tr>
                                     @forelse($feeInvoices as $feeInvoice)
-                                        <form id="form-with-multiple-column"
+                                        <form id="form-with-multiple-column" autocomplete="off"
                                               class="max-w-full"
                                               action="{{ route('Recipt_Payment.store') }}"
                                               method="post">
@@ -131,7 +131,7 @@
                                         <th></th>
                                     </tr>
                                     @forelse($parts as $part)
-                                        <form id="form-with-multiple-column"
+                                        <form id="form-with-multiple-column" autocomplete="off"
                                               class="max-w-full"
                                               action="{{ route('payment_parts.submit_pay') }}"
                                               method="post">

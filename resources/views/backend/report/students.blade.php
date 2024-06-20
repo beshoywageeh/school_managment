@@ -64,29 +64,40 @@
 </head>
 
 <body>
+<form action="{{ route('export.submit') }}" method="POST">
+    @csrf
+    <div class="form-group">
+        <label for="format">Choose export format:</label>
+        <select class="custom-select" name="format" id="format">
+            <option value="excel">Excel</option>
+            <option value="pdf">PDF</option>
+            <option value="word">Word</option>
+        </select>
+    </div>
 
-@foreach ($data['students'] as $students)
-<page-header>
-        <table class="school_date">
-            <tr>
-                <th><h4>{{$school->name}}</h4></th>
-                @if($school->image == null)
-                    <th></th>
-                @else
-                    <th><img class="logo"
-                             src="{{ asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                             alt=""/></th>
-                @endif
-                <th>{!!$school->heading_right!!}</th>
-            </tr>
-        </table>
-</page-header>
+    <button type="submit">Export</button>
+</form>
+@foreach ($students as $student)
+    <table class="school_date">
+        <tr>
+            <th><h4>{{$school->name}}</h4></th>
+            @if($school->image == null)
+                <th></th>
+            @else
+                <th><img class="logo"
+                         src="{{ asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
+                         alt=""/></th>
+            @endif
+
+            <th>{!!$school->heading_right!!}</th>
+        </tr>
+    </table>
     <table class="grade_data">
         <tr>
             <th>{{ trans('Grades.name') }}</th>
-            <th>{{ $students->name }}</th>
+            <th>{{ $student->name }}</th>
             <th>{{ trans('Grades.student_count') }}</th>
-            <th>{{ $students->students_count }}</th>
+            <th>{{ $student->students_count }}</th>
         </tr>
     </table>
     <table class="data">
@@ -112,29 +123,28 @@
         </tr>
         </thead>
         <tbody>
-        @foreach ($students->students as $student)
+        @foreach ($student->students as $stud)
             @php
-                $age=explode('-',$student->birth_at_begin);
+                $age=explode('-',$stud->birth_at_begin);
             @endphp
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $student->name }}</td>
-                <td>{{ $student->national_id }}</td>
-                <td>{{ $student->birth_date }}</td>
+                <td>{{ $stud->name }}</td>
+                <td>{{ $stud->national_id }}</td>
+                <td>{{ $stud->birth_date }}</td>
                 <td>{{ $age[0] }}</td>
                 <td>{{ $age[1] }}</td>
                 <td>{{ $age[2] }}</td>
-                <td>{{ $student->join_date }}</td>
-                <td>{{ $student->gender->lang() }}</td>
-                <td>{{ $student->parent->Father_Name }}</td>
-                <td>{{ $student->student_status->lang() }}</td>
-                <td>{{ $student->religion->lang() }}</td>
-                <td>{{ $student->classroom->name }}</td>
+                <td>{{ $stud->join_date }}</td>
+                <td>{{ $stud->gender->lang() }}</td>
+                <td>{{ $stud->parent->Father_Name }}</td>
+                <td>{{ $stud->student_status->lang() }}</td>
+                <td>{{ $stud->religion->lang() }}</td>
+                <td>{{ $stud->classroom->name }}</td>
             </tr>
         @endforeach
         </tbody>
     </table>
-    <pagebreak/>
 @endforeach
 </body>
 

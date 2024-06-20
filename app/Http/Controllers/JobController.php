@@ -26,7 +26,7 @@ class JobController extends Controller
                 'name' => $request->job_name,
                 'status' => ($request->status == 'on') ? 0 : 1,
                 'is_main' => ($request->is_main == 'on') ? 1 : 0,
-                'main_job_id' => ($request->status == 'on') ? $request->type : null,
+                'main_job_id' => ($request->is_main == 'on') ? null : $request->type,
                 'created_by' => \Auth::id(),
             ]);
             session()->flash('success', trans('general.success'));
@@ -40,29 +40,28 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Job $job)
+    public function show($id)
     {
-        //
+        $jobs = Job::where('main_job_id', $id)->get();
+        return response()->json($jobs);
     }
 
     public function edit($id)
     {
-        $create = false;
-        $job = Job::findorFail($id);
-        $jobs = Job::paginate(10);
-        return view('backend.Job.index', get_defined_vars());
     }
 
-    public function update(Request $request, Job $job)
+    public function update(Request $request)
     {
+//   return $request;
+
         try {
-            $Job = Job::findorFail($request->id);
+            $Job = Job::findOrFail($request->id);
+
             $Job->update([
                 'name' => $request->job_name,
-                'status' => ($request->status == 'on') ? 0 : 1,
-                'type' => $request->type,
-                'updated_by' => \Auth::id()
+                'main_job_id' => $request->type || $Job->main_job_id,
             ]);
+
             session()->flash('success', trans('general.success'));
             return redirect()->route('jobs.index');
         } catch (\Exception $e) {

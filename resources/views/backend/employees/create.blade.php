@@ -105,7 +105,17 @@
 
                                 </div>
 
-                                <x-input.worker_type/>
+                                <div class="col">
+                                    <label for="jobs" class="">{{ trans('employees.job_title') }}</label>
+                                    <select name="type" id="worker_type" class="custom-select">
+                                        <option selected> ---{{ trans('employees.select_worker_title') }}---</option>
+                                    @forelse($jobs_main as $job)
+                                        <option value="{{$job->id}}">{{$job->name}}</option>
+                                        @empty
+
+                                    @endforelse
+                                    </select>
+                                </div>
                                 <div class="col">
                                     <label for="jobs" class="">{{ trans('employees.job_title') }}</label>
                                     <select name="job_id" id="jobs" class="custom-select">

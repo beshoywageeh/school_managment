@@ -19,17 +19,17 @@
                             $acc_links=[
                                 [
                                 'Name'=>trans('report.student_info'),
-                                'Url'=>'1'
+                                'Url'=>route('reports.export_student')
                                 ]];
                         @endphp
                         @foreach( $acc_links as $acc_link)
                             <li class="">
                                 <div class="media">
                                     <div class="media-body text-center">
-                                        <button class="btn" data-toggle="modal" data-target="{{$acc_link['Url']}}">
-                                            <span class="text-danger">
-                                                {{ $acc_link['Name'] }}</span>
-                                        </button>
+                                        <a class="btn btn-block btn-light" target="_blank" href="{{$acc_link['Url']}}">
+                                            <h5 class="">
+                                                {{ $acc_link['Name'] }}</h5>
+                                        </a>
                                     </div>
                                 </div>
 
@@ -101,10 +101,10 @@
                             <li class="">
                                 <div class="media">
                                     <div class="media-body text-center">
-                                        <a href="{{$acc_link['Url']}}" class="">
-                                            <span class="text-danger">
-                                                {{ $acc_link['Name'] }}</span>
-                                        </a>
+                                        <button class="btn btn-block btn-light" data-toggle="modal" data-target="{{$acc_link['Url']}}">
+                                            <h5 class="">
+                                                {{ $acc_link['Name'] }}</h5>
+                                        </button>
                                     </div>
                                 </div>
 

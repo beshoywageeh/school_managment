@@ -90,7 +90,17 @@
                             </div>
                             <div class="col">
 
-                                <x-input.worker_type />
+                                <div class="col">
+                                    <label for="jobs" class="">{{ trans('employees.job_title') }}</label>
+                                    <select name="type" id="worker_type" class="custom-select">
+                                        <option selected> ---{{ trans('employees.select_worker_title') }}---</option>
+                                        @forelse($jobs_main as $job)
+                                            <option value="{{$job->id}}">{{$job->name}}</option>
+                                        @empty
+
+                                        @endforelse
+                                    </select>
+                                </div>
                             </div>
                             <div class="col form-group">
                                 <label for="jobs" class="">{{ trans('employees.job_title') }}</label>
@@ -151,24 +161,23 @@
 
 
 @push('scripts')
-<script>
-    const jobs = document.querySelector('#jobs');
-    const worker_type = document.querySelector('#worker_type')
-    worker_type.addEventListener('change', async () => {
+    <script>
+        const jobs = document.querySelector('#jobs');
+        const worker_type = document.querySelector('#worker_type')
+        worker_type.addEventListener('change', async () => {
 
-        jobs.innerHTML = '<option>{{ trans('
-        employees.select_worker_type ') }}</option>';
-        const response = await fetch(`/ajax/get_jobs/${worker_type.value}`)
-        const data = await response.json();
-        data.forEach(job => {
-            const option = document.createElement('option');
-            option.value = job.id;
-            option.text = job.name;
-            jobs.appendChild(option);
+            jobs.innerHTML = '<option>{{ trans('employees.select_worker_type') }}</option>';
+            const response = await fetch(`/ajax/get_jobs/${worker_type.value}`)
+            const data = await response.json();
+            data.forEach(job => {
+                const option = document.createElement('option');
+                option.value = job.id;
+                option.text = job.name;
+                jobs.appendChild(option);
+
+            });
 
         });
-
-    });
-</script>
+    </script>
 @endpush
 @endsection

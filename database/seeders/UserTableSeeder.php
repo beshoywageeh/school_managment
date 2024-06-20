@@ -17,7 +17,7 @@ class UserTableSeeder extends Seeder
 
         $user = User::create([
             'name' => 'Admin',
-            'password' => bcrypt('hypervisio2020'),
+            'password' => bcrypt('hypervision2020'),
             'code' =>'000001',
             'phone' => '01201026745',
             'address' =>'fafa',
@@ -27,7 +27,7 @@ class UserTableSeeder extends Seeder
             'reiligon' => '1',
             'type' => '1',
             'email_verified_at' => now(),
-            'email' => 'admin@school_stepup.com',
+            'email' => 'admin@schoolstepup.com',
             'isAdmin' => '1',
             'login_allow' => '1']);
         $role = Role::create(['name' => 'Admin']);

@@ -59,7 +59,6 @@ class ReciptPaymentController extends Controller
                 $pay->student_id = $request->student_id;
                 $pay->Debit = $invoice->fees->amount;
                 $pay->academic_year_id = acadmice_year::where('status', '0')->first()->id;
-
                 $pay->save();
                 $std = new StudentAccount();
                 $std->date = date('Y-m-d');

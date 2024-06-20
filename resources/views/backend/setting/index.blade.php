@@ -15,9 +15,15 @@
                 </div>
                 <div class="text-center card-body position-relative">
                     <div class="avatar-top">
+                        @if($school->image == null)
+                            <img class="img-fluid w-25 rounded-circle"
+                                 src="{{ asset('storage/attachments/schools/'.$school->slug .'/') }}"
+                                 alt="{{ $school->name }}">
+                        @else
                         <img class="img-fluid w-25 rounded-circle"
                              src="{{ asset('storage/attachments/schools/'.$school->slug .'/'. $school->image->filename) }}"
                              alt="{{ $school->name }}">
+                    @endif
                     </div>
                     <div class="row">
                         <div class="col-sm-4 mt-30">

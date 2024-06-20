@@ -2,16 +2,12 @@
     <!-- logo -->
 
     <div class="text-left navbar-brand-wrapper">
-        @if (isset($school) && $school->slug != null && $school->image !=null)
-            <a class="navbar-brand brand-logo" href="index.html"><img
-                    src="{{ asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                    alt=""></a>
+         <a class="navbar-brand brand-logo" href="https://www.facebook.com/LoopLabsDev"><img
+                    src="{{ asset('assests/images/logo-icon-dark.png') }}"
+                    alt=""><span>Loop Labs</span></a>
             <a class="navbar-brand brand-logo-mini" href="index.html"><img
-                    src="{{ asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
+                    src="{{ asset('assests/images/logo-icon-dark.png') }}"
                     alt=""></a>
-        @else
-            <link rel="icon" href="" type="image/png" />
-        @endif
         <title>@yield('page_title')</title>
 
     </div>

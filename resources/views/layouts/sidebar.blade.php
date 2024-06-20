@@ -1,6 +1,9 @@
 <div class="side-menu-fixed">
     <div class="scrollbar side-menu-bg">
         <ul class="nav navbar-nav side-menu" id="sidebarnav">
+            <li class="bg-white text-center m-auto py-3 my-2">
+                <span class="font-bold">{{$school->name}}</span>
+            </li>
             <!-- school name -->
             <x-nav_link :href="route('dashboard')" :active="request()->is('*/dashboard')" :image="URL::asset('assests/images/Sidebar/dashboard.png')">
                 {{ trans('Sidebar.Dashboard') }}

@@ -94,6 +94,7 @@ return new class extends Migration
             $table->foreign('class_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('academic_year_id')->references('id')->on('fee_invoices')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('school_fees_id')->references('id')->on('school__fees')->onDelete('Cascade')->onUpdate('Cascade');
         });
     }
 
@@ -173,6 +174,7 @@ return new class extends Migration
             $table->dropForeign('class_id');
             $table->dropForeign('grade_id');
             $table->dropForeign('academic_year_id');
+            $table->dropForeign('school_fees_id');
         });
     }
 };

@@ -13,6 +13,7 @@ class StudentAccount extends Model
     use HasFactory;
     use SoftDeletes;
     use LogsActivity;
+    protected $guarded=[];
     protected $table='student_accounts';
     protected $casts = [
         'type' => Payment_Type::class

@@ -4,6 +4,8 @@ namespace App\Livewire;
 
 use App\Models\{class_room, Grade, Student};
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use PowerComponents\LivewirePowerGrid\{Column, Footer, Header, PowerGrid, PowerGridComponent, PowerGridFields};
 use PowerComponents\LivewirePowerGrid\Facades\Filter;
@@ -28,8 +30,16 @@ final class StudentTable extends PowerGridComponent
         ];
     }
     public function datasource(): Collection
-    {
-        return Student::with('grade:id,name', 'classroom:id,name','parent:id,Father_Name')->get();
+    {   $id = \Auth::id();
+        if (Auth::user()->hasRole('Admin')) {
+            return Student::with('grade:id,name', 'classroom:id,name','parent:id,Father_Name')->get();
+
+        } else {
+            $grade = DB::Table('teacher_grade')->where('teacher_id', $id)->pluck('grade_id');
+            return Student::whereIn('grade_id', $grade)->with('grade:id,name', 'classroom:id,name','parent:id,Father_Name')->get();
+
+        }
+
     }
     public function relationSearch(): array
     {

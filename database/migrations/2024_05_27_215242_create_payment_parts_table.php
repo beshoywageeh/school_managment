@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('date');
             $table->decimal('amount',10,2);
             $table->tinyInteger('payment_status')->default(0);
+            $table->unsignedBigInteger('school_fees_id');
             $table->timestamps();
             $table->softDeletes();
         });
