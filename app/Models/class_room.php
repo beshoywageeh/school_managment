@@ -42,18 +42,18 @@ class class_room extends Model
     {
         $changes = $this->getChanges();
         $oldname = $this->getOriginal('name');
-
+        $newname = $changes['status'] ?? null;
 
         if ($eventName == 'created') {
-            return trans('system_lookup.field_create', ['value' => $this->id]);
+            return trans('system_lookup.field_create', ['value' => $this->name]);
         } elseif ($eventName == 'updated') {
             return trans('system_lookup.field_change', [
                 'value' => $this->id,
                 'old_value' => $oldname,
-                'new_value' => $changes
+                'new_value' => $newname
             ]);
         } else {
-            return trans('system_lookup.field_delete', ['value' => $this->id]);
+            return trans('system_lookup.field_delete', ['value' => $this->name]);
         }
     }
 }

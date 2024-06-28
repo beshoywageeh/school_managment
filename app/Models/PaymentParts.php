@@ -44,4 +44,28 @@ class PaymentParts extends Model
             ->logOnly(['*'])->logOnlyDirty();
         // Chain fluent methods for configuration options
     }
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        $changes = $this->getChanges();
+        $oldStatus = $this->getOriginal('status');
+        $newStatus = $changes['status'] ?? null;
+
+        // تأكد من تحويل القيم إلى نص
+        $oldStatus = $oldStatus instanceof payment_status ? $oldStatus->lang() : $oldStatus;
+        $newStatus = $newStatus instanceof payment_status ? $newStatus->lang() : $newStatus;
+
+
+
+        if ($eventName == 'created') {
+            return trans('system_lookup.field_create', ['value' => $this->students->name . '-' . $this->amount]);
+        } elseif ($eventName == 'updated') {
+            return trans('system_lookup.field_change', [
+                'value' => $this->id,
+                'old_value' => $oldStatus,
+                'new_value' => $newStatus
+            ]);
+        } else {
+            return trans('system_lookup.field_delete', ['value' => $this->id]);
+        }
+    }
 }

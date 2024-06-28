@@ -45,7 +45,27 @@ class School_Fee extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['*'])->logOnlyDirty();
+            ->logOnly(['grade_id', 'amount'])->logOnlyDirty();
         // Chain fluent methods for configuration options
+    }
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        $changes = $this->getChanges();
+        $old_grade = $this->getOriginal('grade_id');
+        $new_grade = $changes['grade_id'] ?? null;
+        $old_amount = $this->getOriginal('amount');
+        $new_amount = $changes['amount'] ?? null;
+
+        if ($eventName == 'created') {
+            return trans('system_lookup.field_create', ['value' => $this->grade->name . '-' . $this->amount]);
+        } elseif ($eventName == 'updated') {
+            return trans('system_lookup.field_change', [
+                'value' => $this->id,
+                'old_value' => $old_grade->grade->name . '-' . $old_amount,
+                'new_value' => $new_grade->grade->name . '-' . $new_amount,
+            ]);
+        } else {
+            return trans('system_lookup.field_delete', ['value' => $this->grade->name . '-' . $this->amount]);
+        }
     }
 }

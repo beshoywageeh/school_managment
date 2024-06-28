@@ -42,7 +42,25 @@ class Fee_invoice extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['*'])->logOnlyDirty();
+            ->logOnly(['student_id', 'id'])->logOnlyDirty();
         // Chain fluent methods for configuration options
+    }
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        $student = $this->student_id->students->name;
+        $changes = $this->getChanges();
+        $oldname = $this->getOriginal('student_id');
+        $newname = $changes['student_id'] ?? null;
+        if ($eventName == 'created') {
+            return trans('system_lookup.field_create', ['value' => $student . '-' . $this->id]);
+        } elseif ($eventName == 'updated') {
+            return trans('system_lookup.field_change', [
+                'value' => $this->id,
+                'old_value' => $oldname->students->name,
+                'new_value' => $newname->students->name
+            ]);
+        } else {
+            return trans('system_lookup.field_delete', ['value' => $student . '-' . $this->id]);
+        }
     }
 }

@@ -29,26 +29,7 @@ class Student extends Model
         'student_status'=>Student_Status::class
 
     ];
-    const HEADINGS = [
-        'id'=>'#',
-        'name' => 'إسم الطالب',
-        'birth_date' => 'تاريخ الميلاد',
-        'gender' => 'النوع',
-        'grade_id' => 'المرحلة الدراسية',
-        'address' => 'العنوان',
-        'national_id' => 'الرقم القومي',
-        'join_date' => 'تاريخ الالتحاق',
-        'parent_id' => 'ولي امر الطالب',
-        'classroom_id'=>'الفصل الدراسي',
-        'student_status'=>'-',
-        'birth_at_begin'=>'-',
-        'user_id'=>'-',
-        'slug'=>'-',
-        'created_at'=>'-',
-        'updated_at'=>'-',
-        'deleted_at'=>'-'
 
-    ];
 
     public function user()
     {
@@ -84,7 +65,25 @@ class Student extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['*'])->logOnlyDirty();
+            ->logOnly(['name'])->logOnlyDirty();
         // Chain fluent methods for configuration options
+    }
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        $changes = $this->getChanges();
+        $old_name = $this->getOriginal('name');
+        $new_name = $changes['name'] ?? null;
+
+        if ($eventName == 'created') {
+            return trans('system_lookup.field_create', ['value' => $this->name]);
+        } elseif ($eventName == 'updated') {
+            return trans('system_lookup.field_change', [
+                'value' => $this->id,
+                'old_value' => $old_name,
+                'new_value' => $new_name,
+            ]);
+        } else {
+            return trans('system_lookup.field_delete', ['value' => $this->name]);
+        }
     }
 }

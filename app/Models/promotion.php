@@ -36,7 +36,22 @@ class promotion extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['*'])->logOnlyDirty();
+            ->logOnly(['id'])->logOnlyDirty();
         // Chain fluent methods for configuration options
+    }
+    public function getDescriptionForEvent(string $eventName): string
+    {
+
+        if ($eventName == 'created') {
+            return trans('system_lookup.field_create', ['value' => $this->id]);
+        } elseif ($eventName == 'updated') {
+            return trans('system_lookup.field_change', [
+                'value' => $this->id,
+                'old_value' => $this->id,
+                'new_value' => $this->id
+            ]);
+        } else {
+            return trans('system_lookup.field_delete', ['value' => $this->id]);
+        }
     }
 }

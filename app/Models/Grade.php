@@ -43,7 +43,24 @@ class Grade extends Model
 	   public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['*'])->logOnlyDirty();
+            ->logOnly(['name'])->logOnlyDirty();
         // Chain fluent methods for configuration options
+    }
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        $changes = $this->getChanges();
+        $oldname = $this->getOriginal('name');
+        $newname = $changes['name'] ?? null;
+        if ($eventName == 'created') {
+            return trans('system_lookup.field_create', ['value' => $this->name]);
+        } elseif ($eventName == 'updated') {
+            return trans('system_lookup.field_change', [
+                'value' => $this->id,
+                'old_value' =>  $oldname,
+                'new_value' => $newname
+            ]);
+        } else {
+            return trans('system_lookup.field_delete', ['value' => $this->id . '-' . $this->name]);
+        }
     }
 }

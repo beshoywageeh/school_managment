@@ -28,7 +28,28 @@ class Job extends Model
 	   public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['*'])->logOnlyDirty();
+            ->logOnly(['name', 'status'])->logOnlyDirty();
         // Chain fluent methods for configuration options
+    }
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        $changes = $this->getChanges();
+        $oldStatus = $this->getOriginal('status');
+        $newStatus = $changes['status'] ?? null;
+        // تأكد من تحويل القيم إلى نص
+        $oldStatus = $oldStatus instanceof Status ? $oldStatus->lang() : $oldStatus;
+        $newStatus = $newStatus instanceof Status ? $newStatus->lang() : $newStatus;
+
+        if ($eventName == 'created') {
+            return trans('system_lookup.field_create', ['value' => $oldStatus . '-' . $this->oldStatus]);
+        } elseif ($eventName == 'updated') {
+            return trans('system_lookup.field_change', [
+                'value' => $this->id,
+                'old_value' => $oldStatus . '-' . $this->name,
+                'new_value' => $newStatus . '-' . $this->name
+            ]);
+        } else {
+            return trans('system_lookup.field_delete', ['value' => $this->oldStatus . '-' . $oldStatus]);
+        }
     }
 }

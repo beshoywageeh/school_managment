@@ -28,7 +28,7 @@ class ExcptionFeesController extends Controller
     {
         try{
             $Excpetion = Student::where('id',$id)->first();
-$acadmincs= acadmice_year::where('status','0')->get();
+			$acadmincs= acadmice_year::where('status','0')->get();
             return view('backend.fee_exception.create',get_defined_vars());
         }catch(\Exception $e){
             session()->flash('error',$e->getMessage());
@@ -57,7 +57,6 @@ $acadmincs= acadmice_year::where('status','0')->get();
              $std->type='3';
              $std->credit = $request->amount;
              $std->academic_year_id=$request->acadmic_id;
-
              $std->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
              $std->classroom_id = Student::where('id', $request->student_id)->first()->classroom_id;
              $std->debit = 0.00;

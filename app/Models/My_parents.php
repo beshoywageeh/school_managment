@@ -33,7 +33,26 @@ class My_parents extends Model
 	   public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['*'])->logOnlyDirty();
+            ->logOnly(['Father_Name'])->logOnlyDirty();
         // Chain fluent methods for configuration options
+    }
+    public function getDescriptionForEvent(string $eventName): string
+    {
+        $changes = $this->getChanges();
+        $oldname = $this->getOriginal('Father_Name');
+        $newname = $changes['Father_Name'] ?? null;
+
+
+        if ($eventName == 'created') {
+            return trans('system_lookup.field_create', ['value' => $this->Father_Name]);
+        } elseif ($eventName == 'updated') {
+            return trans('system_lookup.field_change', [
+                'value' => $this->id,
+                'old_value' => $oldname,
+                'new_value' => $newname
+            ]);
+        } else {
+            return trans('system_lookup.field_delete', ['value' => $this->Father_Name]);
+        }
     }
 }

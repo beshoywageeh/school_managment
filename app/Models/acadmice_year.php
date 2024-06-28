@@ -58,7 +58,7 @@ class acadmice_year extends Model
         $newStatus = $newStatus instanceof Status ? $newStatus->lang() : $newStatus;
 
         if ($eventName == 'created') {
-            return trans('system_lookup.field_create', ['value' => $this->id]);
+            return trans('system_lookup.field_create', ['value' => $this->year_start . '-' . $this->year_end]);
         } elseif ($eventName == 'updated') {
             return trans('system_lookup.field_change', [
                 'value' => $this->id,
@@ -66,7 +66,7 @@ class acadmice_year extends Model
                 'new_value' => $newStatus . '-' . $newYear
             ]);
         } else {
-            return trans('system_lookup.field_delete', ['value' => $this->id]);
+            return trans('system_lookup.field_delete', ['value' => $this->year_start . '-' . $this->year_end]);
         }
     }
 }
