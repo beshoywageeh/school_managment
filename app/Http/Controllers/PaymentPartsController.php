@@ -207,6 +207,4 @@ class PaymentPartsController extends Controller
         ]);
         $studentAccount->save();
     }
-
-
 }

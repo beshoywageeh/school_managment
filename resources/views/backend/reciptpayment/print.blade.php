@@ -102,8 +102,10 @@
      id="print">
     <div class="receipt-header">
         <div class="logo">
+            @if($school->image)
             <img src="{{ asset('storage/attachments/schools/'.$school->slug.'/' . $school->image->filename) }}"
                  alt="{{$school->name}}">
+                @endif
         </div>
         <div class="receipt-details">
             <h1>{{trans('Recipt_payments.title')}}</h1>

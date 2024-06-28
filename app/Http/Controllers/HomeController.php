@@ -11,14 +11,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $id = Auth()->user()->id;
-        $acadmic = acadmice_year::where('status', '0')->first();
-        if ($acadmic == null) {
-            $debit = '0';
-        } else {
-            $acadmic_id = $acadmic->id;
-            $debit = Recipt_payment::where('academic_year_id', $acadmic)->sum('Debit');
-        }
+        $id = Auth::user()->id;
         if (Auth::user()->hasRole('Admin')) {
             $students = Student::count();
         } else {

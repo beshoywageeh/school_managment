@@ -1,5 +1,5 @@
 <div class="modal fade"
-     id="Create_Year"
+     id="daily_fee"
      tabindex="-1"
      role="dialog"
      aria-hidden="true">
@@ -10,7 +10,7 @@
                 <div class="modal-title"
                      id="exampleModalLabel">
                     <div class="">
-                        <h6>{{trans('academic_year.title')}} | {{trans('general.new')}}</h6>
+                        <h6>{{trans('report.daily_fee')}} | {{trans('general.new')}}</h6>
                     </div>
                 </div>
                 <button type="button"

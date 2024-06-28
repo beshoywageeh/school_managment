@@ -24,48 +24,10 @@
             </div>
         </div>
         <div class="col-md-4 mb-4">
-            <div class="card card-statistics h-100">
-                <div class="card-body">
-                    <div class="clearfix">
-                        <div class="float-left icon-box bg-primary rounded-circle">
-                  <span class="text-white">
-                    <i class="ti-money highlight-icon"
-                       aria-hidden="true"></i>
-                  </span>
-                        </div>
-                        <div class="float-right text-right">
-                            <p class="card-text text-dark">{{ trans('Sidebar.Recipt_Payment') }}</p>
-                            @if(is_numeric($debit))
-                                <h4>{{Number::currency($debit,'EGP','AR')}}</h4>
-                            @else
-                                {{$debit}}
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
         <div class="col-md-4 mb-4">
-            <div class="card card-statistics h-100">
-                <div class="card-body">
-                    <div class="clearfix">
-                        <div class="float-left icon-box bg-primary rounded-circle">
-                  <span class="text-white">
-                    <i class="ti-money highlight-icon"
-                       aria-hidden="true"></i>
-                  </span>
-                        </div>
-                        <div class="float-right text-right">
-                            <p class="card-text text-dark">{{ trans('Sidebar.credit') }}</p>
-                            @if(is_numeric($credit))
-                                <h4>{{Number::currency($credit,'EGP','AR')}}</h4>
-                            @else
-                                {{$credit}}
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 

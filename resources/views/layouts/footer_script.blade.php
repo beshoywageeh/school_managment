@@ -35,7 +35,6 @@
 
 <!-- lobilist -->
 <script src="{{ asset('assests/js/lobilist.js') }}"></script>
-<script src="{{ asset('assests/js/nicescroll/jquery.nicescroll.js') }}"></script>
 <!-- custom -->
 <script src="{{ asset('assests/js/tomselect.js') }}"></script>
 

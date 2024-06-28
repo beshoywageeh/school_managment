@@ -78,6 +78,10 @@
                         @php
                             $acc_links=[
                                 [
+                                'Name'=>trans('Sidebar.daily'),
+                                'Url'=>'1'
+                                ],
+                                [
                                 'Name'=>trans('Sidebar.schoolfees'),
                                 'Url'=>'1'
                                 ],[

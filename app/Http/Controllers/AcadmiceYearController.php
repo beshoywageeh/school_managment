@@ -27,19 +27,11 @@ class AcadmiceYearController extends Controller
             $validated = $request->validate([
                 'year_end' => 'required|date|unique:acadmice_years,year_end',
             ]);
-            $latest_year = acadmice_year::latest()->first();
-            if ($latest_year == null) {
-                $year_start = date('Y-m-d');
-            } else {
-                if ($latest_year->status == 0) {
-                    session()->flash('error', trans('general.active_year'));
-                    return redirect()->back();
-                }
-                $year_start = date('Y-m-d', strtotime($latest_year->year_end . '+1 day'));
-            }
+            $year_start = date('Y-m-d', strtotime($request->year_start));
+            $year_end = date('Y-m-d', strtotime($request->year_end));
             acadmice_year::create([
                 'year_start' => $year_start,
-                'year_end' => $request->year_end,
+                'year_end' => $year_end,
                 'created_by' => Auth::id(),
                 'status' => ($request->status)?0:1
 

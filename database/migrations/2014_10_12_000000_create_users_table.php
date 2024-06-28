@@ -34,6 +34,8 @@ return new class extends Migration
             $table->string('insurance_number')->nullable();
             $table->date('insurance_date')->nullable();
             $table->string('national_id')->nullable();
+            $table->boolean('resign')->default('0');
+            $table->string('resign_reason')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

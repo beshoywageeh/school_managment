@@ -178,6 +178,7 @@ Route::group(
                 Route::get('report','index')->name('report.index');
                 Route::get('Students_export','ExportStudents')->name('reports.export_student');
                 Route::post('/export','export_submit')->name('export.submit');
+                Route::post('/daily','Daily_fee')->name('daily_fee');
             });
 
             Route::group(['prefix' => 'ajax'], function () {
