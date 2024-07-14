@@ -8,13 +8,14 @@ use App\Imports\StudentImport;
 use App\Models\{class_room, Grade, My_parents, Student};
 use Illuminate\Http\Request;
 use PDF;
+use App\DataTables\StudentDataTable;
 
 class StudentsController extends Controller
 {
-    public function index()
-
+    public function index(StudentDataTable $datatable)
     {
-        return view('backend.Students.Index');
+        return $datatable->render('backend.Students.Index');
+       // return view('backend.Students.Index');
     }
 
     /**

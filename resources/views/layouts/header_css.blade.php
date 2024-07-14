@@ -1,6 +1,7 @@
 @stack('css')
 
 <link rel="stylesheet" href="{{URL::asset('assests/css/tomselect.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assests/css/plugins/datatable_button.css')}}">
 <link rel="stylesheet" href="{{URL::asset('assests/css/style.css')}}">
 
 

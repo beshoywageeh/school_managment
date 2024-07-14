@@ -2,7 +2,10 @@
 
 <!-- jquery -->
 <script src="{{ asset('assests/js/jquery-3.3.1.min.js') }}"></script>
-
+<script src="{{ URL::asset('assests/js/bootstrap-datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL::asset('assests/js/bootstrap-datatables/buttons.bootstrap.js') }}"></script>
+<script src="{{ URL::asset('assests/js/bootstrap-datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
 <!-- plugins-jquery -->
 <script src="{{ asset('assests/js/plugins-jquery.js') }}"></script>
 <!-- plugin_path -->
@@ -88,9 +91,7 @@
         };
     }
 </script>
-<script src="{{ URL::asset('assests/js/bootstrap-datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ URL::asset('assests/js/bootstrap-datatables/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('assests/js/init_datatable.js') }}"></script>
+
 
 <script>
     $(function() {
