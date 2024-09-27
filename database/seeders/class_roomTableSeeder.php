@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-
+use App\Models\{Grade, User, class_room};
 class class_roomTableSeeder extends Seeder
 {
     /**
@@ -11,6 +11,18 @@ class class_roomTableSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\class_room::factory()->count(24)->create();
+        $class_rooms = ['الصف الاول', 'الصف الثاني', 'الصف الثالث', 'الصف الرابع', 'الصف الخامس', 'الصف السادس'];
+        $grades = Grade::get();
+
+        foreach ($grades as $grade_id) {
+            foreach ($class_rooms as $name) {
+                class_room::create([
+                    'name' => $name,
+                    'grade_id' => $grade_id->id,
+                    'user_id' => '1',
+                    'slug' => \Illuminate\Support\str::slug($name),
+                ]);
+            }
+        }
     }
 }

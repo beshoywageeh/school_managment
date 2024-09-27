@@ -23,11 +23,11 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <div class="checkbox text-left checbox-switch switch-info">
+                                <div class="text-left checkbox checbox-switch switch-info">
                                     <label>{{ trans('jobs.is_main') }}
                                         <input type="checkbox"
                                                name="is_main"
-                                               id="is_main">
+                                               id="is_main" checked>
                                         <span></span>
                                     </label>
                                 </div>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <div class="checkbox text-left checbox-switch switch-info">
+                                <div class="text-left checkbox checbox-switch switch-info">
                                     <label>{{ trans('jobs.status') }}
                                         <input type="checkbox"
                                                name="status">

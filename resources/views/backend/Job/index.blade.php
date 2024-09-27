@@ -9,7 +9,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 9999; /* Ensure the spinner is above other elements */
+            z-index: 9999;
+            /* Ensure the spinner is above other elements */
         }
 
         .loader {
@@ -25,6 +26,7 @@
             0% {
                 transform: rotate(0deg);
             }
+
             100% {
                 transform: rotate(360deg);
             }
@@ -39,12 +41,10 @@
                     <div class="card-title">
                         <div class="row">
                             <div class="col"></div>
-                            <div class="col text-right">
+                            <div class="text-right col">
                                 @can('jobs-create')
-                                    <button type="button"
-                                            class="btn btn-success btn-lg"
-                                            data-target="#Create_Job"
-                                            data-toggle="modal"><i class="ti-plus"></i>
+                                    <button type="button" class="btn btn-success" data-target="#Create_Job"
+                                        data-toggle="modal"><i class="ti-plus"></i>
                                         {{ trans('general.new') }}</button>
                                     @include('backend.Job.create')
                                 @endcan
@@ -58,57 +58,53 @@
                                 @can('jobs-list')
                                     <table class="table table-striped table-bordered table-sm">
                                         <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>{{ trans('jobs.title_name') }}</th>
-                                            <th>{{ trans('academic_year.status') }}</th>
-                                            <th>{{ trans('general.actions') }}</th>
-                                        </tr>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>{{ trans('jobs.title_name') }}</th>
+                                                <th>{{ trans('academic_year.status') }}</th>
+                                                <th>{{ trans('general.actions') }}</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        @forelse ($jobs_main as $job)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td>{{ $job->name }}</td>
-                                                <td>
-                                            <span class="badge {{ $job->status->color() }}">
-                                                {{ $job->status->lang() }}
-                                            </span>
-                                                </td>
-                                                <td>
-                                                    <x-dropdown-table :buttonText="trans('general.actions')"
-                                                                      :items="[
-
-                                                [
-                                                    'url' => route('jobs.show', $job->id),
-                                                    'text' => trans('general.info'),
-                                                    'icon' => 'ti-info-alt',
-                                                    'can'=>'jobs-info',
-                                                    'className'=>'show_jobs'
-                                                ],
-                                                [
-                                                    'url' => route('jobs.edit', $job->id),
-                                                    'text' => trans('general.edit'),
-                                                    'icon' => 'ti-pencil',
-                                                    'can'=>'jobs-edit'
-
-                                                ],
-                                                [
-                                                    'url' => route('jobs.destroy', $job->id),
-                                                    'text' => trans('general.delete'),
-                                                    'icon' => 'ti-trash',
-                                                    'onclick' => 'confirmation(event)',
-                                                    'can' => 'jobs-delete',
-                                                ],
-                                            ]"/>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="10"
-                                                    class="text-center">{{ trans('general.Msg') }}</td>
-                                            </tr>
-                                        @endforelse
+                                            @forelse ($jobs_main as $job)
+                                                <tr>
+                                                    <td> {{ $loop->iteration }}</td>
+                                                    <td>{{ $job->name }}</td>
+                                                    <td>
+                                                        <span class="badge {{ $job->status->color() }}">
+                                                            {{ $job->status->lang() }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                            [
+                                                                'url' => route('jobs.show', $job->id),
+                                                                'text' => trans('general.info'),
+                                                                'icon' => 'ti-info-alt',
+                                                                'can' => 'jobs-info',
+                                                                'className' => 'show_jobs',
+                                                            ],
+                                                            [
+                                                                'url' => route('jobs.edit', $job->id),
+                                                                'text' => trans('general.edit'),
+                                                                'icon' => 'ti-pencil',
+                                                                'can' => 'jobs-edit',
+                                                            ],
+                                                            [
+                                                                'url' => route('jobs.destroy', $job->id),
+                                                                'text' => trans('general.delete'),
+                                                                'icon' => 'ti-trash',
+                                                                'onclick' => 'confirmation(event)',
+                                                                'can' => 'jobs-delete',
+                                                            ],
+                                                        ]" />
+                                                    </td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="10" class="text-center">{{ trans('general.Msg') }}</td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                 @endcan
@@ -116,21 +112,17 @@
                         </div>
                         <div class="col">
 
-                            <div id="loadingSpinner"
-                                 class="spinner col "
-                                 style="display: none;">
+                            <div id="loadingSpinner" class="spinner col " style="display: none;">
                                 <!-- You can customize this spinner as per your requirement -->
-                                <div class="loader text-center"></div>
+                                <div class="text-center loader"></div>
                             </div>
-                            <table id="jobs_table"
-                                   style="display: none"
-                                   class="table table-bordered table-sm">
+                            <table id="jobs_table" style="display: none" class="table table-bordered table-sm">
                                 <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>{{trans('jobs.job_name')}}</th>
-                                    <th></th>
-                                </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>{{ trans('jobs.job_name') }}</th>
+                                        <th></th>
+                                    </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
@@ -145,7 +137,7 @@
         <script>
             let is_main = document.getElementById('is_main'),
                 main_jobs = document.getElementById('main_jobs');
-            is_main.addEventListener('click', function () {
+            is_main.addEventListener('click', function() {
                 if (is_main.checked) {
                     main_jobs.style.display = 'none';
                 } else {
@@ -158,8 +150,8 @@
             let show_jobs = document.querySelectorAll('.show_jobs');
             let loadingSpinner = document.getElementById('loadingSpinner');
             let table = document.getElementById('jobs_table');
-            show_jobs.forEach(function (job) {
-                job.addEventListener('click', function (e) {
+            show_jobs.forEach(function(job) {
+                job.addEventListener('click', function(e) {
                     e.preventDefault();
 
                     // Show the spinner
@@ -192,8 +184,8 @@
                             }
 
                             // Add event listeners for edit buttons after rendering
-                            document.querySelectorAll('.edit-btn').forEach(function (btn) {
-                                btn.addEventListener('click', function (e) {
+                            document.querySelectorAll('.edit-btn').forEach(function(btn) {
+                                btn.addEventListener('click', function(e) {
                                     e.preventDefault();
                                     const jobId = this.dataset.id;
                                     // Open edit modal with jobId
@@ -201,9 +193,13 @@
                                     // Populate modal fields with job data
                                     const jobData = data.find(j => j.id == jobId);
                                     $('#Edit_Job #job_id').val(jobId);
-                                    $('#Edit_Job #job_name').val(jobData.name); // Adjust to match your data structure
-                                    $('#Edit_Job #worker_type').val(jobData.type); // Adjust to match your data structure
-                                    $('#Edit_Job #is_main').prop('checked', jobData.is_main == 1); // Adjust to match your data structure
+                                    $('#Edit_Job #job_name').val(jobData
+                                    .name); // Adjust to match your data structure
+                                    $('#Edit_Job #worker_type').val(jobData
+                                    .type); // Adjust to match your data structure
+                                    $('#Edit_Job #is_main').prop('checked', jobData
+                                        .is_main == 1
+                                        ); // Adjust to match your data structure
                                 });
                             });
                         })
@@ -217,7 +213,6 @@
                         });
                 });
             });
-
         </script>
     @endpush
 @endsection

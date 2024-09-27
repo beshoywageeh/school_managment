@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Grade;
-use App\Models\promotion;
 use App\Models\Student;
+use App\Models\promotion;
 use Illuminate\Http\Request;
 
 class promotionController extends Controller
@@ -15,8 +16,6 @@ class promotionController extends Controller
     public function index()
     {
         $promotions = promotion::with('students', 'f_grade', 'f_class', 't_grade', 't_class')->get();
-
-        //return $promotions;
         return view('backend.promotion.Index', compact('promotions'));
     }
 
@@ -26,7 +25,6 @@ class promotionController extends Controller
     public function create()
     {
         $grades = Grade::all();
-
         return view('backend.promotion.create', compact('grades'));
     }
 
@@ -35,9 +33,8 @@ class promotionController extends Controller
      */
     public function store(Request $request)
     {
-        \DB::beginTransaction();
+        DB::beginTransaction();
         try {
-
             $Students = Student::where('grade_id', $request->old_grade)->where('classroom_id', $request->old_class)->get();
             if ($Students->count() < 1) {
                 return redirect()->back()->with('error', trans('promotions.no_data'));
@@ -55,11 +52,11 @@ class promotionController extends Controller
                     'to_class' => $request->new_class,
                 ]);
             }
-            \DB::commit();
+            DB::commit();
 
             return redirect()->route('promotion.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
 
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -94,9 +91,8 @@ class promotionController extends Controller
      */
     public function destroy(string $id)
     {
-        \DB::beginTransaction();
+        DB::beginTransaction();
         try {
-
             $promotions = promotion::findorfail($id);
             Student::where('id', $promotions->student_id)
                 ->update([
@@ -104,12 +100,10 @@ class promotionController extends Controller
                     'grade_id' => $promotions->from_grade,
                 ]);
             $promotions->delete();
-            \DB::commit();
-
+            DB::commit();
             return redirect()->route('promotion.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
-            \DB::rollBack();
-
+            DB::rollBack();
             return redirect()->back()->with('error', $e->getMessage());
         }
     }

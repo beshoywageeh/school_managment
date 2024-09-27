@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Grade;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-
+use App\Models\class_room;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\class_room>
  */
@@ -16,14 +16,7 @@ class class_roomFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
-    {
-        return [
-            'name' => $this->faker->randomElement(['الصف الاول', 'الصف الثاني', 'الصف الثالث', 'الصف الخامس', 'الصف السادس']),
-            'grade_id' => Grade::all()->unique()->random()->id,
-            'user_id' => User::all()->random()->id,
-            'slug' => $this->faker->slug(),
-        ];
+    public function definition() {
 
     }
 }
