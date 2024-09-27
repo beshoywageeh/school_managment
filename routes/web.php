@@ -1,24 +1,27 @@
 <?php
 
-use App\Http\Controllers\{AcadmiceYearController,
-    AdminEraControllerController,
-    BackupController,
-    ClassRooms\ClassRoomsController,
-    ExcptionFeesController,
-    fee_invoiceController,
-    Grades\GradesController,
-    HomeController,
-    JobController,
-    MonitorSystemController,
-    Parents\MyParentsController,
-    ProfileController,
-    promotionController,
-    ReciptPaymentController,
-    SchoolFeeController,
-    SettingsController,
-    SetupController,
-    Students\StudentsController,
-    UserController,PaymentPartsController,ReportController,RoleController,AdminEraController};
+use App\Http\Controllers\AcadmiceYearController;
+use App\Http\Controllers\AdminEraController;
+use App\Http\Controllers\BackupController;
+use App\Http\Controllers\ClassRooms\ClassRoomsController;
+use App\Http\Controllers\ExcptionFeesController;
+use App\Http\Controllers\fee_invoiceController;
+use App\Http\Controllers\Grades\GradesController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\MonitorSystemController;
+use App\Http\Controllers\Parents\MyParentsController;
+use App\Http\Controllers\PaymentPartsController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\promotionController;
+use App\Http\Controllers\ReciptPaymentController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SchoolFeeController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SetupController;
+use App\Http\Controllers\Students\StudentsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -33,7 +36,6 @@ use Livewire\Livewire;
  |
  */
 
-
 Route::group(
 
     [
@@ -45,7 +47,6 @@ Route::group(
         Livewire::setUpdateRoute(function ($handle) {
             return Route::post('/livewire/update', $handle);
         });
-
 
         Route::middleware('auth')->group(function () {
 
@@ -79,7 +80,7 @@ Route::group(
                 Route::post('/store', 'store')->name('parents.store');
                 Route::post('/update', 'update')->name('parents.update');
                 Route::get('/datatable', 'data')->name('parents.datatable');
-                Route::post('/Import_Excel','Excel_Import')->name('parents.import_excel');
+                Route::post('/Import_Excel', 'Excel_Import')->name('parents.import_excel');
             });
             Route::group(['prefix' => 'students', 'controller' => StudentsController::class], function () {
                 Route::get('/index', 'index')->name('Students.index');
@@ -99,7 +100,7 @@ Route::group(
                 Route::get('/{id}/show', 'show')->name('academic_year.show');
                 Route::post('/store', 'store')->name('academic_year.store');
                 Route::post('/update', 'update')->name('academic_year.update');
-             });
+            });
             Route::group(['prefix' => 'jobs', 'controller' => JobController::class], function () {
                 Route::get('/index', 'index')->name('jobs.index');
                 Route::get('/create', 'create')->name('jobs.create');
@@ -175,11 +176,11 @@ Route::group(
                 Route::get('/{id?}/pay', 'pay')->name('payment_parts.pay');
                 Route::post('/submit_pay', 'submit_pay')->name('payment_parts.submit_pay');
             });
-            Route::group(['prefix'=>'reports','controller'=>ReportController::class],function (){
-                Route::get('report','index')->name('report.index');
-                Route::get('Students_export','ExportStudents')->name('reports.export_student');
-                Route::post('/daily','daily_paymnet')->name('report.daily_fee');
-                Route::post('/exception_fee','exception_fee')->name('report.exception_fee');
+            Route::group(['prefix' => 'reports', 'controller' => ReportController::class], function () {
+                Route::get('report', 'index')->name('report.index');
+                Route::get('Students_export', 'ExportStudents')->name('reports.export_student');
+                Route::post('/daily', 'daily_paymnet')->name('report.daily_fee');
+                Route::post('/exception_fee', 'exception_fee')->name('report.exception_fee');
             });
 
             Route::group(['prefix' => 'ajax'], function () {
@@ -202,13 +203,13 @@ Route::group(
                 Route::get('/destroy/{id}', 'destroy')->name('roles.delete');
 
             });
-            Route::group(['prefix'=>'admin_era','controller'=>AdminEraController::class],function(){
-                Route::get('/index','index')->name('admin_era.index');
+            Route::group(['prefix' => 'admin_era', 'controller' => AdminEraController::class], function () {
+                Route::get('/index', 'index')->name('admin_era.index');
                 Route::post('/employee/{id}', 'emp_active')->name('employee.update');
             });
             Route::group(['prefix' => 'settings', 'controller' => SettingsController::class], function () {
                 Route::get('/index', 'index')->name('setting.index');
-                Route::post('/update','update')->name('settings.update');
+                Route::post('/update', 'update')->name('settings.update');
                 Route::post('/update_password', 'update_password')->name('setting.update_password');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
@@ -216,9 +217,9 @@ Route::group(
         });
     }
 );
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 Route::get('/', [SetupController::class, 'showSetupForm'])->name('setup')->middleware('setup');
 Route::post('/setup', [SetupController::class, 'processSetup'])->name('config')->middleware('setup');
 if (config('app.env') == 'local') {
-    require __DIR__ . '/local.php';
+    require __DIR__.'/local.php';
 }

@@ -17,7 +17,7 @@ class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'filename' => $this->faker->randomElement(['heather-allison.png','teegan-horne.png']),
+            'filename' => $this->faker->randomElement(['heather-allison.png', 'teegan-horne.png']),
             'imageable_id' => $this->faker->numberBetween(1, 5),
             'imageable_type' => 'App\Models\settings',
         ];

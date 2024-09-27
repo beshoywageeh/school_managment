@@ -14,6 +14,7 @@ enum Status: int
             self::CLOSE => 'badge badge-pill badge-danger',
         };
     }
+
     public function lang(): string
     {
         return match ($this) {

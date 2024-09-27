@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 
@@ -40,14 +39,14 @@ class PermissionTableSeeder extends Seeder
             ['table' => 'employees', 'name' => 'employees-edit'],
             ['table' => 'employees', 'name' => 'employees-info'],
             ['table' => 'employees', 'name' => 'employees-delete'],
-            ['table'=>'employees','name'=>'employees-import_Excel'],
+            ['table' => 'employees', 'name' => 'employees-import_Excel'],
 
             ['table' => 'parents', 'name' => 'parents-list'],
             ['table' => 'parents', 'name' => 'parents-create'],
             ['table' => 'parents', 'name' => 'parents-edit'],
             ['table' => 'parents', 'name' => 'parents-info'],
             ['table' => 'parents', 'name' => 'parents-delete'],
-            ['table' => 'parents','name'=>'Parents-import_Excel'],
+            ['table' => 'parents', 'name' => 'Parents-import_Excel'],
             ['table' => 'Students', 'name' => 'Students-list'],
             ['table' => 'Students', 'name' => 'Students-create'],
             ['table' => 'Students', 'name' => 'Students-edit'],
@@ -102,7 +101,7 @@ class PermissionTableSeeder extends Seeder
         foreach ($permissions as $permission) {
             Permission::create([
                 'table' => $permission['table'],
-                'name' => $permission['name']
+                'name' => $permission['name'],
             ]);
         }
 

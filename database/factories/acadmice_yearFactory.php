@@ -17,10 +17,10 @@ class acadmice_yearFactory extends Factory
     public function definition(): array
     {
         return [
-            'year_start'=>$this->faker->date('Y-m-d'),
-            'year_end'=>$this->faker->date('Y-m-d'),
-            'status'=>'0',
-            'created_by'=>'1'
+            'year_start' => $this->faker->date('Y-m-d'),
+            'year_end' => $this->faker->date('Y-m-d'),
+            'status' => '0',
+            'created_by' => '1',
         ];
     }
 }

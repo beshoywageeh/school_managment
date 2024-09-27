@@ -35,7 +35,7 @@ class ParentsRequest extends FormRequest
             'Religion' => 'nullable|string|max:255',
             'Address' => 'nullable|string|max:255',
             'Mother_Birth_Date' => 'nullable|date',
-            'slug' => 'nullable|string|max:255'
+            'slug' => 'nullable|string|max:255',
         ];
     }
 

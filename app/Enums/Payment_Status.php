@@ -13,9 +13,10 @@ enum Payment_Status: int
         return match ($this) {
             self::OPEN => 'btn-danger',
             self::CLOSE => 'btn-success disabled',
-            self::Waiting=> 'btn-warning',
+            self::Waiting => 'btn-warning',
         };
     }
+
     public function lang(): string
     {
         return match ($this) {

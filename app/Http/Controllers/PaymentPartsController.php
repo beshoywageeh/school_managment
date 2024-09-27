@@ -17,6 +17,7 @@ class PaymentPartsController extends Controller
     public function index()
     {
         $PaymentParts = PaymentParts::with(['students', 'grades', 'classes', 'year'])->get();
+
         return view('backend.payment_parts.index', get_defined_vars());
     }
 
@@ -27,12 +28,14 @@ class PaymentPartsController extends Controller
 
             if ($student == null) {
                 session()->flash('info', trans('general.noInvoiceToPart'));
+
                 return redirect()->back();
             } else {
                 return view('backend.payment_parts.create', get_defined_vars());
             }
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -42,7 +45,7 @@ class PaymentPartsController extends Controller
         $List_Parts = $request->list_parts;
         try {
             foreach ($List_Parts as $list_part) {
-                $fee = new PaymentParts();
+                $fee = new PaymentParts;
                 $fee->date = $list_part['pay_at'];
                 $fee->student_id = $list_part['student_id'];
                 $fee->grade_id = $request->grade_id;
@@ -53,9 +56,11 @@ class PaymentPartsController extends Controller
                 $fee->save();
             }
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -65,9 +70,11 @@ class PaymentPartsController extends Controller
         try {
             $paymentParts = PaymentParts::where('id', $id)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'acd_year'])->first();
             session()->flash('success', trans('general.success'));
+
             return view('backend.payment_parts.edit', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -80,6 +87,7 @@ class PaymentPartsController extends Controller
             return view('backend.payment_parts.edit', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -89,12 +97,14 @@ class PaymentPartsController extends Controller
         try {
             $paymentpart = PaymentParts::findorfail($request->id);
             $paymentpart->update([
-                'amount' => $request->amount
+                'amount' => $request->amount,
             ]);
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -105,9 +115,11 @@ class PaymentPartsController extends Controller
 
             $PaymentParts = PaymentParts::findorFail($id)->delete();
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -117,13 +129,14 @@ class PaymentPartsController extends Controller
         try {
 
             $part = PaymentParts::where('id', $id)->with(['students', 'grades', 'classes', 'year'])->first();
+
             return view('backend.payment_parts.pay', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
-
 
     public function submit_pay(Request $request)
     {
@@ -158,19 +171,23 @@ class PaymentPartsController extends Controller
                 $part->update(['payment_status' => 1]);
                 $this->createStudentAccount($receipt->id, $request->student_id, $student->grade_id, $student->classroom_id, $currentYear->id, $receipt->date, $part->amount, 0.00, '2');
                 DB::commit();
+
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
             } else {
 
                 $part->update(['payment_status' => 1]);
                 DB::commit();
+
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
             }
             DB::commit();
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             DB::rollback();
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }

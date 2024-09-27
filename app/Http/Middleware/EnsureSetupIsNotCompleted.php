@@ -21,6 +21,7 @@ class EnsureSetupIsNotCompleted
     {
         try {
             DB::connection()->getPdo();
+
             return DB::table('users')->exists(); // مثال: تحقق من وجود مستخدمين
         } catch (\Exception $e) {
             return false;

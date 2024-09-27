@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Grades;
 
-use App\Models\User;
+use App\Http\Controllers\Controller;
 use App\Models\Grade;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Browsershot\Browsershot;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 
 class GradesController extends Controller
 {
@@ -22,6 +22,7 @@ class GradesController extends Controller
             $data['grades'] = Grade::whereIn('id', $grade)->with('user')->withCount(['class_room', 'students'])->paginate(10);
         }
         $data['users'] = User::get();
+
         return view('backend.Grades.index', ['data' => $data]);
     }
 
@@ -60,19 +61,19 @@ class GradesController extends Controller
      */
     public function show(string $id)
     {
-        $report_data = Grade::where('id', $id)->with(['class_room', 'class_room.students'])->withCount(['class_room','students'])->first();
+        $report_data = Grade::where('id', $id)->with(['class_room', 'class_room.students'])->withCount(['class_room', 'students'])->first();
 
         $html = view('backend.grades.report', ['report_data' => $report_data])->render();
 
-        $tempFile = tempnam(sys_get_temp_dir(), 'pdf_') . '.html';
+        $tempFile = tempnam(sys_get_temp_dir(), 'pdf_').'.html';
         file_put_contents($tempFile, $html);
 
         try {
             $browsershot = new Browsershot($tempFile);
             $browsershot->timeout(300000) // 5 minutes
-                        ->windowSize(1920, 1080)
-                        ->waitUntilNetworkIdle()
-                        ->pdf(['printBackground' => true]);
+                ->windowSize(1920, 1080)
+                ->waitUntilNetworkIdle()
+                ->pdf(['printBackground' => true]);
 
             $pdfContent = $browsershot->pdf();
 
@@ -82,7 +83,8 @@ class GradesController extends Controller
                 ->header('Content-Type', 'application/pdf')
                 ->header('Content-Disposition', 'inline; filename="grade_report.pdf"');
         } catch (\Exception $e) {
-            \Log::error('PDF Generation failed: ' . $e->getMessage());
+            \Log::error('PDF Generation failed: '.$e->getMessage());
+
             return back()->with('error', 'Failed to generate PDF. Please try again later.');
         }
     }
@@ -106,7 +108,7 @@ class GradesController extends Controller
             if (isset($request->user_id)) {
                 $grade->users()->sync($request->user_id);
             } else {
-                $grade->users()->sync(array());
+                $grade->users()->sync([]);
             }
             \DB::commit();
             session()->flash('success', trans('general.success'));

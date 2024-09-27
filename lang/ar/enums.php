@@ -21,9 +21,9 @@ return [
     'REJECTED' => 'مستبعد',
     'NEW' => 'مستجد',
     'TOTAL_ABSENT' => 'منقطع',
-    'waiting'=>'مدفوعة جزء',
-    'fee_invoice'=>'فواتير دراسية',
-    'payment_recipt'=>'مدفوعات دراسية',
-    'fee_exception'=>'معافات'
+    'waiting' => 'مدفوعة جزء',
+    'fee_invoice' => 'فواتير دراسية',
+    'payment_recipt' => 'مدفوعات دراسية',
+    'fee_exception' => 'معافات',
 
 ];

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\promotion;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class promotionSeeder extends Seeder

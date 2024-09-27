@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\settings;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -16,7 +15,6 @@ class GradeFactory extends Factory
      *
      * @return array<string, mixed>
      */
-
     public function definition(): array
     {
 
@@ -25,7 +23,7 @@ class GradeFactory extends Factory
                 'المرحلة الابتدائية', 'المرحلة الاعدادية', 'المرحلة الثانوية', 'مرحلة حضانة',
             ]),
             'user_id' => User::all()->random()->id,
-            'slug'=>$this->faker->slug()
+            'slug' => $this->faker->slug(),
         ];
     }
 }

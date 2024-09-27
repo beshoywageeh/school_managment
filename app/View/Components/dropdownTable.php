@@ -12,7 +12,9 @@ class dropdownTable extends Component
      * Create a new component instance.
      */
     public $buttonText;
+
     public $items;
+
     public function __construct($buttonText, $items = [])
     {
         $this->buttonText = $buttonText;

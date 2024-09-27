@@ -42,6 +42,7 @@ class StoreUserRequest extends FormRequest
             'national_id' => 'required|string|min:14|max:14|regex:/[0-9]{14}/',
         ];
     }
+
     /**
      * Get custom messages for validator errors.
      *

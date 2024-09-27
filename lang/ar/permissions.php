@@ -2,9 +2,9 @@
 
 return [
     'title' => 'الصلاحيات',
-    'name'=>'الاسم',
-    'description'=>'الوصف',
-    'permissions'=>'الصلاحيات',
+    'name' => 'الاسم',
+    'description' => 'الوصف',
+    'permissions' => 'الصلاحيات',
     'select_all' => 'تحديد الكل',
     'Admin' => 'مسؤل النظام',
     'role' => 'الصلاحيات',
@@ -102,7 +102,7 @@ return [
     'Students-info' => 'تفاصيل الطالب',
     'Students-edit' => 'تعديل الطالب',
     'fee_invoice-create' => 'إضافة فاتورة مصاريف',
-    'create'=>'إسم الصلاحية',
+    'create' => 'إسم الصلاحية',
     'employees-import_Excel' => 'إستيراد إكسيل',
     'Parents-import_Excel' => 'إستيراد إكسيل',
 

@@ -19,11 +19,11 @@ class ExcptionFeesFactory extends Factory
         return [
             'grade_id' => $this->faker->numberBetween(1, 4),
             'class_id' => $this->faker->numberBetween(1, 6),
-            'student_id'=>$this->faker->numberBetween(1, 300),
-            'academic_year_id'=>'1',
-            'fee_id'=>$this->faker->numberBetween(1, 50),
-            'date'=>$this->faker->date('Y-m-d'),
-            'amount'=>$this->faker->numberBetween(100,500)
+            'student_id' => $this->faker->numberBetween(1, 300),
+            'academic_year_id' => '1',
+            'fee_id' => $this->faker->numberBetween(1, 50),
+            'date' => $this->faker->date('Y-m-d'),
+            'amount' => $this->faker->numberBetween(100, 500),
         ];
     }
 }

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{School_Fee, Grade, acadmice_year, class_room};
 use App\Http\Requests\StoreSchool_FeeRequest;
 use App\Http\Requests\UpdateSchool_FeeRequest;
+use App\Models\acadmice_year;
+use App\Models\class_room;
+use App\Models\Grade;
+use App\Models\School_Fee;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+
 class SchoolFeeController extends Controller
 {
     /**
@@ -15,8 +18,9 @@ class SchoolFeeController extends Controller
     public function index()
     {
         $School_Fees = School_Fee::with('grade', 'classroom', 'user')->get();
-       // return $School_Fees;
-         return view('backend.school_fees.index',get_defined_vars());
+
+        // return $School_Fees;
+        return view('backend.school_fees.index', get_defined_vars());
     }
 
     /**
@@ -24,19 +28,21 @@ class SchoolFeeController extends Controller
      */
     public function create()
     {
-        try{
+        try {
             $grades = Grade::get();
             $years = acadmice_year::where('status', 0)->get();
             $academic_years =
                 $years->map(function ($year) {
                     return [
                         'id' => $year->id,
-                        'academic_year' => Carbon::parse($year->year_start)->format('Y') . '-' . Carbon::parse($year->year_end)->format('Y'),
+                        'academic_year' => Carbon::parse($year->year_start)->format('Y').'-'.Carbon::parse($year->year_end)->format('Y'),
                     ];
                 });
-            return view('backend.school_fees.create',get_defined_vars());
-        }catch(\Exception $e){
-            session()->flash('error',$e->getMessage());
+
+            return view('backend.school_fees.create', get_defined_vars());
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -48,10 +54,10 @@ class SchoolFeeController extends Controller
     {
 
         //StoreSchool_FeeRequest
-//    return $request;
-         try{
-             foreach($request->classroom_id as $class_rooms){
-                $school_fee = new School_Fee();
+        //    return $request;
+        try {
+            foreach ($request->classroom_id as $class_rooms) {
+                $school_fee = new School_Fee;
                 $school_fee->grade_id = $request->grade_id;
                 $school_fee->classroom_id = $class_rooms;
                 $school_fee->user_id = $request->user()->id;
@@ -63,9 +69,11 @@ class SchoolFeeController extends Controller
             }
 
             session()->flash('success', trans('General.success'));
+
             return redirect()->route('schoolfees.index');
-        }catch(\Exception $e){
-            session()->flash('error',$e->getMessage());
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -83,7 +91,7 @@ class SchoolFeeController extends Controller
      */
     public function edit($id)
     {
-        try{
+        try {
             $school_Fee = School_Fee::findorFail($id);
             $grades = Grade::get();
             $years = acadmice_year::where('status', 1)->get();
@@ -91,12 +99,14 @@ class SchoolFeeController extends Controller
                 $years->map(function ($year) {
                     return [
                         'id' => $year->id,
-                        'academic_year' => Carbon::parse($year->year_start)->format('Y') . '-' . Carbon::parse($year->year_end)->format('Y'),
+                        'academic_year' => Carbon::parse($year->year_start)->format('Y').'-'.Carbon::parse($year->year_end)->format('Y'),
                     ];
                 });
+
             return view('backend.school_fees.edit', get_defined_vars());
-        }catch(\Exception $e){
-            session()->flash('error',$e->getMessage());
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -107,7 +117,7 @@ class SchoolFeeController extends Controller
     public function update(UpdateSchool_FeeRequest $request)
     {
 
-        try{
+        try {
             $school_fee = School_Fee::findorFail($request->id);
             $school_fee->update([
                 'grade_id' => $request->grade_id,
@@ -116,11 +126,13 @@ class SchoolFeeController extends Controller
                 'description' => $request->description,
                 'amount' => $request->amount,
             ]);
-            session()->flash('success',trans('general_success'));
+            session()->flash('success', trans('general_success'));
+
             return redirect()->route('schoolfees.index');
 
-        }catch(\Exception $e){
-            session()->flash('error',$e->getMessage());
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -130,17 +142,22 @@ class SchoolFeeController extends Controller
      */
     public function destroy($id)
     {
-        try{
+        try {
             School_Fee::destroy($id);
-            session()->flash('success',trans('general_success'));
+            session()->flash('success', trans('general_success'));
+
             return redirect()->route('schoolfees.index');
-        }catch(\Exception $e){
-            session()->flash('error',$e->getMessage());
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
-    public function getclasses($id){
+
+    public function getclasses($id)
+    {
         $class_rooms = class_room::where('grade_id', $id)->get(['id', 'name']);
+
         return response()->json($class_rooms);
     }
 }

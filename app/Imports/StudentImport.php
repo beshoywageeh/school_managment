@@ -2,7 +2,10 @@
 
 namespace App\Imports;
 
-use App\Enums\{Student_Status, user_religion, UserGender};
+use App\Enums\Student_Status;
+use App\Enums\user_religion;
+use App\Enums\UserGender;
+use App\Jobs\ImportStudentsJob;
 use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\My_parents;
@@ -10,7 +13,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use App\Jobs\ImportStudentsJob;
 
 class StudentImport implements ToCollection
 {
@@ -36,8 +38,9 @@ class StudentImport implements ToCollection
             $religionEnum = user_religion::fromString($row[5]);
             $statusEnum = Student_Status::fromString($row[6]);
 
-            if (!$genderEnum || !$religionEnum || !$statusEnum) {
+            if (! $genderEnum || ! $religionEnum || ! $statusEnum) {
                 Log::warning("Unmapped gender, religion, or status: {$row[0]}");
+
                 continue; // Skip this row or handle as needed
             }
 
@@ -64,7 +67,7 @@ class StudentImport implements ToCollection
         }
 
         // Dispatch remaining students
-        if (!empty($students)) {
+        if (! empty($students)) {
             ImportStudentsJob::dispatch($students);
         }
     }

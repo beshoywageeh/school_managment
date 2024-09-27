@@ -46,7 +46,6 @@ return new class extends Migration
             $table->foreign('created_by')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
 
-
         });
         Schema::table('teacher_grade', function (Blueprint $table) {
             $table->foreign('teacher_id')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
@@ -77,7 +76,8 @@ return new class extends Migration
             $table->foreign('classroom_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('recipt__payments_id')->references('id')->on('recipt__payments')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('excpetion_id')->references('id')->on('excption_fees')->onDelete('Cascade')->onUpdate('Cascade');
-            $table->foreign('fee_invoices_id')->references('id')->on('fee_invoices')->onDelete('Cascade')->onUpdate('Cascade'); $table->foreign('academic_year_id')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('fee_invoices_id')->references('id')->on('fee_invoices')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('academic_year_id')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
         });
         Schema::table('recipt__payments', function (Blueprint $table) {
             $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
@@ -87,8 +87,9 @@ return new class extends Migration
             $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('class_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
-            $table->foreign('fee_id')->references('id')->on('fee_invoices')->onDelete('Cascade')->onUpdate('Cascade');$table->foreign('academic_year_id')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
-            });
+            $table->foreign('fee_id')->references('id')->on('fee_invoices')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('academic_year_id')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
+        });
         Schema::table('payment_parts', function (Blueprint $table) {
             $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('class_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
@@ -97,7 +98,6 @@ return new class extends Migration
             $table->foreign('school_fees_id')->references('id')->on('school__fees')->onDelete('Cascade')->onUpdate('Cascade');
         });
     }
-
 
     /**
      * Reverse the migrations.

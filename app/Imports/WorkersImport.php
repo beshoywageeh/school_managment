@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 class WorkersImport implements ToCollection
 {
     /**
-     * @param Collection $collection
+     * @param  Collection  $collection
      */
     public function collection(Collection $rows)
     {
@@ -27,7 +27,7 @@ class WorkersImport implements ToCollection
                 'learning' => $row[6],
                 'reiligon' => user_religion::fromString($row[7]),
                 'type' => Jobs_types::fromString($row[8]),
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
             ]);
         }
     }

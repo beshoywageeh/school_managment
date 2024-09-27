@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ExcptionFees extends Model
 {
     use HasFactory, SoftDeletes;
+
     protected $guarded = [];
 
     public function students()
     {
         return $this->belongsTo('App\Models\Student', 'student_id');
     }
+
     public function academic_year()
     {
 
@@ -26,6 +28,7 @@ class ExcptionFees extends Model
 
         return $this->belongsTo('App\Models\Grade', 'grade_id');
     }
+
     public function classroom()
     {
 

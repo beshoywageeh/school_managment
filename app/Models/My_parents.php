@@ -21,6 +21,6 @@ class My_parents extends Model
 
     public function Students()
     {
-        return $this->hasMany('App\Models\Student', 'parent_id')->orderBy('join_date','ASC');
+        return $this->hasMany('App\Models\Student', 'parent_id')->orderBy('join_date', 'ASC');
     }
 }

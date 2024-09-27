@@ -15,8 +15,8 @@ return [
     'password_updated' => 'تم تعديل كلمة المرور',
     'old_password_not_match' => 'كلمة المرور القديمة غير مطابقة',
     'auth_details_desc' => 'يمكن تعديل كلمة المرور فقط',
-    'total_student'=>'إجمالي الطلبة',
-    'total_teacher'=>'إجمالي المدرسين',
-    'total_classroom'=>'إجمالي الفصول الدراسية'
+    'total_student' => 'إجمالي الطلبة',
+    'total_teacher' => 'إجمالي المدرسين',
+    'total_classroom' => 'إجمالي الفصول الدراسية',
 
 ];

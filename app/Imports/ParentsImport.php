@@ -11,28 +11,27 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 class ParentsImport implements ToCollection
 {
     /**
-    * @param Collection $collection
-    */
+     * @param  Collection  $collection
+     */
     public function collection(Collection $rows)
     {
-        foreach ($rows as $row)
-        {
+        foreach ($rows as $row) {
             My_parents::create([
-                'Father_Name'=>$row[0],
-                'Father_National_Id'=>$row[1],
-                'Father_Phone'=>$row[2],
-                'Father_Job'=>$row[3],
-                'Father_Birth_Date'=>$row[4],
-                'Father_Learning'=>$row[5],
-                'Father_Birth_Location'=>$row[6],
-                'Mother_Name'=>$row[7],
-                'Mother_National_Id'=>$row[8],
-                'Mother_Phone'=>$row[9],
-                'Mother_Job'=>$row[10],
-                'Religion'=>user_religion::fromString($row[11]),
-                'Address'=>$row[12],
-                'Mother_Birth_Date'=>$row[13],
-                'user_id'=>Auth::id()
+                'Father_Name' => $row[0],
+                'Father_National_Id' => $row[1],
+                'Father_Phone' => $row[2],
+                'Father_Job' => $row[3],
+                'Father_Birth_Date' => $row[4],
+                'Father_Learning' => $row[5],
+                'Father_Birth_Location' => $row[6],
+                'Mother_Name' => $row[7],
+                'Mother_National_Id' => $row[8],
+                'Mother_Phone' => $row[9],
+                'Mother_Job' => $row[10],
+                'Religion' => user_religion::fromString($row[11]),
+                'Address' => $row[12],
+                'Mother_Birth_Date' => $row[13],
+                'user_id' => Auth::id(),
             ]);
         }
     }

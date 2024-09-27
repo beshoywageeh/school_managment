@@ -5,6 +5,6 @@ return [
     'year_end' => 'نهاية في',
     'title' => 'السنة الدراسية',
     'status' => 'الحالة',
-    'change_status' => 'تغيير الحالة'
+    'change_status' => 'تغيير الحالة',
 
 ];

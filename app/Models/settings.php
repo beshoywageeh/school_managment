@@ -10,8 +10,6 @@ class settings extends Model
 {
     use HasFactory,SoftDeletes;
 
-
-
     public function image()
     {
         return $this->morphOne('App\Models\Image', 'imageable');

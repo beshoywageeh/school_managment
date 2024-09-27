@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{acadmice_year, PaymentParts, Recipt_Payment, Student, StudentAccount,My_parents};
+use App\Models\My_parents;
+use App\Models\PaymentParts;
+use App\Models\Recipt_Payment;
+use App\Models\Student;
+use App\Models\StudentAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
 
 class HomeController extends Controller
 {

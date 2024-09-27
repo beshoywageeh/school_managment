@@ -15,7 +15,7 @@ class StudentDataTable extends DataTable
     /**
      * Build the DataTable class.
      *
-     * @param QueryBuilder $query Results from query() method.
+     * @param  QueryBuilder  $query  Results from query() method.
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
@@ -52,13 +52,12 @@ class StudentDataTable extends DataTable
             ->buttons([
                 Button::make('excel')->title('Download Excel')->text(trans('General.Export_Excel')),
                 Button::make('csv'), Button::make('print'),
-                 Button::make('reset'),
+                Button::make('reset'),
                 Button::make('reload')->text('<i class="fa fa-refresh"></i>'),
                 Button::raw(
                     " <button type='button' class='btn btn-primary' data-target='#Import_Excel' data-toggle='modal'><i class='ti-upload'></i>"
-                    . trans('general.Import_Excel') . '</button>'
-                )
-
+                    .trans('general.Import_Excel').'</button>'
+                ),
 
             ]);
     }
@@ -92,6 +91,6 @@ class StudentDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Student_' . date('YmdHis');
+        return 'Student_'.date('YmdHis');
     }
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('fee_id');
             $table->unsignedBigInteger('academic_year_id');
             $table->date('date');
-            $table->decimal('amount',10,2);
+            $table->decimal('amount', 10, 2);
             $table->timestamps();
             $table->softDeletes();
         });

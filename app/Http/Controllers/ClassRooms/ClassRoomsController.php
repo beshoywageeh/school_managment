@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\DB;
 class ClassRoomsController extends Controller
 {
     public function index()
-    {     $id = \Auth::id();
+    {
+        $id = \Auth::id();
         if (Auth::user()->hasRole('Admin')) {
             $data['class_rooms'] = class_room::with(['user', 'grade'])->withCount('students')->orderBy('grade_id', 'asc')->get();
         } else {
@@ -49,6 +50,7 @@ class ClassRoomsController extends Controller
                 ]);
             }
             session()->flash('success', trans('general.success'));
+
             return redirect()->back();
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -66,7 +68,7 @@ class ClassRoomsController extends Controller
         try {
             $data['class_room'] = class_room::where('id', $id)->with(['user', 'grade', 'students'])->first();
 
-           // return $data;
+            // return $data;
             return view('backend.class_rooms.show', ['data' => $data]);
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

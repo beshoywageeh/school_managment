@@ -21,7 +21,7 @@ class JobFactory extends Factory
             'type' => $this->faker->numberBetween(1, 4),
             'status' => $this->faker->numberBetween(0, 1),
             'created_by' => '1',
-            'created_at' => now()
+            'created_at' => now(),
 
         ];
     }

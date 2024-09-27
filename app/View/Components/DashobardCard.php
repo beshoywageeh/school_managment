@@ -7,7 +7,9 @@ use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class DashobardCard extends Component
-{  public $item;
+{
+    public $item;
+
     public function __construct($item = [])
     {
 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->unsignedBigInteger('academic_year_id');
             $table->unsignedBigInteger('student_id');
-            $table->decimal('Debit',10,2);
+            $table->decimal('Debit', 10, 2);
             $table->timestamps();
             $table->softDeletes();
         });

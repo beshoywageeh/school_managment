@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Enums\Student_Status;
+use App\Enums\user_religion;
+use App\Enums\UserGender;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Enums\{UserGender, user_religion,Student_Status};
 
 class Student extends Model
 {
@@ -19,16 +21,16 @@ class Student extends Model
         'user_id',
         'grade_id',
         'classroom_id',
-        'address','join_date',
-        'national_id','birth_at_begin','student_status','religion'
+        'address', 'join_date',
+        'national_id', 'birth_at_begin', 'student_status', 'religion',
     ];
+
     protected $casts = [
-        'gender'=>UserGender::class,
+        'gender' => UserGender::class,
         'religion' => user_religion::class,
-        'student_status'=>Student_Status::class
+        'student_status' => Student_Status::class,
 
     ];
-
 
     public function user()
     {
@@ -49,17 +51,20 @@ class Student extends Model
     {
         return $this->belongsTo('App\Models\My_parents');
     }
-    public function fees(){
+
+    public function fees()
+    {
         return $this->hasMany('App\Models\StudentAccount');
     }
+
     public function StudentAccount()
     {
         return $this->hasMany('App\Models\StudentAccount');
     }
+
     public function scopeSearch($query, $Search)
     {
 
         return $query->where('name', 'LIKE', '%'.$Search.'%');
     }
-
 }

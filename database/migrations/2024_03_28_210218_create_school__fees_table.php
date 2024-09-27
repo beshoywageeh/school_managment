@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('school__fees', function (Blueprint $table) {
             $table->id();
-            $table->string('title',100)->required();
+            $table->string('title', 100)->required();
             $table->bigInteger('grade_id')->unsigned()->nullable();
             $table->bigInteger('classroom_id')->unsigned()->nullable();
             $table->bigInteger('user_id')->unsigned()->nullable();

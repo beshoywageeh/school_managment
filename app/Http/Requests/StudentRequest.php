@@ -23,16 +23,18 @@ class StudentRequest extends FormRequest
     {
         return [
             'student_name' => ['required', 'string', 'max:255'],
-            'birth_date'=>['required','date'],
-            'join_date'=>['required','date'],
-            'address'=>['required','string','max:100'],
-            'grade'=>['required'],
-            'class_room'=>['required'],
-            'parents'=>['required'],
-            'national_id'=>'required|string|min:14|max:14|regex:/[0-9]{9}/',
+            'birth_date' => ['required', 'date'],
+            'join_date' => ['required', 'date'],
+            'address' => ['required', 'string', 'max:100'],
+            'grade' => ['required'],
+            'class_room' => ['required'],
+            'parents' => ['required'],
+            'national_id' => 'required|string|min:14|max:14|regex:/[0-9]{9}/',
         ];
     }
-    public function messages(){
+
+    public function messages()
+    {
         return [
             'student_name.required' => trans('validation.required'),
             'grade.required' => trans('validation.required'),

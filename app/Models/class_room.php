@@ -30,5 +30,4 @@ class class_room extends Model
     {
         return $this->hasMany('App\Models\Student', 'classroom_id');
     }
-
 }

@@ -36,7 +36,7 @@ class ImportStudentsJob implements ShouldQueue
         try {
             DB::table('students')->insert($this->students);
         } catch (\Exception $e) {
-            Log::error('Error inserting students: ' . $e->getMessage());
+            Log::error('Error inserting students: '.$e->getMessage());
         }
     }
 }

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Recipt_Payment;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class RecipetPaymentSeeder extends Seeder

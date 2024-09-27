@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserTableSeeder extends Seeder
 {
@@ -18,9 +18,9 @@ class UserTableSeeder extends Seeder
         $user = User::create([
             'name' => 'Admin',
             'password' => bcrypt('hypervision2020'),
-            'code' =>'000001',
+            'code' => '000001',
             'phone' => '01201026745',
-            'address' =>'fafa',
+            'address' => 'fafa',
             'date_of_birth' => now()->format('Y-m-d'),
             'date_of_hiring' => now()->format('Y-m-d'),
             'learning' => 'Bachelor',
@@ -31,7 +31,8 @@ class UserTableSeeder extends Seeder
             'isAdmin' => '1',
             'login_allow' => '1']);
         $role = Role::create(['name' => 'Admin']);
-        $permissions = Permission::pluck('id','id')->all();$role->syncPermissions($permissions);
+        $permissions = Permission::pluck('id', 'id')->all();
+        $role->syncPermissions($permissions);
         $user->assignRole([$role->id]);
     }
 }

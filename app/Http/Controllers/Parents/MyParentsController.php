@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Parents;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ParentsRequest;
 use App\Imports\ParentsImport;
-use App\Imports\StudentImport;
 use App\Models\My_parents;
 use Illuminate\Http\Request;
 use yajra\DataTables\DataTables;
+
 class MyParentsController extends Controller
 {
     public function index()
@@ -16,23 +16,28 @@ class MyParentsController extends Controller
         //$parents = My_parents::with('students')->get();
         return view('backend.Parents.index', get_defined_vars());
     }
+
     public function data()
     {
-        $parents = My_parents::withCount('students')->get(['id','Father_Name','Father_Phone','Mother_Name','Mother_Phone','Address']);
+        $parents = My_parents::withCount('students')->get(['id', 'Father_Name', 'Father_Phone', 'Mother_Name', 'Mother_Phone', 'Address']);
+
         return Datatables::of($parents)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
-                return view('components.parent_table_action', compact('row'));})
-                ->addColumn('childrens', function ($row) {
-                    return $row->students_count;
-                })
-            ->rawColumns(['action','childrens'])
+                return view('components.parent_table_action', compact('row'));
+            })
+            ->addColumn('childrens', function ($row) {
+                return $row->students_count;
+            })
+            ->rawColumns(['action', 'childrens'])
             ->make(true);
     }
+
     public function create()
     {
         return view('backend.Parents.create');
     }
+
     public function store(ParentsRequest $request)
     {
         try {
@@ -61,11 +66,14 @@ class MyParentsController extends Controller
             return redirect()->back()->withInput();
         }
     }
+
     public function show(string $id)
     {
-        $parent = My_parents::where('id',$id)->with(['students'])->first();
-        return view('backend.Parents.show',get_defined_vars());
+        $parent = My_parents::where('id', $id)->with(['students'])->first();
+
+        return view('backend.Parents.show', get_defined_vars());
     }
+
     public function edit($id)
     {
         $parent = My_parents::findorfail($id);
@@ -73,10 +81,11 @@ class MyParentsController extends Controller
         //return $parent;
         return view('backend.parents.edit', get_defined_vars());
     }
+
     public function update(ParentsRequest $request)
     {
         try {
-			My_parents::find($request->id)->update([
+            My_parents::find($request->id)->update([
                 'Father_Name' => $request->Father_Name,
                 'Father_Phone' => $request->Father_Phone,
                 'Father_Job' => $request->Father_Job,
@@ -101,30 +110,36 @@ class MyParentsController extends Controller
             return redirect()->back()->withInput();
         }
     }
-    public function destroy(string $id,Request $request)
+
+    public function destroy(string $id, Request $request)
     {
-        try{
-            $d =My_parents::withCount('Students')->findorfail($id);
-            if($d->Students_count == 0){
+        try {
+            $d = My_parents::withCount('Students')->findorfail($id);
+            if ($d->Students_count == 0) {
 
                 $d->delete();
                 session()->flash('success', trans('general.deleted'));
+
                 return redirect()->route('parents.index');
             }
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->route('parents.index');
         }
     }
+
     public function Excel_Import(Request $request)
     {
         try {
             $path = $request->file('excel')->getRealPath();
-            \Excel::import(new ParentsImport(), $path);
+            \Excel::import(new ParentsImport, $path);
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('parents.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }

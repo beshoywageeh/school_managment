@@ -18,7 +18,8 @@ class fee_invoiceController extends Controller
      */
     public function index()
     {
-        $fee_invoices = Fee_invoice::with(['students:id,name', 'grades:id,name', 'classes:id,name','acd_year'])->withSum('fees','amount')->get();
+        $fee_invoices = Fee_invoice::with(['students:id,name', 'grades:id,name', 'classes:id,name', 'acd_year'])->withSum('fees', 'amount')->get();
+
         return view('backend.fee_invoices.index', compact('fee_invoices'));
     }
 
@@ -30,7 +31,8 @@ class fee_invoiceController extends Controller
         $student = Student::findorfail($student_id);
 
         $School_Fees = School_Fee::where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get(['id', 'title', 'amount']);
-       // return $School_Fees;
+
+        // return $School_Fees;
         return view('backend.fee_invoices.create', get_defined_vars());
     }
 
@@ -39,12 +41,12 @@ class fee_invoiceController extends Controller
      */
     public function store(Request $request)
     {
-        $List_Fees=$request->list_fees;
+        $List_Fees = $request->list_fees;
         \DB::beginTransaction();
         try {
             $ac_year = acadmice_year::where('status', '0')->first();
             foreach ($List_Fees as $list_fee) {
-                $fee = new Fee_invoice();
+                $fee = new Fee_invoice;
                 $fee->invoice_date = date('Y-m-d');
                 $fee->student_id = $list_fee['student_id'];
                 $fee->grade_id = $request->grade_id;
@@ -52,12 +54,12 @@ class fee_invoiceController extends Controller
                 $fee->school_fee_id = $list_fee['fee'];
                 $fee->academic_year_id = $ac_year->id;
                 $fee->save();
-                $std = new StudentAccount();
+                $std = new StudentAccount;
                 $std->student_id = $list_fee['student_id'];
                 $std->grade_id = $request->grade_id;
-                $std->date=$fee->invoice_date;
+                $std->date = $fee->invoice_date;
                 $std->type = '1';
-                $std->fee_invoices_id=$fee->id;
+                $std->fee_invoices_id = $fee->id;
                 $std->classroom_id = $request->classroom_id;
                 $std->academic_year_id = $ac_year->id;
                 $std->debit = School_Fee::where('id', $list_fee['fee'])->first()->amount;
@@ -65,9 +67,11 @@ class fee_invoiceController extends Controller
                 $std->save();
             }
             \DB::commit();
+
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));
         } catch (Exception $e) {
             \DB::rollback();
+
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
@@ -75,19 +79,17 @@ class fee_invoiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        $fee = Fee_invoice::where('id',$id)->with('students','fees')->first();
-        $sfees=School_Fee::where('grade_id',$fee->grade_id)->where('classroom_id',$fee->classroom_id)->get();
-        return view('backend.fee_invoices.edit',get_defined_vars());
+        $fee = Fee_invoice::where('id', $id)->with('students', 'fees')->first();
+        $sfees = School_Fee::where('grade_id', $fee->grade_id)->where('classroom_id', $fee->classroom_id)->get();
+
+        return view('backend.fee_invoices.edit', get_defined_vars());
     }
 
     /**
@@ -116,19 +118,20 @@ class fee_invoiceController extends Controller
             $std->grade_id = $request->grade_id;
             $std->fee_invoices_id = $fee->id;
             $std->classroom_id = $request->classroom_id;
-            $std->academic_year_id =  $ac_year->idd;
+            $std->academic_year_id = $ac_year->idd;
             $std->debit = School_Fee::where('id', $request->fee)->first()->amount;
             $std->credit = 0.00;
             $std->save();
 
             DB::commit();
+
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));
         } catch (Exception $e) {
             DB::rollback();
+
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -136,7 +139,8 @@ class fee_invoiceController extends Controller
     public function destroy(string $id)
     {
         try {
-           Fee_invoice::destroy($id);
+            Fee_invoice::destroy($id);
+
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

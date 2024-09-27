@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\ImageTrait;
 use App\Models\settings;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Traits\ImageTrait;
+
 class SetupController extends Controller
 {
     use ImageTrait;
+
     public function showSetupForm()
     {
         return view('setup');
@@ -35,17 +36,17 @@ class SetupController extends Controller
             ]);
 
             // تنفيذ الأوامر مثل migration
-            Artisan::call('migrate',['--force'=>true]);
-            $slug=\Str::slug($request->schoolname);
-            $school = new settings();
+            Artisan::call('migrate', ['--force' => true]);
+            $slug = \Str::slug($request->schoolname);
+            $school = new settings;
             $school->name = $request->schoolname;
             $school->phone = $request->phone;
             $school->address = $request->address;
-            $school->slug=$slug;
+            $school->slug = $slug;
             $school->save();
             $this->verifyAndStoreImage($request, 'logo', $slug, 'upload_attachments', $school->id, 'App\Models\settings', $request->schoolname);
             $lastemp = User::latest()->first();
-            $user = new User();
+            $user = new User;
             $user->code = $lastemp ? str_pad($lastemp->code + 1, 5, '0', STR_PAD_LEFT) : '00001';
             $user->name = $request->name;
             $user->email = $request->email;
@@ -54,6 +55,7 @@ class SetupController extends Controller
             $user->password = bcrypt($request->password);
             $user->save();
             \DB::commit();
+
             return redirect()->route('dashboard')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             \DB::rollBack();

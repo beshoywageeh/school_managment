@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Students;
 
+use App\DataTables\StudentDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
 use App\Imports\StudentImport;
-use App\Models\{class_room, Grade, My_parents, Student};
+use App\Models\class_room;
+use App\Models\Grade;
+use App\Models\My_parents;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use PDF;
-use App\DataTables\StudentDataTable;
 use Spatie\Browsershot\Browsershot;
 
 class StudentsController extends Controller
@@ -16,7 +19,7 @@ class StudentsController extends Controller
     public function index(StudentDataTable $datatable)
     {
         return $datatable->render('backend.Students.Index');
-       // return view('backend.Students.Index');
+        // return view('backend.Students.Index');
     }
 
     /**
@@ -46,7 +49,7 @@ class StudentsController extends Controller
             $days = $inputDate->diffInDays($firstOfOctober->copy()->subYears($years)->subMonths($months));
             $final_date = "{$years}-{$months}-{$days}";
             Student::create([
-                'code'=>isset($generate_code) ? str_pad($generate_code->code + 1, 6, '0', STR_PAD_LEFT) : '000001',
+                'code' => isset($generate_code) ? str_pad($generate_code->code + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'name' => $request->student_name,
                 'birth_date' => $request->birth_date,
                 'join_date' => $request->join_date,
@@ -62,9 +65,11 @@ class StudentsController extends Controller
                 'user_id' => \Auth::Id(),
             ]);
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -75,10 +80,14 @@ class StudentsController extends Controller
     public function show(string $id)
     {
         try {
-            $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone', 'StudentAccount'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();            return $student;
+            $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone', 'StudentAccount'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();
+
+            return $student;
+
             return view('backend.Students.show', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -92,9 +101,11 @@ class StudentsController extends Controller
             $grades = Grade::all(['id', 'name']);
             $parents = My_parents::all(['id', 'Father_Name']);
             $student = Student::findorfail($id);
+
             return view('backend.Students.edit', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -122,9 +133,11 @@ class StudentsController extends Controller
                 'user_id' => \Auth::Id(),
             ]);
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -137,37 +150,39 @@ class StudentsController extends Controller
         try {
             $student = Student::findorfail($id);
             $student->delete();
+
             return redirect()->back()->with('success', trans('general.success'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
 
-
     public function getclasses($id)
     {
         $class_rooms = class_room::where('grade_id', $id)->get(['id', 'name']);
+
         return response()->json($class_rooms);
     }
 
     public function pdf($id)
     {
         $data['students'] = Grade::with(['students'])->withcount('students')->get();
-      /*  $pdf = PDF::loadView('backend.Students.pdf', ['data' => $data], [], [
-            'format' => 'A4',
-            'margin_left' => 6,
-            'margin_right' => 6,
-            'margin_top' => 6,
-            'margin_bottom' => 6,
-            'margin_header' => 0,
-            'margin_footer' => 0,
-            'orientation' => 'L',
-        ]);*/
+        /*  $pdf = PDF::loadView('backend.Students.pdf', ['data' => $data], [], [
+              'format' => 'A4',
+              'margin_left' => 6,
+              'margin_right' => 6,
+              'margin_top' => 6,
+              'margin_bottom' => 6,
+              'margin_header' => 0,
+              'margin_footer' => 0,
+              'orientation' => 'L',
+          ]);*/
         // $pdf = PDF::loadView('backend.Students.pdf', ['students'=>$students]);
-    //    return $pdf->stream(trans('student.info') . '.pdf');
-$template=view('backend.Students.pdf', ['data' => $data]);
-Browsershot::html($template)->setPaper('a4', 'landscape')->download(trans('student.info') . '.pdf');
+        //    return $pdf->stream(trans('student.info') . '.pdf');
+        $template = view('backend.Students.pdf', ['data' => $data]);
+        Browsershot::html($template)->setPaper('a4', 'landscape')->download(trans('student.info').'.pdf');
     }
 
     public function Excel_Import(Request $request)
@@ -176,9 +191,11 @@ Browsershot::html($template)->setPaper('a4', 'landscape')->download(trans('stude
             $path = $request->file('excel')->getRealPath();
             \Excel::import(new StudentImport, $path);
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }

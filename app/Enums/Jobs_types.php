@@ -22,10 +22,10 @@ enum Jobs_types: int
     public static function fromString(string $std_status): ?self
     {
         return match (strtolower($std_status)) {
-            'TEACHER' => Self::TEACHER,
-            'WORKER' => Self::WORKER,
-            'ACCOUNTANT' => Self::ACCOUNTANT,
-            'MANEGMENT' => Self::MANEGMENT,
+            'TEACHER' => self::TEACHER,
+            'WORKER' => self::WORKER,
+            'ACCOUNTANT' => self::ACCOUNTANT,
+            'MANEGMENT' => self::MANEGMENT,
         };
     }
 }

@@ -21,7 +21,7 @@ class promotionFactory extends Factory
             'from_class' => $this->faker->numberBetween(1, 6),
             'to_grade' => $this->faker->numberBetween(3, 4),
             'to_class' => $this->faker->numberBetween(1, 6),
-            'student_id'=>$this->faker->numberBetween(1, 300),
+            'student_id' => $this->faker->numberBetween(1, 300),
         ];
     }
 }

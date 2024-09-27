@@ -22,6 +22,7 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         $roles = Role::orderBy('id', 'DESC')->get();
+
         //return $roles;
         return view('backend.roles.index', compact('roles'));
     }
@@ -30,6 +31,7 @@ class RoleController extends Controller
     public function create()
     {
         $permissions = Permission::get()->groupBy('table');
+
         //return $permission;
         return view('backend.roles.create', compact('permissions'));
     }
@@ -71,19 +73,19 @@ class RoleController extends Controller
     /*** Update the specified resource in storage.** @param  \Illuminate\Http\Request  $request* @param  int  $id* @return \Illuminate\Http\Response*/
     public function update(Request $request)
     {
-        try{
+        try {
             $this->validate($request, ['name' => 'required', 'permission' => 'required']);
             $role = Role::find($request->id);
             $role->name = $request->input('name');
             $role->save();
             $role->syncPermissions($request->input('permission'));
-    
+
             return redirect()->route('roles.index')->with('success', trans('General.success'));
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
 
         }
-       
+
     }
 
     /*** Remove the specified resource from storage.** @param  int  $id* @return \Illuminate\Http\Response*/

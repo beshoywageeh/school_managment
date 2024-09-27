@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Factories;
-use App\Models\settings;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,7 +24,7 @@ class UserFactory extends Factory
             'date_of_birth' => $this->faker->optional()->date(),
             'date_of_hiring' => $this->faker->optional()->date(),
             'learning' => $this->faker->optional()->randomElement(['High School', 'Bachelor', 'Master']),
-            'reiligon' => $this->faker->numberBetween(0,1),
+            'reiligon' => $this->faker->numberBetween(0, 1),
             'type' => $this->faker->numberBetween(1, 4),
             'email_verified_at' => $this->faker->optional()->dateTime(),
             'email' => 'a@a.com',

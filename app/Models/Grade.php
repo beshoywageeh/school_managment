@@ -20,6 +20,7 @@ class Grade extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+
     public function users()
     {
         return $this->belongsToMany('App\Models\User', 'teacher_grade', 'grade_id', 'teacher_id');

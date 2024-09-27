@@ -4,22 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Enums\{user_religion, UserGender, Jobs_types};
-
+use App\Enums\user_religion;
+use App\Enums\UserGender;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\SoftDeletes;
-
-
 use Spatie\Permission\Traits\HasRoles;
-use Spatie\Permission\Models\Role;
-
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes,HasRoles;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable,SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -45,7 +41,7 @@ class User extends Authenticatable
         'insurance',
         'insurance_date',
         'national_id',
-        'grade_year'
+        'grade_year',
     ];
 
     /**
@@ -66,7 +62,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'gender'=>UserGender::class,
+        'gender' => UserGender::class,
         'religion' => user_religion::class,
 
     ];
@@ -75,13 +71,17 @@ class User extends Authenticatable
     {
         return $this->morphMany('App\Models\Image', 'imageable');
     }
-    public function settings(){
-        return $this->belongsToMany('App\Models\settings','setting_user','id','setting_id');
+
+    public function settings()
+    {
+        return $this->belongsToMany('App\Models\settings', 'setting_user', 'id', 'setting_id');
     }
+
     public function job()
     {
         return $this->belongsTo('App\Models\Job');
     }
+
     public function grades()
     {
         return $this->belongsToMany('App\Models\Grade', 'teacher_grade', 'teacher_id', 'grade_id');

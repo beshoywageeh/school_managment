@@ -20,9 +20,9 @@ class settingsFactory extends Factory
             'name' => $this->faker->company(),
             'phone' => $this->faker->phoneNumber(),
             'address' => $this->faker->address(),
-            'slug'=> $this->faker->slug(),
-            'heading_right'=> $this->faker->word(),
-            'heading_left'=>$this->faker->word()
+            'slug' => $this->faker->slug(),
+            'heading_right' => $this->faker->word(),
+            'heading_left' => $this->faker->word(),
         ];
     }
 }

@@ -21,9 +21,9 @@ return new class extends Migration
             $table->unsignedBigInteger('excpetion_id')->nullable();
             $table->unsignedBigInteger('academic_year_id');
             $table->date('date');
-            $table-> tinyInteger('type')->comment('Invoice => 1 , Payment => 2 , Expcition => 3');
-            $table->decimal('debit',10,2);
-            $table->decimal('credit',10,2);
+            $table->tinyInteger('type')->comment('Invoice => 1 , Payment => 2 , Expcition => 3');
+            $table->decimal('debit', 10, 2);
+            $table->decimal('credit', 10, 2);
             $table->timestamps();
             $table->softDeletes();
         });

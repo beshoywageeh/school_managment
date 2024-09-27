@@ -8,14 +8,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 class acadmice_year extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $casts = ['status' => Status::class];
+
     protected $fillable = ['year_start', 'status', 'year_end', 'created_by', 'updated_by'];
+
     protected static $logAttributes = ['year_end', 'status'];
+
     protected static $logOnlyDirty = true;
 
     public function creator()
@@ -33,8 +35,10 @@ class acadmice_year extends Model
         if ($this->year) {
             $year_start = Carbon::parse($this->year->year_start)->format('Y');
             $year_end = Carbon::parse($this->year->year_end)->format('Y');
-            return $year_start . '-' . $year_end;
+
+            return $year_start.'-'.$year_end;
         }
-        return "-";
+
+        return '-';
     }
 }

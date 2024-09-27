@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Grade;
 use App\Models\promotion;
 use App\Models\Student;
+use Illuminate\Http\Request;
 
 class promotionController extends Controller
 {
@@ -15,6 +15,7 @@ class promotionController extends Controller
     public function index()
     {
         $promotions = promotion::with('students', 'f_grade', 'f_class', 't_grade', 't_class')->get();
+
         //return $promotions;
         return view('backend.promotion.Index', compact('promotions'));
     }
@@ -25,6 +26,7 @@ class promotionController extends Controller
     public function create()
     {
         $grades = Grade::all();
+
         return view('backend.promotion.create', compact('grades'));
     }
 
@@ -42,7 +44,7 @@ class promotionController extends Controller
             }
             $Students->toQuery()->update([
                 'classroom_id' => $request->new_class,
-                'grade_id' => $request->new_grade
+                'grade_id' => $request->new_grade,
             ]);
             foreach ($Students as $student) {
                 promotion::updateOrCreate([
@@ -50,13 +52,15 @@ class promotionController extends Controller
                     'from_grade' => $request->old_grade,
                     'from_class' => $request->old_class,
                     'to_grade' => $request->new_grade,
-                    'to_class' => $request->new_class
+                    'to_class' => $request->new_class,
                 ]);
             }
             \DB::commit();
+
             return redirect()->route('promotion.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             \DB::rollBack();
+
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
@@ -97,13 +101,15 @@ class promotionController extends Controller
             Student::where('id', $promotions->student_id)
                 ->update([
                     'classroom_id' => $promotions->from_class,
-                    'grade_id' => $promotions->from_grade
+                    'grade_id' => $promotions->from_grade,
                 ]);
             $promotions->delete();
             \DB::commit();
+
             return redirect()->route('promotion.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             \DB::rollBack();
+
             return redirect()->back()->with('error', $e->getMessage());
         }
     }

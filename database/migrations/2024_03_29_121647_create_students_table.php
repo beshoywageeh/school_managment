@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('national_id')->nullable();
             $table->tinyInteger('gender')->nullable();
             $table->tinyInteger('student_status')->nullable();
-            $table->string('birth_at_begin',50)->nullable();
+            $table->string('birth_at_begin', 50)->nullable();
             $table->tinyInteger('religion');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('grade_id');

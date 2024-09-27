@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
@@ -15,6 +14,7 @@ class JobController extends Controller
     {
         $jobs = Job::with('jobs')->get();
         $jobs_main = Job::where('is_main', 1)->get();
+
         return view('backend.Job.index', get_defined_vars());
     }
 
@@ -30,9 +30,11 @@ class JobController extends Controller
                 'created_by' => \Auth::id(),
             ]);
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('jobs.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -43,16 +45,15 @@ class JobController extends Controller
     public function show($id)
     {
         $jobs = Job::where('main_job_id', $id)->get();
+
         return response()->json($jobs);
     }
 
-    public function edit($id)
-    {
-    }
+    public function edit($id) {}
 
     public function update(Request $request)
     {
-//   return $request;
+        //   return $request;
 
         try {
             $Job = Job::findOrFail($request->id);
@@ -63,10 +64,12 @@ class JobController extends Controller
             ]);
 
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('jobs.index');
         } catch (\Exception $e) {
 
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -81,9 +84,11 @@ class JobController extends Controller
             $Job = Job::findorFail($id);
             $this->syslog('', 'Job', \Auth::id(), [$Job], $request->ip());
             $Job->delete();
+
             return redirect()->back();
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
