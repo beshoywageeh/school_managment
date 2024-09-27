@@ -78,6 +78,7 @@ Route::group(
                 Route::get('/{id}/show', 'show')->name('parent.show');
                 Route::post('/store', 'store')->name('parents.store');
                 Route::post('/update', 'update')->name('parents.update');
+                Route::get('/datatable', 'data')->name('parents.datatable');
                 Route::post('/Import_Excel','Excel_Import')->name('parents.import_excel');
             });
             Route::group(['prefix' => 'students', 'controller' => StudentsController::class], function () {
@@ -177,8 +178,8 @@ Route::group(
             Route::group(['prefix'=>'reports','controller'=>ReportController::class],function (){
                 Route::get('report','index')->name('report.index');
                 Route::get('Students_export','ExportStudents')->name('reports.export_student');
-                Route::post('/export','export_submit')->name('export.submit');
-                Route::post('/daily','Daily_fee')->name('daily_fee');
+                Route::post('/daily','daily_paymnet')->name('report.daily_fee');
+                Route::post('/exception_fee','exception_fee')->name('report.exception_fee');
             });
 
             Route::group(['prefix' => 'ajax'], function () {

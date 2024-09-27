@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\StudentsExport;
 use App\Models\Grade;
-use App\Models\Student;
+use App\Models\Recipt_Payment;
+use App\Models\acadmice_year;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpWord\PhpWord;
@@ -13,46 +14,24 @@ class ReportController extends Controller
 {
     public function index()
     {
-        return view('backend.report.index');
+        $acadmeic_years=acadmice_year::where('status',0)->get();
+        return view('backend.report.index',get_defined_vars());
     }
     public function ExportStudents(){
         $students = Grade::with(['students'])->withcount('students')->get();
-
-
-        // Excel::download(new StudentsExport($student),'students.xlsx')
         return view('backend.report.students',get_defined_vars());
     }
-    public function export_submit(Request $request)
-    {
-        $format = $request->input('format');
-        $students = Grade::with(['students'])->withcount('students')->get();
-        switch ($format) {
-            case 'excel':
-                return Excel::download(new StudentsExport($students), 'users.xlsx');
-
-            case 'pdf':
-                return redirect()->route('Students.pdf', 'test');
-
-            case 'word':
-                $phpWord = new PhpWord();
-                $section = $phpWord->addSection();
-
-
-                foreach ($students as $student) {
-                    $section->addText($student->name);
-                    foreach ($student->students as $std){
-                        $section->addText($std->name);
-                    }
-                }
-
-                $fileName = 'users.docx';
-                $objWriter = IOFactory::createWriter($phpWord, 'Word2007');
-                $objWriter->save($fileName);
-
-                return response()->download($fileName)->deleteFileAfterSend(true);
-
-            default:
-                return redirect()->back()->with('error', 'Invalid format selected');
-        }
+    public function daily_paymnet(Request $request){
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date',
+        ]);
+        $start_date = $request->input('start_date');
+        $end_date = $request->input('end_date');
+        $data=Recipt_Payment::whereBetween('date', [$start_date, $end_date])->with(['student'])->get();
+        $date=[];
+        $date['from']=$start_date;
+        $date['to']=$end_date;
+return view('backend.report.daily_fee_view',get_defined_vars());
     }
 }

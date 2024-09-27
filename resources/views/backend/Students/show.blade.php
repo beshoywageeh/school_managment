@@ -19,7 +19,7 @@
             @include('backend.msg')
             <div id="print">
                 <div class="mb-4 table-responsive">
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered table-sm">
                         <tr>
                             <th>{{ trans('parents.Father_Name') }}</th>
                             <td>{{ $student->parent->Father_Name }}</td>
@@ -36,7 +36,7 @@
                 </div>
                 <hr>
                 <div class="mt-4 table-responsive">
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered table-sm">
                         <tr>
                             <th>{{trans('student.name')}}</th>
                             <th>{{trans('student.birth_date')}}</th>
@@ -53,7 +53,7 @@
                 </div>
                 <hr>
                 <div class="mt-4 table-responsive">
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered table-sm">
                         <thead class="alert-success">
                         <tr>
                             <th>{{trans('payment.date')}}</th>
@@ -77,8 +77,7 @@
                         <tfoot class="alert-info">
                         <tr>
                             <th colspan="2">{{trans('payment.total')}}</th>
-                            <th>{{Number::currency($student->student_account_sum_debit, in: 'EGP', locale: 'ar')}}</th>
-                            <th>{{Number::currency($student->student_account_sum_credit, in: 'EGP', locale: 'ar')}}</th>
+
                         </tr>
                         </tfoot>
                     </table>

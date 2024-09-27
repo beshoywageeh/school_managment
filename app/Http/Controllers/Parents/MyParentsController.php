@@ -8,12 +8,26 @@ use App\Imports\ParentsImport;
 use App\Imports\StudentImport;
 use App\Models\My_parents;
 use Illuminate\Http\Request;
+use yajra\DataTables\DataTables;
 class MyParentsController extends Controller
 {
     public function index()
     {
-        $parents = My_parents::with('students')->get();
+        //$parents = My_parents::with('students')->get();
         return view('backend.Parents.index', get_defined_vars());
+    }
+    public function data()
+    {
+        $parents = My_parents::withCount('students')->get(['id','Father_Name','Father_Phone','Mother_Name','Mother_Phone','Address']);
+        return Datatables::of($parents)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                return view('components.parent_table_action', compact('row'));})
+                ->addColumn('childrens', function ($row) {
+                    return $row->students_count;
+                })
+            ->rawColumns(['action','childrens'])
+            ->make(true);
     }
     public function create()
     {

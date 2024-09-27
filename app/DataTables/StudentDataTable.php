@@ -20,6 +20,7 @@ class StudentDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addIndexColumn()
             ->setRowId('id')
             ->addColumn('action', 'components.student_-table_-action');
     }
@@ -29,7 +30,7 @@ class StudentDataTable extends DataTable
      */
     public function query(Student $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->with('parent:id,father_name', 'classroom:id,name', 'grade:id,name');
     }
 
     /**
@@ -41,15 +42,24 @@ class StudentDataTable extends DataTable
             ->setTableId('student-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('Bfrtlip')
+            ->dom('Blfrtip')
             ->orderBy(1)
+            ->parameters([
+                'language' => [
+                    'url' => asset('assests/ar.json'),
+                ],
+            ])
             ->buttons([
-                Button::make('excel')->title('Download Excel')->text('Download Excel'),
-                Button::make('csv'),
-                Button::make('pdf'),
-                Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload')
+                Button::make('excel')->title('Download Excel')->text(trans('General.Export_Excel')),
+                Button::make('csv'), Button::make('print'),
+                 Button::make('reset'),
+                Button::make('reload')->text('<i class="fa fa-refresh"></i>'),
+                Button::raw(
+                    " <button type='button' class='btn btn-primary' data-target='#Import_Excel' data-toggle='modal'><i class='ti-upload'></i>"
+                    . trans('general.Import_Excel') . '</button>'
+                )
+
+
             ]);
     }
 
@@ -59,11 +69,17 @@ class StudentDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id'),
-            Column::make('name'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('id', 'id')->title('#')->orderable(false),
+            Column::make('name')->title(trans('student.name')),
+            Column::make('grade.name')->title(trans('student.grade')),
+            Column::make('classroom.name')->title(trans('student.class')),
+            Column::make('parent.father_name')->title(trans('Parents.Father_Name')),
+            Column::make('birth_date')->title(trans('student.birth_date')),
+            Column::make('join_date')->title(trans('student.join_date')),
+            Column::make('address')->title(trans('student.address')),
+            Column::make('national_id')->title(trans('student.national_id')),
             Column::computed('action')
+                ->title(trans('General.actions'))
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)

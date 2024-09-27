@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Enums\{UserGender, user_religion,Student_Status};
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
+
 class Student extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -62,28 +61,5 @@ class Student extends Model
 
         return $query->where('name', 'LIKE', '%'.$Search.'%');
     }
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['name'])->logOnlyDirty();
-        // Chain fluent methods for configuration options
-    }
-    public function getDescriptionForEvent(string $eventName): string
-    {
-        $changes = $this->getChanges();
-        $old_name = $this->getOriginal('name');
-        $new_name = $changes['name'] ?? null;
 
-        if ($eventName == 'created') {
-            return trans('system_lookup.field_create', ['value' => $this->name]);
-        } elseif ($eventName == 'updated') {
-            return trans('system_lookup.field_change', [
-                'value' => $this->id,
-                'old_value' => $old_name,
-                'new_value' => $new_name,
-            ]);
-        } else {
-            return trans('system_lookup.field_delete', ['value' => $this->name]);
-        }
-    }
 }

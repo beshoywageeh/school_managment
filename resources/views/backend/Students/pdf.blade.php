@@ -79,6 +79,7 @@
                 @endif
                 <th>{!!$school->heading_right!!}</th>
             </tr>
+
         </table>
 </page-header>
     <table class="grade_data">

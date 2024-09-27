@@ -8,7 +8,7 @@
     <link rel="icon"
           href="{{ asset('assests/images/logo-icon-dark.png') }}"
           type="image/png" />
-    <title>School Stepup &nbsp; {{trans('auth.login')}}</title>
+    <title>{{env('APP_NAME')}} &nbsp; {{trans('auth.login')}}</title>
     @include('layouts.header_css')
 </head>
 

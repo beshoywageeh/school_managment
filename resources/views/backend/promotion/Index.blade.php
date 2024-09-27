@@ -13,8 +13,7 @@
                         </div>
                         <div class="col text-md-right">
                             @can('promotion-create')
-                                <a href="{{ route('promotion.create') }}"
-                                   class="btn btn-success">
+                                <a href="{{ route('promotion.create') }}" class="btn btn-success">
                                     <i class="ti-plus"></i>
                                     {{ trans('general.new') }}
                                 </a>
@@ -23,48 +22,47 @@
                     </div>
                     <div class="table-responsive">
                         @can('promotion-list')
-                            <table class="table table-striped table-bordered"
-                                   id="datatable">
+                            <table class="table table-striped table-bordered table-sm" id="datatable">
                                 <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>{{ trans('promotions.student') }}</th>
-                                    <th>{{ trans('promotions.from_gradename') }}</th>
-                                    <th>{{ trans('promotions.from_classroom') }}</th>
-                                    <th>{{ trans('promotions.to_gradename') }}</th>
-                                    <th>{{ trans('promotions.to_classroom') }}</th>
-                                    <th>{{ trans('general.actions') }}</th>
-                                </tr>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>{{ trans('promotions.student') }}</th>
+                                        <th>{{ trans('promotions.from_gradename') }}</th>
+                                        <th>{{ trans('promotions.from_classroom') }}</th>
+                                        <th>{{ trans('promotions.to_gradename') }}</th>
+                                        <th>{{ trans('promotions.to_classroom') }}</th>
+                                        <th>{{trans('General.created_at')}}</th>
+                                        <th>{{ trans('general.actions') }}</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                @forelse ($promotions as $promotion)
-                                    <tr>
-                                        <td> {{ $loop->iteration }}</td>
-                                        <td>{{ $promotion->students->name }}</td>
-                                        <td>{{$promotion->f_grade->name}}</td>
-                                        <td> {{ $promotion->f_class->name }}</td>
-                                        <td>{{ $promotion->t_grade->name }}</td>
-                                        <td>{{ $promotion->t_class->name }}</td>
-                                        <td>
-                                            <x-dropdown-table :buttonText="trans('general.actions')"
-                                                              :items="[
-                                                [
-                                                    'url' => route('promotions.destroy', $promotion->id),
-                                                    'text' => trans('general.delete'),
-                                                    'icon' => 'ti-trash',
-                                                    'onclick' => 'confirmation(event)',
-                                                    'can'=>'promotion-delete'
-                                                ],
+                                    @forelse ($promotions as $promotion)
+                                        <tr>
+                                            <td> {{ $loop->iteration }}</td>
+                                            <td>{{ $promotion->students->name }}</td>
+                                            <td>{{ $promotion->f_grade->name }}</td>
+                                            <td> {{ $promotion->f_class->name }}</td>
+                                            <td>{{ $promotion->t_grade->name }}</td>
+                                            <td>{{ $promotion->t_class->name }}</td>
+                                            <td>{{$promotion->created_at->format('d-m-Y')}}</td>
+                                            <td>
+                                                <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                    [
+                                                        'url' => route('promotions.destroy', $promotion->id),
+                                                        'text' => trans('general.delete'),
+                                                        'icon' => 'ti-trash',
+                                                        'onclick' => 'confirmation(event)',
+                                                        'can' => 'promotion-delete',
+                                                    ],
+                                                ]" />
 
-                                            ]"/>
-
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="9">{{ trans('general.Msg') }}</td>
-                                    </tr>
-                                @endforelse
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="9">{{ trans('general.Msg') }}</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         @endcan
@@ -75,5 +73,8 @@
     </div>
 
     @push('scripts')
+    <script>
+
+    </script>
     @endpush
 @endsection

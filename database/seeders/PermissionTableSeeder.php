@@ -47,7 +47,7 @@ class PermissionTableSeeder extends Seeder
             ['table' => 'parents', 'name' => 'parents-edit'],
             ['table' => 'parents', 'name' => 'parents-info'],
             ['table' => 'parents', 'name' => 'parents-delete'],
-            ['table'=>'parents','name'=>'Parents-import_Excel'],
+            ['table' => 'parents','name'=>'Parents-import_Excel'],
             ['table' => 'Students', 'name' => 'Students-list'],
             ['table' => 'Students', 'name' => 'Students-create'],
             ['table' => 'Students', 'name' => 'Students-edit'],

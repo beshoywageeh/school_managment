@@ -30,7 +30,7 @@ class fee_invoiceController extends Controller
         $student = Student::findorfail($student_id);
 
         $School_Fees = School_Fee::where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get(['id', 'title', 'amount']);
-
+       // return $School_Fees;
         return view('backend.fee_invoices.create', get_defined_vars());
     }
 
@@ -40,8 +40,7 @@ class fee_invoiceController extends Controller
     public function store(Request $request)
     {
         $List_Fees=$request->list_fees;
-//return $request;
-        DB::beginTransaction();
+        \DB::beginTransaction();
         try {
             $ac_year = acadmice_year::where('status', '0')->first();
             foreach ($List_Fees as $list_fee) {
@@ -88,7 +87,6 @@ class fee_invoiceController extends Controller
     {
         $fee = Fee_invoice::where('id',$id)->with('students','fees')->first();
         $sfees=School_Fee::where('grade_id',$fee->grade_id)->where('classroom_id',$fee->classroom_id)->get();
-
         return view('backend.fee_invoices.edit',get_defined_vars());
     }
 

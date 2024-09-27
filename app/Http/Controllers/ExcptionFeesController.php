@@ -75,9 +75,15 @@ class ExcptionFeesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ExcptionFees $excptionFees)
+    public function show($id)
     {
-        //
+        try{
+            $excptionFees = ExcptionFees::where('student_id',$id)->with('students','academic_year','grade','classroom')->get();
+            return view('backend.fee_exception.show',get_defined_vars());
+        }catch(\Exception $e){
+            session()->flash('error',$e->getMessage());
+            return redirect()->back();
+        }
     }
 
     /**

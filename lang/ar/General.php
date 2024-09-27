@@ -43,5 +43,6 @@ return [
     'noInvoiceToPart'=>'لا يوجد فواتير دراسية للتقسيط',
     'noDataToShow'=>'لا يوجد بيانات للعرض',
     'full_pay'=>'دفع بالكامل',
-    'download_form'=>'تحميل ملف البيانات'
+    'download_form'=>'تحميل ملف البيانات',
+    'show'=>'عرض'
 ];

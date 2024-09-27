@@ -1,10 +1,10 @@
-@stack('scripts')
 
 <!-- jquery -->
 <script src="{{ asset('assests/js/jquery-3.3.1.min.js') }}"></script>
-<script src="{{ URL::asset('assests/js/bootstrap-datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ URL::asset('assests/js/bootstrap-datatables/buttons.bootstrap.js') }}"></script>
-<script src="{{ URL::asset('assests/js/bootstrap-datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ URL::asset('assests\js\datatable\datatables\jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL::asset('assests\js\datatable\datatable-extension\dataTables.buttons.min.js') }}"></script>
+<script src="{{ URL::asset('assests\js\bootstrap-datatables\dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ URL::asset('assests\js\datatable\datatable-extension\buttons.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
 <!-- plugins-jquery -->
 <script src="{{ asset('assests/js/plugins-jquery.js') }}"></script>
@@ -39,7 +39,7 @@
 <!-- lobilist -->
 <script src="{{ asset('assests/js/lobilist.js') }}"></script>
 <!-- custom -->
-<script src="{{ asset('assests/js/tomselect.js') }}"></script>
+<script src="{{ asset('assests/js/select2.full.min.js') }}"></script>
 
 <script src="{{ asset('assests/js/custom.js') }}"></script>
 
@@ -114,7 +114,9 @@
 <script>
 
 
-new TomSelect("#tom-select");
+$(document).ready(function() {
+    $('.select2').select2();
+});
 
 
 </script>
@@ -129,3 +131,18 @@ new TomSelect("#tom-select");
 setInterval(updateDateTime, 1000);
 updateDateTime();
 </script>
+<script>
+            $(document).ready(function() {
+        $('#datatable').DataTable({
+            language: {
+                    url: "{{ asset('assests/' . app()->getLocale() . '.json') }}"
+                },
+                responsive: true,
+                lengthMenu: [
+                    [20, 40, 50, -1],
+                    [20, 40, 50, "الكل"]
+                ]
+        })}
+    )
+</script>
+@stack('scripts')

@@ -10,7 +10,6 @@
         'url' => route('Students.show', $id),
         'text' => trans('general.info'),
         'icon' => 'ti-info-alt',
-        'target' => '_blank',
         'can'=>'Students-info'
     ],
     [

@@ -56,7 +56,7 @@
                         <div class="col">
                             <div class="table-responsive">
                                 @can('jobs-list')
-                                    <table class="table table-striped table-bordered">
+                                    <table class="table table-striped table-bordered table-sm">
                                         <thead>
                                         <tr>
                                             <th>#</th>
@@ -124,7 +124,7 @@
                             </div>
                             <table id="jobs_table"
                                    style="display: none"
-                                   class="table table-bordered">
+                                   class="table table-bordered table-sm">
                                 <thead>
                                 <tr>
                                     <th>#</th>

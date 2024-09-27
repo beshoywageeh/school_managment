@@ -5,39 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
+
 class ExcptionFees extends Model
 {
-    use HasFactory,SoftDeletes,LogsActivity;
-    protected $guarded=[];
-    protected static $logOnlyDirty = true;
+    use HasFactory, SoftDeletes;
+    protected $guarded = [];
+
     public function students()
     {
-        return $this->belongsTo('App\Models\Student','student_id');
+        return $this->belongsTo('App\Models\Student', 'student_id');
     }
-    public function getActivitylogOptions(): LogOptions
+    public function academic_year()
     {
-        return LogOptions::defaults()
-            ->logOnly(['student_id', 'amount'])->logOnlyDirty();
-        // Chain fluent methods for configuration options
+
+        return $this->belongsTo('App\Models\Acadmice_year', 'academic_year_id');
     }
-    public function getDescriptionForEvent(string $eventName): string
+
+    public function grade()
     {
-        $student = $this->student_id->students->name;
-        $changes = $this->getChanges();
-        $oldname = $this->getOriginal('student_id');
-        $newname = $changes['student_id'] ?? null;
-        if ($eventName == 'created') {
-            return trans('system_lookup.field_create', ['value' => $student . '-' . $this->amount]);
-        } elseif ($eventName == 'updated') {
-            return trans('system_lookup.field_change', [
-                'value' => $this->id,
-                'old_value' => $oldname->students->name . '-' . $this->amount,
-                'new_value' => $newname->students->name . '-' . $this->amount
-            ]);
-        } else {
-            return trans('system_lookup.field_delete', ['value' => $student . '-' . $this->amount]);
-        }
+
+        return $this->belongsTo('App\Models\Grade', 'grade_id');
+    }
+    public function classroom()
+    {
+
+        return $this->belongsTo('App\Models\class_room', 'class_id');
     }
 }

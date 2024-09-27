@@ -25,7 +25,7 @@
 
                    </div>
                     <div class="table-responsive">
-                        <table class="table table-striped table-bordered" id="datatable">
+                        <table class="table table-striped table-bordered table-sm" id="datatable">
                             <thead>
                                 <tr>
                                     <th>#</th>

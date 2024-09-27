@@ -9,6 +9,7 @@ use App\Models\{class_room, Grade, My_parents, Student};
 use Illuminate\Http\Request;
 use PDF;
 use App\DataTables\StudentDataTable;
+use Spatie\Browsershot\Browsershot;
 
 class StudentsController extends Controller
 {
@@ -39,12 +40,13 @@ class StudentsController extends Controller
 
             $inputDate = \Carbon\Carbon::parse($request->birth_date);
             $firstOfOctober = \Carbon\Carbon::create(date('Y'), 10, 1);
-
+            $generate_code = Student::orderBy('code', 'desc')->first();
             $years = $inputDate->diffInYears($firstOfOctober);
             $months = $inputDate->diffInMonths($firstOfOctober) % 12;
             $days = $inputDate->diffInDays($firstOfOctober->copy()->subYears($years)->subMonths($months));
             $final_date = "{$years}-{$months}-{$days}";
             Student::create([
+                'code'=>isset($generate_code) ? str_pad($generate_code->code + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'name' => $request->student_name,
                 'birth_date' => $request->birth_date,
                 'join_date' => $request->join_date,
@@ -73,8 +75,7 @@ class StudentsController extends Controller
     public function show(string $id)
     {
         try {
-            $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone', 'StudentAccount'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();
-            // return $student;
+            $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone', 'StudentAccount'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();            return $student;
             return view('backend.Students.show', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -153,10 +154,7 @@ class StudentsController extends Controller
     public function pdf($id)
     {
         $data['students'] = Grade::with(['students'])->withcount('students')->get();
-
-
-        //  return $data['students'];
-        $pdf = PDF::loadView('backend.Students.pdf', ['data' => $data], [], [
+      /*  $pdf = PDF::loadView('backend.Students.pdf', ['data' => $data], [], [
             'format' => 'A4',
             'margin_left' => 6,
             'margin_right' => 6,
@@ -165,10 +163,11 @@ class StudentsController extends Controller
             'margin_header' => 0,
             'margin_footer' => 0,
             'orientation' => 'L',
-        ]);
+        ]);*/
         // $pdf = PDF::loadView('backend.Students.pdf', ['students'=>$students]);
-        return $pdf->stream(trans('student.info') . '.pdf');
-
+    //    return $pdf->stream(trans('student.info') . '.pdf');
+$template=view('backend.Students.pdf', ['data' => $data]);
+Browsershot::html($template)->setPaper('a4', 'landscape')->download(trans('student.info') . '.pdf');
     }
 
     public function Excel_Import(Request $request)

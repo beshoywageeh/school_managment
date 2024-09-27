@@ -23,7 +23,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('schoolfees-list')
-                            <table class="table table-striped table-bordered"
+                            <table class="table table-striped table-bordered table-sm table-hover"
                                    id="datatable">
                                 <thead>
                                 <tr>

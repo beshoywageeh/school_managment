@@ -64,7 +64,7 @@
                                 role="tabpanel"
                                 aria-labelledby="home-tab"
                             >
-                                <table class="table table-bordered">
+                                <table class="table table-bordered table-sm">
                                     <tr>
                                         <th>{{trans('Recipt_payments.name')}}</th>
                                         <th>{{trans('general.created_at')}}</th>
@@ -121,7 +121,7 @@
                                 role="tabpanel"
                                 aria-labelledby="profile-tab"
                             >
-                                <table class="table table-bordered">
+                                <table class="table table-bordered table-sm">
                                     <tr>
                                         <th>{{trans('Recipt_payments.name')}}</th>
                                         <th>{{trans('PaymentParts.date')}}</th>
@@ -182,7 +182,7 @@
                     <div class="row">
                         <div class="col">
                             <h4 class="bg-info text-center my-4 py-2 text-white">{{trans('Recipt_Payments.mini_report')}}</h4>
-                            <table class="table table-active table-bordered">
+                            <table class="table table-active table-bordered table-sm">
                                 <tr>
                                     <th>{{trans('Recipt_Payments.total_debit')}}</th>
                                     <th>{{trans('Recipt_Payments.total_credit')}}</th>

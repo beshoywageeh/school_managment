@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered table-sm">
                         <tr>
                             <th>{{ trans('Parents.Father_Name') }}</th>
                             <td>{{ $parent->Father_Name }}</td>
@@ -45,7 +45,7 @@
                 </div>
                 <hr>
                 <div class="mt-4 table-responsive">
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered table-sm">
                         <tr>
                             <th>{{trans('student.name')}}</th>
                             <th>{{trans('student.birth_date')}}</th>
@@ -54,9 +54,9 @@
                         </tr>
                         @forelse ($parent->students as $student )
                         <tr>
-                            <td>{{$student->name}}</td>
+                            <td><a class="btn btn-secondary" href="{{route('Students.show',$student->id)}}">{{$student->name}}</a></td>
                             <td>{{$student->birth_date}}</td>
-                            <td>{{$student->gender}}</td>
+                            <td>{{$student->gender->lang()}}</td>
                             <td>{{$student->grade->name}}</td>
                         </tr>
                         @empty

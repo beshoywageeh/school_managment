@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{acadmice_year, PaymentParts, Recipt_Payment, Student, StudentAccount};
+use App\Models\{acadmice_year, PaymentParts, Recipt_Payment, Student, StudentAccount,My_parents};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -14,10 +14,11 @@ class HomeController extends Controller
         $id = Auth::user()->id;
         if (Auth::user()->hasRole('Admin')) {
             $students = Student::count();
+            $parents = My_parents::count();
         } else {
             $grade = DB::Table('teacher_grade')->where('teacher_id', $id)->pluck('grade_id');
             $students = Student::whereIn('grade_id', $grade)->count();
-
+            $parents = My_parents::whereIn('student_id', $grade)->count();
         }
         $credit = StudentAccount::sum('credit');
         $payment_parts = PaymentParts::where('date', '<=', date('Y-m-d'))->where('payment_status', '0')->with('students:id,name')->get();

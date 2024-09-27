@@ -42,7 +42,7 @@
                             <label class="" for="form-horizontal-full-name">
                                 {{ trans('student.choose_classroom') }}
                             </label>
-                            <select class='custom-select' name="classroom_id" id="classrooms">
+                            <select class='custom-select select2' name="classroom_id[]" id="classrooms" multiple>
                                 <option>{{ trans('student.choose_classroom') }}</option>
                             </select>
                         </div>

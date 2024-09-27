@@ -31,7 +31,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('employees-list')
-                            <table class="table table-striped table-bordered"
+                            <table class="table table-striped table-bordered table-sm"
                                    id="datatable">
                                 <thead>
                                 <tr>

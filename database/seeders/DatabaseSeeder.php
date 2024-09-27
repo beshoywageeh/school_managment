@@ -21,6 +21,11 @@ class DatabaseSeeder extends Seeder
             GradeTableSeeder::class,
             class_roomTableSeeder::class,
             StudentsTableSeeder::class,
+            AcadmiceYearSeeder::class,
+            SchoolFeeSeeder::class,
+            FeeinvSeeder::class,
+            ExceptionSeeder::class,
+            RecipetPaymentSeeder::class,
         ]);
 
     }

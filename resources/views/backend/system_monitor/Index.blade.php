@@ -17,7 +17,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table text-center table-striped" id="datatable">
+                        <table class="table text-center table-striped table-sm" id="datatable">
                             <thead>
                             <tr>
                                 <th>{{trans('system_lookup.user')}}</th>

@@ -17,6 +17,7 @@ class StudentFactory extends Factory
     public function definition(): array
     {
         return [
+            'code'=>$this->faker->numerify('########'),
             'name' => $this->faker->name(),
             'birth_date' => $this->faker->date(),
             'address' => $this->faker->address(),

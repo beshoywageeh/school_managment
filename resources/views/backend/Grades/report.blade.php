@@ -104,27 +104,6 @@
         </tbody>
 
     </table>
-    <htmlpagefooter name="page-footer">
-        <table class="data">
-            <tr>
-                <td colspan="2">{{ trans('student.gender_male') }}</td>
-                <td colspan="2">{{ trans('student.gender_female') }}</td>
-            </tr>
-            <tr>
-                <td>{{trans('student.christian')}}</td>
-                <td>{{trans('student.muslim')}}</td>
-                <td>{{trans('student.christian')}}</td>
-                <td>{{trans('student.muslim')}}</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
-    </htmlpagefooter>
-    <pagebreak />
     @endforeach
 </body>
 

@@ -6,7 +6,7 @@ use App\Models\{School_Fee, Grade, acadmice_year, class_room};
 use App\Http\Requests\StoreSchool_FeeRequest;
 use App\Http\Requests\UpdateSchool_FeeRequest;
 use Carbon\Carbon;
-
+use Illuminate\Http\Request;
 class SchoolFeeController extends Controller
 {
     /**
@@ -46,17 +46,22 @@ class SchoolFeeController extends Controller
      */
     public function store(StoreSchool_FeeRequest $request)
     {
-        //return $request->all();
+
+        //StoreSchool_FeeRequest
+//    return $request;
          try{
-            $school_fee = new School_Fee();
-            $school_fee->grade_id = $request->grade_id;
-            $school_fee->classroom_id = $request->classroom_id;
-            $school_fee->user_id = $request->user()->id;
-            $school_fee->academic_year_id = $request->academic_year_id;
-            $school_fee->description = $request->description;
-            $school_fee->amount = $request->amount;
-            $school_fee->title = $request->title;
-            $school_fee->save();
+             foreach($request->classroom_id as $class_rooms){
+                $school_fee = new School_Fee();
+                $school_fee->grade_id = $request->grade_id;
+                $school_fee->classroom_id = $class_rooms;
+                $school_fee->user_id = $request->user()->id;
+                $school_fee->academic_year_id = $request->academic_year_id;
+                $school_fee->description = $request->description;
+                $school_fee->amount = $request->amount;
+                $school_fee->title = $request->title;
+                $school_fee->save();
+            }
+
             session()->flash('success', trans('General.success'));
             return redirect()->route('schoolfees.index');
         }catch(\Exception $e){

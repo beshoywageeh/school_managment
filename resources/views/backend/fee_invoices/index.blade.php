@@ -19,7 +19,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('fee_invoice-list')
-                        <table id="datatable" class="table text-center table-striped table-bordered">
+                        <table id="datatable" class="table text-center table-striped table-bordered table-sm">
                             <thead>
                                 <tr>
                                     <th>#</th>

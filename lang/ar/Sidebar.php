@@ -28,5 +28,6 @@ return [
     'permission'=>'الأدوار والصلاحيات',
     'report'=>'التقارير',
     'admin_era'=>'تفعيل الحسابات',
-    'Clothes_Books'=>'الزي و الكتب'
+    'Clothes_Books'=>'الزي و الكتب',
+    'daily'=>'يومية'
     ];

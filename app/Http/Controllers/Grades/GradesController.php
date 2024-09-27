@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Grades;
 
-use App\Http\Controllers\Controller;
-use App\Models\Grade;
 use App\Models\User;
+use App\Models\Grade;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Spatie\Browsershot\Browsershot;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class GradesController extends Controller
 {
@@ -52,7 +53,6 @@ class GradesController extends Controller
 
             return redirect()->back()->withInput();
         }
-
     }
 
     /**
@@ -60,12 +60,31 @@ class GradesController extends Controller
      */
     public function show(string $id)
     {
-        $report_data = Grade::where('id', $id)->with(['class_room', 'class_room.students'])->withCount(['class_room', 'students'])->first();
-        //    return $data;
-        $pdf = \PDF::loadView('backend.grades.report', ['report_data' => $report_data]);
+        $report_data = Grade::where('id', $id)->with(['class_room', 'class_room.students'])->withCount(['class_room','students'])->first();
 
-        return $pdf->stream($report_data->Grade_Name . '.pdf');
-        //  return view('backend.grades.report', compact('report_data'));
+        $html = view('backend.grades.report', ['report_data' => $report_data])->render();
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'pdf_') . '.html';
+        file_put_contents($tempFile, $html);
+
+        try {
+            $browsershot = new Browsershot($tempFile);
+            $browsershot->timeout(300000) // 5 minutes
+                        ->windowSize(1920, 1080)
+                        ->waitUntilNetworkIdle()
+                        ->pdf(['printBackground' => true]);
+
+            $pdfContent = $browsershot->pdf();
+
+            unlink($tempFile);
+
+            return response($pdfContent)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="grade_report.pdf"');
+        } catch (\Exception $e) {
+            \Log::error('PDF Generation failed: ' . $e->getMessage());
+            return back()->with('error', 'Failed to generate PDF. Please try again later.');
+        }
     }
 
     public function edit(string $id)
@@ -99,7 +118,6 @@ class GradesController extends Controller
 
             return redirect()->back()->withInput();
         }
-
     }
 
     /**

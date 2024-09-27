@@ -9,12 +9,11 @@
             <div class="card">
                 <div class="card-body">
                     <x-Student-header/>
-                    <div class="table-responsive">
                         @can('Students-list')
-                            {!!$dataTable->table(['class'=>"datatable table table-striped table-bordered table-hover"])!!}
+                            {!!$dataTable->table(['class'=>"datatable table table-sm table-striped table-hover dt-buttons"],true)!!}
                         @endcan
                         @include('backend.Students.import')
-                    </div>
+
                 </div>
             </div>
         </div>

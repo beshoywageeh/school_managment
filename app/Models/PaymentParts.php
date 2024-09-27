@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Traits\LogsActivity;
+
 use App\Enums\Payment_Status;
 class PaymentParts extends Model
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = [];
     protected $casts = ['payment_status' => Payment_Status::class];
@@ -36,36 +35,5 @@ class PaymentParts extends Model
     {
 
         return $this->belongsTo(acadmice_year::class, 'acadmic_id');
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['*'])->logOnlyDirty();
-        // Chain fluent methods for configuration options
-    }
-    public function getDescriptionForEvent(string $eventName): string
-    {
-        $changes = $this->getChanges();
-        $oldStatus = $this->getOriginal('status');
-        $newStatus = $changes['status'] ?? null;
-
-        // تأكد من تحويل القيم إلى نص
-        $oldStatus = $oldStatus instanceof payment_status ? $oldStatus->lang() : $oldStatus;
-        $newStatus = $newStatus instanceof payment_status ? $newStatus->lang() : $newStatus;
-
-
-
-        if ($eventName == 'created') {
-            return trans('system_lookup.field_create', ['value' => $this->students->name . '-' . $this->amount]);
-        } elseif ($eventName == 'updated') {
-            return trans('system_lookup.field_change', [
-                'value' => $this->id,
-                'old_value' => $oldStatus,
-                'new_value' => $newStatus
-            ]);
-        } else {
-            return trans('system_lookup.field_delete', ['value' => $this->id]);
-        }
     }
 }

@@ -8,7 +8,7 @@
             <a class="navbar-brand brand-logo-mini" href="index.html"><img
                     src="{{ asset('assests/images/logo-icon-dark.png') }}"
                     alt=""></a>
-        <title>@yield('page_title')</title>
+        <title>{{env('APP_NAME')}}&nbsp;@yield('page_title')</title>
 
     </div>
     <!-- Top bar left -->
@@ -23,7 +23,7 @@
     <!-- top bar right -->
     <ul class="ml-auto nav navbar-nav">
         <li class="nav-item">
-            <h6 class="text-center alert alert-info rounded m-auto" id="datetime"></h6>
+            <h6 class="m-auto text-center rounded alert alert-info" id="datetime"></h6>
         </li>
         <li class="nav-item fullscreen">
             <a id="btnFullscreen" href="#" class="nav-link"><i class="ti-fullscreen"></i></a>
