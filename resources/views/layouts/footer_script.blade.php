@@ -1,4 +1,3 @@
-
 <!-- jquery -->
 <script src="{{ asset('assests/js/jquery-3.3.1.min.js') }}"></script>
 <script src="{{ URL::asset('assests\js\datatable\datatables\jquery.dataTables.min.js') }}"></script>
@@ -112,37 +111,38 @@
     }
 </script>
 <script>
-
-
-$(document).ready(function() {
-    $('.select2').select2();
-});
-
-
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
 </script>
 <script>
     function updateDateTime() {
-    const now = new Date();
-    const date = now.toLocaleDateString();
-    const time = now.toLocaleTimeString();
-    document.getElementById('datetime').textContent = `${date} ${time}`;
-}
+        const now = new Date();
+        const date = now.toLocaleDateString();
+        const time = now.toLocaleTimeString();
+        document.getElementById('datetime').textContent = `${date} ${time}`;
+    }
 
-setInterval(updateDateTime, 1000);
-updateDateTime();
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
 </script>
 <script>
-            $(document).ready(function() {
+    $(document).ready(function() {
         $('#datatable').DataTable({
             language: {
-                    url: "{{ asset('assests/' . app()->getLocale() . '.json') }}"
-                },
-                responsive: true,
-                lengthMenu: [
-                    [20, 40, 50, -1],
-                    [20, 40, 50, "الكل"]
-                ]
-        })}
-    )
+                url: "{{ asset('assests/' . app()->getLocale() . '.json') }}"
+            },
+            responsive: true,
+            lengthMenu: [
+                [20, 40, 50, -1],
+                [20, 40, 50, "الكل"]
+            ]
+        })
+    })
+</script>
+<script>
+
+
+
 </script>
 @stack('scripts')

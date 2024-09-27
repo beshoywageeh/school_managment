@@ -49,16 +49,9 @@ class StudentDataTable extends DataTable
                     'url' => asset('assests/ar.json'),
                 ],
             ])
-            ->buttons([
-                Button::make('excel')->title('Download Excel')->text(trans('General.Export_Excel')),
-                Button::make('csv'), Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload')->text('<i class="fa fa-refresh"></i>'),
-                Button::raw(
-                    " <button type='button' class='btn btn-primary' data-target='#Import_Excel' data-toggle='modal'><i class='ti-upload'></i>"
-                    .trans('general.Import_Excel').'</button>'
-                ),
-
+            ->buttons([Button::make('csv'),
+            Button::make('print'),
+            Button::make('reload')->text('<i class="fa fa-refresh"></i>'),
             ]);
     }
 
@@ -69,6 +62,7 @@ class StudentDataTable extends DataTable
     {
         return [
             Column::make('id', 'id')->title('#')->orderable(false),
+            Column::make('code')->title(trans('student.code')),
             Column::make('name')->title(trans('student.name')),
             Column::make('grade.name')->title(trans('student.grade')),
             Column::make('classroom.name')->title(trans('student.class')),
@@ -91,6 +85,6 @@ class StudentDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Student_'.date('YmdHis');
+        return 'Student_' . date('YmdHis');
     }
 }

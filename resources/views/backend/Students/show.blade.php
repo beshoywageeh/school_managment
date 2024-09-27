@@ -1,18 +1,18 @@
 @extends('layouts.app')
 @section('title')
-    {{trans('student.show')}} | {{ $student->name }}
+    {{ trans('student.show') }} | {{ $student->name }}
 @endsection
 @section('content')
-    <div class="card mb-4">
+    <div class="mb-4 card">
         <div class="card-body">
             <div class="flex justify-between mb-4">
                 <div class="row card-title">
                     <div class="col">
-                <h4 >{{ $student->name }}</h4>
+                        <h4>{{ $student->name }}</h4>
 
                     </div>
-                    <div class="col text-right">
-                        <button class="btn btn-info" onclick="printDiv()">{{trans('general.print')}}</button>
+                    <div class="text-right col">
+                        <button class="btn btn-info" onclick="printDiv()">{{ trans('general.print') }}</button>
                     </div>
                 </div>
             </div>
@@ -38,16 +38,16 @@
                 <div class="mt-4 table-responsive">
                     <table class="table table-striped table-bordered table-sm">
                         <tr>
-                            <th>{{trans('student.name')}}</th>
-                            <th>{{trans('student.birth_date')}}</th>
-                            <th>{{trans('student.gender')}}</th>
-                            <th>{{trans('student.grade')}}</th>
+                            <th>{{ trans('student.name') }}</th>
+                            <th>{{ trans('student.birth_date') }}</th>
+                            <th>{{ trans('student.gender') }}</th>
+                            <th>{{ trans('student.grade') }}</th>
                         </tr>
                         <tr>
-                            <td>{{$student->name}}</td>
-                            <td>{{$student->birth_date}}</td>
-                            <td>{{$student->gender->lang()}}</td>
-                            <td>{{$student->grade->name}}</td>
+                            <td>{{ $student->name }}</td>
+                            <td>{{ $student->birth_date }}</td>
+                            <td>{{ $student->gender->lang() }}</td>
+                            <td>{{ $student->grade->name }}</td>
                         </tr>
                     </table>
                 </div>
@@ -55,30 +55,32 @@
                 <div class="mt-4 table-responsive">
                     <table class="table table-striped table-bordered table-sm">
                         <thead class="alert-success">
-                        <tr>
-                            <th>{{trans('payment.date')}}</th>
-                            <th>{{trans('payment.type')}}</th>
-                            <th>{{trans('payment.credit')}}</th>
-                            <th>{{trans('payment.debit')}}</th>
+                            <tr>
+                                <th>{{ trans('payment.date') }}</th>
+                                <th>{{ trans('payment.type') }}</th>
+                                <th>{{ trans('payment.credit') }}</th>
+                                <th>{{ trans('payment.debit') }}</th>
 
-                        </tr>
+                            </tr>
                         </thead>
 
                         @forelse ($student->StudentAccount as $account)
                             <tr>
-                                <td>{{$account->created_at->format('Y-m-d')}}</td>
-                                <td>{{$account->type->lang()}}</td>
-                                <td>{{number_format($account->debit,2)}}&nbsp; ج.م</td>
-                                <td>{{number_format($account->credit,2)}}&nbsp; ج.م</td>
+                                <td>{{ $account->created_at->format('Y-m-d') }}</td>
+                                <td>{{ $account->type->lang() }}</td>
+                                <td>{{ number_format($account->debit, 2) }}&nbsp; ج.م</td>
+                                <td>{{ number_format($account->credit, 2) }}&nbsp; ج.م</td>
                             </tr>
                         @empty
                             <tr></tr>
                         @endforelse
                         <tfoot class="alert-info">
-                        <tr>
-                            <th colspan="2">{{trans('payment.total')}}</th>
+                            <tr>
+                                <th colspan="2">{{ trans('payment.total') }}</th>
+                                <th>{{ number_format($student->StudentAccount->sum('credit'), 2) }}&nbsp; ج.م</th>
+                                <th>{{ number_format($student->StudentAccount->sum('debit'), 2) }}&nbsp; ج.م</th>
 
-                        </tr>
+                            </tr>
                         </tfoot>
                     </table>
                 </div>
@@ -88,6 +90,5 @@
     </div>
 
     @push('scripts')
-
-@endpush
+    @endpush
 @endsection

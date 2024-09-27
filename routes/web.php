@@ -90,7 +90,6 @@ Route::group(
                 Route::get('/{id}/show', 'show')->name('Students.show');
                 Route::post('/store', 'store')->name('Students.store');
                 Route::post('/update', 'update')->name('Students.update');
-                Route::get('/{id?}/pdf', 'pdf')->name('Students.pdf');
                 Route::post('/Import_Excel', 'Excel_Import')->name('Students.import_excel');
 
             });

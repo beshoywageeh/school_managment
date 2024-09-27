@@ -13,7 +13,7 @@
         <form action="{{route('Students.update','test')}}" method="post">
             <input type="hidden" name="id" value="{{$student->id}}">
             @csrf
-            <fieldset class='p-4 rounded border border-primary'>
+            <fieldset class='p-4 border rounded border-primary'>
                 <legend class='w-auto text-center text-muted'>{{trans('student.student_info')}}</legend>
                 <div class="row">
 
@@ -36,19 +36,25 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <x-input type="text" name="national_id" value="{{$student->national_id}}">{{
-                            trans('student.national_id') }}
-                        </x-input>
+                        <div class="form-group">
+                            <label for="national_id">{{trans('student.national_id')}}</label>
+                            <input type="text" value="{{ $student->national_id }}"
+                            name="national_id" class="form-control" id="national_id" maxlength="14" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
+                            @error('national_id')
+                            <div class="mt-1 alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="col form-group">
+                    <div class="col">
                         <x-input type="date" name="join_date" class="form-control" value="{{$student->join_date}}">{{ trans('student.join_date')
                             }}
                         </x-input>
                     </div>
                     <div class="col">
                         <x-input.gender-select name="gender"/>
-                            <x-input.Student_Status/>
+
                     </div>
+                    <div class="col"><x-input.Student_Status/></div>
                 </div>
                 <div class="row">
                     <div class="col">
@@ -59,7 +65,7 @@
             </fieldset>
             <br>
             <hr><br>
-            <fieldset class='p-4 rounded border border-primary'>
+            <fieldset class='p-4 border rounded border-primary'>
                 <legend class='w-auto text-center text-muted'>{{trans('student.study_info')}}</legend>
                 <div class="row">
 
@@ -84,7 +90,7 @@
                     </div>
                     <div class="col">
                         <label for="parent" class="mb-1">{{trans('student.parent')}}</label>
-                        <select name="parents" id="tom-select" class="form-control tom-select">
+                        <select name="parents" id="" class="custom-select select2">
                             <option> {{trans('student.parent')}}</option>
 
                             @foreach ($parents as $parent)

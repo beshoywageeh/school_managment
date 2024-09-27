@@ -22,7 +22,11 @@ class Student extends Model
         'grade_id',
         'classroom_id',
         'address', 'join_date',
-        'national_id', 'birth_at_begin', 'student_status', 'religion',
+        'national_id',
+        'birth_at_begin',
+        'student_status',
+        'religion',
+        'code'
     ];
 
     protected $casts = [

@@ -8,13 +8,13 @@
             <a href="{{ route('Students.create') }}" class="btn btn-primary"><i class="ti-plus"></i>
                 {{ trans('general.new') }}</a>
                 @endcan
-                @can('')
+                @can('Students-Import_Excel')
             <button type="button" class="btn btn-primary" data-target="#Import_Excel" data-toggle="modal"><i class="ti-upload"></i>
                 {{ trans('general.Import_Excel') }}</button>
                 @endcan
 
                 @can('Students-pdf')
-            <a href="{{ route('Students.pdf', 'test') }}" target="_new" class="btn btn-primary"><i
+            <a href="{{ route('reports.export_student') }}" target="_new" class="btn btn-primary"><i
                     class="ti-file"></i>
                 {{ trans('general.Export_PDF') }}</a>
                 @endcan

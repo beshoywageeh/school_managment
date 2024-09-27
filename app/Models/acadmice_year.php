@@ -14,11 +14,7 @@ class acadmice_year extends Model
 
     protected $casts = ['status' => Status::class];
 
-    protected $fillable = ['year_start', 'status', 'year_end', 'created_by', 'updated_by'];
-
-    protected static $logAttributes = ['year_end', 'status'];
-
-    protected static $logOnlyDirty = true;
+    protected $fillable = ['year_start', 'status', 'year_end', 'created_by', 'updated_by', 'view'];
 
     public function creator()
     {
@@ -28,17 +24,5 @@ class acadmice_year extends Model
     public function updator()
     {
         return $this->belongsTo(User::class, 'updated_by');
-    }
-
-    public function academic_year_formated()
-    {
-        if ($this->year) {
-            $year_start = Carbon::parse($this->year->year_start)->format('Y');
-            $year_end = Carbon::parse($this->year->year_end)->format('Y');
-
-            return $year_start.'-'.$year_end;
-        }
-
-        return '-';
     }
 }

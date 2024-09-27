@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{trans('student.title')}}
+    {{ trans('student.title') }}
 @endsection
 @section('content')
     @include('backend.msg')
@@ -8,11 +8,13 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <x-Student-header/>
+                    <x-Student-header />
+                    <div class="table-responsive">
                         @can('Students-list')
-                            {!!$dataTable->table(['class'=>"datatable table table-sm table-striped table-hover dt-buttons"],true)!!}
+                            {!! $dataTable->table(['class' => 'datatable table table-sm table-striped table-hover dt-buttons'], true) !!}
                         @endcan
                         @include('backend.Students.import')
+                    </div>
 
                 </div>
             </div>
@@ -20,7 +22,6 @@
 
     </div>
     @push('scripts')
-
-{{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+        {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
     @endpush
 @endsection

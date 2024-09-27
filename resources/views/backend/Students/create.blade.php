@@ -36,9 +36,14 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <x-input type="text" value="{{ old('national_id') }}"
-                                        name="national_id">{{ trans('student.national_id') }}
-                                    </x-input>
+                                    <div class="form-group">
+                                        <label for="national_id">{{trans('student.national_id')}}</label>
+                                        <input type="text" value="{{ old('national_id') }}"
+                                        name="national_id" class="form-control" id="national_id" maxlength="14" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
+                                        @error('national_id')
+                                        <div class="mt-1 alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div class="col">
                                     <x-input type="date" name="join_date" class="form-control" value="{{old('join_date')}}">

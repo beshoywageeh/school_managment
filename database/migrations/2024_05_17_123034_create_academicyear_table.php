@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('year_start');
             $table->date('year_end');
             $table->boolean('status')->default(1);
+            $table->string('view');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();

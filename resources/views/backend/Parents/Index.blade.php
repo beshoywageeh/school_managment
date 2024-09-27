@@ -73,7 +73,10 @@
                         data: 'Father_Phone',
                         name: 'Father_Phone'
                     },
-                    {data:'Father_Job',name:'Father_Job'},
+                    {
+                        data: 'Father_Job',
+                        name: 'Father_Job'
+                    },
                     {
                         data: 'Mother_Name',
                         name: 'Mother_Name'
@@ -105,8 +108,13 @@
                 lengthMenu: [
                     [20, 40, 50, -1],
                     [20, 40, 50, "الكل"]
-                ]
+                ],
             });
         });
     </script>
+    <sctipt>
+        $(document).ready(function() {
+            $('.dataTables_length select').removeClass().addClass('custom-select');
+        })
+    </sctipt>
 @endpush

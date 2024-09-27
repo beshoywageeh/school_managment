@@ -13,7 +13,7 @@
                    <div class="card-title">
                        <div class="row">
                            <div class="col"></div>
-                           <div class="col text-right">
+                           <div class="text-right col">
                                @can('academic_year-create')
                                    @include('backend.academic_year.create')
                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Create_Year">
@@ -31,6 +31,7 @@
                                     <th>#</th>
                                     <th>{{ trans('academic_year.year_start') }}</th>
                                     <th>{{ trans('academic_year.year_end') }}</th>
+                                    <th>{{ trans('academic_year.view') }}</th>
                                     <th>{{ trans('general.created_by') }}</th>
                                     <th>{{ trans('general.created_at') }}</th>
                                     <th>{{ trans('academic_year.status') }}</th>
@@ -45,6 +46,7 @@
                                         <td> {{ $acadmice_years->firstItem() + $loop->index }}</td>
                                         <td>{{ \Carbon\Carbon::parse($acadmice_year->year_start)->format('Y-m') }}</td>
                                         <td> {{ \Carbon\Carbon::parse($acadmice_year->year_end)->format('Y-m') }}</td>
+                                        <td>{{$acadmice_year->view}}</td>
                                         <td>{{ $acadmice_year->creator->name }}</td>
                                         <td>{{ $acadmice_year->created_at->format('Y-m-d') }}</td>
                                         <td>

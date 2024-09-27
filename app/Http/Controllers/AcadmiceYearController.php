@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\acadmice_year;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +24,6 @@ class AcadmiceYearController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request;
 
         try {
             $validated = $request->validate([
@@ -31,9 +31,11 @@ class AcadmiceYearController extends Controller
             ]);
             $year_start = date('Y-m-d', strtotime($request->year_start));
             $year_end = date('Y-m-d', strtotime($request->year_end));
+            $view = Carbon::parse($year_start)->format('Y') . ' - ' . Carbon::parse($year_end)->format('Y');
             acadmice_year::create([
                 'year_start' => $year_start,
                 'year_end' => $year_end,
+                'view' => $view,
                 'created_by' => Auth::id(),
                 'status' => ($request->status) ? 0 : 1,
 

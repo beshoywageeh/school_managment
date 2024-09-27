@@ -29,7 +29,7 @@ class StudentRequest extends FormRequest
             'grade' => ['required'],
             'class_room' => ['required'],
             'parents' => ['required'],
-            'national_id' => 'required|string|min:14|max:14|regex:/[0-9]{9}/',
+            'national_id' => 'required|string|min:14|max:14',
         ];
     }
 
@@ -39,7 +39,7 @@ class StudentRequest extends FormRequest
             'student_name.required' => trans('validation.required'),
             'grade.required' => trans('validation.required'),
             'class_room.required' => trans('validation.required'),
-
+            'national_id.min' => trans('student.national_min'),
         ];
     }
 }

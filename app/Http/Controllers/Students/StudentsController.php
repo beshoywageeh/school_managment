@@ -11,8 +11,6 @@ use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\Student;
 use Illuminate\Http\Request;
-use PDF;
-use Spatie\Browsershot\Browsershot;
 
 class StudentsController extends Controller
 {
@@ -40,7 +38,6 @@ class StudentsController extends Controller
     public function store(StudentRequest $request)
     {
         try {
-
             $inputDate = \Carbon\Carbon::parse($request->birth_date);
             $firstOfOctober = \Carbon\Carbon::create(date('Y'), 10, 1);
             $generate_code = Student::orderBy('code', 'desc')->first();
@@ -81,9 +78,6 @@ class StudentsController extends Controller
     {
         try {
             $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone', 'StudentAccount'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();
-
-            return $student;
-
             return view('backend.Students.show', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -165,26 +159,6 @@ class StudentsController extends Controller
 
         return response()->json($class_rooms);
     }
-
-    public function pdf($id)
-    {
-        $data['students'] = Grade::with(['students'])->withcount('students')->get();
-        /*  $pdf = PDF::loadView('backend.Students.pdf', ['data' => $data], [], [
-              'format' => 'A4',
-              'margin_left' => 6,
-              'margin_right' => 6,
-              'margin_top' => 6,
-              'margin_bottom' => 6,
-              'margin_header' => 0,
-              'margin_footer' => 0,
-              'orientation' => 'L',
-          ]);*/
-        // $pdf = PDF::loadView('backend.Students.pdf', ['students'=>$students]);
-        //    return $pdf->stream(trans('student.info') . '.pdf');
-        $template = view('backend.Students.pdf', ['data' => $data]);
-        Browsershot::html($template)->setPaper('a4', 'landscape')->download(trans('student.info').'.pdf');
-    }
-
     public function Excel_Import(Request $request)
     {
         try {
