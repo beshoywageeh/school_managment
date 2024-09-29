@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSchool_FeeRequest;
 use App\Http\Requests\UpdateSchool_FeeRequest;
-use App\Models\acadmice_year;
-use App\Models\class_room;
-use App\Models\Grade;
-use App\Models\School_Fee;
+use App\Models\{acadmice_year, class_room, Grade, School_Fee};
 use Carbon\Carbon;
 
 class SchoolFeeController extends Controller

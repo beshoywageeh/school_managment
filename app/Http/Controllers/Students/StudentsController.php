@@ -78,6 +78,7 @@ class StudentsController extends Controller
     {
         try {
             $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone', 'StudentAccount'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();
+
             return view('backend.Students.show', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

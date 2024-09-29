@@ -3,14 +3,9 @@
 namespace App\Http\Controllers;
 
 use Alkoumi\LaravelArabicNumbers\Numbers;
-use App\Models\acadmice_year;
-use App\Models\Fee_invoice;
-use App\Models\PaymentParts;
-use App\Models\Recipt_Payment;
-use App\Models\Student;
-use App\Models\StudentAccount;
+use App\Models\{acadmice_year, Fee_invoice, PaymentParts, Recipt_Payment, Student, StudentAccount};
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class ReciptPaymentController extends Controller
 {
     /**
@@ -19,7 +14,6 @@ class ReciptPaymentController extends Controller
     public function index()
     {
         $Recipt_Payments = Recipt_Payment::with(['student:id,name'])->get();
-
         return view('backend.reciptpayment.index', get_defined_vars());
     }
 
@@ -34,8 +28,6 @@ class ReciptPaymentController extends Controller
             $invoice_manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
             $feeInvoices = Fee_invoice::where('student_id', $id)->where('status', 0)->with('fees:id,title,amount')->get(['id', 'invoice_date', 'school_fee_id']);
             $parts = PaymentParts::where('student_id', $id)->where('payment_status', 0)->get();
-
-            //return $parts;
             return view('backend.reciptpayment.create', get_defined_vars());
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -49,7 +41,7 @@ class ReciptPaymentController extends Controller
     {
         try {
             if ($request->type == 'full') {
-                \DB::beginTransaction();
+                DB::beginTransaction();
                 $invoice = Fee_invoice::where('id', $request->feeInvoice)->with('fees:id,title,amount')->first();
                 $pay = new Recipt_Payment;
                 $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
@@ -71,7 +63,7 @@ class ReciptPaymentController extends Controller
                 $std->recipt__payments_id = $pay->id;
                 $std->save();
                 $invoice->update(['status' => 1]);
-                \DB::commit();
+                DB::commit();
 
                 return redirect()->route('Recipt_Payment.print', $pay->id);
 
@@ -80,7 +72,7 @@ class ReciptPaymentController extends Controller
             }
 
         } catch (\Exception $e) {
-            \DB::rollback();
+            DB::rollback();
 
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -92,9 +84,7 @@ class ReciptPaymentController extends Controller
     public function show($id)
     {
         $report_data['recipt'] = Recipt_Payment::where('id', $id)->with(['student:id,name'])->first();
-
         $report_data['tafqeet'] = Numbers::TafqeetMoney($report_data['recipt']->Debit, 'EGP');
-
         return view('backend.reciptpayment.print', get_defined_vars());
     }
 
@@ -121,7 +111,7 @@ class ReciptPaymentController extends Controller
     public function update(Request $request)
     {
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             // Retrieve the existing Recipt_Payment record using the id from the request
             $pay = Recipt_Payment::findOrFail($request->id);
@@ -145,11 +135,11 @@ class ReciptPaymentController extends Controller
             $std->recipt__payments_id = $pay->id;
             $std->save();
 
-            \DB::commit();
+            DB::commit();
 
             return redirect()->route('Recipt_Payment.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
 
             return redirect()->back()->with('error', $e->getMessage());
         }

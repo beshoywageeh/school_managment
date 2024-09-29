@@ -14,9 +14,10 @@
     }
 }
 </style>
+@stack('css')
 <body>
-    <div class="container-fluid text-center text-middle">
-        <div class="row no-print mt-2">
+    <div class="text-center container-fluid text-middle">
+        <div class="mt-2 row no-print">
             <div class="col"><a href="{{url()->previous()}}" class="btn btn-primary">{{trans('report.back')}}</a></div>
             <div class="col">
                 <button class="btn btn-success" onclick="window.print()">{{trans('report.print')}}</button>
