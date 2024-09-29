@@ -121,7 +121,7 @@ class SchoolFeeController extends Controller
                 'description' => $request->description,
                 'amount' => $request->amount,
             ]);
-            session()->flash('success', trans('general_success'));
+            session()->flash('success', trans('general.success'));
 
             return redirect()->route('schoolfees.index');
 
