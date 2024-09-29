@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSchool_FeeRequest;
 use App\Http\Requests\UpdateSchool_FeeRequest;
-use App\Models\{acadmice_year, class_room, Grade, School_Fee};
+use App\Models\{acadmice_year, class_room, Grade, School_Fee, Student};
 use Carbon\Carbon;
 
 class SchoolFeeController extends Controller
@@ -14,9 +14,7 @@ class SchoolFeeController extends Controller
      */
     public function index()
     {
-        $School_Fees = School_Fee::with('grade', 'classroom', 'user')->get();
-
-        // return $School_Fees;
+        $School_Fees = School_Fee::with('grade:id,name', 'classroom:id,name', 'user:id,name', 'year:id,view')->get(['id', 'title', 'amount', 'academic_year_id', 'description', 'grade_id', 'classroom_id', 'user_id', 'created_at']);
         return view('backend.school_fees.index', get_defined_vars());
     }
 
@@ -50,8 +48,6 @@ class SchoolFeeController extends Controller
     public function store(StoreSchool_FeeRequest $request)
     {
 
-        //StoreSchool_FeeRequest
-        //    return $request;
         try {
             foreach ($request->classroom_id as $class_rooms) {
                 $school_fee = new School_Fee;
@@ -78,9 +74,11 @@ class SchoolFeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(School_Fee $school_Fee)
+    public function show($id)
     {
-        //
+        $school_fee = School_Fee::findorFail($id);
+        $students = Student::where('classroom_id', $school_fee->classroom_id)->where('grade_id', $school_fee->grade_id)->with('classroom:id,name', 'grade:id,name')->get(['code', 'name', 'classroom_id', 'grade_id']);
+        return view('backend.school_fees.show', get_defined_vars());
     }
 
     /**

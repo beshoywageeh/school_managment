@@ -32,16 +32,4 @@ class School_Fee extends Model
     {
         return $this->belongsTo('App\Models\acadmice_year', 'academic_year_id', 'id');
     }
-
-    public function academic_year_formated()
-    {
-        if ($this->year) {
-            $year_start = Carbon::parse($this->year->year_start)->format('Y');
-            $year_end = Carbon::parse($this->year->year_end)->format('Y');
-
-            return $year_start.'-'.$year_end;
-        }
-
-        return '-';
-    }
 }
