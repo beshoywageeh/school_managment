@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSchool_FeeRequest;
 use App\Http\Requests\UpdateSchool_FeeRequest;
-use App\Models\{acadmice_year, class_room, Grade, School_Fee, Student};
+use App\Models\{acadmice_year, class_room, Fee_invoice, Grade, School_Fee, Student, StudentAccount};
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class SchoolFeeController extends Controller
@@ -47,7 +48,7 @@ class SchoolFeeController extends Controller
      */
     public function store(StoreSchool_FeeRequest $request)
     {
-
+        DB::beginTransaction();
         try {
             foreach ($request->classroom_id as $class_rooms) {
                 $school_fee = new School_Fee;
@@ -60,13 +61,36 @@ class SchoolFeeController extends Controller
                 $school_fee->title = $request->title;
                 $school_fee->save();
             }
-
+            $students = Student::where('grade_id', $request->grade_id)->whereIn('classroom_id', $request->classroom_id)->get();
+            $ac_year = acadmice_year::where('status', '0')->first();
+            // return $student;
+            foreach ($students as $student) {
+                $fee = new Fee_invoice;
+                $fee->invoice_date = date('Y-m-d');
+                $fee->student_id = $student->id;
+                $fee->grade_id = $student->grade_id;
+                $fee->classroom_id = $student->classroom_id;
+                $fee->school_fee_id = $school_fee->id;
+                $fee->academic_year_id = $ac_year->id;
+                $fee->save();
+                $std = new StudentAccount;
+                $std->student_id = $student->id;
+                $std->grade_id = $student->grade_id;
+                $std->date = $fee->invoice_date;
+                $std->type = '1';
+                $std->fee_invoices_id = $fee->id;
+                $std->classroom_id = $student->classroom_id;
+                $std->academic_year_id = $ac_year->id;
+                $std->debit = $request->amount;
+                $std->credit = 0.00;
+                $std->save();
+            }
             session()->flash('success', trans('General.success'));
-
+            DB::commit();
             return redirect()->route('schoolfees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
-
+            DB::rollBack();
             return redirect()->back()->withInput();
         }
     }
