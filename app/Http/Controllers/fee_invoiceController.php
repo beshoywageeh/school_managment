@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{acadmice_year, Fee_invoice, School_Fee, Student, StudentAccount};
+use App\Models\{acadmice_year, ActivityLog, Fee_invoice, School_Fee, Student, StudentAccount};
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Http\Request;
 use Alkoumi\LaravelArabicNumbers\Numbers;
-
+use App\Http\Traits\LogsActivity;
 class fee_invoiceController extends Controller
 {
+    use LogsActivity;
     /**
      * Display a listing of the resource.
      */
@@ -58,7 +59,9 @@ class fee_invoiceController extends Controller
                 $std->debit = School_Fee::where('id', $list_fee['fee'])->first()->amount;
                 $std->credit = 0.00;
                 $std->save();
+
             }
+
             DB::commit();
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));
         } catch (Exception $e) {

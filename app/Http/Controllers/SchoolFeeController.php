@@ -7,9 +7,11 @@ use App\Http\Requests\UpdateSchool_FeeRequest;
 use App\Models\{acadmice_year, class_room, Fee_invoice, Grade, School_Fee, Student, StudentAccount};
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-
+use App\Http\Traits\LogsActivity;
+use Alkoumi\LaravelArabicNumbers\Numbers;
 class SchoolFeeController extends Controller
 {
+    use LogsActivity;
     /**
      * Display a listing of the resource.
      */
@@ -60,6 +62,7 @@ class SchoolFeeController extends Controller
                 $school_fee->amount = $request->amount;
                 $school_fee->title = $request->title;
                 $school_fee->save();
+                $this->logActivity('إضافة', 'مصروفات دراسية بقيمة :' . \Number::currency($request->amount, 'EGP', 'ar'));
             }
             $students = Student::where('grade_id', $request->grade_id)->whereIn('classroom_id', $request->classroom_id)->get();
             $ac_year = acadmice_year::where('status', '0')->first();
@@ -84,6 +87,7 @@ class SchoolFeeController extends Controller
                 $std->debit = $request->amount;
                 $std->credit = 0.00;
                 $std->save();
+                $this->logActivity('إضافة', "تم اضافة فاتورة جديدة للطالب : " . $student->name . 'بقيمة :' . \Number::currency($request->amount, 'EGP', 'ar'));
             }
             session()->flash('success', trans('General.success'));
             DB::commit();

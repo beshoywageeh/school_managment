@@ -22,6 +22,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SetupController;
 use App\Http\Controllers\Students\StudentsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ActivityLogController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -212,7 +213,7 @@ Route::group(
                 Route::post('/update_password', 'update_password')->name('setting.update_password');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
-            Route::get('/monitor', MonitorSystemController::class)->name('system_lookup');
+            Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');
         });
     }
 );
