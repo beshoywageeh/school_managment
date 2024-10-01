@@ -18,7 +18,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('Recipt_Payment-list')
-                            <table id="datatable" class="table text-center table-striped table-bordered">
+                            <table id="datatable" class="table text-center table-sm table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -41,7 +41,7 @@
                                                         href="{{ route('Recipt_Payment.show', $Recipt_Payment->student->id) }}">{{ $Recipt_Payment->student->name }}</a>
                                                 @endcan
                                             </td>
-                                            <td>{{ number_format($Recipt_Payment->Debit, 2) }}&nbsp;ج.م</td>
+                                            <td>{{ Number::currency($Recipt_Payment->Debit, 'EGP', 'ar') }}</td>
 
                                             <td>
 
@@ -65,13 +65,6 @@
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',
                                                         'can' => 'Recipt_Payment-edit',
-                                                    ],
-                                                    [
-                                                        'url' => route('Recipt_Payment.print', $Recipt_Payment->id),
-                                                        'text' => trans('general.print'),
-                                                        'icon' => 'ti-printer',
-                                                        'target' => '_blank',
-                                                       'can'=>'Recipt_Payment-edit'
                                                     ],
                                                 ]" />
                                             </td>

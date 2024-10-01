@@ -20,13 +20,13 @@
         <div class="mt-2 row no-print">
             <div class="col"><a href="{{url()->previous()}}" class="btn btn-primary">{{trans('report.back')}}</a></div>
             <div class="col">
-                <button class="btn btn-success" onclick="window.print()">{{trans('report.print')}}</button>
+                <button class="btn btn-success" onclick="window.print();">{{trans('report.print')}}</button>
             </div>
 
         </div>
     @yield('content')
     </div>
-
+@stack('js')
 <script>
 
 </script>

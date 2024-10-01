@@ -12,7 +12,6 @@
                         <div class="col">
                             <input readonly class="form-control" value="{{$part->amount}}"/>
                         </div>
-
                     </div>
                     <form id="form-with-multiple-column" class="max-w-full" action="{{ route('payment_parts.submit_pay') }}"
                           method="post">
@@ -25,9 +24,7 @@
                             <div class="col">
                                 <label for="">{{trans('Recipt_payments.name')}}</label>
                                 <select name="student_id" id="" class="custom-select">
-
                                     <option value="{{$part->students->id}}">{{$part->students->name}}</option>
-
                                 </select>
                             </div>
 

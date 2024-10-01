@@ -18,7 +18,7 @@
                     </div>
                     <div class="table-responsive">
 
-                        <table class="table text-center table-striped table-bordered">
+                        <table class="table text-center table-sm table-striped table-bordered">
 
                             <tr>
                                 <th>#</th>
@@ -31,15 +31,13 @@
                             </tr>
                             @foreach ($excptionFees as $ExcptionFee)
                                 <tr>
-                                    <td> {{ $loop->iteration }}</td>
+                                    <td> {{ $loop->index + 1 }}</td>
                                     <td>{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
                                     <td>{{ $ExcptionFee->students->name }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($ExcptionFee->academic_year->year_start)->format('Y') . '-' . \Carbon\Carbon::parse($ExcptionFee->academic_year->year_end)->format('Y') }}
-                                    </td>
-                                    <td>{{ number_format($ExcptionFee->amount, 2) }}&nbsp;ج.م</td>
+                                    <td>{{ $ExcptionFee->academic_year->view }}</td>
+                                    <td>{{ Number::currency($ExcptionFee->amount, 'EGP', 'ar')}}</td>
                                     <td>{{ $ExcptionFee->grade->name }}</td>
                                     <td>{{ $ExcptionFee->classroom->name }}</td>
-
                                 </tr>
                             @endforeach
                         </table>

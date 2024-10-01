@@ -2,12 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\acadmice_year;
-use App\Models\Fee_invoice;
-use App\Models\PaymentParts;
-use App\Models\Recipt_Payment;
-use App\Models\Student;
-use App\Models\StudentAccount;
+use App\Models\{acadmice_year, Fee_invoice, PaymentParts, Recipt_Payment, Student, StudentAccount};
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +12,6 @@ class PaymentPartsController extends Controller
     public function index()
     {
         $PaymentParts = PaymentParts::with(['students', 'grades', 'classes', 'year'])->get();
-
         return view('backend.payment_parts.index', get_defined_vars());
     }
 
@@ -25,10 +19,8 @@ class PaymentPartsController extends Controller
     {
         try {
             $student = Fee_invoice::where('student_id', $id)->with(['students', 'grades', 'classes', 'acd_year', 'fees'])->get();
-
             if ($student == null) {
                 session()->flash('info', trans('general.noInvoiceToPart'));
-
                 return redirect()->back();
             } else {
                 return view('backend.payment_parts.create', get_defined_vars());
@@ -56,11 +48,9 @@ class PaymentPartsController extends Controller
                 $fee->save();
             }
             session()->flash('success', trans('general.success'));
-
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
-
             return redirect()->back()->withInput();
         }
     }
@@ -70,7 +60,6 @@ class PaymentPartsController extends Controller
         try {
             $paymentParts = PaymentParts::where('id', $id)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'acd_year'])->first();
             session()->flash('success', trans('general.success'));
-
             return view('backend.payment_parts.edit', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -83,7 +72,6 @@ class PaymentPartsController extends Controller
     {
         try {
             $paymentParts = PaymentParts::where('id', $id)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'year:id,year_start,year_end'])->first();
-
             return view('backend.payment_parts.edit', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -100,7 +88,6 @@ class PaymentPartsController extends Controller
                 'amount' => $request->amount,
             ]);
             session()->flash('success', trans('general.success'));
-
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -112,10 +99,8 @@ class PaymentPartsController extends Controller
     public function destroy($id)
     {
         try {
-
-            $PaymentParts = PaymentParts::findorFail($id)->delete();
+            PaymentParts::findorFail($id)->delete();
             session()->flash('success', trans('general.success'));
-
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -127,29 +112,29 @@ class PaymentPartsController extends Controller
     public function pay($id)
     {
         try {
-
             $part = PaymentParts::where('id', $id)->with(['students', 'grades', 'classes', 'year'])->first();
-
             return view('backend.payment_parts.pay', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
-
             return redirect()->back();
         }
     }
 
     public function submit_pay(Request $request)
     {
-        DB::beginTransaction();
+
 
         try {
+            DB::beginTransaction();
             $part = PaymentParts::findOrFail($request->id);
-            $check = PaymentParts::where('school_fees_id', $part->school_fees_id)->get();
-            //  return $check->where('payment_status', 0)->count();
+            $check = PaymentParts::where('school_fees_id', $part->school_fees_id)->where('student_id', $part->student_id)->get();
+            $fee = Fee_invoice::where('school_fee_id', $part->school_fees_id)->with('fees')->first();
+            //return $fee;
             $student = Student::findOrFail($request->student_id);
-            $currentYear = acadmice_year::where('status', '0')->firstOrFail();
+            $currentYear = acadmice_year::where('status', '0 ')->firstOrFail();
             $currentDate = Carbon::today();
             if ($request->amount != $part->amount) {
+    
                 // Handling partial payments
                 $newPart = new PaymentParts([
                     'date' => $currentDate,
@@ -162,41 +147,36 @@ class PaymentPartsController extends Controller
                 ]);
                 $newPart->save();
                 $part->delete();
-            } elseif ($request->amount === $part->amount || $check->where('payment_status', 0)->count() === 0) {
+            } elseif ($request->amount === $part->amount || $check->count() !== 0) {
+                //dd($check->sum('amount'), $fee->fees->amount);
                 // Handling full payment
                 $part->update(['payment_status' => 1]);
-                $this->createStudentAccount(null, $request->student_id, $student->grade_id, $student->classroom_id, $currentYear->id, $currentDate, $part->amount, 0.00, '2');
-                $totalAmount = $check->sum('amount');
+                $this->createStudentAccount(null, $request->student_id, $student->grade_id, $student->classroom_id, $currentYear->id, $currentDate, $part->amount, 0.00, '2 ');
+                $totalAmount = $request->amount;
                 $receipt = $this->createReceipt($totalAmount, $request->student_id, $currentYear->id);
-                $part->update(['payment_status' => 1]);
-                $this->createStudentAccount($receipt->id, $request->student_id, $student->grade_id, $student->classroom_id, $currentYear->id, $receipt->date, $part->amount, 0.00, '2');
+                if ($totalAmount == $fee->fees->amount) {
+                    $fee->update(['status' => '1']);
+                }
                 DB::commit();
-
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
             } else {
-
                 $part->update(['payment_status' => 1]);
                 DB::commit();
-
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
             }
             DB::commit();
             session()->flash('success', trans('general.success'));
-
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             DB::rollback();
             session()->flash('error', $e->getMessage());
-
             return redirect()->back();
         }
     }
-
     private function createReceipt($amount, $studentId, $academicYearId)
     {
         $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
         $manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
-
         $receipt = new Recipt_Payment([
             'manual' => $manual,
             'date' => Carbon::today(),
@@ -205,7 +185,6 @@ class PaymentPartsController extends Controller
             'academic_year_id' => $academicYearId,
         ]);
         $receipt->save();
-
         return $receipt;
     }
 

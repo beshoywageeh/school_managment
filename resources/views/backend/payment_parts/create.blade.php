@@ -41,7 +41,7 @@
 
                                         </div>
                                         <div class="col">
-                                            <label for="">{{trans('fee_invoice.fee')}}</label>
+                                            <label for="">{{trans('fee_invoice.title')}}</label>
                                             <select class="custom-select"
                                                     name="fee_id">
                                                 <option value=""
@@ -70,6 +70,7 @@
                                                    id="">
                                         </div>
                                         <div class="col">
+                                            <label for=""></label>
                                             <input class="btn btn-danger btn-block mx-auto"
                                                    data-repeater-delete
                                                    type="button"

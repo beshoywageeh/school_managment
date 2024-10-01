@@ -82,6 +82,7 @@ class PermissionTableSeeder extends Seeder
             ['table' => 'Recipt_Payment', 'name' => 'Recipt_Payment-create'],
             ['table' => 'Recipt_Payment', 'name' => 'Recipt_Payment-delete'],
             ['table' => 'Recipt_Payment', 'name' => 'Recipt_Payment-info'],
+            ['table' => 'Recipt_Payment', 'name' => 'Recipt_Payment-edit'],
             ['table' => 'promotion', 'name' => 'promotion-list'],
             ['table' => 'promotion', 'name' => 'promotion-create'],
             ['table' => 'promotion', 'name' => 'promotion-delete'],

@@ -94,7 +94,15 @@
                                                 </td>
                                                 <td>{{$feeInvoice->invoice_date}}</td>
                                                 <td>{{$feeInvoice->fees->title}}</td>
-                                                <td>{{Number::currency($feeInvoice->fees->amount,'EGP','AR')}}</td>
+                                                @php
+                                                $get_fees = \App\Models\ExcptionFees::where('student_id',$Student->id)->where('fee_id',$feeInvoice->id)->first();
+                                                if($get_fees != null){
+                                                    $final = $feeInvoice->fees->amount - $get_fees->amount;
+                                                }else{
+                                                    $final = $feeInvoice->fees->amount;
+                                                }
+                                                @endphp
+                                                <td>{{Number::currency($final,'EGP','AR')}}</td>
                                                 <td>
                                                     <button class="btn btn-success btn-sm"
                                                             type="submit">{{ trans('General.full_pay') }}</button>
@@ -127,7 +135,6 @@
                                         <th>{{trans('PaymentParts.date')}}</th>
                                         <th>{{trans('PaymentParts.amount')}}</th>
                                         <th>{{trans('PaymentParts.pay_part')}}</th>
-
                                         <th></th>
                                     </tr>
                                     @forelse($parts as $part)

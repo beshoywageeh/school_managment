@@ -18,14 +18,13 @@
                         @csrf
 
                         <div class="row">
-                            <div class="col">
+                            <div class="col-3">
                                 <label for="">{{trans('Recipt_payments.name')}}</label>
                                 <select name="student_id" id="" class="custom-select">
                                     <option value="{{$Excpetion->id}}">{{$Excpetion->name}}</option>
-
                                 </select>
                             </div>
-                            <div class="col">
+                            <div class="col-3">
                                 <label for="">{{trans('academic_year.title')}}</label>
                                 <select name="acadmic_id" id="" class="custom-select">
                                     @forelse ($acadmincs as $acadminc)
@@ -36,13 +35,21 @@
 
                                 </select>
                             </div>
-                            <div class="col">
+                            <div class="col-3">
+                                <label for="">{{trans('fees.title')}}</label>
+                                <select name="fee_id" id="" class="custom-select">
+                                    @forelse ($fees as $fee)
+                                        <option value="{{$fee->id}}">{{$fee->fees->title}}</option>
+                                    @empty
+                                        <option value="">No Fee</option>
+                                    @endforelse
+                            </div>
+                            <div class="col-3">
                                 <label for="">{{trans('ExcptionFee.amount')}}</label>
                                 <input type="number" class="form-control" name="amount">
                             </div>
-
                         </div>
-                        <br>
+
                         <div class="row">
                             <div class="col text-md-right">
                                 <button class="btn btn-success" type="submit">{{ trans('General.Submit') }}</button>

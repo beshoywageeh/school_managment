@@ -41,6 +41,7 @@
                                             </select>
                                         </div>
                                         <div class="col">
+                                            <label></label>
                                             <input class="btn btn-danger btn-block" data-repeater-delete type="button"
                                                    value="{{trans('General.delete')}}"/>
                                         </div>

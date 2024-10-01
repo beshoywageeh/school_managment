@@ -26,6 +26,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>{{trans('fee.title')}}</th>
                                         <th>{{ trans('fees.grade') }}</th>
                                         <th>{{ trans('fees.classroom') }}</th>
                                         <th>{{ trans('academic_year.title') }}</th>
@@ -39,12 +40,13 @@
                                 <tbody>
                                     @forelse ($School_Fees as $fee)
                                         <tr>
-                                            <td> {{ $loop->iteration }}</td>
+                                            <td> {{ $loop->index + 1 }}</td>
+                                            <td>{{ $fee->title }}</td>
                                             <td>{{ $fee->grade->name }}</td>
                                             <td>{{ $fee->classroom->name }}</td>
                                             <td>{{ $fee->year->view }}</td>
                                             <td>{{ $fee->description }}</td>
-                                            <td>{{ number_format($fee->amount, 2) }}&nbsp;ج.م</td>
+                                            <td>{{ Number::currency($fee->amount,'EGP','AR')}}</td>
                                             <td>{{ $fee->user->name }}</td>
                                             <td>{{ $fee->created_at->format('Y-m-d') }}</td>
                                             <td>

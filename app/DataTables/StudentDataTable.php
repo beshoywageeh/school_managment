@@ -48,7 +48,7 @@ class StudentDataTable extends DataTable
                 'language' => [
                     'url' => asset('assests/ar.json'),
                 ],
-            ])
+            ])->lengthMenu([[20, 40, 50, -1], [20, 40, 50, trans('General.all')]])
             ->buttons([Button::make('csv'),
             Button::make('print'),
             Button::make('reload')->text('<i class="fa fa-refresh"></i>'),

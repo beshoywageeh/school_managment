@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\acadmice_year;
 use App\Models\ExcptionFees;
+use App\Models\Fee_invoice;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class ExcptionFeesController extends Controller
 {
     /**
@@ -28,6 +29,7 @@ class ExcptionFeesController extends Controller
         try {
             $Excpetion = Student::where('id', $id)->first();
             $acadmincs = acadmice_year::where('status', '0')->get();
+            $fees = Fee_invoice::where('student_id', $id)->where('status', 0)->with('fees')->get();
 
             return view('backend.fee_exception.create', get_defined_vars());
         } catch (\Exception $e) {
@@ -43,7 +45,7 @@ class ExcptionFeesController extends Controller
     public function store(Request $request)
     {
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
             $pay = new ExcptionFees;
             $pay->date = date('Y-m-d');
             $pay->student_id = $request->student_id;
@@ -51,6 +53,7 @@ class ExcptionFeesController extends Controller
             $pay->academic_year_id = $request->acadmic_id;
             $pay->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
             $pay->class_id = Student::where('id', $request->student_id)->first()->classroom_id;
+            $pay->fee_id = $request->fee_id;
             $pay->save();
             $std = new StudentAccount;
             $std->student_id = $request->student_id;
@@ -63,12 +66,12 @@ class ExcptionFeesController extends Controller
             $std->debit = 0.00;
             $std->excpetion_id = $pay->id;
             $std->save();
-            \DB::commit();
+            DB::commit();
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('except_fee.index');
         } catch (\Exception $e) {
-            \DB::rollback();
+            DB::rollback();
             session()->flash('error', $e->getMessage());
 
             return redirect()->back();
@@ -112,7 +115,7 @@ class ExcptionFeesController extends Controller
      */
     public function update(Request $request)
     {
-        \DB::beginTransaction();
+        DB::beginTransaction();
         try {
             // Fetch the existing ExceptionFees record
             $pay = ExcptionFees::where('id', $request->id)->first();
@@ -134,12 +137,12 @@ class ExcptionFeesController extends Controller
             $std->debit = 0.00;
             $std->save();
 
-            \DB::commit();
+            DB::commit();
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('except_fee.index');
         } catch (\Exception $e) {
-            \DB::rollback();
+            DB::rollback();
             session()->flash('error', $e->getMessage());
 
             return redirect()->back();
