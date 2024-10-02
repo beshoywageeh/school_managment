@@ -122,19 +122,16 @@ class PaymentPartsController extends Controller
 
     public function submit_pay(Request $request)
     {
-
-
         try {
             DB::beginTransaction();
             $part = PaymentParts::findOrFail($request->id);
             $check = PaymentParts::where('school_fees_id', $part->school_fees_id)->where('student_id', $part->student_id)->get();
-            $fee = Fee_invoice::where('school_fee_id', $part->school_fees_id)->with('fees')->first();
-            //return $fee;
+            $fee = Fee_invoice::where('school_fee_id', $part->school_fees_id)->where('student_id', $part->student_id)->where('status', '0')->with('fees')->first();
+            $fee_parts = PaymentParts::where('school_fees_id', $part->school_fees_id)->where('student_id', $part->student_id)->get();
             $student = Student::findOrFail($request->student_id);
             $currentYear = acadmice_year::where('status', '0 ')->firstOrFail();
             $currentDate = Carbon::today();
             if ($request->amount != $part->amount) {
-    
                 // Handling partial payments
                 $newPart = new PaymentParts([
                     'date' => $currentDate,
@@ -147,15 +144,16 @@ class PaymentPartsController extends Controller
                 ]);
                 $newPart->save();
                 $part->delete();
+                DB::commit();
             } elseif ($request->amount === $part->amount || $check->count() !== 0) {
-                //dd($check->sum('amount'), $fee->fees->amount);
+
                 // Handling full payment
                 $part->update(['payment_status' => 1]);
-                $this->createStudentAccount(null, $request->student_id, $student->grade_id, $student->classroom_id, $currentYear->id, $currentDate, $part->amount, 0.00, '2 ');
+                $this->createStudentAccount(null, $request->student_id, $student->grade_id, $student->classroom_id, $currentYear->id, $currentDate, $part->amount, 0.00, '2');
                 $totalAmount = $request->amount;
                 $receipt = $this->createReceipt($totalAmount, $request->student_id, $currentYear->id);
-                if ($totalAmount == $fee->fees->amount) {
-                    $fee->update(['status' => '1']);
+                if ($fee_parts->sum('amount') == $check->sum('amount')) {
+                    $fee->update(['status' => 1]);
                 }
                 DB::commit();
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
@@ -172,6 +170,7 @@ class PaymentPartsController extends Controller
             session()->flash('error', $e->getMessage());
             return redirect()->back();
         }
+        
     }
     private function createReceipt($amount, $studentId, $academicYearId)
     {

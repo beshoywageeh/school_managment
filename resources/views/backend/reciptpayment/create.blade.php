@@ -104,7 +104,7 @@
                                                 @endphp
                                                 <td>{{Number::currency($final,'EGP','AR')}}</td>
                                                 <td>
-                                                    <button class="btn btn-success btn-sm"
+                                                    <button class="btn btn-success btn-block"
                                                             type="submit">{{ trans('General.full_pay') }}</button>
                                                 </td>
                                             </tr>
@@ -164,7 +164,7 @@
                                                            class="form-control">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-success btn-sm"
+                                                    <button class="btn btn-success btn-block"
                                                             type="submit">{{ trans('General.Submit') }}</button>
                                                 </td>
                                             </tr>
