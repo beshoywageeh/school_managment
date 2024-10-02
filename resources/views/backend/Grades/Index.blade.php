@@ -25,7 +25,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('grade-list')
-                        <table id="datatable" class="table p-0 text-center table-striped table-bordered">
+                        <table id="datatable" class="table p-0 text-center table-striped table-sm table-bordered">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -48,10 +48,10 @@
                                         <td>{{ $grade->created_at->format('Y/m/d') }}</td>
                                         <td>{{ $grade->class_room_count }}</td>
                                         <td>{{ $grade->students_count }}</td>
-                                        <td>{{ number_format($grade->fees_sum_amount, 2) }}&nbsp;ج.م</td>
+                                        <td>{{ Number::currency($grade->fees_sum_amount,'EGP','AR')}}</td>
                                         <td>
                                             @can('grade-edit')
-                                            <button class="btn btn-warning" data-toggle="modal"
+                                            <button class="btn btn-warning btn-sm" data-toggle="modal"
                                                 data-target="#grade-edit-{{ $grade->id }}">
                                                 <i class="ti-pencil-alt"></i>
                                                 {{ trans('general.edit') }}

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Artisan;
+
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Log;
@@ -10,7 +10,7 @@ use Spatie\Backup\Commands\ListCommand;
 use Spatie\Backup\Helpers\Format;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
-
+use Illuminate\Support\Facades\Artisan;
 class BackupController extends Controller
 {
     public function index()
@@ -53,7 +53,7 @@ class BackupController extends Controller
             $output = Artisan::output();
             // log the results
             Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n".$output);
-            session()->flash('success', trans('notifications.backup_successful_body'));
+            session()->flash('success', trans('notifications.backup_successful_body', ['application_name' => config('app.name'), 'disk_name' => config('backup.backup.destination.disks')[0]]));
 
             return redirect()->back();
         } catch (\Exception $e) {

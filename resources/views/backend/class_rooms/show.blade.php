@@ -28,12 +28,14 @@
                     </div>
                 </div>
                 <div class="table-resposive">
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered table-sm">
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>{{ trans('student.name') }}</th>
                                 <th>{{ trans('student.birth_date') }}</th>
+                                <th>{{ trans('student.gender') }}</th>
+                                <th>{{trans('student.religion')}}</th>
                                 <th>{{ trans('general.created_by') }}</th>
                                 <th>{{ trans('general.created_at') }}</th>
                             </tr>
@@ -44,6 +46,8 @@
                                 <td> {{ $loop->iteration }}</td>
                                 <td>{{$student->name}}</td>
                                 <td>{{$student->birth_date}}</td>
+                                <td>{{$student->gender->lang()}}</td>
+                                <td>{{$student->religion->lang()}}</td>
                                 <td>{{$student->user->name}}</td>
                                 <td>{{$student->created_at->format('Y/m/d')}}</td>
 

@@ -80,7 +80,7 @@ return [
              * For a complete list of available customization options, see https://github.com/spatie/db-dumper
              */
             'databases' => [
-                'pgsql',
+                'mysql',
             ],
         ],
 
@@ -208,7 +208,6 @@ return [
 
         'mail' => [
             'to' => 'your@example.com',
-
             'from' => [
                 'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
                 'name' => env('MAIL_FROM_NAME', 'Example'),

@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Spatie\Browsershot\Browsershot;
 
 class GradesController extends Controller
 {
@@ -16,11 +15,12 @@ class GradesController extends Controller
     {
         $id = \Auth::id();
         if (Auth::user()->hasRole('Admin')) {
-            $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->paginate(10);
+            $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->withSum('fees', 'amount')->paginate(10);
         } else {
             $grade = DB::Table('teacher_grade')->where('teacher_id', $id)->pluck('grade_id');
             $data['grades'] = Grade::whereIn('id', $grade)->with('user')->withCount(['class_room', 'students'])->paginate(10);
         }
+
         $data['users'] = User::get();
 
         return view('backend.Grades.index', ['data' => $data]);
@@ -34,7 +34,7 @@ class GradesController extends Controller
     public function store(Request $request)
     {
         // return $request;
-        \DB::beginTransaction();
+        DB::beginTransaction();
         try {
             $request->validate([
                 'Grade_Name' => ['required', 'string', 'max:255'],
@@ -44,14 +44,13 @@ class GradesController extends Controller
                 'user_id' => \Auth::Id(),
             ]);
             $grade->users()->attach($request->user_id);
-            \DB::commit();
+            DB::commit();
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
             session()->flash('error', $e->getMessage());
-
             return redirect()->back()->withInput();
         }
     }
@@ -61,27 +60,9 @@ class GradesController extends Controller
      */
     public function show(string $id)
     {
-        $report_data = Grade::where('id', $id)->with(['class_room', 'class_room.students'])->withCount(['class_room', 'students'])->first();
-
-        $html = view('backend.grades.report', ['report_data' => $report_data])->render();
-
-        $tempFile = tempnam(sys_get_temp_dir(), 'pdf_').'.html';
-        file_put_contents($tempFile, $html);
-
         try {
-            $browsershot = new Browsershot($tempFile);
-            $browsershot->timeout(300000) // 5 minutes
-                ->windowSize(1920, 1080)
-                ->waitUntilNetworkIdle()
-                ->pdf(['printBackground' => true]);
-
-            $pdfContent = $browsershot->pdf();
-
-            unlink($tempFile);
-
-            return response($pdfContent)
-                ->header('Content-Type', 'application/pdf')
-                ->header('Content-Disposition', 'inline; filename="grade_report.pdf"');
+            $report_data = Grade::where('id', $id)->with(['class_room', 'class_room.students'])->withCount(['class_room', 'students'])->first();
+            return view('backend.Grades.report', get_defined_vars());
         } catch (\Exception $e) {
             \Log::error('PDF Generation failed: '.$e->getMessage());
 
@@ -96,7 +77,7 @@ class GradesController extends Controller
 
     public function update(Request $request)
     {
-        \DB::beginTransaction();
+        DB::beginTransaction();
         try {
             $request->validate([
                 'Grade_Name' => ['required', 'string', 'max:255'],
@@ -110,12 +91,12 @@ class GradesController extends Controller
             } else {
                 $grade->users()->sync([]);
             }
-            \DB::commit();
+            DB::commit();
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
         } catch (\Exception $e) {
-            \DB::rollBack();
+            DB::rollBack();
             session()->flash('error', $e->getMessage());
 
             return redirect()->back()->withInput();
