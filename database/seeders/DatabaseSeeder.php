@@ -13,19 +13,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            settingsTableSeeder::class,
+        $this->call([settingsTableSeeder::class,
             PermissionTableSeeder::class,
             UserTableSeeder::class,
-            My_parentsTableSeeder::class,
-            GradeTableSeeder::class,
-            class_roomTableSeeder::class,
-            StudentsTableSeeder::class,
-            AcadmiceYearSeeder::class,
-            SchoolFeeSeeder::class,
-            FeeinvSeeder::class,
-            ExceptionSeeder::class,
-            RecipetPaymentSeeder::class,
+            // My_parentsTableSeeder::class,
+            // GradeTableSeeder::class,
+            // class_roomTableSeeder::class,
+            // StudentsTableSeeder::class,
+            // AcadmiceYearSeeder::class,
+            // SchoolFeeSeeder::class,
+            // FeeinvSeeder::class,
+            // ExceptionSeeder::class,
+            // RecipetPaymentSeeder::class,
         ]);
 
     }

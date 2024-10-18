@@ -28,9 +28,9 @@ class ParentsImport implements ToCollection
                 'Mother_National_Id' => $row[8],
                 'Mother_Phone' => $row[9],
                 'Mother_Job' => $row[10],
-                'Religion' => user_religion::fromString($row[11]),
+                'Religion' => user_religion::fromString($row[13]),
                 'Address' => $row[12],
-                'Mother_Birth_Date' => $row[13],
+                'Mother_Birth_Date' => $row[11],
                 'user_id' => Auth::id(),
             ]);
         }

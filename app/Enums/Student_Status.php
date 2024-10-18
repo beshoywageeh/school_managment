@@ -13,8 +13,8 @@ enum Student_Status: int
     case SECOND_TRY = 6;
     case PASS_ON_LOW = 7;
     case REJECTED = 8;
-
     case FREEZED = 9;
+    case STILL = 10;
 
     public function color(): string
     {
@@ -39,6 +39,7 @@ enum Student_Status: int
             self::REJECTED => trans('enums.REJECTED'),
             self::FREEZED => trans('enums.FREEZED'),
             self::TOTAL_ABSENT => trans('enums.TOTAL_ABSENT'),
+            self::STILL => trans('enums.STILL')
         };
     }
 
@@ -55,6 +56,7 @@ enum Student_Status: int
             'reject' => self::REJECTED,
             'freeze' => self::FREEZED,
             'total_absent' => self::TOTAL_ABSENT,
+            'still' => self::STILL,
             default => null,
         };
     }

@@ -67,6 +67,8 @@
                                         </thead>
                                         <tbody>
                                             @forelse ($jobs_main as $job)
+
+
                                                 <tr>
                                                     <td> {{ $loop->iteration }}</td>
                                                     <td>{{ $job->name }}</td>
@@ -78,6 +80,7 @@
                                                     <td>
                                                         <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                             [
+                                                                'type' => 'link',
                                                                 'url' => route('jobs.show', $job->id),
                                                                 'text' => trans('general.info'),
                                                                 'icon' => 'ti-info-alt',
@@ -85,12 +88,7 @@
                                                                 'className' => 'show_jobs',
                                                             ],
                                                             [
-                                                                'url' => route('jobs.edit', $job->id),
-                                                                'text' => trans('general.edit'),
-                                                                'icon' => 'ti-pencil',
-                                                                'can' => 'jobs-edit',
-                                                            ],
-                                                            [
+                                                                'type' => 'link',
                                                                 'url' => route('jobs.destroy', $job->id),
                                                                 'text' => trans('general.delete'),
                                                                 'icon' => 'ti-trash',
@@ -100,6 +98,7 @@
                                                         ]" />
                                                     </td>
                                                 </tr>
+
                                             @empty
                                                 <tr>
                                                     <td colspan="10" class="text-center">{{ trans('general.Msg') }}</td>
@@ -137,6 +136,7 @@
         <script>
             let is_main = document.getElementById('is_main'),
                 main_jobs = document.getElementById('main_jobs');
+            main_jobs.style.display = 'none';
             is_main.addEventListener('click', function() {
                 if (is_main.checked) {
                     main_jobs.style.display = 'none';
@@ -194,12 +194,12 @@
                                     const jobData = data.find(j => j.id == jobId);
                                     $('#Edit_Job #job_id').val(jobId);
                                     $('#Edit_Job #job_name').val(jobData
-                                    .name); // Adjust to match your data structure
+                                        .name); // Adjust to match your data structure
                                     $('#Edit_Job #worker_type').val(jobData
-                                    .type); // Adjust to match your data structure
+                                        .type); // Adjust to match your data structure
                                     $('#Edit_Job #is_main').prop('checked', jobData
                                         .is_main == 1
-                                        ); // Adjust to match your data structure
+                                    ); // Adjust to match your data structure
                                 });
                             });
                         })

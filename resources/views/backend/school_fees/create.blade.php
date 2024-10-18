@@ -52,8 +52,8 @@
                             </label>
                             <select class='custom-select' name="academic_year_id">
                                 <option> {{ trans('fees.choose_academic_year') }}</option>
-                                @forelse ($academic_years as $year)
-                                    <option value="{{ $year['id'] }}">{{ $year['academic_year'] }}</option>
+                                @forelse ($years as $year)
+                                    <option value="{{ $year->id }}">{{ $year->view }}</option>
                                 @empty
                                     <option>{{ trans('fees.no_academic_year') }}</option>
                                 @endforelse

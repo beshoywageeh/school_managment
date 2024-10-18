@@ -30,4 +30,8 @@ return [
     'admin_era' => 'تفعيل الحسابات',
     'Clothes_Books' => 'الزي و الكتب',
     'daily' => 'يومية',
+    'stores' => 'مخازن',
+    'stocks' => 'عهدة',
+    'clothes' => 'ملابس',
+    'books_sheets' => 'الكتب والملازم'
 ];

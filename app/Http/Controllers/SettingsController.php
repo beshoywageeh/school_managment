@@ -32,7 +32,7 @@ class SettingsController extends Controller
 
     public function store(NewSchoolRequest $request)
     {
-        // return $request;
+
         \Illuminate\Support\Facades\DB::beginTransaction();
         try {
             $school = new settings;
@@ -63,7 +63,7 @@ class SettingsController extends Controller
 
     public function update(Request $request)
     {
-        //return $request;
+        return $request;
         try {
             $school = settings::findorfail($request->id);
             $school->name = $request->school_name;

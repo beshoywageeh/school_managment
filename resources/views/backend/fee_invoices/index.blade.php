@@ -49,6 +49,7 @@
 
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
+                                                        'type'=>'link',
                                                         'url' => route('fee_invoice.destroy', $fee_invoice->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
@@ -56,6 +57,7 @@
                                                         'can' => 'fee_invoice-delete',
                                                     ],
                                                     [
+                                                        'type'=>'link',
                                                         'url' => route('fee_invoice.show', $fee_invoice->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info-alt',
@@ -63,6 +65,7 @@
                                                         'can' => 'fee_invoice-info',
                                                     ],
                                                     [
+                                                        'type'=>'link',
                                                         'url' => route('fee_invoice.edit', $fee_invoice->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',

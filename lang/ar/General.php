@@ -46,4 +46,6 @@ return [
     'download_form' => 'تحميل ملف البيانات',
     'show' => 'عرض',
     'invoice_to' => 'الفاتورة إلى',
+    'noInvoiceToPay' => "لا يوجد فواتير للدفع",
+    'noInvoiceToExcept' => 'لا يوجد فواتير للاعفاء'
 ];

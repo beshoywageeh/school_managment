@@ -12,7 +12,7 @@ trait LogsActivity
             'user_id' => auth()->id(),
             'action' => $action,
             'description' => $description,
-            'ip_address' => request()->ip(),
+            'ip' => request()->ip(),
         ]);
     }
 }

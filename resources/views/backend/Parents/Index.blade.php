@@ -28,24 +28,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('parents-list')
-                            <table class="table table-striped table-hover table-sm" id="parents_datatable">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{{ trans('Parents.Father_Name') }}</th>
-                                        <th>{{ trans('Parents.Father_Phone') }}</th>
-                                        <th>{{ trans('Parents.Father_Job') }}</th>
-                                        <th>{{ trans('Parents.Mother_Name') }}</th>
-                                        <th>{{ trans('Parents.Mother_Phone') }}</th>
-                                        <th>{{ trans('Parents.Address') }}</th>
-                                        <th>{{ trans('Parents.children_count') }}</th>
-                                        <th>{{ trans('General.actions') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
+                        {!! $dataTable->table(['class' => 'datatable table table-sm table-striped table-hover dt-buttons'], true) !!}
                         @endcan
                     </div>
                 </div>
@@ -55,66 +38,5 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#parents_datatable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('parents.datatable') }}",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex'
-                    },
-                    {
-                        data: 'Father_Name',
-                        name: 'Father_Name'
-                    },
-                    {
-                        data: 'Father_Phone',
-                        name: 'Father_Phone'
-                    },
-                    {
-                        data: 'Father_Job',
-                        name: 'Father_Job'
-                    },
-                    {
-                        data: 'Mother_Name',
-                        name: 'Mother_Name'
-                    },
-                    {
-                        data: 'Mother_Phone',
-                        name: 'Mother_Phone'
-                    },
-                    {
-                        data: 'Address',
-                        name: 'Address'
-                    },
-
-                    {
-                        data: 'childrens',
-                        name: 'childrens'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
-                ],
-                language: {
-                    url: "{{ asset('assests/' . app()->getLocale() . '.json') }}"
-                },
-                responsive: true,
-                lengthMenu: [
-                    [20, 40, 50, -1],
-                    [20, 40, 50, "الكل"]
-                ],
-            });
-        });
-    </script>
-    <sctipt>
-        $(document).ready(function() {
-            $('.dataTables_length select').removeClass().addClass('custom-select');
-        })
-    </sctipt>
+{{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 @endpush

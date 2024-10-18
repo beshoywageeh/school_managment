@@ -26,7 +26,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>{{trans('fee.title')}}</th>
+                                        <th>{{ trans('fees.title') }}</th>
                                         <th>{{ trans('fees.grade') }}</th>
                                         <th>{{ trans('fees.classroom') }}</th>
                                         <th>{{ trans('academic_year.title') }}</th>
@@ -46,12 +46,13 @@
                                             <td>{{ $fee->classroom->name }}</td>
                                             <td>{{ $fee->year->view }}</td>
                                             <td>{{ $fee->description }}</td>
-                                            <td>{{ Number::currency($fee->amount,'EGP','AR')}}</td>
+                                            <td>{{ Number::currency($fee->amount, 'EGP', 'AR') }}</td>
                                             <td>{{ $fee->user->name }}</td>
                                             <td>{{ $fee->created_at->format('Y-m-d') }}</td>
                                             <td>
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
+                                                        'type' => 'link',
                                                         'url' => route('schoolfees.destroy', $fee->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
@@ -59,6 +60,7 @@
                                                         'can' => 'schoolfees-delete',
                                                     ],
                                                     [
+                                                        'type' => 'link',
                                                         'url' => route('schoolfees.show', $fee->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info-alt',
@@ -66,6 +68,7 @@
                                                         'can' => 'schoolfees-info',
                                                     ],
                                                     [
+                                                        'type' => 'link',
                                                         'url' => route('schoolfees.edit', $fee->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',

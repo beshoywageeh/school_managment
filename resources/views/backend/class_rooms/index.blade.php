@@ -7,7 +7,7 @@
 @section('content')
     <div class="row">
         <div class="col">
-            <div class="card mb-4">
+            <div class="mb-4 card">
                 <div class="card-body">
                     <div class="row card-title">
                         <div class="col-lg">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('class_rooms-list')
-                        <table class="table table-striped table-bordered" id="datatable">
+                        <table class="table table-striped table-bordered table-sm" id="datatable">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -48,15 +48,16 @@
                                         <td>{{ $class_room->created_at->format('Y/m/d') }}</td>
                                         <td>{{ $class_room->students_count }}</td>
                                         <td>
-                                            @can('class_rooms-edit')
-                                            <button class="btn btn-warning btn-sm" data-toggle="modal"
-                                                                data-target="#class-edit-{{ $class_room->id }}">
-                                                                <i class="ti-pencil-alt"></i>
-                                                                {{ trans('general.edit') }}
-                                                            </button>
-                                                            @endcan
                                             <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+  [
+                                                'type'=>'button',
+                                                'target'=>'#class-edit-'.$class_room->id,
+                                                'text'=>trans('general.edit'),
+                                                'icon'=>'ti-pencil-alt',
+                                                'can'=>'class_rooms-edit'
+                                            ],
                                                 [
+                                                    'type'=>'link',
                                                     'url' =>  route('class_rooms.destroy', $class_room->id) ,
                                                     'text' => trans('general.delete'),
                                                     'icon' => 'ti-trash',
@@ -64,6 +65,7 @@
                                                     'can'=>'class_rooms-delete'
                                                 ],
                                                 [
+                                                    'type'=>'link',
                                                     'url' =>  route('class_room.show', $class_room->id) ,
                                                     'text' => trans('general.info'),
                                                     'icon' => 'ti-info-alt',

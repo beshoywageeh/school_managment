@@ -19,7 +19,7 @@ class PaymentPartsController extends Controller
     {
         try {
             $student = Fee_invoice::where('student_id', $id)->with(['students', 'grades', 'classes', 'acd_year', 'fees'])->get();
-            if ($student == null) {
+            if ($student->count() == 0) {
                 session()->flash('info', trans('general.noInvoiceToPart'));
                 return redirect()->back();
             } else {
@@ -170,7 +170,7 @@ class PaymentPartsController extends Controller
             session()->flash('error', $e->getMessage());
             return redirect()->back();
         }
-        
+
     }
     private function createReceipt($amount, $studentId, $academicYearId)
     {

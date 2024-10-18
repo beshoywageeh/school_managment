@@ -11,21 +11,24 @@
     </style>
 @endpush
 @section('content')
-    <div class="row">
+    <div class="row"style="height: 35vh !important">
         <div class="mb-4 col-md-4">
             <div class="card card-statistics h-100">
                 <div class="card-body">
+
                     @php
                         $statisces = [
                             [
                                 'title' => 'Sidebar.Students',
-                                'icon' => 'users',
+                                'icon' => URL::asset('assests/images/Sidebar/students.png'),
                                 'data_var' => $students,
+                                'route'=>route('Students.index'),
                             ],
                             [
                                 'title' => 'Sidebar.parents',
-                                'icon' => 'users',
+                                'icon' => URL::asset('assests/images/Sidebar/parents.png'),
                                 'data_var' => $parents,
+                                'route'=>route('parents.index'),
                             ],
                         ];
                     @endphp
@@ -33,8 +36,8 @@
                         <table class="table table-sm table-bordered" id="statisces">
                             @foreach ($statisces as $statisce)
                                 <tr>
-                                    <td><i class="fa fa-{{ $statisce['icon'] }}"></i></td>
-                                    <td>{{ trans($statisce['title']) }}</td>
+                                    <td><img class="img img-responisve" width="30" height="30" src="{{$statisce['icon']}}" alt=""></td>
+                                    <td><a href="{{$statisce['route']}}">{{trans($statisce['title'])}}</a></td>
                                     <td>{{ $statisce['data_var'] }}</td>
                                 </tr>
                             @endforeach
@@ -91,7 +94,7 @@
         </div>
     </div>
 
-    <div class="mb-40 row">
+    <div class="mb-40 row" style="height: 35vh !important">
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">

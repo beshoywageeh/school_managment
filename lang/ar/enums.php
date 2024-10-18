@@ -13,6 +13,7 @@ return [
     'manegment' => 'إدارة',
     'CHANGE_PATH' => 'تحويل مسار',
     'MERGE' => 'دمج',
+    'STILL' => 'باق',
     'SECOND_TRY' => 'دور ثاني',
     'FREEZED' => 'مجمدين',
     'TRASPORT_TO' => 'محولون الي المدرسة',

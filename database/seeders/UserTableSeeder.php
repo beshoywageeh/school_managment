@@ -27,7 +27,7 @@ class UserTableSeeder extends Seeder
             'reiligon' => '1',
             'type' => '1',
             'email_verified_at' => now(),
-            'email' => 'admin@schoolstepup.com',
+            'email' => 'admin@ischool.com',
             'isAdmin' => '1',
             'login_allow' => '1']);
         $role = Role::create(['name' => 'Admin']);

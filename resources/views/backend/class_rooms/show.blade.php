@@ -49,8 +49,7 @@
                                 <td>{{$student->gender->lang()}}</td>
                                 <td>{{$student->religion->lang()}}</td>
                                 <td>{{$student->user->name}}</td>
-                                <td>{{$student->created_at->format('Y/m/d')}}</td>
-
+                                <td>{{is_null($student->created_at)?'-':$student->created_at->format('Y-m-d')}}</td>
                             </tr>
                             @endforeach
                         </tbody>

@@ -11,6 +11,7 @@ use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentsController extends Controller
 {
@@ -37,6 +38,7 @@ class StudentsController extends Controller
      */
     public function store(StudentRequest $request)
     {
+        //return $request;
         try {
             $inputDate = \Carbon\Carbon::parse($request->birth_date);
             $firstOfOctober = \Carbon\Carbon::create(date('Y'), 10, 1);
@@ -45,6 +47,7 @@ class StudentsController extends Controller
             $months = $inputDate->diffInMonths($firstOfOctober) % 12;
             $days = $inputDate->diffInDays($firstOfOctober->copy()->subYears($years)->subMonths($months));
             $final_date = "{$years}-{$months}-{$days}";
+            $religion = My_parents::findorfail($request->parents);
             Student::create([
                 'code' => isset($generate_code) ? str_pad($generate_code->code + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'name' => $request->student_name,
@@ -57,7 +60,7 @@ class StudentsController extends Controller
                 'address' => $request->address,
                 'national_id' => $request->national_id,
                 'student_status' => $request->std_status,
-                'religion' => My_parents::findorfail($request->parents)->Religion,
+                'religion' => $religion->Religion,
                 'birth_at_begin' => $final_date,
                 'user_id' => \Auth::Id(),
             ]);
@@ -164,7 +167,8 @@ class StudentsController extends Controller
     {
         try {
             $path = $request->file('excel')->getRealPath();
-            \Excel::import(new StudentImport, $path);
+            Excel::import(new StudentImport, $path);
+            //Excel::import(new StudentImport, '/up/Student_Info2.xlsx', 'upload_attachments');
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('Students.index');

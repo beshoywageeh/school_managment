@@ -1,30 +1,32 @@
 <?php
 
-use App\Http\Controllers\AcadmiceYearController;
-use App\Http\Controllers\AdminEraController;
-use App\Http\Controllers\BackupController;
-use App\Http\Controllers\ClassRooms\ClassRoomsController;
-use App\Http\Controllers\ExcptionFeesController;
-use App\Http\Controllers\fee_invoiceController;
-use App\Http\Controllers\Grades\GradesController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\MonitorSystemController;
-use App\Http\Controllers\Parents\MyParentsController;
-use App\Http\Controllers\PaymentPartsController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\promotionController;
-use App\Http\Controllers\ReciptPaymentController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\SchoolFeeController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\SetupController;
-use App\Http\Controllers\Students\StudentsController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\{
+    AcadmiceYearController,
+    AdminEraController,
+    BackupController,
+    ClassRooms\ClassRoomsController,
+    ExcptionFeesController,
+    fee_invoiceController,
+    Grades\GradesController,
+    HomeController,
+    JobController,
+    Parents\MyParentsController,
+    PaymentPartsController,
+    ProfileController,
+    promotionController,
+    ReciptPaymentController,
+    ReportController,
+    RoleController,
+    SchoolFeeController,
+    SettingsController,
+    SetupController,
+    Students\StudentsController,
+    UserController,
+    ActivityLogController,
+    OrderController,
+    StockController
+};
 use Illuminate\Support\Facades\Route;
-use Livewire\Livewire;
 
 /*
  |
@@ -44,11 +46,6 @@ Route::group(
         'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
     ],
     function () {
-
-        Livewire::setUpdateRoute(function ($handle) {
-            return Route::post('/livewire/update', $handle);
-        });
-
         Route::middleware('auth')->group(function () {
 
             Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
@@ -80,7 +77,6 @@ Route::group(
                 Route::get('/{id}/show', 'show')->name('parent.show');
                 Route::post('/store', 'store')->name('parents.store');
                 Route::post('/update', 'update')->name('parents.update');
-                Route::get('/datatable', 'data')->name('parents.datatable');
                 Route::post('/Import_Excel', 'Excel_Import')->name('parents.import_excel');
             });
             Route::group(['prefix' => 'students', 'controller' => StudentsController::class], function () {
@@ -212,6 +208,26 @@ Route::group(
                 Route::post('/update', 'update')->name('settings.update');
                 Route::post('/update_password', 'update_password')->name('setting.update_password');
             });
+            Route::group(['prefix' => 'stocks', 'controller' => StockController::class], function () {
+                Route::get('/index', 'index')->name('stocks.index');
+                Route::post('/store', 'store')->name('stock.store');
+                Route::post('/stocks_submit', 'stocks_submit')->name('stock_submit.store');
+                Route::get('/delete/{id}', 'destroy')->name('stock.destroy');
+                Route::get('/tawreed/{id}', 'new_tawreed_order')->name('stock.tawreed');
+            });
+            Route::group(['prefix' => 'orders', 'controller' => OrderController::class], function () {
+                Route::get('/sotre', 'store')->name('order.store');
+            });
+            // Route::get('books/index', function () {
+            //     return view('backend.AdminEra.index');
+            // })->name('books.index');
+            // Route::get('books_sheets/index', function () {
+            //     return view('backend.AdminEra.index');
+            // })->name('books_sheets.index');
+            // Route::get('stocks/index', function () {
+            //     return view('backend.AdminEra.index');
+            // })->name('clothes.index');
+
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');
         });

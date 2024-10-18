@@ -47,6 +47,7 @@
 
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
+                                                        'type' => 'link',
                                                         'url' => route('Recipt_Payment.destroy', $Recipt_Payment->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
@@ -54,6 +55,7 @@
                                                         'can' => 'Recipt_Payment-delete',
                                                     ],
                                                     [
+                                                        'type' => 'link',
                                                         'url' => route('Recipt_Payment.show', $Recipt_Payment->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info-alt',
@@ -61,6 +63,7 @@
                                                         'can' => 'Recipt_Payment-info',
                                                     ],
                                                     [
+                                                        'type' => 'link',
                                                         'url' => route('Recipt_Payment.edit', $Recipt_Payment->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',

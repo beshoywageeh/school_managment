@@ -10,7 +10,7 @@
             <div class="card card-satistics h-100">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class='table table-bordered table-striped'>
+                        <table class='table table-bordered table-striped table-sm'>
                             <thead class='alert-success'>
                                 <tr>
                                     <th>#</th>
@@ -45,7 +45,7 @@
                                                 <input type="checkbox" name="login_allow" class="form-control"
                                                     @checked($employee->login_allow == 1) />
                                             </td>
-                                            <td>{{ $employee->type->lang() }}</td>
+                                            <td>{{ $employee->job->name ?? 'N/A' }}</td>
                                             <td>
 
                                                 <input type="password" name="password" class="form-control" />

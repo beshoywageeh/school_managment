@@ -22,19 +22,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file"
-                                   name="excel"
-                                   multiple
-                                   accept="application/csvm+json,application/xlsx"
-                                   class="custom-file-input"
-                                   id="inputGroupFile02">
-                            <label class="custom-file-label"
-                                   for="inputGroupFile02">{{trans('general.choose_file')}}</label>
-                        </div>
-                        <div class="input-group-append">
-                            <span class="input-group-text">{{trans('general.upload')}}</span>
-                        </div>
+                     <input type="file" name="excel" id="">
                     </div>
                 </div>
                 <div class="modal-footer">

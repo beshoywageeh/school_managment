@@ -12,14 +12,14 @@ NOTE:
   "use strict";
 // Line Stacked
 
-    $('.date-picker-default').datepicker({
-        format: 'mm-dd-yyyy',
+    $(".date-picker-default").datepicker({
+        format: "yyyy-mm-dd",
         autoclose: true,
         orientation: "bottom",
         templates: {
             leftArrow: '<i class="fa fa-angle-left"></i>',
-            rightArrow: '<i class="fa fa-angle-right"></i>'
-        }
+            rightArrow: '<i class="fa fa-angle-right"></i>',
+        },
     });
 
 
@@ -45,6 +45,7 @@ NOTE:
 
     $('#datepicker-inline').datepicker({
         todayHighlight: true,
+        format: "yyyy-mm-dd",
         autoclose: true,
         orientation: "bottom",
         templates: {
@@ -56,6 +57,7 @@ NOTE:
 
     $('#datepicker-action').datepicker({
         todayBtn: "linked",
+        format: "yyyy-mm-dd",
         clearBtn: true,
         autoclose: true,
         todayHighlight: true,

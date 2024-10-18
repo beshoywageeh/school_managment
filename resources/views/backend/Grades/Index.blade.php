@@ -15,70 +15,72 @@
                             </div>
                             <div class="col text-md-right">
                                 @can('grade-create')
-                                <x-button data-toggle="modal" data-target="#CreateGrade" type="" class="primary">
-                                    <i class="ti-plus"></i>
-                                    {{ trans('Grades.new') }}
-                                </x-button>
+                                    <x-button data-toggle="modal" data-target="#CreateGrade" type="" class="primary">
+                                        <i class="ti-plus"></i>
+                                        {{ trans('Grades.new') }}
+                                    </x-button>
                                 @endcan
                             </div>
                         </div>
                     </div>
                     <div class="table-responsive">
                         @can('grade-list')
-                        <table id="datatable" class="table p-0 text-center table-striped table-sm table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>{{ trans('Grades.name') }}</th>
-                                    <th>{{ trans('grades.by') }}</th>
-                                    <th>{{ trans('General.created_at') }}</th>
-                                    <th>{{ trans('grades.class_count') }}</th>
-                                    <th>{{ trans('grades.student_count') }}</th>
-                                    <th>{{ trans('grades.total_fees') }}</th>
-                                    <th>{{ trans('general.actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($data['grades'] as $grade)
-                                    <tr>
-                                        <td> {{ $data['grades']->firstItem() + $loop->index }}</td>
-                                        <td><a target='_blank'
-                                                href="{{ route('grade.show', $grade->id) }}">{{ $grade->name }}</a></td>
-                                        <td>{{ $grade->user->name }}</td>
-                                        <td>{{ $grade->created_at->format('Y/m/d') }}</td>
-                                        <td>{{ $grade->class_room_count }}</td>
-                                        <td>{{ $grade->students_count }}</td>
-                                        <td>{{ Number::currency($grade->fees_sum_amount,'EGP','AR')}}</td>
-                                        <td>
-                                            @can('grade-edit')
-                                            <button class="btn btn-warning btn-sm" data-toggle="modal"
-                                                data-target="#grade-edit-{{ $grade->id }}">
-                                                <i class="ti-pencil-alt"></i>
-                                                {{ trans('general.edit') }}
-                                            </button>
-                                            @endcan
-                                            <x-dropdown-table :buttonText="trans('general.actions')" :items="[
-                                                [
-                                                    'url' => route('grade.destroy', $grade->id),
-                                                    'text' => trans('general.delete'),
-                                                    'icon' => 'ti-trash',
-                                                    'onclick' => 'confirmation(event)',
-                                                    'can'=>'grade-delete'
-                                                ],
-                                                [
-                                                    'url' => route('grade.show', $grade->id),
-                                                    'text' => trans('general.info'),
-                                                    'icon' => 'ti-info-alt',
-                                                    'target' => '_blank',
-                                                    'can'=>'grade-info'
-                                                ],
-                                            ]" />
-                                        </td>
-                                    </tr>
-                                    @include('backend.Grades.edit')
-                                @endforeach
-                            </tbody>
-                        </table>
+                            <table class="table p-0 text-center table-striped table-sm table-bordered">
+                                <thead class="font-bold">
+                                    <td>#</td>
+                                    <td>{{ trans('Grades.name') }}</td>
+                                    <td>{{ trans('grades.by') }}</td>
+                                    <td>{{ trans('General.created_at') }}</td>
+                                    <td>{{ trans('grades.class_count') }}</td>
+                                    <td>{{ trans('grades.student_count') }}</td>
+                                    <td>{{ trans('general.actions') }}</td>
+                                </thead>
+                                <tbody>
+                                    @forelse ($data['grades'] as $grade)
+                                        <tr>
+                                            <td> {{ $data['grades']->firstItem() + $loop->index }}</td>
+                                            <td><a target='_blank'
+                                                    href="{{ route('grade.show', $grade->id) }}">{{ $grade->name }}</a></td>
+                                            <td>{{ $grade->user->name }}</td>
+                                            <td>{{ $grade->created_at->format('Y/m/d') }}</td>
+                                            <td>{{ $grade->class_room_count }}</td>
+                                            <td>{{ $grade->students_count }}</td>
+
+                                            <td>
+                                                <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                    [
+                                                        'type'=>'button',
+                                                        'target'=>'#grade-edit-'.$grade->id,
+                                                        'text'=>trans('general.edit'),
+                                                        'icon'=>'ti-pencil-alt',
+                                                        'can'=>'grade-edit'
+                                            ],
+                                                    [
+                                                        'type'=>'link',
+                                                        'url' => route('grade.destroy', $grade->id),
+                                                        'text' => trans('general.delete'),
+                                                        'icon' => 'ti-trash',
+                                                        'onclick' => 'confirmation(event)',
+                                                        'can' => 'grade-delete',
+                                                    ],
+                                                    [
+                                                        'type'=>'link',
+                                                        'url' => route('grade.show', $grade->id),
+                                                        'text' => trans('general.info'),
+                                                        'icon' => 'ti-info-alt',
+                                                        'target' => '_blank',
+                                                        'can' => 'grade-info',
+                                                    ],
+
+                                                ]" />
+                                            </td>
+                                        </tr>
+                                        @include('backend.Grades.edit')
+                                        @empty
+                                        <tr><td colspan="7">{{trans('General.noDataToShow')}}</td></tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         @endcan
                     </div>
                 </div>

@@ -63,6 +63,7 @@
                                             <x-dropdown-table :buttonText="trans('general.actions')"
                                                               :items="[
                                                 [
+                                                    'type'=>'link',
                                                     'url' => route('employees.destroy', $employee->id),
                                                     'text' => trans('general.delete'),
                                                     'icon' => 'ti-trash',
@@ -70,6 +71,7 @@
                                                     'can'=>'employees-delete'
                                                 ],
                                                 [
+                                                    'type'=>'link',
                                                     'url' => route('employees.show', $employee->id),
                                                     'text' => trans('general.info'),
                                                     'icon' => 'ti-info-alt',
@@ -77,6 +79,7 @@
                                                     'can'=>'employees-info'
                                                 ],
                                                 [
+                                                    'type'=>'link',
                                                     'url' => route('employees.edit', $employee->id),
                                                     'text' => trans('general.edit'),
                                                     'icon' => 'ti-pencil',

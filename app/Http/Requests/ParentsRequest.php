@@ -22,10 +22,10 @@ class ParentsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'Father_Name' => 'nullable|string|max:255',
+            'Father_Name' => 'required|string|max:255',
             'Father_National_Id' => 'nullable|string|min:14|max:14|regex:/[0-9]{14}/',
             'Father_Phone' => 'nullable|numeric|digits:11|regex:/^01[1-9]\d{8}$/',
-            'Father_Job' => 'nullable|string|max:255',
+            'Father_Job' => 'required|string|max:255',
             'Father_Birth_Date' => 'nullable|date',
             'Father_Learning' => 'nullable|string|max:255',
             'Mother_Name' => 'nullable|string|max:255',

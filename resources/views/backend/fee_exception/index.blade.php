@@ -42,6 +42,7 @@
 
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
+                                                        'type'=>'link',
                                                         'url' => route('except_fee.destroy', $ExcptionFee->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
@@ -49,6 +50,7 @@
                                                         'can' => 'except_fee-delete',
                                                     ],
                                                     [
+                                                        'type'=>'link',
                                                         'url' => route('except_fee.show', $ExcptionFee->students->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info-alt',
@@ -56,6 +58,7 @@
                                                         'can' => 'except_fee-info',
                                                     ],
                                                     [
+                                                        'type'=>'link',
                                                         'url' => route('except_fee.edit', $ExcptionFee->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',

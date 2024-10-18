@@ -131,9 +131,8 @@
 
                     birthDateInput.addEventListener('change', () => {
                         const birthDate = new Date(birthDateInput.value);
-                        console.log(birthDate);
                         const checkDate = new Date(makeDate());
-                        checkBirthInput.value = Math.ceil((checkDate - birthDate) / (1000 * 3600 * 24));
+                        checkBirthInput.value = Math.floor((checkDate - birthDate) / (1000 * 3600 * 24)/365);
                     });
                 } else {
                     console.error('Input elements not found');

@@ -30,8 +30,12 @@ class ExcptionFeesController extends Controller
             $Excpetion = Student::where('id', $id)->first();
             $acadmincs = acadmice_year::where('status', '0')->get();
             $fees = Fee_invoice::where('student_id', $id)->where('status', 0)->with('fees')->get();
-
-            return view('backend.fee_exception.create', get_defined_vars());
+            if ($fees->count() == 0) {
+                session()->flash('info', trans('General.noInvoiceToExcept'));
+                return redirect()->back();
+            } else {
+                return view('backend.fee_exception.create', get_defined_vars());
+            }
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -156,13 +160,10 @@ class ExcptionFeesController extends Controller
     {
         try {
             ExcptionFees::findorfail($id)->delete();
-
             session()->flash('success', trans('general.success'));
-
             return redirect()->route('except_fee.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
-
             return redirect()->back();
         }
     }

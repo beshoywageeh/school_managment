@@ -28,7 +28,12 @@ class ReciptPaymentController extends Controller
             $invoice_manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
             $feeInvoices = Fee_invoice::where('student_id', $id)->where('status', 0)->with('fees:id,title,amount')->get(['id', 'invoice_date', 'school_fee_id']);
             $parts = PaymentParts::where('student_id', $id)->where('payment_status', 0)->get();
-            return view('backend.reciptpayment.create', get_defined_vars());
+            if ($feeInvoices->count() == 0 && $parts->count() == 0) {
+                session()->flash('info', trans('General.noInvoiceToPay'));
+                return redirect()->back();
+            } else {
+                return view('backend.reciptpayment.create', get_defined_vars());
+            }
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

@@ -29,15 +29,13 @@ class SchoolFeeController extends Controller
         try {
             $grades = Grade::get();
             $years = acadmice_year::where('status', 0)->get();
-            $academic_years =
-                $years->map(function ($year) {
-                    return [
-                        'id' => $year->id,
-                        'academic_year' => Carbon::parse($year->year_start)->format('Y').'-'.Carbon::parse($year->year_end)->format('Y'),
-                    ];
-                });
+            if ($grades->count() == 0 || $years->count() == 0) {
+                session()->flash('info', 'من فضلك اضف مراحل واعوام دراسية للبدء');
+                return redirect()->back();
+            } else {
+                return view('backend.school_fees.create', get_defined_vars());
+            }
 
-            return view('backend.school_fees.create', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -150,9 +148,7 @@ class SchoolFeeController extends Controller
                 'amount' => $request->amount,
             ]);
             session()->flash('success', trans('general.success'));
-
             return redirect()->route('schoolfees.index');
-
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

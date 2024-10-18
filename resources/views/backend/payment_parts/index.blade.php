@@ -49,6 +49,7 @@
                                             <td>
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
+                                                        'type' => 'link',
                                                         'url' => route('payment_parts.show', $PaymentPart->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info-alt',
@@ -56,6 +57,7 @@
                                                         'can' => 'payment_parts-info',
                                                     ],
                                                     [
+                                                        'type' => 'link',
                                                         'url' => route('payment_parts.destroy', $PaymentPart->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
@@ -63,12 +65,14 @@
                                                         'can' => 'payment_parts-delete',
                                                     ],
                                                     [
+                                                        'type' => 'link',
                                                         'url' => route('payment_parts.edit', $PaymentPart->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',
                                                         'can' => 'payment_parts-edit',
                                                     ],
                                                     [
+                                                        'type' => 'link',
                                                         'url' => route('payment_parts.pay', $PaymentPart->id),
                                                         'text' => trans('general.pay'),
                                                         'icon' => 'ti-pencil',

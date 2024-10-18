@@ -72,7 +72,7 @@ class GradesController extends Controller
 
     public function edit(string $id)
     {
-        return $id;
+        
     }
 
     public function update(Request $request)

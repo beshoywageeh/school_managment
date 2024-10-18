@@ -60,14 +60,14 @@
                             <td>{{ $stud->name }}</td>
                             <td>{{ $stud->national_id }}</td>
                             <td>{{ $stud->birth_date }}</td>
-                            <td>{{ $age[0] }}</td>
-                            <td>{{ $age[1] }}</td>
-                            <td>{{ $age[2] }}</td>
+                            <td>{{ $age[0] ??'-'}}</td>
+                            <td>{{ $age[1] ?? '-'}}</td>
+                            <td>{{ $age[2] ??'-'}}</td>
                             <td>{{ $stud->join_date }}</td>
                             <td>{{ $stud->gender->lang() }}</td>
                             <td>{{ $stud->parent->Father_Name }}</td>
                             <td>{{ $stud->student_status->lang() }}</td>
-                            <td>{{ $stud->religion->lang() }}</td>
+                            <td>{{ ($stud->religion == null) ? ' - ':$stud->religion->lang() }}</td>
                             <td>{{ $stud->classroom->name }}</td>
                         </tr>
                     @endforeach

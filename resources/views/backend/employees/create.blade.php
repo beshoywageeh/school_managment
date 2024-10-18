@@ -44,23 +44,10 @@
                             </div>
                             <!-- Form Row: Two -->
                             <div class="row">
-                                <div class="col form-group">
-                                    <label>
+                                <div class="col">
 
-                                        {{ trans('employees.birth_date') }}
-                                    </label>
-                                    <div class="input-group date" id="datepicker-action">
-                                        <input class="form-control" name="birth_date" value="{{old('birth_date')}}"
-                                               type="text">
-                                        <span class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </span>
-                                        @error('birth_date')
-                                        <div class="mt-1 alert alert-error">
-                                            {{$message}}
-                                        </div>
-                                        @enderror
-                                    </div>
+                                    <x-input type="date" name="birth_date" value="{{old('birth_date')}}">{{ trans('employees.birth_date') }}</x-input>
+                                  
                                 </div>
                                 <div class="col">
                                     <x-input name="phone" value="{{old('phone')}}"

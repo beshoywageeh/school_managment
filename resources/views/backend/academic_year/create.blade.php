@@ -14,24 +14,28 @@
             <form action="{{ route('academic_year.store') }}" method="post">
                 <div class="modal-body">
                     @csrf
-                    <div class="row">
-                        <div class="col-5">
-                            <label for="">{{ trans('academic_year.year_start') }}</label>
-                            <input class="form-control" name="year_start" type="date" value="dd/mm/yyyy">
-                        </div>
-                        <div class="col-5">
-                            <label for="">{{ trans('academic_year.year_end') }}</label>
-                            <input class="form-control" name="year_end" type="date" value="dd/mm/yyyy">
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>
-                                    {{ trans('academic_year.status') }}
-                                </label>
-                                <input type="checkbox" name="status" class="custom-checkbox">
-                            </div>
-                        </div>
+                    <div class="table">
+                        <table class="table table-sm table-bordered">
+                            <tr>
+                            <th>{{ trans('academic_year.year_start') }}</th>
+                            <th>{{ trans('academic_year.year_end') }}</th>
+                            <th>{{ trans('academic_year.status') }}</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" name="year_start" type="date" value="dd/mm/yyyy">
+                                </td>
+                                <td>
+                                    <input class="form-control" name="year_end" type="date" value="dd/mm/yyyy">
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="status" class="custom-checkbox">
+
+                                </td>
+                            </tr>
+                        </table>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">{{ trans('general.Submit') }}</button>
