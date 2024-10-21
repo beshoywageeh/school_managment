@@ -7,10 +7,12 @@ use App\Models\Grade;
 use App\Models\Student;
 use App\Models\promotion;
 use Illuminate\Http\Request;
-
+use App\Http\Traits\LogsActivity;
 class promotionController extends Controller
 {
-    /**
+    use LogsActivity;
+    /*
+    *
      * Display a listing of the resource.
      */
     public function index()
@@ -51,6 +53,7 @@ class promotionController extends Controller
                     'to_grade' => $request->new_grade,
                     'to_class' => $request->new_class,
                 ]);
+                $this->logActivity('ترقية طالب', 'تم ترقية طالب', $student->name);
             }
             DB::commit();
 
@@ -100,6 +103,7 @@ class promotionController extends Controller
                     'grade_id' => $promotions->from_grade,
                 ]);
             $promotions->delete();
+            $this->logActivity('ترقية طالب', 'تم إلفاء ترقية طالب', $promotions->student->name);
             DB::commit();
             return redirect()->route('promotion.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {

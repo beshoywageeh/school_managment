@@ -54,6 +54,7 @@ class MyParentsController extends Controller
                 'user_id' => \Auth::Id(),
                 'Father_Learning' => $request->Father_Learning,
             ]);
+            $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->Father_Name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -104,7 +105,7 @@ class MyParentsController extends Controller
                 'Religion' => $request->religion,
                 'Father_Learning' => $request->Father_Learning,
             ]);
-
+            $this->logActivity('تعديل', trans('system_lookup.field_change', ['value' => $request->Father_Name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -121,6 +122,7 @@ class MyParentsController extends Controller
             $d = My_parents::withCount('Students')->findorfail($id);
             if ($d->Students_count == 0) {
                 $d->delete();
+                $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $d->Father_Name]));
                 session()->flash('success', trans('general.deleted'));
                 return redirect()->route('parents.index');
             }

@@ -216,6 +216,11 @@ Route::group(
                 Route::get('/tawreed/{id}', 'new_tawreed_order')->name('stock.tawreed');
             });
             Route::group(['prefix' => 'orders', 'controller' => OrderController::class], function () {
+                Route::get('/index', 'index')->name('order.index');
+                Route::get('/show/{id}', 'show')->name('order.show');
+                Route::get('/edit/{id}', 'edit')->name('order.edit');
+                Route::post('/update', 'update')->name('order.update');
+                Route::get('/delete/{id}', 'destroy')->name('order.destroy');
                 Route::get('/sotre', 'store')->name('order.store');
             });
             // Route::get('books/index', function () {

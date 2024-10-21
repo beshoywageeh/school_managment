@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{acadmice_year, ActivityLog, Fee_invoice, School_Fee, Student, StudentAccount};
+use App\Models\{acadmice_year, Fee_invoice, School_Fee, Student, StudentAccount};
 use Illuminate\Support\Facades\DB;
 use Exception;
 use Illuminate\Http\Request;
@@ -61,7 +61,7 @@ class fee_invoiceController extends Controller
                 $std->save();
 
             }
-
+            $this->logActivity('إضافة', 'تم اضافة فاتورة مدفوع لطالب', $fee->students->name);
             DB::commit();
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));
         } catch (Exception $e) {
@@ -120,7 +120,7 @@ class fee_invoiceController extends Controller
             $std->debit = School_Fee::where('id', $request->fee)->first()->amount;
             $std->credit = 0.00;
             $std->save();
-
+            $this->logActivity('تعديل', 'تم تعديل فاتورة مدفوع لطالب', $fee->students->name);
             DB::commit();
 
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));
@@ -137,7 +137,9 @@ class fee_invoiceController extends Controller
     public function destroy(string $id)
     {
         try {
-            Fee_invoice::destroy($id);
+            $fee = Fee_invoice::findorFail($id);
+            $this->logActivity('حذف', 'تم حذف فاتورة مدفوع لطالب', $fee->students->name);
+            $fee->delete();
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());

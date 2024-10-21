@@ -6,9 +6,10 @@ use App\Models\{acadmice_year, Fee_invoice, PaymentParts, Recipt_Payment, Studen
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\Traits\LogsActivity;
 class PaymentPartsController extends Controller
 {
+    use LogsActivity;
     public function index()
     {
         $PaymentParts = PaymentParts::with(['students', 'grades', 'classes', 'year'])->get();
@@ -46,6 +47,7 @@ class PaymentPartsController extends Controller
                 $fee->amount = $list_part['amount'];
                 $fee->academic_year_id = acadmice_year::where('status', '0')->first()->id;
                 $fee->save();
+                $this->logActivity('إضافة', 'تم حفظ فاتورة قسط لطالب', $fee->students->name);
             }
             session()->flash('success', trans('general.success'));
             return redirect()->route('payment_parts.index');
@@ -87,6 +89,7 @@ class PaymentPartsController extends Controller
             $paymentpart->update([
                 'amount' => $request->amount,
             ]);
+            $this->logActivity('تعديل', 'تم تعديل قسط لطالب', $paymentpart->students->name);
             session()->flash('success', trans('general.success'));
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
@@ -99,7 +102,9 @@ class PaymentPartsController extends Controller
     public function destroy($id)
     {
         try {
-            PaymentParts::findorFail($id)->delete();
+            $pay = PaymentParts::findorFail($id);
+            $this->logActivity('حذف', 'تم حذف قسط لطالب', $pay->students->name);
+            $pay->delete();
             session()->flash('success', trans('general.success'));
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
@@ -143,6 +148,7 @@ class PaymentPartsController extends Controller
                     'academic_year_id' => $currentYear->id,
                 ]);
                 $newPart->save();
+                $this->logActivity('دف جزء', 'تم حفظ قسط لطالب', $part->students->name);
                 $part->delete();
                 DB::commit();
             } elseif ($request->amount === $part->amount || $check->count() !== 0) {
@@ -155,6 +161,7 @@ class PaymentPartsController extends Controller
                 if ($fee_parts->sum('amount') == $check->sum('amount')) {
                     $fee->update(['status' => 1]);
                 }
+                $this->logActivity('دفع بالكامل', 'تم حفظ قسط لطالب', $part->students->name);
                 DB::commit();
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
             } else {
@@ -183,6 +190,7 @@ class PaymentPartsController extends Controller
             'Debit' => $amount,
             'academic_year_id' => $academicYearId,
         ]);
+        $this->logActivity('إضافة', 'تم إضافة إلفاتورة لطالب', $receipt->students->name);
         $receipt->save();
         return $receipt;
     }
@@ -200,6 +208,7 @@ class PaymentPartsController extends Controller
             'academic_year_id' => $academicYearId,
             'recipt__payments_id' => $receiptId,
         ]);
+        $this->logActivity('إضافة', 'تم إضافة حساب لطالب', $studentAccount->students->name);
         $studentAccount->save();
     }
 }

@@ -11,8 +11,10 @@ use Spatie\Backup\Helpers\Format;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Traits\LogsActivity;
 class BackupController extends Controller
 {
+    use LogsActivity;
     public function index()
     {
         $disk = Storage::disk('backup');
@@ -54,7 +56,7 @@ class BackupController extends Controller
             // log the results
             Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n".$output);
             session()->flash('success', trans('notifications.backup_successful_body', ['application_name' => config('app.name'), 'disk_name' => config('backup.backup.destination.disks')[0]]));
-
+            $this->logActivity('نسخه إحتياطية', 'بتاريخ' . Carbon::parse()->format('Y-M-d'));
             return redirect()->back();
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -91,7 +93,7 @@ class BackupController extends Controller
             if ($disk->exists(config('backup.backup.name').'/'.$file_name)) {
                 $disk->delete(config('backup.backup.name').'/'.$file_name);
                 session()->flash('success', trans('notifications.cleanup_successful_subject_title'));
-
+                $this->logActivity('حذف نسخه إحتياطية','بتاريخ' . Carbon::parse()->format('Y-m-d'));
                 return redirect()->back();
             } else {
                 abort(404, "The backup file doesn't exist.");

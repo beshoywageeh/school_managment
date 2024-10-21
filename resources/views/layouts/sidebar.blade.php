@@ -152,6 +152,9 @@
                             {{ trans('sidebar.stocks') }}
                         </x-nav_link>
                     @endcan
+                    <x-nav_link :href="route('order.index')" :active="request()->is('*/orders/*')" >
+                        {{ trans('orders.income') }}
+                    </x-nav_link>
                     {{-- @can('Students-list')
                         <x-nav_link :href="route('clothes.index')" :active="request()->is('*/clothes/*')" :image="URL::asset('assests/images/Sidebar/clothes.png')">
                             {{ trans('sidebar.clothes') }}

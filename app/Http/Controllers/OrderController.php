@@ -2,15 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\order;
+use App\Models\{order, stock};
 use Exception;
 use Illuminate\Http\Request;
+use App\Http\Traits\LogsActivity;
 
 class OrderController extends Controller
 {
+    use LogsActivity;
     public function index()
     {
-        return 1;
+        $orders = order::where('type', 1)->withcount('stocks')->get();
+        return view('backend.orders.index', compact('orders'));
+    }
+    public function show($id)
+    {
+        try {
+            $order = order::with('stocks')->findorFail($id);
+
+            return view('backend.orders.show', get_defined_vars());
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
     public function store()
     {
@@ -20,10 +33,61 @@ class OrderController extends Controller
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT)  : '000001',
                 'type' => '1'
             ]);
+            $this->logActivity('إضافة', 'إضافة أمر توريد رقم' . $order->auto_number);
             return redirect()->route('stock.tawreed', $order->id);
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
             return redirect()->back();
         }
-    }   //
+    }
+    public function edit($id)
+    {
+        try {
+            $order = order::with('stocks')->findorFail($id);
+            $stocks = stock::get('id', 'name');
+            return view('backend.orders.edit', get_defined_vars());
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+    public function update(Request $request)
+    {
+        $order = Order::findOrFail($request->order_id);
+        foreach ($request->product as $key => $productName) {
+            $product = Stock::where('name', $productName)->first()->id;
+
+            $stocks = [
+                'manual' => $request->manual[$key], // updated line
+                'stock_id' => $product, // updated line
+                'order_id' => $order->id,
+                'manual_date' => $request->manual_date[$key],
+                'quantity_in' => $request->quantity[$key],
+            ];
+            $order->stocks()->syncWithPivotValues('order_id', $stocks);
+        }
+        $this->logActivity('تعديل', 'تعديل أمر توريد رقم' . $order->auto_number);
+        session()->flash('success', 'تم التعديل بنجاح');
+        return redirect()->route('order.index');
+        try {
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+    public function destroy($id)
+    {
+        try {
+            $order = order::withcount('stocks')->findorFail($id);
+            if ($order->stocks_count > 0) {
+                session()->flash('error', 'لا يمكن حذف هذا الامر');
+                return redirect()->back();
+            }
+            $order->delete();
+            $this->logActivity('حذف', 'حذف أمر توريد رقم' . $order->auto_number);
+            session()->flash('success', 'تم الحذف بنجاح');
+            return redirect()->back();
+        } catch (Exception $e) {
+            session()->flash('error', $e->getMessage());
+            return redirect()->back();
+        }
+    } //
 }

@@ -8,9 +8,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\Traits\LogsActivity;
 class GradesController extends Controller
 {
+    use LogsActivity;
     public function index()
     {
         $id = \Auth::id();
@@ -44,6 +45,7 @@ class GradesController extends Controller
                 'user_id' => \Auth::Id(),
             ]);
             $grade->users()->attach($request->user_id);
+            $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->Grade_Name]));
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -72,7 +74,7 @@ class GradesController extends Controller
 
     public function edit(string $id)
     {
-        
+
     }
 
     public function update(Request $request)
@@ -91,6 +93,7 @@ class GradesController extends Controller
             } else {
                 $grade->users()->sync([]);
             }
+            $this->logActivity('تعديل', trans('system_lookup.field_add', ['value' => $request->Grade_name]));
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -112,7 +115,7 @@ class GradesController extends Controller
         $grade = Grade::where('id', $id)->withcount('class_room')->first();
         if ($grade->class_room_count == 0) {
             $grade->delete();
-
+            $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $grade->class_name]));
             return redirect()->back()->with('success', trans('general.success'));
         }
 

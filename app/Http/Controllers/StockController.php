@@ -69,6 +69,7 @@ class StockController extends Controller
                     'manual_date' => $stock['manual_date'],
                     'quantity_in' => $stock['quantity'],
                 ]);
+                $this->logActivity('اضافة', trans('system_lookup.field_create', ['value' => $stock->name . ' - ' . $stock->opening_stock]));
             }
             return redirect()->route('stocks.index')->with('success', trans('general.success'));
         } catch (Exception $e) {

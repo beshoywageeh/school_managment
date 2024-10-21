@@ -65,7 +65,7 @@ class StudentsController extends Controller
                 'user_id' => \Auth::Id(),
             ]);
             session()->flash('success', trans('general.success'));
-
+            $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->name]));
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -131,7 +131,7 @@ class StudentsController extends Controller
                 'user_id' => \Auth::Id(),
             ]);
             session()->flash('success', trans('general.success'));
-
+            $this->logActivity('تعديل', trans('system_lookup.field_change', ['value' => $request->name]));
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -148,7 +148,7 @@ class StudentsController extends Controller
         try {
             $student = Student::findorfail($id);
             $student->delete();
-
+            $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $student->class_name]));
             return redirect()->back()->with('success', trans('general.success'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

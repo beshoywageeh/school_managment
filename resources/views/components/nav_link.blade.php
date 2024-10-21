@@ -2,7 +2,9 @@
 
 <li @class(['sidebar-menu', 'active' => $active])>
     <a {{ $attributes }}>
+        @isset($image)
         <img class="img-fluid" width="25" height="25" src="{{ $image }}" alt="{{ $slot }}" />
-        <span class="right-nav-text mx-3">{{ $slot }}</span>
+        @endisset
+        <span class="mx-3 right-nav-text">{{ $slot }}</span>
     </a>
 </li>

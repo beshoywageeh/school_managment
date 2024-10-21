@@ -6,8 +6,10 @@ use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Models\{acadmice_year, Fee_invoice, PaymentParts, Recipt_Payment, Student, StudentAccount};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Traits\LogsActivity;
 class ReciptPaymentController extends Controller
 {
+    use LogsActivity;
     /**
      * Display a listing of the resource.
      */
@@ -68,6 +70,7 @@ class ReciptPaymentController extends Controller
                 $std->recipt__payments_id = $pay->id;
                 $std->save();
                 $invoice->update(['status' => 1]);
+                $this->logActivity('إضافة', 'تم اضافة دفعة جديدة للطالب ' . $request->student->name . ' بتاريخ ' . date('Y-m-d'));
                 DB::commit();
 
                 return redirect()->route('Recipt_Payment.print', $pay->id);
@@ -139,7 +142,7 @@ class ReciptPaymentController extends Controller
             $std->debit = 0.00;
             $std->recipt__payments_id = $pay->id;
             $std->save();
-
+            $this->logActivity('تعديل', 'تم تعديل دفعة جديدة للطالب ' . $request->student->name . ' بتاريخ ' . date('Y-m-d'));
             DB::commit();
 
             return redirect()->route('Recipt_Payment.index')->with('success', trans('general.success'));
@@ -159,7 +162,7 @@ class ReciptPaymentController extends Controller
 
             $Recipt_Payment = Recipt_Payment::findorFail($id);
             $Recipt_Payment->delete();
-
+            $this->logActivity('حذف', 'تم حذف دفعة جديدة للطالب ' . $Recipt_Payment->student->name . ' بتاريخ ' . date('Y-m-d'));
             return redirect()->route('Recipt_Payment.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

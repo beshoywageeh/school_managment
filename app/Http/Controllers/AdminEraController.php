@@ -28,6 +28,7 @@ class AdminEraController extends Controller
             'email' => $request->email ? $request->email : '',
         ]);
         $employee->assignRole([$request->role]);
+        $this->logActivity('تغير الحالة', 'قام مسؤول النظام بتغير الحالة', 'emp_active', $employee->id);
         return redirect()->back()->with('success', trans('General.success'));
 
     }

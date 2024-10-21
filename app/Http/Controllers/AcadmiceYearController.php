@@ -43,6 +43,7 @@ class AcadmiceYearController extends Controller
                 'status' => ($request->status) ? 0 : 1,
 
             ]);
+            $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->view]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
@@ -84,7 +85,7 @@ class AcadmiceYearController extends Controller
             $acadmice_year->status = ($request->status) ? 0 : 1;
             $acadmice_year->save();
             session()->flash('success', trans('general.success'));
-
+            $this->logActivity('تعديل', trans('system_lookup.field_change', ['value' => $request->view]));
             return redirect()->back();
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -103,7 +104,7 @@ class AcadmiceYearController extends Controller
             $acadmice_year = acadmice_year::findorFail($id);
             $acadmice_year->delete();
             session()->flash('success', trans('general.success'));
-
+            $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $acadmice_year->view]));
             return redirect()->back();
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

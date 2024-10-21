@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\acadmice_year;
-use App\Models\ExcptionFees;
-use App\Models\Fee_invoice;
-use App\Models\Student;
-use App\Models\StudentAccount;
+use App\Models\{acadmice_year, ExcptionFees, Fee_invoice, Student, StudentAccount};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Traits\LogsActivity;
 class ExcptionFeesController extends Controller
 {
+    use LogsActivity;
     /**
      * Display a listing of the resource.
      */
@@ -70,6 +68,7 @@ class ExcptionFeesController extends Controller
             $std->debit = 0.00;
             $std->excpetion_id = $pay->id;
             $std->save();
+            $this->logActivity('إضافة', 'تم اضافة فاتورة إغفاء لطالب', $pay->students->name);
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -140,7 +139,7 @@ class ExcptionFeesController extends Controller
             $std->classroom_id = Student::where('id', $request->student_id)->first()->classroom_id;
             $std->debit = 0.00;
             $std->save();
-
+            $this->logActivity('تعديل', 'تم تعديل فاتورة إغفاء لطالب', $pay->students->name);
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -159,7 +158,10 @@ class ExcptionFeesController extends Controller
     public function destroy($id)
     {
         try {
-            ExcptionFees::findorfail($id)->delete();
+            $pay = ExcptionFees::findorfail($id);
+
+            $pay->delete();
+            $this->logActivity('حذف', 'تم اضافة فاتورة إغفاء لطالب', $pay->students->name);
             session()->flash('success', trans('general.success'));
             return redirect()->route('except_fee.index');
         } catch (\Exception $e) {

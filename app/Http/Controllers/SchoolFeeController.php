@@ -147,6 +147,7 @@ class SchoolFeeController extends Controller
                 'description' => $request->description,
                 'amount' => $request->amount,
             ]);
+            $this->logActivity('تعديل', 'تم تعديل مصروفات دراسية بقيمة :' . \Number::currency($request->amount, 'EGP', 'ar'));
             session()->flash('success', trans('general.success'));
             return redirect()->route('schoolfees.index');
         } catch (\Exception $e) {
@@ -162,7 +163,9 @@ class SchoolFeeController extends Controller
     public function destroy($id)
     {
         try {
-            School_Fee::destroy($id);
+            $fee = School_Fee::findorFail($id);
+            $this->logActivity('حذف', 'تم حذف مصروف دراسي بقيمة :' . \Number::currency($fee->amount, 'EGP', 'ar'));
+            $fee->delete();
             session()->flash('success', trans('general_success'));
 
             return redirect()->route('schoolfees.index');

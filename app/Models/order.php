@@ -15,6 +15,6 @@ class order extends Model
     public function stocks()
     {
 
-        return $this->belongsToMany(stock::class, 'stocks_order', 'order_id', 'stock_id');
+        return $this->belongsToMany(stock::class, 'stocks_order', 'order_id', 'stock_id')->withPivot('quantity_in', 'quantity_out', 'manual', 'manual_date');
     }
 }

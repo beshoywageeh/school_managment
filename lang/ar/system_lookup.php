@@ -13,6 +13,6 @@ return [
     'deleted' => 'حذف',
     'created_at' => 'تمت في',
     'field_create' => 'تم إنشاء العنصر :value',
-    'field_change' => 'تم تعديل العنصر برقم :value من :old_value إلى :new_value',
+    'field_change' => 'تم تعديل العنصر برقم :value',
     'field_delete' => 'تم حذف العنصر :value',
 ];
