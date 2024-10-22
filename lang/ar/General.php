@@ -47,5 +47,6 @@ return [
     'show' => 'عرض',
     'invoice_to' => 'الفاتورة إلى',
     'noInvoiceToPay' => "لا يوجد فواتير للدفع",
-    'noInvoiceToExcept' => 'لا يوجد فواتير للاعفاء'
+    'noInvoiceToExcept' => 'لا يوجد فواتير للاعفاء',
+    'profile' => 'الملف الشخصي',
 ];
