@@ -66,6 +66,7 @@ class StudentsController extends Controller
             ]);
             session()->flash('success', trans('general.success'));
             $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->name]));
+
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -132,6 +133,7 @@ class StudentsController extends Controller
             ]);
             session()->flash('success', trans('general.success'));
             $this->logActivity('تعديل', trans('system_lookup.field_change', ['value' => $request->name]));
+
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -149,6 +151,7 @@ class StudentsController extends Controller
             $student = Student::findorfail($id);
             $student->delete();
             $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $student->class_name]));
+
             return redirect()->back()->with('success', trans('general.success'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -163,6 +166,7 @@ class StudentsController extends Controller
 
         return response()->json($class_rooms);
     }
+
     public function Excel_Import(Request $request)
     {
         try {

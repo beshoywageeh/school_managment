@@ -25,7 +25,7 @@ class WorkersImport implements ToCollection
                 'date_of_birth' => $row[4],
                 'date_of_hiring' => $row[5],
                 'learning' => $row[6],
-                'email' => \Str::slug($row[1]) . '@ischool.com',
+                'email' => \Str::slug($row[1]).'@ischool.com',
                 'reiligon' => user_religion::fromString($row[7]),
                 'type' => Jobs_types::fromString($row[8]),
                 'user_id' => Auth::id(),

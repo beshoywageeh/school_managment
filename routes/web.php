@@ -1,31 +1,30 @@
 <?php
 
-use App\Http\Controllers\{
-    AcadmiceYearController,
-    AdminEraController,
-    BackupController,
-    ClassRooms\ClassRoomsController,
-    ExcptionFeesController,
-    fee_invoiceController,
-    Grades\GradesController,
-    HomeController,
-    JobController,
-    Parents\MyParentsController,
-    PaymentPartsController,
-    ProfileController,
-    promotionController,
-    ReciptPaymentController,
-    ReportController,
-    RoleController,
-    SchoolFeeController,
-    SettingsController,
-    SetupController,
-    Students\StudentsController,
-    UserController,
-    ActivityLogController,
-    OrderController,
-    StockController
-};
+use App\Http\Controllers\AcadmiceYearController;
+use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AdminEraController;
+use App\Http\Controllers\BackupController;
+use App\Http\Controllers\ClassRooms\ClassRoomsController;
+use App\Http\Controllers\ExcptionFeesController;
+use App\Http\Controllers\fee_invoiceController;
+use App\Http\Controllers\Grades\GradesController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OutOrderController;
+use App\Http\Controllers\Parents\MyParentsController;
+use App\Http\Controllers\PaymentPartsController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\promotionController;
+use App\Http\Controllers\ReciptPaymentController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SchoolFeeController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SetupController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\Students\StudentsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -221,17 +220,19 @@ Route::group(
                 Route::get('/edit/{id}', 'edit')->name('order.edit');
                 Route::post('/update', 'update')->name('order.update');
                 Route::get('/delete/{id}', 'destroy')->name('order.destroy');
-                Route::get('/sotre', 'store')->name('order.store');
+                Route::get('/store', 'store')->name('order.store');
             });
-            // Route::get('books/index', function () {
-            //     return view('backend.AdminEra.index');
-            // })->name('books.index');
-            // Route::get('books_sheets/index', function () {
-            //     return view('backend.AdminEra.index');
-            // })->name('books_sheets.index');
-            // Route::get('stocks/index', function () {
-            //     return view('backend.AdminEra.index');
-            // })->name('clothes.index');
+            Route::group(['prefix' => 'outorder', 'controller' => OutOrderController::class], function () {
+                Route::get('/index', 'index')->name('outorder.index');
+                Route::get('/show/{id}', 'show')->name('outorder.show');
+                Route::get('/edit/{id}', 'edit')->name('outorder.edit');
+                Route::get('/store/{id}', 'new_transfer')->name('outorder.new_transfer');
+                Route::post('/update', 'update')->name('outorder.update');
+                Route::get('/delete/{id}', 'destroy')->name('outorder.destroy');
+                Route::post('/store', 'store')->name('outorder.store');
+                Route::post('/transfer', 'transfer')->name('orders.transfer');
+                Route::post('/submit_transfer', 'submit_transfer')->name('orders.submit_transfer');
+            });
 
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');

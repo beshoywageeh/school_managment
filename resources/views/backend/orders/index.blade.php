@@ -1,6 +1,13 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('orders.income') }}
+    @if ($type == 1)
+        {{ trans('stock.income_order') }}
+    @elseif ($type == 2)
+        {{ trans('stock.outcome_order') }}
+    @elseif ($type == 3)
+        {{ trans('stock.gard') }}
+    @else
+    @endif
 @endsection
 @section('content')
     @include('backend.msg')
@@ -12,10 +19,21 @@
                         <div class="col-lg-6"></div>
                         <div class="col-lg-6 text-md-right">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                @can('stocks-income_order')
-                                    <a href="{{route('order.store')}}"
-                                        class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
-                                @endcan
+                                @if ($type == 1)
+                                    @can('stocks-income_order')
+                                        <a href="{{ route('order.store') }}"
+                                            class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
+                                    @endcan
+                                @elseif ($type == 2)
+                                    @can('stocks-outcome_order')
+                                        <button data-toggle="modal" data-target="#CreateTransfer"
+                                            class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
+                                    @endcan
+                                @elseif ($type == 3)
+                                    {{ trans('orders.gard') }}
+                                @else
+                                @endif
+
                             </div>
                         </div>
                     </div>
@@ -23,29 +41,36 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         {{-- @can('orders-index') --}}
-                            <table class="table table-bordered table-sm" id="datatable">
-                                <thead class="alert-info">
+                        <table class="table table-bordered table-sm" id="datatable">
+                            <thead class="alert-info">
+                                <tr>
+                                    <th>#</th>
+                                    <th>{{ trans('orders.num') }}</th>
+                                    <th>{{ trans('orders.product_count') }}</th>
+                                    <th>{{ trans('general.created_at') }}</th>
+                                    <th>{{ trans('general.updated_at') }}</th>
+                                    <th>{{ trans('General.actions') }}</th>
+                                </tr>
+                                </theadv>
+                            <tbody>
+                                @forelse ($orders as $order)
                                     <tr>
-                                        <th>#</th>
-                                        <th>{{ trans('orders.num') }}</th>
-                                        <th>{{ trans('orders.product_count') }}</th>
-                                        <th>{{ trans('general.created_at') }}</th>
-                                        <th>{{ trans('general.updated_at') }}</th>
-                                        <th>{{ trans('General.actions') }}</th>
-                                    </tr>
-                                    </theadv>
-                                <tbody>
-                                    @forelse ($orders as $order)
-                                        <tr>
-                                            <td>{{ $loop->index + 1 }}</td>
-                                            <td><a class="btn btn-outline-primary btn-sm" target="_blank" href="{{ route('order.show', $order->id) }}">{{ $order->auto_number }}</a></td>
-                                            <td>{{ $order->stocks_count }}</td>
-                                            <td>{{ $order->created_at->format('Y-m-d') }}</td>
-                                            <td>{{ $order->updated_at->format('Y-m-d') }}</td>
-                                            <td>
+                                        <td>{{ $loop->index + 1 }}</td>
+                                        <td><a class="btn btn-outline-primary btn-sm" target="_blank"
+                                                @if ($type == 1) href="{{ route('order.show', $order->id) }}"
+                                                @endif
+                                                @if ($type == 2)
+                                                href="{{ route('outorder.show', $order->id) }}"
+                                                @endif>{{ $order->auto_number }}</a>
+                                        </td>
+                                        <td>{{ $order->stocks_count }}</td>
+                                        <td>{{ $order->created_at->format('Y-m-d') }}</td>
+                                        <td>{{ $order->updated_at->format('Y-m-d') }}</td>
+                                        <td>
+                                            @if ($type == 1)
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
-                                                        'type'=>'link',
+                                                        'type' => 'link',
                                                         'url' => route('order.destroy', $order->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
@@ -53,25 +78,49 @@
                                                         'can' => 'order-delete',
                                                     ],
                                                     [
-                                                        'type'=>'link',
+                                                        'type' => 'link',
                                                         'url' => route('order.edit', $order->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',
                                                         'can' => 'order-edit',
                                                     ],
                                                 ]" />
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan='6'>
-                                                {{ trans('general.404') }}
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                                            @elseif ($type == 2)
+                                            <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                [
+                                                    'type' => 'link',
+                                                    'url' => route('outorder.destroy', $order->id),
+                                                    'text' => trans('general.delete'),
+                                                    'icon' => 'ti-trash',
+                                                    'onclick' => 'confirmation(event)',
+                                                    'can' => 'out_order-delete',
+                                                ],
+                                                [
+                                                    'type' => 'link',
+                                                    'url' => route('outorder.edit', $order->id),
+                                                    'text' => trans('general.edit'),
+                                                    'icon' => 'ti-pencil',
+                                                    'can' => 'out_order-edit',
+                                                ],
+                                            ]" />
+                                            @elseif ($type == 3)
+                                                {{ trans('orders.gard') }}
+                                            @else 1 @endif
+                                                </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan='6'>
+                                            {{ trans('general.404') }}
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                         {{-- @endcan --}}
+                        @if ($type == 2)
+                            @include('backend.orders.transfer_create')
+                        @endif
                     </div>
                 </div>
             </div>

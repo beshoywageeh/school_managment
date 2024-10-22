@@ -1,6 +1,13 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('stock.income_order') }} | {{ $order->auto_number }}
+    @if ($type == 1)
+        {{ trans('stock.income_order') }} | {{ $order->auto_number }}
+    @elseif ($type == 2)
+        {{ trans('stock.outcome_order') }} | {{ $order->auto_number }}
+    @elseif ($type == 3)
+        {{ trans('stock.gard') }} | {{ $order->auto_number }}
+    @else
+    @endif
 @endsection
 @section('content')
     @include('backend.msg')
@@ -16,8 +23,14 @@
                             <tr>
                                 <th>الرقم : {{ $order->auto_number }}</th>
                                 <th>النوع :
-                                    أمر توريد
-
+                                     @if ($type == 1)
+                                        {{ trans('stock.income_order') }}
+                                    @elseif ($type == 2)
+                                        {{ trans('stock.outcome_order') }}
+                                    @elseif ($type == 3)
+                                        {{ trans('stock.gard') }}
+                                    @else
+                                    @endif
                                 </th>
                                 <th>التاريخ : {{ $order->created_at->format('Y-M-d') }}</th>
                                 <th>الوقت : {{ $order->created_at->format('h : i : s A') }}</th>
@@ -28,8 +41,10 @@
                                 <tr>
                                     <th>#</th>
                                     <th>{{ trans('stock.name') }}</th>
+                                    @if($type==1)
                                     <th>{{ trans('stock.manual_num') }}</th>
                                     <th>{{ trans('stock.manual_date') }}</th>
+                                    @endif
                                     <th>{{ trans('stock.quantity') }}</th>
                                 </tr>
                             </thead>
@@ -38,9 +53,14 @@
                                     <tr>
                                         <td>{{ $loop->index + 1 }}</td>
                                         <td>{{ $stock->name }}</td>
-                                        <td>{{ $stock->pivot->manual }}</td>
-                                        <td>{{ $stock->pivot->manual_date }}</td>
-                                        <td>{{ number_format($stock->pivot->quantity_in, 2) }}</td>
+                                        @if ($type == 1)
+                                            <td>{{ $stock->pivot->manual }}</td>
+                                            <td>{{ $stock->pivot->manual_date }}</td>
+                                            <td>{{ number_format($stock->pivot->quantity_in, 2) }}</td>
+                                        @endif
+                                        @if ($type == 2)
+                                            <td>{{ number_format($stock->pivot->quantity_out, 2) }}</td>
+                                        @endif
                                     </tr>
                                 @empty
                                     <tr>

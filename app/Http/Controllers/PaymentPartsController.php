@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{acadmice_year, Fee_invoice, PaymentParts, Recipt_Payment, Student, StudentAccount};
+use App\Http\Traits\LogsActivity;
+use App\Models\acadmice_year;
+use App\Models\Fee_invoice;
+use App\Models\PaymentParts;
+use App\Models\Recipt_Payment;
+use App\Models\Student;
+use App\Models\StudentAccount;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Traits\LogsActivity;
+
 class PaymentPartsController extends Controller
 {
     use LogsActivity;
+
     public function index()
     {
         $PaymentParts = PaymentParts::with(['students', 'grades', 'classes', 'year'])->get();
+
         return view('backend.payment_parts.index', get_defined_vars());
     }
 
@@ -22,6 +30,7 @@ class PaymentPartsController extends Controller
             $student = Fee_invoice::where('student_id', $id)->with(['students', 'grades', 'classes', 'acd_year', 'fees'])->get();
             if ($student->count() == 0) {
                 session()->flash('info', trans('general.noInvoiceToPart'));
+
                 return redirect()->back();
             } else {
                 return view('backend.payment_parts.create', get_defined_vars());
@@ -50,9 +59,11 @@ class PaymentPartsController extends Controller
                 $this->logActivity('إضافة', 'تم حفظ فاتورة قسط لطالب', $fee->students->name);
             }
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -62,6 +73,7 @@ class PaymentPartsController extends Controller
         try {
             $paymentParts = PaymentParts::where('id', $id)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'acd_year'])->first();
             session()->flash('success', trans('general.success'));
+
             return view('backend.payment_parts.edit', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -74,6 +86,7 @@ class PaymentPartsController extends Controller
     {
         try {
             $paymentParts = PaymentParts::where('id', $id)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'year:id,year_start,year_end'])->first();
+
             return view('backend.payment_parts.edit', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -91,6 +104,7 @@ class PaymentPartsController extends Controller
             ]);
             $this->logActivity('تعديل', 'تم تعديل قسط لطالب', $paymentpart->students->name);
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -106,6 +120,7 @@ class PaymentPartsController extends Controller
             $this->logActivity('حذف', 'تم حذف قسط لطالب', $pay->students->name);
             $pay->delete();
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -118,9 +133,11 @@ class PaymentPartsController extends Controller
     {
         try {
             $part = PaymentParts::where('id', $id)->with(['students', 'grades', 'classes', 'year'])->first();
+
             return view('backend.payment_parts.pay', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }
@@ -163,22 +180,27 @@ class PaymentPartsController extends Controller
                 }
                 $this->logActivity('دفع بالكامل', 'تم حفظ قسط لطالب', $part->students->name);
                 DB::commit();
+
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
             } else {
                 $part->update(['payment_status' => 1]);
                 DB::commit();
+
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
             }
             DB::commit();
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             DB::rollback();
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
 
     }
+
     private function createReceipt($amount, $studentId, $academicYearId)
     {
         $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
@@ -192,6 +214,7 @@ class PaymentPartsController extends Controller
         ]);
         $this->logActivity('إضافة', 'تم إضافة إلفاتورة لطالب', $receipt->students->name);
         $receipt->save();
+
         return $receipt;
     }
 

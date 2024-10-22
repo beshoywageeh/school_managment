@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Grades;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\LogsActivity;
 use App\Models\Grade;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Http\Traits\LogsActivity;
+
 class GradesController extends Controller
 {
     use LogsActivity;
+
     public function index()
     {
         $id = \Auth::id();
@@ -53,6 +55,7 @@ class GradesController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -64,6 +67,7 @@ class GradesController extends Controller
     {
         try {
             $report_data = Grade::where('id', $id)->with(['class_room', 'class_room.students'])->withCount(['class_room', 'students'])->first();
+
             return view('backend.Grades.report', get_defined_vars());
         } catch (\Exception $e) {
             \Log::error('PDF Generation failed: '.$e->getMessage());
@@ -72,10 +76,7 @@ class GradesController extends Controller
         }
     }
 
-    public function edit(string $id)
-    {
-
-    }
+    public function edit(string $id) {}
 
     public function update(Request $request)
     {
@@ -116,6 +117,7 @@ class GradesController extends Controller
         if ($grade->class_room_count == 0) {
             $grade->delete();
             $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $grade->class_name]));
+
             return redirect()->back()->with('success', trans('general.success'));
         }
 

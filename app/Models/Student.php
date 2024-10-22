@@ -26,7 +26,7 @@ class Student extends Model
         'birth_at_begin',
         'student_status',
         'religion',
-        'code'
+        'code',
     ];
 
     protected $casts = [

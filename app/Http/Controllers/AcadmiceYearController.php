@@ -34,7 +34,7 @@ class AcadmiceYearController extends Controller
             ]);
             $year_start = date('Y-m-d', strtotime($request->year_start));
             $year_end = date('Y-m-d', strtotime($request->year_end));
-            $view = Carbon::parse($year_start)->format('Y') . ' - ' . Carbon::parse($year_end)->format('Y');
+            $view = Carbon::parse($year_start)->format('Y').' - '.Carbon::parse($year_end)->format('Y');
             acadmice_year::create([
                 'year_start' => $year_start,
                 'year_end' => $year_end,
@@ -65,6 +65,7 @@ class AcadmiceYearController extends Controller
         $students = Student::whereBetween('created_at', [$start_year, $end_year])->get();
         $parents = My_parents::whereBetween('created_at', [$start_year, $end_year])->get();
         $users = User::whereBetween('created_at', [$start_year, $end_year])->get();
+
         return $users;
     }
 
@@ -78,14 +79,15 @@ class AcadmiceYearController extends Controller
             $acadmice_year = acadmice_year::findorFail($request->id);
             $year_start = date('Y-m-d', strtotime($acadmice_year->year_start));
             $year_end = date('Y-m-d', strtotime($request->year_end));
-            $view = Carbon::parse($year_start)->format('Y') . ' - ' . Carbon::parse($year_end)->format('Y');
+            $view = Carbon::parse($year_start)->format('Y').' - '.Carbon::parse($year_end)->format('Y');
             $acadmice_year->year_end = $year_end;
             $acadmice_year->updated_by = Auth::id();
-            $acadmice_year->view =  $view;
+            $acadmice_year->view = $view;
             $acadmice_year->status = ($request->status) ? 0 : 1;
             $acadmice_year->save();
             session()->flash('success', trans('general.success'));
             $this->logActivity('تعديل', trans('system_lookup.field_change', ['value' => $request->view]));
+
             return redirect()->back();
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -105,6 +107,7 @@ class AcadmiceYearController extends Controller
             $acadmice_year->delete();
             session()->flash('success', trans('general.success'));
             $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $acadmice_year->view]));
+
             return redirect()->back();
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

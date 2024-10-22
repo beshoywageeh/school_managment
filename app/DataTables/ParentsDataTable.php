@@ -8,8 +8,6 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
 class ParentsDataTable extends DataTable
@@ -17,7 +15,7 @@ class ParentsDataTable extends DataTable
     /**
      * Build the DataTable class.
      *
-     * @param QueryBuilder $query Results from query() method.
+     * @param  QueryBuilder  $query  Results from query() method.
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
@@ -58,6 +56,7 @@ class ParentsDataTable extends DataTable
                 Button::make('reload')->text('<i class="fa fa-refresh"></i>'),
             ]);
     }
+
     /**
      * Get the dataTable columns definition.
      */
@@ -87,6 +86,6 @@ class ParentsDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Parents_' . date('YmdHis');
+        return 'Parents_'.date('YmdHis');
     }
 }

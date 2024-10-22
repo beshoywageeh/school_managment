@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{acadmice_year, Grade, Recipt_payment};
+use App\Models\acadmice_year;
+use App\Models\Grade;
+use App\Models\Recipt_payment;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -17,6 +19,7 @@ class ReportController extends Controller
     public function ExportStudents()
     {
         $students = Grade::with(['students'])->withcount('students')->get();
+
         return view('backend.report.students', get_defined_vars());
     }
 

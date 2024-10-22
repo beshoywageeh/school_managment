@@ -152,19 +152,16 @@
                             {{ trans('sidebar.stocks') }}
                         </x-nav_link>
                     @endcan
-                    <x-nav_link :href="route('order.index')" :active="request()->is('*/orders/*')" >
-                        {{ trans('orders.income') }}
-                    </x-nav_link>
-                    {{-- @can('Students-list')
-                        <x-nav_link :href="route('clothes.index')" :active="request()->is('*/clothes/*')" :image="URL::asset('assests/images/Sidebar/clothes.png')">
-                            {{ trans('sidebar.clothes') }}
+                    @can('orders-index')
+                        <x-nav_link :href="route('order.index')" :active="request()->is('*/orders/*')">
+                            {{ trans('orders.income') }}
                         </x-nav_link>
                     @endcan
-                    @can('promotion-list')
-                        <x-nav_link :href="route('books_sheets.index')" :active="request()->is('*/books_sheets/*')" :image="URL::asset('assests/images/Sidebar/books_sheets.png')">
-                            {{ trans('sidebar.books_sheets') }}
+                    @can('order_out-index')
+                        <x-nav_link :href="route('outorder.index')" :active="request()->is('*/orders/*')">
+                            {{ trans('stock.outcome_order') }}
                         </x-nav_link>
-                    @endcan --}}
+                    @endcan
                 </ul>
             </li>
             @if (\Auth::user()->isAdmin)

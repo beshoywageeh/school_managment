@@ -17,8 +17,8 @@
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                 @endcan
                                 @can('stocks-outcome_order')
-                                    <a href=""
-                                        class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
+                                    <button data-toggle="modal" data-target="#CreateTransfer"
+                                        class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
                                 @endcan
                                 @can('stocks-inventory_order')
                                     <a href=""
@@ -80,6 +80,7 @@
             </div>
         </div>
         @include('backend.stocks.create')
+        @include('backend.orders.transfer_create')
     </div>
     @push('scripts')
     @endpush

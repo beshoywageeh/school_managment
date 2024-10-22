@@ -76,7 +76,7 @@ class StudentImport implements ToCollection
                 'grade_id' => $gradeId,
                 'parent_id' => $parentId,
                 'classroom_id' => $classId,
-                'birth_at_begin' => $final_date 
+                'birth_at_begin' => $final_date,
             ];
 
             // Dispatch job if batch size is reached

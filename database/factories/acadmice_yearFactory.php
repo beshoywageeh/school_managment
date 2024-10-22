@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\acadmice_year;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +19,7 @@ class acadmice_yearFactory extends Factory
         return [
             'year_start' => $this->faker->date('Y-m-d'),
             'year_end' => $this->faker->date('Y-m-d'),
-            'view' => $this->faker->date('Y') . '-' . $this->faker->date('Y'),
+            'view' => $this->faker->date('Y').'-'.$this->faker->date('Y'),
             'status' => '0',
             'created_by' => '1',
         ];

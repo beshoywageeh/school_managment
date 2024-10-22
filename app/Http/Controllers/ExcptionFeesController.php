@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{acadmice_year, ExcptionFees, Fee_invoice, Student, StudentAccount};
+use App\Http\Traits\LogsActivity;
+use App\Models\acadmice_year;
+use App\Models\ExcptionFees;
+use App\Models\Fee_invoice;
+use App\Models\Student;
+use App\Models\StudentAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Traits\LogsActivity;
+
 class ExcptionFeesController extends Controller
 {
     use LogsActivity;
+
     /**
      * Display a listing of the resource.
      */
@@ -30,6 +36,7 @@ class ExcptionFeesController extends Controller
             $fees = Fee_invoice::where('student_id', $id)->where('status', 0)->with('fees')->get();
             if ($fees->count() == 0) {
                 session()->flash('info', trans('General.noInvoiceToExcept'));
+
                 return redirect()->back();
             } else {
                 return view('backend.fee_exception.create', get_defined_vars());
@@ -163,9 +170,11 @@ class ExcptionFeesController extends Controller
             $pay->delete();
             $this->logActivity('حذف', 'تم اضافة فاتورة إغفاء لطالب', $pay->students->name);
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('except_fee.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back();
         }
     }

@@ -10,6 +10,7 @@ class order extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
     protected $fillable = ['auto_number', 'type'];
 
     public function stocks()

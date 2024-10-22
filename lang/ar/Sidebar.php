@@ -33,5 +33,5 @@ return [
     'stores' => 'مخازن',
     'stocks' => 'عهدة',
     'clothes' => 'ملابس',
-    'books_sheets' => 'الكتب والملازم'
+    'books_sheets' => 'الكتب والملازم',
 ];

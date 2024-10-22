@@ -4,20 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSchool_FeeRequest;
 use App\Http\Requests\UpdateSchool_FeeRequest;
-use App\Models\{acadmice_year, class_room, Fee_invoice, Grade, School_Fee, Student, StudentAccount};
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use App\Http\Traits\LogsActivity;
-use Alkoumi\LaravelArabicNumbers\Numbers;
+use App\Models\acadmice_year;
+use App\Models\class_room;
+use App\Models\Fee_invoice;
+use App\Models\Grade;
+use App\Models\School_Fee;
+use App\Models\Student;
+use App\Models\StudentAccount;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 class SchoolFeeController extends Controller
 {
     use LogsActivity;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $School_Fees = School_Fee::with('grade:id,name', 'classroom:id,name', 'user:id,name', 'year:id,view')->get(['id', 'title', 'amount', 'academic_year_id', 'description', 'grade_id', 'classroom_id', 'user_id', 'created_at']);
+
         return view('backend.school_fees.index', get_defined_vars());
     }
 
@@ -31,6 +39,7 @@ class SchoolFeeController extends Controller
             $years = acadmice_year::where('status', 0)->get();
             if ($grades->count() == 0 || $years->count() == 0) {
                 session()->flash('info', 'من فضلك اضف مراحل واعوام دراسية للبدء');
+
                 return redirect()->back();
             } else {
                 return view('backend.school_fees.create', get_defined_vars());
@@ -60,7 +69,7 @@ class SchoolFeeController extends Controller
                 $school_fee->amount = $request->amount;
                 $school_fee->title = $request->title;
                 $school_fee->save();
-                $this->logActivity('إضافة', 'مصروفات دراسية بقيمة :' . \Number::currency($request->amount, 'EGP', 'ar'));
+                $this->logActivity('إضافة', 'مصروفات دراسية بقيمة :'.\Number::currency($request->amount, 'EGP', 'ar'));
             }
             $students = Student::where('grade_id', $request->grade_id)->whereIn('classroom_id', $request->classroom_id)->get();
             $ac_year = acadmice_year::where('status', '0')->first();
@@ -85,14 +94,16 @@ class SchoolFeeController extends Controller
                 $std->debit = $request->amount;
                 $std->credit = 0.00;
                 $std->save();
-                $this->logActivity('إضافة', "تم اضافة فاتورة جديدة للطالب : " . $student->name . 'بقيمة :' . \Number::currency($request->amount, 'EGP', 'ar'));
+                $this->logActivity('إضافة', 'تم اضافة فاتورة جديدة للطالب : '.$student->name.'بقيمة :'.\Number::currency($request->amount, 'EGP', 'ar'));
             }
             session()->flash('success', trans('General.success'));
             DB::commit();
+
             return redirect()->route('schoolfees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
             DB::rollBack();
+
             return redirect()->back()->withInput();
         }
     }
@@ -104,6 +115,7 @@ class SchoolFeeController extends Controller
     {
         $school_fee = School_Fee::findorFail($id);
         $students = Student::where('classroom_id', $school_fee->classroom_id)->where('grade_id', $school_fee->grade_id)->with('classroom:id,name', 'grade:id,name')->get(['code', 'name', 'classroom_id', 'grade_id']);
+
         return view('backend.school_fees.show', get_defined_vars());
     }
 
@@ -147,8 +159,9 @@ class SchoolFeeController extends Controller
                 'description' => $request->description,
                 'amount' => $request->amount,
             ]);
-            $this->logActivity('تعديل', 'تم تعديل مصروفات دراسية بقيمة :' . \Number::currency($request->amount, 'EGP', 'ar'));
+            $this->logActivity('تعديل', 'تم تعديل مصروفات دراسية بقيمة :'.\Number::currency($request->amount, 'EGP', 'ar'));
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('schoolfees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -164,7 +177,7 @@ class SchoolFeeController extends Controller
     {
         try {
             $fee = School_Fee::findorFail($id);
-            $this->logActivity('حذف', 'تم حذف مصروف دراسي بقيمة :' . \Number::currency($fee->amount, 'EGP', 'ar'));
+            $this->logActivity('حذف', 'تم حذف مصروف دراسي بقيمة :'.\Number::currency($fee->amount, 'EGP', 'ar'));
             $fee->delete();
             session()->flash('success', trans('general_success'));
 

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('manual_date');
             $table->string('quantity_in')->nullable();
             $table->string('quantity_out')->nullable();
+            $table->string('location')->nullable();
         });
     }
 

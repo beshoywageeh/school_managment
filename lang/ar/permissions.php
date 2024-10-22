@@ -113,7 +113,7 @@ return [
     'stocks-income_order' => 'أمر توريد',
     'stocks-outcome_order' => 'أمر صرف',
     'stocks-inventory_order' => 'أمر جرد',
-	'stock-delete'=>'حذف المنتج',
+    'stock-delete' => 'حذف المنتج',
     'clothes-index' => 'عرض زي',
     'clothes-create' => 'إضافة زي',
     'clothes-update' => 'تعديل زي',
@@ -126,7 +126,6 @@ return [
     'books_sheets-order' => 'أمر توريد أو صرف كتب أو ملازم',
     'store' => 'المخازن',
     'clothes' => 'الملابس',
-    'books_sheets' => 'الكتب والملازم'
-
+    'books_sheets' => 'الكتب والملازم',
 
 ];

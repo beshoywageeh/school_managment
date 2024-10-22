@@ -3,19 +3,27 @@
 namespace App\Http\Controllers;
 
 use Alkoumi\LaravelArabicNumbers\Numbers;
-use App\Models\{acadmice_year, Fee_invoice, PaymentParts, Recipt_Payment, Student, StudentAccount};
+use App\Http\Traits\LogsActivity;
+use App\Models\acadmice_year;
+use App\Models\Fee_invoice;
+use App\Models\PaymentParts;
+use App\Models\Recipt_Payment;
+use App\Models\Student;
+use App\Models\StudentAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Traits\LogsActivity;
+
 class ReciptPaymentController extends Controller
 {
     use LogsActivity;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $Recipt_Payments = Recipt_Payment::with(['student:id,name'])->get();
+
         return view('backend.reciptpayment.index', get_defined_vars());
     }
 
@@ -32,6 +40,7 @@ class ReciptPaymentController extends Controller
             $parts = PaymentParts::where('student_id', $id)->where('payment_status', 0)->get();
             if ($feeInvoices->count() == 0 && $parts->count() == 0) {
                 session()->flash('info', trans('General.noInvoiceToPay'));
+
                 return redirect()->back();
             } else {
                 return view('backend.reciptpayment.create', get_defined_vars());
@@ -70,7 +79,7 @@ class ReciptPaymentController extends Controller
                 $std->recipt__payments_id = $pay->id;
                 $std->save();
                 $invoice->update(['status' => 1]);
-                $this->logActivity('إضافة', 'تم اضافة دفعة جديدة للطالب ' . $request->student->name . ' بتاريخ ' . date('Y-m-d'));
+                $this->logActivity('إضافة', 'تم اضافة دفعة جديدة للطالب '.$request->student->name.' بتاريخ '.date('Y-m-d'));
                 DB::commit();
 
                 return redirect()->route('Recipt_Payment.print', $pay->id);
@@ -93,6 +102,7 @@ class ReciptPaymentController extends Controller
     {
         $report_data['recipt'] = Recipt_Payment::where('id', $id)->with(['student:id,name'])->first();
         $report_data['tafqeet'] = Numbers::TafqeetMoney($report_data['recipt']->Debit, 'EGP');
+
         return view('backend.reciptpayment.print', get_defined_vars());
     }
 
@@ -142,7 +152,7 @@ class ReciptPaymentController extends Controller
             $std->debit = 0.00;
             $std->recipt__payments_id = $pay->id;
             $std->save();
-            $this->logActivity('تعديل', 'تم تعديل دفعة جديدة للطالب ' . $request->student->name . ' بتاريخ ' . date('Y-m-d'));
+            $this->logActivity('تعديل', 'تم تعديل دفعة جديدة للطالب '.$request->student->name.' بتاريخ '.date('Y-m-d'));
             DB::commit();
 
             return redirect()->route('Recipt_Payment.index')->with('success', trans('general.success'));
@@ -162,7 +172,8 @@ class ReciptPaymentController extends Controller
 
             $Recipt_Payment = Recipt_Payment::findorFail($id);
             $Recipt_Payment->delete();
-            $this->logActivity('حذف', 'تم حذف دفعة جديدة للطالب ' . $Recipt_Payment->student->name . ' بتاريخ ' . date('Y-m-d'));
+            $this->logActivity('حذف', 'تم حذف دفعة جديدة للطالب '.$Recipt_Payment->student->name.' بتاريخ '.date('Y-m-d'));
+
             return redirect()->route('Recipt_Payment.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

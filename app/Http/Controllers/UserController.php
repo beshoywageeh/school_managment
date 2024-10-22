@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
 use App\Http\Traits\ImageTrait;
 use App\Imports\WorkersImport;
 use App\Models\Job;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Laravel\Pulse\Users;
-use Maatwebsite\Excel\Excel;
+
 class UserController extends Controller
 {
     use ImageTrait;
@@ -21,6 +19,7 @@ class UserController extends Controller
     public function index()
     {
         $employees = User::with('job')->get();
+
         return view('backend.employees.index', get_defined_vars());
     }
 
@@ -31,6 +30,7 @@ class UserController extends Controller
     {
         $jobs_main = Job::where('is_main', 1)->get();
         $years = range(date('Y'), date('Y') - 10);
+
         return view('backend.employees.create', get_defined_vars());
     }
 
@@ -63,15 +63,17 @@ class UserController extends Controller
             $user->insurance_number = $request->insurance_number;
             $user->insurance_date = $request->insurance_date ? $request->insurance_date : null;
             $user->national_id = $request->national_id;
-            $user->email = \Str::slug($request->name) . '@ischool.com';
+            $user->email = \Str::slug($request->name).'@ischool.com';
             $user->save();
-            $this->verifyAndStoreImage($request, 'file', 'employees' . '/' . $request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
+            $this->verifyAndStoreImage($request, 'file', 'employees'.'/'.$request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
             DB::commit();
             session()->flash('success', trans('General.success'));
+
             return redirect()->route('employees.index');
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -82,6 +84,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::findorFail($id);
+
         return view('backend.employees.show', get_defined_vars());
     }
 
@@ -94,9 +97,11 @@ class UserController extends Controller
             $jobs_main = Job::where('is_main', 1)->get();
             $user = User::findOrFail($id);
             $years = range(date('Y'), date('Y') - 10);
+
             return view('backend.employees.edit', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -129,9 +134,11 @@ class UserController extends Controller
             $user->national_id = $request->national_id;
             $user->save();
             session()->flash('success', trans('General.success'));
+
             return redirect()->route('employees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -145,9 +152,11 @@ class UserController extends Controller
             $user = User::findOrFail($id);
             $user->delete();
             session()->flash('success', trans('General.success'));
+
             return redirect()->route('employees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }
@@ -155,6 +164,7 @@ class UserController extends Controller
     public function getjobs($id)
     {
         $jobs = Job::where('main_job_id', $id)->get(['id', 'name']);
+
         return response()->json($jobs);
     }
 
@@ -164,9 +174,11 @@ class UserController extends Controller
             $path = $request->file('excel')->getRealPath();
             \Excel::import(new WorkersImport, $path);
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }

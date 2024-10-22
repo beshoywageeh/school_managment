@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\class_room;
+use App\Models\Grade;
 use Illuminate\Database\Seeder;
-use App\Models\{Grade, User, class_room};
+
 class class_roomTableSeeder extends Seeder
 {
     /**
