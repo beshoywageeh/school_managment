@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('stock_id')->nullable();
             $table->unsignedBigInteger('order_id')->nullable();
-            $table->string('manual');
-            $table->date('manual_date');
+            $table->string('manual')->nullable();
+            $table->date('manual_date')->nullable();
             $table->string('quantity_in')->nullable();
             $table->string('quantity_out')->nullable();
             $table->string('location')->nullable();

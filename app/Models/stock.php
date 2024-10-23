@@ -17,4 +17,7 @@ class stock extends Model
     {
         return $this->belongsToMany(order::class, 'stocks_order', 'stock_id', 'order_id')->withPivot('quantity_in', 'quantity_out');
     }
+    public function gard(){
+        return $this->hasMany(gard::class,'stock_id','id');
+    }
 }

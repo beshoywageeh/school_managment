@@ -162,6 +162,9 @@
                             {{ trans('stock.outcome_order') }}
                         </x-nav_link>
                     @endcan
+                    <x-nav_link :href="route('gard.index')" :active="request()->is('*/orders/*')">
+                        {{ trans('stock.inventory_order') }}
+                    </x-nav_link>
                 </ul>
             </li>
             @if (\Auth::user()->isAdmin)

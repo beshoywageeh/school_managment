@@ -15,7 +15,6 @@ class StockController extends Controller
     public function index()
     {
         $stocks = stock::with('orders')->get();
-
         return view('backend.stocks.index', compact('stocks'));
     }
 
@@ -54,30 +53,23 @@ class StockController extends Controller
     {
         $order = Order::findorFail($id);
         $stocks = stock::get(['id', 'name']);
-
+$type=1;
         return view('backend.stocks.tawreed', get_defined_vars());
     }
 
     public function stocks_submit(Request $request)
     {
-
         try {
             $order_id = $request->id;
             $list_stocks = $request->List_stocks;
             foreach ($list_stocks as $stock) {
-                $stock = stock::firstOrCreate(['name' => $stock['stock_name']], [
-                    'opening_stock' => $stock['quantity'],
-                    'opening_stock_date' => date('Y-m-d'),
-                ]);
-                $this->logActivity('اضافة', trans('system_lookup.field_create', ['value' => $stock->name.' - '.$stock->opening_stock]));
                 \DB::table('stocks_order')->Insert([
                     'order_id' => $order_id,
-                    'stock_id' => $stock->id,
+                    'stock_id' => $stock['name'],
                     'manual' => $stock['manual_num'],
                     'manual_date' => $stock['manual_date'],
                     'quantity_in' => $stock['quantity'],
                 ]);
-                $this->logActivity('اضافة', trans('system_lookup.field_create', ['value' => $stock->name.' - '.$stock->opening_stock]));
             }
 
             return redirect()->route('stocks.index')->with('success', trans('general.success'));

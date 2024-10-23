@@ -100,6 +100,10 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('stock_id')->references('id')->on('stocks')->onDelete('Cascade')->onUpdate('Cascade');
         });
+        Schema::table('order',function(Blueprint $table){
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('stock_id')->references('id')->on('stocks')->onDelete('Cascade')->onUpdate('Cascade');
+        });
     }
 
     /**
@@ -180,7 +184,11 @@ return new class extends Migration
         });
         Schema::table('stocks_order', function (Blueprint $table) {
             $table->dropForeign('order_id');
-            $table->dropForeign('stock');
+            $table->dropForeign('stock_id');
+        });
+        Schema::table('stocks_order', function (Blueprint $table) {
+            $table->dropForeign('order_id');
+            $table->dropForeign('stock_id');
         });
     }
 };

@@ -5,7 +5,7 @@
     @elseif ($type == 2)
         {{ trans('stock.outcome_order') }}
     @elseif ($type == 3)
-        {{ trans('stock.gard') }}
+        {{ trans('stock.inventory_order') }}
     @else
     @endif
 @endsection
@@ -30,7 +30,7 @@
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
                                     @endcan
                                 @elseif ($type == 3)
-                                    {{ trans('orders.gard') }}
+                                    <a href="{{route('gard.create')}}" class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>
                                 @else
                                 @endif
 
@@ -104,7 +104,7 @@
                                                 ],
                                             ]" />
                                             @elseif ($type == 3)
-                                                {{ trans('orders.gard') }}
+                                                {{ trans('orders.inventory_order') }}
                                             @else 1 @endif
                                                 </td>
                                     </tr>

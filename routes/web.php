@@ -1,30 +1,6 @@
 <?php
 
-use App\Http\Controllers\AcadmiceYearController;
-use App\Http\Controllers\ActivityLogController;
-use App\Http\Controllers\AdminEraController;
-use App\Http\Controllers\BackupController;
-use App\Http\Controllers\ClassRooms\ClassRoomsController;
-use App\Http\Controllers\ExcptionFeesController;
-use App\Http\Controllers\fee_invoiceController;
-use App\Http\Controllers\Grades\GradesController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OutOrderController;
-use App\Http\Controllers\Parents\MyParentsController;
-use App\Http\Controllers\PaymentPartsController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\promotionController;
-use App\Http\Controllers\ReciptPaymentController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\SchoolFeeController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\SetupController;
-use App\Http\Controllers\StockController;
-use App\Http\Controllers\Students\StudentsController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\{AcadmiceYearController,GardController,ActivityLogController,AdminEraController,BackupController,ClassRooms\ClassRoomsController,ExcptionFeesController,fee_invoiceController,Grades\GradesController,HomeController,JobController,OrderController,OutOrderController,Parents\MyParentsController,PaymentPartsController,ProfileController,promotionController,ReciptPaymentController,ReportController,RoleController,SchoolFeeController,SettingsController,SetupController,StockController,Students\StudentsController,UserController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -233,7 +209,14 @@ Route::group(
                 Route::post('/transfer', 'transfer')->name('orders.transfer');
                 Route::post('/submit_transfer', 'submit_transfer')->name('orders.submit_transfer');
             });
-
+            Route::group(['prefix'=>'gard','controller'=>GardController::class],function(){
+                Route::get('/index','index')->name('gard.index');
+                Route::get('/create','create')->name('gard.create');
+                Route::get('/edit/{id}','edit')->name('gard.edit');
+                Route::post('/store','store')->name('gard.store');
+                Route::post('/update','update')->name('gard.update');
+                Route::get('/destroy/{id}','destroy')->name('gard.destroy');
+            });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');
         });
