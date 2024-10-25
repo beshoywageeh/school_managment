@@ -13,7 +13,8 @@ class ReportController extends Controller
     public function index()
     {
         $acadmeic_years = acadmice_year::where('status', 0)->get();
-$stocks = stock::get();
+        $stocks = stock::get();
+
         return view('backend.report.index', get_defined_vars());
     }
 
@@ -43,15 +44,19 @@ $stocks = stock::get();
     public function StockProducts()
     {
         $stocks = stock::with('orders')->get();
+
         return view('backend.report.stock_product', get_defined_vars());
     }
-    public function stock_product(Request $request){
-        $stock=stock::where('id',$request->stock)->with('orders')->first();
+
+    public function stock_product(Request $request)
+    {
+        $stock = stock::where('id', $request->stock)->with('orders')->first();
         $stocks = $this->calculateTotals($stock);
 
-        return view('backend.report.stock_product_view',get_defined_vars());
+        return view('backend.report.stock_product_view', get_defined_vars());
 
     }
+
     private function calculateTotals($stocks)
     {
         $previousstock = 0;
