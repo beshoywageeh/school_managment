@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\LogsActivity;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-use App\Http\Traits\LogsActivity;
+
 class AdminEraController extends Controller
 {
     use LogsActivity;
+
     public function Index()
     {
         $Employees = User::with('job', 'roles:id')->get(['id', 'code', 'job_id', 'name', 'email', 'isAdmin', 'login_allow', 'password']);

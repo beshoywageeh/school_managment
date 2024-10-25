@@ -10,7 +10,8 @@ class Gard extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable=['order_id','stock_id','quantity'];
-protected$table="gard_stocks";
 
+    protected $fillable = ['order_id', 'stock_id', 'quantity'];
+
+    protected $table = 'gard_stocks';
 }

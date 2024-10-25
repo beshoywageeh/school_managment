@@ -44,6 +44,7 @@ class OutOrderController extends Controller
         $order = Order::findorFail($id);
         $stocks = stock::get(['id', 'name']);
         $type = 2;
+
         return view('backend.stocks.tawreed', get_defined_vars());
     }
 

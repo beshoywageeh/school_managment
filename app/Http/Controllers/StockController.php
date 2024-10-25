@@ -54,7 +54,8 @@ class StockController extends Controller
     {
         $order = Order::findorFail($id);
         $stocks = stock::get(['id', 'name']);
-$type=1;
+        $type = 1;
+
         return view('backend.stocks.tawreed', get_defined_vars());
     }
 
