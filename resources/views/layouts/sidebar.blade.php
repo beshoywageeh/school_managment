@@ -41,136 +41,152 @@
                 </li>
             @endif
             <!--for employee-->
-            <li>
-                <a href="javascript:void(0);" data-toggle="collapse" data-target="#employee_info">
-                    <div class="pull-left">
-                        <img class="img-fluid" width="25" height="25"
-                            src="{{ URL::asset('assests/images/Sidebar/employees.png') }}"
-                            alt="{{ trans('sidebar.employee_info') }}" />
-                        <span class="right-nav-text">{{ trans('sidebar.employee_info') }}</span>
-                    </div>
-                    <div class="pull-right"><i class="ti-plus"></i></div>
-                    <div class="clearfix"></div>
-                </a>
-                <ul id="employee_info" class="collapse" data-parent="#sidebarnav">
-                    @can('jobs-list')
-                        <x-nav_link :href="route('jobs.index')" :active="request()->is('*/jobs/*')" :image="URL::asset('assests/images/Sidebar/job.png')">
-                            {{ trans('sidebar.jobs') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('employees-list')
-                        <x-nav_link :href="route('employees.index')" :active="request()->is('*/employees/*')" :image="URL::asset('assests/images/Sidebar/employees.png')">
-                            {{ trans('sidebar.employees') }}
-                        </x-nav_link>
-                    @endcan
-                </ul>
-            </li>
+            @if (Auth::user()->hasAnyPermission(['jobs-list', 'employees-list']))
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#employee_info">
+                        <div class="pull-left">
+                            <img class="img-fluid" width="25" height="25"
+                                src="{{ URL::asset('assests/images/Sidebar/employees.png') }}"
+                                alt="{{ trans('sidebar.employee_info') }}" />
+                            <span class="right-nav-text">{{ trans('sidebar.employee_info') }}</span>
+                        </div>
+                        <div class="pull-right"><i class="ti-plus"></i></div>
+                        <div class="clearfix"></div>
+                    </a>
+                    <ul id="employee_info" class="collapse" data-parent="#sidebarnav">
+                        @can('jobs-list')
+                            <x-nav_link :href="route('jobs.index')" :active="request()->is('*/jobs/*')" :image="URL::asset('assests/images/Sidebar/job.png')">
+                                {{ trans('sidebar.jobs') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('employees-list')
+                            <x-nav_link :href="route('employees.index')" :active="request()->is('*/employees/*')" :image="URL::asset('assests/images/Sidebar/employees.png')">
+                                {{ trans('sidebar.employees') }}
+                            </x-nav_link>
+                        @endcan
+                    </ul>
+                </li>
+            @endif
             <!--for acounting-->
-            <li>
-                <a href="javascript:void(0);" data-toggle="collapse" data-target="#accounting">
-                    <div class="pull-left">
-                        <img class="img-fluid" width="25" height="25"
-                            src="{{ URL::asset('assests/images/Sidebar/money.png') }}"
-                            alt="{{ trans('sidebar.accounting') }}" />
-                        <span class="right-nav-text">{{ trans('sidebar.accounting') }}</span>
-                    </div>
-                    <div class="pull-right"><i class="ti-plus"></i></div>
-                    <div class="clearfix"></div>
-                </a>
-                <ul id="accounting" class="collapse" data-parent="#sidebarnav">
-                    @can('academic_year-list')
-                        <x-nav_link :href="route('academic_year.index')" :active="request()->is('*/academic_year/*')" :image="URL::asset('assests/images/Sidebar/calendar.png')">
-                            {{ trans('academic_year.title') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('schoolfees-list')
-                        <x-nav_link :href="route('schoolfees.index')" :active="request()->is('*/school_fees/*')" :image="URL::asset('assests/images/Sidebar/money.png')">
-                            {{ trans('sidebar.schoolfees') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('fee_invoice-list')
-                        <x-nav_link :href="route('fee_invoice.index')" :active="request()->is('*/fee_invoice/*')" :image="URL::asset('assests/images/Sidebar/invoice.png')">
-                            {{ trans('sidebar.fees_invoice') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('Recipt_Payment-list')
-                        <x-nav_link :href="route('Recipt_Payment.index')" :active="request()->is('*/Recipt_Payment/*')" :image="URL::asset('assests/images/Sidebar/bill.png')">
-                            {{ trans('sidebar.Recipt_Payment') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('except_fee-list')
-                        <x-nav_link :href="route('except_fee.index')" :active="request()->is('*/except_fee/*')" :image="URL::asset('assests/images/Sidebar/declined.png')">
-                            {{ trans('sidebar.except_fee') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('payment_parts-list')
-                        <x-nav_link :href="route('payment_parts.index')" :active="request()->is('*/payment_parts/*')" :image="URL::asset('assests/images/Sidebar/down-payment.png')">
-                            {{ trans('sidebar.payment_parts') }}
-                        </x-nav_link>
-                    @endcan
-                </ul>
-            </li>
+            @if (Auth::user()->hasAnyPermission([
+                    'academic_year-list',
+                    'schoolfees-list',
+                    'fee_invoice-list',
+                    'Recipt_Payment-list',
+                    'except_fee-list',
+                    'payment_parts-list',
+                ]))
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#accounting">
+                        <div class="pull-left">
+                            <img class="img-fluid" width="25" height="25"
+                                src="{{ URL::asset('assests/images/Sidebar/money.png') }}"
+                                alt="{{ trans('sidebar.accounting') }}" />
+                            <span class="right-nav-text">{{ trans('sidebar.accounting') }}</span>
+                        </div>
+                        <div class="pull-right"><i class="ti-plus"></i></div>
+                        <div class="clearfix"></div>
+                    </a>
+                    <ul id="accounting" class="collapse" data-parent="#sidebarnav">
+                        @can('academic_year-list')
+                            <x-nav_link :href="route('academic_year.index')" :active="request()->is('*/academic_year/*')" :image="URL::asset('assests/images/Sidebar/calendar.png')">
+                                {{ trans('academic_year.title') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('schoolfees-list')
+                            <x-nav_link :href="route('schoolfees.index')" :active="request()->is('*/school_fees/*')" :image="URL::asset('assests/images/Sidebar/money.png')">
+                                {{ trans('sidebar.schoolfees') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('fee_invoice-list')
+                            <x-nav_link :href="route('fee_invoice.index')" :active="request()->is('*/fee_invoice/*')" :image="URL::asset('assests/images/Sidebar/invoice.png')">
+                                {{ trans('sidebar.fees_invoice') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('Recipt_Payment-list')
+                            <x-nav_link :href="route('Recipt_Payment.index')" :active="request()->is('*/Recipt_Payment/*')" :image="URL::asset('assests/images/Sidebar/bill.png')">
+                                {{ trans('sidebar.Recipt_Payment') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('except_fee-list')
+                            <x-nav_link :href="route('except_fee.index')" :active="request()->is('*/except_fee/*')" :image="URL::asset('assests/images/Sidebar/declined.png')">
+                                {{ trans('sidebar.except_fee') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('payment_parts-list')
+                            <x-nav_link :href="route('payment_parts.index')" :active="request()->is('*/payment_parts/*')" :image="URL::asset('assests/images/Sidebar/down-payment.png')">
+                                {{ trans('sidebar.payment_parts') }}
+                            </x-nav_link>
+                        @endcan
+                    </ul>
+                </li>
+            @endif
             <!--for grades_setting-->
-            <li>
-                <a href="javascript:void(0);" data-toggle="collapse" data-target="#grades_setting">
-                    <div class="pull-left">
-                        <img class="img-fluid" width="25" height="25"
-                            src="{{ URL::asset('assests/images/Sidebar/classroom.png') }}"
-                            alt="{{ trans('sidebar.grades_setting') }}" />
-                        <span class="right-nav-text">{{ trans('sidebar.grades_setting') }}</span>
-                    </div>
-                    <div class="pull-right"><i class="ti-plus"></i></div>
-                    <div class="clearfix"></div>
-                </a>
-                <ul id="grades_setting" class="collapse" data-parent="#sidebarnav">
-                    @can('grade-list')
-                        <x-nav_link :href="route('grade.index')" :active="request()->is('*/grade/*')" :image="URL::asset('assests/images/Sidebar/score.png')">
-                            {{ trans('sidebar.Grade') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('class_rooms-list')
-                        <x-nav_link :href="route('class_rooms.index')" :active="request()->is('*/class_rooms/*')" :image="URL::asset('assests/images/Sidebar/classroom.png')">
-                            {{ trans('sidebar.Class_Rooms') }}
-                        </x-nav_link>
-                    @endcan
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:void(0);" data-toggle="collapse" data-target="#stocks-info">
-                    <div class="pull-left">
-                        <img class="img-fluid" width="25" height="25"
-                            src="{{ URL::asset('assests/images/Sidebar/inventory.png') }}"
-                            alt="{{ trans('sidebar.stores') }}" />
-                        <span class="right-nav-text">{{ trans('sidebar.stores') }}</span>
-                    </div>
-                    <div class="pull-right"><i class="ti-plus"></i></div>
-                    <div class="clearfix"></div>
-                </a>
-                <ul id="stocks-info" class="collapse" data-parent="#sidebarnav">
-                    @can('stocks-index')
-                        <x-nav_link :href="route('stocks.index')" :active="request()->is('*/stocks/*')" :image="URL::asset('assests/images/Sidebar/stocks.png')">
-                            {{ trans('sidebar.stocks') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('orders-index')
-                        <x-nav_link :href="route('order.index')" :active="request()->is('*/orders/*')">
-                            {{ trans('orders.income') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('order_out-index')
-                        <x-nav_link :href="route('outorder.index')" :active="request()->is('*/orders/*')">
-                            {{ trans('stock.outcome_order') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('stocks-inventory_order')
-                        <x-nav_link :href="route('gard.index')" :active="request()->is('*/orders/*')">
-                            {{ trans('stock.inventory_order') }}
-                        </x-nav_link>
-                    @endcan
-                </ul>
-            </li>
-            @if (\Auth::user()->isAdmin)
-                <!--for security-->
+            @if (Auth::user()->hasAnyPermission(['grade-list', 'class_rooms-list']))
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#grades_setting">
+                        <div class="pull-left">
+                            <img class="img-fluid" width="25" height="25"
+                                src="{{ URL::asset('assests/images/Sidebar/classroom.png') }}"
+                                alt="{{ trans('sidebar.grades_setting') }}" />
+                            <span class="right-nav-text">{{ trans('sidebar.grades_setting') }}</span>
+                        </div>
+                        <div class="pull-right"><i class="ti-plus"></i></div>
+                        <div class="clearfix"></div>
+                    </a>
+                    <ul id="grades_setting" class="collapse" data-parent="#sidebarnav">
+                        @can('grade-list')
+                            <x-nav_link :href="route('grade.index')" :active="request()->is('*/grade/*')" :image="URL::asset('assests/images/Sidebar/score.png')">
+                                {{ trans('sidebar.Grade') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('class_rooms-list')
+                            <x-nav_link :href="route('class_rooms.index')" :active="request()->is('*/class_rooms/*')" :image="URL::asset('assests/images/Sidebar/classroom.png')">
+                                {{ trans('sidebar.Class_Rooms') }}
+                            </x-nav_link>
+                        @endcan
+                    </ul>
+                </li>
+            @endif
+            <!--for stores-->
+            @if (Auth::user()->hasAnyPermission(['stocks-index', 'orders-index', 'order_out-index', 'stocks-inventory_order-index']))
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#stocks-info">
+                        <div class="pull-left">
+                            <img class="img-fluid" width="25" height="25"
+                                src="{{ URL::asset('assests/images/Sidebar/inventory.png') }}"
+                                alt="{{ trans('sidebar.stores') }}" />
+                            <span class="right-nav-text">{{ trans('sidebar.stores') }}</span>
+                        </div>
+                        <div class="pull-right"><i class="ti-plus"></i></div>
+                        <div class="clearfix"></div>
+                    </a>
+                    <ul id="stocks-info" class="collapse" data-parent="#sidebarnav">
+                        @can('stocks-index')
+                            <x-nav_link :href="route('stocks.index')" :active="request()->is('*/stocks/*')" :image="URL::asset('assests/images/Sidebar/stocks.png')">
+                                {{ trans('sidebar.stocks') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('orders-index')
+                            <x-nav_link :href="route('order.index')" :active="request()->is('*/orders/*')">
+                                {{ trans('orders.income') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('order_out-index')
+                            <x-nav_link :href="route('outorder.index')" :active="request()->is('*/orders/*')">
+                                {{ trans('stock.outcome_order') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('stocks-inventory_order')
+                            <x-nav_link :href="route('gard.index')" :active="request()->is('*/orders/*')">
+                                {{ trans('stock.inventory_order') }}
+                            </x-nav_link>
+                        @endcan
+                    </ul>
+                </li>
+            @endif
+            <!--for security-->
+            @if (Auth::user()->hasAnyPermission(['settings-info', 'role-list', 'back-list']))
                 <li>
                     <a href="javascript:void(0);" data-toggle="collapse" data-target="#security">
                         <div class="pull-left">
@@ -202,11 +218,13 @@
                                 {{ trans('sidebar.permission') }}
                             </x-nav_link>
                         @endcan
-                        <x-nav_link :href="route('admin_era.index')" :active="request()->is('*/admin_era/*')" :image="URL::asset('assests/images/Sidebar/admin.png')">
-                            {{ trans('sidebar.admin_era') }}
-                        </x-nav_link>
                     </ul>
                 </li>
+            @endif
+            @if (\Auth::user()->isAdmin)
+                <x-nav_link :href="route('admin_era.index')" :active="request()->is('*/admin_era/*')" :image="URL::asset('assests/images/Sidebar/admin.png')">
+                    {{ trans('sidebar.admin_era') }}
+                </x-nav_link>
             @endif
 
 
