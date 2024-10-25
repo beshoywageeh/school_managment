@@ -150,6 +150,7 @@ Route::group(
             Route::group(['prefix' => 'reports', 'controller' => ReportController::class], function () {
                 Route::get('report', 'index')->name('report.index');
                 Route::get('Students_export', 'ExportStudents')->name('reports.export_student');
+                Route::get('stocks_product', 'StockProducts')->name('reports.stock_product');
                 Route::post('/daily', 'daily_paymnet')->name('report.daily_fee');
                 Route::post('/exception_fee', 'exception_fee')->name('report.exception_fee');
             });
@@ -212,6 +213,7 @@ Route::group(
             Route::group(['prefix'=>'gard','controller'=>GardController::class],function(){
                 Route::get('/index','index')->name('gard.index');
                 Route::get('/create','create')->name('gard.create');
+                Route::get('/show/{id}', 'show')->name('gard.show');
                 Route::get('/edit/{id}','edit')->name('gard.edit');
                 Route::post('/store','store')->name('gard.store');
                 Route::post('/update','update')->name('gard.update');

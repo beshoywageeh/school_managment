@@ -34,4 +34,5 @@ return [
     'stocks' => 'عهدة',
     'clothes' => 'ملابس',
     'books_sheets' => 'الكتب والملازم',
+    'inventory'=>'مخازن'
 ];

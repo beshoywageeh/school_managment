@@ -39,14 +39,66 @@ class GardController extends Controller
                 $current_qty = $stock->orders()->where('stock_id',$stock->id);
                 $qty=$request->actual_stock[$key]-($stock->opening_stock+$current_qty->sum('quantity_in')-$current_qty->sum('quantity_out'));
 
-                Gard::create([
+                \DB::table('stocks_order')->Insert([
                     'order_id' => $request->id,
                     'stock_id' => $stock->id,
-                    'quantity'=>$qty
+                    'quantity_out' => max(0, -$qty),
+                    'quantity_in' => max(0, $qty)
                 ]);
-                $this->logActivity('إضافة', 'إضافة للمخزن'.$stock);
+                $this->logActivity('إضافة', 'إضافة للمخزن'.$stock->name . 'في الجرد رقم'.$request->id);
             }
             return redirect()->route('stocks.index')->with('success','تم الاضافة بنجاح');
+        }catch(Exception $e){
+            return redirect()->back()->with('error',$e->getMessage());
+        }
+    }
+public function edit ($id){
+    try{
+        $order = order::where('id',$id)->with('stocks')->first();
+        $type=3;
+       // return $order;
+        return view('backend.gard.edit',get_defined_vars());
+    }catch(Exception $e){
+        return redirect()->back()->with('error',$e->getMessage());
+    }
+}
+public function update(Request $request){
+    try{
+        $order = order::where('id',$request->id)->with('stocks')->first();
+        $type=3;
+        foreach($request->stock_id as $key=>$stock){
+            $stock = stock::find($stock);
+            $current_qty = $stock->orders()->where('stock_id',$stock->id);
+            $qty=$request->actual_stock[$key]-($stock->opening_stock+$current_qty->sum('quantity_in')-$current_qty->sum('quantity_out'));
+            $order->stocks()->syncWithPivotValues('order_id', [
+                'stock_id' => $stock->id,
+                'quantity_out' => max(0, -$qty),
+                'quantity_in' => max(0, $qty)
+            ]);
+            $this->logActivity('تعديل', 'تعديل للمخزن'.$stock->name . 'في الجرد رقم'.$order->auto_number);
+        }
+        return redirect()->route('stocks.index')->with('success',trans('general.success'));
+    }catch(Exception $e){
+        return redirect()->back()->with('error',$e->getMessage());
+    }
+}
+public function show($id)
+{
+    try {
+        $order = order::with('stocks')->findorFail($id);
+        $type = 3;
+
+        return view('backend.orders.show', get_defined_vars());
+    } catch (Exception $e) {
+        return redirect()->back()->with('error', $e->getMessage());
+    }
+}
+    public function destroy($id){
+        try{
+            $gard = order::findorfail($id);
+            $this->logActivity('حذف', ' حذف أمر جرد رقم'.$gard->auto_number);
+            $gard->delete();
+            return redirect()->back()->with('success',trans('general.success'));
         }catch(Exception $e){
             return redirect()->back()->with('error',$e->getMessage());
         }

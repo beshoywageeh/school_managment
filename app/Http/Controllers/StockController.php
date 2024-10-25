@@ -15,6 +15,7 @@ class StockController extends Controller
     public function index()
     {
         $stocks = stock::with('orders')->get();
+
         return view('backend.stocks.index', compact('stocks'));
     }
 

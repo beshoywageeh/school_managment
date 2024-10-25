@@ -5,7 +5,7 @@
     @elseif ($type == 2)
         {{ trans('stock.outcome_order') }} | {{ $order->auto_number }}
     @elseif ($type == 3)
-        {{ trans('stock.gard') }} | {{ $order->auto_number }}
+        {{ trans('stock.inventory_order') }} | {{ $order->auto_number }}
     @else
     @endif
 @endsection
@@ -23,12 +23,12 @@
                             <tr>
                                 <th>الرقم : {{ $order->auto_number }}</th>
                                 <th>النوع :
-                                     @if ($type == 1)
+                                    @if ($type == 1)
                                         {{ trans('stock.income_order') }}
                                     @elseif ($type == 2)
                                         {{ trans('stock.outcome_order') }}
                                     @elseif ($type == 3)
-                                        {{ trans('stock.gard') }}
+                                        {{ trans('stock.inventory_order') }}
                                     @else
                                     @endif
                                 </th>
@@ -41,9 +41,9 @@
                                 <tr>
                                     <th>#</th>
                                     <th>{{ trans('stock.name') }}</th>
-                                    @if($type==1)
-                                    <th>{{ trans('stock.manual_num') }}</th>
-                                    <th>{{ trans('stock.manual_date') }}</th>
+                                    @if ($type == 1)
+                                        <th>{{ trans('stock.manual_num') }}</th>
+                                        <th>{{ trans('stock.manual_date') }}</th>
                                     @endif
                                     <th>{{ trans('stock.quantity') }}</th>
                                 </tr>
@@ -60,6 +60,13 @@
                                         @endif
                                         @if ($type == 2)
                                             <td>{{ number_format($stock->pivot->quantity_out, 2) }}</td>
+                                        @endif
+                                        @if ($type == 3)
+                                            @if (is_null($stock->pivot->quantity_in))
+                                                <td>{{ number_format($stock->pivot->quantity_out, 2) }}</td>
+                                            @else
+                                                <td>{{ number_format($stock->pivot->quantity_in, 2) }}</td>
+                                            @endif
                                         @endif
                                     </tr>
                                 @empty

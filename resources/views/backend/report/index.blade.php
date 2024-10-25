@@ -59,10 +59,33 @@
                 <div class="card-body">
                     <div class="row card-title">
                         <div class="text-center col">
-                            <h4>{{ trans('report.title') }} | {{ trans('Sidebar.Clothes_Books') }}</h4>
+                            <h4>{{ trans('report.title') }} | {{ trans('Sidebar.inventory') }}</h4>
                         </div>
                     </div>
+                    <ul class="list-unstyled">
+                        @php
+                            $acc_links=[
+                                [
+                                'Name'=>trans('report.stock_product'),
+                                'Url'=>route('reports.stock_product')
+                                ]];
+                        @endphp
+                        @foreach( $acc_links as $acc_link)
+                            <li class="">
+                                <div class="media">
+                                    <div class="text-center media-body">
+                                        <a class="btn btn-block btn-light" target="_blank" href="{{$acc_link['Url']}}">
+                                            <h5 class="">
+                                                {{ $acc_link['Name'] }}</h5>
+                                        </a>
+                                    </div>
+                                </div>
 
+                            </li>
+                            <div class="mt-20 mb-20 divider dotted"></div>
+                        @endforeach
+
+                    </ul>
                 </div>
             </div>
         </div>

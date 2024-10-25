@@ -9,37 +9,37 @@
                 {{ trans('Sidebar.Dashboard') }}
             </x-nav_link>
             <!--for student-->
-
-            <li>
-                <a href="javascript:void(0);" data-toggle="collapse" data-target="#student-info">
-                    <div class="pull-left">
-                        <img class="img-fluid" width="25" height="25"
-                            src="{{ URL::asset('assests/images/Sidebar/students.png') }}"
-                            alt="{{ trans('sidebar.student_info') }}" />
-                        <span class="right-nav-text">{{ trans('sidebar.student_info') }}</span>
-                    </div>
-                    <div class="pull-right"><i class="ti-plus"></i></div>
-                    <div class="clearfix"></div>
-                </a>
-                <ul id="student-info" class="collapse" data-parent="#sidebarnav">
-                    @can('parents-list')
-                        <x-nav_link :href="route('parents.index')" :active="request()->is('*/parents/*')" :image="URL::asset('assests/images/Sidebar/parents.png')">
-                            {{ trans('sidebar.parents') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('Students-list')
-                        <x-nav_link :href="route('Students.index')" :active="request()->is('*/students/*')" :image="URL::asset('assests/images/Sidebar/students.png')">
-                            {{ trans('sidebar.Students') }}
-                        </x-nav_link>
-                    @endcan
-                    @can('promotion-list')
-                        <x-nav_link :href="route('promotion.index')" :active="request()->is('*/promotion/*')" :image="URL::asset('assests/images/Sidebar/promotion.png')">
-                            {{ trans('sidebar.promotion') }}
-                        </x-nav_link>
-                    @endcan
-                </ul>
-            </li>
-
+            @if (Auth::user()->hasAnyPermission(['Students-list', 'parents-list', 'promotion-list']))
+                <li>
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#student-info">
+                        <div class="pull-left">
+                            <img class="img-fluid" width="25" height="25"
+                                src="{{ URL::asset('assests/images/Sidebar/students.png') }}"
+                                alt="{{ trans('sidebar.student_info') }}" />
+                            <span class="right-nav-text">{{ trans('sidebar.student_info') }}</span>
+                        </div>
+                        <div class="pull-right"><i class="ti-plus"></i></div>
+                        <div class="clearfix"></div>
+                    </a>
+                    <ul id="student-info" class="collapse" data-parent="#sidebarnav">
+                        @can('parents-list')
+                            <x-nav_link :href="route('parents.index')" :active="request()->is('*/parents/*')" :image="URL::asset('assests/images/Sidebar/parents.png')">
+                                {{ trans('sidebar.parents') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('Students-list')
+                            <x-nav_link :href="route('Students.index')" :active="request()->is('*/students/*')" :image="URL::asset('assests/images/Sidebar/students.png')">
+                                {{ trans('sidebar.Students') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('promotion-list')
+                            <x-nav_link :href="route('promotion.index')" :active="request()->is('*/promotion/*')" :image="URL::asset('assests/images/Sidebar/promotion.png')">
+                                {{ trans('sidebar.promotion') }}
+                            </x-nav_link>
+                        @endcan
+                    </ul>
+                </li>
+            @endif
             <!--for employee-->
             <li>
                 <a href="javascript:void(0);" data-toggle="collapse" data-target="#employee_info">
@@ -162,9 +162,11 @@
                             {{ trans('stock.outcome_order') }}
                         </x-nav_link>
                     @endcan
-                    <x-nav_link :href="route('gard.index')" :active="request()->is('*/orders/*')">
-                        {{ trans('stock.inventory_order') }}
-                    </x-nav_link>
+                    @can('stocks-inventory_order')
+                        <x-nav_link :href="route('gard.index')" :active="request()->is('*/orders/*')">
+                            {{ trans('stock.inventory_order') }}
+                        </x-nav_link>
+                    @endcan
                 </ul>
             </li>
             @if (\Auth::user()->isAdmin)

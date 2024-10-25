@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\acadmice_year;
-use App\Models\Grade;
-use App\Models\Recipt_payment;
+use App\Models\{acadmice_year,Grade,Recipt_payment,order,stock};
 use Illuminate\Http\Request;
-
 class ReportController extends Controller
 {
     public function index()
     {
         $acadmeic_years = acadmice_year::where('status', 0)->get();
-
         return view('backend.report.index', get_defined_vars());
     }
 
@@ -37,5 +33,10 @@ class ReportController extends Controller
         $date['to'] = $end_date;
 
         return view('backend.report.daily_fee_view', get_defined_vars());
+    }
+    public function StockProducts(){
+        $stocks=stock::with('orders')->get();
+        //return $stocks;
+        return view('backend.report.stock_product',get_defined_vars());
     }
 }

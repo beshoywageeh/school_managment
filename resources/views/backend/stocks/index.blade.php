@@ -53,7 +53,7 @@
                                             <td>{{ $stock->name }}</td>
                                             <td>{{ $stock->opening_stock }}</td>
                                             <td>{{ $stock->opening_stock_date }}</td>
-                                            <td>{{ $stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out') + $stock->gard()->sum('quantity') }}
+                                            <td>{{ $stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out') }}
                                             </td>
                                             <td> <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                 [

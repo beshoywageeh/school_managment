@@ -8,11 +8,20 @@
     <link rel="stylesheet" href="{{asset('assests/css/bootstrap-rtl.min.css')}}">
 </head>
 <style>
+    @page {
+  size: A4;
+  margin: 0;
+}
 @media print {
     .no-print, .no-print * {
         display: none !important;
     }
+    html, body {
+    width: 210mm;
+    height: 297mm;
 }
+
+  }
 </style>
 @stack('css')
 <body>

@@ -61,7 +61,11 @@
                                                 @endif
                                                 @if ($type == 2)
                                                 href="{{ route('outorder.show', $order->id) }}"
-                                                @endif>{{ $order->auto_number }}</a>
+                                                @endif
+                                                @if ($type == 3)
+                                                href="{{ route('gard.show', $order->id) }}"
+                                                @endif
+                                                >{{ $order->auto_number }}</a>
                                         </td>
                                         <td>{{ $order->stocks_count }}</td>
                                         <td>{{ $order->created_at->format('Y-m-d') }}</td>
@@ -104,7 +108,24 @@
                                                 ],
                                             ]" />
                                             @elseif ($type == 3)
-                                                {{ trans('orders.inventory_order') }}
+                                            <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                [
+                                                    'type' => 'link',
+                                                    'url' => route('gard.destroy', $order->id),
+                                                    'text' => trans('general.delete'),
+                                                    'icon' => 'ti-trash',
+                                                    'onclick' => 'confirmation(event)',
+                                                    'can' => 'stocks-inventory_delete',
+                                                ],
+                                                [
+                                                    'type' => 'link',
+                                                    'url' => route('gard.edit', $order->id),
+                                                    'text' => trans('general.edit'),
+                                                    'icon' => 'ti-pencil',
+                                                    'can' => 'stocks-inventory_edit',
+                                                ],
+
+                                            ]" />
                                             @else 1 @endif
                                                 </td>
                                     </tr>
