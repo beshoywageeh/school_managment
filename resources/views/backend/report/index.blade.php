@@ -16,17 +16,18 @@
                     </div>
                     <ul class="list-unstyled">
                         @php
-                            $acc_links=[
+                            $acc_links = [
                                 [
-                                'Name'=>trans('report.student_info'),
-                                'Url'=>route('reports.export_student')
-                                ]];
+                                    'Name' => trans('report.student_info'),
+                                    'Url' => route('reports.export_student'),
+                                ],
+                            ];
                         @endphp
-                        @foreach( $acc_links as $acc_link)
+                        @foreach ($acc_links as $acc_link)
                             <li class="">
                                 <div class="media">
                                     <div class="text-center media-body">
-                                        <a class="btn btn-block btn-light" target="_blank" href="{{$acc_link['Url']}}">
+                                        <a class="btn btn-block btn-light" target="_blank" href="{{ $acc_link['Url'] }}">
                                             <h5 class="">
                                                 {{ $acc_link['Name'] }}</h5>
                                         </a>
@@ -64,20 +65,34 @@
                     </div>
                     <ul class="list-unstyled">
                         @php
-                            $acc_links=[
+                            $acc_links = [
                                 [
-                                'Name'=>trans('report.stock_product'),
-                                'Url'=>route('reports.stock_product')
-                                ]];
+                                    'Name' => trans('report.stock_product'),
+                                    'Url' => route('reports.stock_product'),
+                                    'type' => 'link',
+                                ],
+                                [
+                                    'Name' => trans('report.stock'),
+                                    'Url' => '#stock',
+                                    'type' => 'button',
+                                ],
+                            ];
                         @endphp
-                        @foreach( $acc_links as $acc_link)
+                        @foreach ($acc_links as $acc_link)
                             <li class="">
                                 <div class="media">
                                     <div class="text-center media-body">
-                                        <a class="btn btn-block btn-light" target="_blank" href="{{$acc_link['Url']}}">
-                                            <h5 class="">
-                                                {{ $acc_link['Name'] }}</h5>
-                                        </a>
+                                        @if ($acc_link['type'] == 'link')
+                                            <a class="btn btn-block btn-light" target="_blank"
+                                                href="{{ $acc_link['Url'] }}">
+                                                <h5 class="">
+                                                    {{ $acc_link['Name'] }}</h5>
+                                            </a>
+                                        @endif
+                                        @if ($acc_link['type'] == 'button')
+                                            <button class="btn btn-block btn-light" data-toggle="modal"
+                                                data-target="{{ $acc_link['Url'] }}"><h5>{{ $acc_link['Name'] }}</h5></button>
+                                        @endif
                                     </div>
                                 </div>
 
@@ -98,35 +113,44 @@
                         </div>
                     </div>
                     <ul class="list-unstyled">
-                        <button data-target="#daily_fee" data-toggle="modal" class="btn btn-block btn-light"><h5>{{ trans('Sidebar.daily') }}</h5></button>
+                        <button data-target="#daily_fee" data-toggle="modal" class="btn btn-block btn-light">
+                            <h5>{{ trans('Sidebar.daily') }}</h5>
+                        </button>
                         <hr>
-                        <button data-target="#exception_fee" data-toggle="modal" class="btn btn-block btn-light"><h5>{{ trans('Sidebar.except_fee') }}</h5></button>
+                        <button data-target="#exception_fee" data-toggle="modal" class="btn btn-block btn-light">
+                            <h5>{{ trans('Sidebar.except_fee') }}</h5>
+                        </button>
                         <hr>
                         @php
-                            $acc_links=[
-
+                            $acc_links = [
                                 [
-                                'Name'=>trans('Sidebar.schoolfees'),
-                                'Url'=>'1'
-                                ],[
-                                'Name'=>trans('Sidebar.fees_invoice'),
-                                'Url'=>'1'
-                                ],[
-                                'Name'=>trans('Sidebar.Recipt_Payment'),
-                                'Url'=>'1'
-                                ],[
-                                'Name'=>trans('Sidebar.payment_parts'),
-                                'Url'=>'1'
-                                ],[
-                                'Name'=>trans('Sidebar.credit'),
-                                'Url'=>'1'
-                                ],];
+                                    'Name' => trans('Sidebar.schoolfees'),
+                                    'Url' => '1',
+                                ],
+                                [
+                                    'Name' => trans('Sidebar.fees_invoice'),
+                                    'Url' => '1',
+                                ],
+                                [
+                                    'Name' => trans('Sidebar.Recipt_Payment'),
+                                    'Url' => '1',
+                                ],
+                                [
+                                    'Name' => trans('Sidebar.payment_parts'),
+                                    'Url' => '1',
+                                ],
+                                [
+                                    'Name' => trans('Sidebar.credit'),
+                                    'Url' => '1',
+                                ],
+                            ];
                         @endphp
-                        @foreach( $acc_links as $acc_link)
+                        @foreach ($acc_links as $acc_link)
                             <li class="">
                                 <div class="media">
                                     <div class="text-center media-body">
-                                        <button class="btn btn-block btn-light" data-toggle="modal" data-target="{{$acc_link['Url']}}">
+                                        <button class="btn btn-block btn-light" data-toggle="modal"
+                                            data-target="{{ $acc_link['Url'] }}">
                                             <h5 class="">
                                                 {{ $acc_link['Name'] }}</h5>
                                         </button>
@@ -145,6 +169,7 @@
     </div>
     @include('backend.report.daily_fee_popup')
     @include('backend.report.exception_popup')
+    @include('backend.report.stock_popup')
     @push('scripts')
     @endpush
 @endsection

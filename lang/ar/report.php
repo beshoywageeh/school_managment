@@ -18,4 +18,16 @@ return [
     'exception' => 'إعفاءات',
     'to_colcet' => 'المطلوب تحصيله',
     'stock_product' => 'المخزون الخاص بالمنتجات',
+    'stock'=>'المخزون',
+    'select_stock'=>'اختر المخزون',
+    'stock_transaction'=>'المخزون الخاص بالمنتجات',
+    'auto_number'=>'الرقم التسلسلي',
+    'quantity_in'=>'الكمية الواردة',
+    'quantity_out'=>'الكمية المصروفة',
+    'quantity_total'=>'إلاجمالي',
+    'inorder'=>'وارد',
+    'outorder'=>'منصرف',
+    'inventory'=>'جرد',
+    'opening_stock'=>'المخزون الافتتاحي',
+    'type'=>'النوع'
 ];

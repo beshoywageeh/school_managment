@@ -178,6 +178,7 @@ Route::group(
                 Route::get('stocks_product', 'StockProducts')->name('reports.stock_product');
                 Route::post('/daily', 'daily_paymnet')->name('report.daily_fee');
                 Route::post('/exception_fee', 'exception_fee')->name('report.exception_fee');
+                Route::post('/stock', 'stock_product')->name('report.stock');
             });
 
             Route::group(['prefix' => 'ajax'], function () {
