@@ -100,9 +100,14 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('stock_id')->references('id')->on('stocks')->onDelete('Cascade')->onUpdate('Cascade');
         });
-        Schema::table('order', function (Blueprint $table) {
-            $table->foreign('order_id')->references('id')->on('orders')->onDelete('Cascade')->onUpdate('Cascade');
-            $table->foreign('stock_id')->references('id')->on('stocks')->onDelete('Cascade')->onUpdate('Cascade');
+        Schema::table('clothes_orders',function(Blueprint $table){
+           $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
+
+        });
+        Schema::table('clothes_stocks',function(Blueprint $table){
+           $table->foreign('order_id')->references('id')->on('clothes_stocks')->onDelete('Cascade')->onUpdate('Cascade')
+           ;
+
         });
     }
 
@@ -186,9 +191,12 @@ return new class extends Migration
             $table->dropForeign('order_id');
             $table->dropForeign('stock_id');
         });
-        Schema::table('stocks_order', function (Blueprint $table) {
-            $table->dropForeign('order_id');
-            $table->dropForeign('stock_id');
+
+          Schema::table('clothes_orders', function (Blueprint $table) {
+            $table->dropForeign('student_id');
         });
+        Schema::table('clothes_stocks',function(Blueprint $table){
+            $table->dropForeign('order_id');$table->dropForeign('clothe_id');
+         });
     }
 };

@@ -52,10 +52,11 @@
 
                                             </td>
                                             <td>
+
                                                 <select name="role" class="custom-select">
 
                                                     @forelse ($Permissions as $permission)
-                                                        <option value="{{ $permission->name }}">
+                                                        <option @selected($employee->roles[0]->id == $permission->id) value="{{ $permission->name }}">
                                                             {{ trans('permissions.' . $permission->name) }}</option>
                                                     @empty
                                                     @endforelse

@@ -5,6 +5,7 @@ use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AdminEraController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\ClassRooms\ClassRoomsController;
+use App\Http\Controllers\ClothesController;
 use App\Http\Controllers\ExcptionFeesController;
 use App\Http\Controllers\fee_invoiceController;
 use App\Http\Controllers\GardController;
@@ -213,6 +214,7 @@ Route::group(
             Route::group(['prefix' => 'stocks', 'controller' => StockController::class], function () {
                 Route::get('/index', 'index')->name('stocks.index');
                 Route::post('/store', 'store')->name('stock.store');
+                Route::post('/update', 'update')->name('stock.update');
                 Route::post('/stocks_submit', 'stocks_submit')->name('stock_submit.store');
                 Route::get('/delete/{id}', 'destroy')->name('stock.destroy');
                 Route::get('/tawreed/{id}', 'new_tawreed_order')->name('stock.tawreed');
@@ -244,6 +246,11 @@ Route::group(
                 Route::post('/store', 'store')->name('gard.store');
                 Route::post('/update', 'update')->name('gard.update');
                 Route::get('/destroy/{id}', 'destroy')->name('gard.destroy');
+            });
+            Route::group(['prefix'=>'clothe','controller'=>ClothesController::class],function(){
+                Route::get('/index', 'index')->name('clothes.index');
+                Route::post('/store', 'store')->name('clothes.store');
+
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');

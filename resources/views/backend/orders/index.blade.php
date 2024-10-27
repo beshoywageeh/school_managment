@@ -30,7 +30,8 @@
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
                                     @endcan
                                 @elseif ($type == 3)
-                                    <a href="{{route('gard.create')}}" class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>
+                                    <a href="{{ route('gard.create') }}"
+                                        class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>
                                 @else
                                 @endif
 
@@ -57,15 +58,9 @@
                                     <tr>
                                         <td>{{ $loop->index + 1 }}</td>
                                         <td><a class="btn btn-outline-primary btn-sm" target="_blank"
-                                                @if ($type == 1) href="{{ route('order.show', $order->id) }}"
-                                                @endif
-                                                @if ($type == 2)
-                                                href="{{ route('outorder.show', $order->id) }}"
-                                                @endif
-                                                @if ($type == 3)
-                                                href="{{ route('gard.show', $order->id) }}"
-                                                @endif
-                                                >{{ $order->auto_number }}</a>
+                                                @if ($type == 1) href="{{ route('order.show', $order->id) }}" @endif
+                                                @if ($type == 2) href="{{ route('outorder.show', $order->id) }}" @endif
+                                                @if ($type == 3) href="{{ route('gard.show', $order->id) }}" @endif>{{ $order->auto_number }}</a>
                                         </td>
                                         <td>{{ $order->stocks_count }}</td>
                                         <td>{{ $order->created_at->format('Y-m-d') }}</td>
@@ -90,44 +85,45 @@
                                                     ],
                                                 ]" />
                                             @elseif ($type == 2)
-                                            <x-dropdown-table :buttonText="trans('general.actions')" :items="[
-                                                [
-                                                    'type' => 'link',
-                                                    'url' => route('outorder.destroy', $order->id),
-                                                    'text' => trans('general.delete'),
-                                                    'icon' => 'ti-trash',
-                                                    'onclick' => 'confirmation(event)',
-                                                    'can' => 'out_order-delete',
-                                                ],
-                                                [
-                                                    'type' => 'link',
-                                                    'url' => route('outorder.edit', $order->id),
-                                                    'text' => trans('general.edit'),
-                                                    'icon' => 'ti-pencil',
-                                                    'can' => 'out_order-edit',
-                                                ],
-                                            ]" />
+                                                <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                    [
+                                                        'type' => 'link',
+                                                        'url' => route('outorder.destroy', $order->id),
+                                                        'text' => trans('general.delete'),
+                                                        'icon' => 'ti-trash',
+                                                        'onclick' => 'confirmation(event)',
+                                                        'can' => 'out_order-delete',
+                                                    ],
+                                                    [
+                                                        'type' => 'link',
+                                                        'url' => route('outorder.edit', $order->id),
+                                                        'text' => trans('general.edit'),
+                                                        'icon' => 'ti-pencil',
+                                                        'can' => 'out_order-edit',
+                                                    ],
+                                                ]" />
                                             @elseif ($type == 3)
-                                            <x-dropdown-table :buttonText="trans('general.actions')" :items="[
-                                                [
-                                                    'type' => 'link',
-                                                    'url' => route('gard.destroy', $order->id),
-                                                    'text' => trans('general.delete'),
-                                                    'icon' => 'ti-trash',
-                                                    'onclick' => 'confirmation(event)',
-                                                    'can' => 'stocks-inventory_delete',
-                                                ],
-                                                [
-                                                    'type' => 'link',
-                                                    'url' => route('gard.edit', $order->id),
-                                                    'text' => trans('general.edit'),
-                                                    'icon' => 'ti-pencil',
-                                                    'can' => 'stocks-inventory_edit',
-                                                ],
-
-                                            ]" />
-                                            @else 1 @endif
-                                                </td>
+                                                <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                    [
+                                                        'type' => 'link',
+                                                        'url' => route('gard.destroy', $order->id),
+                                                        'text' => trans('general.delete'),
+                                                        'icon' => 'ti-trash',
+                                                        'onclick' => 'confirmation(event)',
+                                                        'can' => 'stocks-inventory_delete',
+                                                    ],
+                                                    [
+                                                        'type' => 'link',
+                                                        'url' => route('gard.edit', $order->id),
+                                                        'text' => trans('general.edit'),
+                                                        'icon' => 'ti-pencil',
+                                                        'can' => 'stocks-inventory_edit',
+                                                    ],
+                                                ]" />
+                                            @else
+                                                1
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>

@@ -64,8 +64,17 @@
                                                     'onclick' => 'confirmation(event)',
                                                     'can' => 'stock-delete',
                                                 ],
+                                                [
+                                                    'type' => 'button',
+                                                    'text' => trans('general.edit'),
+                                                    'icon' => 'ti-pencil',
+                                                    'toggle' => 'modal',
+                                                    'target' => '#editItem-'.$stock->id,
+                                                    'can' => 'stock-update',
+                                                ],
                                             ]" /></td>
                                         </tr>
+                                        @include('backend.stocks.edit')
                                     @empty
                                         <tr>
                                             <td colspan='6'>

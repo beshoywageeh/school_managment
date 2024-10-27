@@ -35,7 +35,21 @@ class StockController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
+public function update(Request $request){
+    try{
+        $stock = stock::findorfail($request->id);
+        $stock->update([
+            'name' => $request->name,
+            'opening_stock' => $request->opening_qty,
+            'opening_stock_date' => date('Y-m-d'),
+        ]);
+        $this->logActivity('تعديل', trans('system_lookup.field_update', ['value' => $request->name]));
+        session()->flash('success', trans('General.success'));
+        return redirect()->back();
+    }catch(Exception $e){
+        return redirect()->back()->with('error', $e->getMessage());
+    }
+}
     public function destroy($id)
     {
         try {

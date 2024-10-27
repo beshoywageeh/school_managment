@@ -182,6 +182,9 @@
                                 {{ trans('stock.inventory_order') }}
                             </x-nav_link>
                         @endcan
+                        <x-nav_link :href="route('clothes.index')" :active="request()->is('*/clothes/*')" :image="URL::asset('assests/images/Sidebar/clothes.png')">
+                            {{ trans('stock.clothes') }}
+                        </x-nav_link>
                     </ul>
                 </li>
             @endif
