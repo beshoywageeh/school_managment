@@ -35,10 +35,12 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         @can('clothes-index')
-                            <table class="table table-bordered table-sm">
+                            <table class="table table-bordered table-sm" id='datatable'>
                                 <thead class="alert-info">
                                     <tr>
                                         <th>#</th>
+                                        <th>{{ trans('grades.title') }}</th>
+                                        <th>{{ trans('class_rooms.title') }}</th>
                                         <th>{{ trans('stock.name') }}</th>
                                         <th>{{ trans('stock.opening_balance') }}</th>
                                         <th>{{ trans('stock.opening_date') }}</th>
@@ -50,10 +52,12 @@
                                     @forelse ($clothes as $stock)
                                         <tr>
                                             <td>{{ $loop->index + 1 }}</td>
+                                            <td>{{ $stock->grade->name }}</td>
+                                            <td>{{ $stock->classroom->name }}</td>
                                             <td>{{ $stock->name }}</td>
-                                            <td>{{ $stock->opening_stock }}</td>
+                                            <td>{{ number_format($stock->opening_qty,2) }}</td>
                                             <td>{{ $stock->opening_stock_date }}</td>
-                                            <td>{{ $stock->orders()->sum('qty_in') + $stock->opening_stock - $stock->orders()->sum('qty_out') }}
+                                            <td>{{ number_format($stock->orders()->sum('qty_in') + $stock->opening_qty - $stock->orders()->sum('qty_out'),2) }}
                                             </td>
                                             <td> <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                 [
@@ -69,7 +73,7 @@
                                                     'text' => trans('general.edit'),
                                                     'icon' => 'ti-pencil',
                                                     'toggle' => 'modal',
-                                                    'target' => '#editItem-'.$stock->id,
+                                                    'target' => '#editItem-' . $stock->id,
                                                     'can' => 'stock-update',
                                                 ],
                                             ]" /></td>
@@ -77,7 +81,7 @@
                                         @include('backend.stocks.edit')
                                     @empty
                                         <tr>
-                                            <td colspan='6'>
+                                            <td colspan='8'>
                                                 {{ trans('general.404') }}
                                             </td>
                                         </tr>
@@ -93,5 +97,35 @@
         @include('backend.orders.transfer_create')
     </div>
     @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $('.table').repeater({
+
+                    show: function() {
+                        $(this).slideDown();
+                    },
+                    hide: function(deleteElement) {
+                        $(this).slideUp(deleteElement);
+                    }
+                });
+            });
+        </script>
+        <script>
+            const classrooms = document.querySelector('#classrooms');
+            const grades = document.querySelector('#grades')
+            grades.addEventListener('change', async () => {
+
+                classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
+                const response = await fetch(`/ajax/get_classRooms/${grades.value}`)
+                const data = await response.json();
+                data.forEach(class_rooms => {
+                    const option = document.createElement('option');
+                    option.value = class_rooms.id;
+                    option.text = class_rooms.name;
+                    classrooms.appendChild(option);
+                });
+
+            });
+        </script>
     @endpush
 @endsection

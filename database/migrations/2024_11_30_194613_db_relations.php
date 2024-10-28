@@ -109,6 +109,12 @@ return new class extends Migration
            ;
 
         });
+        Schema::table('clothes',function(Blueprint $table){
+           $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
+           $table->foreign('classroom_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade')
+           ;
+
+        });
     }
 
     /**
@@ -197,6 +203,8 @@ return new class extends Migration
         });
         Schema::table('clothes_stocks',function(Blueprint $table){
             $table->dropForeign('order_id');$table->dropForeign('clothe_id');
+         });  Schema::table('clothes',function(Blueprint $table){
+            $table->dropForeign('grade_id');$table->dropForeign('classroom_id');
          });
     }
 };

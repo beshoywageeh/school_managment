@@ -14,5 +14,9 @@ return [
     'quantity' => 'الكمية',
     'new' => 'منتج جديد',
     'location' => 'المحول اليه',
+    'purchase_price' => 'سعر الشراء',
+    'sale_price' => 'سعر البيع',
+    'clothes'=>'زي'
+
 
 ];

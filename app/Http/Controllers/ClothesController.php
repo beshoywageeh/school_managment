@@ -2,22 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\clothes;
+use App\Models\{clothes,Grade};
 use Illuminate\Http\Request;
 use App\Http\Traits\LogsActivity;
 class ClothesController extends Controller
 {
     use LogsActivity;
     public function index(){
-        $clothes = clothes::with('orders')->get();
-        return view('backend.clothes.index',compact('clothes'));
+        $clothes = clothes::with('orders','grade','classroom')->get();
+        $grades=Grade::all();
+        return view('backend.clothes.index',compact('clothes','grades'));
     }
     public function store(Request $request){
+        //return $request;
         try{
             clothes::create([
+                'classroom_id'=>$request->classroom_id,
+                'grade_id'=>$request->grade_id,
+                'sales_price'=>$request->sales_price,
+                'purchase_price'=>$request->purchase_price,
                 'name' => $request->name,
-                'opening_qty'=>$request->opening_stock,
-                'isset'=>$request->isset,
+                'opening_qty'=>$request->quantity,
+                'isset'=>($request->isset =='on')?0:1,
                 'opening_date'=>date('Y-m-d'),
 
             ]);
