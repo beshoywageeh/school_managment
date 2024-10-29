@@ -250,6 +250,7 @@ Route::group(
             Route::group(['prefix'=>'clothe','controller'=>ClothesController::class],function(){
                 Route::get('/index', 'index')->name('clothes.index');
                 Route::post('/store', 'store')->name('clothes.store');
+                Route::get('/destroy/{id}', 'destroy')->name('clothe.destroy');
 
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');

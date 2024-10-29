@@ -33,4 +33,14 @@ class ClothesController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+    public function destroy($id){
+        try{
+            $clothes = clothes::findorfail($id);
+            $this->logActivity('حذف', 'تم حذف منتج '.$clothes->name);
+            $clothes->delete();
+            return redirect()->back()->with('success',trans('general.success'));
+        }catch(\Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }

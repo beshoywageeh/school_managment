@@ -50,5 +50,6 @@ return [
     'noInvoiceToExcept' => 'لا يوجد فواتير للاعفاء',
     'profile' => 'الملف الشخصي',
     'select' => 'أختر',
-    'isset'=>'طقم'
+    'isset'=>'طقم',
+    'download'=>'تحميل'
 ];

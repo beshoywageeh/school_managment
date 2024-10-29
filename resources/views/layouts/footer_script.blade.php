@@ -140,7 +140,7 @@
         })
     })
 </script>
-<script>
+<script src="{{ asset('assests/modules.json') }}">
 
 
 

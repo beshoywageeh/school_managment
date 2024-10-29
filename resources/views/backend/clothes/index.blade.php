@@ -62,11 +62,11 @@
                                             <td> <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                 [
                                                     'type' => 'link',
-                                                    'url' => route('stock.destroy', $stock->id),
+                                                    'url' => route('clothe.destroy', $stock->id),
                                                     'text' => trans('general.delete'),
                                                     'icon' => 'ti-trash',
                                                     'onclick' => 'confirmation(event)',
-                                                    'can' => 'stock-delete',
+                                                    'can' => 'clothes-delete',
                                                 ],
                                                 [
                                                     'type' => 'button',

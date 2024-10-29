@@ -40,6 +40,7 @@
                     </ul>
                 </li>
             @endif
+
             <!--for employee-->
             @if (Auth::user()->hasAnyPermission(['jobs-list', 'employees-list']))
                 <li>

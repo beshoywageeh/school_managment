@@ -59,17 +59,22 @@
                                                                 <td colspan="2">{{ trans('backup.news') }}</td>
                                                                 <td colspan="2">{{ $file }}</td>
                                                                 <td colspan="2">
-                                                                    @can('backup-download')
-                                                                        <a href="{{ route('backup.download', $file) }}"
-                                                                            class="btn btn-outline-secondary btn-sm" role="button"
-                                                                            download><i class="ti-download"></i></a>
-                                                                    @endcan
-                                                                    @can('backup-delete')
-                                                                        <a href="{{ route('backup.delete', $file) }}"
-                                                                            class="btn btn-outline-danger btn-sm" role="button"><i
-                                                                                class="ti-trash"></i></a>
-                                                                    @endcan
-
+                                                                    <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                                        [
+                                                                            'type' => 'button',
+                                                                            'url' => route('backup.delete', $file),
+                                                                            'text' => trans('general.delete'),
+                                                                            'icon' => 'ti-trash',
+                                                                            'can' => 'backup-delete',
+                                                                        ],
+                                                                        [
+                                                                            'type' => 'link',
+                                                                            'url' => route('backup.download', $file),
+                                                                            'text'=>trans('general.download'),
+                                                                            'icon' => 'ti-download',
+                                                                            'can' => 'backup-download',
+                                                                        ],
+                                                                    ]" />
 
                                                                 </td>
                                                             </tr>
@@ -117,16 +122,22 @@
                                                 {{ $backup['file_date']->format('g:i:s A') . ' |' . $backup['file_date']->diffForHumans() }}
                                             </td>
                                             <td>
-                                                @can('backup-download')
-                                                    <a href="{{ route('backup.download', $backup['file_name']) }}"
-                                                        class="btn btn-outline-secondary btn-sm" role="button" download><i
-                                                            class="ti-download"></i></a>
-                                                @endcan
-                                                @can('backup-delete')
-                                                    <a href="{{ route('backup.delete', $backup['file_name']) }}"
-                                                        class="btn btn-outline-danger btn-sm" role="button"><i
-                                                            class="ti-trash"></i></a>
-                                                @endcan
+                                                <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                    [
+                                                        'type' => 'link',
+                                                        'url' => route('backup.delete', $backup['file_name']),
+                                                        'text' => trans('general.delete'),
+                                                        'icon' => 'ti-trash',
+                                                        'can' => 'backup-delete',
+                                                    ],
+                                                    [
+                                                        'type' => 'link',
+                                                        'url' => route('backup.download', $backup['file_name']),
+                                                        'text'=>trans('general.download'),
+                                                        'icon' => 'ti-download',
+                                                        'can' => 'backup-download',
+                                                    ],
+                                                ]" />
 
                                             </td>
                                         </tr>
