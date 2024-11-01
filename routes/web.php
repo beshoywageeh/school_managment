@@ -251,6 +251,7 @@ Route::group(
                 Route::get('/index', 'index')->name('clothes.index');
                 Route::post('/store', 'store')->name('clothes.store');
                 Route::get('/destroy/{id}', 'destroy')->name('clothe.destroy');
+                Route::post('/update','update')->name('clothe.update');
 
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');

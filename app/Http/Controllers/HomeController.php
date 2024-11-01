@@ -24,9 +24,11 @@ class HomeController extends Controller
             $parents = My_parents::whereIn('student_id', $grade)->count();
         }
         $credit = StudentAccount::sum('credit');
-        $payment_parts = PaymentParts::where('date', '<=', date('Y-m-d'))->where('payment_status', '0')->with('students:id,name')->get();
-        $payments = Recipt_Payment::where('date', date('Y-m-d'))->with(['student:id,name'])->get();
+        $payment_parts = PaymentParts::where('date', date('Y-m-d'))->where('payment_status', '0')->sum('amount');
+        $payments = Recipt_Payment::where('date', date('Y-m-d'))->sum('Debit');
 
-        return view('dashboard', get_defined_vars());
+$employees = DB::Table('users')->count();
+
+return view('dashboard', get_defined_vars());
     }
 }

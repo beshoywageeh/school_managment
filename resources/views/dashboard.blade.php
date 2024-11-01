@@ -3,159 +3,154 @@
     {{ trans('Sidebar.Dashboard') }}
 @endsection
 @push('css')
-    <style>
-        #statisces {
-            font-size: x-large;
-            font-weight: bold;
-        }
-    </style>
+<style>
+
+</style>
 @endpush
 @section('content')
-    <div class="row"style="height: 35vh !important">
-        <div class="mb-4 col-md-4">
-            <div class="card card-statistics h-100">
+    <div class="row mb-30">
+        <div class="col-xl-4 mb-30">
+            <div class="card card-statistics fb-bg h-100">
                 <div class="card-body">
-
-                    @php
-                        $statisces = [
-                            [
-                                'title' => 'Sidebar.Students',
-                                'icon' => URL::asset('assests/images/Sidebar/students.png'),
-                                'data_var' => $students,
-                                'route'=>route('Students.index'),
-                            ],
-                            [
-                                'title' => 'Sidebar.parents',
-                                'icon' => URL::asset('assests/images/Sidebar/parents.png'),
-                                'data_var' => $parents,
-                                'route'=>route('parents.index'),
-                            ],
-                        ];
-                    @endphp
-                    <div class="table-responsive">
-                        <table class="table table-sm table-bordered" id="statisces">
-                            @foreach ($statisces as $statisce)
-                                <tr>
-                                    <td><img class="img img-responisve" width="30" height="30" src="{{$statisce['icon']}}" alt=""></td>
-                                    <td><a href="{{$statisce['route']}}">{{trans($statisce['title'])}}</a></td>
-                                    <td>{{ $statisce['data_var'] }}</td>
-                                </tr>
-                            @endforeach
-                        </table>
+                    <div class="clearfix">
+                        <div class="float-left icon-box-fixed">
+                            <img class="img img-responsive" width="50"
+                                src="{{ URL::asset('assests/images/Sidebar/students.png') }}">
+                        </div>
+                        <div class="float-right text-right">
+                            <h4 class="text-white">{{ $students }}</h4>
+                            <a href="{{ route('Students.index') }}"
+                                class="text-white card-text">{{ trans('Sidebar.Students') }}</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="mb-4 col-md-4">
-        </div>
-        <div class="mb-4 col-md-4">
-            @php
-                $quickAccess = [
-                    [
-                        'route' => 'Students.create',
-                        'name' => 'student.title',
-                        'can' => 'Students-create',
-                    ],
-                    [
-                        'route' => 'parents.create',
-                        'name' => 'parents.title',
-                        'can' => 'parents-create',
-                    ],
-                    [
-                        'route' => 'employees.create',
-                        'name' => 'employees.title',
-                        'can' => 'employees-create',
-                    ],
-                    [
-                        'route' => 'schoolfees.create',
-                        'name' => 'fees.title',
-                        'can' => 'schoolfees-create',
-                    ],
-                ];
-            @endphp
-            <div class="text-center card card-statistics h-100">
+        <div class="col-xl-4 mb-30">
+            <div class="card card-statistics youtube-bg h-100">
                 <div class="card-body">
-                    <ul class="list-unstyled">
-                        @foreach ($quickAccess as $link)
-                            @can($link['can'])
-                                <li>
-                                    <a href="{{ route($link['route']) }}" class="btn btn-success btn-block">
-                                        <strong>{{ trans($link['name']) . ' ' . trans('General.new') }}</strong></a>
-                                </li>
-                            @endcan
-                            @if (!$loop->last)
-                                <hr>
-                            @endif
-                        @endforeach
-                    </ul>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="mb-40 row" style="height: 35vh !important">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h5>{{ trans('Sidebar.payment_parts') }}</h5>
+                    <div class="clearfix">
+                        <div class="float-left icon-box-fixed">
+                            <img class="img img-responsive" width="50"
+                                src="{{ URL::asset('assests/images/Sidebar/parents.png') }}" alt="">
+                        </div>
+                        <div class="float-right text-right">
+                            <h4 class="text-white">{{ $parents }}</h4>
+                            <a href="{{ route('parents.index') }}"
+                                class="text-white card-text">{{ trans('Sidebar.parents') }}</a>
+                        </div>
                     </div>
-                    <ul class="list-unstyled">
-                        @foreach ($payment_parts as $payment_part)
-                            <li class="mb-20">
-                                <div class="media">
-
-                                    <div class="media-body">
-                                        <h6 class="mt-0 mb-0">
-                                            {{ $payment_part->students->name }}
-                                            <span class="float-right text-danger">
-                                                @if (is_numeric($payment_parts->amount))
-                                                    {{ Number::currency($payment_part->amount, 'EGP', 'AR') }}
-                                            </span>
-                                        @else
-                                            {{ $payment_parts->amount }}
-                        @endif
-                        </h6>
                 </div>
             </div>
-            <div class="mt-20 divider dotted"></div>
-            </li>
-            @endforeach
-
         </div>
-    </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    <h5>{{ trans('Sidebar.Recipt_Payment') }}</h5>
+        <div class="col-xl-4 mb-30">
+            <div class="card card-statistics twitter-bg h-100">
+                <div class="card-body">
+                    <div class="clearfix">
+                        <div class="float-left icon-box-fixed">
+                            <img width="50" src="{{ URL::asset('assests/images/Sidebar/employees.png') }}"
+                                alt="">
+                        </div>
+                        <div class="float-right text-right">
+                            <h4 class="text-white">{{ $employees }}</h4>
+                            <a href="{{ route('employees.index') }}"
+                                class="text-white card-text">{{ trans('Sidebar.employees') }}</a>
+                        </div>
+                    </div>
                 </div>
-                <ul class="list-unstyled">
-                    @foreach ($payments as $payment)
-                        <li class="mb-20">
-                            <div class="media">
-
-                                <div class="media-body">
-                                    <h6 class="mt-0 mb-0">
-                                        {{ $payment->student->name }}
-                                        <span class="float-right text-danger">
-                                            @if (is_numeric($payment->debit))
-                                                {{ Number::currency($payment->debit, 'EGP', 'AR') }}
-                                            @else
-                                                {{ $payment->debit }}
-                                            @endif
-                                        </span>
-                                    </h6>
-                                </div>
-                            </div>
-                            <div class="mt-20 divider dotted"></div>
-                        </li>
-                    @endforeach
-
             </div>
         </div>
     </div>
+    <div class="row mb-30">
+        <div class="col-md-6 mb-30">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="text-center card-title">{{trans('Sidebar.accounting')}} </h5>
+                  <div class="chart-wrapper">
+                  <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
+                     <canvas id="canvas3" width="550"></canvas>
+                 </div>
+               </div>
+              </div>
+            </div>
+           </div>
+    </div>
+    <div class="row mb-30" >
+        @can('Students-create')
+            <div class="col-lg-2">
+                <a href="{{ route('Students.create') }}" class="py-5 btn btn-primary btn-block"><img
+                        src="{{ URL::asset('assests/images/Sidebar/students.png') }}" width="70" alt=""><br>
+                    <h5 class="text-white">{{ trans('Sidebar.Students') }} {{ trans('general.new') }}</h5>
+                </a>
+            </div>
+        @endcan
+        @can('parents-create')
+            <div class="col-lg-2">
+                <a href="{{ route('parents.create') }}" class="py-5 btn btn-primary dashboard-btn btn-block"><img
+                        src="{{ URL::asset('assests/images/Sidebar/parents.png') }}" width="70" alt=""><br>
+                    <h5 class="text-white">{{ trans('Sidebar.parents') }} {{ trans('general.new') }}</h5>
+                </a>
+            </div>
+        @endcan
+        @can('grade-list')
+            <div class="col-lg-2">
+                <a href="{{ route('grade.index') }}" class="py-5 btn btn-primary dashboard-btn btn-block"><img
+                        src="{{ URL::asset('assests/images/Sidebar/score.png') }}" width="70" alt=""><br>
+                    <h5 class="text-white">{{ trans('Sidebar.Grade') }}</h5>
+                </a>
+            </div>
+        @endcan
+        @can('class_rooms-list')
+            <div class="col-lg-2">
+                <a href="{{ route('class_rooms.index') }}" class="py-5 btn btn-primary dashboard-btn btn-block"><img
+                        src="{{ URL::asset('assests/images/Sidebar/classroom.png') }}" width="70" alt=""><br>
+                    <h5 class="text-white">{{ trans('Sidebar.Class_Rooms') }}</h5>
+                </a>
+            </div>
+        @endcan
+        @can('schoolfees-create')
+            <div class="col-lg-2">
+                <a href="{{ route('schoolfees.create') }}" class="py-5 btn btn-primary dashboard-btn btn-block"><img
+                        src="{{ URL::asset('assests/images/Sidebar/money.png') }}" width="70" alt=""><br>
+                    <h5 class="text-white">{{ trans('Sidebar.schoolfees') }}</h5>
+                </a>
+            </div>
+        @endcan
+        @can('jobs-list')
+            <div class="col-lg-2">
+                <a href="{{ route('jobs.index') }}" class="py-5 btn btn-primary dashboard-btn btn-block"><img
+                        src="{{ URL::asset('assests/images/Sidebar/job.png') }}" width="70" alt=""><br>
+                    <h5 class="text-white">{{ trans('Sidebar.jobs') }} {{ trans('general.new') }}</h5>
+                </a>
+            </div>
+        @endcan
+
     </div>
 @endsection
+@push('scripts')
+    <script>
+          var ctx3 = document.getElementById('canvas3').getContext('2d');
+          var config3 = new Chart(ctx3, {
+            type: 'doughnut',
+            data: {
+              datasets: [{
+                data: ["{{$credit}}", "{{$payment_parts}}", "{{$payments}}"],
+                backgroundColor: [window.chartColors.red, window.chartColors.orange, window.chartColors.yellow],
+                label: 'Dataset 1'
+              }],
+              labels:(['{{trans("Sidebar.credit")}}', '{{trans("Sidebar.payment_parts")}}', '{{trans("Sidebar.Recipt_Payment")}}'])
+            },
+            options: {
+              responsive: true,
+              legend: {
+                position: 'bottom',
+                labels: {
+                  fontColor: "#9295a2"
+                }
+              },
+
+            }
+          });
+
+</script>
+@endpush

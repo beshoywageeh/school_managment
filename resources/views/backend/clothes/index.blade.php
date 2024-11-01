@@ -74,7 +74,7 @@
                                                     'icon' => 'ti-pencil',
                                                     'toggle' => 'modal',
                                                     'target' => '#editItem-' . $stock->id,
-                                                    'can' => 'stock-update',
+                                                    'can' => 'clothes-update',
                                                 ],
                                             ]" /></td>
                                         </tr>

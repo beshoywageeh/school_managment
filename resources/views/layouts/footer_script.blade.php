@@ -12,7 +12,7 @@
     var plugin_path = 'assests/js/';
 </script>
 <!-- chart -->
-<script src="{{ asset('assests/js/chart-init.js') }}"></script>
+{{-- <script src="{{ asset('assests/js/chart-init.js') }}"></script> --}}
 
 <!-- calendar -->
 <script src="{{ asset('assests/js/calendar.init.js') }}"></script>
@@ -140,7 +140,6 @@
         })
     })
 </script>
-<script src="{{ asset('assests/modules.json') }}">
 
 
 

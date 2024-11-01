@@ -42,7 +42,8 @@
                     </div>
                 </div>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{route('profile.edit')}}"><i class="text-info ti-settings"></i>{{trans('general.profile')}}</a>
+                <a class="dropdown-item" href="{{ route('profile.edit') }}"><i
+                        class="text-info ti-settings"></i>{{ trans('general.profile') }}</a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="dropdown-item">
