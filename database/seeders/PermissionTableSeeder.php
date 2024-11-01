@@ -108,8 +108,9 @@ class PermissionTableSeeder extends Seeder
             ['table' => 'clothes', 'name' => 'clothes-update'],
             ['table' => 'clothes', 'name' => 'clothes-delete'],
             ['table' => 'clothes', 'name' => 'clothes-order'],
-			
+
             ['table' => 'clothes', 'name' => 'clothes-income_order'],
+            ['table' => 'clothes', 'name' => 'clothes-income_order_delete'],
             ['table' => 'clothes', 'name' => 'clothes-outcome_order'],
             ['table' => 'clothes', 'name' => 'clothes-inventory_order'],
             ['table' => 'books_sheets', 'name' => 'books_sheets-index'],

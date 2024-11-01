@@ -16,7 +16,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label>{{ trans('grades.name') }}</label>
-                                <select name="grade_id" class="custom-select" id="grades">
+                                <select name="grade_id" class="custom-select" id="grades_create">
                                     <option value="" disabled selected>{{ trans('general.select') }}
                                     </option>
                                     @foreach ($grades as $grade)
@@ -28,7 +28,7 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="">{{ trans('class_rooms.title') }}</label>
-                                <select name="classroom_id" id="classrooms" class="custom-select ">
+                                <select name="classroom_id" id="classrooms_create" class="custom-select ">
                                     <option value="" disabled selected>{{ trans('general.select') }}
                                     </option>
                                 </select>

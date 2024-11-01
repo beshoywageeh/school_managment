@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminEraController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\ClassRooms\ClassRoomsController;
 use App\Http\Controllers\ClothesController;
+use App\Http\Controllers\ClothesOrderController;
 use App\Http\Controllers\ExcptionFeesController;
 use App\Http\Controllers\fee_invoiceController;
 use App\Http\Controllers\GardController;
@@ -247,12 +248,20 @@ Route::group(
                 Route::post('/update', 'update')->name('gard.update');
                 Route::get('/destroy/{id}', 'destroy')->name('gard.destroy');
             });
-            Route::group(['prefix'=>'clothe','controller'=>ClothesController::class],function(){
+            Route::group(['prefix' => 'clothe', 'controller' => ClothesController::class], function () {
                 Route::get('/index', 'index')->name('clothes.index');
                 Route::post('/store', 'store')->name('clothes.store');
                 Route::get('/destroy/{id}', 'destroy')->name('clothe.destroy');
-                Route::post('/update','update')->name('clothe.update');
-
+                Route::post('/update', 'update')->name('clothe.update');
+            });
+            Route::group(['prefix' => 'clothes_order', 'controller' => ClothesOrderController::class], function () {
+                Route::get('/index', 'index')->name('clothes_order.index');
+                Route::get('/tawreed', 'tawreed')->name('clothes_order.tawreed');
+                Route::get('/delete/{id}', 'destroy')->name('clothes_order.delete');
+                Route::get('/show/{id}', 'show')->name('clothes_order.show');
+                Route::get('/edit/{id}', 'edit')->name('clothes_order.edit');
+                Route::post('/update', 'clothes_stock_update')->name('clothes_stock_submit.update');
+                Route::post('/clothes_stock_submit', 'clothes_stock_submit')->name('clothes_stock_submit.store');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');

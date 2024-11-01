@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('auto_number');
             $table->unsignedBigInteger('student_id')->nullable();
-            $table->string('date');
+            $table->date('date');
+            $table->smallInteger('type');
+            $table->string('manual_number')->nullable();
+            $table->date('manual_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

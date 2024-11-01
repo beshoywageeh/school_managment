@@ -27,8 +27,8 @@ class HomeController extends Controller
         $payment_parts = PaymentParts::where('date', date('Y-m-d'))->where('payment_status', '0')->sum('amount');
         $payments = Recipt_Payment::where('date', date('Y-m-d'))->sum('Debit');
 
-$employees = DB::Table('users')->count();
+        $employees = DB::Table('users')->count();
 
-return view('dashboard', get_defined_vars());
+        return view('dashboard', get_defined_vars());
     }
 }

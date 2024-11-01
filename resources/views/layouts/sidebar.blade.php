@@ -150,7 +150,7 @@
                 </li>
             @endif
             <!--for stores-->
-            @if (Auth::user()->hasAnyPermission(['stocks-index', 'orders-index', 'order_out-index', 'stocks-inventory_order-index']))
+            @if (Auth::user()->hasAnyPermission(['stocks-index', 'orders-index', 'order_out-index', 'stocks-inventory_order-index','clothes-income_order','clothes-index']))
                 <li>
                     <a href="javascript:void(0);" data-toggle="collapse" data-target="#stocks-info">
                         <div class="pull-left">
@@ -178,14 +178,21 @@
                                 {{ trans('stock.outcome_order') }}
                             </x-nav_link>
                         @endcan
-                        @can('stocks-inventory_order')
+                        @can('stocks-inventory_order-index')
                             <x-nav_link :href="route('gard.index')" :active="request()->is('*/orders/*')">
                                 {{ trans('stock.inventory_order') }}
                             </x-nav_link>
                         @endcan
-                        <x-nav_link :href="route('clothes.index')" :active="request()->is('*/clothes/*')" :image="URL::asset('assests/images/Sidebar/clothes.png')">
-                            {{ trans('stock.clothes') }}
-                        </x-nav_link>
+                        @can('clothes-index')
+                            <x-nav_link :href="route('clothes.index')" :active="request()->is('*/clothes/*')" :image="URL::asset('assests/images/Sidebar/clothes.png')">
+                                {{ trans('stock.clothes') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('clothes-income_order')
+                            <x-nav_link :href="route('clothes_order.index')" :active="request()->is('*/orders/*')">
+                                {{ trans('orders.income') }}
+                            </x-nav_link>
+                        @endcan
                     </ul>
                 </li>
             @endif

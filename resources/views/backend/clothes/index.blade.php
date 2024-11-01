@@ -126,6 +126,22 @@
                 });
 
             });
+        </script> <script>
+            const classrooms_create = document.querySelector('#classrooms_create');
+            const grades_create = document.querySelector('#grades_create')
+            grades_create.addEventListener('change', async () => {
+
+                classrooms_create.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
+                const response = await fetch(`/ajax/get_classRooms/${grades.value}`)
+                const data = await response.json();
+                data.forEach(class_rooms_create => {
+                    const option = document.createElement('option');
+                    option.value = class_rooms_create.id;
+                    option.text = class_rooms_create.name;
+                    classrooms_create.appendChild(option);
+                });
+
+            });
         </script>
     @endpush
 @endsection
