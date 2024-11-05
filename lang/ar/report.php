@@ -30,4 +30,7 @@ return [
     'inventory' => 'جرد',
     'opening_stock' => 'المخزون الافتتاحي',
     'type' => 'النوع',
+    'report_type' => 'سجل (:type) مستجدين',
+    'student_numbers' => 'أعداد الطلاب بالمراحل',
+    'choose_grade_head' => 'كشف بأسماء التلاميذ بمرحلة :grade - :class_room  للعام الدراسي :acc',
 ];

@@ -6,6 +6,7 @@ use App\DataTables\StudentDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
 use App\Imports\StudentImport;
+use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\My_parents;
@@ -48,6 +49,8 @@ class StudentsController extends Controller
             $days = $inputDate->diffInDays($firstOfOctober->copy()->subYears($years)->subMonths($months));
             $final_date = "{$years}-{$months}-{$days}";
             $religion = My_parents::findorfail($request->parents);
+            $year = \Carbon\Carbon::parse()->format('Y');
+            $acc_year = acadmice_year::whereYear('year_start', $year);
             Student::create([
                 'code' => isset($generate_code) ? str_pad($generate_code->code + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'name' => $request->student_name,
@@ -62,6 +65,7 @@ class StudentsController extends Controller
                 'student_status' => $request->std_status,
                 'religion' => $religion->Religion,
                 'birth_at_begin' => $final_date,
+                'acadmiecyear_id' => $acc_year,
                 'user_id' => \Auth::Id(),
             ]);
             session()->flash('success', trans('general.success'));

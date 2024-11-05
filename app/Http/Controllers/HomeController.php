@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\PaymentParts;
 use App\Models\Recipt_Payment;
@@ -28,6 +29,7 @@ class HomeController extends Controller
         $payments = Recipt_Payment::where('date', date('Y-m-d'))->sum('Debit');
 
         $employees = DB::Table('users')->count();
+        $grades = Grade::withCount('students')->get();
 
         return view('dashboard', get_defined_vars());
     }

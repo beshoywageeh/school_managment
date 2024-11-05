@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="bg-primary">
-                    <h2 class="text-center text-white p-2">{{ $stock->name }}</h2>
+                    <h5 class="text-center text-white p-2">{{ $stock->name }}</h5>
                 </div>
             </div>
         </div>
@@ -37,8 +37,9 @@
                                 <td>{{ $stock->name }}</td>
                                 <td>{{ $stock->opening_stock_date }}</td>
                                 <td colspan="4">
-                                    <h4>{{ trans('report.opening_stock') }}
-                                        &nbsp;&nbsp;===========>&nbsp;&nbsp;{{ number_format($stock->opening_stock, 2) }}</h4>
+                                     <h6>{{ trans('report.opening_stock') }}
+                                        &nbsp;&nbsp;===========>&nbsp;&nbsp;{{ number_format($stock->opening_stock, 2) }}
+                                    </h6>
                                 </td>
                             </tr>
                         @endif
@@ -46,27 +47,30 @@
                             <td>{{ $loop->index + 1 }}</td>
                             <td>{{ $order['stk']->auto_number }}</td>
                             <td>{{ $order['stk']->created_at->format('Y-m-d') }}</td>
-                            <td>@if($order['stk']->type=='1')
-                                {{trans('report.inorder')}}
-                                @elseif($order['stk']->type=='2')
-                                {{trans('report.outorder')}}
+                            <td>
+                                @if ($order['stk']->type == '1')
+                                    {{ trans('report.inorder') }}
+                                @elseif($order['stk']->type == '2')
+                                    {{ trans('report.outorder') }}
                                 @else
-                                {{trans('report.inventory')}}
-                                @endif</td>
-                            <td>{{ number_format($order['stk']->pivot->quantity_in,2) }}</td>
-                            <td>{{ number_format($order['stk']->pivot->quantity_out,2) }}</td>
-                            <td>{{ number_format($order['total']+$stock->opening_stock,2) }}</td>
+                                    {{ trans('report.inventory') }}
+                                @endif
+                            </td>
+                            <td>{{ number_format($order['stk']->pivot->quantity_in, 2) }}</td>
+                            <td>{{ number_format($order['stk']->pivot->quantity_out, 2) }}</td>
+                            <td>{{ number_format($order['total'] + $stock->opening_stock, 2) }}</td>
                         </tr>
                     @empty
-                    <tr class="text-center alert-info">
-                        <td colspan="7">{{trans('report.no_data_found')}}</td>
-                    </tr>
+                        <tr class="text-center alert-info">
+                            <td colspan="7">{{ trans('report.no_data_found') }}</td>
+                        </tr>
                     @endforelse
                     <tfoot>
                         <tr>
                             <th colspan='4'>{{ trans('report.total') }}</th>
-                            <th>{{ number_format($order['stk']->pivot->sum('quantity_in'),2) }}</th>
-                            <th>{{ number_format($order['stk']->pivot->sum('quantity_out'),2) }}</th><th>{{ number_format($order['total']+$stock->opening_stock,2) }}</th>
+                            <th>{{ number_format($stock->orders->sum('pivot.quantity_in')+$stock->opening_stock, 2) }}</th>
+                            <th>{{ number_format($stock->orders->sum('pivot.quantity_out'), 2) }}</th>
+                            <th>{{ number_format($order['total']+ $stock->opening_stock, 2) }}</th>
                         </tr>
                     </tfoot>
                 </table>

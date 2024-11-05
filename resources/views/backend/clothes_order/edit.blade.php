@@ -53,10 +53,10 @@
                                         <td>{{$stock->grade->name}}</td>
                                         <td>{{$stock->classroom->name}}</td>
                                         <td>
-                                            <input type="text" name="manual_num[]" class="form-control" value="{{$stock->manual_number}}">
+                                            <input type="text" name="manual_num" class="form-control" value="{{$stock->manual_number}}">
                                         </td>
                                         <td>
-                                            <input type="date" name="manual_date[]" class="form-control" value="{{$stock->manual_date}}">
+                                            <input type="date" name="manual_date" class="form-control" value="{{$stock->manual_date}}">
                                         </td>
                                         <td>
                                             <input type="number" value="{{$stock->pivot->qty_in}}" name="qty[]" class="form-control qty">

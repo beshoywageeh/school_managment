@@ -20,7 +20,7 @@
                                     <button data-toggle="modal" data-target="#CreateTransfer"
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
                                 @endcan
-                                @can('stocks-inventory_order')
+                                @can('stocks-inventory_order-create')
                                     <a href="{{ route('gard.create') }}"
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>
                                 @endcan
@@ -70,7 +70,7 @@
                                                     'icon' => 'ti-pencil',
                                                     'toggle' => 'modal',
                                                     'target' => '#editItem-'.$stock->id,
-                                                    'can' => 'stock-update',
+                                                    'can' => 'stocks-update',
                                                 ],
                                             ]" /></td>
                                         </tr>

@@ -13,30 +13,7 @@
                 @csrf
                 <input type="hidden" name="id" value="{{ $stock->id }}">
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>{{ trans('grades.name') }}</label>
-                                <select name="grade_id" class="custom-select" id="grades">
-                                    <option value="" disabled selected>{{ trans('general.select') }}
-                                    </option>
-                                    @foreach ($grades as $grade)
-                                        <option @selected($grade->id == $stock->grade_id) value="{{ $grade->id }}">
-                                            {{ $grade->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="">{{ trans('class_rooms.title') }}</label>
-                                <select name="classroom_id" id="classrooms" class="custom-select ">
-                                    <option value="{{ $stock->classroom_id }}">{{ $stock->classroom->name }}</option>
 
-                                </select>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
@@ -61,22 +38,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="">{{ trans('stock.purchase_price') }}</label>
-                                <input type="number" name="purchase_price" value="{{ $stock->purchase_price }}"
-                                    class="form-control" />
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="">{{ trans('stock.sale_price') }}</label>
-                                <input type="number" value="{{ $stock->sales_price }}" name="sales_price"
-                                    class="form-control" />
-                            </div>
-                        </div>
-                    </div>
+
 
                 </div>
                 <div class="modal-footer">

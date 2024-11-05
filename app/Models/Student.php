@@ -66,6 +66,11 @@ class Student extends Model
         return $this->hasMany('App\Models\StudentAccount');
     }
 
+    public function Acadmice_year()
+    {
+        return $this->hasMany('App\Models\acadmice_year');
+    }
+
     public function scopeSearch($query, $Search)
     {
 

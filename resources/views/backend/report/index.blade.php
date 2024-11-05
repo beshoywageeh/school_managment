@@ -6,6 +6,7 @@
 @endpush
 @section('content')
     <div class="mb-40 row">
+        {{-- Students Report --}}
         <div class="col">
             <div class="mb-4 card">
                 <div class="card-body">
@@ -20,6 +21,10 @@
                                 [
                                     'Name' => trans('report.student_info'),
                                     'Url' => route('reports.export_student'),
+                                ],
+                                [
+                                    'Name'=>trans('report.report_type',['type'=>41]),
+                                    'Url'=>route('report.student_report',['type'=>41])
                                 ],
                             ];
                         @endphp
@@ -43,6 +48,7 @@
                 </div>
             </div>
         </div>
+        {{-- Teachers Report --}}
         <div class="col">
             <div class="mb-4 card">
                 <div class="card-body">
@@ -55,6 +61,7 @@
                 </div>
             </div>
         </div>
+        {{-- Inventory Report --}}
         <div class="col">
             <div class="mb-4 card">
                 <div class="card-body">
@@ -104,6 +111,7 @@
                 </div>
             </div>
         </div>
+        {{-- Accounting Report --}}
         <div class="col">
             <div class="mb-4 card card-statistics h-100">
                 <div class="card-body">

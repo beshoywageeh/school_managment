@@ -52,10 +52,10 @@
                                         <td>{{$clothe->grade->name}}</td>
                                         <td>{{$clothe->classroom->name}}</td>
                                         <td>
-                                            <input type="text" name="manual_num[]" class="form-control">
+                                            <input type="text" name="manual_num" class="form-control">
                                         </td>
                                         <td>
-                                            <input type="date" name="manual_date[]" class="form-control">
+                                            <input type="date" name="manual_date" class="form-control">
                                         </td>
                                         <td>
                                             <input type="number" value="0" name="qty[]" class="form-control qty">

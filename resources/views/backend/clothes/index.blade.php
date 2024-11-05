@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('stock.title') }}
+    {{ trans('stock.title') }} : {{trans('sidebar.clothes')}}
 @endsection
 @section('content')
     @include('backend.msg')
@@ -13,7 +13,7 @@
                         <div class="col-lg-6 text-md-right">
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 @can('clothes-income_order')
-                                    <a href="{{ route('order.store') }}"
+                                    <a href="{{ route('clothes_order.tawreed') }}"
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                 @endcan
                                 @can('clothes-outcome_order')
@@ -74,7 +74,7 @@
                                                     'icon' => 'ti-pencil',
                                                     'toggle' => 'modal',
                                                     'target' => '#editItem-' . $stock->id,
-                                                    'can' => 'clothes-update',
+                                                    'can' => 'clothes-income_order_edit',
                                                 ],
                                             ]" /></td>
                                         </tr>
@@ -94,7 +94,6 @@
             </div>
         </div>
         @include('backend.clothes.create')
-        @include('backend.orders.transfer_create')
     </div>
     @push('scripts')
         <script>
@@ -126,13 +125,14 @@
                 });
 
             });
-        </script> <script>
+        </script>
+        <script>
             const classrooms_create = document.querySelector('#classrooms_create');
             const grades_create = document.querySelector('#grades_create')
             grades_create.addEventListener('change', async () => {
 
                 classrooms_create.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
-                const response = await fetch(`/ajax/get_classRooms/${grades.value}`)
+                const response = await fetch(`/ajax/get_classRooms/${grades_create.value}`)
                 const data = await response.json();
                 data.forEach(class_rooms_create => {
                     const option = document.createElement('option');

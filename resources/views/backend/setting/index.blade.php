@@ -5,46 +5,76 @@
 @section('content')
     <div class="row mb-30">
         <div class="col-xl-4">
-            <div class="card card-statistics h-100">
-                <div class="p-4 text-center bg"
-                     style="background: url({{ asset('assests/images/bg/01.jpg') }})">
-                    <h5 class="text-white mb-70 position-relative">
-                        {{ $school->name }}
-                    </h5>
+            <div class="row mb-30">
+                <div class="col-xl-12">
+                    <div class="card card-statistics h-100">
+                        <div class="p-4 text-center bg"
+                            style="background: url({{ asset('storage/app/attachments/schools/' . $school_info->slug . '/' . $school_info->image->filename) }});background-repeat: no-repeat;background-size: cover;">
+                            <h5 class="text-white mb-70 position-relative">
+                                {{ $school_info->name }}
+                            </h5>
 
+                        </div>
+                        <div class="text-center card-body position-relative">
+                            <div class="avatar-top">
+                                @if ($school_info->image == null)
+                                    <img class="img-fluid w-25 rounded-circle"
+                                        src="{{ asset('assests/images/loop_labs.png') }}"
+                                        alt="{{ $school_info->name }}">
+                                @else
+                                    <img class="img-fluid w-25 rounded-circle"
+                                        src="{{ asset('storage/app/attachments/schools/' . $school_info->slug . '/' . $school_info->image->filename) }}"
+                                        alt="{{ $school_info->name }}">
+                                @endif
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4 mt-30">
+                                    <b>{{ trans('setting.total_student') }}</b>
+                                    <h4 class="mt-10 text-success">{{ $std_count }}</h4>
+                                </div>
+                                <div class="col-sm-4 mt-30">
+                                    <b>{{ trans('setting.total_teacher') }}</b>
+                                    <h4 class="mt-10 text-danger">{{ $teach_count }}</h4>
+                                </div>
+                                <div class="col-sm-4 mt-30">
+                                    <b>{{ trans('setting.total_classroom') }}</b>
+                                    <h4 class="mt-10 text-warning">{{ $grd_count }}</h4>
+                                </div>
+                            </div>
+                            <div class="mt-20 divider"></div>
+                            <p class="mt-30">
+                                {{ $school_info->address }}
+                            </p>
+                            <p class="mt-10">{{ $school_info->phone }}</p>
+
+                        </div>
+                    </div>
                 </div>
-                <div class="text-center card-body position-relative">
-                    <div class="avatar-top">
-                        @if($school->image == null)
-                            <img class="img-fluid w-25 rounded-circle"
-                                 src="{{ asset('storage/attachments/schools/'.$school->slug .'/') }}"
-                                 alt="{{ $school->name }}">
-                        @else
-                        <img class="img-fluid w-25 rounded-circle"
-                             src="{{ asset('storage/attachments/schools/'.$school->slug .'/'. $school->image->filename) }}"
-                             alt="{{ $school->name }}">
-                    @endif
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4 mt-30">
-                            <b>{{ trans('setting.total_student') }}</b>
-                            <h4 class="mt-10 text-success">{{$std_count}}</h4>
-                        </div>
-                        <div class="col-sm-4 mt-30">
-                            <b>{{ trans('setting.total_teacher') }}</b>
-                            <h4 class="mt-10 text-danger">{{$teach_count}}</h4>
-                        </div>
-                        <div class="col-sm-4 mt-30">
-                            <b>{{ trans('setting.total_classroom') }}</b>
-                            <h4 class="mt-10 text-warning">{{$grd_count}}</h4>
-                        </div>
-                    </div>
-                    <div class="mt-20 divider"></div>
-                    <p class="mt-30">
-                        {{ $school->address }}
-                    </p>
-                    <p class="mt-10">{{ $school->phone }}</p>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card card-statistics h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ trans('Sidebar.Grade') }}</h5>
+                            <ul class="list-unstyled">
+                                @foreach ($grades as $grade)
+                                    <li class="mb-20">
+                                        <div class="media">
 
+                                            <div class="media-body">
+                                                <h6 class="mt-0 mb-0">
+                                                    {{ $grade->name }}
+                                                    <span class="float-right text-danger">
+                                                        {{ $grade->students_count }}</span>
+                                                </h6>
+                                            </div>
+                                        </div>
+                                        <div class="mt-20 divider dotted"></div>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,34 +83,25 @@
                 <div class="card-body">
                     <h2 class="card-title">
                         {{ trans('setting.school_details') }}</h2>
-                    <form action="{{route('settings.update')}}"
-                          method="post" enctype="multipart/form-data">
+                    <form action="{{ route('settings.update') }}" method="post" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden"
-                               name="id"
-                               value="{{$school->id}}">
+                        <input type="hidden" name="id" value="{{ $school_info->id }}">
                         <!-- Name  -->
                         <div class="row">
                             <div class="col">
-                                <label class=""
-                                       for="first-name">{{ trans('setting.name') }}</label>
-                                <input type="text"
-                                       class="form-control"
-                                       value="{{ $school->name }}"
-                                       name="school_name"/>
+                                <label class="" for="first-name">{{ trans('setting.name') }}</label>
+                                <input type="text" class="form-control" value="{{ $school_info->name }}"
+                                    name="school_name" />
                                 @error('school_name')
-                                <div class="mt-1 alert alert-error">{{$message}}</div>
+                                    <div class="mt-1 alert alert-error">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col">
-                                <label class=""
-                                       for="last-name">{{ trans('setting.phone') }}</label>
-                                <input type="text"
-                                       class="form-control"
-                                       value="{{ $school->phone }}"
-                                       name="school_phone"/>
+                                <label class="" for="last-name">{{ trans('setting.phone') }}</label>
+                                <input type="text" class="form-control" value="{{ $school_info->phone }}"
+                                    name="school_phone" />
                                 @error('school_phone')
-                                <div class="mt-1 alert alert-error">{{$message}}</div>
+                                    <div class="mt-1 alert alert-error">{{ $message }}</div>
                                 @enderror
                             </div>
 
@@ -90,28 +111,18 @@
                             <div class="col">
                                 <label>{{ trans('setting.address') }}
                                 </label>
-                                <textarea class="form-control" rows="5"
-                                          name="address">{{ $school->address }}</textarea>
+                                <textarea class="form-control" rows="4" name="address">{{ $school_info->address }}</textarea>
                                 @error('address')
-                                <div class="mt-1 alert alert-error">{{$message}}</div>
+                                    <div class="mt-1 alert alert-error">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col">
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file"
-                                               name="file"
-                                               multiple
-                                               accept="image/png,image/jpeg"
-                                               class="custom-file-input"
-                                               id="inputGroupFile02">
-                                        <label class="custom-file-label"
-                                               for="inputGroupFile02">{{trans('general.choose_file')}}</label>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">{{trans('general.upload')}}</span>
-                                    </div>
-                                </div>
+                                <label for="">{{ trans('general.logo') }}</label>
+                                <input type="file" name="logo" accept="image/*" id="logo"
+                                    onchange="showPreview(event)" hidden>
+                                <img src="{{ asset('assests/images/logo-icon-dark.png') }}" style="margin-right: 50%"
+                                    class="img-fluid w-25 avatar rounded-circle user-avatar"
+                                    onclick="  $('#logo').trigger('click');" id="preview">
                             </div>
                         </div>
                         <div class="row">
@@ -119,18 +130,16 @@
                                 <label>
                                     {{ trans('setting.heading_right') }}
                                 </label>
-                                <textarea class="form-control" id="summernote"
-                                          name="head_right">{{ $school->heading_right }}</textarea>
+                                <textarea class="form-control" id="summernote" name="head_right">{{ $school_info->heading_right }}</textarea>
                                 @error('head_right')
-                                <div class="mt-1 alert alert-error">{{$message}}</div>
+                                    <div class="mt-1 alert alert-error">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
                         <!-- heading  -->
                         <div class="row mt-4">
                             <div class="col text-right">
-                                <button type="submit"
-                                        class="btn btn-primary">{{trans('General.Submit')}}</button>
+                                <button type="submit" class="btn btn-primary">{{ trans('General.Submit') }}</button>
                             </div>
 
 
@@ -142,27 +151,46 @@
         </div>
     </div>
     <div class="row mb-30">
-        <div class="col-xl-4">
-            <div class="card card-statistics h-100">
+        <div class="col">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ trans('Sidebar.Grade') }}</h5>
-                    <ul class="list-unstyled">
-                        @foreach ($grades as $grade)
-                            <li class="mb-20">
-                                <div class="media">
+                    <div class="row card-title">
+                        <div class="col">
+                            <h2>
+                                {{ trans('setting.auth_details') }}</h2>
+                            <p class="mb-4 text-sm font-normal text-slate-400">
+                                {{ trans('setting.auth_details_desc') }}
+                            </p>
+                        </div>
+                        <div class="col text-md-right">
+                            <span class="my-1">{{ trans('setting.auth_name') }} : </span>
+                            <h4>{{ $user->name }}</h4>
+                        </div>
+                    </div>
 
-                                    <div class="media-body">
-                                        <h6 class="mt-0 mb-0">
-                                            {{ $grade->name }}
-                                            <span class="float-right text-danger">
-                                                {{ $grade->students_count }}</span>
-                                        </h6>
-                                    </div>
-                                </div>
-                                <div class="mt-20 divider dotted"></div>
-                            </li>
-                        @endforeach
-                    </ul>
+                    <form method="post" action="{{ route('setting.update_password') }}">
+                        @csrf
+                        <div class="row">
+                            <div class="col">
+                                <label class="block my-1">{{ trans('setting.old_password') }}</label>
+                                <input type="password" name="old_password" class="form-control" id="old_password" />
+                            </div>
+                            <div class="col">
+
+                                <label class="block my-1" for="new-password">
+                                    {{ trans('setting.new_password') }}
+                                </label>
+                                <input type="password" name="new_password" class="form-control" id="new-password" />
+                            </div>
+                            <div class="col text-md-right">
+                                <!-- Button  -->
+                                <button type="submit"
+                                    class="btn btn-danger btn-block">{{ trans('general.update') }}</button>
+
+                            </div>
+                        </div>
+
+                    </form>
                 </div>
             </div>
         </div>
@@ -171,8 +199,7 @@
                 <div class="card-body">
                     <h2 class="card-title">{{ trans('academic_year.title') }}</h2>
                     <div class="table-responsive">
-                        <table class="table table-bordered"
-                               id="datatable">
+                        <table class="table table-bordered" id="datatable">
                             <tr>
                                 <th>#</th>
                                 <th>{{ trans('academic_year.year_start') }}</th>
@@ -193,11 +220,8 @@
                                     <td>{{ $acadmic_year->created_at->format('Y-m-d') }}</td>
                                 </tr>
                             @empty
-                                <div class="alert alert-primary"
-                                     role="alert">
-                                    <i width="1rem"
-                                       height="1rem"
-                                       data-feather="alert-circle"></i>
+                                <div class="alert alert-primary" role="alert">
+                                    <i width="1rem" height="1rem" data-feather="alert-circle"></i>
                                     <p>{{ trans('general.Msg') }}</p>
                                 </div>
                             @endforelse
@@ -207,61 +231,18 @@
             </div>
 
         </div>
+
     </div>
-    <div class="row mb-30">
-        <div class="col-xl-4"></div>
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row card-title">
-                        <div class="col">
-                            <h2>
-                                {{ trans('setting.auth_details') }}</h2>
-                            <p class="mb-4 text-sm font-normal text-slate-400">
-                                {{ trans('setting.auth_details_desc') }}
-                            </p>
-                        </div>
-                        <div class="col text-md-right">
-                            <span class="my-1">{{ trans('setting.auth_name') }} : </span>
-                            <h4>{{ $user->name }}</h4>
-                        </div>
-                    </div>
 
-                    <form method="post"
-                          action="{{ route('setting.update_password') }}">
-                        @csrf
-                        <div class="row">
-                            <div class="col">
-                                <label class="block my-1">{{ trans('setting.old_password') }}</label>
-                                <input type="password"
-                                       name="old_password"
-                                       class="form-control"
-                                       id="old_password"/>
-                            </div>
-                            <div class="col">
-
-                                <label class="block my-1"
-                                       for="new-password">
-                                    {{ trans('setting.new_password') }}
-                                </label>
-                                <input type="password"
-                                       name="new_password"
-                                       class="form-control"
-                                       id="new-password"/>
-                            </div>
-                            <div class="col text-md-right">
-                                <!-- Button  -->
-                                <button type="submit"
-                                        class="btn btn-danger btn-block">{{ trans('general.update') }}</button>
-
-                            </div>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
     @push('scripts')
+        <script>
+            function showPreview(event) {
+                if (event.target.files.length > 0) {
+                    let src = URL.createObjectURL(event.target.files[0]),
+                        preview = document.getElementById("preview");
+                    preview.src = src;
+                }
+            }
+        </script>
     @endpush
 @endsection

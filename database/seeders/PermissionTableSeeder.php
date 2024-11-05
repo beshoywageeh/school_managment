@@ -93,6 +93,7 @@ class PermissionTableSeeder extends Seeder
             ['table' => 'store', 'name' => 'stocks-income_order'],
             ['table' => 'store', 'name' => 'stocks-outcome_order'],
             ['table' => 'store', 'name' => 'stocks-inventory_order-index'],
+            ['table' => 'store', 'name' => 'stocks-inventory_order-create'],
             ['table' => 'store', 'name' => 'stocks-inventory_edit'],
             ['table' => 'store', 'name' => 'stocks-inventory_delete'],
             ['table' => 'store', 'name' => 'stock-delete'],

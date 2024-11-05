@@ -11,6 +11,6 @@ class AcadmiceYearSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\acadmice_year::factory()->count(1)->create();
+        \App\Models\acadmice_year::factory()->count(3)->create();
     }
 }

@@ -3,9 +3,9 @@
     {{ trans('Sidebar.Dashboard') }}
 @endsection
 @push('css')
-<style>
+    <style>
 
-</style>
+    </style>
 @endpush
 @section('content')
     <div class="row mb-30">
@@ -64,18 +64,30 @@
     <div class="row mb-30">
         <div class="col-md-6 mb-30">
             <div class="card h-100">
-              <div class="card-body">
-                <h5 class="text-center card-title">{{trans('Sidebar.accounting')}} </h5>
-                  <div class="chart-wrapper">
-                  <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
-                     <canvas id="canvas3" width="550"></canvas>
-                 </div>
-               </div>
-              </div>
+                <div class="card-body">
+                    <h5 class="text-center card-title">{{ trans('Sidebar.accounting') }} </h5>
+                    <div class="chart-wrapper">
+                        <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
+                            <canvas id="canvas3" width="550"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
-           </div>
+        </div>
+        <div class="col-md-6 mb-30">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="text-center card-title">{{ trans('report.student_numbers') }} </h5>
+                    <div class="chart-wrapper">
+                        <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
+                            <canvas id="canvas4" width="550"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row mb-30" >
+    <div class="row mb-30">
         @can('Students-create')
             <div class="col-lg-2">
                 <a href="{{ route('Students.create') }}" class="py-5 btn btn-primary btn-block"><img
@@ -129,28 +141,64 @@
 @endsection
 @push('scripts')
     <script>
-          var ctx3 = document.getElementById('canvas3').getContext('2d');
-          var config3 = new Chart(ctx3, {
+        var ctx3 = document.getElementById('canvas3').getContext('2d');
+        var config3 = new Chart(ctx3, {
             type: 'doughnut',
             data: {
-              datasets: [{
-                data: ["{{$credit}}", "{{$payment_parts}}", "{{$payments}}"],
-                backgroundColor: [window.chartColors.red, window.chartColors.orange, window.chartColors.yellow],
-                label: 'Dataset 1'
-              }],
-              labels:(['{{trans("Sidebar.credit")}}', '{{trans("Sidebar.payment_parts")}}', '{{trans("Sidebar.Recipt_Payment")}}'])
+                datasets: [{
+                    data: ["{{ $credit }}", "{{ $payment_parts }}", "{{ $payments }}"],
+                    backgroundColor: [window.chartColors.red, window.chartColors.orange, window.chartColors
+                        .yellow
+                    ],
+                    label: 'Dataset 1'
+                }],
+                labels: (['{{ trans('Sidebar.credit') }}', '{{ trans('Sidebar.payment_parts') }}',
+                    '{{ trans('Sidebar.Recipt_Payment') }}'
+                ])
             },
             options: {
-              responsive: true,
-              legend: {
-                position: 'bottom',
-                labels: {
-                  fontColor: "#9295a2"
-                }
-              },
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        fontColor: "#9295a2"
+                    }
+                },
 
             }
-          });
+        });
+    </script>
+    <script>
+        var ctx3 = document.getElementById('canvas4').getContext('2d');
+        var config3 = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    data: [
+                        @foreach ($grades as $grade)
+                            "{{ $grade->students_count }}",
+                        @endforeach
+                    ],
+                    backgroundColor: [window.chartColors.red, window.chartColors.orange, window.chartColors.yellow
+                    ],
+                    label:'',
+                }],
+                labels: ([
+                    @foreach ($grades as $grade)
+                        '{{ $grade->name }}',
+                    @endforeach
+                ])
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        fontColor: "#9295a2"
+                    }
+                },
 
-</script>
+            }
+        });
+    </script>
 @endpush

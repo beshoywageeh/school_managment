@@ -19,7 +19,7 @@ class SettingsController extends Controller
 
     public function index()
     {
-        $school = settings::with('image')->first();
+        $school_info = settings::with('image')->first();
         $grades = Grade::withCount('students')->get();
         $std_count = Student::count();
         $grd_count = Grade::count();
@@ -63,7 +63,6 @@ class SettingsController extends Controller
 
     public function update(Request $request)
     {
-        return $request;
         try {
             $school = settings::findorfail($request->id);
             $school->name = $request->school_name;

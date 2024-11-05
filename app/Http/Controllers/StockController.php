@@ -30,7 +30,7 @@ class StockController extends Controller
             $this->logActivity('إضافة', trans('system_lookup.field_create', ['value' => $request->name]));
             session()->flash('success', trans('General.success'));
 
-            return redirect()->back();
+            return redirect()->route('stocks.index');
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

@@ -30,8 +30,10 @@
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
                                     @endcan
                                 @elseif ($type == 3)
-                                    <a href="{{ route('gard.create') }}"
-                                        class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>
+                                    @can('stocks-inventory_order-create')
+                                        <a href="{{ route('gard.create') }}"
+                                            class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>
+                                    @endcan
                                 @else
                                 @endif
 

@@ -4,11 +4,13 @@ namespace App\Http\Controllers\ClassRooms;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\LogsActivity;
+use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Grade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class ClassRoomsController extends Controller
 {
@@ -68,10 +70,23 @@ class ClassRoomsController extends Controller
     public function show(string $id)
     {
         try {
-            $data['class_room'] = class_room::where('id', $id)->with(['user', 'grade', 'students'])->first();
+            $data['class_room'] = class_room::where('id', $id)->with(['grade:id,name', 'students'])->first();
+            $current_year = \Carbon\Carbon::parse()->format('Y');
+            $data['acc_year'] = acadmice_year::whereYear('year_start', $current_year)->first()->view;
+            $pdf = PDF::loadView('backend.class_rooms.show', ['data' => $data], [], [
+                'format' => 'A4',
+                'default_font_size' => 10,
+                'margin_left' => 2,
+                'margin_right' => 2,
+                'margin_top' => 25,
+                'margin_bottom' => 10,
+                'margin_header' => 2,
+                'margin_footer' => 2,
+                'orientation' => 'P',
+            ]);
 
-            // return $data;
-            return view('backend.class_rooms.show', ['data' => $data]);
+            return $pdf->stream($data['class_room']->grade->name.' - '.$data['class_room']->name.'.pdf');
+
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

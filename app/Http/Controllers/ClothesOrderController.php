@@ -25,7 +25,7 @@ class ClothesOrderController extends Controller
 
         $clothes = clothes::with('orders', 'grade:id,name', 'classroom:id,name')->get();
         if ($clothes->count() == 0) {
-            return redirect()->route('clothes.index')->with('info', trans('general.no_data'));
+            return redirect()->route('clothes.index')->with('info', trans('General.noDataToShow'));
         }
         $generate_code = clothes_order::where('type', '1')->orderBy('auto_number', 'desc')->first();
         $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
@@ -42,12 +42,12 @@ class ClothesOrderController extends Controller
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'type' => '1',
                 'date' => date('Y-m-d'),
+                'manual_number' => $request->manual_num,
+                'manual_date' => Carbon::parse($request->manual_date)->format('Y-m-d'),
             ]);
             foreach ($request->id as $key => $clothe_id) {
                 \DB::table('clothes_stocks')->insert([
                     'clothes_id' => $clothe_id,
-                    'manual_number' => $request->manual_num[$key],
-                    'manual_date' => Carbon::parse($request->manual_date[$key])->format('Y-m-d'),
                     'qty_in' => $request->qty[$key],
                     'qty_out' => '0',
                     'order_id' => $order->id,
@@ -75,13 +75,13 @@ class ClothesOrderController extends Controller
             $order = clothes_order::findOrFail($request->order_id);
             $order->update([
                 'date' => date('Y-m-d'),
+                'manual_number' => $request->manual_num,
+                'manual_date' => Carbon::parse($request->manual_date)->format('Y-m-d'),
             ]);
             \DB::table('clothes_stocks')->where('order_id', $request->order_id)->delete();
             foreach ($request->id as $key => $clothe_id) {
                 \DB::table('clothes_stocks')->insert([
                     'clothes_id' => $clothe_id,
-                    'manual_number' => $request->manual_num[$key],
-                    'manual_date' => Carbon::parse($request->manual_date[$key])->format('Y-m-d'),
                     'qty_in' => $request->qty[$key],
                     'qty_out' => '0',
                     'order_id' => $request->order_id,

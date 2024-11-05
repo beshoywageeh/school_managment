@@ -26,6 +26,21 @@ enum Student_Status: int
         };
     }
 
+    public function text($key)
+    {
+        switch ($key) {
+            case 0:
+                return trans('enums.NEW');
+                break;
+            case 1:
+                return trans('enums.TRASPORT_FROM');
+                break;
+            default:
+                // code...
+                break;
+        }
+    }
+
     public function lang(): string
     {
         return match ($this) {

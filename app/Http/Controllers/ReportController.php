@@ -6,7 +6,10 @@ use App\Models\acadmice_year;
 use App\Models\Grade;
 use App\Models\Recipt_payment;
 use App\Models\stock;
+use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use PDF;
 
 class ReportController extends Controller
 {
@@ -20,9 +23,21 @@ class ReportController extends Controller
 
     public function ExportStudents()
     {
-        $students = Grade::with(['students'])->withcount('students')->get();
+        $data = Grade::with(['students'])->withcount('students')->get();
+        $pdf = PDF::loadView('backend.report.students', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 2,
+            'margin_right' => 2,
+            'margin_top' => 35,
+            'margin_bottom' => 10,
+            'margin_header' => 2,
+            'margin_footer' => 2,
+            'orientation' => 'L',
+        ]);
 
-        return view('backend.report.students', get_defined_vars());
+        return $pdf->stream('d.pdf');
+        //return view('backend.report.students', get_defined_vars());
     }
 
     public function daily_paymnet(Request $request)
@@ -51,9 +66,27 @@ class ReportController extends Controller
     public function stock_product(Request $request)
     {
         $stock = stock::where('id', $request->stock)->with('orders')->first();
+
         $stocks = $this->calculateTotals($stock);
 
         return view('backend.report.stock_product_view', get_defined_vars());
+
+    }
+
+    public function student_report($type)
+    {
+        $year_start = Carbon::now()->format('Y');
+        $acc = acadmice_year::whereYear('year_start', $year_start)->first();
+
+        if (is_null($acc)) {
+            return redirect()->back()->with('info', trans('General.noDataToShow'));
+        }
+        if ($type == 41) {
+            $students = Student::where('acadmiecyear_id', $acc->id)->with('parent')->orderBy('gender', 'DESC')->orderBy('name', 'ASC')->get()->groupBy('student_status');
+
+            return view('backend.report.41', get_defined_vars());
+
+        }
 
     }
 

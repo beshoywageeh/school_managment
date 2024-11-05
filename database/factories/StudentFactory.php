@@ -32,6 +32,7 @@ class StudentFactory extends Factory
             'student_status' => $this->faker->numberBetween(0, 3),
             'birth_at_begin' => $this->faker->date(),
             'religion' => $this->faker->numberBetween(0, 1),
+            'acadmiecyear_id' => $this->faker->numberBetween(1, 2),
 
         ];
     }
