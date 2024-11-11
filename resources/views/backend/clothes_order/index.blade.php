@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title')
     @if ($type == 1)
-        {{ trans('stock.income_order') }}
+        {{ trans('stock.income_order') }} : {{ trans('sidebar.clothes') }}
     @elseif ($type == 2)
         {{ trans('stock.outcome_order') }}
     @elseif ($type == 3)
@@ -20,16 +20,20 @@
                         <div class="col-lg-6 text-md-right">
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 @if ($type == 1)
-                                    @can('stocks-income_order')
+                                    @can('clothes-income_order')
                                         <a href="{{ route('clothes_order.tawreed') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                     @endcan
                                 @elseif ($type == 2)
-                                    @can('stocks-outcome_order')
-
+                                    @can('clothes-outcome_order')
+                                        <button data-toggle="modal" data-target="#Out_order"
+                                            class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
                                     @endcan
                                 @elseif ($type == 3)
-
+                                    @can('clothes-inventory_order')
+                                        <a href="{{ route('clothes.gard') }}"
+                                            class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>
+                                    @endcan
                                 @else
                                 @endif
 
@@ -39,68 +43,109 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        {{-- @can('orders-index') --}}
-                        <table class="table table-bordered table-sm" id="datatable">
-                            <thead class="alert-info">
-                                <tr>
-                                    <th>#</th>
-                                    <th>{{ trans('orders.num') }}</th>
-                                    <th>{{ trans('orders.product_count') }}</th>
-                                    <th>{{ trans('general.created_at') }}</th>
-                                    <th>{{ trans('general.updated_at') }}</th>
-                                    <th>{{ trans('General.actions') }}</th>
-                                </tr>
-                                </theadv>
-                            <tbody>
-                                @forelse ($orders as $order)
+                        @if (Auth::user()->hasAnyPermission(['clothes-income_order', 'clothes-outcome_order', 'clothes-inventory_order']))
+                            <table class="table table-bordered table-sm" id="datatable">
+                                <thead class="alert-info">
                                     <tr>
-                                        <td>{{ $loop->index + 1 }}</td>
-                                        <td><a class="btn btn-outline-primary btn-sm"
-                                                target="_blank"href="{{ route('clothes_order.show', $order->id) }}">
-                                                {{ $order->auto_number }}</a>
-                                        </td>
-                                        <td>{{ trans('clothes.total_product') . ' ' . $order->stocks()->count('qty_in') . ' ' . trans('clothes.total_qty') . ' ' . $order->stocks()->sum('qty_in') }}
-                                        </td>
-                                        <td>{{ $order->created_at->format('Y-m-d') }}</td>
-                                        <td>{{ $order->updated_at ? $order->updated_at->format('Y-m-d') : '' }}</td>
-                                        <td>                                                <x-dropdown-table :buttonText="trans('general.actions')" :items="[
-                                                    [
-                                                        'type' => 'link',
-                                                        'url' => route('clothes_order.delete', $order->id),
-                                                        'text' => trans('general.delete'),
-                                                        'icon' => 'ti-trash',
-                                                        'onclick' => 'confirmation(event)',
-                                                        'can' => 'clothes-income_order_delete',
-                                                    ],
-                                                    [
-                                                        'type' => 'link',
-                                                        'url' => route('clothes_order.edit', $order->id),
-                                                        'text' => trans('general.edit'),
-                                                        'icon' => 'ti-pencil',
-                                                        'can' => 'order-edit',
-                                                    ],
-                                                ]" />
+                                        <th>#</th>
+                                        <th>{{ trans('orders.num') }}</th>
+                                        <th>{{ trans('orders.product_count') }}</th>
+                                        <th>{{ trans('general.created_at') }}</th>
+                                        <th>{{ trans('general.updated_at') }}</th>
+                                        <th>{{ trans('General.actions') }}</th>
+                                    </tr>
+                                    </theadv>
+                                <tbody>
+                                    @forelse ($orders as $order)
+                                        <tr>
+                                            <td>{{ $loop->index + 1 }}</td>
+                                            <td><a class="btn btn-outline-primary btn-sm"
+                                                    target="_blank"href="{{ route('clothes_order.show', $order->id) }}">
+                                                    {{ $order->auto_number }}</a>
+                                            </td>
 
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan='6'>
-                                            {{ trans('general.404') }}
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                        {{-- @endcan --}}
-                        @if ($type == 2)
-                            @include('backend.orders.transfer_create')
+                                                <td>{{ trans('clothes.total_product') . ' ' . $order->stocks()->count('qty_in') . ' ' . trans('clothes.total_qty') . ' ' . $order->stocks()->sum('qty_in')-$order->stocks()->sum('qty_out') }}
+                                                </td>
+                                            <td>{{ $order->created_at->format('Y-m-d') }}</td>
+                                            <td>{{ $order->updated_at ? $order->updated_at->format('Y-m-d') : '' }}
+                                            </td>
+                                            <td>
+                                                @if ($type == 1)
+                                                    <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                        [
+                                                            'type' => 'link',
+                                                            'url' => route('clothes_order.delete', $order->id),
+                                                            'text' => trans('general.delete'),
+                                                            'icon' => 'ti-trash',
+                                                            'onclick' => 'confirmation(event)',
+                                                            'can' => 'clothes-income_order_delete',
+                                                        ],
+                                                        [
+                                                            'type' => 'link',
+                                                            'url' => route('clothes_order.edit', $order->id),
+                                                            'text' => trans('general.edit'),
+                                                            'icon' => 'ti-pencil',
+                                                            'can' => 'clothes-income_order-update',
+                                                        ],
+                                                    ]" />
+                                                @endif
+                                                @if ($type == 2)
+                                                    <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                        [
+                                                            'type' => 'link',
+                                                            'url' => route('clothes_order.delete', $order->id),
+                                                            'text' => trans('general.delete'),
+                                                            'icon' => 'ti-trash',
+                                                            'onclick' => 'confirmation(event)',
+                                                            'can' => 'clothes-outcome_order_delete',
+                                                        ],
+                                                        [
+                                                            'type' => 'link',
+                                                            'url' => route('clothes_out_order.edit', $order->id),
+                                                            'text' => trans('general.edit'),
+                                                            'icon' => 'ti-pencil',
+                                                            'can' => 'clothes-outcome_order-update',
+                                                        ],
+                                                    ]" />
+                                                @endif
+                                                @if ($type == 3)
+                                                    <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                        [
+                                                            'type' => 'link',
+                                                            'url' => route('clothes_order.delete', $order->id),
+                                                            'text' => trans('general.delete'),
+                                                            'icon' => 'ti-trash',
+                                                            'onclick' => 'confirmation(event)',
+                                                            'can' => 'clothes-inventory_order-delete',
+                                                        ],
+                                                        [
+                                                            'type' => 'link',
+                                                            'url' => route('clothes_inventory_order.edit', $order->id),
+                                                            'text' => trans('general.edit'),
+                                                            'icon' => 'ti-pencil',
+                                                            'can' => 'clothes-inventory_order-update',
+                                                        ],
+                                                    ]" />
+                                                @endif
+
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan='6'>
+                                                {{ trans('general.404') }}
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         @endif
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    @push('scripts')
-    @endpush
 @endsection
+@push('scripts')
+@endpush

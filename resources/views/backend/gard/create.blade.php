@@ -14,7 +14,7 @@
                                 <th>الرقم : {{ $order->auto_number }}</th>
                                 <th>النوع : {{ trans('stock.inventory_order') }}</th>
                                 <th>التاريخ : {{ $order->created_at->format('Y-M-d') }}</th>
-                                <th>الوقت : {{ $order->created_at->format('H : i : s A') }}</th>
+                                <th>الوقت : {{ $order->created_at->format('g : i : s A') }}</th>
                             </tr>
                         </table>
                     </div>

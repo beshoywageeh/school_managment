@@ -17,11 +17,11 @@
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                 @endcan
                                 @can('clothes-outcome_order')
-                                    <button data-toggle="modal" data-target="#CreateTransfer"
-                                        class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
+                                    <a href="{{route('clothes_out_order.create')}}"
+                                        class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
                                 @endcan
                                 @can('clothes-inventory_order')
-                                    <a href="{{ route('gard.create') }}"
+                                    <a href="{{ route('clothes.gard') }}"
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>
                                 @endcan
                                 @can('clothes-create')
@@ -45,6 +45,9 @@
                                         <th>{{ trans('stock.opening_balance') }}</th>
                                         <th>{{ trans('stock.opening_date') }}</th>
                                         <th>{{ trans('stock.current_stock') }}</th>
+                                        <th>{{ trans('clothes.purchase_price') }}</th>
+                                        <th>{{ trans('clothes.sales_price') }}</th>
+                                        <th>{{ trans('clothes.sales_isset') }}</th>
                                         <th>{{ trans('General.actions') }}</th>
                                     </tr>
                                     </theadv>
@@ -57,8 +60,12 @@
                                             <td>{{ $stock->name }}</td>
                                             <td>{{ number_format($stock->opening_qty,2) }}</td>
                                             <td>{{ $stock->opening_stock_date }}</td>
-                                            <td>{{ number_format($stock->orders()->sum('qty_in') + $stock->opening_qty - $stock->orders()->sum('qty_out'),2) }}
+                                            <td>{{ number_format(($stock->orders()->sum('qty_in') + $stock->opening_qty) - $stock->orders()->sum('qty_out'),2) }}
                                             </td>
+                                            <td>{{ Number::currency($stock->purchase_price,'EGP','ar') }}</td>
+                                            <td>{{ Number::currency($stock->sales_price,'EGP','ar') }}</td>
+
+                                            <td>{{ Number::currency($stock->sales_price_set,'EGP','ar') }}</td>
                                             <td> <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                 [
                                                     'type' => 'link',
@@ -94,6 +101,7 @@
             </div>
         </div>
         @include('backend.clothes.create')
+
     </div>
     @push('scripts')
         <script>

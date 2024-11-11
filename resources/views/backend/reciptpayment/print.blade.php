@@ -1,38 +1,6 @@
-@extends('layouts.report_view')
+@extends('layouts.invoice_view')
 @push('css')
 
-    <style>
-        @page {
-            size: A5 landscape;
-            margin: 0;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: white;
-        }
-        .receipt {
-            width: 210mm;
-            height: 148.5mm;
-            padding: 10mm;
-            box-sizing: border-box;
-            overflow: hidden;
-            page-break-inside: avoid;
-        }
-        .logo img {
-            height: 50px;
-        }
-        @media print {
-            body, html {
-                width: 210mm;
-                height: 148.5mm;
-            }
-            .receipt {
-                width: 100%;
-                height: 100%;
-                box-shadow: none;
-            }
-        }
-    </style>
 @endpush
 @section('content')
 <div class="receipt" id="print">

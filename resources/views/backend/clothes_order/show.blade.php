@@ -11,6 +11,13 @@
 @endsection
 @push('css')
     <style>
+        @media print{
+            @page{
+                size:A5;
+                width:210mm;
+                height:148mm;
+            }
+        }
         .table {
             border:3px solid black;
         }
@@ -92,7 +99,7 @@
                                     <td>
                                         {{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->qty_in),2) }}</td>
                                     <td>
-                                        {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->qty_in * $stock->sales_price),'EGP','ar') }}
+                                        {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->qty_in * $stock->purchase_price),'EGP','ar') }}
                                     </td>
                                 </tr>
                             </tfoot>

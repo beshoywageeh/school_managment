@@ -150,7 +150,7 @@
                 </li>
             @endif
             <!--for stores-->
-            @if (Auth::user()->hasAnyPermission(['stocks-index', 'orders-index', 'order_out-index', 'stocks-inventory_order-index','clothes-income_order','clothes-index']))
+            @if (Auth::user()->hasAnyPermission(['stocks-index', 'orders-index', 'order_out-index', 'stocks-inventory_order-index','clothes-income_order','clothes-index','clothes-outcome_order']))
                 <li>
                     <a href="javascript:void(0);" data-toggle="collapse" data-target="#stocks-info">
                         <div class="pull-left">
@@ -189,10 +189,21 @@
                             </x-nav_link>
                         @endcan
                         @can('clothes-income_order')
-                            <x-nav_link :href="route('clothes_order.index')" :active="request()->is('*/orders/*')">
+                            <x-nav_link :href="route('clothes_order.index',['type'=>'1'])" :active="request()->is('*/orders/*')">
                                 {{ trans('orders.income') }}
                             </x-nav_link>
                         @endcan
+                        @can('clothes-outcome_order')
+                            <x-nav_link :href="route('clothes_order.index',['type'=>'2'])" :active="request()->is('*/orders/*')">
+                                {{ trans('stock.outcome_order') }}
+                            </x-nav_link>
+                        @endcan
+                        @can('clothes-outcome_order')
+                            <x-nav_link :href="route('clothes_order.index',['type'=>'3'])" :active="request()->is('*/orders/*')">
+                                {{ trans('stock.inventory_order') }}
+                            </x-nav_link>
+                        @endcan
+
                     </ul>
                 </li>
             @endif

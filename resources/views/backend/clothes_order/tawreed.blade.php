@@ -28,7 +28,7 @@
                 <form action="{{ route('clothes_stock_submit.store') }}"method="post" autocomplete="off">
                     <div class="card-body">
                         @csrf
-                        <table class="table table-bordered text-center">
+                        <table class="table text-center table-bordered">
                             <thead>
                                 <tr>
                                     <th>{{ trans('stock.name') }}</th>
@@ -39,6 +39,7 @@
                                     <th>{{ trans('stock.quantity') }}</th>
                                     <th>{{ trans('clothes.purchase_price') }}</th>
                                     <th>{{ trans('clothes.sales_price') }}</th>
+                                    <th>{{ trans('clothes.sales_isset') }}</th>
                                     <th>{{ trans('report.quantity_total') }}</th>
                                 </tr>
                             </thead>
@@ -65,6 +66,8 @@
                                         </td>
                                         <td>
                                             <input type="number" value="0" name="sales[]" class="form-control">
+                                        </td>    <td>
+                                            <input type="number" value="0" name="sales_isset[]" class="form-control">
                                         </td>
                                         <td>
                                             <input type="text" disabled value="0" class="form-control total_product">

@@ -54,4 +54,5 @@ return [
     'download' => 'تحميل',
     'total' => 'الإجمالي',
     'logo' => 'الشعار',
+    'choose_student' => 'اختر طالب للبدء',
 ];

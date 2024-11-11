@@ -32,6 +32,7 @@ class ClothesController extends Controller
                 'opening_qty' => $request->quantity,
                 'isset' => ($request->isset == 'on') ? 1 : 0,
                 'opening_date' => date('Y-m-d'),
+                'sales_price_set' => $request->sales_price_isset,
 
             ]);
             $this->logActivity('اضافة', trans('system_lookup.field_create', ['value' => $request->name]));
@@ -54,6 +55,8 @@ class ClothesController extends Controller
                 'opening_qty' => $request->quantity,
                 'name' => $request->name,
                 'isset' => ($request->isset == 'on') ? 1 : 0,
+                'sales_price_set' => $request->sales_price_isset,
+
             ]);
             $this->logActivity('تعديل', 'تم تعديل العنصر'.$request->name);
 

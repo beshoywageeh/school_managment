@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('opening_qty');
             $table->string('opening_date');
             $table->boolean('isset')->default(0);
-            $table->decimal('sales_price', 10, 2)->nullable();
-            $table->string('purchase_price', 10, 2)->nullable();
+            $table->decimal('sales_price', 10, 2)->default(0);
+            $table->decimal('sales_price_set', 10, 2)->default(0);
+            $table->string('purchase_price', 10, 2)->default(0);
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('classroom_id');
             $table->timestamps();

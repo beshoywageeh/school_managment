@@ -1,6 +1,6 @@
 @props(['name', 'type','value'=>''])
 <div class="form-group">
-    <label for="{{ $name }}">{{ $slot }}</label>
+    <label for="{{ $name }}"><strong>{{ $slot }}</strong></label>
     <input
         {{ $attributes->class(['form-control', 'is-invalid' => $errors->has($name)])->merge(['name' => $name, 'id' => $name, 'type' => $type, 'value' => $value]) }}
     >

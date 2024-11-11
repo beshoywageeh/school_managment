@@ -188,6 +188,7 @@ Route::group(
                 Route::get('/get_classRooms/{id}', [StudentsController::class, 'getclasses']);
                 Route::get('/get_classRooms_fee/{id}', [SchoolFeeController::class, 'getclasses']);
                 Route::get('/get_jobs/{id}', [UserController::class, 'getjobs']);
+                Route::get('/get_clothes/{id}', [ClothesOrderController::class, 'getClothes']);
             });
             Route::group(['prefix' => 'backup', 'controller' => BackupController::class], function () {
                 Route::get('/index', 'index')->name('backup.index');
@@ -256,13 +257,21 @@ Route::group(
                 Route::post('/update', 'update')->name('clothe.update');
             });
             Route::group(['prefix' => 'clothes_order', 'controller' => ClothesOrderController::class], function () {
-                Route::get('/index', 'index')->name('clothes_order.index');
+                Route::get('/index/{type}', 'index')->name('clothes_order.index');
                 Route::get('/tawreed', 'tawreed')->name('clothes_order.tawreed');
                 Route::get('/delete/{id}', 'destroy')->name('clothes_order.delete');
                 Route::get('/show/{id}', 'show')->name('clothes_order.show');
                 Route::get('/edit/{id}', 'edit')->name('clothes_order.edit');
                 Route::post('/update', 'clothes_stock_update')->name('clothes_stock_submit.update');
                 Route::post('/clothes_stock_submit', 'clothes_stock_submit')->name('clothes_stock_submit.store');
+                Route::get('/clothes_out_order', 'clothes_out_order')->name('clothes_out_order.create');
+                Route::get('/clothes_out_order_edit/{id}', 'clothes_out_order_edit')->name('clothes_out_order.edit');
+                Route::get('/clothes_gard', 'clothes_order_gard')->name('clothes.gard');
+                Route::post('/clothes_out_order_submit', 'clothes_out_order_submit')->name('clothes_out_order.store');
+                Route::post('/clothes_out_order_update', 'clothes_out_order_update')->name('clothes_out_order.update');
+                Route::post('/clothes_order_gard_submit', 'clothes_order_gard_submit')->name('clothes_gard.submit');
+                Route::get('/clothes_order_gard_edit/{id}', 'clothes_order_gard_edit')->name('clothes_inventory_order.edit');
+                Route::post('/clothes_order_gard_update', 'clothes_order_gard_update')->name('clothes_inventory_order.update');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');

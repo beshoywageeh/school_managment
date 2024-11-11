@@ -55,6 +55,11 @@
                                 <label for="">{{trans('general.isset')}}</label>
                                 <input type="checkbox" name="isset" class="form-select" id="">
                             </div>
+                        </div><div class="col">
+                            <div class="form-group">
+                                <label for="">{{trans('clothes.sales_isset')}}</label>
+                                <input type="number" name="sales_price_isset" class="form-control" id="">
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -71,7 +76,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>

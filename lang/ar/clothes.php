@@ -6,4 +6,5 @@ return [
     'total_qty' => 'الكمية الكلية',
     'total_price' => 'السعر الكلي',
     'total_product' => 'إجمالي المنتجات',
+    'sales_isset' => 'السعر بالطقم',
 ];
