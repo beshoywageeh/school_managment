@@ -15,7 +15,7 @@ class clothes extends Model
 
     public function orders()
     {
-        return $this->belongsToMany(clothes_order::class, 'clothes_stocks', 'clothes_id', 'order_id')->withPivot('qty_in', 'qty_out');
+        return $this->belongsToMany(clothes_order::class, 'clothes_stocks', 'clothes_id', 'order_id')->withPivot('quantity_in', 'quantity_out');
     }
 
     public function grade()

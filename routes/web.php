@@ -182,6 +182,8 @@ Route::group(
                 Route::post('/exception_fee', 'exception_fee')->name('report.exception_fee');
                 Route::post('/stock', 'stock_product')->name('report.stock');
                 Route::get('/student_report/{type}', 'student_report')->name('report.student_report');
+                Route::get('/clothes_stock', 'clothes_stocks')->name('reports.clothes_stock');
+                Route::post('/clothe_stock', 'clothe_stock')->name('report.clothes_stock');
             });
 
             Route::group(['prefix' => 'ajax'], function () {
@@ -272,6 +274,7 @@ Route::group(
                 Route::post('/clothes_order_gard_submit', 'clothes_order_gard_submit')->name('clothes_gard.submit');
                 Route::get('/clothes_order_gard_edit/{id}', 'clothes_order_gard_edit')->name('clothes_inventory_order.edit');
                 Route::post('/clothes_order_gard_update', 'clothes_order_gard_update')->name('clothes_inventory_order.update');
+                Route::get('/pay/{id}', 'pay')->name('clothes_order.pay');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');

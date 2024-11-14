@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('clothes_id');
             $table->unsignedBigInteger('order_id');
-            $table->string('qty_in')->nullable();
-            $table->string('qty_out')->nullable();
+            $table->string('quantity_in')->nullable();
+            $table->string('quantity_out')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

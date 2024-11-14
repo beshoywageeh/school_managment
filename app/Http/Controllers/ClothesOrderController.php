@@ -20,7 +20,7 @@ class ClothesOrderController extends Controller
             $type = 1;
         }
         if ($type == 2) {
-            $orders = clothes_order::where('type', 2)->with('stocks')->get();
+            $orders = clothes_order::where('type', 2)->with('stocks', 'students')->get();
             $type = 2;
         }  if ($type == 3) {
             $orders = clothes_order::where('type', 3)->with('stocks')->get();
@@ -64,19 +64,24 @@ class ClothesOrderController extends Controller
             $type = 3;
             foreach ($request->stock_id as $key => $stock) {
                 $stock = clothes::find($stock);
-                $current_qty = $stock->orders()->where('clothes_id', $stock->id);
-                $qty = $request->actual_stock[$key] - ($stock->opening_qty + $current_qty->sum('qty_in') - $current_qty->sum('qty_out'));
-
-                return $qty;
-                $order->stocks()->syncWithPivotValues('order_id', [
-                    'clothes_id' => $stock->id,
-                    'qty_out' => max(0, -$qty),
-                    'qty_in' => max(0, $qty),
-                ]);
+                $current_qty = $stock->orders()->where('clothes_orders.id', '!=', $order->id)->where('clothes_id', $stock->id);
+                $qty = $request->actual_stock[$key] - ($stock->opening_qty + $current_qty->sum('quantity_in') - $current_qty->sum('quantity_out'));
+                if ($qty < 0) {
+                    $order->stocks()->syncWithPivotValues('clothes_orders.id', [
+                        'clothes_id' => $stock->id,
+                        'quantity_out' => abs($qty),
+                    ]);
+                } elseif ($qty > 0) {
+                    $order->stocks()->syncWithPivotValues('clothes_orders.id', [
+                        'clothes_id' => $stock->id,
+                        'quantity_in' => $qty,
+                    ]);
+                }
                 $this->logActivity('تعديل', 'تعديل للمخزن'.$stock->name.'في الجرد رقم'.$order->auto_number);
             }
 
             return redirect()->route('clothes.index')->with('success', trans('general.success'));
+
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -97,8 +102,8 @@ class ClothesOrderController extends Controller
             foreach ($request->id as $key => $clothe_id) {
                 \DB::table('clothes_stocks')->insert([
                     'clothes_id' => $clothe_id,
-                    'qty_in' => $request->qty[$key],
-                    'qty_out' => '0',
+                    'quantity_in' => $request->qty[$key],
+                    'quantity_out' => '0',
                     'order_id' => $order->id,
                 ]);
                 clothes::find($clothe_id)->update([
@@ -132,8 +137,8 @@ class ClothesOrderController extends Controller
             foreach ($request->id as $key => $clothe_id) {
                 \DB::table('clothes_stocks')->insert([
                     'clothes_id' => $clothe_id,
-                    'qty_in' => $request->qty[$key],
-                    'qty_out' => '0',
+                    'quantity_in' => $request->qty[$key],
+                    'quantity_out' => '0',
                     'order_id' => $request->order_id,
                 ]);
                 clothes::find($clothe_id)->update([
@@ -208,12 +213,13 @@ class ClothesOrderController extends Controller
                 'type' => '2',
                 'date' => date('Y-m-d'),
                 'student_id' => $request->student_id,
+                'isset_order' => ($request->isset == 'on') ? 1 : 0,
             ]);
             foreach ($request->id as $key => $clothe_id) {
                 \DB::table('clothes_stocks')->insert([
                     'clothes_id' => $clothe_id,
-                    'qty_out' => $request->quantity[$key],
-                    'qty_in' => '0',
+                    'quantity_out' => $request->quantity[$key],
+                    'quantity_in' => '0',
                     'order_id' => $order->id,
                 ]);
             }
@@ -253,7 +259,7 @@ class ClothesOrderController extends Controller
                 $clothes = [
                     'clothes_id' => $clothe_id, // updated line
                     'order_id' => $order_id,
-                    'qty_out' => $request->quantity[$key],
+                    'quantity_out' => $request->quantity[$key],
                 ];
 
                 $order->stocks()->syncWithPivotValues($order_id, $clothes);
@@ -269,13 +275,16 @@ class ClothesOrderController extends Controller
     public function clothes_order_gard()
     {
         try {
+            $stocks = clothes::with('grade', 'classroom')->get();
+            if ($stocks->count() == 0) {
+                return redirect()->back()->with('error', 'لا يوجد منتجات');
+            }
             $generate_code = clothes_order::where('type', '3')->orderBy('auto_number', 'desc')->first();
             $order = clothes_order::create([
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'type' => '3',
                 'date' => date('Y-m-d'),
             ]);
-            $stocks = clothes::with('grade', 'classroom')->get();
             $this->logActivity('إضافة', ' إضافة أمر جرد رقم'.$order->auto_number);
 
             return view('backend.clothes_order.gard_create', compact('order', 'stocks'));
@@ -286,22 +295,34 @@ class ClothesOrderController extends Controller
 
     public function clothes_order_gard_submit(Request $request)
     {
-
         try {
             foreach ($request->stock_id as $key => $stock) {
                 $stock = clothes::find($stock);
                 $current_qty = $stock->orders()->where('clothes_id', $stock->id);
-                $qty = $request->actual_stock[$key] - ($stock->opening_qty + $current_qty->sum('qty_in') - $current_qty->sum('qty_out'));
+                $qty = $request->actual_stock[$key] - ($stock->opening_qty + $current_qty->sum('quantity_in') - $current_qty->sum('quantity_out'));
                 \DB::table('clothes_stocks')->Insert([
                     'order_id' => $request->id,
                     'clothes_id' => $stock->id,
-                    'qty_out' => max(0, -$qty),
-                    'qty_in' => max(0, $qty),
+                    'quantity_out' => $qty < 0 ? abs($qty) : 0,
+                    'quantity_in' => $qty > 0 ? $qty : 0,
                 ]);
                 $this->logActivity('إضافة', ' إضافة للمخزن'.$stock->name.'في الجرد رقم'.$request->id);
             }
 
             return redirect()->route('clothes.index')->with('success', 'تم الاضافة بنجاح');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function pay($id)
+    {
+        try {
+            $order = clothes_order::findorfail($id);
+            $order->update(['is_payed' => 1]);
+            $this->logActivity('تعديل', 'تم تعديل الإيصال رقم '.$order->auto_number.' إلى مدفوع ');
+
+            return redirect()->route('clothes_order.index', ['type' => 2])->with('info', 'تم الدفع بنجاح');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

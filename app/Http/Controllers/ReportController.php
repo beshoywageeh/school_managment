@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\acadmice_year;
+use App\Models\clothes;
 use App\Models\Grade;
 use App\Models\Recipt_payment;
 use App\Models\stock;
@@ -17,6 +18,7 @@ class ReportController extends Controller
     {
         $acadmeic_years = acadmice_year::where('status', 0)->get();
         $stocks = stock::get();
+        $clothes = clothes::with('grade:id,name', 'classroom:id,name')->get();
 
         return view('backend.report.index', get_defined_vars());
     }
@@ -36,7 +38,7 @@ class ReportController extends Controller
             'orientation' => 'L',
         ]);
 
-        return $pdf->stream('d.pdf');
+        return $pdf->stream('students.pdf');
         //return view('backend.report.students', get_defined_vars());
     }
 
@@ -61,6 +63,46 @@ class ReportController extends Controller
         $stocks = stock::with('orders')->get();
 
         return view('backend.report.stock_product', get_defined_vars());
+    }
+
+    public function clothes_stocks()
+    {
+        $data = clothes::with('orders', 'classroom', 'grade')->get();
+        $pdf = PDF::loadView('backend.report.clothes_stocks', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 25,
+            'margin_bottom' => 10,
+            'margin_header' => 1,
+            'margin_footer' => 2,
+            'orientation' => 'P',
+        ]);
+
+        return $pdf->stream('clothes.pdf');
+    }
+
+    public function clothe_stock(Request $request)
+    {
+        $id = $request->stock;
+        $data['stock'] = clothes::where('id', $id)->with('orders')->first();
+
+        $data['total'] = $this->calculateTotals($data['stock']);
+
+        $pdf = PDF::loadView('backend.report.clothe_stock', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 25,
+            'margin_bottom' => 10,
+            'margin_header' => 1,
+            'margin_footer' => 2,
+            'orientation' => 'P',
+        ]);
+
+        return $pdf->stream('clothes.pdf');
     }
 
     public function stock_product(Request $request)

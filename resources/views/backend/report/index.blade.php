@@ -8,13 +8,12 @@
     <div class="mb-40 row">
         {{-- Students Report --}}
         <div class="col">
-            <div class="mb-4 card">
+            <div class="mb-4 card h-100">
+                <div class="card-header text-center">
+                    <h4><strong>{{ trans('report.title') }} | {{ trans('Sidebar.Students') }}</strong></h4>
+                </div>
                 <div class="card-body">
-                    <div class="row card-title">
-                        <div class="text-center col">
-                            <h4>{{ trans('report.title') }} | {{ trans('Sidebar.Students') }}</h4>
-                        </div>
-                    </div>
+
                     <ul class="list-unstyled">
                         @php
                             $acc_links = [
@@ -23,8 +22,8 @@
                                     'Url' => route('reports.export_student'),
                                 ],
                                 [
-                                    'Name'=>trans('report.report_type',['type'=>41]),
-                                    'Url'=>route('report.student_report',['type'=>41])
+                                    'Name' => trans('report.report_type', ['type' => 41]),
+                                    'Url' => route('report.student_report', ['type' => 41]),
                                 ],
                             ];
                         @endphp
@@ -34,7 +33,8 @@
                                     <div class="text-center media-body">
                                         <a class="btn btn-block btn-light" target="_blank" href="{{ $acc_link['Url'] }}">
                                             <h5 class="">
-                                                {{ $acc_link['Name'] }}</h5>
+                                                <strong>{{ $acc_link['Name'] }}</strong>
+                                            </h5>
                                         </a>
                                     </div>
                                 </div>
@@ -50,26 +50,24 @@
         </div>
         {{-- Teachers Report --}}
         <div class="col">
-            <div class="mb-4 card">
+            <div class="mb-4 card h-100">
+                <div class="card-header text-center">
+                    <h4><strong>{{ trans('report.title') }} | {{ trans('Sidebar.Teacher') }}</strong></h4>
+                </div>
                 <div class="card-body">
-                    <div class="row card-title">
-                        <div class="text-center col">
-                            <h4>{{ trans('report.title') }} | {{ trans('Sidebar.Teacher') }}</h4>
-                        </div>
-                    </div>
+
 
                 </div>
             </div>
         </div>
         {{-- Inventory Report --}}
         <div class="col">
-            <div class="mb-4 card">
+            <div class="mb-4 card h-100">
+                <div class="card-header text-center">
+                    <h4><strong>{{ trans('report.title') }} | {{ trans('Sidebar.inventory') }}</strong></h4>
+                </div>
                 <div class="card-body">
-                    <div class="row card-title">
-                        <div class="text-center col">
-                            <h4>{{ trans('report.title') }} | {{ trans('Sidebar.inventory') }}</h4>
-                        </div>
-                    </div>
+
                     <ul class="list-unstyled">
                         @php
                             $acc_links = [
@@ -83,6 +81,15 @@
                                     'Url' => '#stock',
                                     'type' => 'button',
                                 ],
+                                [
+                                    'Name' => trans('report.clothes_stock'),
+                                    'Url' => route('reports.clothes_stock'),
+                                    'type' => 'link',
+                                ],
+                                [
+                                    'Name' => trans('report.clothe_stock'),
+                                     'Url' => '#clothes_stock',
+                                     'type' => 'button'],
                             ];
                         @endphp
                         @foreach ($acc_links as $acc_link)
@@ -93,12 +100,15 @@
                                             <a class="btn btn-block btn-light" target="_blank"
                                                 href="{{ $acc_link['Url'] }}">
                                                 <h5 class="">
-                                                    {{ $acc_link['Name'] }}</h5>
+                                                    <strong>{{ $acc_link['Name'] }}</strong>
+                                                </h5>
                                             </a>
                                         @endif
                                         @if ($acc_link['type'] == 'button')
                                             <button class="btn btn-block btn-light" data-toggle="modal"
-                                                data-target="{{ $acc_link['Url'] }}"><h5>{{ $acc_link['Name'] }}</h5></button>
+                                                data-target="{{ $acc_link['Url'] }}">
+                                                <h5><strong>{{ $acc_link['Name'] }}</strong></h5>
+                                            </button>
                                         @endif
                                     </div>
                                 </div>
@@ -113,20 +123,19 @@
         </div>
         {{-- Accounting Report --}}
         <div class="col">
-            <div class="mb-4 card card-statistics h-100">
+            <div class="mb-4 card h-100">
+                <div class="card-header text-center">
+                    <h4><strong>{{ trans('report.title') }} | {{ trans('Sidebar.accounting') }}</strong></h4>
+                </div>
                 <div class="card-body">
-                    <div class="row card-title">
-                        <div class="text-center col">
-                            <h4>{{ trans('report.title') }} | {{ trans('Sidebar.accounting') }}</h4>
-                        </div>
-                    </div>
+
                     <ul class="list-unstyled">
                         <button data-target="#daily_fee" data-toggle="modal" class="btn btn-block btn-light">
-                            <h5>{{ trans('Sidebar.daily') }}</h5>
+                            <h5><strong>{{ trans('Sidebar.daily') }}</strong></h5>
                         </button>
                         <hr>
                         <button data-target="#exception_fee" data-toggle="modal" class="btn btn-block btn-light">
-                            <h5>{{ trans('Sidebar.except_fee') }}</h5>
+                            <h5><strong>{{ trans('Sidebar.except_fee') }}</strong></h5>
                         </button>
                         <hr>
                         @php
@@ -160,7 +169,8 @@
                                         <button class="btn btn-block btn-light" data-toggle="modal"
                                             data-target="{{ $acc_link['Url'] }}">
                                             <h5 class="">
-                                                {{ $acc_link['Name'] }}</h5>
+                                                <strong> {{ $acc_link['Name'] }}</strong>
+                                            </h5>
                                         </button>
                                     </div>
                                 </div>
@@ -178,6 +188,7 @@
     @include('backend.report.daily_fee_popup')
     @include('backend.report.exception_popup')
     @include('backend.report.stock_popup')
+    @include('backend.report.clothes_popup')
     @push('scripts')
     @endpush
 @endsection

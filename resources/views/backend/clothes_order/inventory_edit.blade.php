@@ -46,10 +46,10 @@
                                 <input type="hidden" value="{{$stock->id}}" name="stock_id[]">
                             </td>
                                 <td>
-                                    <input type="text" disabled name="inv_stock[]" class="form-control inv_stock" value="{{$stock->orders()->sum('qty_in')+$stock->opening_qty }}"/>
+                                    <input type="text" disabled name="inv_stock[]" class="form-control inv_stock" value="{{$stock->orders()->sum('quantity_in')+$stock->opening_qty }}"/>
                                 </td>
                                 <td>
-                                    <input type="number" value={{$stock->orders()->sum('qty_in')+$stock->opening_qty-$stock->orders()->sum('qty_out')}} name="actual_stock[]" class="form-control actual_stock" />
+                                    <input type="number" value={{$stock->orders()->sum('quantity_in')+$stock->opening_qty-$stock->orders()->sum('quantity_out')}} name="actual_stock[]" class="form-control actual_stock" />
                                 </td>
                             <td>
                                 <input type="number" disabled name="different[]" class="font-extrabold form-control different" value="0" />

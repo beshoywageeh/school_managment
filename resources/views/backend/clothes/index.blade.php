@@ -60,7 +60,7 @@
                                             <td>{{ $stock->name }}</td>
                                             <td>{{ number_format($stock->opening_qty,2) }}</td>
                                             <td>{{ $stock->opening_stock_date }}</td>
-                                            <td>{{ number_format(($stock->orders()->sum('qty_in') + $stock->opening_qty) - $stock->orders()->sum('qty_out'),2) }}
+                                            <td>{{ number_format(($stock->orders()->sum('quantity_in') + $stock->opening_qty) - $stock->orders()->sum('quantity_out'),2) }}
                                             </td>
                                             <td>{{ Number::currency($stock->purchase_price,'EGP','ar') }}</td>
                                             <td>{{ Number::currency($stock->sales_price,'EGP','ar') }}</td>

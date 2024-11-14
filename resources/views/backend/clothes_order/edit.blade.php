@@ -59,7 +59,7 @@
                                             <input type="date" name="manual_date" class="form-control" value="{{$stock->manual_date}}">
                                         </td>
                                         <td>
-                                            <input type="number" value="{{$stock->pivot->qty_in}}" name="qty[]" class="form-control qty">
+                                            <input type="number" value="{{$stock->pivot->quantity_in}}" name="qty[]" class="form-control qty">
                                         </td>
                                         <td>
                                             <input type="number" value="{{$stock->purchase_price}}" name="purchase[]" class="form-control purchase">
@@ -68,7 +68,7 @@
                                             <input type="number" value="{{$stock->sales_price}}" name="sales[]" class="form-control">
                                         </td>
                                         <td>
-                                            <input type="text" disabled  value="{{$stock->pivot->qty_in * $stock->purchase_price}}" class="form-control total_product">
+                                            <input type="text" disabled  value="{{$stock->pivot->quantity_in * $stock->purchase_price}}" class="form-control total_product">
                                         </td>
                                     </tr>
                                 @endforeach
@@ -77,12 +77,12 @@
                                 <tr>
                                     <td colspan="2">{{trans('clothes.total_qty')}}</td>
                                     <td colspan="2">
-                                        <input type="text"   disabled value="{{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->qty_in),2) }}" class="form-control" id="grand_qty">
+                                        <input type="text"   disabled value="{{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->quantity_in),2) }}" class="form-control" id="grand_qty">
                                     </td>
                                     <td></td>
                                     <td colspan="2">{{trans('clothes.total_price')}}</td>
                                     <td colspan="2">
-                                        <input type="text"  disabled value=" {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->qty_in * $stock->sales_price),'EGP','ar') }}" class="form-control" id="grand_total">
+                                        <input type="text"  disabled value=" {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->quantity_in * $stock->sales_price),'EGP','ar') }}" class="form-control" id="grand_total">
                                     </td>
                                 </tr>
                             </tfoot>

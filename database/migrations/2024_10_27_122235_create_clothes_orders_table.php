@@ -17,8 +17,10 @@ return new class extends Migration
             $table->unsignedBigInteger('student_id')->nullable();
             $table->date('date');
             $table->smallInteger('type');
+            $table->boolean('isset_order')->default('1');
             $table->string('manual_number')->nullable();
             $table->date('manual_date')->nullable();
+            $table->boolean('is_payed')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

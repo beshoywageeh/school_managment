@@ -43,7 +43,7 @@
                                         </td>
                                         <td>
                                             <input type="text" disabled name="inv_stock[]" class="form-control inv_stock"
-                                                value="{{ $stock->orders()->sum('qty_in') + $stock->opening_qty - $stock->orders()->sum('qty_out') }}" />
+                                                value="{{ $stock->orders()->sum('quantity_in') + $stock->opening_qty - $stock->orders()->sum('quantity_out') }}" />
                                         </td>
                                         <td>
                                             <input type="number" name="actual_stock[]" class="form-control actual_stock" />

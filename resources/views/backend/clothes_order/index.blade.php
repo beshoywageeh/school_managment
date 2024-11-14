@@ -49,6 +49,9 @@
                                     <tr>
                                         <th>#</th>
                                         <th>{{ trans('orders.num') }}</th>
+                                        @if($type==2)
+                                        <th>{{trans('student.name')}}</th>
+                                        @endif
                                         <th>{{ trans('orders.product_count') }}</th>
                                         <th>{{ trans('general.created_at') }}</th>
                                         <th>{{ trans('general.updated_at') }}</th>
@@ -62,9 +65,20 @@
                                             <td><a class="btn btn-outline-primary btn-sm"
                                                     target="_blank"href="{{ route('clothes_order.show', $order->id) }}">
                                                     {{ $order->auto_number }}</a>
-                                            </td>
+                                                    @if($order->is_payed == 0)
+                                                        <span class="badge badge-danger">{{trans('clothes.not_payed')}}</span>
 
-                                                <td>{{ trans('clothes.total_product') . ' ' . $order->stocks()->count('qty_in') . ' ' . trans('clothes.total_qty') . ' ' . $order->stocks()->sum('qty_in')-$order->stocks()->sum('qty_out') }}
+                                                    @endif
+                                                    @if($order->is_payed == 1 && $order->type==1)
+                                                        <span class="badge badge-success">{{trans('clothes.payed')}}</span>
+
+                                                    @endif
+                                            </td>
+                                            @if($order->type==2)
+                                            <th>{{$order->students->name}}</th>
+                                            @endif
+
+                                                <td>{{ trans('clothes.total_product') . ' ' . $order->stocks()->count('quantity_in') . ' ' . trans('clothes.total_qty') . ' ' . $order->stocks()->sum('quantity_in')-$order->stocks()->sum('quantity_out') }}
                                                 </td>
                                             <td>{{ $order->created_at->format('Y-m-d') }}</td>
                                             <td>{{ $order->updated_at ? $order->updated_at->format('Y-m-d') : '' }}
@@ -89,6 +103,7 @@
                                                         ],
                                                     ]" />
                                                 @endif
+                                                @if($order->is_payed == 0)
                                                 @if ($type == 2)
                                                     <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                         [
@@ -97,7 +112,7 @@
                                                             'text' => trans('general.delete'),
                                                             'icon' => 'ti-trash',
                                                             'onclick' => 'confirmation(event)',
-                                                            'can' => 'clothes-outcome_order_delete',
+                                                            'can' => 'clothes-outcome_order-delete',
                                                         ],
                                                         [
                                                             'type' => 'link',
@@ -105,8 +120,15 @@
                                                             'text' => trans('general.edit'),
                                                             'icon' => 'ti-pencil',
                                                             'can' => 'clothes-outcome_order-update',
+                                                        ],                                                        [
+                                                            'type' => 'link',
+                                                            'url' => route('clothes_order.pay', $order->id),
+                                                            'text' => trans('clothes.pay'),
+                                                            'icon' => 'ti-money',
+                                                            'can' => 'clothes-outcome_order-update',
                                                         ],
                                                     ]" />
+                                                @endif
                                                 @endif
                                                 @if ($type == 3)
                                                     <x-dropdown-table :buttonText="trans('general.actions')" :items="[

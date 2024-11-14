@@ -56,7 +56,7 @@
                                             <td>{{$loop->index+1}}</td>
                                             <td><input type="hidden" name="id[]" value="{{$stock->id}}">{{$stock->name}}</td>
                                             <td>{{$stock->sales_price}}</td>
-                                            <td><input class="form-control" value="{{$stock->pivot->qty_out}}" name="quantity[]"/></td>
+                                            <td><input class="form-control" value="{{$stock->pivot->quantity_out}}" name="quantity[]"/></td>
                                         </tr>
                                     @empty
 

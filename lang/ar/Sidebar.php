@@ -35,4 +35,6 @@ return [
     'clothes' => 'ملابس',
     'books_sheets' => 'الكتب والملازم',
     'inventory' => 'مخازن',
+    'stocks_show' => 'عرض العهدة',
+    'clothes_show' => 'عرض اللبس',
 ];

@@ -25,6 +25,7 @@
                                 <div class="col">
                                     الوقت : {{ date('s : i : g A') }}
                                 </div>
+                                <div class="col"><h6>{{trans('clothes.isset_order')}}</h6><input type="checkbox" name="isset" id=""></div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="">{{ trans('student.name') }}</label>

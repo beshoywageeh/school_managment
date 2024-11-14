@@ -149,61 +149,107 @@
                     </ul>
                 </li>
             @endif
-            <!--for stores-->
-            @if (Auth::user()->hasAnyPermission(['stocks-index', 'orders-index', 'order_out-index', 'stocks-inventory_order-index','clothes-income_order','clothes-index','clothes-outcome_order']))
+            @if (Auth::user()->hasAnyPermission([
+                    'stocks-index',
+                    'orders-index',
+                    'order_out-index',
+                    'stocks-inventory_order-index',
+                    'clothes-income_order',
+                    'clothes-index',
+                    'clothes-outcome_order',
+                ]))
+                <!--for stores-->
                 <li>
-                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#stocks-info">
-                        <div class="pull-left">
-                            <img class="img-fluid" width="25" height="25"
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#inventory">
+                        <div class="pull-left"> <img class="img-fluid" width="25" height="25"
                                 src="{{ URL::asset('assests/images/Sidebar/inventory.png') }}"
-                                alt="{{ trans('sidebar.stores') }}" />
-                            <span class="right-nav-text">{{ trans('sidebar.stores') }}</span>
-                        </div>
+                                alt="{{ trans('sidebar.stores') }}" /><span
+                                class="right-nav-text">{{ trans('sidebar.stores') }}</span></div>
                         <div class="pull-right"><i class="ti-plus"></i></div>
                         <div class="clearfix"></div>
                     </a>
-                    <ul id="stocks-info" class="collapse" data-parent="#sidebarnav">
-                        @can('stocks-index')
-                            <x-nav_link :href="route('stocks.index')" :active="request()->is('*/stocks/*')" :image="URL::asset('assests/images/Sidebar/stocks.png')">
-                                {{ trans('sidebar.stocks') }}
-                            </x-nav_link>
-                        @endcan
-                        @can('orders-index')
-                            <x-nav_link :href="route('order.index')" :active="request()->is('*/orders/*')">
-                                {{ trans('orders.income') }}
-                            </x-nav_link>
-                        @endcan
-                        @can('order_out-index')
-                            <x-nav_link :href="route('outorder.index')" :active="request()->is('*/orders/*')">
-                                {{ trans('stock.outcome_order') }}
-                            </x-nav_link>
-                        @endcan
-                        @can('stocks-inventory_order-index')
-                            <x-nav_link :href="route('gard.index')" :active="request()->is('*/orders/*')">
-                                {{ trans('stock.inventory_order') }}
-                            </x-nav_link>
-                        @endcan
-                        @can('clothes-index')
-                            <x-nav_link :href="route('clothes.index')" :active="request()->is('*/clothes/*')" :image="URL::asset('assests/images/Sidebar/clothes.png')">
-                                {{ trans('stock.clothes') }}
-                            </x-nav_link>
-                        @endcan
-                        @can('clothes-income_order')
-                            <x-nav_link :href="route('clothes_order.index',['type'=>'1'])" :active="request()->is('*/orders/*')">
-                                {{ trans('orders.income') }}
-                            </x-nav_link>
-                        @endcan
-                        @can('clothes-outcome_order')
-                            <x-nav_link :href="route('clothes_order.index',['type'=>'2'])" :active="request()->is('*/orders/*')">
-                                {{ trans('stock.outcome_order') }}
-                            </x-nav_link>
-                        @endcan
-                        @can('clothes-outcome_order')
-                            <x-nav_link :href="route('clothes_order.index',['type'=>'3'])" :active="request()->is('*/orders/*')">
-                                {{ trans('stock.inventory_order') }}
-                            </x-nav_link>
-                        @endcan
+                    <ul id="inventory" class="collapse" data-parent="#sidebarnav">
+                        {{-- stocks-inventory --}}
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="collapse"
+                                data-target="#stocks">{{ trans('sidebar.stocks') }}<div class="pull-right"><i
+                                        class="ti-plus"></i></div>
+                                <div class="clearfix"></div>
+                            </a>
+                            <ul id="stocks" class="collapse">
 
+                                @can('stocks-index')
+                                    <li> <a href="{{ route('stocks.index') }}">{{ trans('sidebar.stocks_show') }}</a>
+                                    </li>
+                                @endcan
+                                @can('orders-index')
+                                    <li> <a href="{{ route('order.index') }}">{{ trans('orders.income') }}</a> </li>
+                                @endcan
+                                @can('order_out-index')
+                                    <li> <a href="{{ route('outorder.index') }}">{{ trans('stock.outcome_order') }}</a>
+                                    </li>
+                                @endcan
+                                @can('stocks-inventory_order-index')
+                                    <li> <a href="{{ route('gard.index') }}">{{ trans('stock.inventory_order') }}</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                        {{-- clothes-inventory --}}
+                        <li>
+                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#clothes">
+                                {{ trans('stock.clothes') }}<div class="pull-right"><i class="ti-plus"></i></div>
+                                <div class="clearfix"></div>
+                            </a>
+                            <ul id="clothes" class="collapse">
+                                @can('clothes-index')
+                                    <li> <a href="{{ route('clothes.index') }}">{{ trans('Sidebar.clothes_show') }}</a>
+                                    </li>
+                                @endcan
+                                @can('clothes-income_order')
+                                    <li> <a
+                                            href="{{ route('clothes_order.index', ['type' => '1']) }}">{{ trans('orders.income') }}</a>
+                                    </li>
+                                @endcan
+                                @can('clothes-outcome_order')
+                                    <li> <a
+                                            href="{{ route('clothes_order.index', ['type' => '2']) }}">{{ trans('stock.outcome_order') }}</a>
+                                    </li>
+                                @endcan
+                                @can('clothes-outcome_order')
+                                    <li> <a
+                                            href="{{ route('clothes_order.index', ['type' => '3']) }}">{{ trans('stock.inventory_order') }}</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                         <li>
+                            <a href="javascript:void(0);" data-toggle="collapse" data-target="#book_sheets">
+                                {{ trans('Sidebar.books_sheets') }}<div class="pull-right"><i class="ti-plus"></i></div>
+                                <div class="clearfix"></div>
+                            </a>
+                            <ul id="book_sheets" class="collapse">
+                                @can('clothes-index')
+                                    <li> <a href="{{ route('clothes.index') }}">{{ trans('Sidebar.clothes_show') }}</a>
+                                    </li>
+                                @endcan
+                                @can('clothes-income_order')
+                                    <li> <a
+                                            href="{{ route('clothes_order.index', ['type' => '1']) }}">{{ trans('orders.income') }}</a>
+                                    </li>
+                                @endcan
+                                @can('clothes-outcome_order')
+                                    <li> <a
+                                            href="{{ route('clothes_order.index', ['type' => '2']) }}">{{ trans('stock.outcome_order') }}</a>
+                                    </li>
+                                @endcan
+                                @can('clothes-outcome_order')
+                                    <li> <a
+                                            href="{{ route('clothes_order.index', ['type' => '3']) }}">{{ trans('stock.inventory_order') }}</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
                     </ul>
                 </li>
             @endif

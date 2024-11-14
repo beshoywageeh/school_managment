@@ -16,7 +16,7 @@ class clothes_order extends Model
     public function stocks()
     {
 
-        return $this->belongsToMany(clothes::class, 'clothes_stocks', 'order_id', 'clothes_id')->withPivot('qty_in', 'qty_out');
+        return $this->belongsToMany(clothes::class, 'clothes_stocks', 'order_id', 'clothes_id')->withPivot('quantity_in', 'quantity_out');
     }
 
     public function students()

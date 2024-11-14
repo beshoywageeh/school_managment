@@ -8,19 +8,29 @@
             <div class="row mb-30">
                 <div class="col-xl-12">
                     <div class="card card-statistics h-100">
-                        <div class="p-4 text-center bg"
-                            style="background: url({{ asset('storage/app/attachments/schools/' . $school_info->slug . '/' . $school_info->image->filename) }});background-repeat: no-repeat;background-size: cover;">
-                            <h5 class="text-white mb-70 position-relative">
-                                {{ $school_info->name }}
-                            </h5>
+                        @if ($school_info->image == null)
+                            <div class="p-4 text-center bg"
+                                style="background: url({{ asset('assests/images/loop_labs.png') }});background-repeat: no-repeat;background-size: cover;">
+                                <h5 class="text-white mb-70 position-relative">
+                                    {{ $school_info->name }}
+                                </h5>
 
-                        </div>
+                            </div>
+                        @else
+                            <div class="p-4 text-center bg"
+                                style="background: url({{ asset('storage/app/attachments/schools/' . $school_info->slug . '/' . $school_info->image->filename) }});background-repeat: no-repeat;background-size: cover;">
+                                <h5 class="text-white mb-70 position-relative">
+                                    {{ $school_info->name }}
+                                </h5>
+
+                            </div>
+                        @endif
+
                         <div class="text-center card-body position-relative">
                             <div class="avatar-top">
                                 @if ($school_info->image == null)
                                     <img class="img-fluid w-25 rounded-circle"
-                                        src="{{ asset('assests/images/loop_labs.png') }}"
-                                        alt="{{ $school_info->name }}">
+                                        src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school_info->name }}">
                                 @else
                                     <img class="img-fluid w-25 rounded-circle"
                                         src="{{ asset('storage/app/attachments/schools/' . $school_info->slug . '/' . $school_info->image->filename) }}"
@@ -107,7 +117,7 @@
 
                         </div>
                         <!-- address  -->
-                        <div class="row mt-4">
+                        <div class="mt-4 row">
                             <div class="col">
                                 <label>{{ trans('setting.address') }}
                                 </label>
@@ -137,8 +147,8 @@
                             </div>
                         </div>
                         <!-- heading  -->
-                        <div class="row mt-4">
-                            <div class="col text-right">
+                        <div class="mt-4 row">
+                            <div class="text-right col">
                                 <button type="submit" class="btn btn-primary">{{ trans('General.Submit') }}</button>
                             </div>
 
