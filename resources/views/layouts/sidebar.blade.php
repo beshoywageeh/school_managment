@@ -157,6 +157,7 @@
                     'clothes-income_order',
                     'clothes-index',
                     'clothes-outcome_order',
+                    'books_sheets-index'
                 ]))
                 <!--for stores-->
                 <li>
@@ -229,8 +230,8 @@
                                 <div class="clearfix"></div>
                             </a>
                             <ul id="book_sheets" class="collapse">
-                                @can('clothes-index')
-                                    <li> <a href="{{ route('clothes.index') }}">{{ trans('Sidebar.clothes_show') }}</a>
+                                @can('books_sheets-index')
+                                    <li> <a href="{{ route('books_sheets.index') }}">{{ trans('Sidebar.books_sheets_show') }}</a>
                                     </li>
                                 @endcan
                                 @can('clothes-income_order')

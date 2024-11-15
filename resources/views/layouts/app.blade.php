@@ -6,14 +6,34 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <link rel="icon"
-            href="{{ asset('assests/images/logo-icon-dark.png') }}"
-            type="image/png" />
+    <link rel="icon" href="{{ asset('assests/images/logo-icon-dark.png') }}" type="image/png" />
+    <style>
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
 
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            background-color: #3498db;
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+    </style>
     <title>@yield('title')</title>
 
     @include('layouts.header_css')
-    @livewireStyles
+
 
 
 </head>
@@ -21,8 +41,9 @@
 <body>
     <!-- Wrapper Starts -->
     <div class="wrapper">
-        <div id="pre-loader">
-            <img src="{{ asset('assests/images/pre-loader/loader-01.svg') }}" alt="">
+        <div id="pre-loader" class="pulse">
+            <img src="{{ asset('assests/images/logo-dark.png') }}" alt="">
+
         </div>
         <!-- Header Starts -->
         @include('layouts.header')
@@ -64,7 +85,7 @@
     <!-- Page Content Ends -->
 
     @include('layouts.footer_script')
-    @livewireScripts
+
 </body>
 
 </html>

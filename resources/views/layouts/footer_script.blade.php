@@ -1,18 +1,17 @@
 <!-- jquery -->
-<script src="{{ asset('assests/js/jquery-3.3.1.min.js') }}"></script>
+<script src="{{ asset('assests\js\jquery-3.3.1.min.js') }}"></script>
 <script src="{{ URL::asset('assests\js\datatable\datatables\jquery.dataTables.min.js') }}"></script>
 <script src="{{ URL::asset('assests\js\datatable\datatable-extension\dataTables.buttons.min.js') }}"></script>
 <script src="{{ URL::asset('assests\js\bootstrap-datatables\dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ URL::asset('assests\js\datatable\datatable-extension\buttons.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
-<!-- plugins-jquery -->
-<script src="{{ asset('assests/js/plugins-jquery.js') }}"></script>
 <!-- plugin_path -->
 <script>
     var plugin_path = 'assests/js/';
 </script>
-<!-- chart -->
-{{-- <script src="{{ asset('assests/js/chart-init.js') }}"></script> --}}
+<!-- plugins-jquery -->
+<script src="{{ asset('assests/js/plugins-jquery.js') }}"></script>
+
 
 <!-- calendar -->
 <script src="{{ asset('assests/js/calendar.init.js') }}"></script>
@@ -139,9 +138,5 @@
             ]
         })
     })
-</script>
-
-
-
 </script>
 @stack('scripts')

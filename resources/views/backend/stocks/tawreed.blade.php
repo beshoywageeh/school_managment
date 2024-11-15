@@ -45,6 +45,7 @@
                 <div class="card-body">
                     @csrf
                     <input type="hidden" name="id" value="{{ $order->id }}">
+                   <div class="table-responsive">
                     <table class="table table-sm table-bordered">
                         <thead>
                             <tr>
@@ -97,6 +98,7 @@
                             </tr>
                         </tfoot>
                     </table>
+                   </div>
                 </div>
                 <div class="card-footer">
                     <div class="text-md-right">
