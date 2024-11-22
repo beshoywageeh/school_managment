@@ -287,7 +287,9 @@ Route::group(
             });
             Route::group(['prefix' => 'bookSheetsOrder', 'controller' => BookSheetsOrderController::class], function () {
                 Route::get('/index/{type}', 'index')->name('bookSheetsOrder.index');
-
+                Route::get('/create_tawreed', 'create_tawreed')->name('bookSheetsOrder.create');
+                Route::post('/store_tawreed', 'store_tawreed')->name('bookSheetsOrder.store_tawreed');
+                Route::get('/destroy/{id}','destroy')->name('bookSheetsOrder.destroy');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');

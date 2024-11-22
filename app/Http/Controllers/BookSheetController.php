@@ -16,7 +16,7 @@ class BookSheetController extends Controller
      */
     public function index()
     {
-        $books_sheets = book_sheet::with('grade', 'classroom')->get();
+        $books_sheets = book_sheet::with('grade', 'classroom', 'orders')->get();
         $grades = Grade::all();
 
         return view('backend.book_sheet.index', get_defined_vars());

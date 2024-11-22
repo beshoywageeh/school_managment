@@ -122,8 +122,8 @@ return new class extends Migration
             $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
         });
         Schema::table('books_sheets_stocks', function (Blueprint $table) {
-            $table->foreign('books_sheets_id')->references('id')->on('clothes_orders')->onDelete('Cascade')->onUpdate('Cascade');
-            $table->foreign('order_id')->references('id')->on('clothes')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('books_sheets_id')->references('id')->on('book_sheets')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('order_id')->references('id')->on('book_sheets')->onDelete('Cascade')->onUpdate('Cascade');
         });
     }
 

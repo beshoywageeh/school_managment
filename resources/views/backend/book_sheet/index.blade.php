@@ -45,7 +45,7 @@
                                         </td>
                                         <td>{{ $book_sheet->grade->name }}</td>
                                         <td>{{ $book_sheet->classroom->name }}</td>
-                                        <td>{{ $book_sheet->opening_qty }}</td>
+                                        <td>{{ $book_sheet->opening_qty + $book_sheet->orders->sum('pivot.quantity_in') - $book_sheet->orders->sum('pivot.quantity_out') }}</td>
                                         <td>{{ Number::currency($book_sheet->sales_price, 'EGP', 'ar') }}</td>
                                         <td>{{ $book_sheet->created_at->format('Y-m-d') }}</td>
                                         <td>
