@@ -26,8 +26,8 @@
                                     @endcan
                                 @elseif ($type == 2)
                                     @can('clothes-outcome_order')
-                                        <button data-toggle="modal" data-target="#Out_order"
-                                            class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
+                                        <a href="{{route('clothes_out_order.create')}}"
+                                            class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
                                     @endcan
                                 @elseif ($type == 3)
                                     @can('clothes-inventory_order')

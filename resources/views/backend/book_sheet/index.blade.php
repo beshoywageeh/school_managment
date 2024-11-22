@@ -31,7 +31,7 @@
                                     <th>{{ trans('book_sheet.grade') }}</th>
                                     <th>{{ trans('book_sheet.classroom') }}</th>
                                     <th>{{ trans('book_sheet.opening_qty') }}</th>
-                                    <th>{{trans('book_sheet.sales-price')}}</th>
+                                    <th>{{ trans('book_sheet.sales-price') }}</th>
                                     <th>{{ trans('General.created_at') }}</th>
                                     <th>{{ trans('General.actions') }}</th>
                                 </tr>
@@ -40,11 +40,13 @@
                                 @forelse($books_sheets as $book_sheet)
                                     <tr>
                                         <td>{{ $loop->index + 1 }}</td>
-                                        <td>{{ $book_sheet->name }}&nbsp<span class="badge badge-info">{{($book_sheet->is_book==1)?trans('book_sheet.book'):trans('book_sheet.not_book')}}</span></td>
+                                        <td>{{ $book_sheet->name }}&nbsp<span
+                                                class="badge badge-info">{{ $book_sheet->is_book == 1 ? trans('book_sheet.book') : trans('book_sheet.not_book') }}</span>
+                                        </td>
                                         <td>{{ $book_sheet->grade->name }}</td>
                                         <td>{{ $book_sheet->classroom->name }}</td>
                                         <td>{{ $book_sheet->opening_qty }}</td>
-                                        <td>{{Number::currency($book_sheet->sales_price,'EGP','ar')}}</td>
+                                        <td>{{ Number::currency($book_sheet->sales_price, 'EGP', 'ar') }}</td>
                                         <td>{{ $book_sheet->created_at->format('Y-m-d') }}</td>
                                         <td>
                                             <x-dropdown-table :buttonText="trans('general.actions')" :items="[
@@ -69,7 +71,7 @@
                                     @include('backend.book_sheet.edit')
                                 @empty
                                     <tr>
-                                        <td colspan="7">
+                                        <td colspan="8">
                                             <span
                                                 class="alert alert-info d-block">{{ trans('general.noDataToShow') }}</span>
                                         </td>
@@ -96,12 +98,14 @@
                 const data = await response.json();
                 $classrooms.html('<option>{{ trans('student.choose_classroom') }}</option>');
                 $.each(data, function(index, class_rooms) {
-                    const option = $('<option></option>').val(class_rooms.id).text(class_rooms.name);
+                    const option = $('<option></option>').val(class_rooms.id).text(class_rooms
+                        .name);
                     $classrooms.append(option);
                 });
             });
         });
-    </script>    <script>
+    </script>
+    <script>
         $(document).ready(function() {
             const $classrooms = $('#classrooms_create');
             const $grades = $('#grades_create');
@@ -112,7 +116,8 @@
                 const data = await response.json();
                 $classrooms.html('<option>{{ trans('student.choose_classroom') }}</option>');
                 $.each(data, function(index, class_rooms) {
-                    const option = $('<option></option>').val(class_rooms.id).text(class_rooms.name);
+                    const option = $('<option></option>').val(class_rooms.id).text(class_rooms
+                        .name);
                     $classrooms.append(option);
                 });
             });

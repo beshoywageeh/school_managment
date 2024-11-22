@@ -4,6 +4,8 @@ use App\Http\Controllers\AcadmiceYearController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\AdminEraController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\BookSheetController;
+use App\Http\Controllers\BookSheetsOrderController;
 use App\Http\Controllers\ClassRooms\ClassRoomsController;
 use App\Http\Controllers\ClothesController;
 use App\Http\Controllers\ClothesOrderController;
@@ -28,7 +30,6 @@ use App\Http\Controllers\SetupController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\Students\StudentsController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\BookSheetController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -276,12 +277,17 @@ Route::group(
                 Route::get('/clothes_order_gard_edit/{id}', 'clothes_order_gard_edit')->name('clothes_inventory_order.edit');
                 Route::post('/clothes_order_gard_update', 'clothes_order_gard_update')->name('clothes_inventory_order.update');
                 Route::get('/pay/{id}', 'pay')->name('clothes_order.pay');
+                Route::get('/print/{id}', 'clothes_out_order_print')->name('clothes_order.print');
             });
-            Route::group(['prefix'=>'books_sheets','controller'=>BookSheetController::class],function(){
-                Route::get('/index','index')->name('books_sheets.index');
-                Route::post('/store','store')->name('books_sheets.store');
-                Route::post('/update','update')->name('books_sheets.update');
-                Route::get('/destroy/{id}','destroy')->name('books_sheets.destroy');
+            Route::group(['prefix' => 'books_sheets', 'controller' => BookSheetController::class], function () {
+                Route::get('/index', 'index')->name('books_sheets.index');
+                Route::post('/store', 'store')->name('books_sheets.store');
+                Route::post('/update', 'update')->name('books_sheets.update');
+                Route::get('/destroy/{id}', 'destroy')->name('books_sheets.destroy');
+            });
+            Route::group(['prefix' => 'bookSheetsOrder', 'controller' => BookSheetsOrderController::class], function () {
+                Route::get('/index/{type}', 'index')->name('bookSheetsOrder.index');
+
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');

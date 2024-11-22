@@ -225,10 +225,19 @@ class ClothesOrderController extends Controller
             }
             $this->logActivity('اضافة', 'تم إضافة أمر صرف رقم '.$order->id.' للطالب '.Student::findorfail($request->student_id)->name);
             \DB::commit();
-            $order = clothes_order::where('id', $order->id)->with('stocks', 'students')->first();
+
+            return redirect()->route('clothes_order.print', $order->id)->with('success', trans('general.success'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function clothes_out_order_print($id)
+    {
+        try {
+            $order = clothes_order::where('id', $id)->with('stocks', 'students')->first();
 
             return view('backend.clothes_order.out_order_print', compact('order'));
-
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -266,7 +275,7 @@ class ClothesOrderController extends Controller
             }
             $this->logActivity('تعديل', 'تم تعديل أمر صرف رقم '.$order->id.' للطالب '.Student::findorfail($request->student_id)->name);
 
-            return view('backend.clothes_order.out_order_print', compact('order'));
+            return redirect()->route('clothes_order.print', $order->id)->with('success', trans('general.success'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

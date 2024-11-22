@@ -10,13 +10,21 @@ class book_sheet extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable=['grade_id','classroom_id','name','opening_qty','sales_price','is_book'];
+
+    protected $fillable = ['grade_id', 'classroom_id', 'name', 'opening_qty', 'sales_price', 'is_book'];
+
     public function grade()
     {
         return $this->belongsTo(grade::class);
-    }    public function classroom()
+    }
+
+    public function classroom()
     {
         return $this->belongsTo(class_room::class);
     }
 
+    public function orders()
+    {
+        return $this->belongsToMany(bookSheets_order::class, 'books_sheets_stocks', 'books_sheets_id', 'order_id')->withPivot('quantity_in', 'quantity_out');
+    }
 }
