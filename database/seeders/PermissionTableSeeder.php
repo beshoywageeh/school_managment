@@ -133,6 +133,7 @@ class PermissionTableSeeder extends Seeder
             ['table' => 'books_sheets-order', 'name' => 'books_sheets-outcome_order-create'],
             ['table' => 'books_sheets-order', 'name' => 'books_sheets-outcome_order-update'],
             ['table' => 'books_sheets-order', 'name' => 'books_sheets-outcome_order-delete'],
+            ['table' => 'books_sheets-order', 'name' => 'books_sheets-outcome_order-pay'],
             ['table' => 'books_sheets-order', 'name' => 'books_sheets-inventory_order'],
             ['table' => 'books_sheets-order', 'name' => 'books_sheets-inventory_order-create'],
             ['table' => 'books_sheets-order', 'name' => 'books_sheets-inventory_order-update'],

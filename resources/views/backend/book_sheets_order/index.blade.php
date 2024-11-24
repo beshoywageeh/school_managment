@@ -114,27 +114,34 @@
                                                 @if ($order->is_payed == 0)
                                                     @if ($type == 2)
                                                         <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                          [
+                                                            'type' => 'link',
+                                                            'url' => route('bookSheetsOrder.destroy', $order->id),
+                                                            'text' => trans('general.delete'),
+                                                            'icon' => 'ti-trash',
+                                                            'onclick' => 'confirmation(event)',
+                                                            'can' => 'books_sheets-outcome_order-delete',
+                                                        ],
+                                                        [
+                                                            'type' => 'link',
+                                                            'url' => route('bookSheetsOrder.edit_sarf', $order->id),
+                                                            'text' => trans('general.edit'),
+                                                            'icon' => 'ti-pencil',
+                                                            'can' => 'books_sheets-outcome_order-update',
+                                                        ],
+                                                        [
+                                                            'type' => 'link',
+                                                            'url' => route('bookSheetsOrder.show', $order->id),
+                                                            'text' => trans('general.show'),
+                                                            'icon' => 'fa fa-print',
+                                                            'can' => 'books_sheets-order_show',
+                                                        ],
                                                             [
                                                                 'type' => 'link',
-                                                                'url' => route('clothes_order.delete', $order->id),
-                                                                'text' => trans('general.delete'),
-                                                                'icon' => 'ti-trash',
-                                                                'onclick' => 'confirmation(event)',
-                                                                'can' => 'clothes-outcome_order-delete',
-                                                            ],
-                                                            [
-                                                                'type' => 'link',
-                                                                'url' => route('clothes_out_order.edit', $order->id),
-                                                                'text' => trans('general.edit'),
-                                                                'icon' => 'ti-pencil',
-                                                                'can' => 'clothes-outcome_order-update',
-                                                            ],
-                                                            [
-                                                                'type' => 'link',
-                                                                'url' => route('clothes_order.pay', $order->id),
+                                                                'url' => route('bookSheetsOrder.pay', $order->id),
                                                                 'text' => trans('clothes.pay'),
                                                                 'icon' => 'ti-money',
-                                                                'can' => 'clothes-outcome_order-update',
+                                                                'can' => 'books_sheets-outcome_order-pay',
                                                             ],
                                                         ]" />
                                                     @endif

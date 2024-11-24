@@ -7,8 +7,11 @@
 
 
 <style>
-    *{font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ; }
+    *{font-family: 'Cairo','Segoe UI', Tahoma, Geneva, Verdana, sans-serif ; }
      table {
             text-align: center;
+        }
+        .font-weight-bolder{
+            font-weight: 900 !important;
         }
 </style>

@@ -30,7 +30,6 @@ use App\Http\Controllers\SetupController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\Students\StudentsController;
 use App\Http\Controllers\UserController;
-use App\Models\bookSheets_order;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -293,9 +292,12 @@ Route::group(
                 Route::post('/store_tawreed', 'store_tawreed')->name('bookSheetsOrder.store_tawreed');
                 Route::get('/edit_tawreed/{id}', 'edit_tawreed')->name('bookSheetsOrder.edit_tawreed');
                 Route::post('/update_tawreed', 'update_tawreed')->name('bookSheetsOrder.update_tawreed');
-                Route::get('/create_sarf','create_sarf')->name('bookSheetsOrder.create_sarf');
-                Route::post('/store_sarf','store_sarf')->name('bookSheetsOrder.store_sarf');
+                Route::get('/create_sarf', 'create_sarf')->name('bookSheetsOrder.create_sarf');
+                Route::post('/store_sarf', 'store_sarf')->name('bookSheetsOrder.store_sarf');
+                Route::get('/edit_sarf/{id}', 'edit_sarf')->name('bookSheetsOrder.edit_sarf');
+                Route::post('/update_sarf', 'update_sarf')->name('bookSheetsOrder.update_sarf');
                 Route::get('/show/{id}', 'show')->name('bookSheetsOrder.show');
+                Route::get('/pay/{id}', 'pay')->name('bookSheetsOrder.pay');
                 Route::get('/destroy/{id}', 'destroy')->name('bookSheetsOrder.destroy');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');

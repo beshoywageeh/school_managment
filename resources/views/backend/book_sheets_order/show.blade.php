@@ -54,12 +54,19 @@
                                 <th>{{ trans('general.created_at') }}</th>
                                 <td>{{ $order->date }}</td>
                             </tr>
+                            @if ($order->type==2)
+                            <tr>
+                                <th>{{trans('student.name')}}</th>
+                                <td>{{$order->students->name}}</td>
+                            </tr>
+                            @endif
+
+
                         </table>
                     </div>
                     <div class="table-responsive">
                         {{-- @can('orders-index') --}}
                         <table class="table">
-
                                 <tr>
                                     <th>#</th>
                                     <th>{{ trans('stock.name') }}</th>
@@ -77,9 +84,16 @@
                                         <td>{{ $stock->name }}</td>
                                         <td>{{ $stock->grade->name }}</td>
                                         <td>{{ $stock->classroom->name }}</td>
+                                        @if($order->type==1)
                                         <td>{{ Number::currency($stock->sales_price,'EGP','ar') }}</td>
                                         <td>{{ number_format($stock->pivot->quantity_in, 2) }}</td>
                                         <td>{{ Number::currency($stock->pivot->quantity_in * $stock->sales_price, 'EGP','ar') }}</td>
+                                        @endif
+                                        @if($order->type==2)
+                                        <td>{{ Number::currency($stock->sales_price,'EGP','ar') }}</td>
+                                        <td>{{ number_format($stock->pivot->quantity_out, 2) }}</td>
+                                        <td>{{ Number::currency($stock->pivot->quantity_out * $stock->sales_price, 'EGP','ar') }}</td>
+                                        @endif
 
                                     </tr>
                                 @empty
@@ -92,12 +106,16 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="{{$order->type==1?5:1}}"><strong>{{trans('general.total')}}</strong></td>
-                                    <td>
-                                        {{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->quantity_in),2) }}</td>
-                                    <td>
-                                        {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->quantity_in * $stock->sales_price),'EGP','ar') }}
-                                    </td>
+                                    <td colspan="5"><strong>{{trans('general.total')}}</strong></td>
+                                    <th>
+                                        {{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out),2) }}
+                                    </th>
+                                    <th>
+                                        {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out * $stock->sales_price),'EGP','ar') }}
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th colspan="7">{{Numbers::TafqeetMoney($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out * $stock->sales_price),'EGP')}}</th>
                                 </tr>
                             </tfoot>
                         </table>

@@ -144,4 +144,9 @@
         $('form').attr('autocomplete', 'off');
     })
 </script>
+<script>
+    $(document).ready(function() {
+        $('th').addClass('font-weight-bolder');
+    })
+</script>
 @stack('scripts')

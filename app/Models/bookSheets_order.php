@@ -18,7 +18,9 @@ class bookSheets_order extends Model
 
         return $this->belongsToMany(book_sheet::class, 'books_sheets_stocks', 'order_id', 'books_sheets_id')->withPivot('quantity_in', 'quantity_out');
     }
-    public function students(){
-        return $this->belongsTo(Student::class,'student_id');
+
+    public function students()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
     }
 }
