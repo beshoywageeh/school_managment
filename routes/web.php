@@ -30,6 +30,7 @@ use App\Http\Controllers\SetupController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\Students\StudentsController;
 use App\Http\Controllers\UserController;
+use App\Models\bookSheets_order;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -193,6 +194,7 @@ Route::group(
                 Route::get('/get_classRooms_fee/{id}', [SchoolFeeController::class, 'getclasses']);
                 Route::get('/get_jobs/{id}', [UserController::class, 'getjobs']);
                 Route::get('/get_clothes/{id}', [ClothesOrderController::class, 'getClothes']);
+                Route::get('/get_books_sheets/{id}', [bookSheetsOrderController::class, 'get_books_sheets']);
             });
             Route::group(['prefix' => 'backup', 'controller' => BackupController::class], function () {
                 Route::get('/index', 'index')->name('backup.index');
@@ -291,6 +293,8 @@ Route::group(
                 Route::post('/store_tawreed', 'store_tawreed')->name('bookSheetsOrder.store_tawreed');
                 Route::get('/edit_tawreed/{id}', 'edit_tawreed')->name('bookSheetsOrder.edit_tawreed');
                 Route::post('/update_tawreed', 'update_tawreed')->name('bookSheetsOrder.update_tawreed');
+                Route::get('/create_sarf','create_sarf')->name('bookSheetsOrder.create_sarf');
+                Route::post('/store_sarf','store_sarf')->name('bookSheetsOrder.store_sarf');
                 Route::get('/show/{id}', 'show')->name('bookSheetsOrder.show');
                 Route::get('/destroy/{id}', 'destroy')->name('bookSheetsOrder.destroy');
             });
