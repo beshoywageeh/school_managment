@@ -33,6 +33,11 @@ return [
     'report_type' => 'سجل (:type) مستجدين',
     'student_numbers' => 'أعداد الطلاب بالمراحل',
     'choose_grade_head' => 'كشف بأسماء التلاميذ بمرحلة :grade - :class_room  للعام الدراسي :acc',
+    'student_new' => 'كشف مستجدين للصف        :classroom             لعام :acc',
     'clothes_stock' => 'إجمالي مخزون الزي',
     'clothe_stock' => 'إجمالي مخزون منتج',
+    'tammen'=>'الطلاب المنتفعين بالتأمين',
+    'books_sheets_stocks'=>'مخزون الكتب والملازم',
+    'book_sheet_stock'=>'المخزون الخاص بكتاب او ملزمة',
+    'book_sheet'=>'كتاب أو ملزمة'
 ];

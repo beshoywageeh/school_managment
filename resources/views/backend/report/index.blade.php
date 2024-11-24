@@ -9,7 +9,7 @@
         {{-- Students Report --}}
         <div class="col">
             <div class="mb-4 card h-100">
-                <div class="card-header text-center">
+                <div class="text-center card-header">
                     <h4><strong>{{ trans('report.title') }} | {{ trans('Sidebar.Students') }}</strong></h4>
                 </div>
                 <div class="card-body">
@@ -19,6 +19,10 @@
                             $acc_links = [
                                 [
                                     'Name' => trans('report.student_info'),
+                                    'Url' => route('reports.export_student'),
+                                ],
+                                [
+                                    'Name' => trans('report.tammen'),
                                     'Url' => route('reports.export_student'),
                                 ],
                                 [
@@ -51,7 +55,7 @@
         {{-- Teachers Report --}}
         <div class="col">
             <div class="mb-4 card h-100">
-                <div class="card-header text-center">
+                <div class="text-center card-header">
                     <h4><strong>{{ trans('report.title') }} | {{ trans('Sidebar.Teacher') }}</strong></h4>
                 </div>
                 <div class="card-body">
@@ -63,7 +67,7 @@
         {{-- Inventory Report --}}
         <div class="col">
             <div class="mb-4 card h-100">
-                <div class="card-header text-center">
+                <div class="text-center card-header">
                     <h4><strong>{{ trans('report.title') }} | {{ trans('Sidebar.inventory') }}</strong></h4>
                 </div>
                 <div class="card-body">
@@ -89,6 +93,15 @@
                                 [
                                     'Name' => trans('report.clothe_stock'),
                                      'Url' => '#clothes_stock',
+                                     'type' => 'button'],
+                                     [
+                                    'Name' => trans('report.books_sheets_stocks'),
+                                    'Url' => route('report.books_sheets'),
+                                    'type' => 'link',
+                                ],
+                                [
+                                    'Name' => trans('report.book_sheet_stock'),
+                                     'Url' => '#book_sheet_stock',
                                      'type' => 'button'],
                             ];
                         @endphp
@@ -124,7 +137,7 @@
         {{-- Accounting Report --}}
         <div class="col">
             <div class="mb-4 card h-100">
-                <div class="card-header text-center">
+                <div class="text-center card-header">
                     <h4><strong>{{ trans('report.title') }} | {{ trans('Sidebar.accounting') }}</strong></h4>
                 </div>
                 <div class="card-body">
@@ -189,6 +202,7 @@
     @include('backend.report.exception_popup')
     @include('backend.report.stock_popup')
     @include('backend.report.clothes_popup')
+    @include('backend.report.book_sheet_popup')
     @push('scripts')
     @endpush
 @endsection
