@@ -296,6 +296,10 @@ Route::group(
                 Route::post('/store_sarf', 'store_sarf')->name('bookSheetsOrder.store_sarf');
                 Route::get('/edit_sarf/{id}', 'edit_sarf')->name('bookSheetsOrder.edit_sarf');
                 Route::post('/update_sarf', 'update_sarf')->name('bookSheetsOrder.update_sarf');
+                Route::get('/create_gard', 'create_gard')->name('bookSheetsOrder.create_gard');
+                Route::post('/submit_gard', 'submit_gard')->name('bookSheetsOrder.submit_gard');
+                Route::get('/edit_gard/{id}', 'edit_gard')->name('bookSheetsOrder.edit_gard');
+                Route::post('/update_gard', 'update_gard')->name('bookSheetsOrder.update_gard');
                 Route::get('/show/{id}', 'show')->name('bookSheetsOrder.show');
                 Route::get('/pay/{id}', 'pay')->name('bookSheetsOrder.pay');
                 Route::get('/destroy/{id}', 'destroy')->name('bookSheetsOrder.destroy');

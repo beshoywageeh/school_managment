@@ -60,8 +60,6 @@
                                 <td>{{$order->students->name}}</td>
                             </tr>
                             @endif
-
-
                         </table>
                     </div>
                     <div class="table-responsive">
@@ -73,10 +71,15 @@
                                     <th>{{ trans('Grades.name') }}</th>
                                     <th>{{ trans('class_rooms.Name') }}</th>
                                     <th>{{ trans('clothes.sales_price') }}</th>
+                                    @if ($order->type == 3)
+                                        <th>{{trans('report.quantity_in')}}</th>
+                                        <th>{{trans('report.quantity_out')}}</th>
+                                    @endif
+                                    @if($order->type!=3)
                                     <th>{{ trans('stock.quantity') }}</th>
                                     <th>{{ trans('clothes.total_price') }}</th>
+                                    @endif
                                 </tr>
-
                             <tbody>
                                 @forelse ($order->stocks as $stock)
                                     <tr>
@@ -89,12 +92,15 @@
                                         <td>{{ number_format($stock->pivot->quantity_in, 2) }}</td>
                                         <td>{{ Number::currency($stock->pivot->quantity_in * $stock->sales_price, 'EGP','ar') }}</td>
                                         @endif
-                                        @if($order->type==2)
                                         <td>{{ Number::currency($stock->sales_price,'EGP','ar') }}</td>
+                                        @if($order->type==2)
                                         <td>{{ number_format($stock->pivot->quantity_out, 2) }}</td>
                                         <td>{{ Number::currency($stock->pivot->quantity_out * $stock->sales_price, 'EGP','ar') }}</td>
                                         @endif
-
+                                        @if ($order->type == 3)
+                                        <td>{{ number_format($stock->pivot->quantity_in, 2) }}</td>
+                                        <td>{{ number_format($stock->pivot->quantity_out, 2)*-1 }}</td>
+                                    @endif
                                     </tr>
                                 @empty
                                     <tr>
@@ -104,6 +110,7 @@
                                     </tr>
                                 @endforelse
                             </tbody>
+                            @if($order->type != 3)
                             <tfoot>
                                 <tr>
                                     <td colspan="5"><strong>{{trans('general.total')}}</strong></td>
@@ -118,6 +125,7 @@
                                     <th colspan="7">{{Numbers::TafqeetMoney($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out * $stock->sales_price),'EGP')}}</th>
                                 </tr>
                             </tfoot>
+                            @endif
                         </table>
                     </div>
                 </div>

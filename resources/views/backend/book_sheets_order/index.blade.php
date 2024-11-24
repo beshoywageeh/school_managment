@@ -34,7 +34,7 @@
                                 @endif
                                 @if ($type == 3)
                                     @can('books_sheets-inventory_order-create')
-                                        <a href="{{ route('clothes.gard') }}"
+                                        <a href="{{ route('bookSheetsOrder.create_gard') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>
                                     @endcan
                                 @endif
@@ -150,18 +150,25 @@
                                                     <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                         [
                                                             'type' => 'link',
-                                                            'url' => route('clothes_order.delete', $order->id),
+                                                            'url' => route('bookSheetsOrder.destroy', $order->id),
                                                             'text' => trans('general.delete'),
                                                             'icon' => 'ti-trash',
                                                             'onclick' => 'confirmation(event)',
-                                                            'can' => 'clothes-inventory_order-delete',
+                                                            'can' => 'books_sheets-inventory_order-delete',
                                                         ],
                                                         [
                                                             'type' => 'link',
-                                                            'url' => route('clothes_inventory_order.edit', $order->id),
+                                                            'url' => route('bookSheetsOrder.edit_gard', $order->id),
                                                             'text' => trans('general.edit'),
                                                             'icon' => 'ti-pencil',
-                                                            'can' => 'clothes-inventory_order-update',
+                                                            'can' => 'books_sheets-inventory_order-update',
+                                                        ],
+                                                        [
+                                                            'type' => 'link',
+                                                            'url' => route('bookSheetsOrder.show', $order->id),
+                                                            'text' => trans('general.show'),
+                                                            'icon' => 'fa fa-print',
+                                                            'can' => 'books_sheets-order_show',
                                                         ],
                                                     ]" />
                                                 @endif

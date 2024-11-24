@@ -9,11 +9,34 @@
     <title>{{ env('APP_NAME') }} &nbsp; {{ trans('auth.login') }}</title>
     @include('layouts.header_css')
 </head>
+<style>
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
 
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .pulse {
+        background-color: #3498db;
+        border-radius: 10px;
+        padding: 10px;
+        color: white;
+        animation: pulse 2s infinite;
+    }
+</style>
 <body>
     <div class="wrapper">
-        <div id="pre-loader">
-            <img src="{{ asset('assests/images/pre-loader/loader-01.svg') }}" alt="">
+        <div id="pre-loader" class="pulse">
+            <img src="{{ asset('assests/images/logo-dark.png') }}" alt="">
+
         </div>
         <section class="height-100vh d-flex align-items-center page-section-ptb login"
             style="background-image: url({{ asset('assests/images/login-bg.jpg') }});background-repeat: no-repeat;

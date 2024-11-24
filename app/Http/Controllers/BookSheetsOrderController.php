@@ -159,7 +159,7 @@ class BookSheetsOrderController extends Controller
     public function show($id)
     {
         $o = bookSheets_order::findorfail($id);
-        if ($o->type == 1) {
+        if ($o->type == 1 || $o->type == 3) {
             $order = bookSheets_order::where('id', $id)->with('stocks')->first();
         }
         if ($o->type == 2) {
@@ -202,6 +202,92 @@ class BookSheetsOrderController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
 
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function create_gard()
+    {
+        try {
+            $generate_code = bookSheets_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
+            $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
+            $stocks = book_sheet::all();
+            if ($stocks->isEmpty()) {
+                return redirect()->back()->with('info', trans('general.noDataToShow'));
+            }
+
+            return view('backend.book_sheets_order.gard_create', compact('auto_number', 'stocks'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function submit_gard(Request $request)
+    {
+        try {
+            $generate_code = bookSheets_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
+            $order = bookSheets_order::create([
+                'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
+                'type' => '3',
+                'date' => date('Y-m-d'),
+
+            ]);
+            foreach ($request->stock_id as $key => $stock) {
+                $stock = book_sheet::find($stock);
+                $current_qty = $stock->orders()->where('books_sheets_id', $stock->id);
+                $qty = $request->actual_stock[$key] - ($stock->opening_qty + $current_qty->sum('quantity_in') - $current_qty->sum('quantity_out'));
+                \DB::table('books_sheets_stocks')->Insert([
+                    'order_id' => $order->id,
+                    'books_sheets_id' => $stock->id,
+                    'quantity_out' => $qty < 0 ? abs($qty) : 0,
+                    'quantity_in' => $qty > 0 ? $qty : 0,
+                ]);
+                $this->logActivity('إضافة', ' إضافة للمخزن'.$stock->name.'في الجرد رقم'.$request->id);
+            }
+
+            return redirect()->route('bookSheetsOrder.index', 3)->with('success', 'تم الاضافة بنجاح');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function edit_gard($id)
+    {
+        try {
+            $order = bookSheets_order::where('id', $id)->with('stocks')->first();
+
+            return view('backend.book_sheets_order.edit_gard', compact('order'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function update_gard(Request $request)
+    {
+        try {
+            $order = bookSheets_order::where('id', $request->order_id)->with('stocks')->first();
+            $type = 3;
+            foreach ($request->stock_id as $key => $stock) {
+                $stock = book_sheet::find($stock);
+                $current_qty = $stock->orders()->where('book_sheets_orders.id', '!=', $order->id)->where('books_sheets_id', $stock->id);
+                $qty = $request->actual_stock[$key] - ($stock->opening_qty + $current_qty->sum('quantity_in') - $current_qty->sum('quantity_out'));
+                if ($qty < 0) {
+                    $order->stocks()->syncWithPivotValues('book_sheets_orders.id', [
+                        'books_sheets_id' => $stock->id,
+                        'quantity_out' => abs($qty),
+                    ]);
+                } elseif ($qty > 0) {
+                    $order->stocks()->syncWithPivotValues('book_sheets_orders.id', [
+                        'books_sheets_id' => $stock->id,
+                        'quantity_in' => $qty,
+                    ]);
+                }
+                $this->logActivity('تعديل', ' تعديل للمخزن '.$stock->name.' في الجرد رقم '.$order->auto_number);
+            }
+
+            return redirect()->route('bookSheetsOrder.index', 3)->with('success', trans('general.success'));
+
+        } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }

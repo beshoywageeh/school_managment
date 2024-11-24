@@ -123,7 +123,7 @@ return new class extends Migration
         });
         Schema::table('books_sheets_stocks', function (Blueprint $table) {
             $table->foreign('books_sheets_id')->references('id')->on('book_sheets')->onDelete('Cascade')->onUpdate('Cascade');
-            $table->foreign('order_id')->references('id')->on('book_sheets')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('order_id')->references('id')->on('book_sheets_orders')->onDelete('Cascade')->onUpdate('Cascade');
         });
     }
 
