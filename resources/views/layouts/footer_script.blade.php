@@ -139,4 +139,9 @@
         })
     })
 </script>
+<script>
+    $(document).ready(function() {
+        $('form').attr('autocomplete', 'off');
+    })
+</script>
 @stack('scripts')
