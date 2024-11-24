@@ -96,10 +96,16 @@
                                                         ],
                                                         [
                                                             'type' => 'link',
-                                                            'url' => route('clothes_order.edit', $order->id),
+                                                            'url' => route('bookSheetsOrder.edit_tawreed', $order->id),
                                                             'text' => trans('general.edit'),
                                                             'icon' => 'ti-pencil',
-                                                            'can' => 'clothes-income_order-update',
+                                                            'can' => 'books_sheets-income_order-update',
+                                                        ][
+                                                            'type' => 'link',
+                                                            'url' => route('bookSheetsOrder.show', $order->id),
+                                                            'text' => trans('general.show'),
+                                                            'icon' => 'fa fa-print',
+                                                            'can' => 'books_sheets-order_show',
                                                         ],
                                                     ]" />
                                                 @endif
