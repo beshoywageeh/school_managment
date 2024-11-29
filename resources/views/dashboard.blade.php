@@ -2,11 +2,7 @@
 @section('title')
     {{ trans('Sidebar.Dashboard') }}
 @endsection
-@push('css')
-    <style>
 
-    </style>
-@endpush
 @section('content')
     <div class="row mb-30">
         <div class="col-xl-4 mb-30">

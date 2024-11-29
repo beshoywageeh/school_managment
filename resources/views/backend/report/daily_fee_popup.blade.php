@@ -20,7 +20,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('report.exception_fee') }}"
+            <form action="{{ route('report.daily_fee') }}"
                   method="post">
                 <div class="modal-body">
                     @csrf

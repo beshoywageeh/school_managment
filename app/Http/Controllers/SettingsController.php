@@ -64,18 +64,24 @@ class SettingsController extends Controller
     public function update(Request $request)
     {
         try {
+            \DB::beginTransaction();
             $school = settings::findorfail($request->id);
             $school->name = $request->school_name;
             $school->phone = $request->school_phone;
             $school->address = $request->address;
             $school->heading_right = $request->head_right;
+            $school->footer_right = $request->footer_right;
+            $school->footer_left = $request->footer_left;
             $school->slug = \Str::slug($school->name);
             $school->save();
-            $this->verifyAndStoreImage($request, 'file', $request->school_name, 'upload_attachments', $request->id, 'App\Models\settings', $request->school_name);
+            $this->verifyAndStoreImage($request, 'logo', $request->school_name, 'upload_attachments', $request->id, 'App\Models\settings', $request->school_name);
+            \DB::commit();
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
         } catch (\Exception $e) {
+            \DB::rollback();
+
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
 

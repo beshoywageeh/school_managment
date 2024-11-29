@@ -5,26 +5,61 @@
 @endsection
 @section('content')
 
-        <div class="table-responsive" id="heading">
-            <table class="table text-center table-borderless table-sm">
+<htmlpageheader name="page-header">
+    <div style="height: 5px; width: 95%; margin: auto;">
+        <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
+            <table class="data-table" style="width:100%">
                 <tr>
-                    <th rowspan="2" class="text-center align-middle">{{ $school->name }}<br>{!! $school->heading_right !!}</th>
-                    <th>{{ trans('report.period', ['from' => $date['from'], 'to' => $date['to']]) }}</th>
-                    @if ($school->image == null)
-                        <th rowspan="2"></th>
-                    @else
-                        <th class="text-center align-middle" rowspan="2"><img class="logo" width="20" height="20"
-                                src="{{ asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                                alt="" /></th>
-                    @endif
-                </tr>
-                <tr>
-                    <th>
-                        {{ trans('report.print_date') }} | {{ date('Y-m-d') }}
-                    </th>
+                    <td class="text-center" width="25%">
+                        {!! $school->heading_right !!}
+                    </td>
+                    <td class="text-center" width="50%">
+                        {{ trans('report.period', ['from' => $data['begin'], 'to' => $data['end']]) }}
+                    </td>
+                    <td class="text-left">
+                        @if ($school->image == null)
+                            <img class="img-fluid" style="max-width:10%"
+                                src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
+                        @else
+                            <img class="img-fluid" style="max-width:10%"
+                                src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
+                                alt="{{ $school->name }}">
+                        @endif
+                    </td>
                 </tr>
             </table>
         </div>
+    </div>
+</htmlpageheader>
+<htmlpagefooter name="page-footer">
+    <div style="height: 5px; width: 95%; margin: auto;">
+        <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">
+            <table class="data-table" style="width:100%">
+                <tr>
+                    <td class="text-right" width="20%">
+                        <div class="text-center">
+                            <center>
+
+                                {!! $school->footer_right !!}
+                            </center>
+                        </div>
+                    </td>
+                    <td class="text-center" width="50%">
+                        {PAGENO}
+                    </td>
+                    <td class="text-left">
+
+                        <center>
+
+                            {!! $school->footer_left !!}
+                        </center>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</htmlpagefooter>
         <div class="table-responsive" id="data">
             <table class="table text-center table-striped table-bordered table-sm">
                 <thead>
@@ -44,7 +79,7 @@
                             <td>{{ $fee->manual }}</td>
                             <td>{{ $fee->date }}</td>
                             <td>{{ $fee->student->name }}</td>
-                            <td>{{ Number::currency($fee->Debit, 'EGP') }}</td>
+                            <td>{{ Number::currency($fee->Debit, 'EGP','ar') }}</td>
                             <td>{{ $fee->note }}</td>
                         </tr>
                     @empty
@@ -54,7 +89,7 @@
                 <tfoot>
                     <tr class="text-center text-white bg-dark">
                         <th colspan="4">{{ trans('report.total') }}</th>
-                        <th>{{ Number::currency($data->sum('Debit'), 'EGP') }}</th>
+                        <th>{{ Number::currency($data->sum('Debit'), 'EGP','ar') }}</th>
                         <th></th>
                     </tr>
                 </tfoot>

@@ -117,14 +117,16 @@
             <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
                 <table class="data-table" style="width:100%">
                     <tr>
-                        <td class="text-right">
+                        <td class="text-center" width="25%">
                             {!! $school->heading_right !!}
                         </td>
-                        <td></td>
+                        <td class="text-center" width="50%">
+                            {{ trans('report.period', ['from' => $data['begin'], 'to' => $data['end']]) }}
+                        </td>
                         <td class="text-left">
                             @if ($school->image == null)
                                 <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('assests/images/loop_labs.jpg') }}" alt="{{ $school->name }}">
+                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
                             @else
                                 <img class="img-fluid" style="max-width:10%"
                                     src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
@@ -137,9 +139,32 @@
         </div>
     </htmlpageheader>
     <htmlpagefooter name="page-footer">
-        <div style="border-top:1px solid black;">
+        <div style="height: 5px; width: 95%; margin: auto;">
+            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">
+                <table class="data-table" style="width:100%">
+                    <tr>
+                        <td class="text-right" width="20%">
+                            <div class="text-center">
+                                <center>
 
-            <p style="text-align: center;">{PAGENO}</p>
+                                    {!! $school->footer_right !!}
+                                </center>
+                            </div>
+                        </td>
+                        <td class="text-center" width="50%">
+                            {PAGENO}
+                        </td>
+                        <td class="text-left">
+
+                            <center>
+
+                                {!! $school->footer_left !!}
+                            </center>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </htmlpagefooter>
 </body>

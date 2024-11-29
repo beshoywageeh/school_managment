@@ -18,5 +18,7 @@ return [
     'total_student' => 'إجمالي الطلبة',
     'total_teacher' => 'إجمالي المدرسين',
     'total_classroom' => 'إجمالي الفصول الدراسية',
+    'footer_right'=>'تذيل صفحة يمين',
+    'footer_left'=>'تذيل صفحة يسار'
 
 ];

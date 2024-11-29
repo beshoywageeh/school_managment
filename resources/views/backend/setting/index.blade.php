@@ -140,8 +140,26 @@
                                 <label>
                                     {{ trans('setting.heading_right') }}
                                 </label>
-                                <textarea class="form-control" id="summernote" name="head_right">{{ $school_info->heading_right }}</textarea>
+                                <textarea class="form-control " id="summernote" name="head_right">{{ $school_info->heading_right }}</textarea>
                                 @error('head_right')
+                                    <div class="mt-1 alert alert-error">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col">
+                                <label>
+                                    {{ trans('setting.footer_right') }}
+                                </label>
+                                <textarea class="form-control" rows="20" id="summernote1" name="footer_right">{{ $school_info->footer_right }}</textarea>
+                                @error('footer_right')
+                                    <div class="mt-1 alert alert-error">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col">
+                                <label>
+                                    {{ trans('setting.footer_left') }}
+                                </label>
+                                <textarea class="form-control" rows="20" id="summernote2" name="footer_left">{{ $school_info->footer_left }}</textarea>
+                                @error('footer_left')
                                     <div class="mt-1 alert alert-error">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -186,13 +204,13 @@
                                 <input type="password" name="old_password" class="form-control" id="old_password" />
                             </div>
                             <div class="col">
-
                                 <label class="block my-1" for="new-password">
                                     {{ trans('setting.new_password') }}
                                 </label>
                                 <input type="password" name="new_password" class="form-control" id="new-password" />
                             </div>
                             <div class="col text-md-right">
+                                <label for=""></label>
                                 <!-- Button  -->
                                 <button type="submit"
                                     class="btn btn-danger btn-block">{{ trans('general.update') }}</button>

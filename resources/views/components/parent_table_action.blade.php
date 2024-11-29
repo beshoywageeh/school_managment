@@ -1,6 +1,6 @@
 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
     [
-        'tybe'=>'link',
+        'type'=>'link',
         'url' => route('parents.destroy', $id),
         'text' => trans('general.delete'),
         'icon' => 'ti-trash',

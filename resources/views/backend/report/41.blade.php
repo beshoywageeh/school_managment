@@ -133,21 +133,34 @@
         <pagebreak></pagebreak>
     @endforeach
 
+  
     <htmlpagefooter name="page-footer">
-        <div style="border-top:1px solid black;">
-            <table style="width:100%">
-                <tr>
-                <th class="text-right">
-                    <p class="">يعتمد <br>وكيل شئون الطلبة</p>
-                </th>
-                <th class="text-center">{PAGENO}</th>
-                <th class="text-left">
-                    <p class="text-right">التوقيع <br>الممثل القانوني للمدرسة</p>
-                </th>
-                </tr>
-            </table>
+        <div style="height: 5px; width: 95%; margin: auto;">
+            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">
+                <table class="data-table" style="width:100%">
+                    <tr>
+                        <td class="text-right" width="20%">
+                            <div class="text-center">
+                                <center>
 
+                                    {!! $school->footer_right !!}
+                                </center>
+                            </div>
+                        </td>
+                        <td class="text-center" width="50%">
+                            {PAGENO}
+                        </td>
+                        <td class="text-left">
 
+                            <center>
+
+                                {!! $school->footer_left !!}
+                            </center>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </htmlpagefooter>
 </body>

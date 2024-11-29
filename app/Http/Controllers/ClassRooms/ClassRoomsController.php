@@ -72,7 +72,7 @@ class ClassRoomsController extends Controller
         try {
             $data['class_room'] = class_room::where('id', $id)->with(['grade:id,name', 'students'])->first();
             $current_year = \Carbon\Carbon::parse()->format('Y');
-            $data['acc_year'] = acadmice_year::whereYear('year_start', $current_year)->first()->view;
+            $data['acc_year'] = acadmice_year::whereYear('year_start', $current_year)->first();
             $pdf = PDF::loadView('backend.class_rooms.show', ['data' => $data], [], [
                 'format' => 'A4',
                 'default_font_size' => 10,
@@ -94,13 +94,6 @@ class ClassRoomsController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -132,12 +125,11 @@ class ClassRoomsController extends Controller
             $class_room = class_room::where('id', $id)->withcount('students')->first();
             if ($class_room->students_count == 0) {
                 $class_room->delete();
-
                 return redirect()->back()->with('success', trans('general.success'));
             }
             $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $class_room->class_name]));
 
-            return redirect()->back()->with('error', trans('grade.cannot_deleted'));
+            return redirect()->back()->with('error', trans('class_rooms.cannot_deleted'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

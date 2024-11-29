@@ -39,5 +39,6 @@ return [
     'tammen'=>'الطلاب المنتفعين بالتأمين',
     'books_sheets_stocks'=>'مخزون الكتب والملازم',
     'book_sheet_stock'=>'المخزون الخاص بكتاب او ملزمة',
-    'book_sheet'=>'كتاب أو ملزمة'
+    'book_sheet'=>'كتاب أو ملزمة',
+    'excepiton_fee'=>'الإعفاءات'
 ];

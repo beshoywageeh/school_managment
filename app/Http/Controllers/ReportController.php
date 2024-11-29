@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\acadmice_year;
 use App\Models\book_sheet;
 use App\Models\clothes;
+use App\Models\ExcptionFees;
 use App\Models\Grade;
 use App\Models\Recipt_payment;
 use App\Models\stock;
@@ -180,7 +181,25 @@ $books_sheets=book_sheet::with('grade:id,name','classroom:id,name')->get();
         }
 
     }
+    public function exception_fee (Request $request){
+        $data['begin'] = Carbon::parse($request->start_date)->format('Y-m-d');
+        $data['end'] = Carbon::parse($request->end_date)->format('Y-m-d');
+        $data['exception_list']= ExcptionFees::whereBetween('date',[$data['begin'],$data['end']])->with('students:id,name,parent_id')->get();
+        $pdf = PDF::loadView('backend.report.exception_view', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 25,
+            'margin_bottom' => 25,
+            'margin_header' => 1,
+            'margin_footer' => 1,
+            'orientation' => 'P',
+        ]);
 
+        return $pdf->stream('exception_fee.pdf');
+
+    }
     private function calculateTotals($stocks)
     {
         $previousstock = 0;

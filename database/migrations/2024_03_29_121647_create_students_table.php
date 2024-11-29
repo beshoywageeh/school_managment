@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->string('name');
+            $table->string('name')->index();
             $table->date('birth_date');
             $table->string('address');
             $table->date('join_date');
@@ -23,6 +23,7 @@ return new class extends Migration
             $table->tinyInteger('student_status')->nullable();
             $table->string('birth_at_begin', 50)->nullable();
             $table->tinyInteger('religion');
+            $table->tinyInteger('tameen')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('classroom_id');

@@ -10,7 +10,7 @@
                 <div class="modal-title"
                      id="exampleModalLabel">
                     <div class="">
-                        <h6>{{trans('report.daily_fee')}}</h6>
+                        <h6>{{trans('report.excepiton_fee')}}</h6>
                     </div>
                 </div>
                 <button type="button"
@@ -20,7 +20,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('report.daily_fee') }}"
+            <form action="{{ route('report.exception_fee') }}"
                   method="post">
                 <div class="modal-body">
                     @csrf

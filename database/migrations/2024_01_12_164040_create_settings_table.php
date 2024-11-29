@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('address');
             $table->string('heading_right')->nullable();
             $table->string('heading_left')->nullable();
+            $table->string('footer_right')->nullable();
+            $table->string('footer_left')->nullable();
             $table->string('slug')->nullable();
             $table->timestamps();
             $table->softDeletes();
