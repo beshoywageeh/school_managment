@@ -94,7 +94,6 @@ class ClassRoomsController extends Controller
         }
     }
 
-
     /**
      * Update the specified resource in storage.
      */
@@ -125,6 +124,7 @@ class ClassRoomsController extends Controller
             $class_room = class_room::where('id', $id)->withcount('students')->first();
             if ($class_room->students_count == 0) {
                 $class_room->delete();
+
                 return redirect()->back()->with('success', trans('general.success'));
             }
             $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $class_room->class_name]));

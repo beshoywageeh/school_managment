@@ -6,6 +6,7 @@ use App\Models\acadmice_year;
 use App\Models\book_sheet;
 use App\Models\clothes;
 use App\Models\ExcptionFees;
+use App\Models\Fee_invoice;
 use App\Models\Grade;
 use App\Models\Recipt_payment;
 use App\Models\stock;
@@ -21,13 +22,17 @@ class ReportController extends Controller
         $acadmeic_years = acadmice_year::where('status', 0)->get();
         $stocks = stock::get();
         $clothes = clothes::with('grade:id,name', 'classroom:id,name')->get();
-$books_sheets=book_sheet::with('grade:id,name','classroom:id,name')->get();
+        $books_sheets = book_sheet::with('grade:id,name', 'classroom:id,name')->get();
+        $grades = grade::get(['id', 'name']);
+
         return view('backend.report.index', get_defined_vars());
     }
 
     public function ExportStudents()
     {
-        $data = Grade::with(['students'])->withcount('students')->get();
+        $data = Grade::select('id', 'name', 'created_at', 'updated_at')->withCount('students')->get();
+        $data->load('students:id,name,grade_id,student_status,birth_date,birth_at_begin,gender,parent_id');
+
         $pdf = PDF::loadView('backend.report.students', ['data' => $data], [], [
             'format' => 'A4',
             'default_font_size' => 10,
@@ -40,7 +45,7 @@ $books_sheets=book_sheet::with('grade:id,name','classroom:id,name')->get();
             'orientation' => 'L',
         ]);
 
-        return $pdf->stream('students.pdf');
+        return $pdf->download('students.pdf');
         //return view('backend.report.students', get_defined_vars());
     }
 
@@ -52,19 +57,40 @@ $books_sheets=book_sheet::with('grade:id,name','classroom:id,name')->get();
         ]);
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
-        $data = Recipt_Payment::whereBetween('date', [$start_date, $end_date])->with(['student'])->get();
+        $data['daily'] = Recipt_Payment::whereBetween('date', [$start_date, $end_date])->with(['student'])->get();
         $date = [];
-        $date['from'] = $start_date;
-        $date['to'] = $end_date;
+        $data['begin'] = $start_date;
+        $data['end'] = $end_date;
+        $pdf = PDF::loadView('backend.report.daily_fee_view', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 10,
+            'margin_right' => 10,
 
-        return view('backend.report.daily_fee_view', get_defined_vars());
+            'margin_header' => 1,
+            'margin_footer' => 2,
+            'orientation' => 'P',
+        ]);
+
+        return $pdf->stream('daily.pdf');
+        //return view('backend.report.daily_fee_view', get_defined_vars());
     }
 
     public function StockProducts()
     {
-        $stocks = stock::with('orders')->get();
+        $data['stocks'] = stock::with('orders')->get();
+        $pdf = PDF::loadView('backend.report.stock_product', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 10,
+            'margin_right' => 10,
 
-        return view('backend.report.stock_product', get_defined_vars());
+            'margin_header' => 1,
+            'margin_footer' => 2,
+            'orientation' => 'P',
+        ]);
+
+        return $pdf->stream('stocks.pdf');
     }
 
     public function clothes_stocks()
@@ -84,6 +110,7 @@ $books_sheets=book_sheet::with('grade:id,name','classroom:id,name')->get();
 
         return $pdf->stream('clothes.pdf');
     }
+
     public function books_sheets()
     {
         $data = book_sheet::with('orders', 'classroom', 'grade')->get();
@@ -122,7 +149,9 @@ $books_sheets=book_sheet::with('grade:id,name','classroom:id,name')->get();
         ]);
 
         return $pdf->stream('clothes.pdf');
-    }public function book_sheet_stock(Request $request)
+    }
+
+    public function book_sheet_stock(Request $request)
     {
         $id = $request->stock;
         $data['stock'] = book_sheet::where('id', $id)->with('orders')->first();
@@ -146,11 +175,20 @@ $books_sheets=book_sheet::with('grade:id,name','classroom:id,name')->get();
 
     public function stock_product(Request $request)
     {
-        $stock = stock::where('id', $request->stock)->with('orders')->first();
+        $data['stock'] = stock::where('id', $request->stock)->with('orders')->first();
 
-        $stocks = $this->calculateTotals($stock);
+        $data['stocks'] = $this->calculateTotals($data['stock']);
+        $pdf = PDF::loadView('backend.report.stock_product_view', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_header' => 1,
+            'margin_footer' => 2,
+            'orientation' => 'P',
+        ]);
 
-        return view('backend.report.stock_product_view', get_defined_vars());
+        return $pdf->stream($data['stock']->name.'.pdf');
 
     }
 
@@ -162,29 +200,31 @@ $books_sheets=book_sheet::with('grade:id,name','classroom:id,name')->get();
             return redirect()->back()->with('info', trans('General.noDataToShow'));
         }
         if ($type == 41) {
-            $data['students'] = Student::where('acadmiecyear_id', $data['acc']->id)->with('parent','grade','classroom')->orderBy('gender', 'DESC')->orderBy('name', 'ASC')->get()->groupBy('classroom.name');
+            $data['students'] = Student::where('acadmiecyear_id', $data['acc']->id)->with('parent', 'grade', 'classroom')->orderBy('gender', 'DESC')->orderBy('name', 'ASC')->get()->groupBy('classroom.name');
 
-        $pdf = PDF::loadView('backend.report.41', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 5,
-            'margin_right' => 5,
-            'margin_top' => 2,
-            'margin_bottom' => 10,
-            'margin_header' => 1,
-            'margin_footer' => 1,
-            'orientation' => 'L',
-        ]);
+            $pdf = PDF::loadView('backend.report.41', ['data' => $data], [], [
+                'format' => 'A4',
+                'default_font_size' => 10,
+                'margin_left' => 5,
+                'margin_right' => 5,
+                'margin_top' => 2,
+                'margin_bottom' => 10,
+                'margin_header' => 1,
+                'margin_footer' => 1,
+                'orientation' => 'L',
+            ]);
 
-        return $pdf->stream('student_41.pdf');
+            return $pdf->stream('student_41.pdf');
 
         }
 
     }
-    public function exception_fee (Request $request){
+
+    public function exception_fee(Request $request)
+    {
         $data['begin'] = Carbon::parse($request->start_date)->format('Y-m-d');
         $data['end'] = Carbon::parse($request->end_date)->format('Y-m-d');
-        $data['exception_list']= ExcptionFees::whereBetween('date',[$data['begin'],$data['end']])->with('students:id,name,parent_id')->get();
+        $data['exception_list'] = ExcptionFees::whereBetween('date', [$data['begin'], $data['end']])->with('students:id,name,parent_id')->get();
         $pdf = PDF::loadView('backend.report.exception_view', ['data' => $data], [], [
             'format' => 'A4',
             'default_font_size' => 10,
@@ -200,6 +240,48 @@ $books_sheets=book_sheet::with('grade:id,name','classroom:id,name')->get();
         return $pdf->stream('exception_fee.pdf');
 
     }
+
+    public function payment_status(Request $request)
+    {
+        $year = Carbon::now()->format('Y');
+
+        $data['acc_year'] = acadmice_year::whereyear('year_start', $year)->first(['id', 'view']);
+        if ($request->grade == 0) {
+            $data['exp'] = Fee_invoice::where('academic_year_id', $data['acc_year']->id)->where('status', $request->payment_status)->with('grades:id,name', 'students:id,name')->get(['student_id', 'grade_id'])->groupBy('grades.name');
+        } else {
+            $data['exp'] = Fee_invoice::where('academic_year_id', $data['acc_year']->id)->where('grade_id', $request->grade)->where('status', $request->payment_status)->with('grades:id,name', 'students:id,name')->get(['student_id', 'grade_id'])->groupBy('grades.name');
+        }
+        $pdf = PDF::loadView('backend.report.payment_status_view', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 5,
+            'margin_bottom' => 25,
+            'margin_header' => 1,
+            'margin_footer' => 1,
+            'orientation' => 'P',
+        ]);
+
+        return $pdf->stream('payment_status.pdf');
+    }
+
+    public function fees_invoices(Request $request)
+    {
+        $grade = $request->grade;
+        $payment_status = $request->payment_status;
+        $start = $request->from;
+        $end = $request->to;
+        $year = Carbon::now()->format('Y');
+        $data['acc_year'] = acadmice_year::whereyear('year_start', $year)->first(['id', 'view']);
+        if ($grade == 0 && $payment_status == 0 && $start == '' && $end == '') {
+            $data['all'] = Fee_invoice::with('grades:id,name', 'classes:id,name', 'students:id,name', 'acd_year:id,view')->get(['id', 'student_id', 'grade_id', 'classroom_id', 'academic_year_id', 'school_fee_id', 'status'])->groupBy(['acd_year.view', 'grades.name', 'classes.name']);
+
+            return $data;
+        }
+
+    }
+
     private function calculateTotals($stocks)
     {
         $previousstock = 0;

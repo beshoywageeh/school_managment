@@ -118,10 +118,17 @@
                 <table class="data-table" style="width:100%">
                     <tr>
                         <td class="text-center" width="25%">
-                            {!! $school->heading_right !!}
+                            <center>
+
+                                {!! $school->heading_right !!}
+                            </center>
                         </td>
                         <td class="text-center" width="50%">
-                            {{ trans('report.period', ['from' => $data['begin'], 'to' => $data['end']]) }}
+                            <center>
+                                <p>{{$data['stock']->name}}
+                                    </p><br>
+                                <p>{{trans('report.print_date',['date'=>date('Y-m-d')])}}</p>
+                            </center>
                         </td>
                         <td class="text-left">
                             @if ($school->image == null)
@@ -147,12 +154,15 @@
                             <div class="text-center">
                                 <center>
 
-                                    {!! $school->footer_right !!}
+
                                 </center>
                             </div>
                         </td>
                         <td class="text-center" width="50%">
-                            {PAGENO}
+                            <center>
+
+                                {PAGENO}
+                            </center>
                         </td>
                         <td class="text-left">
 

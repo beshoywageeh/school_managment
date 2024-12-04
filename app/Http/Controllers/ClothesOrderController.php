@@ -80,7 +80,7 @@ class ClothesOrderController extends Controller
                 $this->logActivity('تعديل', 'تعديل للمخزن'.$stock->name.'في الجرد رقم'.$order->auto_number);
             }
 
-            return redirect()->route('clothes.index')->with('success', trans('general.success'));
+            return redirect()->route('clothes.index', 1)->with('success', trans('general.success'));
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -115,7 +115,7 @@ class ClothesOrderController extends Controller
             $this->logActivity('اضافة', 'تم إضافة أمر توريد رقم '.$order->id);
             \DB::commit();
 
-            return redirect()->route('clothes_order.index')->with('success', trans('general.success'));
+            return redirect()->route('clothes_order.index', 1)->with('success', trans('general.success'));
         } catch (\Exception $e) {
             \DB::rollback();
 

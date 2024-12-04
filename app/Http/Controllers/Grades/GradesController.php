@@ -130,8 +130,10 @@ class GradesController extends Controller
         if ($grade->class_room_count == 0) {
             $grade->delete();
             $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $grade->class_name]));
+
             return redirect()->back()->with('success', trans('general.success'));
         }
+
         return redirect()->back()->with('error', trans('Grades.cannot_deleted'));
     }
 }

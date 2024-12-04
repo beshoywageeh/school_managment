@@ -39,10 +39,10 @@
                                                     value="{{ $employee->email }}" />
 
                                             </td>
-                                            <td><input type="checkbox" class="form-control" name="isAdmin"
+                                            <td><input type="checkbox" class="form-control" disabled name="isAdmin"
                                                     @checked($employee->isAdmin == 1) /></td>
                                             <td>
-                                                <input type="checkbox" name="login_allow" class="form-control"
+                                                <input type="checkbox" name="login_allow" disabled class="form-control"
                                                     @checked($employee->login_allow == 1) />
                                             </td>
                                             <td>{{ $employee->job->name ?? 'N/A' }}</td>
@@ -53,7 +53,7 @@
                                             </td>
                                             <td>
 
-                                                <select name="role" class="custom-select">
+                                                <select name="role" disabled class="custom-select">
 
                                                     @forelse ($Permissions as $permission)
                                                         <option @selected($employee->roles[0]->id == $permission->id) value="{{ $permission->name }}">
@@ -62,8 +62,11 @@
                                                     @endforelse
                                                 </select>
                                             </td>
-                                            <td><button type="submit"
+                                            <td>
+                                                @if($employee->isAdmin != 1)
+                                                <button type="submit"
                                                     class="btn btn-outline-primary btn-sm">{{ trans('General.Submit') }}</button>
+                                                    @endif
                                             </td>
                                         </tr>
                                     </form>

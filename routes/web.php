@@ -188,6 +188,8 @@ Route::group(
                 Route::get('/student_report/{type}', 'student_report')->name('report.student_report');
                 Route::get('/clothes_stock', 'clothes_stocks')->name('reports.clothes_stock');
                 Route::post('/clothe_stock', 'clothe_stock')->name('report.clothes_stock');
+                Route::post('/payment_status', 'payment_status')->name('report.payment_status');
+                Route::post('/fees_invoices', 'fees_invoices')->name('report.fees_invoices');
             });
 
             Route::group(['prefix' => 'ajax'], function () {

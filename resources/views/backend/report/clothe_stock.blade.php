@@ -76,7 +76,7 @@
                     <td>{{ $data['stock']->opening_stock_date }}</td>
                     <td colspan="4">
                         <h6>{{ trans('report.opening_stock') }}
-                            &nbsp;&nbsp;===========>&nbsp;&nbsp;{{ number_format($data['stock']->opening_stock, 2) }}
+                            &nbsp;&nbsp;===========>&nbsp;&nbsp;{{ number_format($data['stock']->opening_qty, 2) }}
                         </h6>
                     </td>
                 </tr>
@@ -118,10 +118,15 @@
                 <table class="data-table" style="width:100%">
                     <tr>
                         <td class="text-center" width="25%">
-                            {!! $school->heading_right !!}
+                            <center>
+
+                            </center>
                         </td>
                         <td class="text-center" width="50%">
-                            {{ trans('report.period', ['from' => $data['begin'], 'to' => $data['end']]) }}
+                            <center>
+
+                                {{ $data['stock']->name }}
+                            </center>
                         </td>
                         <td class="text-left">
                             @if ($school->image == null)

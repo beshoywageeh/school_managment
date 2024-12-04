@@ -65,11 +65,11 @@
                                             <td><a class="btn btn-outline-primary btn-sm"
                                                     target="_blank"href="{{ route('clothes_order.show', $order->id) }}">
                                                     {{ $order->auto_number }}</a>
-                                                    @if($order->is_payed == 0)
+                                                    @if($order->is_payed == 0 && $order->type==2)
                                                         <span class="badge badge-danger">{{trans('clothes.not_payed')}}</span>
 
                                                     @endif
-                                                    @if($order->is_payed == 1 && $order->type==1)
+                                                    @if($order->is_payed == 1 && $order->type==2)
                                                         <span class="badge badge-success">{{trans('clothes.payed')}}</span>
 
                                                     @endif

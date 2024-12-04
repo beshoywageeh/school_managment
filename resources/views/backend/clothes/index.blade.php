@@ -121,10 +121,10 @@
             const classrooms = document.querySelector('#classrooms');
             const grades = document.querySelector('#grades')
             grades.addEventListener('change', async () => {
-
-                classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
+                classrooms.innerHTML='<option>{{ trans('General.loading') }}</option>';
                 const response = await fetch(`/ajax/get_classRooms/${grades.value}`)
                 const data = await response.json();
+                classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
                 data.forEach(class_rooms => {
                     const option = document.createElement('option');
                     option.value = class_rooms.id;
@@ -138,10 +138,10 @@
             const classrooms_create = document.querySelector('#classrooms_create');
             const grades_create = document.querySelector('#grades_create')
             grades_create.addEventListener('change', async () => {
-
-                classrooms_create.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
+               classrooms_create.innerHTML='<option>{{ trans('General.loading') }}</option>';
                 const response = await fetch(`/ajax/get_classRooms/${grades_create.value}`)
                 const data = await response.json();
+                classrooms_create.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
                 data.forEach(class_rooms_create => {
                     const option = document.createElement('option');
                     option.value = class_rooms_create.id;

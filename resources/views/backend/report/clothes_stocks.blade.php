@@ -17,6 +17,7 @@
         width: 100%;
         border-collapse: collapse;
         text-align:center;
+        text-align: center;
     }
 
     .table td,
@@ -85,7 +86,9 @@
                         {!! $school->heading_right !!}
                     </td>
                     <td class="text-center" width="50%">
-                        {{ trans('report.period', ['from' => $data['begin'], 'to' => $data['end']]) }}
+                        <center>
+                            {{trans('report.clothes_stock')}}
+                        </center>
                     </td>
                     <td class="text-left">
                         @if ($school->image == null)
@@ -111,7 +114,6 @@
                         <div class="text-center">
                             <center>
 
-                                {!! $school->footer_right !!}
                             </center>
                         </div>
                     </td>

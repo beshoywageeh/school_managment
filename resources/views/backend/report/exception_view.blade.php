@@ -94,7 +94,6 @@
                             <div class="text-center">
                                 <center>
 
-                                    {!! $school->footer_right !!}
                                 </center>
                             </div>
                         </td>

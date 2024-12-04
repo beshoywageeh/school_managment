@@ -15,7 +15,7 @@
                         </div>
                         <div class="col-lg text-md-right">
                             @can('backup-list')
-                                <a href="{{ route('backup.create') }}" class="btn btn-success" role="button">
+                                <a href="{{ route('backup.create') }}" class="btn btn-success" id="create" role="button">
                                     <i class="ti-server"></i>
                                     {{ trans('backup.create') }}</a>
                             @endcan
@@ -157,4 +157,11 @@
 
 @endsection
 @push('scripts')
+<script>
+    let btn = document.querySelector('#create');
+    btn.addEventListener('click',function(){
+        btn.classList.add('disabled');
+        btn.innerHTML=`{{ trans('General.loading') }}`;
+    });
+</script>
 @endpush

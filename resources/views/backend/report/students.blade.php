@@ -16,6 +16,7 @@
         border: 1px solid black !important;
         width: 100%;
         border-collapse: collapse;
+        text-align: center
     }
 
     .table td,
@@ -120,7 +121,7 @@
                             {!! $school->heading_right !!}
                         </td>
                         <td class="text-center" width="50%">
-                            {{ trans('report.period', ['from' => $data['begin'], 'to' => $data['end']]) }}
+
                         </td>
                         <td class="text-left">
                             @if ($school->image == null)

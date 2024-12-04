@@ -29,8 +29,7 @@
                             <div class="form-group">
                                 <label for="">{{ trans('class_rooms.title') }}</label>
                                 <select name="classroom_id" id="classrooms_create" class="custom-select ">
-                                    <option value="" disabled selected>{{ trans('general.select') }}
-                                    </option>
+                                    <option disabled selected>{{ trans('General.choose_grade') }}</option>
                                 </select>
                             </div>
                         </div>
