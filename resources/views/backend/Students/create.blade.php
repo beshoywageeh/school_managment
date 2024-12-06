@@ -45,11 +45,6 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <x-input type="date" name="join_date" class="form-control" value="{{old('join_date')}}">
-                                        {{ trans('student.join_date') }}
-                                    </x-input>
-                                </div>
 
                                 <x-input.gender-select/>
                                 <x-input.Student_Status/>
@@ -144,8 +139,9 @@
             const grades = document.querySelector('#grades')
             grades.addEventListener('change', async () => {
 
-                classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
+                classrooms.innerHTML = '<option>{{ trans('General.loading') }}</option>';
                 const response = await fetch(`/ajax/get_classRooms/${grades.value}`)
+                classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
                 const data = await response.json();
                 data.forEach(class_rooms => {
                     const option = document.createElement('option');

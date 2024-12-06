@@ -100,7 +100,7 @@
                             <td class="text-right">
                                 {!! $school->heading_right !!}
                             </td>
-                            <td>      <h6 style="text-align: center; align-items:bottom">{{ trans('report.choose_grade_head', ['grade' => $data['class_room']->grade->name, 'class_room' => $data['class_room']->name, 'acc' => $data['acc_year']]) }}
+                            <td>      <h6 style="text-align: center; align-items:bottom">{{ trans('report.choose_grade_head', ['grade' => $data['class_room']->grade->name, 'class_room' => $data['class_room']->name, 'acc' => $data['acc_year']->view]) }}
                             </h6></td>
                             <td class="text-left">
                                 @if ($school->image == null)

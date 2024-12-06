@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\acadmice_year;
 use App\Models\book_sheet;
+use App\Models\class_room;
 use App\Models\clothes;
 use App\Models\ExcptionFees;
 use App\Models\Fee_invoice;
@@ -23,7 +24,7 @@ class ReportController extends Controller
         $stocks = stock::get();
         $clothes = clothes::with('grade:id,name', 'classroom:id,name')->get();
         $books_sheets = book_sheet::with('grade:id,name', 'classroom:id,name')->get();
-        $grades = grade::get(['id', 'name']);
+        $grades = grade::with('class_rooms:id,name,grade_id')->get(['id', 'name']);
 
         return view('backend.report.index', get_defined_vars());
     }
@@ -184,7 +185,7 @@ class ReportController extends Controller
             'margin_left' => 10,
             'margin_right' => 10,
             'margin_header' => 1,
-            'margin_footer' => 2,
+            'margin_footer' => 10,
             'orientation' => 'P',
         ]);
 
@@ -192,29 +193,37 @@ class ReportController extends Controller
 
     }
 
-    public function student_report($type)
+    public function student_report($type,Request $request)
     {
         $year_start = Carbon::now()->format('Y');
         $data['acc'] = acadmice_year::whereYear('year_start', $year_start)->first();
+
         if (is_null($data['acc'])) {
             return redirect()->back()->with('info', trans('General.noDataToShow'));
         }
         if ($type == 41) {
-            $data['students'] = Student::where('acadmiecyear_id', $data['acc']->id)->with('parent', 'grade', 'classroom')->orderBy('gender', 'DESC')->orderBy('name', 'ASC')->get()->groupBy('classroom.name');
+            $data['students'] = Student::where('classroom_id',$request->classroom_id)->where('student_status',0)->where('acadmiecyear_id', $data['acc']->id)
+            ->with(['parent:id,Father_Name,address', 'grade:id,name', 'classroom:id,name'])
+            ->orderBy('gender', 'DESC')
+            ->orderBy('name', 'ASC')
+            ->orderBy('religion', 'ASC')
+            ->get(['id','name','student_status','classroom_id','grade_id','parent_id','national_id','religion','birth_date','birth_at_begin'])->chunk(100);
 
-            $pdf = PDF::loadView('backend.report.41', ['data' => $data], [], [
-                'format' => 'A4',
-                'default_font_size' => 10,
-                'margin_left' => 5,
-                'margin_right' => 5,
-                'margin_top' => 2,
-                'margin_bottom' => 10,
-                'margin_header' => 1,
-                'margin_footer' => 1,
-                'orientation' => 'L',
-            ]);
+$data['classroom'] = class_room::where('id',$request->classroom_id)->with('grade')->first();
 
-            return $pdf->stream('student_41.pdf');
+        // Stream PDF generation to handle memory efficiently
+         return \PDF::loadView('backend.report.41', compact('data'),[], [
+             'format' => 'A4',
+             'default_font_size' => 10,
+             'margin_left' => 5,
+             'margin_right' => 5,
+             'margin_top' => 35,
+            'margin_bottom' => 20,
+            'margin_header' => 1,
+            'margin_footer' => 1,
+            'orientation' => 'L',
+        ])
+         ->stream('student_41.pdf');
 
         }
 

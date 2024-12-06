@@ -185,7 +185,7 @@ Route::group(
                 Route::post('/stock', 'stock_product')->name('report.stock');
                 Route::post('/book_sheet_stock', 'book_sheet_stock')->name('report.book_sheet_stock');
                 Route::get('/books_sheets', 'books_sheets')->name('report.books_sheets');
-                Route::get('/student_report/{type}', 'student_report')->name('report.student_report');
+                Route::post('/student_report/{type}', 'student_report')->name('report.student_report');
                 Route::get('/clothes_stock', 'clothes_stocks')->name('reports.clothes_stock');
                 Route::post('/clothe_stock', 'clothe_stock')->name('report.clothes_stock');
                 Route::post('/payment_status', 'payment_status')->name('report.payment_status');

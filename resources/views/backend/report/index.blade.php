@@ -21,8 +21,8 @@
                     ],
                     [
                         'Name' => trans('report.report_type', ['type' => 41]),
-                        'Url' => route('report.student_report', ['type' => 41]),
-                        'type' => 'link',
+                        'Url' => '#incoming_students',
+                        'type' => 'button',
                     ],
                 ],
                 trans('Sidebar.stores') => [
@@ -141,13 +141,21 @@
             </div>
         @endforeach
     </div>
-    @include('backend.report.popup.daily_fee_popup')
-    @include('backend.report.popup.exception_popup')
-    @include('backend.report.popup.stock_popup')
-    @include('backend.report.popup.clothes_popup')
-    @include('backend.report.popup.book_sheet_popup')
-    @include('backend.report.popup.payment_status')
-    @include('backend.report.popup.fees_invoices_popup')
+    @php
+        $popups = [
+            'daily_fee_popup',
+            'exception_popup',
+            'stock_popup',
+            'clothes_popup',
+            'book_sheet_popup',
+            'payment_status_popup',
+            'fees_invoices_popup',
+            'incoming_students_popup',
+        ]
+    @endphp
+  @foreach ($popups as $popup )
+      @include('backend.report.popup.'.$popup)
+  @endforeach
     @push('scripts')
     @endpush
 @endsection

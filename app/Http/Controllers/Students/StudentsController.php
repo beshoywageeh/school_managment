@@ -11,11 +11,13 @@ use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Http\Traits\LogsActivity;
 class StudentsController extends Controller
 {
+use LogsActivity;
     public function index(StudentDataTable $datatable)
     {
         return $datatable->render('backend.Students.Index');
@@ -39,7 +41,7 @@ class StudentsController extends Controller
      */
     public function store(StudentRequest $request)
     {
-        //return $request;
+
         try {
             $inputDate = \Carbon\Carbon::parse($request->birth_date);
             $firstOfOctober = \Carbon\Carbon::create(date('Y'), 10, 1);
@@ -50,12 +52,13 @@ class StudentsController extends Controller
             $final_date = "{$years}-{$months}-{$days}";
             $religion = My_parents::findorfail($request->parents);
             $year = \Carbon\Carbon::parse()->format('Y');
-            $acc_year = acadmice_year::whereYear('year_start', $year);
+            $acc_year = acadmice_year::whereYear('year_start', $year)->first()->id;
+
             Student::create([
                 'code' => isset($generate_code) ? str_pad($generate_code->code + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'name' => $request->student_name,
                 'birth_date' => $request->birth_date,
-                'join_date' => $request->join_date,
+                'join_date' => Carbon::parse()->format('Y-m-d'),
                 'gender' => $request->gender,
                 'grade_id' => $request->grade,
                 'parent_id' => $request->parents,
@@ -69,8 +72,7 @@ class StudentsController extends Controller
                 'user_id' => \Auth::Id(),
             ]);
             session()->flash('success', trans('general.success'));
-            $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->name]));
-
+            $this->logActivity('اضافة', 'تم إضافة الطالب '.' '.$request->name);
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
