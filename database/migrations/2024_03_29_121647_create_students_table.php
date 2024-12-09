@@ -27,8 +27,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('classroom_id');
+            $table->unsignedBigInteger('class_id')->nullable();
             $table->unsignedBigInteger('acadmiecyear_id');
             $table->unsignedBigInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('nationality_id');
             $table->string('slug')->nullable();
             $table->timestamps();
             $table->softDeletes();

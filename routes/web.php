@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminEraController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\BookSheetController;
 use App\Http\Controllers\BookSheetsOrderController;
+use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassRooms\ClassRoomsController;
 use App\Http\Controllers\ClothesController;
 use App\Http\Controllers\ClothesOrderController;
@@ -72,6 +73,7 @@ Route::group(
                 Route::get('/{id}/show', 'show')->name('class_room.show');
                 Route::post('/store', 'store')->name('class_rooms.store');
                 Route::post('/update', 'update')->name('class_rooms.update');
+                Route::get('/tammen/{id}', 'tammen')->name('class_rooms.tammen');
             });
             Route::group(['prefix' => 'parents', 'controller' => MyParentsController::class], function () {
                 Route::get('/index', 'index')->name('parents.index');
@@ -186,12 +188,22 @@ Route::group(
                 Route::post('/book_sheet_stock', 'book_sheet_stock')->name('report.book_sheet_stock');
                 Route::get('/books_sheets', 'books_sheets')->name('report.books_sheets');
                 Route::post('/student_report/{type}', 'student_report')->name('report.student_report');
+                Route::post('/student_tammen', 'student_tameen')->name('report.student_tameen');
                 Route::get('/clothes_stock', 'clothes_stocks')->name('reports.clothes_stock');
                 Route::post('/clothe_stock', 'clothe_stock')->name('report.clothes_stock');
                 Route::post('/payment_status', 'payment_status')->name('report.payment_status');
                 Route::post('/fees_invoices', 'fees_invoices')->name('report.fees_invoices');
             });
-
+Route::group(['prefix'=>'classes','controller'=>ClassesController::class],function(){
+    Route::get('/index','index')->name('classes.index');
+    Route::get('/create','create')->name('classes.create');
+    Route::post('/store','store')->name('classes.store');
+    Route::get('/edit/{id}','edit')->name('classes.edit');
+    Route::post('/update','update')->name('classes.update');
+    Route::get('/add_students/{class}','add_students')->name('classes.add_students');
+    Route::post('/add_students_submit','add_students_submit')->name('classes.add_students_submit');
+    Route::get('/destroy/{id}','destroy')->name('classes.destroy');
+});
             Route::group(['prefix' => 'ajax'], function () {
                 Route::get('/get_classRooms/{id}', [StudentsController::class, 'getclasses']);
                 Route::get('/get_classRooms_fee/{id}', [SchoolFeeController::class, 'getclasses']);

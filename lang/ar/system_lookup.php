@@ -15,4 +15,5 @@ return [
     'field_create' => 'تم إنشاء العنصر :value',
     'field_change' => 'تم تعديل العنصر برقم :value',
     'field_delete' => 'تم حذف العنصر :value',
+    'tammen_on_class' => 'تم تفعيل التأمين علي كل الطلبة :class',
 ];

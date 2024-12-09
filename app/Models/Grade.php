@@ -26,9 +26,9 @@ class Grade extends Model
         return $this->belongsToMany('App\Models\User', 'teacher_grade', 'grade_id', 'teacher_id');
     }
 
-    public function class_room()
+    public function class_rooms()
     {
-        return $this->hasMany(class_room::class,'grade_id');
+        return $this->hasMany(class_room::class, 'grade_id');
     }
 
     public function students()

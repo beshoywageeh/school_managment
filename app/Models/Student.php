@@ -26,7 +26,7 @@ class Student extends Model
         'birth_at_begin',
         'student_status',
         'religion',
-        'code','acadmiecyear_id'
+        'code', 'acadmiecyear_id', 'nationality_id',
     ];
 
     protected $casts = [
@@ -71,9 +71,8 @@ class Student extends Model
         return $this->hasMany('App\Models\acadmice_year');
     }
 
-    public function scopeSearch($query, $Search)
+    public function nationality()
     {
-
-        return $query->where('name', 'LIKE', '%'.$Search.'%');
+        return $this->belongsTo('App\Models\nationality');
     }
 }

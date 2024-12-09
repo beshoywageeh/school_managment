@@ -23,6 +23,10 @@
                         'Name' => trans('report.report_type', ['type' => 41]),
                         'Url' => '#incoming_students',
                         'type' => 'button',
+                    ], [
+                        'Name' => trans('report.student_tammen'),
+                        'Url' => '#tammen_1',
+                        'type' => 'button',
                     ],
                 ],
                 trans('Sidebar.stores') => [
@@ -151,11 +155,12 @@
             'payment_status_popup',
             'fees_invoices_popup',
             'incoming_students_popup',
-        ]
+            'tammen_1_popup',
+        ];
     @endphp
-  @foreach ($popups as $popup )
-      @include('backend.report.popup.'.$popup)
-  @endforeach
+    @foreach ($popups as $popup)
+        @include('backend.report.popup.' . $popup)
+    @endforeach
     @push('scripts')
     @endpush
 @endsection

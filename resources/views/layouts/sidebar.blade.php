@@ -146,6 +146,11 @@
                                 {{ trans('sidebar.Class_Rooms') }}
                             </x-nav_link>
                         @endcan
+                    @can('class_rooms-list')
+                            <x-nav_link :href="route('classes.index')" :active="request()->is('*/class_rooms/*')" :image="URL::asset('assests/images/Sidebar/classes.png')">
+                                {{ trans('sidebar.classes') }}
+                            </x-nav_link>
+                        @endcan
                     </ul>
                 </li>
             @endif

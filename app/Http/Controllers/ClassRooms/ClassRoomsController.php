@@ -115,6 +115,28 @@ class ClassRoomsController extends Controller
         }
     }
 
+    public function tammen($id)
+    {
+        try {
+            \DB::beginTransaction();
+            $class = class_room::where('id', $id)->with('students')->first();
+            if ($class->students->isEmpty()) {
+                return redirect()->back()->with('info', trans('General.no_students'));
+            }
+            $class->students->toQuery()->update(['tameen' => 1]);
+            $class->update(['tameen' => 1]);
+            $this->logActivity('تعديل', trans('system_lookup.tammen_on_class', ['class' => $class->name]));
+            \DB::commit();
+
+            return redirect()->back()->with('success', trans('General.success'));
+        } catch (\Exception $e) {
+            \DB::rollback();
+
+            return redirect()->back()->with('error', $e->getMessage());
+
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      */

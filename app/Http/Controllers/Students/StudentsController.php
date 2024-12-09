@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Students;
 use App\DataTables\StudentDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
+use App\Http\Traits\LogsActivity;
 use App\Imports\StudentImport;
 use App\Models\acadmice_year;
 use App\Models\class_room;
@@ -14,10 +15,11 @@ use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Traits\LogsActivity;
+
 class StudentsController extends Controller
 {
-use LogsActivity;
+    use LogsActivity;
+
     public function index(StudentDataTable $datatable)
     {
         return $datatable->render('backend.Students.Index');
@@ -69,10 +71,12 @@ use LogsActivity;
                 'religion' => $religion->Religion,
                 'birth_at_begin' => $final_date,
                 'acadmiecyear_id' => $acc_year,
+                'nationality_id' => $request->nationality,
                 'user_id' => \Auth::Id(),
             ]);
-            session()->flash('success', trans('general.success'));
             $this->logActivity('اضافة', 'تم إضافة الطالب '.' '.$request->name);
+            session()->flash('success', trans('general.success'));
+
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -125,7 +129,7 @@ use LogsActivity;
             $student->update([
                 'name' => $request->student_name,
                 'birth_date' => $request->birth_date,
-                'join_date' => $request->join_date,
+                'join_date' => $student->join_date,
                 'gender' => $request->gender,
                 'grade_id' => $request->grade,
                 'parent_id' => $request->parents,
@@ -135,10 +139,11 @@ use LogsActivity;
                 'national_id' => $request->national_id,
                 'religion' => My_parents::findorfail($request->parents)->Religion,
 
+                'nationality_id' => $request->nationality,
                 'user_id' => \Auth::Id(),
             ]);
             session()->flash('success', trans('general.success'));
-            $this->logActivity('تعديل', trans('system_lookup.field_change', ['value' => $request->name]));
+            $this->logActivity('تعديل', trans('system_lookup.field_change', ['value' => $student->code]));
 
             return redirect()->route('Students.index');
         } catch (\Exception $e) {

@@ -10,7 +10,7 @@
                     <h4 class="card-title">{{ trans('student.title') }} | {{ trans('general.new') }}</h4>
                     <form action="{{ route('Students.store') }}" method="post">
                         @csrf
-                        <fieldset class=''>
+                        <fieldset class='p-4 border rounded border-primary'>
                             <legend class='m-auto text-center text-muted'>{{ trans('student.student_info') }}</legend>
                             <div class="row">
                                 <div class="col">
@@ -27,10 +27,7 @@
                                 <div class="col">
                                     <label for="check_birth"
                                         class="">{{ trans('student.checkbirth_date') }}</label>
-                                    <div class="input-group" style="flex-direction: row-reverse">
-                                        <span class="input-group-text">{{ trans('general.day') }}</span>
                                         <input type="text" disabled name="check_birth" class="form-control">
-                                    </div>
 
                                 </div>
                             </div>
@@ -45,7 +42,9 @@
                                         @enderror
                                     </div>
                                 </div>
-
+                                <div class="col">
+                                    <x-input.nationality/>
+                                </div>
                                 <x-input.gender-select/>
                                 <x-input.Student_Status/>
 
@@ -57,9 +56,9 @@
                                 </div>
                             </div>
                         </fieldset>
-
-                        <hr>
-                        <fieldset class=''>
+<br>
+<br>
+                        <fieldset class='p-4 border rounded border-primary'>
                             <legend class='m-auto text-center text-muted'>{{ trans('student.study_info') }}</legend>
                             <div class="row">
 
@@ -127,7 +126,12 @@
                     birthDateInput.addEventListener('change', () => {
                         const birthDate = new Date(birthDateInput.value);
                         const checkDate = new Date(makeDate());
-                        checkBirthInput.value = Math.floor((checkDate - birthDate) / (1000 * 3600 * 24)/365);
+                        const diffTime = Math.abs(checkDate - birthDate);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        const years = Math.floor(diffDays / 365);
+                        const months = Math.floor((diffDays % 365) / 30);
+                        const days = (diffDays % 365) % 30;
+                        checkBirthInput.value = `${years} سنه, ${months} شهر, ${days} يوم`;
                     });
                 } else {
                     console.error('Input elements not found');

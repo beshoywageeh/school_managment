@@ -60,4 +60,9 @@ return [
     'note' => 'ملاحظات',
     'choose' => 'إختر :value',
     'all' => 'الكل',
+    'nationality' => 'الجنسية',
+    'no_tammen' => 'غير مؤمن',
+    'ok_tammen' => 'مؤمن',
+    'tammen' => 'التأمين',
+    'no_students' => 'لا يوجد طلبة للتأمين',
 ];

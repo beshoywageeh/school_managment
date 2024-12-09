@@ -82,7 +82,7 @@ class GradesController extends Controller
             // ]);
 
             // return $pdf->stream($report_data->name.'.pdf');
-              return view('backend.Grades.report', ['data'=>$report_data]);
+            return view('backend.Grades.report', ['data' => $report_data]);
         } catch (\Exception $e) {
             \Log::error('PDF Generation failed: '.$e->getMessage());
 

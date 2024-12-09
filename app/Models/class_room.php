@@ -14,6 +14,7 @@ class class_room extends Model
         'name',
         'grade_id',
         'user_id',
+        'tameen',
     ];
 
     public function user()
@@ -29,5 +30,16 @@ class class_room extends Model
     public function students()
     {
         return $this->hasMany('App\Models\Student', 'classroom_id');
+    }
+
+    public function tammen()
+    {
+        $value = $this->tameen;
+        if ($value == 0) {
+            print_r('<span class="badge badge-danger">'.trans('General.no_tammen').'</span>');
+        } else {
+            print_r('<span class="badge badge-success">'.trans('General.ok_tammen').'</span>');
+        }
+
     }
 }

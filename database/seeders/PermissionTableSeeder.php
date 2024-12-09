@@ -13,11 +13,17 @@ class PermissionTableSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
+            ['table' => 'classes', 'name' => 'classes-list'],
+            ['table' => 'classes', 'name' => 'classes-create'],
+            ['table' => 'classes', 'name' => 'classes-update'],
+            ['table' => 'classes', 'name' => 'classes-delete'],
+            ['table' => 'classes', 'name' => 'classes-addstudent'],
             ['table' => 'class_rooms', 'name' => 'class_rooms-list'],
             ['table' => 'class_rooms', 'name' => 'class_rooms-create'],
             ['table' => 'class_rooms', 'name' => 'class_rooms-edit'],
             ['table' => 'class_rooms', 'name' => 'class_rooms-info'],
             ['table' => 'class_rooms', 'name' => 'class_rooms-delete'],
+            ['table' => 'class_rooms', 'name' => 'class_rooms-tammen'],
             ['table' => 'grade', 'name' => 'grade-list'],
             ['table' => 'grade', 'name' => 'grade-create'],
             ['table' => 'grade', 'name' => 'grade-edit'],

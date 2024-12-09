@@ -42,6 +42,7 @@
                                         <td> {{ $loop->iteration }}</td>
                                         <td><a target='_blank'
                                                 href="{{ route('class_room.show', $class_room->id) }}">{{ $class_room->name }}</a>
+                                                &nbsp; {{$class_room->tammen()}}
                                         </td>
                                         <td> {{ $class_room->grade->name }}</td>
                                         <td>{{ $class_room->user->name }}</td>
@@ -71,6 +72,13 @@
                                                     'icon' => 'ti-info-alt',
                                                     'target' =>'_blank',
                                                     'can'=>'class_rooms-info'
+                                                ],
+                                                [
+                                                    'type'=>'link',
+                                                    'url' =>  route('class_rooms.tammen', $class_room->id) ,
+                                                    'text' => trans('general.tammen'),
+                                                    'icon' => '',
+                                                    'can'=>'class_rooms-tammen'
                                                 ],
                                             ]" />
                                         </td>

@@ -149,4 +149,5 @@
         $('th').addClass('font-weight-bolder');
     })
 </script>
+
 @stack('scripts')
