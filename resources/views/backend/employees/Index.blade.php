@@ -3,7 +3,7 @@
     {{ trans('employees.title') }}
 @endsection
 @section('content')
-    <div class="row mb-4">
+    <div class="mb-4 row">
         <div class="col">
             <div class="card">
                 <div class="card-body">
@@ -65,7 +65,7 @@
                                                 [
                                                     'type'=>'link',
                                                     'url' => route('employees.destroy', $employee->id),
-                                                    'text' => trans('general.delete'),
+                                                    'text' => trans('general.resign'),
                                                     'icon' => 'ti-trash',
                                                     'onclick' => 'confirmation(event)',
                                                     'can'=>'employees-delete'

@@ -38,5 +38,5 @@ return [
     'inventory' => 'مخازن',
     'stocks_show' => 'عرض العهدة',
     'clothes_show' => 'عرض اللبس',
-    'classes'=>'الفصول'
+    'classes' => 'الفصول',
 ];

@@ -189,7 +189,7 @@ class ReportController extends Controller
             'orientation' => 'P',
         ]);
 
-        return $pdf->stream($data['stock']->name . '.pdf');
+        return $pdf->stream($data['stock']->name.'.pdf');
     }
 
     public function student_report($type, Request $request)
@@ -285,18 +285,19 @@ class ReportController extends Controller
             return $data;
         }
     }
+
     public function student_tameen(Request $request)
     {
         $data['type'] = $request->type;
-        $data['classroom']=class_room::findorfail($request->classroom_id);
-        $date=Carbon::now()->format('Y');
-        $data['aa']=acadmice_year::whereyear('year_start', $date)->first();
-        $data['students'] = student::where('classroom_id', $request->classroom_id)->where('tameen', 1)->with('parent:id,Father_Phone,address')->get(['name','national_id','parent_id','birth_date','gender']);
+        $data['classroom'] = class_room::findorfail($request->classroom_id);
+        $date = Carbon::now()->format('Y');
+        $data['aa'] = acadmice_year::whereyear('year_start', $date)->first();
+        $data['students'] = student::where('classroom_id', $request->classroom_id)->where('tameen', 1)->with('parent:id,Father_Phone,address')->get(['name', 'national_id', 'parent_id', 'birth_date', 'gender']);
         if (is_null($data['students'])) {
             return redirect()->back()->with('info', trans('report.no_data_found'));
         }
-        
-        if($data['type']==1){
+
+        if ($data['type'] == 1) {
             $pdf = PDF::loadView('backend.report.student_tameen_1', ['data' => $data], [], [
                 'format' => 'A4',
                 'default_font_size' => 10,
@@ -308,8 +309,9 @@ class ReportController extends Controller
                 'margin_footer' => 1,
                 'orientation' => 'P',
             ]);
+
             return $pdf->stream('tammen.pdf');
-        }else{
+        } else {
             $pdf = PDF::loadView('backend.report.student_tameen_2', ['data' => $data], [], [
                 'format' => 'A4',
                 'default_font_size' => 10,
@@ -321,9 +323,11 @@ class ReportController extends Controller
                 'margin_footer' => 1,
                 'orientation' => 'P',
             ]);
+
             return $pdf->stream('tammen.pdf');
         }
     }
+
     private function calculateTotals($stocks)
     {
         $previousstock = 0;

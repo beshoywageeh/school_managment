@@ -65,6 +65,11 @@
                                 {{ trans('sidebar.employees') }}
                             </x-nav_link>
                         @endcan
+                           @can('employees-list')
+                            <x-nav_link :href="route('employees.return_list')" :active="request()->is('*/employees/*')" >
+                                {{ trans('general.resign') }}
+                            </x-nav_link>
+                        @endcan
                     </ul>
                 </li>
             @endif

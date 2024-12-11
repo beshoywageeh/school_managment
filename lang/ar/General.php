@@ -65,4 +65,6 @@ return [
     'ok_tammen' => 'مؤمن',
     'tammen' => 'التأمين',
     'no_students' => 'لا يوجد طلبة للتأمين',
+    'resign' => 'استقالة',
+    'return' => 'ارجاع',
 ];

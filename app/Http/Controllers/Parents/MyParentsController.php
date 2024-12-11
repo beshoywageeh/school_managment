@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Parents;
 use App\DataTables\ParentsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ParentsRequest;
+use App\Http\Traits\LogsActivity;
 use App\Imports\ParentsImport;
 use App\Models\My_parents;
 use Carbon\Carbon;
@@ -13,6 +14,8 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class MyParentsController extends Controller
 {
+    use LogsActivity;
+
     public function index(ParentsDataTable $datatable)
     {
         return $datatable->render('backend.Parents.Index');
@@ -52,7 +55,7 @@ class MyParentsController extends Controller
                 'user_id' => \Auth::Id(),
                 'Father_Learning' => $request->Father_Learning,
             ]);
-            $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->Father_Name]));
+            $this->logActivity('اضافة', 'تم إضافة ولي الأمر '.$request->Father_Name);
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -105,7 +108,7 @@ class MyParentsController extends Controller
                 'Religion' => $request->religion,
                 'Father_Learning' => $request->Father_Learning,
             ]);
-            $this->logActivity('تعديل', trans('system_lookup.field_change', ['value' => $request->Father_Name]));
+            $this->logActivity('تعديل', 'تم تعديل ولي أمر '.$request->Father_Name);
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -122,7 +125,7 @@ class MyParentsController extends Controller
             $d = My_parents::withCount('Students')->findorfail($id);
             if ($d->Students_count == 0) {
                 $d->delete();
-                $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $d->Father_Name]));
+                $this->logActivity('حذف', 'تم حذف ولي أمر '.$d->Father_Name);
                 session()->flash('success', trans('general.deleted'));
 
                 return redirect()->route('parents.index');

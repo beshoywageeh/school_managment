@@ -117,7 +117,9 @@ Route::group(
                 Route::get('/create', 'create')->name('employees.create');
                 Route::get('{id}/edit', 'edit')->name('employees.edit');
                 Route::get('/{id}/destroy', 'destroy')->name('employees.destroy');
+                Route::get('/{id}/return', 'return_emp')->name('employees.return');
                 Route::get('/{id}/show', 'show')->name('employees.show');
+                Route::get('/return_list', 'return_list')->name('employees.return_list');
                 Route::post('/store', 'store')->name('employees.store');
                 Route::post('/update', 'update')->name('employees.update');
                 Route::post('/Import_Excel', 'Excel_Import')->name('employees.import_excel');
@@ -194,16 +196,17 @@ Route::group(
                 Route::post('/payment_status', 'payment_status')->name('report.payment_status');
                 Route::post('/fees_invoices', 'fees_invoices')->name('report.fees_invoices');
             });
-Route::group(['prefix'=>'classes','controller'=>ClassesController::class],function(){
-    Route::get('/index','index')->name('classes.index');
-    Route::get('/create','create')->name('classes.create');
-    Route::post('/store','store')->name('classes.store');
-    Route::get('/edit/{id}','edit')->name('classes.edit');
-    Route::post('/update','update')->name('classes.update');
-    Route::get('/add_students/{class}','add_students')->name('classes.add_students');
-    Route::post('/add_students_submit','add_students_submit')->name('classes.add_students_submit');
-    Route::get('/destroy/{id}','destroy')->name('classes.destroy');
-});
+            Route::group(['prefix' => 'classes', 'controller' => ClassesController::class], function () {
+                Route::get('/index', 'index')->name('classes.index');
+                Route::get('/create', 'create')->name('classes.create');
+                Route::post('/store', 'store')->name('classes.store');
+                Route::post('/update', 'update')->name('classes.update');
+                Route::get('/add_students/{class}', 'add_students')->name('classes.add_students');
+                Route::get('/tammen/{class}', 'tammen')->name('classes.tammen');
+                Route::post('/add_students_submit', 'add_students_submit')->name('classes.add_students_submit');
+                Route::get('/show/{class}', 'show')->name('classes.show');
+                Route::get('/destroy/{id}', 'destroy')->name('classes.destroy');
+            });
             Route::group(['prefix' => 'ajax'], function () {
                 Route::get('/get_classRooms/{id}', [StudentsController::class, 'getclasses']);
                 Route::get('/get_classRooms_fee/{id}', [SchoolFeeController::class, 'getclasses']);

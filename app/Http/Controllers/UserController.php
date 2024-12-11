@@ -161,6 +161,22 @@ class UserController extends Controller
         }
     }
 
+    public function return_emp($id)
+    {
+
+        User::where('id', $id)->restore();
+        session()->flash('success', trans('General.success'));
+
+        return redirect()->route('employees.index');
+    }
+
+    public function return_list()
+    {
+        $employees = User::onlyTrashed()->get();
+
+        return view('backend.employees.resign', get_defined_vars());
+    }
+
     public function getjobs($id)
     {
         $jobs = Job::where('main_job_id', $id)->get(['id', 'name']);

@@ -18,6 +18,7 @@ class PermissionTableSeeder extends Seeder
             ['table' => 'classes', 'name' => 'classes-update'],
             ['table' => 'classes', 'name' => 'classes-delete'],
             ['table' => 'classes', 'name' => 'classes-addstudent'],
+            ['table' => 'classes', 'name' => 'classes-tammen'],
             ['table' => 'class_rooms', 'name' => 'class_rooms-list'],
             ['table' => 'class_rooms', 'name' => 'class_rooms-create'],
             ['table' => 'class_rooms', 'name' => 'class_rooms-edit'],

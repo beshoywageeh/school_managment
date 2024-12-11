@@ -40,13 +40,20 @@
                                     @forelse ($classes as $class)
                                         <tr>
                                             <td> {{ $loop->iteration }}</td>
-                                            <td>{{ $class->title }}</td>
+                                            <td><a href={{route('classes.show',$class)}}>{{ $class->title }}</a>
+                                                 &nbsp; {{ $class->tammen() }}</td>
                                             <td> {{ $class->grade->name }}</td>
                                             <td>{{ $class->class_room->name }}</td>
-                                            <td></td>
+                                            <td>{{ $class->students_count }}</td>
                                             <td>
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
+                                                        'type' => 'link',
+                                                        'url' => route('classes.show', $class),
+                                                        'text' => trans('general.info'),
+                                                        'icon' => 'ti-info',
+                                                        'can' => 'classes-addstudent',
+                                                    ], [
                                                         'type' => 'link',
                                                         'url' => route('classes.add_students', $class),
                                                         'text' => trans('classes.add_Students'),
@@ -61,9 +68,24 @@
                                                         'onclick' => 'confirmation(event)',
                                                         'can' => 'classes-delete',
                                                     ],
+                                                    [
+                                                        'type' => 'link',
+                                                        'url' => route('classes.tammen', $class),
+                                                        'text' => trans('classes.tammen'),
+                                                        'icon' => '',
+                                                        'can' => 'classes-tammen',
+                                                    ],
+                                                    [
+                                                        'type' => 'button',
+                                                        'target' => '#class-edit-' . $class->id,
+                                                        'text' => trans('General.edit'),
+                                                        'icon' => 'ti-pencil',
+                                                        'can' => 'classes-update',
+                                                    ],
                                                 ]" />
                                             </td>
                                         </tr>
+                                        @include('backend.classes.edit')
                                     @empty
                                         <tr>
                                             <td colspan="6">{{ trans('general.noDataToShow') }}</td>

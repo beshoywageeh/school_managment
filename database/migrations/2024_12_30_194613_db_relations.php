@@ -249,7 +249,7 @@ return new class extends Migration
             $table->dropForeign('books_sheets_id');
             $table->dropForeign('order_id');
         });
-            Schema::table('classes', function (Blueprint $table) {
+        Schema::table('classes', function (Blueprint $table) {
             $table->dropForeign('grade_id');
             $table->dropForeign('class_room_id');
         });
