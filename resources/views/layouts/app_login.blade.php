@@ -40,7 +40,7 @@
         </div>
         <section class="height-100vh d-flex align-items-center page-section-ptb login"
             style="background-image: url({{ asset('assests/images/login-bg.jpg') }});background-repeat: no-repeat;
-    background-size: cover;">
+    background-size: cover; background-position: center;">
             <div class="container">
                 @yield('login')
             </div>

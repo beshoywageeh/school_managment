@@ -16,6 +16,7 @@ use App\Http\Controllers\GardController;
 use App\Http\Controllers\Grades\GradesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\LaboratoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OutOrderController;
 use App\Http\Controllers\Parents\MyParentsController;
@@ -184,7 +185,6 @@ Route::group(
                 Route::get('report', 'index')->name('report.index');
                 Route::get('Students_export', 'ExportStudents')->name('reports.export_student');
                 Route::get('stocks_product', 'StockProducts')->name('reports.stock_product');
-                Route::post('/daily', 'daily_paymnet')->name('report.daily_fee');
                 Route::post('/exception_fee', 'exception_fee')->name('report.exception_fee');
                 Route::post('/stock', 'stock_product')->name('report.stock');
                 Route::post('/book_sheet_stock', 'book_sheet_stock')->name('report.book_sheet_stock');
@@ -195,6 +195,8 @@ Route::group(
                 Route::post('/clothe_stock', 'clothe_stock')->name('report.clothes_stock');
                 Route::post('/payment_status', 'payment_status')->name('report.payment_status');
                 Route::post('/fees_invoices', 'fees_invoices')->name('report.fees_invoices');
+                Route::post('/payments', 'payments')->name('report.payments');
+                Route::post('/payment_parts', 'payment_parts')->name('report.payment_parts');
             });
             Route::group(['prefix' => 'classes', 'controller' => ClassesController::class], function () {
                 Route::get('/index', 'index')->name('classes.index');
@@ -204,7 +206,7 @@ Route::group(
                 Route::get('/add_students/{class}', 'add_students')->name('classes.add_students');
                 Route::get('/tammen/{class}', 'tammen')->name('classes.tammen');
                 Route::post('/add_students_submit', 'add_students_submit')->name('classes.add_students_submit');
-                Route::get('/show/{class}', 'show')->name('classes.show');
+                Route::get('/show/{id}', 'show')->name('classes.show');
                 Route::get('/destroy/{id}', 'destroy')->name('classes.destroy');
             });
             Route::group(['prefix' => 'ajax'], function () {
@@ -213,6 +215,15 @@ Route::group(
                 Route::get('/get_jobs/{id}', [UserController::class, 'getjobs']);
                 Route::get('/get_clothes/{id}', [ClothesOrderController::class, 'getClothes']);
                 Route::get('/get_books_sheets/{id}', [bookSheetsOrderController::class, 'get_books_sheets']);
+            });
+            Route::group(['prefix' => 'labs', 'controller' => LaboratoryController::class], function () {
+                Route::get('/index', 'index')->name('labs.index');
+                Route::get('/create', 'create')->name('labs.create');
+                Route::post('/store', 'store')->name('labs.store');
+                Route::get('/{id}/edit', 'edit')->name('labs.edit');
+                Route::post('/update', 'update')->name('labs.update');
+                Route::get('/{id}/destroy', 'destroy')->name('labs.destroy');
+                Route::get('/{id?}/show', 'show')->name('labs.show');
             });
             Route::group(['prefix' => 'backup', 'controller' => BackupController::class], function () {
                 Route::get('/index', 'index')->name('backup.index');
@@ -258,12 +269,12 @@ Route::group(
                 Route::get('/index', 'index')->name('outorder.index');
                 Route::get('/show/{id}', 'show')->name('outorder.show');
                 Route::get('/edit/{id}', 'edit')->name('outorder.edit');
-                Route::get('/store/{id}', 'new_transfer')->name('outorder.new_transfer');
+                Route::get('/create', 'new_transfer')->name('outorder.new_transfer');
                 Route::post('/update', 'update')->name('outorder.update');
                 Route::get('/delete/{id}', 'destroy')->name('outorder.destroy');
                 Route::post('/store', 'store')->name('outorder.store');
                 Route::post('/transfer', 'transfer')->name('orders.transfer');
-                Route::post('/submit_transfer', 'submit_transfer')->name('orders.submit_transfer');
+                Route::post('/submit_transfer', 'submit_transfer')->name('outorder.submit_transfer');
             });
             Route::group(['prefix' => 'gard', 'controller' => GardController::class], function () {
                 Route::get('/index', 'index')->name('gard.index');

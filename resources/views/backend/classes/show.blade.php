@@ -47,6 +47,7 @@
                         </table>
                         <table class="table">
                         <tr>
+                            <th>#</th>
                             <th>{{trans('student.name')}}</th>
                             <th>{{trans('student.gender')}}</th>
                             <th>{{trans('student.religion')}}</th>
@@ -54,6 +55,7 @@
                         <tbody>
                             @foreach ($class->students as $student)
                                 <tr>
+                                    <th>{{$loop->index + 1}}</th>
                                     <td>{{$student->name}}</td>
                                     <td>{{$student->gender->lang()}}</td>
                                     <td>{{$student->religion->lang()}}</td>

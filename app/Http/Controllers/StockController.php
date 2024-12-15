@@ -22,12 +22,15 @@ class StockController extends Controller
     public function store(Request $request)
     {
         try {
-            stock::create([
-                'name' => $request->name,
-                'opening_stock' => $request->opening_qty,
-                'opening_stock_date' => date('Y-m-d'),
-            ]);
-            $this->logActivity('إضافة', trans('system_lookup.field_create', ['value' => $request->name]));
+            $stocks = $request->list_stocks;
+            foreach ($stocks as $stock) {
+                stock::create([
+                    'name' => $stock['name'],
+                    'opening_stock' => $stock['opening_qty'],
+                    'opening_stock_date' => date('Y-m-d'),
+                ]);
+                $this->logActivity('إضافة', trans('system_lookup.field_create', ['value' => $stock['name']]));
+            }
             session()->flash('success', trans('General.success'));
 
             return redirect()->route('stocks.index');

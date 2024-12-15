@@ -38,7 +38,7 @@
                         </div>
                     </div>
 
-                    <div class="table-reponsive">
+                    <div class="table-responsive">
                         <table class="table book_list table-bordered">
                             <thead>
                                 <tr>

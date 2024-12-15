@@ -74,13 +74,13 @@
                     ],
                     [
                         'Name' => trans('Sidebar.Recipt_Payment'),
-                        'Url' => '1',
-                        'type' => 'link',
+                        'Url' => '#payments',
+                        'type' => 'button',
                     ],
                     [
                         'Name' => trans('Sidebar.payment_parts'),
-                        'Url' => '1',
-                        'type' => 'link',
+                        'Url' => '#payment_parts',
+                        'type' => 'button',
                     ],
                     [
                         'Name' => trans('Sidebar.credit'),
@@ -147,7 +147,6 @@
     </div>
     @php
         $popups = [
-            'daily_fee_popup',
             'exception_popup',
             'stock_popup',
             'clothes_popup',
@@ -156,6 +155,7 @@
             'fees_invoices_popup',
             'incoming_students_popup',
             'tammen_1_popup',
+            'payments_popup','payment_part_popup'
         ];
     @endphp
     @foreach ($popups as $popup)

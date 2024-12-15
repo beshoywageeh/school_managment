@@ -65,8 +65,8 @@
                                 {{ trans('sidebar.employees') }}
                             </x-nav_link>
                         @endcan
-                           @can('employees-list')
-                            <x-nav_link :href="route('employees.return_list')" :active="request()->is('*/employees/*')" >
+                        @can('employees-list')
+                            <x-nav_link :href="route('employees.return_list')" :active="request()->is('*/employees/*')">
                                 {{ trans('general.resign') }}
                             </x-nav_link>
                         @endcan
@@ -151,7 +151,7 @@
                                 {{ trans('sidebar.Class_Rooms') }}
                             </x-nav_link>
                         @endcan
-                    @can('class_rooms-list')
+                        @can('class_rooms-list')
                             <x-nav_link :href="route('classes.index')" :active="request()->is('*/class_rooms/*')" :image="URL::asset('assests/images/Sidebar/classes.png')">
                                 {{ trans('sidebar.classes') }}
                             </x-nav_link>
@@ -184,7 +184,13 @@
                         <div class="clearfix"></div>
                     </a>
                     <ul id="inventory" class="collapse" data-parent="#sidebarnav">
-                        @if (Auth::user()->hasAnyPermission(['stocks-index', 'orders-index', 'order_out-index', 'stocks-inventory_order-index']))
+                        @if (Auth::user()->hasAnyPermission([
+                                'stocks-index',
+                                'orders-index',
+                                'order_out-index',
+                                'stocks-inventory_order-index',
+                                'labortories-index',
+                            ]))
                             {{-- stocks-inventory --}}
                             <li>
                                 <a href="javascript:void(0);" data-toggle="collapse"
@@ -193,7 +199,10 @@
                                     <div class="clearfix"></div>
                                 </a>
                                 <ul id="stocks" class="collapse">
-
+                                    @can('labortories-index')
+                                        <li> <a href="{{ route('labs.index') }}">{{ trans('sidebar.lab_index') }}</a>
+                                        </li>
+                                    @endcan
                                     @can('stocks-index')
                                         <li> <a href="{{ route('stocks.index') }}">{{ trans('sidebar.stocks_show') }}</a>
                                         </li>
@@ -285,6 +294,7 @@
                                 </ul>
                             </li>
                         @endif
+
                     </ul>
                 </li>
             @endif

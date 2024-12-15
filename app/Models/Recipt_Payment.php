@@ -18,4 +18,9 @@ class Recipt_Payment extends Model
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
+
+    public function acc_year()
+    {
+        return $this->belongsTo(Acadmice_year::class, 'academic_year_id');
+    }
 }

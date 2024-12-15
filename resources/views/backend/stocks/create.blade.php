@@ -12,14 +12,42 @@
             <form action="{{ route('stock.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
+
                     <div class="row">
                         <div class="col">
-                            <x-input name="name" type="text">{{ trans('stock.name') }}</x-input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <x-input name="opening_qty" type="number">{{ trans('stock.opening_balance') }}</x-input>
+                            <div class="table-responsive">
+                                <table class="list_stocks table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th><strong>{{ trans('stock.name') }}</strong></th>
+                                            <th><strong>{{ trans('stock.opening_balance') }}</strong></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody data-repeater-list="list_stocks">
+                                        <tr data-repeater-item>
+                                            <td>
+                                                <input type="text" name="name" class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="number" name="opening_qty" class="form-control">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-block"
+                                                    data-repeater-delete><i class="ti-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4">
+                                                <input class="btn btn-primary btn-block" data-repeater-create
+                                                    type="button" value="{{ trans('General.new') }}" />
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

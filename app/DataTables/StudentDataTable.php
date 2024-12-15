@@ -22,6 +22,9 @@ class StudentDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->setRowId('id')
+            ->addColumn('std_fullname', function ($query) {
+                return $query->name.' '.$query->parent->father_name;
+            })
             ->addColumn('action', 'components.student_-table_-action');
     }
 
@@ -63,12 +66,10 @@ class StudentDataTable extends DataTable
         return [
             Column::make('id', 'id')->title('#')->orderable(false),
             Column::make('code')->title(trans('student.code')),
-            Column::make('name')->title(trans('student.name')),
+            Column::make('std_fullname')->title(trans('student.name')),
             Column::make('grade.name')->title(trans('student.grade')),
             Column::make('classroom.name')->title(trans('student.class')),
-            Column::make('parent.father_name')->title(trans('Parents.Father_Name')),
             Column::make('birth_date')->title(trans('student.birth_date')),
-            Column::make('join_date')->title(trans('student.join_date')),
             Column::make('address')->title(trans('student.address')),
             Column::make('national_id')->title(trans('student.national_id')),
             Column::computed('action')

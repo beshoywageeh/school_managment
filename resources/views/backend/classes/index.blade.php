@@ -49,7 +49,7 @@
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
                                                         'type' => 'link',
-                                                        'url' => route('classes.show', $class),
+                                                        'url' => route('classes.show', $class->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info',
                                                         'can' => 'classes-addstudent',

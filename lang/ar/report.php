@@ -55,4 +55,7 @@ return [
     'positive' => 'إيجابي',
     'negative' => 'سلبي',
     'code' => 'رقم الكود',
+    'amount' => 'القيمة',
+    'payments' => 'المدفوعات',
+    'classroom' => 'الصف الدراسي',
 ];

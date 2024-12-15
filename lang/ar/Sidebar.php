@@ -39,4 +39,6 @@ return [
     'stocks_show' => 'عرض العهدة',
     'clothes_show' => 'عرض اللبس',
     'classes' => 'الفصول',
+    'lab_index' => 'عرض المعامل',
+
 ];

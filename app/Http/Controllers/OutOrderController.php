@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Models\laboratory;
 use App\Models\order;
 use App\Models\stock;
 use Exception;
@@ -20,18 +21,15 @@ class OutOrderController extends Controller
         return view('backend.orders.index', compact('orders', 'type'));
     }
 
-    public function transfer(Request $request)
+    public function new_transfer()
     {
         try {
             $generate_code = order::where('type', '2')->orderBy('auto_number', 'desc')->first();
-            $order = order::create([
-                'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
-                'type' => '2',
-                'location' => $request->name,
-            ]);
-            $this->logActivity('إضافة', 'إضافة أمر صرف رقم'.$order->auto_number);
+            $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6) : '000001';
+            $labs = Laboratory::where('is_main', 1)->with('sub_locations')->get();
+            $stocks = stock::all();
 
-            return redirect()->route('outorder.new_transfer', $order->id);
+            return view('backend.orders.new_transfer', get_defined_vars());
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -39,32 +37,28 @@ class OutOrderController extends Controller
         }
     }
 
-    public function new_transfer($id)
-    {
-        $order = Order::findorFail($id);
-        $stocks = stock::get(['id', 'name']);
-        $type = 2;
-
-        return view('backend.stocks.tawreed', get_defined_vars());
-    }
-
     public function submit_transfer(Request $request)
     {
         try {
+            \DB::beginTransaction();
             $order_id = $request->id;
-            $list_stocks = $request->List_stocks;
+            $list_stocks = $request->list_outorder;
+            $order_id = order::create(['auto_number' => $request->auto_number, 'type' => 2, 'laboratory_id' => $request->location_to])->id;
             foreach ($list_stocks as $stock) {
                 \DB::table('stocks_order')->Insert([
                     'order_id' => $order_id,
-                    'stock_id' => $stock['name'],
-                    'quantity_out' => $stock['quantity'],
+                    'stock_id' => $stock['stock_id'],
+                    'quantity_out' => (int) ($stock['qty'] ?? 0),
                 ]);
-                $stock_name = stock::findorfail($stock['name'])->name;
-                $this->logActivity('صرف', 'صرف من '.$stock_name.' كمية :  '.$stock['quantity']);
+                $stock_name = stock::findorfail($stock['stock_id'])->name;
+                $this->logActivity('صرف', 'صرف من '.$stock_name.' كمية :  '.$stock['qty']);
             }
+            \DB::commit();
 
             return redirect()->route('stocks.index')->with('success', trans('general.success'));
         } catch (Exception $e) {
+            \DB::rollback();
+
             session()->flash('error', $e->getMessage());
 
             return redirect()->back();

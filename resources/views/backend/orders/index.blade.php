@@ -26,8 +26,8 @@
                                     @endcan
                                 @elseif ($type == 2)
                                     @can('stocks-outcome_order')
-                                        <button data-toggle="modal" data-target="#CreateTransfer"
-                                            class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
+                                        <a href="{{ route('outorder.new_transfer') }}"
+                                            class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
                                     @endcan
                                 @elseif ($type == 3)
                                     @can('stocks-inventory_order-create')
@@ -136,9 +136,6 @@
                                     @endforelse
                                 </tbody>
                             </table>
-                        @endif
-                        @if ($type == 2)
-                            @include('backend.orders.transfer_create')
                         @endif
                     </div>
                 </div>

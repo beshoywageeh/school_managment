@@ -103,8 +103,15 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('stock_id')->references('id')->on('stocks')->onDelete('Cascade')->onUpdate('Cascade');
         });
+        Schema::table('orders', function (Blueprint $table) {
+            $table->foreign('laboratory_id')->references('id')->on('laboratories')->onDelete('Cascade')->onUpdate('Cascade');
+        });
         Schema::table('clothes_orders', function (Blueprint $table) {
             $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
+
+        });
+        Schema::table('laboratories', function (Blueprint $table) {
+            $table->foreign('location_id')->references('id')->on('laboratories')->onDelete('Cascade')->onUpdate('Cascade');
 
         });
         Schema::table('clothes_stocks', function (Blueprint $table) {
@@ -146,6 +153,13 @@ return new class extends Migration
             $table->dropforeign('acadmiecyear_id');
             $table->dropforeign('nationality_id');
             $table->dropforeign('class_id');
+        });
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropforeign('laboratory_id');
+        });
+        Schema::table('laboratories', function (Blueprint $table) {
+            $table->dropforeign('location_id');
+
         });
         Schema::table('grades', function (Blueprint $table) {
             $table->dropForeign('user_id');

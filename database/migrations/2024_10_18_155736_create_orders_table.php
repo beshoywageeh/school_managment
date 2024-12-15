@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('auto_number');
             $table->smallInteger('type');
+            $table->unsignedBigInteger('laboratory_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

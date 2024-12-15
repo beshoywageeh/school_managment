@@ -17,8 +17,8 @@
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                 @endcan
                                 @can('stocks-outcome_order')
-                                    <button data-toggle="modal" data-target="#CreateTransfer"
-                                        class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></button>
+                                    <a href="{{route('outorder.new_transfer')}}"
+                                        class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
                                 @endcan
 
                                 @can('stocks-inventory_order-create')
@@ -36,7 +36,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         @can('stocks-index')
-                            <table class="table table-bordered table-sm">
+                            <table class="table table-bordered table-sm" id='datatable'>
                                 <thead class="alert-info">
                                     <tr>
                                         <th>#</th>
@@ -91,8 +91,20 @@
             </div>
         </div>
         @include('backend.stocks.create')
-        @include('backend.orders.transfer_create')
     </div>
     @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.list_stocks').repeater({
+
+                show: function() {
+                    $(this).slideDown();
+                },
+                hide: function(deleteElement) {
+                    $(this).slideUp(deleteElement);
+                }
+            });
+        });
+    </script>
     @endpush
 @endsection

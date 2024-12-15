@@ -9,6 +9,7 @@ use App\Models\clothes;
 use App\Models\ExcptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Grade;
+use App\Models\PaymentParts;
 use App\Models\Recipt_payment;
 use App\Models\stock;
 use App\Models\Student;
@@ -50,31 +51,19 @@ class ReportController extends Controller
         //return view('backend.report.students', get_defined_vars());
     }
 
-    public function daily_paymnet(Request $request)
+    public function payment_parts(Request $request)
     {
-        $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-        ]);
-        $start_date = $request->input('start_date');
-        $end_date = $request->input('end_date');
-        $data['daily'] = Recipt_Payment::whereBetween('date', [$start_date, $end_date])->with(['student'])->get();
-        $date = [];
-        $data['begin'] = $start_date;
-        $data['end'] = $end_date;
-        $pdf = PDF::loadView('backend.report.daily_fee_view', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 10,
-            'margin_right' => 10,
+        $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
+        $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
+        if ($request->payment_status == 2) {
+            $parts = PaymentParts::whereBetween('date', [$data['from'], $data['to']])->get();
 
-            'margin_header' => 1,
-            'margin_footer' => 2,
-            'orientation' => 'P',
-        ]);
+            return $parts;
+        } else {
+            $parts = PaymentParts::whereBetween('date', [$data['from'], $data['to']])->where('payment_status', $request->payment_status)->get();
 
-        return $pdf->stream('daily.pdf');
-        //return view('backend.report.daily_fee_view', get_defined_vars());
+            return 1;
+        }
     }
 
     public function StockProducts()
@@ -249,12 +238,12 @@ class ReportController extends Controller
     public function payment_status(Request $request)
     {
         $year = Carbon::now()->format('Y');
-
+        $grade = $request->grade;
         $data['acc_year'] = acadmice_year::whereyear('year_start', $year)->first(['id', 'view']);
-        if ($request->grade == 0) {
+        if ($grade == 0) {
             $data['exp'] = Fee_invoice::where('academic_year_id', $data['acc_year']->id)->where('status', $request->payment_status)->with('grades:id,name', 'students:id,name')->get(['student_id', 'grade_id'])->groupBy('grades.name');
         } else {
-            $data['exp'] = Fee_invoice::where('academic_year_id', $data['acc_year']->id)->where('grade_id', $request->grade)->where('status', $request->payment_status)->with('grades:id,name', 'students:id,name')->get(['student_id', 'grade_id'])->groupBy('grades.name');
+            $data['exp'] = Fee_invoice::where('academic_year_id', $data['acc_year']->id)->where('grade_id', $grade)->where('status', $request->payment_status)->with('grades:id,name', 'students:id,name')->get(['student_id', 'grade_id'])->groupBy('grades.name');
         }
         $pdf = PDF::loadView('backend.report.payment_status_view', ['data' => $data], [], [
             'format' => 'A4',
@@ -269,6 +258,29 @@ class ReportController extends Controller
         ]);
 
         return $pdf->stream('payment_status.pdf');
+    }
+
+    public function payments(Request $request)
+    {
+        $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
+        $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
+        $data['payment'] = Recipt_payment::whereBetween('date', [$data['from'], $data['to']])->with(['student' => function ($q) {
+            $q->with('classroom');
+        }], 'acc_year')->get();
+        $pdf = PDF::loadView('backend.report.payments', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 25,
+            'margin_bottom' => 25,
+            'margin_header' => 1,
+            'margin_footer' => 1,
+            'orientation' => 'P',
+        ]);
+
+        return $pdf->stream('payments.pdf');
+
     }
 
     public function fees_invoices(Request $request)

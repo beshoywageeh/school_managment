@@ -85,9 +85,9 @@ class ClassesController extends Controller
         }
     }
 
-    public function show(classes $class)
+    public function show($id)
     {
-        $class = $class->with('grade:id,name', 'class_room:id,name', 'students:id,name,class_id,gender,religion')->first(['id', 'title', 'tameen', 'class_room_id', 'grade_id']);
+        $class = classes::where('id', $id)->with('grade:id,name', 'class_room:id,name', 'students:id,name,class_id,gender,religion')->first(['id', 'title', 'tameen', 'class_room_id', 'grade_id']);
 
         if ($class->students->count() == 0) {
             return redirect()->route('classes.index')->with('info', trans('general.noDataToShow'));
