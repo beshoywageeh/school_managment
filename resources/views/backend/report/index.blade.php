@@ -64,7 +64,7 @@
                 trans('Sidebar.accounting') => [
                     [
                         'Name' => trans('Sidebar.schoolfees'),
-                        'Url' => '1',
+                        'Url' => route('report.school_fees'),
                         'type' => 'link',
                     ],
                     [
@@ -84,7 +84,7 @@
                     ],
                     [
                         'Name' => trans('Sidebar.credit'),
-                        'Url' => '1',
+                        'Url' => '#credit',
                         'type' => 'button',
                     ],
                     [
@@ -155,7 +155,7 @@
             'fees_invoices_popup',
             'incoming_students_popup',
             'tammen_1_popup',
-            'payments_popup','payment_part_popup'
+            'payments_popup','payment_part_popup','credit_popup'
         ];
     @endphp
     @foreach ($popups as $popup)

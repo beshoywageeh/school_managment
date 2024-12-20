@@ -58,4 +58,9 @@ return [
     'amount' => 'القيمة',
     'payments' => 'المدفوعات',
     'classroom' => 'الصف الدراسي',
+    'payments_parts' => 'الاقساط',
+    'paid' => 'تم الدفع',
+    'unpaid' => 'لم يتم الدفع',
+    'credit' => 'مستحقات',
+    'fee_title' => 'القسط',
 ];

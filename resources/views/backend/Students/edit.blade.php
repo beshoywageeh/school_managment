@@ -157,22 +157,33 @@
                 }
             });
         </script>
-        <script>
-            const classrooms = document.querySelector('#classrooms');
-            const grades = document.querySelector('#grades')
-            grades.addEventListener('change', async () => {
+     <script>
+        $(document).ready(function() {
+            $('#grades').on('change', function() {
                 classrooms.innerHTML = '<option>{{ trans('General.loading') }}</option>';
-                const response = await fetch(`/ajax/get_classRooms/${grades.value}`)
-                classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
-                const data = await response.json();
-                data.forEach(class_rooms => {
-                    const option = document.createElement('option');
-                    option.value = class_rooms.id;
-                    option.text = class_rooms.class_name;
-                    classrooms.appendChild(option);
-                });
+                let grade = $(this).val();
+                if (grade) {
+                    $.ajax({
+                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#classrooms').empty();
+                            $('#classrooms').append(
+                                '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                            );
+                            $.each(data,function(key, value) {
+                                console.log(key);
+                                console.log(value.name);
+                                $('#classrooms').append(
+                                    `<option value="${value.id}">${value.name}</option>`);
 
+                            });
+                        },
+                    });
+                };
             });
-        </script>
+        });
+    </script>
     @endpush
 @endsection

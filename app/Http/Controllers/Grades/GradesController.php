@@ -19,10 +19,10 @@ class GradesController extends Controller
     {
         $id = \Auth::id();
         if (Auth::user()->hasRole('Admin')) {
-            $data['grades'] = Grade::with('user')->withCount(['class_room', 'students'])->withSum('fees', 'amount')->paginate(10);
+            $data['grades'] = Grade::with('user')->withCount(['class_rooms', 'students'])->withSum('fees', 'amount')->paginate(10);
         } else {
             $grade = DB::Table('teacher_grade')->where('teacher_id', $id)->pluck('grade_id');
-            $data['grades'] = Grade::whereIn('id', $grade)->with('user')->withCount(['class_room', 'students'])->paginate(10);
+            $data['grades'] = Grade::whereIn('id', $grade)->with('user')->withCount(['class_rooms', 'students'])->paginate(10);
         }
 
         $data['users'] = User::get();

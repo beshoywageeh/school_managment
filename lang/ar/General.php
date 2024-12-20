@@ -40,6 +40,7 @@ return [
     'except_fee' => 'الإعفاءات',
     'payment_status' => 'حالة الدفع',
     'pay' => 'دفع',
+    'not_payed' => 'لم يتم الدفع',
     'noInvoiceToPart' => 'لا يوجد فواتير دراسية للتقسيط',
     'noDataToShow' => 'لا يوجد بيانات للعرض',
     'full_pay' => 'دفع بالكامل',
@@ -70,4 +71,7 @@ return [
     'date' => 'التاريخ',
     'to' => 'الى',
     'from' => 'من',
+    'grade' => 'المرحلة الدراسية',
+    'status' => 'الحالة',
+    'academic_year' => 'العام الدراسي',
 ];

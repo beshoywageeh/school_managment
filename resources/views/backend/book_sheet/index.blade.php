@@ -45,7 +45,8 @@
                                         </td>
                                         <td>{{ $book_sheet->grade->name }}</td>
                                         <td>{{ $book_sheet->classroom->name }}</td>
-                                        <td>{{ $book_sheet->opening_qty + $book_sheet->orders->sum('pivot.quantity_in') - $book_sheet->orders->sum('pivot.quantity_out') }}</td>
+                                        <td>{{ $book_sheet->opening_qty + $book_sheet->orders->sum('pivot.quantity_in') - $book_sheet->orders->sum('pivot.quantity_out') }}
+                                        </td>
                                         <td>{{ Number::currency($book_sheet->sales_price, 'EGP', 'ar') }}</td>
                                         <td>{{ $book_sheet->created_at->format('Y-m-d') }}</td>
                                         <td>
@@ -87,42 +88,60 @@
     </div>
 @endsection
 @push('scripts')
-    <script>
-        $(document).ready(function() {
-            const $classrooms = $('#classrooms');
-            const $grades = $('#grades');
+<script>
+    $(document).ready(function() {
+        $('#grades_create').on('change', function() {
+            let grade = $(this).val();
+            if (grade) {
+                $.ajax({
+                    url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $('#classrooms_create').empty();
+                        $('#classrooms_create').append(
+                            '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                        );
+                        $.each(data,function(key, value) {
 
-            $grades.on('change', async function() {
-                $classrooms.html('<option>{{ trans('General.loading') }}</option>');
-                const response = await fetch(`/ajax/get_classRooms/${$grades.val()}`);
-                const data = await response.json();
-                $classrooms.html('<option>{{ trans('student.choose_classroom') }}</option>');
-                $.each(data, function(index, class_rooms) {
-                    const option = $('<option></option>').val(class_rooms.id).text(class_rooms
-                        .name);
-                    $classrooms.append(option);
-                });
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            const $classrooms = $('#classrooms_create');
-            const $grades = $('#grades_create');
+                            $('#classrooms_create').append(
+                                `<option value="${value.id}">${value.name}</option>`);
 
-            $grades.on('change', async function() {
-                $classrooms.html('<option>{{ trans('General.loading') }}</option>');
-                const response = await fetch(`/ajax/get_classRooms/${$grades.val()}`);
-                const data = await response.json();
-                $classrooms.html('<option>{{ trans('student.choose_classroom') }}</option>');
-                $.each(data, function(index, class_rooms) {
-                    const option = $('<option></option>').val(class_rooms.id).text(class_rooms
-                        .name);
-                    $classrooms.append(option);
+                        });
+                    },
                 });
-            });
+            };
         });
-    </script>
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        $('#grades').on('change', function() {
+            let grade = $(this).val();
+            if (grade) {
+                $.ajax({
+                    url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        $('#classrooms').empty();
+                        $('#classrooms').append(
+                            '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                        );
+                        $.each(data,function(key, value) {
+
+                            $('#classrooms').append(
+                                `<option value="${value.id}">${value.name}</option>`);
+
+                        });
+                    },
+                });
+            };
+        });
+    });
+</script>
     <script>
         $(document).ready(function() {
             $('.book_list').repeater({

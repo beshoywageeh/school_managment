@@ -83,22 +83,32 @@
 
 
     @push('scripts')
-        <script>
-            const classrooms = document.querySelector('#classrooms');
-            const grades = document.querySelector('#grades')
-            grades.addEventListener('change', async () => {
+    <script>
+        $(document).ready(function() {
+            $('#grades').on('change', function() {
+                // classrooms.innerHTML = '<option>{{ trans('General.loading') }}</option>';
+                let grade = $(this).val();
+                if (grade) {
+                    $.ajax({
+                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#classrooms').empty();
+                            // $('#classrooms').append(
+                            //     '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                            // );
+                            $.each(data,function(key, value) {
+                                $('#classrooms').append(
+                                    `<option value="${value.id}">${value.name}</option>`);
 
-                classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
-                const response = await fetch(`/ajax/get_classRooms_fee/${grades.value}`)
-                const data = await response.json();
-                data.forEach(class_rooms => {
-                    const option = document.createElement('option');
-                    option.value = class_rooms.id;
-                    option.text = class_rooms.name;
-                    classrooms.appendChild(option);
-                });
-
+                            });
+                        },
+                    });
+                };
             });
-        </script>
+        });
+    </script>
+
     @endpush
 @endsection

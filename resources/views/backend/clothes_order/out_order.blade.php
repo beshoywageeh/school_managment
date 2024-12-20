@@ -25,7 +25,10 @@
                                 <div class="col">
                                     الوقت : {{ date('s : i : g A') }}
                                 </div>
-                                <div class="col"><h6>{{trans('clothes.isset_order')}}</h6><input type="checkbox" name="isset" id=""></div>
+                                <div class="col">
+                                    <h6>{{ trans('clothes.isset_order') }}</h6><input type="checkbox" name="isset"
+                                        id="">
+                                </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="">{{ trans('student.name') }}</label>
@@ -66,7 +69,8 @@
                         <div class="row">
                             <div class="col"></div>
                             <div class="text-right col">
-                                <button onclick="document.getElementById('invo_submit').submit();" class="btn btn-primary" type="submit">{{ trans('General.Submit') }}</button>
+                                <button onclick="document.getElementById('invo_submit').submit();" class="btn btn-primary"
+                                    type="submit">{{ trans('General.Submit') }}</button>
                             </div>
                         </div>
                     </div>
@@ -77,26 +81,35 @@
 @endsection
 @push('scripts')
     <script>
-        const table = document.querySelector('#invoice_data');
-        $("#student").on("select2:select", async (e) => {
-            table.innerHTML = '<tr><td colspan="4"><img src="{{ asset("assests/images/ajax-loader.gif") }}"/></td></tr>';
-
-            var select_val = $(e.currentTarget).val();
-            const response = await fetch(`/ajax/get_clothes/${select_val}`);
-            const data = await response.json();
-            table.innerHTML='';
-            if(data.length === 0){
-                table.innerHTML = '<tr><td colspan="4" class="alert alert-danger">{{trans("general.noDataToShow")}}</td></tr>';
-            }else{
-            data.forEach((item, index) => {
-                var row = `<tr>
-                        <td>${index+1}</td>
-                        <td><input type="hidden" name="id[]"value="${item.id}"/>${item.name}</td>
-                        <td>${item.sales_price}</td>
-                        <td><input class="form-control" name="quantity[]" value="1" type="number"/></td>
-                        </tr>`;
-                table.innerHTML += row;
-            })}
+        $(document).ready(function() {
+            const table = document.querySelector('#invoice_data');
+            $("#student").on("select2:select", function() {
+                table.innerHTML =
+                    '<tr><td colspan="4"><img src="{{ asset('assests/images/ajax-loader.gif') }}"/></td></tr>';
+                var select_val = $(this).val();
+                $.ajax({
+                    url: "{{ URL::to('/ajax/get_clothes/') }}/" + select_val,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        table.innerHTML = '';
+                        if (data.length === 0) {
+                            table.innerHTML =
+                                '<tr><td colspan="4" class="alert alert-danger">{{ trans('general.noDataToShow') }}</td></tr>';
+                        } else {
+                            $.each(data, (index, item) => {
+                                var row = `<tr>
+        <td>${index + 1}</td>
+        <td><input type="hidden" name="id[]" value="${item.id}">${item.name}</td>
+        <td>${item.sales_price}</td>
+        <td><input class="form-control" name="quantity[]" value="1" type="number"/></td>
+    </tr>`;
+                                table.innerHTML+=row;
+                            });
+                        };
+                    }
+                });
+            });
         });
     </script>
 @endpush

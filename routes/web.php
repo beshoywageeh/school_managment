@@ -197,6 +197,8 @@ Route::group(
                 Route::post('/fees_invoices', 'fees_invoices')->name('report.fees_invoices');
                 Route::post('/payments', 'payments')->name('report.payments');
                 Route::post('/payment_parts', 'payment_parts')->name('report.payment_parts');
+                Route::post('/credit', 'credit')->name('report.credit');
+                Route::get('/school_fees', 'school_fees')->name('report.school_fees');
             });
             Route::group(['prefix' => 'classes', 'controller' => ClassesController::class], function () {
                 Route::get('/index', 'index')->name('classes.index');

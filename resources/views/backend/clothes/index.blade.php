@@ -81,7 +81,7 @@
                                                     'icon' => 'ti-pencil',
                                                     'toggle' => 'modal',
                                                     'target' => '#editItem-' . $stock->id,
-                                                    'can' => 'clothes-income_order_edit',
+                                                    'can' => 'clothes-update',
                                                 ],
                                             ]" /></td>
                                         </tr>
@@ -117,39 +117,59 @@
                 });
             });
         </script>
-        <script>
-            const classrooms = document.querySelector('#classrooms');
-            const grades = document.querySelector('#grades')
-            grades.addEventListener('change', async () => {
-                classrooms.innerHTML='<option>{{ trans('General.loading') }}</option>';
-                const response = await fetch(`/ajax/get_classRooms/${grades.value}`)
-                const data = await response.json();
-                classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
-                data.forEach(class_rooms => {
-                    const option = document.createElement('option');
-                    option.value = class_rooms.id;
-                    option.text = class_rooms.name;
-                    classrooms.appendChild(option);
-                });
+     <script>
+        $(document).ready(function() {
+            $('#grades_create').on('change', function() {
+                let grade = $(this).val();
+                if (grade) {
+                    $.ajax({
+                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#classrooms_create').empty();
+                            $('#classrooms_create').append(
+                                '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                            );
+                            $.each(data,function(key, value) {
 
-            });
-        </script>
-        <script>
-            const classrooms_create = document.querySelector('#classrooms_create');
-            const grades_create = document.querySelector('#grades_create')
-            grades_create.addEventListener('change', async () => {
-               classrooms_create.innerHTML='<option>{{ trans('General.loading') }}</option>';
-                const response = await fetch(`/ajax/get_classRooms/${grades_create.value}`)
-                const data = await response.json();
-                classrooms_create.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
-                data.forEach(class_rooms_create => {
-                    const option = document.createElement('option');
-                    option.value = class_rooms_create.id;
-                    option.text = class_rooms_create.name;
-                    classrooms_create.appendChild(option);
-                });
+                                $('#classrooms_create').append(
+                                    `<option value="${value.id}">${value.name}</option>`);
 
+                            });
+                        },
+                    });
+                };
             });
-        </script>
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#grades').on('change', function() {
+                let grade = $(this).val();
+                if (grade) {
+                    $.ajax({
+                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#classrooms').empty();
+                            $('#classrooms').append(
+                                '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                            );
+                            $.each(data,function(key, value) {
+
+                                $('#classrooms').append(
+                                    `<option value="${value.id}">${value.name}</option>`);
+
+                            });
+                        },
+                    });
+                };
+            });
+        });
+    </script>
     @endpush
 @endsection

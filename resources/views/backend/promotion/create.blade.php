@@ -15,56 +15,71 @@
                     <form id="form-with-multiple-column" class="max-w-full" action="{{ route('promotion.store') }}"
                         method="post">
                         @csrf
+                        <div class="row">
+                            <div class="col">
+                                <fieldset class='p-4 border rounded border-primary'>
+                                    <legend class='m-auto text-center text-muted'>{{ trans('promotions.old') }}</legend>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>{{ trans('promotions.from_gradename') }}</label>
 
-                        <fieldset class=''>
-                            <legend class='m-auto text-center text-danger'>{{ trans('promotions.old') }}</legend>
-                            <div class="row">
-                                <div class="col">
-                                    <label>{{ trans('promotions.from_gradename') }}</label>
+                                            <select class="custom-select" id="old_grade" name="old_grade">
+                                                <option selected value="">{{ trans('promotions.from_gradename') }}
+                                                </option>
+                                                @foreach ($grades as $grade)
+                                                    <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="">{{ trans('promotions.from_classroom') }}</label>
+                                            <select class="custom-select" id="old_class" name="old_class">
+                                                <option selected value="">{{ trans('promotions.from_classroom') }}
+                                                </option>
 
-                                    <select class="custom-select" id="old_grade" name="old_grade">
-                                        <option selected value="">{{ trans('promotions.from_gradename') }}</option>
-                                        @foreach ($grades as $grade)
-                                            <option value="{{ $grade->id }}">{{ $grade->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <label for="">{{ trans('promotions.from_classroom') }}</label>
-                                    <select class="custom-select" id="old_class" name="old_class">
-                                        <option selected value="">{{ trans('promotions.from_classroom') }}</option>
+                                            </select>
+                                        </div>
 
-                                    </select>
-                                </div>
+                                    </div>
 
+                                </fieldset>
                             </div>
+                            <div class="col">
+                                <fieldset class='p-4 border rounded border-primary'>
+                                    <legend class='m-auto text-center text-muted'>{{ trans('promotions.new') }}</legend>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>{{ trans('promotions.to_gradename') }}</label>
 
-                        </fieldset>
-                        <hr>
-                        <fieldset class=''>
-                            <legend class='m-auto text-center text-danger'>{{ trans('promotions.new') }}</legend>
-                            <div class="row">
-                                <div class="col">
-                                    <label>{{ trans('promotions.to_gradename') }}</label>
+                                            <select class="custom-select" id="new_grade" name="new_grade">
+                                                <option selected value="">{{ trans('promotions.to_gradename') }}
+                                                </option>
 
-                                    <select class="custom-select" id="new_grade" name="new_grade">
-                                        <option selected value="">{{ trans('promotions.to_gradename') }}</option>
+                                                @foreach ($grades as $grade)
+                                                    <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="">{{ trans('promotions.to_classroom') }}</label>
+                                            <select class="custom-select" id="new_class" name="new_class">
 
-                                        @foreach ($grades as $grade)
-                                            <option value="{{ $grade->id }}">{{ $grade->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col">
-                                    <label for="">{{ trans('promotions.to_classroom') }}</label>
-                                    <select class="custom-select" id="new_class" name="new_class">
+                                                <option selected value="">{{ trans('promotions.to_classroom') }}
+                                                </option>
+                                            </select>
+                                        </div>
 
-                                        <option selected value="">{{ trans('promotions.to_classroom') }}</option>
-                                    </select>
-                                </div>
-
+                                    </div>
+                                </fieldset>
                             </div>
-                        </fieldset>
+                        </div>
+
+
+
 
                         <hr>
                         <div class="row">
@@ -83,37 +98,64 @@
 
     @push('scripts')
         <script>
-            const old_classrooms = document.querySelector('#old_class');
-            const old_grades = document.querySelector('#old_grade')
-            old_grades.addEventListener('change', async () => {
+            $(document).ready(function() {
+                $('#old_grade').on('change', function() {
+                    $('#old_class').empty();
 
-                old_classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
-                const response = await fetch(`/ajax/get_classRooms/${old_grades.value}`)
-                const data = await response.json();
-                data.forEach(class_rooms => {
-                    const option = document.createElement('option');
-                    option.value = class_rooms.id;
-                    option.text = class_rooms.name;
-                    old_classrooms.appendChild(option);
+                    $('#old_class').append('<option>{{ trans('General.loading') }}</option>');
+                    let grade = $(this).val();
+                    if (grade) {
+                        $.ajax({
+                            url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                            type: "GET",
+                            dataType: "json",
+                            success: function(data) {
+                    $('#old_class').empty();
+
+                                $('#old_class').append(
+                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                                );
+                                $.each(data, function(key, value) {
+
+                                    $('#old_class').append(
+                                        `<option value="${value.id}">${value.name}</option>`
+                                    );
+
+                                });
+                            },
+                        });
+                    };
                 });
-
             });
         </script>
         <script>
-            const new_classrooms = document.querySelector('#new_class');
-            const new_grades = document.querySelector('#new_grade')
-            new_grades.addEventListener('change', async () => {
+            $(document).ready(function() {
+                $('#new_grade').on('change', function() {
+                    $('#new_class').empty();
+                    $('#new_class').append('<option>{{ trans('General.loading') }}</option>');
+                    let grade = $(this).val();
+                    if (grade) {
+                        $.ajax({
+                            url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                            type: "GET",
+                            dataType: "json",
+                            success: function(data) {
+                    $('#new_class').empty();
 
-                new_classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
-                const response = await fetch(`/ajax/get_classRooms/${new_grades.value}`)
-                const data = await response.json();
-                data.forEach(class_rooms => {
-                    const option = document.createElement('option');
-                    option.value = class_rooms.id;
-                    option.text = class_rooms.name;
-                    new_classrooms.appendChild(option);
+                                $('#new_class').append(
+                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                                );
+                                $.each(data, function(key, value) {
+
+                                    $('#new_class').append(
+                                        `<option value="${value.id}">${value.name}</option>`
+                                    );
+
+                                });
+                            },
+                        });
+                    };
                 });
-
             });
         </script>
     @endpush

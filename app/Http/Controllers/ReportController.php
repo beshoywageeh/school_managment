@@ -11,6 +11,7 @@ use App\Models\Fee_invoice;
 use App\Models\Grade;
 use App\Models\PaymentParts;
 use App\Models\Recipt_payment;
+use App\Models\School_Fee;
 use App\Models\stock;
 use App\Models\Student;
 use Carbon\Carbon;
@@ -55,15 +56,25 @@ class ReportController extends Controller
     {
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
-        if ($request->payment_status == 2) {
-            $parts = PaymentParts::whereBetween('date', [$data['from'], $data['to']])->get();
-
-            return $parts;
-        } else {
-            $parts = PaymentParts::whereBetween('date', [$data['from'], $data['to']])->where('payment_status', $request->payment_status)->get();
-
-            return 1;
+        $query = PaymentParts::whereBetween('date', [$data['from'], $data['to']])->with('students', 'grades', 'classes');
+        if ($request->payment_status != 2) {
+            $query->where('payment_status', $request->payment_status);
         }
+        $data['parts'] = $query->get();
+
+        $pdf = PDF::loadView('backend.report.payments_part', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 2,
+            'margin_right' => 2,
+            'margin_top' => 25,
+            'margin_bottom' => 10,
+            'margin_header' => 2,
+            'margin_footer' => 2,
+            'orientation' => 'P',
+        ]);
+
+        return $pdf->stream('payment_parts.pdf');
     }
 
     public function StockProducts()
@@ -74,7 +85,6 @@ class ReportController extends Controller
             'default_font_size' => 10,
             'margin_left' => 10,
             'margin_right' => 10,
-
             'margin_header' => 1,
             'margin_footer' => 2,
             'orientation' => 'P',
@@ -238,13 +248,19 @@ class ReportController extends Controller
     public function payment_status(Request $request)
     {
         $year = Carbon::now()->format('Y');
-        $grade = $request->grade;
-        $data['acc_year'] = acadmice_year::whereyear('year_start', $year)->first(['id', 'view']);
-        if ($grade == 0) {
-            $data['exp'] = Fee_invoice::where('academic_year_id', $data['acc_year']->id)->where('status', $request->payment_status)->with('grades:id,name', 'students:id,name')->get(['student_id', 'grade_id'])->groupBy('grades.name');
-        } else {
-            $data['exp'] = Fee_invoice::where('academic_year_id', $data['acc_year']->id)->where('grade_id', $grade)->where('status', $request->payment_status)->with('grades:id,name', 'students:id,name')->get(['student_id', 'grade_id'])->groupBy('grades.name');
+        $data['acc_year'] = acadmice_year::whereYear('year_start', $year)->first(['id', 'view']);
+
+        $query = Fee_invoice::where('academic_year_id', $data['acc_year']->id)
+            ->where('status', $request->payment_status)
+            ->with('grades:id,name', 'students:id,name')
+            ->select(['student_id', 'grade_id']);
+
+        // Apply grade filter only if a specific grade is selected
+        if ($request->grade && $request->grade != 0) {
+            $query->where('grade_id', $request->grade);
         }
+
+        $data['exp'] = $query->get()->groupBy('grades.name');
         $pdf = PDF::loadView('backend.report.payment_status_view', ['data' => $data], [], [
             'format' => 'A4',
             'default_font_size' => 10,
@@ -285,17 +301,65 @@ class ReportController extends Controller
 
     public function fees_invoices(Request $request)
     {
-        $grade = $request->grade;
-        $payment_status = $request->payment_status;
-        $start = $request->from;
-        $end = $request->to;
         $year = Carbon::now()->format('Y');
-        $data['acc_year'] = acadmice_year::whereyear('year_start', $year)->first(['id', 'view']);
-        if ($grade == 0 && $payment_status == 0 && $start == '' && $end == '') {
-            $data['all'] = Fee_invoice::with('grades:id,name', 'classes:id,name', 'students:id,name', 'acd_year:id,view')->get(['id', 'student_id', 'grade_id', 'classroom_id', 'academic_year_id', 'school_fee_id', 'status'])->groupBy(['acd_year.view', 'grades.name', 'classes.name']);
+        $data['acc_year'] = acadmice_year::whereYear('year_start', $year)->first(['id', 'view']);
 
-            return $data;
+        // Prepare base query
+        $query = Fee_invoice::with([
+            'grades:id,name',
+            'classes:id,name',
+            'students:id,name',
+            'acd_year:id,view',
+            'fees:id,amount',
+        ])->select([
+            'id',
+            'student_id',
+            'grade_id',
+            'classroom_id',
+            'academic_year_id',
+            'school_fee_id',
+            'status',
+            'invoice_date',
+        ]);
+
+        // Apply grade filter
+        if ($request->grade && $request->grade != 0) {
+            $query->where('grade_id', $request->grade);
         }
+
+        // Apply payment status filter
+        if ($request->payment_status && $request->payment_status != 0) {
+            $query->where('status', $request->payment_status);
+        }
+
+        // Apply date range filter
+        if ($request->from && $request->to) {
+            // Full date range specified
+            $query->whereBetween('invoice_date', [$request->from, $request->to]);
+        } elseif ($request->from) {
+            // Only start date specified, use current date as end date
+            $query->whereBetween('invoice_date', [$request->from, Carbon::now()->format('Y-m-d')]);
+        }
+
+        // Fetch and group results
+        $data['all'] = $query->get()->groupBy([
+            'acd_year.view',
+            'grades.name',
+            'classes.name',
+        ]);
+        $pdf = PDF::loadView('backend.report.fee_invoices', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 20,
+            'margin_bottom' => 25,
+            'margin_header' => 2,
+            'margin_footer' => 1,
+            'orientation' => 'P',
+        ]);
+
+        return $pdf->stream('fee_invoices.pdf');
     }
 
     public function student_tameen(Request $request)
@@ -338,6 +402,51 @@ class ReportController extends Controller
 
             return $pdf->stream('tammen.pdf');
         }
+    }
+
+    public function credit(Request $request)
+    {
+        $query = Fee_invoice::where('status', 0)->with('students', 'grades', 'classes', 'fees', 'acd_year');
+
+        if ($request->acc_year && $request->acc_year != 0) {
+            $query->where('academic_year_id', $request->acc_year);
+
+        }
+        $data['credit'] = $query->get();
+
+        $pdf = PDF::loadView('backend.report.credit', ['data' => $data], [], [
+            'format' => 'A4',
+            'default_font_size' => 10,
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 20,
+            'margin_bottom' => 20,
+            'margin_header' => 1,
+            'margin_footer' => 1,
+            'orientation' => 'P',
+        ]);
+
+        return $pdf->stream('credit.pdf');
+    }
+
+    public function school_fees()
+    {
+        $date = date('Y');
+        $data['acc_year'] = acadmice_year::whereYear('year_start', $date)->first(['id', 'view']);
+        $data['school_fees'] = School_Fee::where('academic_year_id', $data['acc_year']->id)->with(['grade:id,name', 'classroom:id,name'])->get()->groupBy(['grade.name', 'classroom.name']);
+        $pdf = PDF::loadView('backend.report.school_fees', ['data' => $data], [], [
+            'format' => 'A5',
+            'default_font_size' => 10,
+            'margin_left' => 5,
+            'margin_right' => 5,
+            'margin_top' => 20,
+            'margin_bottom' => 20,
+            'margin_header' => 1,
+            'margin_footer' => 1,
+            'orientation' => 'P',
+        ]);
+
+        return $pdf->stream('school_fee.pdf');
     }
 
     private function calculateTotals($stocks)

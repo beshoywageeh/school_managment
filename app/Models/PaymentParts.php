@@ -29,12 +29,17 @@ class PaymentParts extends Model
     public function classes()
     {
 
-        return $this->belongsTo(Class_room::class, 'classroom_id');
+        return $this->belongsTo(Class_room::class, 'class_id');
     }
 
     public function year()
     {
 
         return $this->belongsTo(acadmice_year::class, 'acadmic_id');
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->payment_status->value == 0 ? trans('report.unpaid') : trans('report.paid');
     }
 }

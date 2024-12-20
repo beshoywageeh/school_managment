@@ -43,7 +43,7 @@
                                                     href="{{ route('grade.show', $grade->id) }}">{{ $grade->name }}</a></td>
                                             <td>{{ $grade->user->name }}</td>
                                             <td>{{ $grade->created_at->format('Y/m/d') }}</td>
-                                            <td>{{ $grade->class_room_count }}</td>
+                                            <td>{{ $grade->class_rooms_count }}</td>
                                             <td>{{ $grade->students_count }}</td>
 
                                             <td>

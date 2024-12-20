@@ -19,34 +19,35 @@
                                     </x-input>
                                 </div>
                                 <div class="col">
-                                    <x-input type="date" name="birth_date" class="form-control" value="{{old('birth_date')}}">
+                                    <x-input type="date" name="birth_date" class="form-control"
+                                        value="{{ old('birth_date') }}">
                                         {{ trans('student.birth_date') }}
                                     </x-input>
                                 </div>
 
                                 <div class="col">
-                                    <label for="check_birth"
-                                        class="">{{ trans('student.checkbirth_date') }}</label>
-                                        <input type="text" disabled name="check_birth" class="form-control">
+                                    <label for="check_birth" class="">{{ trans('student.checkbirth_date') }}</label>
+                                    <input type="text" disabled name="check_birth" class="form-control">
 
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="national_id">{{trans('student.national_id')}}</label>
-                                        <input type="text" value="{{ old('national_id') }}"
-                                        name="national_id" class="form-control" id="national_id" maxlength="14" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" >
+                                        <label for="national_id">{{ trans('student.national_id') }}</label>
+                                        <input type="text" value="{{ old('national_id') }}" name="national_id"
+                                            class="form-control" id="national_id" maxlength="14"
+                                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                                         @error('national_id')
-                                        <div class="mt-1 alert alert-danger">{{ $message }}</div>
+                                            <div class="mt-1 alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <x-input.nationality/>
+                                    <x-input.nationality />
                                 </div>
-                                <x-input.gender-select/>
-                                <x-input.Student_Status/>
+                                <x-input.gender-select />
+                                <x-input.Student_Status />
 
                             </div>
                             <div class="row">
@@ -56,8 +57,8 @@
                                 </div>
                             </div>
                         </fieldset>
-<br>
-<br>
+                        <br>
+                        <br>
                         <fieldset class='p-4 border rounded border-primary'>
                             <legend class='m-auto text-center text-muted'>{{ trans('student.study_info') }}</legend>
                             <div class="row">
@@ -110,7 +111,7 @@
 
     @push('scripts')
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function() {
                 const birthDateInput = document.querySelector('input[name="birth_date"]');
                 const checkBirthInput = document.querySelector('input[name="check_birth"]');
 
@@ -139,21 +140,31 @@
             });
         </script>
         <script>
-            const classrooms = document.querySelector('#classrooms');
-            const grades = document.querySelector('#grades')
-            grades.addEventListener('change', async () => {
+            $(document).ready(function() {
+                $('#grades').on('change', function() {
+                    classrooms.innerHTML = '<option>{{ trans('General.loading') }}</option>';
+                    let grade = $(this).val();
+                    if (grade) {
+                        $.ajax({
+                            url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                            type: "GET",
+                            dataType: "json",
+                            success: function(data) {
+                                $('#classrooms').empty();
+                                $('#classrooms').append(
+                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                                );
+                                $.each(data,function(key, value) {
+                                    console.log(key);
+                                    console.log(value.name);
+                                    $('#classrooms').append(
+                                        `<option value="${value.id}">${value.name}</option>`);
 
-                classrooms.innerHTML = '<option>{{ trans('General.loading') }}</option>';
-                const response = await fetch(`/ajax/get_classRooms/${grades.value}`)
-                classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
-                const data = await response.json();
-                data.forEach(class_rooms => {
-                    const option = document.createElement('option');
-                    option.value = class_rooms.id;
-                    option.text = class_rooms.name;
-                    classrooms.appendChild(option);
+                                });
+                            },
+                        });
+                    };
                 });
-
             });
         </script>
     @endpush
