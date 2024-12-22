@@ -21,11 +21,11 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table class='table'>
+                        <table class='table table-sm table-bordered'>
                             <thead>
                                 <tr>
                                     <th>{{ trans('permissions.name') }}</th>
-                                    <th>{{ trans('permissions.permissions') }}</th>
+                                    <th>{{ trans('permissions.permissions_count') }}</th>
                                     <th>{{ trans('general.actions') }}</th>
                                 </tr>
                             </thead>
@@ -33,16 +33,11 @@
                                 @foreach ($roles as $role)
                                     <tr>
                                         <td>{{ trans('permissions.' . $role->name) }}</td>
-                                        <td>
-                                            @foreach ($role->permissions as $permission)
-                                                <span
-                                                    class='badge badge-primary'>{{ trans('permissions.' . $permission->name) }}</span>
-                                            @endforeach
-                                        </td>
+                                        <td>{{ $role->permissions_count }}</td>
                                         <td>
                                             <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                 [
-                                                    'type'=>'link',
+                                                    'type' => 'link',
                                                     'url' => route('roles.delete', $role->id),
                                                     'text' => trans('general.delete'),
                                                     'icon' => 'ti-trash',
@@ -50,15 +45,15 @@
                                                     'can' => 'role-delete',
                                                 ],
                                                 [
-                                                    'url' => '#',
-                                                    'type'=>'link',
+                                                    'url' => route('roles.show', $role->id),
+                                                    'type' => 'link',
                                                     'text' => trans('general.info'),
                                                     'icon' => 'ti-info-alt',
                                                     'target' => '_blank',
                                                     'can' => 'role-info',
                                                 ],
                                                 [
-                                                    'type'=>'link',
+                                                    'type' => 'link',
                                                     'url' => route('roles.edit', $role->id),
                                                     'text' => trans('general.edit'),
                                                     'icon' => 'ti-pencil',
@@ -74,10 +69,12 @@
 
                         </table>
                     </div>
+
+
                 </div>
             </div>
         </div>
     </div>
-    @push('scripts')
-    @endpush
 @endsection
+@push('scripts')
+@endpush

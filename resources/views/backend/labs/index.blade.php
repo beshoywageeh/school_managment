@@ -7,12 +7,12 @@
     <div class="row mb-30">
         <div class="col">
 
-            <div class="row mb-4">
+            <div class="mb-4 row">
                 <div class="col-lg-6"></div>
                 <div class="col-lg-6 text-md-right">
                     @can('labortories-create')
                         <button class="btn btn-primary" data-toggle="modal" data-target="#lab_create"><i
-                                class="ti-plus mr-2"></i>{{ trans('General.new') }}</button>
+                                class="mr-2 ti-plus"></i>{{ trans('General.new') }}</button>
                     @endcan
                 </div>
             </div>
@@ -21,7 +21,7 @@
                 @foreach ($labs as $main_lab)
                     <div class="col-lg-3">
                         <div class="card">
-                            <div class="card-header text-center">
+                            <div class="text-center card-header">
                                 <div class="row">
                                     <div class="col">
                                         <h6>{{ $main_lab->location }}</h6>
@@ -31,10 +31,7 @@
                                             <a href="{{ route('labs.edit', $main_lab->id) }}" class="btn btn-warning btn-sm"><i
                                                     class="ti-pencil"></i></a>
                                         @endcan
-                                        @can('labortories-show')
-                                            <a href="{{ route('labs.show', $main_lab->id) }}" class="btn btn-info btn-sm mx-2"><i
-                                                    class="ti-eye"></i></a>
-                                        @endcan
+
 
                                     </div>
                                 </div>
@@ -54,10 +51,15 @@
                                                     <td>{{ $laboratory->sub_location }}</td>
                                                     <td>
                                                         @can('labortories-delete')
+                                                            <a href="{{ route('labs.show', $laboratory->id) }}"
+                                                                class="mx-2 btn btn-info btn-sm"><i class="ti-eye"></i></a>
+                                                        @endcan
+                                                        @can('labortories-delete')
                                                             <a href="{{ route('labs.destroy', $laboratory->id) }}"
                                                                 class="btn btn-danger btn-sm" onclick="confirmation(event)"><i
                                                                     class="ti-trash"></i></a>
                                                         @endcan
+
                                                     </td>
                                                 </tr>
                                             @empty

@@ -66,10 +66,9 @@ class LaboratoryController extends Controller
 
     public function show($id)
     {
-        $laboratory = Laboratory::with(['sub_locations', 'orders'])->findOrFail($id);
-
-        /// $orders = $laboratory->orders()->with('stocks')->get();
-        return $orders;
+        $laboratory = Laboratory::with(['orders:id,auto_number,created_at','orders.stocks:id,name','main_location:id,location'])->findOrFail($id);
+//  return $laboratory;
+        return view('backend.labs.show', get_defined_vars());
 
     }
 

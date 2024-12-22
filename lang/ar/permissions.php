@@ -4,7 +4,7 @@ return [
     'title' => 'الصلاحيات',
     'name' => 'الاسم',
     'description' => 'الوصف',
-    'permissions' => 'الصلاحيات',
+    'permissions_count' => 'عدد الصلاحيات',
     'select_all' => 'تحديد الكل',
     'Admin' => 'مسؤل النظام',
     'role' => 'الصلاحيات',
@@ -166,5 +166,18 @@ return [
     'books_sheets-inventory_order-create' => 'أمر جرد جديد',
     'books_sheets-inventory_order-update' => 'تعديل أمر جرد',
     'books_sheets-inventory_order-delete' => 'حذف أمر جرد',
+    'class_rooms-tammen'=>'تأمين المرحلة بالكاملة',
+    'classes'=>'الفصول الدراسية',
+ 'classes-list'=>'عرض الفصول',
+    'classes-create'=>'إضافة فصل',
+ 'classes-update'=>'تعديل فصل',
+ 'classes-delete'=>'حذف فصل',
+ 'classes-addstudent'=>'إضافة طلبه للفصل',
+ 'classes-tammen'=>'تأميين الفصل',
+'labortories'=>'المعامل',
+    'labortories-index'=>'عرض المعامل',
+ 'labortories-create'=>'إضافة معمل',
+ 'labortories-update'=>'تعديل معمل',
+ 'labortories-delete'=>'حذف معمل'
 
 ];
