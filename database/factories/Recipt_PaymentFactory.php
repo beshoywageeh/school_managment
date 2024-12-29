@@ -22,7 +22,7 @@ class Recipt_PaymentFactory extends Factory
 
             'manual' => Recipt_Payment::orderBy('manual', 'desc')->first() ? str_pad(Recipt_Payment::orderBy('manual', 'desc')->first()->manual + 1, 5, '0', STR_PAD_LEFT) : '00001',
             'date' => $this->faker->date('Y-m-d'),
-            'student_id' => $this->faker->numberBetween(1, 400),
+            'student_id' => $this->faker->numberBetween(1, 100),
             'academic_year_id' => '1',
             'Debit' => $this->faker->numberBetween(500, 5000),
         ];

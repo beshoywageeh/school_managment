@@ -29,8 +29,8 @@
                         <table class="table table-bordered">
 
                             @forelse ($laboratory->orders as $order)
-                            <tr><td colspan="2">{{$order->auto_number}}</td>
-                            <td colspan="2">{{$order->created_at->format('Y-m-d')}}</td></tr>
+                            <tr><td colspan="2">{{trans('stock.manual_num')}} | {{$order->auto_number}}</td>
+                            <td colspan="2">{{trans('stock.manual_date')}} | {{$order->created_at->format('Y-m-d')}}</td></tr>
                             <tr>
                                 <th>#</th>
                                 <th>{{ trans('stock.name') }}</th>
@@ -41,7 +41,7 @@
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>{{ $stock->name }}</td>
-                                <td>{{ $order->pivot->quantity_out }}</td>
+                                <td>{{ $stock->pivot->quantity_out }}</td>
                                 <td></td>
                             </tr>
                             @endforeach

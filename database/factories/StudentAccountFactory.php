@@ -22,7 +22,7 @@ class StudentAccountFactory extends Factory
         return [
             'grade_id' => $this->faker->numberBetween(1, 4),
             'classroom_id' => $this->faker->numberBetween(1, 6),
-            'student_id' => $this->faker->numberBetween(1, 300),
+            'student_id' => $this->faker->numberBetween(1, 100),
             'date' => $this->faker->date('Y-m-d'),
             'fee_invoices_id' => Fee_invoice::all()->random()->id,
             'excpetion_id' => ExcptionFees::all()->random()->id,

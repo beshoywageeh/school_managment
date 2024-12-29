@@ -14,7 +14,7 @@
                     </ul>
                 </div>
             @endif
-            <div class="card-title text-center">
+            <div class="text-center card-title">
                 <h4>{{trans('install.new_school')}}</h4>
             </div>
             <form action="{{ route('config') }}" method="post" enctype="multipart/form-data">
@@ -22,7 +22,7 @@
                 @csrf
                 <div class="row">
                     <div class="col">
-                        <fieldset class='p-4 rounded border border-primary'>
+                        <fieldset class='p-4 border rounded border-primary'>
                             <legend class="m-auto text-center text-muted">{{trans('install.school_details')}}</legend>
 
                             <div class="form-group">
@@ -62,7 +62,7 @@
                         </fieldset>
                     </div>
                     <div class="col">
-                        <fieldset class='p-4 rounded border border-primary'>
+                        <fieldset class='p-4 border rounded border-primary'>
                             <legend class="m-auto text-center text-muted">{{trans('install.admin')}}</legend>
                             <div class="form-group">
                                 <label class="">{{trans('install.name')}} </label>
@@ -73,15 +73,7 @@
                                 <div class="mt-1 error-message">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-group">
-                                <label class="">{{trans('install.email')}}</label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                       name="email"
-                                       value="{{old('email')}}" placeholder="{{trans('install.email')}}"/>
-                                @error('email')
-                                <div class="mt-1 error-message">{{ $message }}</div>
-                                @enderror
-                            </div>
+
                             <div class="form-group">
                                 <label class="">{{trans('install.password')}} </label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror"
@@ -96,37 +88,8 @@
                         </fieldset>
                     </div>
                 </div>
-                <div class="row mt-40">
-                    <div class="col">
-                        <fieldset class='p-4 rounded border border-primary'>
-                            <legend class="m-auto text-center text-muted">{{trans('install.db_details')}}</legend>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="database_name">{{trans('install.db_name')}}</label>
-                                        <input type="text" class="form-control" id="database_name" name="database_name"
-                                               required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="database_user">{{trans('install.db_user')}}</label>
-                                        <input type="text" class="form-control" id="database_user" name="database_user"
-                                               required>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="database_password">{{trans('install.db_password')}}</label>
-                                        <input type="password" class="form-control" id="database_password"
-                                               name="database_password" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
-                </div>
-                <div class="row mt-40">
+
+                <div class="mt-40 row">
                     <div class="col text-md-right">
                         <button type="submit" class="button">{{trans('install.register')}}</button>
 

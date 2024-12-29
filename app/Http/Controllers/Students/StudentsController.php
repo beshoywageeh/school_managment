@@ -91,7 +91,7 @@ class StudentsController extends Controller
     public function show(string $id)
     {
         try {
-            $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone', 'StudentAccount'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();
+            $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone,Father_Job', 'StudentAccount', 'nationality'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();
 
             return view('backend.Students.show', get_defined_vars());
         } catch (\Exception $e) {
@@ -153,17 +153,45 @@ class StudentsController extends Controller
         }
     }
 
+    public function graduated()
+    {
+        $students = Student::onlyTrashed()->with('grade','classroom')->get();
+
+        return view('backend.students.graduated', get_defined_vars());
+    }
+public function restore($id){
+
+$student = Student::where('id',$id)->first();
+$student->restore();
+$this->logActivity('تخرج', 'تم ارجاع الطالب '.' '.$student->name);
+return redirect()->route('Students.index')->with('success',trans('General.success'));
+
+}
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Request $request)
+    public function softDelete(string $id, Request $request)
     {
         try {
             $student = Student::findorfail($id);
             $student->delete();
-            $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $student->class_name]));
+            $this->logActivity('تخرج', 'تم تخرج الطالب '.' '.$student->name);
 
-            return redirect()->back()->with('success', trans('general.success'));
+            return redirect()->route('Students.graduated')->with('success', trans('general.success'));
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+
+            return redirect()->back();
+        }
+    }
+    public function forceDelete(string $id, Request $request)
+    {
+        try {
+            $student = Student::onlyTrashed()->where('id',$id)->first();
+  
+            $this->logActivity('حذف', 'تم حذف الطالب '.' '.$student->name);
+            $student->forceDelete();
+            return redirect()->route('Students.graduated')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

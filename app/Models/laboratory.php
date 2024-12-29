@@ -20,9 +20,11 @@ class laboratory extends Model
 
     public function orders()
     {
-        return $this->belongsToMany(order::class, 'stocks_order', 'stock_id', 'order_id')->withPivot('quantity_in', 'quantity_out');
+        return $this->hasMany(order::class, 'laboratory_id');
     }
-    public function main_location(){
-        return $this->belongsTo(laboratory::class,'location_id','id');
+
+    public function main_location()
+    {
+        return $this->belongsTo(laboratory::class, 'location_id', 'id');
     }
 }

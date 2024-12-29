@@ -19,7 +19,7 @@ class Fee_invoiceFactory extends Factory
         return [
             'grade_id' => $this->faker->numberBetween(1, 4),
             'classroom_id' => $this->faker->numberBetween(1, 6),
-            'student_id' => $this->faker->numberBetween(1, 300),
+            'student_id' => $this->faker->numberBetween(1, 100),
             'academic_year_id' => '1',
             'school_fee_id' => $this->faker->numberBetween(1, 50),
             'invoice_date' => $this->faker->date('Y-m-d'),

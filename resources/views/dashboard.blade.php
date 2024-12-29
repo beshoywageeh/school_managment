@@ -5,6 +5,7 @@
 
 @section('content')
     <div class="row mb-30">
+
         <div class="col-xl-4 mb-30">
             <div class="card card-statistics fb-bg h-100">
                 <div class="card-body">

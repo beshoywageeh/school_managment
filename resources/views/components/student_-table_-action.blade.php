@@ -2,10 +2,9 @@
     [
         'type'=>'link',
         'url' => route('Students.destroy', $id),
-        'text' => trans('general.delete'),
-        'icon' => 'ti-trash',
-        'onclick' => 'confirmation(event)',
-        'can'=>'Students-delete'
+        'text' => trans('student.graduated'),
+        'icon' => '',
+        'can'=>'Students-graduated'
     ],
     [
         'type'=>'link',

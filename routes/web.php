@@ -90,10 +90,13 @@ Route::group(
                 Route::get('/', 'index')->name('Students.index');
                 Route::get('/create', 'create')->name('Students.create');
                 Route::get('{id}/edit', 'edit')->name('Students.edit');
-                Route::get('/{id}/destroy', 'destroy')->name('Students.destroy');
+                Route::get('/{id}/destroy', 'softDelete')->name('Students.destroy');
                 Route::get('/{id}/show', 'show')->name('Students.show');
                 Route::post('/store', 'store')->name('Students.store');
                 Route::post('/update', 'update')->name('Students.update');
+                Route::get('/graduated', 'graduated')->name('Students.graduated');
+                Route::get('/restore/{id}', 'restore')->name('Students.restore');
+                Route::get('/forceDelete/{id}', 'forceDelete')->name('Students.forceDelete');
                 Route::post('/Import_Excel', 'Excel_Import')->name('Students.import_excel');
 
             });
@@ -343,8 +346,8 @@ Route::group(
     }
 );
 require __DIR__.'/auth.php';
-Route::get('/', [SetupController::class, 'showSetupForm'])->name('setup')->middleware('setup');
-Route::post('/setup', [SetupController::class, 'processSetup'])->name('config')->middleware('setup');
+Route::get('/start_setup', [SetupController::class, 'showSetupForm'])->name('setup');
+Route::post('/setup', [SetupController::class, 'processSetup'])->name('config');
 if (config('app.env') == 'local') {
     require __DIR__.'/local.php';
 }

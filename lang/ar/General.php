@@ -74,4 +74,6 @@ return [
     'grade' => 'المرحلة الدراسية',
     'status' => 'الحالة',
     'academic_year' => 'العام الدراسي',
+    'basic_info' => 'البيانات الاساسية',
+    'attendance_request' => 'طلب التحاق بالمدرسة',
 ];

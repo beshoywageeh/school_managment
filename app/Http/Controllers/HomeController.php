@@ -15,12 +15,12 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $id = Auth::user()->id;
+        $id = Auth::user();
         if (Auth::user()->hasRole('Admin')) {
             $students = Student::count();
             $parents = My_parents::count();
         } else {
-            $grade = DB::Table('teacher_grade')->where('teacher_id', $id)->pluck('grade_id');
+            $grade = DB::Table('teacher_grade')->where('teacher_id', $id->id)->pluck('grade_id');
             $students = Student::whereIn('grade_id', $grade)->count();
             $parents = My_parents::whereIn('student_id', $grade)->count();
         }

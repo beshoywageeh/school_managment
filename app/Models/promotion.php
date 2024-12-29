@@ -31,6 +31,16 @@ class promotion extends Model
         return $this->belongsTo(class_room::class, 'to_class', 'id');
     }
 
+    public function t_acc()
+    {
+        return $this->belongsTo(acadmice_year::class, 'to_acc', 'id');
+    }
+
+    public function f_acc()
+    {
+        return $this->belongsTo(acadmice_year::class, 'from_acc', 'id');
+    }
+
     public function students()
     {
         return $this->belongsTo(Student::class, 'student_id', 'id');

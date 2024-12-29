@@ -21,11 +21,8 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $ch = \DB::getSchemaBuilder()->hasTable('settings');
-        if ($ch) {
-            $school = settings::with('image')->first();
-            View::share('school', $school);
+        $school = settings::with('image')->first();
+        view::share('school', $school);
 
-        }
     }
 }

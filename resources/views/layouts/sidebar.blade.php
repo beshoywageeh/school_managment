@@ -9,7 +9,7 @@
                 {{ trans('Sidebar.Dashboard') }}
             </x-nav_link>
             <!--for student-->
-            @if (Auth::user()->hasAnyPermission(['Students-list', 'parents-list', 'promotion-list']))
+            @if (Auth::user()->hasAnyPermission(['Students-list', 'parents-list', 'promotion-list','graduated_list']))
                 <li>
                     <a href="javascript:void(0);" data-toggle="collapse" data-target="#student-info">
                         <div class="pull-left">
@@ -35,6 +35,11 @@
                         @can('promotion-list')
                             <x-nav_link :href="route('promotion.index')" :active="request()->is('*/promotion/*')" :image="URL::asset('assests/images/Sidebar/promotion.png')">
                                 {{ trans('sidebar.promotion') }}
+                            </x-nav_link>
+                        @endcan
+                         @can('graduated-list')
+                            <x-nav_link :href="route('Students.graduated')" :active="request()->is('*/graduated/*')" :image="URL::asset('assests/images/Sidebar/promotion.png')">
+                                {{ trans('sidebar.graduated') }}
                             </x-nav_link>
                         @endcan
                     </ul>

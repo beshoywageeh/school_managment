@@ -22,6 +22,7 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         $roles = Role::orderBy('id', 'DESC')->withCount('permissions')->get();
+
         return view('backend.roles.index', compact('roles'));
     }
 

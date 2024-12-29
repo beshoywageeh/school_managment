@@ -32,7 +32,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="mt-4 row">
                                         <div class="col">
                                             <label for="">{{ trans('promotions.from_classroom') }}</label>
                                             <select class="custom-select" id="old_class" name="old_class">
@@ -43,7 +43,17 @@
                                         </div>
 
                                     </div>
-
+                                    <div class="mt-4 row">
+                                        <div class="col">
+                                            <label for="">{{ trans('promotions.from_year') }}</label>
+                                            <select class="custom-select" name="acc_from" id="">
+                                                @forelse ($acc_year as $acc)
+                                                    <option value="{{ $acc->id }}">{{ $acc->view }}</option>
+                                                @empty
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                    </div>
                                 </fieldset>
                             </div>
                             <div class="col">
@@ -63,7 +73,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="mt-4 row">
                                         <div class="col">
                                             <label for="">{{ trans('promotions.to_classroom') }}</label>
                                             <select class="custom-select" id="new_class" name="new_class">
@@ -74,16 +84,22 @@
                                         </div>
 
                                     </div>
+                                    <div class="mt-4 row">
+                                        <div class="col">
+                                            <label for="">{{ trans('promotions.to_year') }}</label>
+                                            <select class="custom-select" name="acc_to" id="">
+                                                @forelse ($acc_year as $acc)
+                                                    <option value="{{ $acc->id }}">{{ $acc->view }}</option>
+                                                @empty
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                    </div>
                                 </fieldset>
                             </div>
                         </div>
-
-
-
-
                         <hr>
                         <div class="row">
-                            <div class="col"></div>
                             <div class="col text-md-right">
                                 <button class="btn btn-success" type="submit">{{ trans('General.Submit') }}</button>
                             </div>
@@ -110,7 +126,7 @@
                             type: "GET",
                             dataType: "json",
                             success: function(data) {
-                    $('#old_class').empty();
+                                $('#old_class').empty();
 
                                 $('#old_class').append(
                                     '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
@@ -140,7 +156,7 @@
                             type: "GET",
                             dataType: "json",
                             success: function(data) {
-                    $('#new_class').empty();
+                                $('#new_class').empty();
 
                                 $('#new_class').append(
                                     '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'

@@ -31,6 +31,7 @@ class UserFactory extends Factory
             'isAdmin' => '1',
             'login_allow' => '1',
             'password' => \Hash::make('hypervision'),
+            'school_id' => '1',
 
         ];
     }

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->foreign('job_id')->references('id')->on('work_jobs')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('school_id')->references('id')->on('settings')->onDelete('Cascade')->onUpdate('Cascade');
         });
         /* Grades Relation */
         Schema::table('grades', function (Blueprint $table) {
@@ -64,6 +65,8 @@ return new class extends Migration
             $table->foreign('to_grade')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('from_class')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('to_class')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('to_acc')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('from_acc')->references('id')->on('acadmice_years')->onDelete('Cascade')->onUpdate('Cascade');
         });
         Schema::table('fee_invoices', function (Blueprint $table) {
             $table->foreign('student_id')->references('id')->on('students')->onDelete('Cascade')->onUpdate('Cascade');
@@ -191,6 +194,7 @@ return new class extends Migration
         });
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign('job_id');
+            $table->dropForeign('school_id');
         });
         Schema::table('promotions', function (Blueprint $table) {
             $table->dropForeign('student_id');
@@ -198,6 +202,8 @@ return new class extends Migration
             $table->dropForeign('to_grade');
             $table->dropForeign('from_class');
             $table->dropForeign('to_class');
+            $table->dropForeign('to_acc');
+            $table->dropForeign('from_acc');
         });
         Schema::table('fee_invoices', function (Blueprint $table) {
             $table->dropForeign('student_id');

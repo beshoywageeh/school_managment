@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('to_grade');
             $table->unsignedBigInteger('from_class');
             $table->unsignedBigInteger('to_class');
+            $table->unsignedBigInteger('to_acc');
+            $table->unsignedBigInteger('from_acc');
             $table->timestamps();
         });
     }

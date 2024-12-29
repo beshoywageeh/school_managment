@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Models\acadmice_year;
 use App\Models\Grade;
 use App\Models\promotion;
 use App\Models\Student;
@@ -19,7 +20,7 @@ class promotionController extends Controller
      */
     public function index()
     {
-        $promotions = promotion::with('students', 'f_grade', 'f_class', 't_grade', 't_class')->get();
+        $promotions = promotion::with('students:id,name', 'f_grade:id,name', 'f_class:id,name', 't_grade:id,name', 't_class:id,name', 't_acc:id,view', 'f_acc:id,view')->get();
 
         return view('backend.promotion.Index', compact('promotions'));
     }
@@ -30,8 +31,9 @@ class promotionController extends Controller
     public function create()
     {
         $grades = Grade::all();
+        $acc_year = acadmice_year::where('status', 0)->get();
 
-        return view('backend.promotion.create', compact('grades'));
+        return view('backend.promotion.create', get_defined_vars());
     }
 
     /**
@@ -42,12 +44,14 @@ class promotionController extends Controller
         DB::beginTransaction();
         try {
             $Students = Student::where('grade_id', $request->old_grade)->where('classroom_id', $request->old_class)->get();
+
             if ($Students->count() < 1) {
                 return redirect()->back()->with('error', trans('promotions.no_data'));
             }
             $Students->toQuery()->update([
                 'classroom_id' => $request->new_class,
                 'grade_id' => $request->new_grade,
+                'acadmiecyear_id' => $request->acc_to,
             ]);
             foreach ($Students as $student) {
                 promotion::updateOrCreate([
@@ -56,8 +60,10 @@ class promotionController extends Controller
                     'from_class' => $request->old_class,
                     'to_grade' => $request->new_grade,
                     'to_class' => $request->new_class,
+                    'to_acc' => $request->acc_to,
+                    'from_acc' => $request->acc_from,
                 ]);
-                $this->logActivity('ترقية طالب', 'تم ترقية طالب', $student->name);
+                $this->logActivity('ترقية طالب', ' تم ترقية طالب '.$Students->where('id', $student->id)->first()->name);
             }
             DB::commit();
 

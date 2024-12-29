@@ -10,7 +10,7 @@
                 <form method="POST" action="{{ route('login') }}" autocomplete="off">
                     @csrf
                     <div class="mb-20 section-field">
-                        <input id="name" class="web form-control" type="email" name="email"
+                        <input id="name" class="web form-control" type="email" value="" name="email"
                             placeholder="{{ trans('login.email') }} ">
                         @error('email')
                             <div class="alert alert-danger">{{ $message }}</div>
@@ -23,7 +23,14 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <button type="submit" class="button">{{ trans('login.login') }} </button>
+                    <div class="row">
+                        <div class="text-left col">
+                            <button type="submit" class="button btn-block">{{ trans('login.login') }} </button>
+                        </div>
+                        <div class="mt-4 text-right col">
+                            <a class="text-primary" href="{{route('setup')}}">{{trans('login.setup')}}</a>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
