@@ -60,7 +60,7 @@ class PermissionTableSeeder extends Seeder
             ['table' => 'Students', 'name' => 'Students-info'],
             ['table' => 'Students', 'name' => 'Students-delete'],
             ['table' => 'Students', 'name' => 'Students-graduated'],
-            ['table' => 'Students', 'name' => 'Students-restore'],
+            ['table' => 'Students', 'name' => 'Student-restore'],
             ['table' => 'Students', 'name' => 'graduated-list'],
             ['table' => 'Students', 'name' => 'Students-Import_Excel'],
             ['table' => 'Students', 'name' => 'Students-Export_Excel'],

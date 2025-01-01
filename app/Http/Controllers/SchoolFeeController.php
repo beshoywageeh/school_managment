@@ -115,6 +115,7 @@ class SchoolFeeController extends Controller
     {
         $school_fee = School_Fee::findorFail($id);
         $students = Student::where('classroom_id', $school_fee->classroom_id)->where('grade_id', $school_fee->grade_id)->with('classroom:id,name', 'grade:id,name')->get(['code', 'name', 'classroom_id', 'grade_id']);
+
         return view('backend.school_fees.show', get_defined_vars());
     }
 

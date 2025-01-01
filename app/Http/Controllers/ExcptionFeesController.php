@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
-use App\Models\acadmice_year;
 use App\Models\ExcptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Student;
@@ -31,16 +30,16 @@ class ExcptionFeesController extends Controller
     public function create($id)
     {
         try {
-            $Excpetion = Student::where('id', $id)->first();
-            $acadmincs = acadmice_year::where('status', '0')->get();
+            $Excpetion = Student::where('id', $id)->with('StudentAccount')->first();
             $fees = Fee_invoice::where('student_id', $id)->where('status', 0)->with('fees')->get();
-            if ($fees->count() == 0) {
+            $balance = $Excpetion->StudentAccount->sum('debit') - $Excpetion->StudentAccount->sum('credit');
+            if ($fees->isEmpty() || $balance <= 0) {
                 session()->flash('info', trans('General.noInvoiceToExcept'));
 
-                return redirect()->back();
-            } else {
-                return view('backend.fee_exception.create', get_defined_vars());
+                return redirect()->route('Students.index');
             }
+
+            return view('backend.fee_exception.create', get_defined_vars());
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -59,7 +58,7 @@ class ExcptionFeesController extends Controller
             $pay->date = date('Y-m-d');
             $pay->student_id = $request->student_id;
             $pay->amount = $request->amount;
-            $pay->academic_year_id = $request->acadmic_id;
+            $pay->academic_year_id = Student::where('id', $request->student_id)->first()->acadmiecyear_id;
             $pay->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
             $pay->class_id = Student::where('id', $request->student_id)->first()->classroom_id;
             $pay->fee_id = $request->fee_id;
@@ -69,13 +68,13 @@ class ExcptionFeesController extends Controller
             $std->date = $pay->date;
             $std->type = '3';
             $std->credit = $request->amount;
-            $std->academic_year_id = $request->acadmic_id;
+            $std->academic_year_id = Student::where('id', $request->student_id)->first()->acadmiecyear_id;
             $std->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
             $std->classroom_id = Student::where('id', $request->student_id)->first()->classroom_id;
             $std->debit = 0.00;
             $std->excpetion_id = $pay->id;
             $std->save();
-            $this->logActivity('إضافة', 'تم اضافة فاتورة إغفاء لطالب', $pay->students->name);
+            $this->logActivity('إضافة', 'تم اضافة فاتورة إعفاء لطالب', $pay->students->name);
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -146,7 +145,7 @@ class ExcptionFeesController extends Controller
             $std->classroom_id = Student::where('id', $request->student_id)->first()->classroom_id;
             $std->debit = 0.00;
             $std->save();
-            $this->logActivity('تعديل', 'تم تعديل فاتورة إغفاء لطالب', $pay->students->name);
+            $this->logActivity('تعديل', 'تم تعديل فاتورة إعفاء لطالب', $pay->students->name);
             DB::commit();
             session()->flash('success', trans('general.success'));
 

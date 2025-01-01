@@ -155,18 +155,22 @@ class StudentsController extends Controller
 
     public function graduated()
     {
-        $students = Student::onlyTrashed()->with('grade','classroom')->get();
+        $students = Student::onlyTrashed()->with('grade', 'classroom')->get();
 
         return view('backend.students.graduated', get_defined_vars());
     }
-public function restore($id){
 
-$student = Student::where('id',$id)->first();
-$student->restore();
-$this->logActivity('تخرج', 'تم ارجاع الطالب '.' '.$student->name);
-return redirect()->route('Students.index')->with('success',trans('General.success'));
+    public function restore($id)
+    {
 
-}
+        $student = Student::where('id', $id)->first();
+        $student->restore();
+        $this->logActivity('تخرج', 'تم ارجاع الطالب '.' '.$student->name);
+
+        return redirect()->route('Students.index')->with('success', trans('General.success'));
+
+    }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -184,13 +188,15 @@ return redirect()->route('Students.index')->with('success',trans('General.succes
             return redirect()->back();
         }
     }
+
     public function forceDelete(string $id, Request $request)
     {
         try {
-            $student = Student::onlyTrashed()->where('id',$id)->first();
-  
+            $student = Student::onlyTrashed()->where('id', $id)->first();
+
             $this->logActivity('حذف', 'تم حذف الطالب '.' '.$student->name);
             $student->forceDelete();
+
             return redirect()->route('Students.graduated')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

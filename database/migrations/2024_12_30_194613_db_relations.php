@@ -140,6 +140,8 @@ return new class extends Migration
         Schema::table('classes', function (Blueprint $table) {
             $table->foreign('grade_id')->references('id')->on('grades')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('class_room_id')->references('id')->on('class_rooms')->onDelete('Cascade')->onUpdate('Cascade');
+        });     Schema::table('fund_accounts', function (Blueprint $table) {
+            $table->foreign('receipt_id')->references('id')->on('recipt__payments')->onDelete('Cascade')->onUpdate('Cascade');
         });
     }
 
@@ -272,6 +274,9 @@ return new class extends Migration
         Schema::table('classes', function (Blueprint $table) {
             $table->dropForeign('grade_id');
             $table->dropForeign('class_room_id');
+        });
+        Schema::table('fund_accounts', function (Blueprint $table) {
+            $table->dropForeign('receipt_id');
         });
     }
 };

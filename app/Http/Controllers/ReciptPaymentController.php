@@ -6,6 +6,7 @@ use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Http\Traits\LogsActivity;
 use App\Models\acadmice_year;
 use App\Models\Fee_invoice;
+use App\Models\fund_account;
 use App\Models\PaymentParts;
 use App\Models\Recipt_Payment;
 use App\Models\Student;
@@ -57,6 +58,7 @@ class ReciptPaymentController extends Controller
     {
         try {
             if ($request->type == 'full') {
+
                 DB::beginTransaction();
                 $invoice = Fee_invoice::where('id', $request->feeInvoice)->with('fees:id,title,amount')->first();
                 $pay = new Recipt_Payment;
@@ -79,7 +81,13 @@ class ReciptPaymentController extends Controller
                 $std->recipt__payments_id = $pay->id;
                 $std->save();
                 $invoice->update(['status' => 1]);
-                $this->logActivity('إضافة', 'تم اضافة دفعة جديدة للطالب '.$request->student->name.' بتاريخ '.date('Y-m-d'));
+                $fund = new fund_account;
+                $fund->date=date('Y-m-d');
+                $fund->receipt_id=$pay->id;
+                $fund->Credit=0.00;
+                $fund->Debit=$invoice->fees->amount;
+$fund->save();
+                $this->logActivity('إضافة', 'تم اضافة دفعة جديدة للطالب '.Student::where('id', $request->student_id)->first()->name.' بتاريخ '.date('Y-m-d'));
                 DB::commit();
 
                 return redirect()->route('Recipt_Payment.print', $pay->id);
