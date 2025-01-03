@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('auto_number');
             $table->unsignedBigInteger('student_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('school_id')->nullable();
             $table->date('date');
             $table->smallInteger('type');
             $table->boolean('isset_order')->default('1');

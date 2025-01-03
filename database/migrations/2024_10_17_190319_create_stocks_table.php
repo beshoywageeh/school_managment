@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('opening_stock')->nullable();
             $table->date('opening_stock_date')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('school_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

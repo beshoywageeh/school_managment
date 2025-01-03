@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\SchoolTrait;
 use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\PaymentParts;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
+    use SchoolTrait;
+
     public function index()
     {
         $id = Auth::user();

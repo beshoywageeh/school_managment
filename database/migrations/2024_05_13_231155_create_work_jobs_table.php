@@ -19,6 +19,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(1);
             $table->tinyInteger('is_main')->default(0);
             $table->unsignedBigInteger('main_job_id')->nullable();
+            $table->unsignedBigInteger('school_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

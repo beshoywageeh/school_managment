@@ -10,6 +10,6 @@ class fund_account extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $fillable=['date','receipt_id','Debit','Credit'];
 
+    protected $fillable = ['date', 'receipt_id', 'Debit', 'Credit'];
 }

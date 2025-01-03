@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('teacher_id');
             $table->unsignedBigInteger('grade_id');
+            $table->unsignedBigInteger('school_id');
+
         });
     }
 

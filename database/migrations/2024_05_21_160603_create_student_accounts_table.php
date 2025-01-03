@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('recipt__payments_id')->nullable();
             $table->unsignedBigInteger('fee_invoices_id')->nullable();
             $table->unsignedBigInteger('excpetion_id')->nullable();
+            $table->unsignedBigInteger('exchange_bond_id')->nullable();
             $table->unsignedBigInteger('academic_year_id');
             $table->date('date');
             $table->tinyInteger('type')->comment('Invoice => 1 , Payment => 2 , Expcition => 3');

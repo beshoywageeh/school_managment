@@ -17,6 +17,8 @@ return new class extends Migration
             $table->boolean('is_main')->default(0);
             $table->string('sub_location')->nullable();
             $table->unsignedBigInteger('location_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('school_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

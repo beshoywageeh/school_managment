@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('fee_id');
             $table->unsignedBigInteger('academic_year_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('school_id');
             $table->date('date');
             $table->decimal('amount', 10, 2);
             $table->timestamps();

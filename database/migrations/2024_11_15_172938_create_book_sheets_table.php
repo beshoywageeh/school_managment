@@ -17,6 +17,8 @@ return new class extends Migration
             $table->decimal('opening_qty', 10, 2);
             $table->unsignedBigInteger('classroom_id');
             $table->unsignedBigInteger('grade_id');
+            $table->unsignedBigInteger('school_id');
+            $table->unsignedBigInteger('user_id');
             $table->decimal('sales_price', 10, 2)->default(0);
             $table->boolean('is_book')->default(0);
             $table->timestamps();

@@ -82,11 +82,11 @@ class ReciptPaymentController extends Controller
                 $std->save();
                 $invoice->update(['status' => 1]);
                 $fund = new fund_account;
-                $fund->date=date('Y-m-d');
-                $fund->receipt_id=$pay->id;
-                $fund->Credit=0.00;
-                $fund->Debit=$invoice->fees->amount;
-$fund->save();
+                $fund->date = date('Y-m-d');
+                $fund->receipt_id = $pay->id;
+                $fund->Credit = 0.00;
+                $fund->Debit = $invoice->fees->amount;
+                $fund->save();
                 $this->logActivity('إضافة', 'تم اضافة دفعة جديدة للطالب '.Student::where('id', $request->student_id)->first()->name.' بتاريخ '.date('Y-m-d'));
                 DB::commit();
 

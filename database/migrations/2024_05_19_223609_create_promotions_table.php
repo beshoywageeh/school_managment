@@ -20,6 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('to_class');
             $table->unsignedBigInteger('to_acc');
             $table->unsignedBigInteger('from_acc');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('school_id');
             $table->timestamps();
         });
     }

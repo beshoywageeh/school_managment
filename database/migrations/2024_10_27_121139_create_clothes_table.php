@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('purchase_price', 10, 2)->default(0);
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('classroom_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('school_id');
             $table->timestamps();
             $table->softDeletes();
         });

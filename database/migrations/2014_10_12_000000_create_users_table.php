@@ -37,6 +37,7 @@ return new class extends Migration
             $table->boolean('resign')->default('0');
             $table->string('resign_reason')->nullable();
             $table->unsignedBigInteger('school_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

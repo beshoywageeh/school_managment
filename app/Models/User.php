@@ -42,6 +42,7 @@ class User extends Authenticatable
         'insurance_date',
         'national_id',
         'grade_year',
+        'school_id',
     ];
 
     /**

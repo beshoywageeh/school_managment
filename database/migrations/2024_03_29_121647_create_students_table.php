@@ -25,6 +25,7 @@ return new class extends Migration
             $table->tinyInteger('religion');
             $table->tinyInteger('tameen')->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('school_id');
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('classroom_id');
             $table->unsignedBigInteger('class_id')->nullable();

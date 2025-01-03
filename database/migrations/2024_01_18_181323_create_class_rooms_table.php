@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->bigInteger('grade_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('school_id')->unsigned();
             $table->string('slug')->nullable();
             $table->boolean('tameen')->default(0);
             $table->timestamps();

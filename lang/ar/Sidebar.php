@@ -41,5 +41,5 @@ return [
     'classes' => 'الفصول',
     'lab_index' => 'عرض المعامل',
     'graduated' => 'قائمة الخريجين',
-
+    'exchange_bonds' => 'سندات الصرف',
 ];

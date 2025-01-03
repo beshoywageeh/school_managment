@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->unsignedBigInteger('receipt_id');
-            $table->decimal('Debit',8,2)->nullable();
-            $table->decimal('Credit',8,2)->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('school_id');
+            $table->decimal('Debit', 8, 2)->nullable();
+            $table->decimal('Credit', 8, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

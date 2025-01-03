@@ -86,6 +86,7 @@
                     'Recipt_Payment-list',
                     'except_fee-list',
                     'payment_parts-list',
+                    'exchange_bonds-list'
                 ]))
                 <li>
                     <a href="javascript:void(0);" data-toggle="collapse" data-target="#accounting">
@@ -129,6 +130,11 @@
                                 {{ trans('sidebar.payment_parts') }}
                             </x-nav_link>
                         @endcan
+                        @can('exchange_bonds-list')
+                        <x-nav_link :href="route('exchange_bonds.index')" :active="request()->is('*/exchange_bonds/*')" :image="URL::asset('assests/images/Sidebar/bill.png')">
+                            {{ trans('sidebar.exchange_bonds') }}
+                        </x-nav_link>
+                    @endcan
                     </ul>
                 </li>
             @endif

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('title');
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('class_room_id');
+            $table->unsignedBigInteger('school_id');
+            $table->unsignedBigInteger('user_id');
             $table->boolean('tameen')->default(0);
             $table->timestamps();
             $table->softDeletes();

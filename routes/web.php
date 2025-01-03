@@ -10,6 +10,7 @@ use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassRooms\ClassRoomsController;
 use App\Http\Controllers\ClothesController;
 use App\Http\Controllers\ClothesOrderController;
+use App\Http\Controllers\ExchangeBondController;
 use App\Http\Controllers\ExcptionFeesController;
 use App\Http\Controllers\fee_invoiceController;
 use App\Http\Controllers\GardController;
@@ -339,6 +340,9 @@ Route::group(
                 Route::get('/show/{id}', 'show')->name('bookSheetsOrder.show');
                 Route::get('/pay/{id}', 'pay')->name('bookSheetsOrder.pay');
                 Route::get('/destroy/{id}', 'destroy')->name('bookSheetsOrder.destroy');
+            });
+            Route::group(['prefix' => 'exchange_bonds', 'controller' => ExchangeBondController::class], function () {
+                Route::get('/', 'index')->name('exchange_bonds.index');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');
