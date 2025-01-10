@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
 class AdminEraController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function Index()
     {
-        $Employees = User::with('job', 'roles:id')->get(['id', 'code', 'job_id', 'name', 'email', 'isAdmin', 'login_allow', 'password']);
+        $school = $this->getSchool();
+        $Employees = User::where('school_id', $school)->with('job', 'roles:id')->get(['id', 'code', 'job_id', 'name', 'email', 'isAdmin', 'login_allow', 'password']);
         $Permissions = Role::get();
 
         //return $Employees->roles[0]->id;

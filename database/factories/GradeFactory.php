@@ -24,6 +24,7 @@ class GradeFactory extends Factory
             ]),
             'user_id' => User::all()->random()->id,
             'slug' => $this->faker->slug(),
+            'school_id' => '1',
         ];
     }
 }

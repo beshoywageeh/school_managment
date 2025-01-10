@@ -22,6 +22,7 @@ class acadmice_yearFactory extends Factory
             'view' => $this->faker->date('Y').'-'.$this->faker->date('Y'),
             'status' => '0',
             'created_by' => '1',
+            'school_id' => '1',
         ];
     }
 }

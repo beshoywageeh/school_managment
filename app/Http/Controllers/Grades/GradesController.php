@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Grades;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\Grade;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,21 +14,29 @@ use PDF;
 
 class GradesController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
-        $id = \Auth::id();
+        $school = $this->getSchool();
+        $gradesQuery = Grade::where('school_id', $school->id)
+            ->with('user')
+            ->withCount(['class_rooms', 'students']);
+
         if (Auth::user()->hasRole('Admin')) {
-            $data['grades'] = Grade::with('user')->withCount(['class_rooms', 'students'])->withSum('fees', 'amount')->paginate(10);
+            $gradesQuery->withSum('fees', 'amount');
         } else {
-            $grade = DB::Table('teacher_grade')->where('teacher_id', $id)->pluck('grade_id');
-            $data['grades'] = Grade::whereIn('id', $grade)->with('user')->withCount(['class_rooms', 'students'])->paginate(10);
+            $gradesQuery->whereIn('id', DB::table('teacher_grade')
+                ->where('teacher_id', Auth::id())
+                ->pluck('grade_id'));
         }
 
-        $data['users'] = User::get();
+        $data = [
+            'grades' => $gradesQuery->paginate(10),
+            'users' => User::select('id', 'name')->get(),
+        ];
 
-        return view('backend.Grades.index', ['data' => $data]);
+        return view('backend.Grades.index', get_defined_vars());
     }
 
     public function create()
@@ -37,7 +46,6 @@ class GradesController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
         DB::beginTransaction();
         try {
             $request->validate([
@@ -46,8 +54,9 @@ class GradesController extends Controller
             $grade = Grade::create([
                 'name' => $request->Grade_Name,
                 'user_id' => \Auth::Id(),
+                'school_id' => $this->getSchool()->id,
             ]);
-            $grade->users()->attach($request->user_id);
+            $grade->users()->attach($request->user_id, ['school_id' => $this->getSchool()->id]);
             $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->Grade_Name]));
             DB::commit();
             session()->flash('success', trans('general.success'));
@@ -67,6 +76,7 @@ class GradesController extends Controller
     public function show(string $id)
     {
         try {
+            $school = $this->getSchool();
             $report_data = Grade::where('id', $id)->with(['class_room', 'class_room.students'])->withCount(['class_room', 'students'])->first();
 
             // $pdf = PDF::loadView('backend.Grades.report', ['data' => $report_data], [], [
@@ -82,7 +92,7 @@ class GradesController extends Controller
             // ]);
 
             // return $pdf->stream($report_data->name.'.pdf');
-            return view('backend.Grades.report', ['data' => $report_data]);
+            return view('backend.Grades.report', ['data' => $report_data], get_defined_vars());
         } catch (\Exception $e) {
             \Log::error('PDF Generation failed: '.$e->getMessage());
 

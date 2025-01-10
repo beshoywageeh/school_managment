@@ -3,21 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\book_sheet;
 use App\Models\Grade;
 use Illuminate\Http\Request;
 
 class BookSheetController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity,SchoolTrait;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $books_sheets = book_sheet::with('grade', 'classroom', 'orders')->get();
-        $grades = Grade::all();
+        $school = $this->getSchool();
+        $books_sheets = book_sheet::where('school_id', $school->id)->with('grade', 'classroom', 'orders')->get();
+        $grades = Grade::where('school_id', $school->id)->get();
 
         return view('backend.book_sheet.index', get_defined_vars());
     }
@@ -41,6 +43,8 @@ class BookSheetController extends Controller
                     'opening_qty' => $book['opening_qty'],
                     'sales_price' => $request->sales_price,
                     'is_book' => isset($book['is_book']) ? true : false,
+                    'school_id' => $this->getSchool()->id,
+                    'user_id' => auth()->user()->id,
                 ]);
                 $this->logActivity('إضافة', ' تم إضافة كتاب '.$request->name);
             }

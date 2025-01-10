@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\laboratory;
 use App\Models\order;
 use App\Models\stock;
@@ -11,12 +12,13 @@ use Illuminate\Http\Request;
 
 class OutOrderController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
         $orders = order::where('type', 2)->withcount('stocks')->get();
         $type = 2;
+        $school = $this->getSchool();
 
         return view('backend.orders.index', compact('orders', 'type'));
     }
@@ -28,6 +30,7 @@ class OutOrderController extends Controller
             $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6) : '000001';
             $labs = Laboratory::where('is_main', 1)->with('sub_locations')->get();
             $stocks = stock::all();
+            $school = $this->getSchool();
 
             return view('backend.orders.new_transfer', get_defined_vars());
         } catch (Exception $e) {
@@ -43,7 +46,13 @@ class OutOrderController extends Controller
             \DB::beginTransaction();
             $order_id = $request->id;
             $list_stocks = $request->list_outorder;
-            $order_id = order::create(['auto_number' => $request->auto_number, 'type' => 2, 'laboratory_id' => $request->location_to])->id;
+            $order_id = order::create([
+                'auto_number' => $request->auto_number,
+                'type' => 2,
+                'laboratory_id' => $request->location_to,
+                'school_id' => $this->getSchool()->id,
+                'user_id' => auth()->user()->id,
+            ])->id;
             foreach ($list_stocks as $stock) {
                 \DB::table('stocks_order')->Insert([
                     'order_id' => $order_id,
@@ -70,6 +79,7 @@ class OutOrderController extends Controller
         try {
             $order = order::with('stocks')->findorFail($id);
             $type = 2;
+            $school = $this->getSchool();
 
             return view('backend.orders.show', get_defined_vars());
         } catch (Exception $e) {
@@ -82,7 +92,7 @@ class OutOrderController extends Controller
         try {
             $order = order::with('stocks')->findorFail($id);
             $stocks = stock::get();
-
+            $school = $this->getSchool();
             $type = 2;
 
             return view('backend.orders.edit', get_defined_vars());

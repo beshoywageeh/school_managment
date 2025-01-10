@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\NewSchoolRequest;
 use App\Http\Traits\ImageTrait;
+use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Grade;
 use App\Models\settings;
@@ -15,17 +16,18 @@ use Illuminate\Support\Facades\Hash;
 
 class SettingsController extends Controller
 {
-    use ImageTrait;
+    use ImageTrait, SchoolTrait;
 
     public function index()
     {
-        $school_info = settings::with('image')->first();
-        $grades = Grade::withCount('students')->get();
-        $std_count = Student::count();
-        $grd_count = Grade::count();
-        $teach_count = User::count();
+        $school = $this->getSchool();
+        $school_info = settings::where('school_id', $school->id)->with('image')->first();
+        $grades = Grade::where('school_id', $school->id)->withCount('students')->get();
+        $std_count = Student::where('school_id', $school->id)->count();
+        $grd_count = Grade::where('school_id', $school->id)->count();
+        $teach_count = User::where('school_id', $school->id)->count();
         $user = Auth::user();
-        $academic_years = acadmice_year::get();
+        $academic_years = acadmice_year::where('school_id', $school->id)->get();
 
         return view('backend.setting.index', get_defined_vars());
     }

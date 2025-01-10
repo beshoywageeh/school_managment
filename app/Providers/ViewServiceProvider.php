@@ -21,8 +21,8 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $school = settings::with('image')->first();
-        view::share('school', $school);
-
+        /*   $school = settings::with('image')->first();
+           view::share('school', $school);
+*/
     }
 }

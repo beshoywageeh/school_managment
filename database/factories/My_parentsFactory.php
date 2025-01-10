@@ -34,7 +34,7 @@ class My_parentsFactory extends Factory
             'Mother_Birth_Date' => $this->faker->date(),
             'user_id' => '1',
             'slug' => $this->faker->slug(),
-
+            'school_id' => '1',
         ];
     }
 }

@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('fund_accounts', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->unsignedBigInteger('receipt_id');
+            $table->unsignedBigInteger('receipt_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('school_id');
+            $table->unsignedBigInteger('exchange_bond_id')->nullable();
             $table->decimal('Debit', 8, 2)->nullable();
             $table->decimal('Credit', 8, 2)->nullable();
             $table->timestamps();

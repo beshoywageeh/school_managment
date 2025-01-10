@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\order;
 use App\Models\stock;
 use Exception;
@@ -10,13 +11,14 @@ use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
-        $stocks = stock::with('orders')->get();
+        $school = $this->getSchool();
+        $stocks = stock::where('school_id', $school->id)->with('orders')->get();
 
-        return view('backend.stocks.index', compact('stocks'));
+        return view('backend.stocks.index', get_defined_vars());
     }
 
     public function store(Request $request)
@@ -28,6 +30,8 @@ class StockController extends Controller
                     'name' => $stock['name'],
                     'opening_stock' => $stock['opening_qty'],
                     'opening_stock_date' => date('Y-m-d'),
+                    'school_id' => $this->getSchool()->id,
+                    'user_id' => auth()->user()->id,
                 ]);
                 $this->logActivity('إضافة', trans('system_lookup.field_create', ['value' => $stock['name']]));
             }
@@ -73,6 +77,7 @@ class StockController extends Controller
 
     public function new_tawreed_order($id)
     {
+        $school = $this->getSchool();
         $order = Order::findorFail($id);
         $stocks = stock::get(['id', 'name']);
         $type = 1;

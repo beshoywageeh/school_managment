@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ClassRooms;
 
 use App\Http\Controllers\Controller;
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Grade;
@@ -14,21 +15,31 @@ use PDF;
 
 class ClassRoomsController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
         $id = \Auth::id();
-        if (Auth::user()->hasRole('Admin')) {
-            $data['class_rooms'] = class_room::with(['user', 'grade'])->withCount('students')->orderBy('grade_id', 'asc')->get();
-        } else {
-            $grade = DB::Table('teacher_grade')->where('teacher_id', $id)->pluck('grade_id');
-            $data['class_rooms'] = class_room::whereIn('grade_id', $grade)->with('user')->withCount(['students'])->paginate(10);
+        $school = $this->getSchool();
+        $query = class_room::where('school_id', $school->id)
+            ->with(['user', 'grade'])
+            ->withCount('students');
+
+        if (! Auth::user()->hasRole('Admin')) {
+            $grade_ids = DB::table('teacher_grade')
+                ->where('teacher_id', $id)
+                ->pluck('grade_id');
+            $query->whereIn('grade_id', $grade_ids);
         }
+
+        $data['class_rooms'] = $query
+            ->when(Auth::user()->hasRole('Admin'), fn ($q) => $q->orderBy('grade_id', 'asc'))
+            ->when(! Auth::user()->hasRole('Admin'), fn ($q) => $q->paginate(10))
+            ->when(Auth::user()->hasRole('Admin'), fn ($q) => $q->get());
 
         $data['grades'] = Grade::get();
 
-        return view('backend.class_rooms.index', ['data' => $data]);
+        return view('backend.class_rooms.index', get_defined_vars());
     }
 
     /**
@@ -50,6 +61,7 @@ class ClassRoomsController extends Controller
                     'name' => $class['class_name'],
                     'grade_id' => $class['grade_name'],
                     'user_id' => \Auth::Id(),
+                    'school_id' => $this->getSchool()->id,
                 ]);
             }
             session()->flash('success', trans('general.success'));
@@ -72,6 +84,8 @@ class ClassRoomsController extends Controller
         try {
             $data['class_room'] = class_room::where('id', $id)->with(['grade:id,name', 'students'])->first();
             $current_year = \Carbon\Carbon::parse()->format('Y');
+            $data['school'] = $this->getSchool();
+
             $data['acc_year'] = acadmice_year::whereYear('year_start', $current_year)->first();
             $pdf = PDF::loadView('backend.class_rooms.show', ['data' => $data], [], [
                 'format' => 'A4',

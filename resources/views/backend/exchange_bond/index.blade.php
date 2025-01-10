@@ -14,11 +14,7 @@
                             <div class="row">
                                 <div class="col"></div>
                                 <div class="text-right col">
-                                    @can('exchange_bonds-create')
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Create_Year">
-                                            {{ trans('General.new') }}
-                                        </button>
-                                    @endcan
+                                    
                                 </div>
                             </div>
 
@@ -45,7 +41,25 @@
                                             <td>{{ $exchange->student->name }}</td>
                                             <td>{{ Number::currency($exchange->amount,'EGP') }}</td>
                                             <td>{{ $exchange->description }}</td>
-                                            <td></td>
+                                            <td>
+                                                <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                                    [
+                                                        'type'=>'link',
+                                                        'url' => route('exchange_bonds.edit', $exchange->id),
+                                                        'text' => trans('general.edit'),
+                                                        'icon' => 'ti-pencil',
+                                                        'can' => 'exchange_bonds-edit',
+                                                    ],
+                                                    [
+                                                        'type'=>'link',
+                                                        'url' => route('exchange_bonds.destroy', $exchange->id),
+                                                        'text' => trans('general.delete'),
+                                                        'icon' => 'ti-trash',
+                                                        'onclick' => 'confirmation(event)',
+                                                        'can' => 'exchange_bonds-delete',
+                                                    ],  
+                                                ]" />
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>

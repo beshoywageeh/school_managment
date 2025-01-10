@@ -13,7 +13,7 @@ class acadmice_year extends Model
 
     protected $casts = ['status' => Status::class];
 
-    protected $fillable = ['year_start', 'status', 'year_end', 'created_by', 'updated_by', 'view'];
+    protected $fillable = ['year_start', 'status', 'year_end', 'created_by', 'updated_by', 'view', 'school_id'];
 
     public function creator()
     {

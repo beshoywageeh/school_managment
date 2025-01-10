@@ -11,7 +11,7 @@ class order extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['auto_number', 'type', 'laboratory_id'];
+    protected $fillable = ['auto_number', 'type', 'laboratory_id', 'school_id', 'user_id'];
 
     public function stocks()
     {

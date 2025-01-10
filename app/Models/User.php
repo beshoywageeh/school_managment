@@ -43,6 +43,7 @@ class User extends Authenticatable
         'national_id',
         'grade_year',
         'school_id',
+        'user_id',
     ];
 
     /**

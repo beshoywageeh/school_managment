@@ -11,7 +11,7 @@ class School_Fee extends Model
 {
     use HasFactory, LogsActivity, SoftDeletes;
 
-    protected $fillable = ['grade_id', 'classroom_id', 'user_id', 'academic_year_id', 'description', 'amount'];
+    protected $fillable = ['grade_id', 'classroom_id', 'user_id', 'academic_year_id', 'description', 'amount', 'school_id'];
 
     public function user()
     {

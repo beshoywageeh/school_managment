@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSchool_FeeRequest;
 use App\Http\Requests\UpdateSchool_FeeRequest;
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Fee_invoice;
@@ -17,14 +18,15 @@ use Illuminate\Support\Facades\DB;
 
 class SchoolFeeController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $School_Fees = School_Fee::with('grade:id,name', 'classroom:id,name', 'user:id,name', 'year:id,view')->get(['id', 'title', 'amount', 'academic_year_id', 'description', 'grade_id', 'classroom_id', 'user_id', 'created_at']);
+        $school = $this->getSchool();
+        $School_Fees = School_Fee::where('school_id', $school->id)->with('grade:id,name', 'classroom:id,name', 'user:id,name', 'year:id,view')->get(['id', 'title', 'amount', 'academic_year_id', 'description', 'grade_id', 'classroom_id', 'user_id', 'created_at']);
 
         return view('backend.school_fees.index', get_defined_vars());
     }
@@ -35,15 +37,16 @@ class SchoolFeeController extends Controller
     public function create()
     {
         try {
-            $grades = Grade::get();
-            $years = acadmice_year::where('status', 0)->get();
+            $school = $this->getSchool();
+            $grades = Grade::where('school_id', $school->id)->get();
+            $years = acadmice_year::where('school_id', $school->id)->where('status', 0)->get();
             if ($grades->count() == 0 || $years->count() == 0) {
                 session()->flash('info', 'من فضلك اضف مراحل واعوام دراسية للبدء');
 
                 return redirect()->back();
-            } else {
-                return view('backend.school_fees.create', get_defined_vars());
             }
+
+            return view('backend.school_fees.create', get_defined_vars());
 
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -64,10 +67,12 @@ class SchoolFeeController extends Controller
                 $school_fee->grade_id = $request->grade_id;
                 $school_fee->classroom_id = $class_rooms;
                 $school_fee->user_id = $request->user()->id;
+                $school_fee->school_id = $request->user()->school_id;
                 $school_fee->academic_year_id = $request->academic_year_id;
                 $school_fee->description = $request->description;
                 $school_fee->amount = $request->amount;
                 $school_fee->title = $request->title;
+                $school_fee->school_id = $request->user()->school_id;
                 $school_fee->save();
                 $this->logActivity('إضافة', 'مصروفات دراسية بقيمة :'.\Number::currency($request->amount, 'EGP', 'ar'));
             }
@@ -125,8 +130,9 @@ class SchoolFeeController extends Controller
     public function edit($id)
     {
         try {
+            $school = $this->getSchool();
             $school_Fee = School_Fee::findorFail($id);
-            $grades = Grade::get();
+            $grades = Grade::where('school_id', $school->id)->get();
             $years = acadmice_year::where('status', 1)->get();
             $academic_years =
                 $years->map(function ($year) {

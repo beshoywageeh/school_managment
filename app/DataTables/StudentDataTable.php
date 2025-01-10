@@ -33,7 +33,7 @@ class StudentDataTable extends DataTable
      */
     public function query(Student $model): QueryBuilder
     {
-        return $model->newQuery()->with('parent:id,father_name', 'classroom:id,name', 'grade:id,name');
+        return $model->newQuery()->where('school_id', \Auth::user()->school_id)->with('parent:id,father_name', 'classroom:id,name', 'grade:id,name');
     }
 
     /**

@@ -13,6 +13,7 @@ class Grade extends Model
     protected $fillable = [
         'name',
         'user_id',
+        'school_id',
     ];
 
     //protected $primaryKey = 'id';

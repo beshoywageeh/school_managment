@@ -29,7 +29,9 @@ class UserTableSeeder extends Seeder
             'email_verified_at' => now(),
             'email' => 'admin@ischool.com',
             'isAdmin' => '1',
-            'login_allow' => '1']);
+            'login_allow' => '1',
+            'school_id' => 1,
+        ]);
         $role = Role::create(['name' => 'Admin']);
         $permissions = Permission::pluck('id', 'id')->all();
         $role->syncPermissions($permissions);

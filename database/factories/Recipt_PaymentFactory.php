@@ -25,6 +25,8 @@ class Recipt_PaymentFactory extends Factory
             'student_id' => $this->faker->numberBetween(1, 100),
             'academic_year_id' => '1',
             'Debit' => $this->faker->numberBetween(500, 5000),
+            'user_id' => '1',
+            'school_id' => '1',
         ];
     }
 }

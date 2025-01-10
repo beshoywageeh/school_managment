@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\class_room;
 use App\Models\classes;
 use App\Models\Student;
@@ -10,11 +11,12 @@ use Illuminate\Http\Request;
 
 class ClassesController extends Controller
 {
-    use logsActivity;
+    use logsActivity,SchoolTrait;
 
     public function index()
     {
-        $class_rooms = class_room::with(['grade:id,name'])->get(['id', 'name', 'grade_id'])->groupBy('grade.name');
+        $school = $this->getSchool();
+        $class_rooms = class_room::where('school_id', $school->id)->with(['grade:id,name'])->get(['id', 'name', 'grade_id'])->groupBy('grade.name');
         $classes = classes::with(['grade:id,name', 'class_room:id,name'])->withCount('students')->get(['id', 'title', 'class_room_id', 'grade_id', 'tameen']);
 
         return view('backend.classes.index', get_defined_vars());
@@ -22,18 +24,22 @@ class ClassesController extends Controller
 
     public function create()
     {
+        $school = $this->getSchool();
 
-        return view('backend.classes.create');
+        return view('backend.classes.create', get_defined_vars());
     }
 
     public function store(Request $request)
     {
         try {
+            $school = $this->getSchool();
             foreach ($request->list_classes as $class) {
                 classes::create([
                     'title' => $class['class_name'],
                     'class_room_id' => $class['grade_name'],
                     'grade_id' => class_room::find($class['grade_name'])->grade_id,
+                    'school_id' => $school->id,
+                    'user_id' => auth()->user()->id,
                 ]);
             }
             session()->flash('success', trans('general.success'));
@@ -88,7 +94,7 @@ class ClassesController extends Controller
     public function show($id)
     {
         $class = classes::where('id', $id)->with('grade:id,name', 'class_room:id,name', 'students:id,name,class_id,gender,religion')->first(['id', 'title', 'tameen', 'class_room_id', 'grade_id']);
-
+        $school = $this->getSchool();
         if ($class->students->count() == 0) {
             return redirect()->route('classes.index')->with('info', trans('general.noDataToShow'));
         }

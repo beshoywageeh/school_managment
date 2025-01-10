@@ -35,6 +35,7 @@ class StudentFactory extends Factory
             'acadmiecyear_id' => $this->faker->numberBetween(1, 2),
             'tameen' => $this->faker->numberBetween(0, 1),
             'nationality_id' => \App\Models\nationality::pluck('id')->random(),
+            'school_id' => '1',
 
         ];
     }

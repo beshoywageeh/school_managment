@@ -11,7 +11,7 @@ class Exchange_bond extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['student_id', 'academic_year_id', 'date', 'amount', 'manual', 'description'];
+    protected $fillable = ['student_id', 'academic_year_id', 'date', 'amount', 'manual', 'description', 'school_id', 'user_id'];
 
     public function student()
     {
@@ -21,5 +21,10 @@ class Exchange_bond extends Model
     public function acadmic_year()
     {
         return $this->belongsTo(acadmice_year::class, 'academic_year_id');
+    }
+
+    public function studentaccount()
+    {
+        return $this->hasMany(StudentAccount::class);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Grade;
 use App\Models\promotion;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class promotionController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     /*
     *
@@ -20,9 +21,10 @@ class promotionController extends Controller
      */
     public function index()
     {
-        $promotions = promotion::with('students:id,name', 'f_grade:id,name', 'f_class:id,name', 't_grade:id,name', 't_class:id,name', 't_acc:id,view', 'f_acc:id,view')->get();
+        $school = $this->getSchool();
+        $promotions = promotion::where('school_id', $school->id)->with('students:id,name', 'f_grade:id,name', 'f_class:id,name', 't_grade:id,name', 't_class:id,name', 't_acc:id,view', 'f_acc:id,view')->get();
 
-        return view('backend.promotion.Index', compact('promotions'));
+        return view('backend.promotion.Index', compact('promotions', 'school'));
     }
 
     /**
@@ -30,8 +32,9 @@ class promotionController extends Controller
      */
     public function create()
     {
-        $grades = Grade::all();
-        $acc_year = acadmice_year::where('status', 0)->get();
+        $school = $this->getSchool();
+        $grades = Grade::where('school_id', $school)->get();
+        $acc_year = acadmice_year::where('school_id', $school)->where('status', 0)->get();
 
         return view('backend.promotion.create', get_defined_vars());
     }
@@ -62,6 +65,8 @@ class promotionController extends Controller
                     'to_class' => $request->new_class,
                     'to_acc' => $request->acc_to,
                     'from_acc' => $request->acc_from,
+                    'school_id' => $this->getSchool()->id,
+                    'user_id' => auth()->user()->id,
                 ]);
                 $this->logActivity('ترقية طالب', ' تم ترقية طالب '.$Students->where('id', $student->id)->first()->name);
             }

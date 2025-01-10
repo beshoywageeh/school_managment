@@ -13,7 +13,7 @@ class Fee_invoice extends Model
 
     protected $table = 'fee_invoices';
 
-    protected $fillable = ['status'];
+    protected $fillable = ['status', 'user', 'school_id'];
 
     public function students()
     {

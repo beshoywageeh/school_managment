@@ -21,6 +21,8 @@ class classes extends Model
         'updated_at',
         'deleted_at',
         'tameen',
+        'school_id',
+        'user_id',
     ];
 
     public function grade()

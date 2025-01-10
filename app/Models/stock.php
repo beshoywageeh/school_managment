@@ -11,7 +11,7 @@ class stock extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['name', 'opening_stock', 'opening_stock_date'];
+    protected $fillable = ['name', 'opening_stock', 'opening_stock_date', 'school_id', 'user_id'];
 
     public function orders()
     {

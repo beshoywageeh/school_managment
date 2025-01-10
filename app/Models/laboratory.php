@@ -11,7 +11,7 @@ class laboratory extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public $fillable = ['location', 'location_id', 'sub_location', 'is_main'];
+    public $fillable = ['location', 'location_id', 'sub_location', 'is_main', 'school_id', 'user_id'];
 
     public function sub_locations()
     {

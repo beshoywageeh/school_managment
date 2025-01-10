@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Fee_invoice;
 use App\Models\PaymentParts;
@@ -15,11 +16,12 @@ use Illuminate\Support\Facades\DB;
 
 class PaymentPartsController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity,SchoolTrait;
 
     public function index()
     {
         $PaymentParts = PaymentParts::with(['students', 'grades', 'classes', 'year'])->get();
+        $school = $this->getSchool();
 
         return view('backend.payment_parts.index', get_defined_vars());
     }
@@ -28,6 +30,7 @@ class PaymentPartsController extends Controller
     {
         try {
             $student = Fee_invoice::where('student_id', $id)->with(['students', 'grades', 'classes', 'acd_year', 'fees'])->get();
+            $school = $this->getSchool();
             if ($student->count() == 0) {
                 session()->flash('info', trans('general.noInvoiceToPart'));
 
@@ -55,6 +58,8 @@ class PaymentPartsController extends Controller
                 $fee->school_fees_id = $list_part['fee_id'];
                 $fee->amount = $list_part['amount'];
                 $fee->academic_year_id = acadmice_year::where('status', '0')->first()->id;
+                $fee->school_id = $this->getSchool()->id;
+                $fee->user_id = auth()->user()->id;
                 $fee->save();
                 $this->logActivity('إضافة', 'تم حفظ فاتورة قسط لطالب', $fee->students->name);
             }
@@ -72,6 +77,7 @@ class PaymentPartsController extends Controller
     {
         try {
             $paymentParts = PaymentParts::where('id', $id)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'acd_year'])->first();
+            $school = $this->getSchool();
             session()->flash('success', trans('general.success'));
 
             return view('backend.payment_parts.edit', get_defined_vars());
@@ -86,6 +92,7 @@ class PaymentPartsController extends Controller
     {
         try {
             $paymentParts = PaymentParts::where('id', $id)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'year:id,year_start,year_end'])->first();
+            $school = $this->getSchool();
 
             return view('backend.payment_parts.edit', get_defined_vars());
         } catch (\Exception $e) {
@@ -133,6 +140,7 @@ class PaymentPartsController extends Controller
     {
         try {
             $part = PaymentParts::where('id', $id)->with(['students', 'grades', 'classes', 'year'])->first();
+            $school = $this->getSchool();
 
             return view('backend.payment_parts.pay', get_defined_vars());
         } catch (\Exception $e) {
@@ -163,6 +171,8 @@ class PaymentPartsController extends Controller
                     'amount' => $part->amount - $request->amount,
                     'school_fees_id' => $part->school_fees_id,
                     'academic_year_id' => $currentYear->id,
+                    'school_id' => $this->getSchool()->id,
+                    'user_id' => auth()->user()->id,
                 ]);
                 $newPart->save();
                 $this->logActivity('دف جزء', 'تم حفظ قسط لطالب', $part->students->name);
@@ -211,6 +221,8 @@ class PaymentPartsController extends Controller
             'student_id' => $studentId,
             'Debit' => $amount,
             'academic_year_id' => $academicYearId,
+            'school_id' => $this->getSchool()->id,
+            'user_id' => auth()->user()->id,
         ]);
         $this->logActivity('إضافة', 'تم إضافة إلفاتورة لطالب', $receipt->students->name);
         $receipt->save();

@@ -26,6 +26,7 @@ class School_FeeFactory extends Factory
             'amount' => $this->faker->numberBetween('1000', '8000'),
             'title' => $this->faker->randomElement(['قسط اول', 'قسط ثاني', 'قسط ثالث']),
             'academic_year_id' => '1',
+            'school_id' => '1',
 
         ];
     }

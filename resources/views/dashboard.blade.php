@@ -1,68 +1,36 @@
 @extends('layouts.app')
+
 @section('title')
     {{ trans('Sidebar.Dashboard') }}
 @endsection
 
 @section('content')
     <div class="row mb-30">
-
-        <div class="col-xl-4 mb-30">
-            <div class="card card-statistics fb-bg h-100">
-                <div class="card-body">
-                    <div class="clearfix">
-                        <div class="float-left icon-box-fixed">
-                            <img class="img img-responsive" width="50"
-                                src="{{ URL::asset('assests/images/Sidebar/students.png') }}">
-                        </div>
-                        <div class="float-right text-right">
-                            <h4 class="text-white">{{ $students }}</h4>
-                            <a href="{{ route('Students.index') }}"
-                                class="text-white card-text">{{ trans('Sidebar.Students') }}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-4 mb-30">
-            <div class="card card-statistics youtube-bg h-100">
-                <div class="card-body">
-                    <div class="clearfix">
-                        <div class="float-left icon-box-fixed">
-                            <img class="img img-responsive" width="50"
-                                src="{{ URL::asset('assests/images/Sidebar/parents.png') }}" alt="">
-                        </div>
-                        <div class="float-right text-right">
-                            <h4 class="text-white">{{ $parents }}</h4>
-                            <a href="{{ route('parents.index') }}"
-                                class="text-white card-text">{{ trans('Sidebar.parents') }}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-4 mb-30">
-            <div class="card card-statistics twitter-bg h-100">
-                <div class="card-body">
-                    <div class="clearfix">
-                        <div class="float-left icon-box-fixed">
-                            <img width="50" src="{{ URL::asset('assests/images/Sidebar/employees.png') }}"
-                                alt="">
-                        </div>
-                        <div class="float-right text-right">
-                            <h4 class="text-white">{{ $employees }}</h4>
-                            <a href="{{ route('employees.index') }}"
-                                class="text-white card-text">{{ trans('Sidebar.employees') }}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('components.stat_card', [
+            'icon' => 'students.png',
+            'count' => $students,
+            'label' => trans('Sidebar.Students'),
+            'route' => 'Students.index',
+        ])
+        @include('components.stat_card', [
+            'icon' => 'parents.png',
+            'count' => $parents,
+            'label' => trans('Sidebar.parents'),
+            'route' => 'parents.index',
+        ])
+        @include('components.stat_card', [
+            'icon' => 'employees.png',
+            'count' => $employees,
+            'label' => trans('Sidebar.employees'),
+            'route' => 'employees.index',
+        ])
     </div>
+
     <div class="row mb-30">
         <div class="col-md-6 mb-30">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="text-center card-title">{{ trans('Sidebar.accounting') }} </h5>
+                    <h5 class="text-center card-title">{{ trans('Sidebar.accounting') }}</h5>
                     <div class="chart-wrapper">
                         <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
                             <canvas id="canvas3" width="550"></canvas>
@@ -74,7 +42,7 @@
         <div class="col-md-6 mb-30">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="text-center card-title">{{ trans('report.student_numbers') }} </h5>
+                    <h5 class="text-center card-title">{{ trans('report.student_numbers') }}</h5>
                     <div class="chart-wrapper">
                         <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
                             <canvas id="canvas4" width="550"></canvas>
@@ -84,74 +52,73 @@
             </div>
         </div>
     </div>
+
     <div class="row mb-30">
         @can('Students-create')
-            <div class="col-lg-2">
-                <a href="{{ route('Students.create') }}" class="py-5 btn btn-primary btn-block"><img
-                        src="{{ URL::asset('assests/images/Sidebar/students.png') }}" width="70" alt=""><br>
-                    <h5 class="text-white">{{ trans('Sidebar.Students') }} {{ trans('general.new') }}</h5>
-                </a>
-            </div>
+            @include('components.action_button', [
+                'icon' => 'students.png',
+                'label' => trans('Sidebar.Students') . ' ' . trans('general.new'),
+                'route' => 'Students.create',
+            ])
         @endcan
         @can('parents-create')
-            <div class="col-lg-2">
-                <a href="{{ route('parents.create') }}" class="py-5 btn btn-primary dashboard-btn btn-block"><img
-                        src="{{ URL::asset('assests/images/Sidebar/parents.png') }}" width="70" alt=""><br>
-                    <h5 class="text-white">{{ trans('Sidebar.parents') }} {{ trans('general.new') }}</h5>
-                </a>
-            </div>
+            @include('components.action_button', [
+                'icon' => 'parents.png',
+                'label' => trans('Sidebar.parents') . ' ' . trans('general.new'),
+                'route' => 'parents.create',
+            ])
         @endcan
         @can('grade-list')
-            <div class="col-lg-2">
-                <a href="{{ route('grade.index') }}" class="py-5 btn btn-primary dashboard-btn btn-block"><img
-                        src="{{ URL::asset('assests/images/Sidebar/score.png') }}" width="70" alt=""><br>
-                    <h5 class="text-white">{{ trans('Sidebar.Grade') }}</h5>
-                </a>
-            </div>
+            @include('components.action_button', [
+                'icon' => 'score.png',
+                'label' => trans('Sidebar.Grade'),
+                'route' => 'grade.index',
+            ])
         @endcan
         @can('class_rooms-list')
-            <div class="col-lg-2">
-                <a href="{{ route('class_rooms.index') }}" class="py-5 btn btn-primary dashboard-btn btn-block"><img
-                        src="{{ URL::asset('assests/images/Sidebar/classroom.png') }}" width="70" alt=""><br>
-                    <h5 class="text-white">{{ trans('Sidebar.Class_Rooms') }}</h5>
-                </a>
-            </div>
+            @include('components.action_button', [
+                'icon' => 'classroom.png',
+                'label' => trans('Sidebar.Class_Rooms'),
+                'route' => 'class_rooms.index',
+            ])
         @endcan
         @can('schoolfees-create')
-            <div class="col-lg-2">
-                <a href="{{ route('schoolfees.create') }}" class="py-5 btn btn-primary dashboard-btn btn-block"><img
-                        src="{{ URL::asset('assests/images/Sidebar/money.png') }}" width="70" alt=""><br>
-                    <h5 class="text-white">{{ trans('Sidebar.schoolfees') }}</h5>
-                </a>
-            </div>
+            @include('components.action_button', [
+                'icon' => 'money.png',
+                'label' => trans('Sidebar.schoolfees'),
+                'route' => 'schoolfees.create',
+            ])
         @endcan
         @can('jobs-list')
-            <div class="col-lg-2">
-                <a href="{{ route('jobs.index') }}" class="py-5 btn btn-primary dashboard-btn btn-block"><img
-                        src="{{ URL::asset('assests/images/Sidebar/job.png') }}" width="70" alt=""><br>
-                    <h5 class="text-white">{{ trans('Sidebar.jobs') }} {{ trans('general.new') }}</h5>
-                </a>
-            </div>
+            @include('components.action_button', [
+                'icon' => 'job.png',
+                'label' => trans('Sidebar.jobs') . ' ' . trans('general.new'),
+                'route' => 'jobs.index',
+            ])
         @endcan
-
     </div>
 @endsection
+
 @push('scripts')
     <script>
-        var ctx3 = document.getElementById('canvas3').getContext('2d');
-        var config3 = new Chart(ctx3, {
+        const ctx3 = document.getElementById('canvas3').getContext('2d');
+        new Chart(ctx3, {
             type: 'doughnut',
             data: {
                 datasets: [{
-                    data: ["{{ $credit }}", "{{ $payment_parts }}", "{{ $payments }}"],
-                    backgroundColor: [window.chartColors.red, window.chartColors.orange, window.chartColors
-                        .yellow
+                    data: [{{ $credit }}, {{ $payment_parts }}, {{ $payments }}],
+                    backgroundColor: [
+                       'rgba(255, 99, 132, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                        'rgba(255, 205, 86, 0.5)',
                     ],
                     label: 'Dataset 1'
                 }],
-                labels: (['{{ trans('Sidebar.credit') }}', '{{ trans('Sidebar.payment_parts') }}',
+                labels: [
+                    '{{ trans('Sidebar.credit') }}',
+                    '{{ trans('Sidebar.payment_parts') }}',
                     '{{ trans('Sidebar.Recipt_Payment') }}'
-                ])
+                ]
             },
             options: {
                 responsive: true,
@@ -160,14 +127,12 @@
                     labels: {
                         fontColor: "#9295a2"
                     }
-                },
-
+                }
             }
         });
-    </script>
-    <script>
-        var ctx3 = document.getElementById('canvas4').getContext('2d');
-        var config3 = new Chart(ctx3, {
+
+        const ctx4 = document.getElementById('canvas4').getContext('2d');
+        new Chart(ctx4, {
             type: 'bar',
             data: {
                 datasets: [{
@@ -176,15 +141,31 @@
                             "{{ $grade->students_count }}",
                         @endforeach
                     ],
-                    backgroundColor: [window.chartColors.red, window.chartColors.orange, window.chartColors.yellow
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
                     ],
-                    label:'',
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 2,
+                    label: ''
                 }],
-                labels: ([
+                labels: [
                     @foreach ($grades as $grade)
                         '{{ $grade->name }}',
                     @endforeach
-                ])
+                ]
             },
             options: {
                 responsive: true,
@@ -193,8 +174,7 @@
                     labels: {
                         fontColor: "#9295a2"
                     }
-                },
-
+                }
             }
         });
     </script>

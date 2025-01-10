@@ -15,6 +15,7 @@ class class_room extends Model
         'grade_id',
         'user_id',
         'tameen',
+        'school_id',
     ];
 
     public function user()

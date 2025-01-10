@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\ExcptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Student;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class ExcptionFeesController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     /**
      * Display a listing of the resource.
@@ -20,6 +21,7 @@ class ExcptionFeesController extends Controller
     public function index()
     {
         $ExcptionFees = ExcptionFees::with('students')->get();
+        $school = $this->getSchool();
 
         return view('backend.fee_exception.index', get_defined_vars());
     }
@@ -33,6 +35,7 @@ class ExcptionFeesController extends Controller
             $Excpetion = Student::where('id', $id)->with('StudentAccount')->first();
             $fees = Fee_invoice::where('student_id', $id)->where('status', 0)->with('fees')->get();
             $balance = $Excpetion->StudentAccount->sum('debit') - $Excpetion->StudentAccount->sum('credit');
+            $school = $this->getSchool();
             if ($fees->isEmpty() || $balance <= 0) {
                 session()->flash('info', trans('General.noInvoiceToExcept'));
 
@@ -62,6 +65,8 @@ class ExcptionFeesController extends Controller
             $pay->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
             $pay->class_id = Student::where('id', $request->student_id)->first()->classroom_id;
             $pay->fee_id = $request->fee_id;
+            $pay->school_id = $this->getSchool()->id;
+            $pay->user_id = auth()->id();
             $pay->save();
             $std = new StudentAccount;
             $std->student_id = $request->student_id;
@@ -94,6 +99,7 @@ class ExcptionFeesController extends Controller
     {
         try {
             $excptionFees = ExcptionFees::where('student_id', $id)->with('students', 'academic_year', 'grade', 'classroom')->get();
+            $school = $this->getSchool();
 
             return view('backend.fee_exception.show', get_defined_vars());
         } catch (\Exception $e) {
@@ -110,6 +116,7 @@ class ExcptionFeesController extends Controller
     {
         try {
             $excptionFees = ExcptionFees::where('id', $id)->with('students')->first();
+            $school = $this->getSchool();
 
             return view('backend.fee_exception.edit', get_defined_vars());
         } catch (\Exception $e) {

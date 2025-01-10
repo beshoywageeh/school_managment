@@ -6,6 +6,7 @@ use App\DataTables\ParentsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ParentsRequest;
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Imports\ParentsImport;
 use App\Models\My_parents;
 use Carbon\Carbon;
@@ -14,16 +15,20 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class MyParentsController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index(ParentsDataTable $datatable)
     {
-        return $datatable->render('backend.Parents.Index');
+        $school = $this->getSchool();
+
+        return $datatable->render('backend.Parents.Index', compact('school'));
     }
 
     public function create()
     {
-        return view('backend.Parents.create');
+        $school = $this->getSchool();
+
+        return view('backend.Parents.create', get_defined_vars());
     }
 
     public function store(ParentsRequest $request)
@@ -54,6 +59,7 @@ class MyParentsController extends Controller
                 'Religion' => $request->religion,
                 'user_id' => \Auth::Id(),
                 'Father_Learning' => $request->Father_Learning,
+                'school_id' => \Auth::user()->school_id,
             ]);
             $this->logActivity('اضافة', 'تم إضافة ولي الأمر '.$request->Father_Name);
             session()->flash('success', trans('general.success'));
@@ -69,6 +75,7 @@ class MyParentsController extends Controller
     public function show(string $id)
     {
         $parent = My_parents::where('id', $id)->with(['students'])->first();
+        $school = $this->getSchool();
 
         return view('backend.Parents.show', get_defined_vars());
     }
@@ -76,6 +83,7 @@ class MyParentsController extends Controller
     public function edit($id)
     {
         $parent = My_parents::findorfail($id);
+        $school = $this->getSchool();
 
         return view('backend.parents.edit', get_defined_vars());
     }

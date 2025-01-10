@@ -30,7 +30,7 @@ class ParentsDataTable extends DataTable
      */
     public function query(My_parents $model): QueryBuilder
     {
-        return $model->newQuery()->withCount('students');
+        return $model->newQuery()->where('school_id', \Auth::user()->school_id)->withCount('students');
     }
 
     /**

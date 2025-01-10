@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\clothes;
 use App\Models\clothes_order;
 use App\Models\Student;
@@ -11,28 +12,27 @@ use Illuminate\Http\Request;
 
 class ClothesOrderController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index($type)
     {
-        if ($type == 1) {
-            $orders = clothes_order::where('type', 1)->with('stocks')->get();
-            $type = 1;
+        $school = $this->getSchool();
+
+        $validTypes = [1, 2, 3];
+        if (! in_array($type, $validTypes)) {
+            abort(404);
         }
-        if ($type == 2) {
-            $orders = clothes_order::where('type', 2)->with('stocks', 'students')->get();
-            $type = 2;
-        }  if ($type == 3) {
-            $orders = clothes_order::where('type', 3)->with('stocks')->get();
-            $type = 3;
-        }
+
+        $orders = clothes_order::where('school_id', $school->id)->where('type', $type)
+            ->with(['stocks', $type == 2 ? 'students' : null])
+            ->get();
 
         return view('backend.clothes_order.index', get_defined_vars());
     }
 
     public function tawreed()
     {
-
+        $school = $this->getSchool();
         $clothes = clothes::with('orders', 'grade:id,name', 'classroom:id,name')->get();
         if ($clothes->count() == 0) {
             return redirect()->route('clothes.index')->with('info', trans('General.noDataToShow'));
@@ -45,6 +45,7 @@ class ClothesOrderController extends Controller
 
     public function clothes_order_gard_edit($id)
     {
+        $school = $this->getSchool();
 
         try {
             $order = clothes_order::where('id', $id)->with('stocks')->first();
@@ -98,6 +99,8 @@ class ClothesOrderController extends Controller
                 'date' => date('Y-m-d'),
                 'manual_number' => $request->manual_num,
                 'manual_date' => Carbon::parse($request->manual_date)->format('Y-m-d'),
+                'school_id' => $this->getSchool()->id,
+                'user_id' => auth()->user()->id,
             ]);
             foreach ($request->id as $key => $clothe_id) {
                 \DB::table('clothes_stocks')->insert([
@@ -161,6 +164,7 @@ class ClothesOrderController extends Controller
     public function show($id)
     {
         try {
+            $school = $this->getSchool();
             $order = clothes_order::with('stocks')->find($id);
 
             return view('backend.clothes_order.show', get_defined_vars());
@@ -172,6 +176,7 @@ class ClothesOrderController extends Controller
     public function edit($id)
     {
         try {
+            $school = $this->getSchool();
             $order = clothes_order::with('stocks')->find($id);
 
             return view('backend.clothes_order.edit', get_defined_vars());
@@ -182,6 +187,7 @@ class ClothesOrderController extends Controller
 
     public function clothes_out_order()
     {
+        $school = $this->getSchool();
         $generate_code = clothes_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
         $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
         $students = Student::get();
@@ -214,6 +220,8 @@ class ClothesOrderController extends Controller
                 'date' => date('Y-m-d'),
                 'student_id' => $request->student_id,
                 'isset_order' => ($request->isset == 'on') ? 1 : 0,
+                'school_id' => $this->getSchool()->id,
+                'user_id' => auth()->user()->id,
             ]);
             foreach ($request->id as $key => $clothe_id) {
                 \DB::table('clothes_stocks')->insert([
@@ -236,6 +244,7 @@ class ClothesOrderController extends Controller
     {
         try {
             $order = clothes_order::where('id', $id)->with('stocks', 'students')->first();
+            $school = $this->getSchool();
 
             return view('backend.clothes_order.out_order_print', compact('order'));
         } catch (\Exception $e) {
@@ -248,6 +257,7 @@ class ClothesOrderController extends Controller
         try {
             $order = clothes_order::with('stocks')->find($id);
             $students = Student::all();
+            $school = $this->getSchool();
 
             return view('backend.clothes_order.out_order_edit', get_defined_vars());
         } catch (\Exception $e) {
@@ -284,6 +294,7 @@ class ClothesOrderController extends Controller
     public function clothes_order_gard()
     {
         try {
+            $school = $this->getSchool();
             $stocks = clothes::with('grade', 'classroom')->get();
             if ($stocks->count() == 0) {
                 return redirect()->back()->with('error', 'لا يوجد منتجات');
@@ -327,6 +338,7 @@ class ClothesOrderController extends Controller
     public function pay($id)
     {
         try {
+            $school = $this->getSchool();
             $order = clothes_order::findorfail($id);
             $order->update(['is_payed' => 1]);
             $this->logActivity('تعديل', 'تم تعديل الإيصال رقم '.$order->auto_number.' إلى مدفوع ');

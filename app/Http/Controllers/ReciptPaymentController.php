@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Fee_invoice;
 use App\Models\fund_account;
@@ -16,14 +17,15 @@ use Illuminate\Support\Facades\DB;
 
 class ReciptPaymentController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $Recipt_Payments = Recipt_Payment::with(['student:id,name'])->get();
+        $school = $this->getSchool();
+        $Recipt_Payments = Recipt_Payment::where('school_id', $school->id)->with(['student:id,name'])->get();
 
         return view('backend.reciptpayment.index', get_defined_vars());
     }
@@ -34,6 +36,7 @@ class ReciptPaymentController extends Controller
     public function create($id)
     {
         try {
+            $school = $this->getSchool();
             $Student = Student::where('id', $id)->with('fees')->first();
             $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
             $invoice_manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
@@ -68,6 +71,8 @@ class ReciptPaymentController extends Controller
                 $pay->student_id = $request->student_id;
                 $pay->Debit = $invoice->fees->amount;
                 $pay->academic_year_id = acadmice_year::where('status', '0')->first()->id;
+                $pay->school_id = $this->getSchool()->id;
+                $pay->user_id = auth()->user()->id;
                 $pay->save();
                 $std = new StudentAccount;
                 $std->date = date('Y-m-d');
@@ -86,6 +91,8 @@ class ReciptPaymentController extends Controller
                 $fund->receipt_id = $pay->id;
                 $fund->Credit = 0.00;
                 $fund->Debit = $invoice->fees->amount;
+                $fund->school_id = $this->getSchool()->id;
+                $fund->user_id = auth()->user()->id;
                 $fund->save();
                 $this->logActivity('إضافة', 'تم اضافة دفعة جديدة للطالب '.Student::where('id', $request->student_id)->first()->name.' بتاريخ '.date('Y-m-d'));
                 DB::commit();
@@ -108,6 +115,7 @@ class ReciptPaymentController extends Controller
      */
     public function show($id)
     {
+        $school = $this->getSchool();
         $report_data['recipt'] = Recipt_Payment::where('id', $id)->with(['student:id,name'])->first();
         $report_data['tafqeet'] = Numbers::TafqeetMoney($report_data['recipt']->Debit, 'EGP');
 
@@ -121,6 +129,7 @@ class ReciptPaymentController extends Controller
     {
         try {
             $recipt_Payment = Recipt_Payment::where('id', $id)->with('student')->first();
+            $school = $this->getSchool();
 
             //  return $recipt_Payment;
             return view('backend.reciptpayment.edit', get_defined_vars());
@@ -195,6 +204,7 @@ class ReciptPaymentController extends Controller
         $report_data['recipt'] = Recipt_Payment::where('id', $id)->with(['student:id,name'])->first();
 
         $report_data['tafqeet'] = Numbers::TafqeetMoney($report_data['recipt']->Debit, 'EGP');
+        $school = $this->getSchool();
 
         return view('backend.reciptpayment.print', get_defined_vars());
 

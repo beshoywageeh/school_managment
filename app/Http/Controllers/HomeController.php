@@ -18,21 +18,33 @@ class HomeController extends Controller
 
     public function index()
     {
-        $id = Auth::user();
-        if (Auth::user()->hasRole('Admin')) {
-            $students = Student::count();
-            $parents = My_parents::count();
-        } else {
-            $grade = DB::Table('teacher_grade')->where('teacher_id', $id->id)->pluck('grade_id');
-            $students = Student::whereIn('grade_id', $grade)->count();
-            $parents = My_parents::whereIn('student_id', $grade)->count();
-        }
-        $credit = StudentAccount::sum('credit');
-        $payment_parts = PaymentParts::where('date', date('Y-m-d'))->where('payment_status', '0')->sum('amount');
-        $payments = Recipt_Payment::where('date', date('Y-m-d'))->sum('Debit');
+        $id = Auth::id();
+        $user = Auth::user();
+        $school = $this->getSchool();
 
-        $employees = DB::Table('users')->count();
-        $grades = Grade::withCount('students')->get();
+        if ($user->hasRole('Admin')) {
+            $students = Student::where('school_id', $school->id)->count();
+            $parents = My_parents::where('school_id', $school->id)->count();
+        } else {
+            $gradeIds = DB::table('teacher_grade')
+                ->where('teacher_id', $id)
+                ->pluck('grade_id');
+
+            $students = Student::where('school_id', $school->id)->whereIn('grade_id', $gradeIds)->count();
+            $parents = My_parents::where('school_id', $school->id)->whereIn('student_id', $gradeIds)->count();
+        }
+
+        $today = now()->toDateString();
+
+        $credit = StudentAccount::where('school_id', $school->id)->sum('credit');
+        $payment_parts = PaymentParts::where('school_id', $school->id)->whereDate('date', $today)
+            ->where('payment_status', '0')
+            ->sum('amount');
+        $payments = Recipt_Payment::where('school_id', $school->id)->whereDate('date', $today)
+            ->sum('Debit');
+
+        $employees = DB::table('users')->where('school_id', $school->id)->count();
+        $grades = Grade::withCount('students')->where('school_id', $school->id)->get();
 
         return view('dashboard', get_defined_vars());
     }

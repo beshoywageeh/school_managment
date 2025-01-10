@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\clothes;
 use App\Models\Grade;
 use Exception;
@@ -10,11 +11,12 @@ use Illuminate\Http\Request;
 
 class ClothesController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
-        $clothes = clothes::with('orders', 'grade', 'classroom')->get();
+        $school = $this->getSchool();
+        $clothes = clothes::where('school_id', $school->id)->with('orders', 'grade', 'classroom')->get();
         $grades = Grade::all();
 
         return view('backend.clothes.index', compact('clothes', 'grades'));
@@ -33,7 +35,8 @@ class ClothesController extends Controller
                 'isset' => ($request->isset == 'on') ? 1 : 0,
                 'opening_date' => date('Y-m-d'),
                 'sales_price_set' => $request->sales_price_isset,
-
+                'school_id' => $this->getSchool()->id,
+                'user_id' => auth()->user()->id,
             ]);
             $this->logActivity('اضافة', trans('system_lookup.field_create', ['value' => $request->name]));
 

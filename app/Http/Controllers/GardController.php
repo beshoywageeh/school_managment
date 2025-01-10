@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\order;
 use App\Models\stock;
 use Exception;
@@ -10,31 +11,31 @@ use Illuminate\Http\Request;
 
 class GardController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
-        $orders = order::where('type', 3)->withcount('stocks')->get();
+        $school = $this->getSchool();
+        $orders = order::where('school_id', $school->id)->where('type', 3)->withcount('stocks')->get();
         $type = 3;
 
-        return view('backend.orders.index', compact('orders', 'type'));
+        return view('backend.orders.index', get_defined_vars());
     }
 
     public function create()
     {
         try {
-            $stocks = stock::all();
+            $school = $this->getSchool();
+            $stocks = stock::where('school_id', $school)->get();
             if ($stocks->count() == 0) {
                 return redirect()->back()->with('error', 'لا يوجد مستودعات');
             }
-            $generate_code = order::where('type', '3')->orderBy('auto_number', 'desc')->first();
-            $order = order::create([
-                'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
-                'type' => '3',
-            ]);
-            $this->logActivity('إضافة', ' إضافة أمر جرد رقم'.$order->auto_number);
+            $generate_code = order::where('school_id', $school)->where('type', '3')->orderBy('auto_number', 'desc')->first();
+            $order = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
+            $type = 3;
+            $this->logActivity('إضافة', ' إضافة أمر جرد رقم'.$order);
 
-            return view('backend.gard.create', compact('order', 'stocks'));
+            return view('backend.gard.create', get_defined_vars());
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -44,6 +45,12 @@ class GardController extends Controller
     {
 
         try {
+            $order = order::create([
+                'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
+                'type' => '3',
+                'school_id' => $this->getSchool()->id,
+                'user_id' => auth()->user()->id,
+            ]);
             foreach ($request->stock_id as $key => $stock) {
                 $stock = stock::find($stock);
                 $current_qty = $stock->orders()->where('stock_id', $stock->id);
@@ -53,7 +60,7 @@ class GardController extends Controller
                 $quantity_out = max(0, -$qty);
 
                 \DB::table('stocks_order')->Insert([
-                    'order_id' => $request->id,
+                    'order_id' => $order->id,
                     'stock_id' => $stock->id,
                     'quantity_out' => $quantity_out,
                     'quantity_in' => $quantity_in,
@@ -70,6 +77,7 @@ class GardController extends Controller
     public function edit($id)
     {
         try {
+            $school = $this->getSchool();
             $order = order::where('id', $id)->with('stocks')->first();
             $type = 3;
 
@@ -114,6 +122,7 @@ class GardController extends Controller
     public function show($id)
     {
         try {
+            $school = $this->getSchool();
             $order = order::with('stocks')->findorFail($id);
             $type = 3;
 

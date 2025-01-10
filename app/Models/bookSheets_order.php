@@ -11,7 +11,7 @@ class bookSheets_order extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['auto_number', 'manual_number', 'manual_date', 'date', 'type', 'student_id'];
+    protected $fillable = ['auto_number', 'manual_number', 'manual_date', 'date', 'type', 'student_id', 'school_id', 'user_id'];
 
     public function stocks()
     {

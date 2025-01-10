@@ -27,6 +27,7 @@ class Student extends Model
         'student_status',
         'religion',
         'code', 'acadmiecyear_id', 'nationality_id',
+        'school_id',
     ];
 
     protected $casts = [

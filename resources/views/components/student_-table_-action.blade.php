@@ -46,4 +46,11 @@
         'icon' => 'fa fa-money',
         'can'=>'payment_parts-create'
     ],
+    [
+        'type'=>'link',
+        'url' => route('exchange_bonds.create', $id),
+        'text' => trans('exchange_bonds.title'),
+        'icon' => 'fa fa-money',
+        'can'=>'exchange_bonds-create'
+    ],
 ]" />

@@ -343,6 +343,11 @@ Route::group(
             });
             Route::group(['prefix' => 'exchange_bonds', 'controller' => ExchangeBondController::class], function () {
                 Route::get('/', 'index')->name('exchange_bonds.index');
+                Route::get('/create/{id}', 'create')->name('exchange_bonds.create');
+                Route::post('/store', 'store')->name('exchange_bonds.store');
+                Route::get('/edit/{id}', 'edit')->name('exchange_bonds.edit');
+                Route::post('/update', 'update')->name('exchange_bonds.update');
+                Route::get('/destroy/{id}', 'destroy')->name('exchange_bonds.destroy');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
             Route::get('/monitor', [ActivityLogController::class, 'index'])->name('system_lookup');

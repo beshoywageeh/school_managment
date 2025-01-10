@@ -3,20 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\Job;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $jobs = Job::with('jobs')->get();
-        $jobs_main = Job::where('is_main', 1)->get();
+        $school = $this->getSchool();
+        $jobs = Job::where('school_id', $school->id)->with('jobs')->get();
+        $jobs_main = Job::where('school_id', $school->id)->where('is_main', 1)->get();
 
         return view('backend.Job.index', get_defined_vars());
     }
@@ -31,6 +33,7 @@ class JobController extends Controller
                 'is_main' => ($request->is_main == 'on') ? 1 : 0,
                 'main_job_id' => ($request->is_main == 'on') ? null : $request->type,
                 'created_by' => \Auth::id(),
+                'school_id' => $this->getSchool()->id,
             ]);
             $this->logActivity('إضافة', 'تم اضافة وظيفة جديدة'.$request->job_name);
             session()->flash('success', trans('general.success'));
@@ -48,6 +51,7 @@ class JobController extends Controller
      */
     public function show($id)
     {
+        $school = $this->getSchool();
         $jobs = Job::where('main_job_id', $id)->get();
 
         return response()->json($jobs);

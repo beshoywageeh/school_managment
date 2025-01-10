@@ -23,6 +23,7 @@ class class_roomTableSeeder extends Seeder
                     'grade_id' => $grade_id->id,
                     'user_id' => '1',
                     'slug' => \Illuminate\Support\str::slug($name),
+                    'school_id' => '1',
                 ]);
             }
         }

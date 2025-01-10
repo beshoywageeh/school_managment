@@ -11,7 +11,7 @@ class clothes extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['name', 'sales_price', 'purchase_price', 'isset', 'opening_qty', 'opening_date', 'grade_id', 'classroom_id', 'sales_price_set'];
+    protected $fillable = ['name', 'sales_price', 'purchase_price', 'isset', 'opening_qty', 'opening_date', 'grade_id', 'classroom_id', 'sales_price_set', 'school_id', 'user_id'];
 
     public function orders()
     {

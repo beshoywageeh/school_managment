@@ -185,6 +185,7 @@ return new class extends Migration
             $table->foreign('receipt_id')->references('id')->on('recipt__payments')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('school_id')->references('id')->on('settings')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('exchange_bond_id')->references('id')->on('exchange_bonds')->onDelete('Cascade')->onUpdate('Cascade');
         });
     }
 
@@ -369,6 +370,7 @@ return new class extends Migration
             $table->dropForeign('receipt_id');
             $table->dropforeign('user_id');
             $table->dropforeign('school_id');
+            $table->dropforeign('exchange_bond_id');
         });
     }
 };

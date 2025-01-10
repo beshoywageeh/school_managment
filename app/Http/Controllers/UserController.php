@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\ImageTrait;
+use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Imports\WorkersImport;
 use App\Models\Job;
 use App\Models\User;
@@ -11,14 +13,15 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
-    use ImageTrait;
+    use ImageTrait, LogsActivity, SchoolTrait;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $employees = User::with('job')->get();
+        $school = $this->getSchool();
+        $employees = User::where('school_id', $school->id)->with('job')->get();
 
         return view('backend.employees.index', get_defined_vars());
     }
@@ -30,6 +33,7 @@ class UserController extends Controller
     {
         $jobs_main = Job::where('is_main', 1)->get();
         $years = range(date('Y'), date('Y') - 10);
+        $school = $this->getSchool();
 
         return view('backend.employees.create', get_defined_vars());
     }
@@ -64,8 +68,11 @@ class UserController extends Controller
             $user->insurance_date = $request->insurance_date ? $request->insurance_date : null;
             $user->national_id = $request->national_id;
             $user->email = \Str::slug($request->name).'@ischool.com';
+            $user->school_id = $this->getSchool()->id;
+            $user->user_id = auth()->id();
             $user->save();
             $this->verifyAndStoreImage($request, 'file', 'employees'.'/'.$request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
+            $this->logActivity('اضافة', 'تم إضافة الموظف '.$request->name);
             DB::commit();
             session()->flash('success', trans('General.success'));
 
@@ -84,6 +91,7 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::findorFail($id);
+        $school = $this->getSchool();
 
         return view('backend.employees.show', get_defined_vars());
     }
@@ -97,6 +105,7 @@ class UserController extends Controller
             $jobs_main = Job::where('is_main', 1)->get();
             $user = User::findOrFail($id);
             $years = range(date('Y'), date('Y') - 10);
+            $school = $this->getSchool();
 
             return view('backend.employees.edit', get_defined_vars());
         } catch (\Exception $e) {
@@ -112,6 +121,7 @@ class UserController extends Controller
     public function update(Request $request)
     {
         try {
+            DB::beginTransaction();
             $user = User::findOrFail($request->id);
             $user->name = $request->name;
             $user->phone = $request->phone;
@@ -133,10 +143,14 @@ class UserController extends Controller
             $user->insurance_date = $request->insurance_date ? $request->insurance_date : null;
             $user->national_id = $request->national_id;
             $user->save();
+            $this->verifyAndStoreImage($request, 'file', 'employees'.'/'.$request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
+            $this->logActivity('تعديل', 'تم تعديل الموظف '.$request->name);
+            DB::commit();
             session()->flash('success', trans('General.success'));
 
             return redirect()->route('employees.index');
         } catch (\Exception $e) {
+            DB::rollBack();
             session()->flash('error', $e->getMessage());
 
             return redirect()->back()->withInput();
@@ -150,6 +164,7 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
+            $this->logActivity('حذف', 'تم حذف الموظف '.$user->name);
             $user->delete();
             session()->flash('success', trans('General.success'));
 
@@ -164,7 +179,8 @@ class UserController extends Controller
     public function return_emp($id)
     {
 
-        User::where('id', $id)->restore();
+        $emp = User::where('id', $id)->restore();
+        $this->logActivity('استعادة', 'تم استعادة الموظف'.$emp->name);
         session()->flash('success', trans('General.success'));
 
         return redirect()->route('employees.index');
@@ -179,7 +195,8 @@ class UserController extends Controller
 
     public function getjobs($id)
     {
-        $jobs = Job::where('main_job_id', $id)->get(['id', 'name']);
+        $school = $this->getSchool();
+        $jobs = Job::where('school_id', $school->id)->where('main_job_id', $id)->get(['id', 'name']);
 
         return response()->json($jobs);
     }

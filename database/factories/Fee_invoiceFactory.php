@@ -23,6 +23,8 @@ class Fee_invoiceFactory extends Factory
             'academic_year_id' => '1',
             'school_fee_id' => $this->faker->numberBetween(1, 50),
             'invoice_date' => $this->faker->date('Y-m-d'),
+            'school_id' => '1',
+            'user_id' => '1',
         ];
     }
 }

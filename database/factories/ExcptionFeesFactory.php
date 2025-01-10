@@ -24,6 +24,8 @@ class ExcptionFeesFactory extends Factory
             'fee_id' => $this->faker->numberBetween(1, 50),
             'date' => $this->faker->date('Y-m-d'),
             'amount' => $this->faker->numberBetween(100, 500),
+            'school_id' => '1',
+            'user_id' => '1',
         ];
     }
 }

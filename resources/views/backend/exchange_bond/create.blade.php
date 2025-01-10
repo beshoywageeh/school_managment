@@ -1,68 +1,50 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('exchange_bonds.create') }}
+    {{ trans('exchange_bonds.title') }} {{trans('General.new')}}
 @endsection
 @push('css')
 @endpush
 @section('content')
-    @can('exchange_bonds-list')
-        <div class="row">
-            <div class="col-xl-12 mb-30">
-                <div class="card card-satistics h-100">
-                    <div class="card-body">
-                        <div class="card-title">
-                            <div class="row">
-                                <div class="col"></div>
-                                <div class="text-right col">
-                                    @can('exchange_bonds-create')
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Create_Year">
-                                            {{ trans('General.new') }}
-                                        </button>
-                                    @endcan
-                                </div>
+    <div class="row">
+        <div class="col-xl-12 mb-30">
+            <div class="card card-satistics h-100">
+                <div class="card-body">
+                    <form action="{{ route('exchange_bonds.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3 form-row">
+                            <div class="form-group col-md-4">
+                                <label for="manual" class="font-weight-bold">{{trans('exchange_bonds.manual')}}</label>
+                                <input type="text" name="manual" id="manual" class="form-control">
                             </div>
+                            <div class="form-group col-md-4">
+                                <label for="student_id" class="font-weight-bold">{{ trans('exchange_bonds.student') }}</label>
+                                <input name="student_id" value="{{ $student->id }}" type="hidden">
+                                <input type="text" class="form-control" value="{{ $student->name }}" disabled>
+                                <input type="text" class="form-control" value="{{ Number::Currency($student->student_account_sum_debit-$student->student_account_sum_credit,'EGP') }}" disabled>
+                                
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="amount" class="font-weight-bold">{{ trans('exchange_bonds.amount') }}</label>
+                                <input type="number" name="amount" id="amount" class="form-control" step="0.01">
+                            </div>
+                        </div>
+                  
+                        <div class="mb-3 form-row">
+                            <div class="form-group col">
+                                <label for="note" class="font-weight-bold">{{ trans('exchange_bonds.note') }}</label>
+                                <textarea name="note" id="note" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-success btn-block">{{ trans('General.Submit') }}</button>
+                            </div>
+                        </div>
+                    </form>
+                    
 
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-sm" id="datatable">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{{ trans('exchange_bonds.manual') }}</th>
-                                        <th>{{ trans('exchange_bonds.acc_year') }}</th>
-                                        <th>{{ trans('exchange_bonds.student') }}</th>
-                                        <th>{{ trans('exchange_bonds.amount') }}</th>
-                                        <th>{{ trans('exchange_bonds.description') }}</th>
-                                        <th>{{ trans('general.actions') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($exchanges as $exchange)
-                                        <tr>
-                                            <td> {{ $loop->index +1 }}</td>
-                                            <td> {{ $exchange->manual ?? '-' }}</td>
-                                            <td>{{ $exchange->acadmic_year->view }}</td>
-                                            <td>{{ $exchange->student->name }}</td>
-                                            <td>{{ Number::currency($exchange->amount,'EGP') }}</td>
-                                            <td>{{ $exchange->description }}</td>
-                                            <td></td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="7" class="text-center">{{ trans('general.Msg') }}</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                 
-                    </div>
                 </div>
             </div>
         </div>
-    @endcan
-
-    @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @endpush
+    </div>
 @endsection

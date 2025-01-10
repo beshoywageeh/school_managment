@@ -8,4 +8,6 @@ return [
     'date' => 'التاريخ',
     'description' => 'الوصف',
     'amount' => 'القيمة',
+    'note' => 'ملاحظات',
+    'select_student' => 'اختر طالب',
 ];

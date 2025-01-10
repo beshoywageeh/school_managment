@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\book_sheet;
 use App\Models\bookSheets_order;
 use App\Models\Student;
@@ -11,23 +12,24 @@ use Illuminate\Support\Facades\DB;
 
 class BookSheetsOrderController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index($type)
     {
-        if ($type == 1 || 3) {
-
-            $orders = bookSheets_order::where('type', $type)->with('stocks')->get();
-        }        if ($type == 2) {
-            $orders = bookSheets_order::where('type', $type)->with('stocks', 'students')->get();
-        }
+        $school = $this->getSchool();
+        $relations = ($type == 2) ? ['stocks', 'students'] : ['stocks'];
+        $orders = bookSheets_order::where('school_id', $school->id)
+            ->where('type', $type)
+            ->with($relations)
+            ->get();
 
         return view('backend.book_sheets_order.index', compact('orders', 'type'));
     }
 
     public function create_tawreed()
     {
-        $books_sheets = book_sheet::with('grade', 'classroom')->get();
+        $school = $this->getSchool();
+        $books_sheets = book_sheet::where('school_id', $school->id)->with('grade', 'classroom')->get();
         if ($books_sheets->count() == 0) {
             return redirect()->route('books_sheets.index')->with('info', trans('general.noDataToShow'));
         }
@@ -48,6 +50,8 @@ class BookSheetsOrderController extends Controller
                 'date' => date('Y-m-d'),
                 'manual_date' => $request->manual_date,
                 'manual_number' => $request->manual_num,
+                'school_id' => $this->getSchool()->id,
+                'user_id' => auth()->user()->id,
             ]);
             foreach ($request->id as $key => $book_sheet) {
                 DB::table('books_sheets_stocks')->insert([
@@ -70,7 +74,8 @@ class BookSheetsOrderController extends Controller
 
     public function edit_tawreed($id)
     {
-        $order = bookSheets_order::where('id', $id)->with('stocks')->first();
+        $school = $this->getSchool();
+        $order = bookSheets_order::where('school_id', $school->id)->where('id', $id)->with('stocks')->first();
 
         return view('backend.book_sheets_order.edit_tawreed', compact('order'));
     }
@@ -115,7 +120,8 @@ class BookSheetsOrderController extends Controller
 
     public function create_sarf()
     {
-        $students = Student::all(['id', 'name']);
+        $school = $this->getSchool();
+        $students = Student::where('school_id', $school->id)->get(['id', 'name']);
         if ($students->count() == 0) {
             return redirect()->route('bookSheetsOrder.index', 2)->with('info', trans('general.noDataToShow'));
         }
@@ -136,6 +142,8 @@ class BookSheetsOrderController extends Controller
                 'type' => '2',
                 'date' => date('Y-m-d'),
                 'student_id' => $request->student_id,
+                'school_id' => $this->getSchool()->id,
+                'user_id' => auth()->user()->id,
             ]);
             foreach ($request->id as $key => $book_sheet) {
                 DB::table('books_sheets_stocks')->insert([
@@ -158,6 +166,7 @@ class BookSheetsOrderController extends Controller
 
     public function show($id)
     {
+        $school = $this->getSchool();
         $o = bookSheets_order::findorfail($id);
         if ($o->type == 1 || $o->type == 3) {
             $order = bookSheets_order::where('id', $id)->with('stocks')->first();
@@ -171,10 +180,11 @@ class BookSheetsOrderController extends Controller
 
     public function edit_sarf($id)
     {
-        $order = bookSheets_order::where('id', $id)->with('stocks')->first();
+        $school = $this->getSchool();
+        $order = bookSheets_order::where('school_id', $school->id)->where('id', $id)->with('stocks')->first();
         $students = Student::all(['id', 'name']);
 
-        return view('backend.book_sheets_order.edit_sarf', compact('order', 'students'));
+        return view('backend.book_sheets_order.edit_sarf', compact('order', 'students', 'school'));
     }
 
     public function update_sarf(Request $request)
@@ -209,14 +219,15 @@ class BookSheetsOrderController extends Controller
     public function create_gard()
     {
         try {
-            $generate_code = bookSheets_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
-            $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
             $stocks = book_sheet::all();
             if ($stocks->isEmpty()) {
                 return redirect()->back()->with('info', trans('general.noDataToShow'));
             }
+            $school = $this->getSchool();
+            $generate_code = bookSheets_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
+            $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
 
-            return view('backend.book_sheets_order.gard_create', compact('auto_number', 'stocks'));
+            return view('backend.book_sheets_order.gard_create', compact('auto_number', 'stocks', 'school'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -230,6 +241,8 @@ class BookSheetsOrderController extends Controller
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'type' => '3',
                 'date' => date('Y-m-d'),
+                'school_id' => $this->getSchool()->id,
+                'user_id' => auth()->user()->id,
 
             ]);
             foreach ($request->stock_id as $key => $stock) {
@@ -255,6 +268,7 @@ class BookSheetsOrderController extends Controller
     {
         try {
             $order = bookSheets_order::where('id', $id)->with('stocks')->first();
+            $school = $this->getSchool();
 
             return view('backend.book_sheets_order.edit_gard', compact('order'));
         } catch (\Exception $e) {

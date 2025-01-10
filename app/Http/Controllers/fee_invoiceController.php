@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Fee_invoice;
 use App\Models\School_Fee;
@@ -15,14 +16,15 @@ use Illuminate\Support\Facades\DB;
 
 class fee_invoiceController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $fee_invoices = Fee_invoice::with(['students:id,name', 'grades:id,name', 'classes:id,name', 'acd_year:id,view'])->withSum('fees', 'amount')->get();
+        $school = $this->getSchool();
+        $fee_invoices = Fee_invoice::where('school_id', $school)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'acd_year:id,view'])->withSum('fees', 'amount')->get();
 
         return view('backend.fee_invoices.index', compact('fee_invoices'));
     }
@@ -32,8 +34,9 @@ class fee_invoiceController extends Controller
      */
     public function create($student_id)
     {
-        $student = Student::findorfail($student_id);
-        $School_Fees = School_Fee::where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get(['id', 'title', 'amount']);
+        $school = $this->getSchool();
+        $student = Student::where('school_id', $school)->where('id', $student_id)->first();
+        $School_Fees = School_Fee::where('school_id', $school)->where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get(['id', 'title', 'amount']);
 
         return view('backend.fee_invoices.create', get_defined_vars());
     }
@@ -55,6 +58,8 @@ class fee_invoiceController extends Controller
                 $fee->classroom_id = $request->classroom_id;
                 $fee->school_fee_id = $list_fee['fee'];
                 $fee->academic_year_id = $ac_year->id;
+                $fee->user = auth()->user()->id;
+                $fee->school_id = $this->getSchool()->id;
                 $fee->save();
                 $std = new StudentAccount;
                 $std->student_id = $list_fee['student_id'];
@@ -66,6 +71,7 @@ class fee_invoiceController extends Controller
                 $std->academic_year_id = $ac_year->id;
                 $std->debit = School_Fee::where('id', $list_fee['fee'])->first()->amount;
                 $std->credit = 0.00;
+
                 $std->save();
 
             }
@@ -85,6 +91,7 @@ class fee_invoiceController extends Controller
      */
     public function show(string $id)
     {
+        $school = $this->getSchool();
         $invoice_details = Fee_invoice::where('id', $id)->with('students', 'fees', 'grades', 'classes')->first();
         $tafqeet = Numbers::TafqeetMoney($invoice_details->fees->amount, 'EGP', 'ar');
 
@@ -96,6 +103,7 @@ class fee_invoiceController extends Controller
      */
     public function edit(string $id)
     {
+        $school = $this->getSchool();
         $fee = Fee_invoice::where('id', $id)->with('students', 'fees')->first();
         $sfees = School_Fee::where('grade_id', $fee->grade_id)->where('classroom_id', $fee->classroom_id)->get();
 

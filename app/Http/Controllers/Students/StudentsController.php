@@ -6,6 +6,7 @@ use App\DataTables\StudentDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Imports\StudentImport;
 use App\Models\acadmice_year;
 use App\Models\class_room;
@@ -18,12 +19,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class StudentsController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index(StudentDataTable $datatable)
     {
-        return $datatable->render('backend.Students.Index');
-        // return view('backend.Students.Index');
+        $school = $this->getSchool();
+
+        return $datatable->render('backend.Students.Index', get_defined_vars());
     }
 
     /**
@@ -33,8 +35,8 @@ class StudentsController extends Controller
     {
         $grades = Grade::all(['id', 'name']);
         $parents = My_parents::all(['id', 'Father_Name']);
+        $school = $this->getSchool();
 
-        //return get_defined_vars();
         return view('backend.Students.create', get_defined_vars());
     }
 
@@ -55,7 +57,7 @@ class StudentsController extends Controller
             $religion = My_parents::findorfail($request->parents);
             $year = \Carbon\Carbon::parse()->format('Y');
             $acc_year = acadmice_year::whereYear('year_start', $year)->first()->id;
-
+            $id = $this->getSchool()->id;
             Student::create([
                 'code' => isset($generate_code) ? str_pad($generate_code->code + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'name' => $request->student_name,
@@ -73,6 +75,7 @@ class StudentsController extends Controller
                 'acadmiecyear_id' => $acc_year,
                 'nationality_id' => $request->nationality,
                 'user_id' => \Auth::Id(),
+                'school_id' => $id,
             ]);
             $this->logActivity('اضافة', 'تم إضافة الطالب '.' '.$request->name);
             session()->flash('success', trans('general.success'));
@@ -92,6 +95,7 @@ class StudentsController extends Controller
     {
         try {
             $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone,Father_Job', 'StudentAccount', 'nationality'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();
+            $school = $this->getSchool();
 
             return view('backend.Students.show', get_defined_vars());
         } catch (\Exception $e) {
@@ -110,6 +114,7 @@ class StudentsController extends Controller
             $grades = Grade::all(['id', 'name']);
             $parents = My_parents::all(['id', 'Father_Name']);
             $student = Student::findorfail($id);
+            $school = $this->getSchool();
 
             return view('backend.Students.edit', get_defined_vars());
         } catch (\Exception $e) {
@@ -156,6 +161,7 @@ class StudentsController extends Controller
     public function graduated()
     {
         $students = Student::onlyTrashed()->with('grade', 'classroom')->get();
+        $school = $this->getSchool();
 
         return view('backend.students.graduated', get_defined_vars());
     }
@@ -207,7 +213,7 @@ class StudentsController extends Controller
 
     public function getclasses($id)
     {
-        $class_rooms = class_room::where('grade_id', $id)->get(['id', 'name']);
+        $class_rooms = class_room::where('school_id', $this->getSchool()->id)->where('grade_id', $id)->get(['id', 'name']);
 
         return response()->json($class_rooms);
     }

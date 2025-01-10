@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\order;
 use App\Models\stock;
 use Exception;
@@ -10,11 +11,12 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
-        $orders = order::where('type', 1)->withcount('stocks')->get();
+        $school = $this->getSchool();
+        $orders = order::where('school_id', $school->id)->where('type', 1)->withcount('stocks')->get();
         $type = 1;
 
         return view('backend.orders.index', compact('orders', 'type'));
@@ -25,6 +27,7 @@ class OrderController extends Controller
         try {
             $order = order::with('stocks')->findorFail($id);
             $type = 1;
+            $school = $this->getSchool();
 
             return view('backend.orders.show', get_defined_vars());
         } catch (Exception $e) {
@@ -39,6 +42,8 @@ class OrderController extends Controller
             $order = order::create([
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'type' => '1',
+                'school_id' => $this->getSchool()->id,
+                'user_id' => auth()->user()->id,
             ]);
             $this->logActivity('إضافة', 'إضافة أمر توريد رقم'.$order->auto_number);
 
@@ -56,6 +61,7 @@ class OrderController extends Controller
             $order = order::with('stocks')->findorFail($id);
             $stocks = stock::get('id', 'name');
             $type = 1;
+            $school = $this->getSchool();
 
             return view('backend.orders.edit', get_defined_vars());
         } catch (Exception $e) {

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\LogsActivity;
+use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\My_parents;
 use App\Models\Student;
@@ -12,12 +14,15 @@ use Illuminate\Support\Facades\Auth;
 
 class AcadmiceYearController extends Controller
 {
+    use LogsActivity, SchoolTrait;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $acadmice_years = acadmice_year::with('creator', 'updator')->latest()->paginate(10);
+        $school = $this->getSchool();
+        $acadmice_years = acadmice_year::where('school_id', $school->id)->with('creator', 'updator')->latest()->paginate(10);
 
         return view('backend.academic_year.index', get_defined_vars());
     }
@@ -41,6 +46,7 @@ class AcadmiceYearController extends Controller
                 'view' => $view,
                 'created_by' => Auth::id(),
                 'status' => ($request->status) ? 0 : 1,
+                'school_id' => $this->getSchool()->id,
 
             ]);
             $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->view]));
@@ -60,11 +66,15 @@ class AcadmiceYearController extends Controller
     public function show($id)
     {
         $acc_year = acadmice_year::findorFail($id);
-        $start_year = Carbon::parse($acc_year->year_start);
-        $end_year = Carbon::parse($acc_year->year_end);
-        $students = Student::whereBetween('created_at', [$start_year, $end_year])->get();
-        $parents = My_parents::whereBetween('created_at', [$start_year, $end_year])->get();
-        $users = User::whereBetween('created_at', [$start_year, $end_year])->get();
+        $date_range = [
+            Carbon::parse($acc_year->year_start),
+            Carbon::parse($acc_year->year_end),
+        ];
+        $school = $this->getSchool();
+        $users = collect([])
+            ->merge(Student::where('acadmiecyear_id', $acc_year->id)->get())
+            ->merge(My_parents::whereBetween('created_at', $date_range)->get())
+            ->merge(User::whereBetween('created_at', $date_range)->get());
 
         return $users;
     }
