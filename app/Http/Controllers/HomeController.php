@@ -36,7 +36,7 @@ class HomeController extends Controller
 
         $today = now()->toDateString();
 
-        $credit = StudentAccount::where('school_id', $school->id)->sum('credit');
+        $credit = StudentAccount::sum('credit');
         $payment_parts = PaymentParts::where('school_id', $school->id)->whereDate('date', $today)
             ->where('payment_status', '0')
             ->sum('amount');

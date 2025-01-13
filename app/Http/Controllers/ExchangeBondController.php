@@ -71,7 +71,7 @@ class ExchangeBondController extends Controller
             DB::commit();
             $this->LogActivity('إضافة', 'تم إضافة سند صرف بنجاح');
 
-            return redirect()->route('exchange_bonds.index')->with('success', trans('general.success'));
+            return redirect()->route('exchange_bonds.print',$exchange->id);
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
@@ -116,6 +116,13 @@ class ExchangeBondController extends Controller
 
             return redirect()->back();
         }
+    }
+    public function print($id)
+    {
+        $school = $this->GetSchool();
+        $exchange = Exchange_bond::where('id', $id)->with('student')->first();
+
+        return view('backend.exchange_bond.print', get_defined_vars());
     }
 
     public function destroy($id)

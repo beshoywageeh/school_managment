@@ -347,6 +347,7 @@ Route::group(
                 Route::post('/store', 'store')->name('exchange_bonds.store');
                 Route::get('/edit/{id}', 'edit')->name('exchange_bonds.edit');
                 Route::post('/update', 'update')->name('exchange_bonds.update');
+                Route::get('/print/{id}', 'print')->name('exchange_bonds.print');
                 Route::get('/destroy/{id}', 'destroy')->name('exchange_bonds.destroy');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');
