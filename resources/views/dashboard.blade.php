@@ -6,6 +6,7 @@
 
 @section('content')
     <div class="row mb-30">
+     
         @include('components.stat_card', [
             'icon' => 'students.png',
             'count' => $students,

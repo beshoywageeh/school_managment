@@ -88,20 +88,7 @@
                                          type="date">{{ trans('employees.join_date') }}</x-input>
 
                             </div>
-                            <div class="col">
-
-                                <div class="col">
-                                    <label for="jobs" class="">{{ trans('employees.job_title') }}</label>
-                                    <select name="type" id="worker_type" class="custom-select">
-                                        <option selected> ---{{ trans('employees.select_worker_title') }}---</option>
-                                        @forelse($jobs_main as $job)
-                                            <option value="{{$job->id}}">{{$job->name}}</option>
-                                        @empty
-
-                                        @endforelse
-                                    </select>
-                                </div>
-                            </div>
+                            <x-input.job_type/>
                             <div class="col form-group">
                                 <label for="jobs" class="">{{ trans('employees.job_title') }}</label>
                                 <select name="job_id" id="jobs" class="custom-select">
@@ -161,23 +148,31 @@
 
 
 @push('scripts')
-    <script>
-        const jobs = document.querySelector('#jobs');
-        const worker_type = document.querySelector('#worker_type')
-        worker_type.addEventListener('change', async () => {
+<script>
+    $(document).ready(function() {
+        $('#worker_type').on('change', function() {
+            const workerTypeId = $(this).val();
+            $('#jobs').html('<option>{{ trans('General.loading') }}</option>');
+            
+            $.ajax({
+                url: "{{URL::to('/ajax/get_jobs')}}/"+workerTypeId,
+                method: 'GET',
+                success: function(data) {
+            $('#jobs').html('<option>{{ trans('employees.select_worker_type') }}</option>');
 
-            jobs.innerHTML = '<option>{{ trans('employees.select_worker_type') }}</option>';
-            const response = await fetch(`/ajax/get_jobs/${worker_type.value}`)
-            const data = await response.json();
-            data.forEach(job => {
-                const option = document.createElement('option');
-                option.value = job.id;
-                option.text = job.name;
-                jobs.appendChild(option);
-
+                    $.each(data, function(index, job) {
+                        $('#jobs').append($('<option>', {
+                            value: job.id,
+                            text: job.name
+                        }));
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching jobs:', error);
+                }
             });
-
         });
-    </script>
+    });
+</script>
 @endpush
 @endsection

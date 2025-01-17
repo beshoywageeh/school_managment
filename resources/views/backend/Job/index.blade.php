@@ -61,7 +61,6 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>{{ trans('jobs.title_name') }}</th>
-                                                <th>{{ trans('academic_year.status') }}</th>
                                                 <th>{{ trans('general.actions') }}</th>
                                             </tr>
                                         </thead>
@@ -71,31 +70,12 @@
 
                                                 <tr>
                                                     <td> {{ $loop->iteration }}</td>
-                                                    <td>{{ $job->name }}</td>
+                                                    <td>{{ $job->lang() }}</td>
                                                     <td>
-                                                        <span class="badge {{ $job->status->color() }}">
-                                                            {{ $job->status->lang() }}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <x-dropdown-table :buttonText="trans('general.actions')" :items="[
-                                                            [
-                                                                'type' => 'link',
-                                                                'url' => route('jobs.show', $job->id),
-                                                                'text' => trans('general.info'),
-                                                                'icon' => 'ti-info-alt',
-                                                                'can' => 'jobs-info',
-                                                                'className' => 'show_jobs',
-                                                            ],
-                                                            [
-                                                                'type' => 'link',
-                                                                'url' => route('jobs.destroy', $job->id),
-                                                                'text' => trans('general.delete'),
-                                                                'icon' => 'ti-trash',
-                                                                'onclick' => 'confirmation(event)',
-                                                                'can' => 'jobs-delete',
-                                                            ],
-                                                        ]" />
+                                                        @can('jobs-info')
+                                                        <a class="text-white btn btn-info btn-sm show_jobs" href="{{route('jobs.show', $job->value)}}"> <i class="ti-info-alt"></i> {{trans('general.info')}}</a>
+                                                        @endcan
+                                                       
                                                     </td>
                                                 </tr>
 

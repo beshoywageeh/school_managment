@@ -7,10 +7,9 @@
 @section('content')
     <div class="row">
         <div class="col-xl-12 mb-30">
-            <div class="card card-satistics h-100">
-                <div class="card-body">
+         
                     <div class="table-responsive">
-                        <table class='table table-bordered table-striped table-sm'>
+                        <table class='table table-bordered table-striped'>
                             <thead class='alert-success'>
                                 <tr>
                                     <th>#</th>
@@ -36,37 +35,33 @@
                                             <td>{{ $employee->name }}</td>
                                             <td>
                                                 <input type="email" name="email" class="form-control"
-                                                    value="{{ $employee->email }}" />
-
+                                                    value="{{ $employee->email }}"{{$employee->id == \Auth::id() ? 'disabled' : ''}} />
                                             </td>
-                                            <td><input type="checkbox" class="form-control" disabled name="isAdmin"
-                                                    @checked($employee->isAdmin == 1) /></td>
+                                            <td><input type="checkbox" class="form-control" name="isAdmin"
+                                                    @checked($employee->isAdmin == 1) {{$employee->id == \Auth::id() ? 'disabled' : ''}}/></td>
                                             <td>
-                                                <input type="checkbox" name="login_allow" disabled class="form-control"
-                                                    @checked($employee->login_allow == 1) />
+                                                <input type="checkbox" name="login_allow" class="form-control"
+                                                    @checked($employee->login_allow == 1) {{$employee->id == \Auth::id() ? 'disabled' : ''}}/>
                                             </td>
-                                            <td>{{ $employee->job->name ?? 'N/A' }}</td>
+                                            <td>{{ $employee->type->lang() ?? 'N/A' }}</td>
                                             <td>
-
-                                                <input type="password" name="password" class="form-control" />
-
+                                                <input type="password" name="password" class="form-control"
+                                                {{$employee->id == \Auth::id() ? 'disabled' : ''}} />
                                             </td>
                                             <td>
-
-                                                <select name="role" disabled class="custom-select">
-
+                                                <select name="role" class="custom-select" {{$employee->id == \Auth::id() ? 'disabled' : ''}}>
                                                     @forelse ($Permissions as $permission)
-                                                        <option @selected($employee->roles[0]->id == $permission->id) value="{{ $permission->name }}">
+                                                        <option value="{{ $permission->name }}">
                                                             {{ trans('permissions.' . $permission->name) }}</option>
                                                     @empty
                                                     @endforelse
                                                 </select>
                                             </td>
                                             <td>
-                                                @if($employee->isAdmin != 1)
-                                                <button type="submit"
-                                                    class="btn btn-outline-primary btn-sm">{{ trans('General.Submit') }}</button>
-                                                    @endif
+                                                @if (\Auth::user()->isAdmin == 1)
+                                                    <button type="submit"
+                                                        class="btn btn-outline-primary btn-sm">{{ trans('General.Submit') }}</button>
+                                                @endif
                                             </td>
                                         </tr>
                                     </form>
@@ -76,8 +71,6 @@
                         </table>
                     </div>
 
-                </div>
-            </div>
         </div>
     </div>
 

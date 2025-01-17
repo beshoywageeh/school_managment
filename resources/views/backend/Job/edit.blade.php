@@ -33,16 +33,7 @@
                                      id="job_name">{{ trans('jobs.job_name') }}</x-input>
                         </div>
                         <div class="col">
-                            <label for="worker_type"
-                                   class="">{{ trans('general.worker_type') }}</label>
-                            <select id="worker_type" class="custom-select" name="type">
-                                <option value="" selected>{{ trans('general.worker_type') }}</option>
-                                @foreach($jobs_main as $job_type)
-                                    <option value="{{ $job_type->id }}" {{ $job_type->id == $job->type ? 'selected' : '' }}>
-                                        {{ $job_type->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                           <x-input.job_type/>
 
                             @error('type')
                             <div class="mt-1 alert alert-danger">{{ $message }}</div>

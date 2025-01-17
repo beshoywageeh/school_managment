@@ -29,12 +29,16 @@
             color: white;
             animation: pulse 2s infinite;
         }
+        .form-control{
+            border: 1px solid #3498db !important;
+        }
+     
     </style>
     <title>@yield('title')</title>
 
     @include('layouts.header_css')
 
-
+    @livewireStyles
 
 </head>
 
@@ -85,7 +89,7 @@
     <!-- Page Content Ends -->
 
     @include('layouts.footer_script')
-
+    @livewireScripts
 </body>
 
 </html>

@@ -70,6 +70,7 @@
                                 {{ trans('sidebar.employees') }}
                             </x-nav_link>
                         @endcan
+                        <x-nav_link :href="route('schedules.index')" :active="request()->is('*/employees/*')" :image="URL::asset('assests/images/Sidebar/schedules.png')">{{trans('schedules.schedules')}}</x-nav_link>
                         @can('employees-list')
                             <x-nav_link :href="route('employees.return_list')" :active="request()->is('*/employees/*')">
                                 {{ trans('general.resign') }}
@@ -135,6 +136,9 @@
                             {{ trans('sidebar.exchange_bonds') }}
                         </x-nav_link>
                     @endcan
+                    <x-nav_link :href="route('fund_account.index')" :active="request()->is('*/fund_account/*')" :image="URL::asset('assests/images/Sidebar/bill.png')">
+                        {{ trans('sidebar.fund_account') }}
+                    </x-nav_link>
                     </ul>
                 </li>
             @endif
