@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\Jobs_types;
 use App\Enums\user_religion;
 use App\Enums\UserGender;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,6 +45,7 @@ class User extends Authenticatable
         'grade_year',
         'school_id',
         'user_id',
+        'lesson_count',
     ];
 
     /**
@@ -66,6 +68,7 @@ class User extends Authenticatable
         'password' => 'hashed',
         'gender' => UserGender::class,
         'religion' => user_religion::class,
+        'type'=>Jobs_types::class
 
     ];
 

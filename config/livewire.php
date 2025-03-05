@@ -74,6 +74,7 @@ return [
             'jpg', 'jpeg', 'mpga', 'webp', 'wma',
         ],
         'max_upload_time' => 5, // Max duration (in minutes) before an upload is invalidated...
+        'cleanup' => true, // Should cleanup temporary uploads older than 24 hrs...
     ],
 
     /*
@@ -112,6 +113,7 @@ return [
     | this behavior, you need to use @livewireStyles and @livewireScripts.
     |
     */
+    'asset_url' => '/public/vendor/livewire/livewire.js?id=923613aa',
 
     'inject_assets' => true,
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Jobs_types;
 use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,11 +12,11 @@ class Job extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $casts = ['status' => Status::class];
+    protected $casts = ['status' => Status::class,'type'=>Jobs_types::class];
 
     protected $table = 'work_jobs';
 
-    protected $fillable = ['status', 'name', 'created_by', 'updated_by', 'main_job_id', 'is_main'];
+    protected $fillable = ['type', 'name', 'created_by', 'updated_by', 'school_id'];
 
     public function creator()
     {

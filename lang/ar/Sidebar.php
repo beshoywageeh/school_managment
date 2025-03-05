@@ -42,4 +42,5 @@ return [
     'lab_index' => 'عرض المعامل',
     'graduated' => 'قائمة الخريجين',
     'exchange_bonds' => 'سندات الصرف',
+    'fund_account'=>'الخزنة'
 ];

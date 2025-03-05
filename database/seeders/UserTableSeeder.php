@@ -15,26 +15,14 @@ class UserTableSeeder extends Seeder
     public function run(): void
     {
 
-        $user = User::create([
-            'name' => 'Admin',
-            'password' => bcrypt('hypervision2020'),
-            'code' => '000001',
-            'phone' => '01201026745',
-            'address' => 'fafa',
-            'date_of_birth' => now()->format('Y-m-d'),
-            'date_of_hiring' => now()->format('Y-m-d'),
-            'learning' => 'Bachelor',
-            'reiligon' => '1',
-            'type' => '1',
-            'email_verified_at' => now(),
-            'email' => 'admin@ischool.com',
-            'isAdmin' => '1',
-            'login_allow' => '1',
-            'school_id' => 1,
-        ]);
+        // Create admin role and assign all permissions
         $role = Role::create(['name' => 'Admin']);
-        $permissions = Permission::pluck('id', 'id')->all();
-        $role->syncPermissions($permissions);
-        $user->assignRole([$role->id]);
+        $role->syncPermissions(Permission::pluck('id'));
+
+        // Create users and assign admin role
+        User::factory()
+            ->count(10)
+            ->create()
+            ->each(fn ($user) => $user->assignRole($role));
     }
 }

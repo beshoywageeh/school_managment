@@ -65,7 +65,6 @@ return new class extends Migration
         Schema::table('work_jobs', function (Blueprint $table) {
             $table->foreign('created_by')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
-            $table->foreign('main_job_id')->references('id')->on('work_jobs')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('school_id')->references('id')->on('settings')->onDelete('Cascade')->onUpdate('Cascade');
         });
         Schema::table('promotions', function (Blueprint $table) {
@@ -186,6 +185,11 @@ return new class extends Migration
             $table->foreign('school_id')->references('id')->on('settings')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('exchange_bond_id')->references('id')->on('exchange_bonds')->onDelete('Cascade')->onUpdate('Cascade');
+        });
+        Schema::table('schedules', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('class_id')->references('id')->on('classes')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('job_id')->references('id')->on('work_jobs')->onDelete('Cascade')->onUpdate('Cascade');
         });
     }
 
@@ -371,6 +375,11 @@ return new class extends Migration
             $table->dropforeign('user_id');
             $table->dropforeign('school_id');
             $table->dropforeign('exchange_bond_id');
+        });
+        Schema::table('schedules', function (Blueprint $table) {
+            $table->dropForeign('user_id');
+            $table->dropForeign('classes_id');
+            $table->dropForeign('job_id');
         });
     }
 };

@@ -345,4 +345,7 @@ return [
     'urlsIgnored' => ['/skipped'],
 
     'httpMethodsIgnored' => ['POST', 'PUT', 'PATCH', 'DELETE'],
+    'exclude_from_localization' => [
+        'livewire/*',
+    ],
 ];

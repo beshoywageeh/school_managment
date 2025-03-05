@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('work_jobs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->smallInteger('type');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->tinyInteger('status')->default(1);
-            $table->tinyInteger('is_main')->default(0);
-            $table->unsignedBigInteger('main_job_id')->nullable();
             $table->unsignedBigInteger('school_id')->nullable();
             $table->timestamps();
             $table->softDeletes();

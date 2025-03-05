@@ -18,20 +18,19 @@ class JobController extends Controller
     {
         $school = $this->getSchool();
         $jobs = Job::where('school_id', $school->id)->with('jobs')->get();
-        $jobs_main = Job::where('school_id', $school->id)->where('is_main', 1)->get();
+        $jobs_main = \App\Enums\Jobs_types::cases();
 
         return view('backend.Job.index', get_defined_vars());
     }
 
     public function store(Request $request)
     {
+       // return $request;
 
         try {
             Job::create([
                 'name' => $request->job_name,
-                'status' => ($request->status == 'on') ? 0 : 1,
-                'is_main' => ($request->is_main == 'on') ? 1 : 0,
-                'main_job_id' => ($request->is_main == 'on') ? null : $request->type,
+                'type' => $request->worker_type,
                 'created_by' => \Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
@@ -52,7 +51,7 @@ class JobController extends Controller
     public function show($id)
     {
         $school = $this->getSchool();
-        $jobs = Job::where('main_job_id', $id)->get();
+        $jobs = Job::where('type', $id)->get();
 
         return response()->json($jobs);
     }

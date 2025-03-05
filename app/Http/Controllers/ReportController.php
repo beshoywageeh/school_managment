@@ -17,11 +17,13 @@ use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PDF;
-
+use App\Http\Traits\SchoolTrait;
 class ReportController extends Controller
 {
+    use SchoolTrait;
     public function index()
     {
+        $school=$this->GetSchool();
         $acadmeic_years = acadmice_year::where('status', 0)->get();
         $stocks = stock::get();
         $clothes = clothes::with('grade:id,name', 'classroom:id,name')->get();

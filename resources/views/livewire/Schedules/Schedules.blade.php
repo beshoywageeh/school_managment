@@ -33,14 +33,14 @@
 
     </div>
     <div class="card-body">
-        @error('success')
+       @if(session('success'))
             <div class="bg-white border alert border-success alert-dismissible fade show" role="alert">
-                <h5 class='text-success'><strong>{{ $message }}</strong></h5>
+                <h5 class='text-success'><strong>{{ session('success') }}</strong></h5>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-        @enderror
+        @endif
         <!-- الجدول -->
         <div class="table-responsive">
             <table class="table table-bordered">

@@ -75,24 +75,24 @@ class GradesController extends Controller
      */
     public function show(string $id)
     {
-        
+
         try {
             $data['school'] = $this->getSchool();
             $data['report_data'] = Grade::where('id', $id)->with(['class_rooms', 'class_rooms.students'])->withCount(['class_rooms', 'students'])->first();
-          
+
             $pdf = PDF::loadView('backend.Grades.report', ['data' => $data], [], [
-                 'format' => 'A4',
-                 'default_font_size' => 10,
-                      'margin_left' => 2,
-                      'margin_right' => 2,
-                 'margin_top' => 2,
-                 'margin_bottom' => 2,
-                 'margin_header' => 2,
-                 'margin_footer' => 2,
-                 'orientation' => 'P',
-             ]);
-    
-             return $pdf->stream($data['report_data']->name.'.pdf');
+                'format' => 'A4',
+                'default_font_size' => 10,
+                'margin_left' => 2,
+                'margin_right' => 2,
+                'margin_top' => 2,
+                'margin_bottom' => 2,
+                'margin_header' => 2,
+                'margin_footer' => 2,
+                'orientation' => 'P',
+            ]);
+
+            return $pdf->stream($data['report_data']->name.'.pdf');
 
         } catch (\Exception $e) {
             \Log::error('PDF Generation failed: '.$e->getMessage());

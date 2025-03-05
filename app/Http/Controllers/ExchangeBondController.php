@@ -71,7 +71,7 @@ class ExchangeBondController extends Controller
             DB::commit();
             $this->LogActivity('إضافة', 'تم إضافة سند صرف بنجاح');
 
-            return redirect()->route('exchange_bonds.print',$exchange->id);
+            return redirect()->route('exchange_bonds.print', $exchange->id);
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
@@ -117,6 +117,7 @@ class ExchangeBondController extends Controller
             return redirect()->back();
         }
     }
+
     public function print($id)
     {
         $school = $this->GetSchool();

@@ -17,10 +17,10 @@ return [
     'national_id' => 'الرقم القومي',
     'job_title' => 'المسمى الوظيفي',
     'select_worker_title' => 'ختر المسمى الوظيفي أولًا',
-    'job_title' => 'الوظيفة',
     'insurance_status' => 'حالة التأمين',
     'insurance_date' => 'تاريخ بداية التأمين',
     'insurance_number' => 'الرقم التأميني',
     'select_worker_type' => 'إختر الوظيفة',
+    'lesson_count' => 'عدد الحصص',
 
 ];

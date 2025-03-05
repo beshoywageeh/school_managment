@@ -31,8 +31,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $jobs_main = Job::where('is_main', 1)->get();
-        $years = range(date('Y'), date('Y') - 10);
+        $years = range(date('Y'), date('Y') - 40);
         $school = $this->getSchool();
 
         return view('backend.employees.create', get_defined_vars());
@@ -57,7 +56,7 @@ class UserController extends Controller
             $user->reiligon = $request->religion;
             $user->gender = $request->gender;
             $user->grade_year = $request->grade_year;
-            $user->type = $request->type;
+            $user->type = $request->worker_type;
             $user->job_id = $request->job_id;
             $user->email = $request->email;
             $user->isAdmin = $request->isAdmin ?? false;
@@ -70,6 +69,7 @@ class UserController extends Controller
             $user->email = \Str::slug($request->name).'@ischool.com';
             $user->school_id = $this->getSchool()->id;
             $user->user_id = auth()->id();
+            $user->lesson_count = $request->lesson_count;
             $user->save();
             $this->verifyAndStoreImage($request, 'file', 'employees'.'/'.$request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
             $this->logActivity('اضافة', 'تم إضافة الموظف '.$request->name);
@@ -102,7 +102,7 @@ class UserController extends Controller
     public function edit(string $id)
     {
         try {
-            $jobs_main = Job::where('is_main', 1)->get();
+
             $user = User::findOrFail($id);
             $years = range(date('Y'), date('Y') - 10);
             $school = $this->getSchool();
@@ -132,7 +132,7 @@ class UserController extends Controller
             $user->reiligon = $request->religion;
             $user->gender = $request->gender;
             $user->grade_year = $request->grade_year;
-            $user->type = (is_int($request->type)) ? $request->type : $user->type;
+            $user->type = (is_int($request->worker_type)) ? $request->worker_type : $user->type;
             $user->job_id = (is_int($request->job_id)) ? $request->job_id : $user->job_id;
             $user->email = $request->email ?? $user->email;
             $user->isAdmin = $request->isAdmin ?? false;
@@ -196,7 +196,7 @@ class UserController extends Controller
     public function getjobs($id)
     {
         $school = $this->getSchool();
-        $jobs = Job::where('school_id', $school->id)->where('main_job_id', $id)->get(['id', 'name']);
+        $jobs = Job::where('school_id', $school->id)->where('type', $id)->get(['id', 'name']);
 
         return response()->json($jobs);
     }

@@ -127,6 +127,7 @@
                     birthDateInput.addEventListener('change', () => {
                         const birthDate = new Date(birthDateInput.value);
                         const checkDate = new Date(makeDate());
+                        console.log(checkDate);
                         const diffTime = Math.abs(checkDate - birthDate);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                         const years = Math.floor(diffDays / 365);
