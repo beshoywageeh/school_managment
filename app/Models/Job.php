@@ -12,7 +12,7 @@ class Job extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $casts = ['status' => Status::class,'type'=>Jobs_types::class];
+    protected $casts = ['status' => Status::class, 'type' => Jobs_types::class];
 
     protected $table = 'work_jobs';
 

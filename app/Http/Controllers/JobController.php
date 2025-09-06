@@ -25,7 +25,7 @@ class JobController extends Controller
 
     public function store(Request $request)
     {
-       // return $request;
+        // return $request;
 
         try {
             Job::create([

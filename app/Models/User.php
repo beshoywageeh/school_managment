@@ -68,7 +68,7 @@ class User extends Authenticatable
         'password' => 'hashed',
         'gender' => UserGender::class,
         'religion' => user_religion::class,
-        'type'=>Jobs_types::class
+        'type' => Jobs_types::class,
 
     ];
 

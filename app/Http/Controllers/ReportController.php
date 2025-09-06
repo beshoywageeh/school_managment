@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\book_sheet;
 use App\Models\class_room;
@@ -17,13 +18,14 @@ use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PDF;
-use App\Http\Traits\SchoolTrait;
+
 class ReportController extends Controller
 {
     use SchoolTrait;
+
     public function index()
     {
-        $school=$this->GetSchool();
+        $school = $this->GetSchool();
         $acadmeic_years = acadmice_year::where('status', 0)->get();
         $stocks = stock::get();
         $clothes = clothes::with('grade:id,name', 'classroom:id,name')->get();
@@ -51,7 +53,7 @@ class ReportController extends Controller
         ]);
 
         return $pdf->download('students.pdf');
-        //return view('backend.report.students', get_defined_vars());
+        // return view('backend.report.students', get_defined_vars());
     }
 
     public function payment_parts(Request $request)

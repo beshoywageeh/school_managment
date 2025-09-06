@@ -23,7 +23,7 @@ class UserController extends Controller
         $school = $this->getSchool();
         $employees = User::where('school_id', $school->id)->with('job')->get();
 
-        return view('backend.employees.index', get_defined_vars());
+        return view('backend.employees.Index', get_defined_vars());
     }
 
     /**

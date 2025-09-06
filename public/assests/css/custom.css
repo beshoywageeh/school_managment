@@ -1,0 +1,90 @@
+:root{
+    --custom_green:#00BCA0;
+}
+/* Over ride theme class */
+.btn-primary{
+    background-color: var(--custom_green);
+    border-color: var(--custom_green);
+}
+.btn-primary:hover{
+     color: #fff;
+    background-color: #008c77 !important;
+    border-color: var(--custom_green) !important;
+}
+.text-primary{
+    color:var(--custom_green);
+}
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.pulse {
+    background-color: #3498db;
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+    animation: pulse 2s infinite;
+}
+.form-control{
+    border: 1px solid var(--custom_green) !important;
+}
+table {
+       text-align: center;
+}
+.font-weight-bolder{
+   font-weight: 900 !important;
+}
+.card-title {
+margin-bottom: 15px;
+border-bottom: 4px solid var(--custom_green);
+padding-bottom: 1rem;
+font-weight: 600;
+text-transform: capitalize;
+}
+.active{
+background-color: var(--custom_green) !important;
+text-align: center !important;
+}
+.dash-card{
+    border-radius: 5rem 5rem 5rem 0;
+    background-color: white;
+    box-shadow: none;
+    border: 3px solid var(--custom_green);
+}
+.nav_item_header,.logout_form>button{
+    margin-top: -6px;
+    border-radius: 0;
+    width:5em;
+    height: 5vh;
+}
+.nav_item_header>a,form>button{
+    height: 100%;
+    margin:0 !important;
+}
+
+.nav_item_header>a>i,form>button>i{
+    font-size:2em;
+    margin-top: 6px;
+}
+
+.anchor{
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+hr{
+    border-top: 1px solid rgba(0,188,160,0.5);
+}

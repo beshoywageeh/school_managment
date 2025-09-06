@@ -10,7 +10,7 @@ return [
     'saturday' => 'السبت',
     'sunday' => 'الأحد',
     'day' => 'اليوم',
-    'selected_period'=>'اختر الحصة',
-    'period'=>'الحصة'
+    'selected_period' => 'اختر الحصة',
+    'period' => 'الحصة',
 
 ];

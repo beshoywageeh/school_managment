@@ -1,42 +1,42 @@
 <?php
 
-use Livewire\Livewire;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\GardController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\SetupController;
-use App\Http\Controllers\StockController;
-use App\Http\Controllers\BackupController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\ClassesController;
-use App\Http\Controllers\ClothesController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AdminEraController;
-use App\Http\Controllers\OutOrderController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\BookSheetController;
-use App\Http\Controllers\promotionController;
-use App\Http\Controllers\schedulesController;
-use App\Http\Controllers\SchoolFeeController;
-use App\Http\Controllers\LaboratoryController;
-use App\Http\Controllers\ActivityLogController;
-use App\Http\Controllers\fee_invoiceController;
 use App\Http\Controllers\AcadmiceYearController;
+use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AdminEraController;
+use App\Http\Controllers\BackupController;
+use App\Http\Controllers\BookSheetController;
+use App\Http\Controllers\BookSheetsOrderController;
+use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\ClassRooms\ClassRoomsController;
+use App\Http\Controllers\ClothesController;
 use App\Http\Controllers\ClothesOrderController;
 use App\Http\Controllers\ExchangeBondController;
 use App\Http\Controllers\ExcptionFeesController;
-use App\Http\Controllers\PaymentPartsController;
-use App\Http\Controllers\Grades\GradesController;
-use App\Http\Controllers\ReciptPaymentController;
-use App\Http\Controllers\BookSheetsOrderController;
-use App\Http\Controllers\Parents\MyParentsController;
-use App\Http\Controllers\Students\StudentsController;
-use App\Http\Controllers\ClassRooms\ClassRoomsController;
+use App\Http\Controllers\fee_invoiceController;
 use App\Http\Controllers\fund_accountsController;
+use App\Http\Controllers\GardController;
+use App\Http\Controllers\Grades\GradesController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\LaboratoryController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OutOrderController;
+use App\Http\Controllers\Parents\MyParentsController;
+use App\Http\Controllers\PaymentPartsController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\promotionController;
+use App\Http\Controllers\ReciptPaymentController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\schedulesController;
+use App\Http\Controllers\SchoolFeeController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SetupController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\Students\StudentsController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 /*
  |
@@ -355,7 +355,7 @@ Route::group(
             Route::group(['prefix' => 'schedule', 'controller' => schedulesController::class], function () {
                 Route::get('/', 'index')->name('schedules.index');
             });
-            Route::group(['prefix'=>'fundAccount','controller'=>fund_accountsController::class], function () {
+            Route::group(['prefix' => 'fundAccount', 'controller' => fund_accountsController::class], function () {
                 Route::get('/', 'index')->name('fund_account.index');
             });
             Route::get('/School_Setting', [SettingsController::class, 'index'])->name('create_new_school');

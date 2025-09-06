@@ -31,14 +31,14 @@ class RoleController extends Controller
     {
         $permissions = Permission::get()->groupBy('table');
 
-        //return $permission;
+        // return $permission;
         return view('backend.roles.create', compact('permissions'));
     }
 
     /*** Store a newly created resource in storage.** @param  \Illuminate\Http\Request  $request* @return \Illuminate\Http\Response*/
     public function store(Request $request)
     {
-        //return $request;
+        // return $request;
         try {
             $this->validate($request, ['name' => 'required|unique:roles,name', 'permission' => 'required']);
             $role = Role::create(['name' => $request->input('name')]);

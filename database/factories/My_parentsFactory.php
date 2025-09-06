@@ -24,7 +24,7 @@ class My_parentsFactory extends Factory
             'Father_Birth_Date' => $this->faker->date(),
             'Father_Learning' => $this->faker->randomElement(['High School', 'Bachelor', 'Master']),
 
-            //Mother information
+            // Mother information
             'Mother_Name' => $this->faker->firstName,
             'Mother_National_Id' => $this->faker->numerify('############'),
             'Mother_Phone' => $this->faker->phoneNumber,

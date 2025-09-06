@@ -21,7 +21,7 @@ class UserTableSeeder extends Seeder
 
         // Create users and assign admin role
         User::factory()
-            ->count(10)
+            ->count(1)
             ->create()
             ->each(fn ($user) => $user->assignRole($role));
     }

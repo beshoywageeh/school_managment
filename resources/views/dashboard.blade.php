@@ -6,52 +6,60 @@
 
 @section('content')
     <div class="row mb-30">
-     
-        @include('components.stat_card', [
-            'icon' => 'students.png',
-            'count' => $students,
-            'label' => trans('Sidebar.Students'),
-            'route' => 'Students.index',
-        ])
-        @include('components.stat_card', [
-            'icon' => 'parents.png',
-            'count' => $parents,
-            'label' => trans('Sidebar.parents'),
-            'route' => 'parents.index',
-        ])
-        @include('components.stat_card', [
-            'icon' => 'employees.png',
-            'count' => $employees,
-            'label' => trans('Sidebar.employees'),
-            'route' => 'employees.index',
-        ])
+        @can('Students-list')
+            @include('components.stat_card', [
+                'icon' => 'students.png',
+                'count' => $students,
+                'label' => trans('Sidebar.Students'),
+                'route' => 'Students.index',
+            ])
+        @endcan
+        @can('parents-list')
+            @include('components.stat_card', [
+                'icon' => 'parents.png',
+                'count' => $parents,
+                'label' => trans('Sidebar.parents'),
+                'route' => 'parents.index',
+            ])
+        @endcan
+        @can('employees-list')
+            @include('components.stat_card', [
+                'icon' => 'employees.png',
+                'count' => $employees,
+                'label' => trans('Sidebar.employees'),
+                'route' => 'employees.index',
+            ])
+        @endcan
     </div>
-
     <div class="row mb-30">
-        <div class="col-md-6 mb-30">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="text-center card-title">{{ trans('Sidebar.accounting') }}</h5>
-                    <div class="chart-wrapper">
-                        <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
-                            <canvas id="canvas3" width="550"></canvas>
+        @can('schoolfees-list')
+            <div class="col-md-6 mb-30">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="text-center card-title">{{ trans('Sidebar.accounting') }}</h5>
+                        <div class="chart-wrapper">
+                            <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
+                                <canvas id="canvas3" width="550"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 mb-30">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="text-center card-title">{{ trans('report.student_numbers') }}</h5>
-                    <div class="chart-wrapper">
-                        <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
-                            <canvas id="canvas4" width="550"></canvas>
+        @endcan
+        @can('students-list')
+            <div class="col-md-6 mb-30">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="text-center card-title">{{ trans('report.student_numbers') }}</h5>
+                        <div class="chart-wrapper">
+                            <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
+                                <canvas id="canvas4" width="550"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endcan
     </div>
 
     <div class="row mb-30">
@@ -109,7 +117,7 @@
                 datasets: [{
                     data: [{{ $credit }}, {{ $payment_parts }}, {{ $payments }}],
                     backgroundColor: [
-                       'rgba(255, 99, 132, 0.5)',
+                        'rgba(255, 99, 132, 0.5)',
                         'rgba(255, 159, 64, 0.5)',
                         'rgba(255, 205, 86, 0.5)',
                     ],
