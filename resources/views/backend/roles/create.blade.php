@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('permissions.title') }} | {{ trans('General.new') }}
+    {{ trans('permissions.title') }} | {{ trans('general.new') }}
 @endsection
 @section('content')
 <div class="container-fluid">
@@ -15,7 +15,7 @@
                     <div class="col-3">
                         <br>
                         <br>
-                        <button type="submit" class="btn btn-primary btn-block">{{ trans('General.Submit') }}</button>
+                        <button type="submit" class="btn btn-primary btn-block">{{ trans('general.Submit') }}</button>
                     </div>
                 </div>
             </div>

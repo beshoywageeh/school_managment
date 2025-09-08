@@ -7,34 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="icon" href="{{ asset('assests/images/logo-icon-dark.png') }}" type="image/png" />
-    <style>
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        .pulse {
-            background-color: #3498db;
-            border-radius: 10px;
-            padding: 10px;
-            color: white;
-            animation: pulse 2s infinite;
-        }
-        .form-control{
-            border: 1px solid #3498db !important;
-        }
-     
-    </style>
-    <title>@yield('title')</title>
+  
+  <title>@yield('title')</title>
 
     @include('layouts.header_css')
 

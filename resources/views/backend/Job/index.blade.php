@@ -66,16 +66,16 @@
                                         </thead>
                                         <tbody>
                                             @forelse ($jobs_main as $job)
-
-
                                                 <tr>
                                                     <td> {{ $loop->iteration }}</td>
                                                     <td>{{ $job->lang() }}</td>
                                                     <td>
                                                         @can('jobs-info')
-                                                        <a class="text-white btn btn-info btn-sm show_jobs" href="{{route('jobs.show', $job->value)}}"> <i class="ti-info-alt"></i> {{trans('general.info')}}</a>
+                                                            <a class="text-white btn btn-info btn-sm show_jobs"
+                                                                href="{{ route('jobs.show', $job->value) }}"> <i
+                                                                    class="ti-info-alt"></i> {{ trans('general.info') }}</a>
                                                         @endcan
-                                                       
+
                                                     </td>
                                                 </tr>
 
@@ -145,7 +145,7 @@
                             tbody.innerHTML = '';
                             if (data.length === 0) {
                                 // Display a message if no jobs are found
-                                const tr = `<tr><td colspan="3">{{ trans('General.Msg') }}</td></tr>`;
+                                const tr = `<tr><td colspan="3">{{ trans('general.Msg') }}</td></tr>`;
                                 tbody.insertAdjacentHTML('beforeend', tr);
                             } else {
                                 // Add new rows
@@ -154,9 +154,18 @@
                             <td>${index + 1}</td>
                             <td>${job.name}</td>
                             <td>
+                                @can('jobs-edit')
+                                    
                                 <button data-id="${job.id}" class="btn btn-warning btn-sm edit-btn" data-toggle="modal">
                                     <i class="ti-pencil"></i>
                                 </button>
+                                @endcan
+                                @can('jobs-delete')
+                                    
+                                <a href="{{ route('jobs.destroy', '') }}/${job.id}" class="btn btn-danger btn-sm delete-btn" onclick="confirmation(event)">
+                                    <i class="ti-trash"></i>
+                                </a>
+                                @endcan
                             </td>
                         </tr>`;
                                     tbody.insertAdjacentHTML('beforeend', tr);

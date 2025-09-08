@@ -17,8 +17,7 @@ class AdminEraController extends Controller
         $school = $this->getSchool();
         $Employees = User::with('roles:id')->get(['id', 'code', 'type', 'name', 'email', 'isAdmin', 'login_allow', 'password']);
         $Permissions = Role::get();
-
-        return view('backend.AdminEra.index', get_defined_vars());
+        return view('backend.AdminEra.Index', get_defined_vars());
     }
 
     public function emp_active($id, Request $request)

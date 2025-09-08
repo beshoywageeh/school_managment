@@ -31,7 +31,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $years = range(date('Y'), date('Y') - 40);
+        $years = range(date('Y'), date('Y') - 50);
         $school = $this->getSchool();
 
         return view('backend.employees.create', get_defined_vars());
@@ -66,16 +66,20 @@ class UserController extends Controller
             $user->insurance_number = $request->insurance_number;
             $user->insurance_date = $request->insurance_date ? $request->insurance_date : null;
             $user->national_id = $request->national_id;
-            $user->email = \Str::slug($request->name).'@ischool.com';
+            $user->email = \Str::slug($request->name) . '@ischool.com';
             $user->school_id = $this->getSchool()->id;
             $user->user_id = auth()->id();
             $user->lesson_count = $request->lesson_count;
+            $user->sepicality = $request->sepicality;
+            $user->national_id_expire_date = $request->national_id_expire_date;
+            $user->contract_start_date = $request->contract_start_date;
+            $user->notes = $request->notes;
+            $user->ministry_code = $request->ministry_code;
             $user->save();
-            $this->verifyAndStoreImage($request, 'file', 'employees'.'/'.$request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
-            $this->logActivity('اضافة', 'تم إضافة الموظف '.$request->name);
+            $this->verifyAndStoreImage($request, 'file', 'employees' . '/' . $request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
+            $this->logActivity('اضافة', 'تم إضافة الموظف ' . $request->name);
             DB::commit();
-            session()->flash('success', trans('General.success'));
-
+            session()->flash('success', trans('general.success'));
             return redirect()->route('employees.index');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -142,11 +146,16 @@ class UserController extends Controller
             $user->insurance_number = $request->insurance_number;
             $user->insurance_date = $request->insurance_date ? $request->insurance_date : null;
             $user->national_id = $request->national_id;
+            $user->sepicality = $request->sepicality;
+            $user->national_id_expire_date = $request->national_id_expire_date;
+            $user->contract_start_date = $request->contract_start_date;
+            $user->notes = $request->notes;
+            $user->ministry_code = $request->ministry_code;
             $user->save();
-            $this->verifyAndStoreImage($request, 'file', 'employees'.'/'.$request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
-            $this->logActivity('تعديل', 'تم تعديل الموظف '.$request->name);
+            $this->verifyAndStoreImage($request, 'file', 'employees' . '/' . $request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
+            $this->logActivity('تعديل', 'تم تعديل الموظف ' . $request->name);
             DB::commit();
-            session()->flash('success', trans('General.success'));
+            session()->flash('success', trans('general.success'));
 
             return redirect()->route('employees.index');
         } catch (\Exception $e) {
@@ -164,9 +173,9 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            $this->logActivity('حذف', 'تم حذف الموظف '.$user->name);
+            $this->logActivity('حذف', 'تم حذف الموظف ' . $user->name);
             $user->delete();
-            session()->flash('success', trans('General.success'));
+            session()->flash('success', trans('general.success'));
 
             return redirect()->route('employees.index');
         } catch (\Exception $e) {
@@ -180,8 +189,8 @@ class UserController extends Controller
     {
 
         $emp = User::where('id', $id)->restore();
-        $this->logActivity('استعادة', 'تم استعادة الموظف'.$emp->name);
-        session()->flash('success', trans('General.success'));
+        $this->logActivity('استعادة', 'تم استعادة الموظف' . $emp->name);
+        session()->flash('success', trans('general.success'));
 
         return redirect()->route('employees.index');
     }
@@ -189,6 +198,8 @@ class UserController extends Controller
     public function return_list()
     {
         $employees = User::onlyTrashed()->get();
+        $school = $this->getSchool();
+
 
         return view('backend.employees.resign', get_defined_vars());
     }

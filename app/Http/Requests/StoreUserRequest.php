@@ -31,7 +31,6 @@ class StoreUserRequest extends FormRequest
             'religion' => 'required|integer',
             'gender' => 'required|integer',
             'type' => 'required|integer',
-            'job_id' => 'required|integer|exists:jobs,id',
             'email' => 'nullable|string|email|max:255|unique:users,email',
             'isAdmin' => 'nullable|boolean',
             'login_allow' => 'nullable|boolean',

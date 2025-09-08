@@ -12,7 +12,7 @@
                 <div class="col-lg-6 text-md-right">
                     @can('labortories-create')
                         <button class="btn btn-primary" data-toggle="modal" data-target="#lab_create"><i
-                                class="mr-2 ti-plus"></i>{{ trans('General.new') }}</button>
+                                class="mr-2 ti-plus"></i>{{ trans('general.new') }}</button>
                     @endcan
                 </div>
             </div>
@@ -42,7 +42,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>{{ trans('labs.name') }}</th>
-                                            <th>{{ trans('General.actions') }}</th>
+                                            <th>{{ trans('general.actions') }}</th>
                                         </tr>
                                         <tbody>
                                             @forelse ($main_lab->sub_locations as $laboratory)
@@ -64,7 +64,7 @@
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="3">{{ trans('General.noDataToShow') }}</td>
+                                                    <td colspan="3">{{ trans('general.noDataToShow') }}</td>
                                                 </tr>
                                             @endforelse
                                         </tbody>

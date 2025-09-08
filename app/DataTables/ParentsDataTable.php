@@ -54,7 +54,8 @@ class ParentsDataTable extends DataTable
                 Button::make('csv'),
                 Button::make('print'),
                 Button::make('reload')->text('<i class="fa fa-refresh"></i>'),
-            ]);
+            ])
+        ;
     }
 
     /**
@@ -86,6 +87,6 @@ class ParentsDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Parents_'.date('YmdHis');
+        return 'Parents_' . date('YmdHis');
     }
 }

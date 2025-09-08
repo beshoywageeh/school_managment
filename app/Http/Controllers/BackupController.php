@@ -11,10 +11,11 @@ use Spatie\Backup\Commands\ListCommand;
 use Spatie\Backup\Helpers\Format;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
+use App\Http\Traits\SchoolTrait;
 
 class BackupController extends Controller
 {
-    use LogsActivity;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
@@ -44,8 +45,9 @@ class BackupController extends Controller
             $files = array_map('basename', $status->backupDestination()->disk()->files($name));
             $rows[$index]['files'] = array_slice(array_reverse($files), 0, 30);
         }
+        $school=$this->getSchool();
 
-        return view('backend.backup.index', compact('backups', 'rows'));
+        return view('backend.backup.index', compact('backups', 'rows','school'));
     }
 
     public function create()

@@ -15,7 +15,7 @@
                             @can('role-create')
                                 <a class="btn btn-success" href={{ route('roles.create') }}>
                                     <i class="ti-plus"></i>
-                                    {{ trans('General.new') }}
+                                    {{ trans('general.new') }}
                                 </a>
                             @endcan
                         </div>

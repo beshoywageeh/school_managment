@@ -19,7 +19,7 @@ class OrderController extends Controller
         $orders = order::where('school_id', $school->id)->where('type', 1)->withcount('stocks')->get();
         $type = 1;
 
-        return view('backend.orders.index', compact('orders', 'type'));
+        return view('backend.orders.index', get_defined_vars());
     }
 
     public function show($id)

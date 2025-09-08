@@ -1,111 +1,133 @@
-@extends('layouts.app')
+                                                            @extends('layouts.app')
 
 @section('title')
     {{ trans('Sidebar.Dashboard') }}
 @endsection
 
 @section('content')
-    <div class="row mb-30">
-        @can('Students-list')
-            @include('components.stat_card', [
-                'icon' => 'students.png',
-                'count' => $students,
-                'label' => trans('Sidebar.Students'),
-                'route' => 'Students.index',
-            ])
-        @endcan
-        @can('parents-list')
-            @include('components.stat_card', [
-                'icon' => 'parents.png',
-                'count' => $parents,
-                'label' => trans('Sidebar.parents'),
-                'route' => 'parents.index',
-            ])
-        @endcan
-        @can('employees-list')
-            @include('components.stat_card', [
-                'icon' => 'employees.png',
-                'count' => $employees,
-                'label' => trans('Sidebar.employees'),
-                'route' => 'employees.index',
-            ])
-        @endcan
-    </div>
-    <div class="row mb-30">
-        @can('schoolfees-list')
-            <div class="col-md-6 mb-30">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="text-center card-title">{{ trans('Sidebar.accounting') }}</h5>
-                        <div class="chart-wrapper">
-                            <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
-                                <canvas id="canvas3" width="550"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endcan
-        @can('students-list')
-            <div class="col-md-6 mb-30">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="text-center card-title">{{ trans('report.student_numbers') }}</h5>
-                        <div class="chart-wrapper">
-                            <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
-                                <canvas id="canvas4" width="550"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endcan
-    </div>
+                                    <div class="row mb-30">
+                                        @include('components.stat_card', [
+        'icon' => 'students.png',
+        'count' => $students,
+        'label' => trans('Sidebar.Students'),
+        'route' => 'Students.index',
+    ])
+                                        @include('components.stat_card', [
+        'icon' => 'parents.png',
+        'count' => $parents,
+        'label' => trans('Sidebar.parents'),
+        'route' => 'parents.index',
+    ])
+                                        @include('components.stat_card', [
+        'icon' => 'employees.png',
+        'count' => $employees,
+        'label' => trans('Sidebar.employees'),
+        'route' => 'employees.index',
+    ])
+                                                    </div>
 
-    <div class="row mb-30">
-        @can('Students-create')
-            @include('components.action_button', [
-                'icon' => 'students.png',
-                'label' => trans('Sidebar.Students') . ' ' . trans('general.new'),
-                'route' => 'Students.create',
-            ])
-        @endcan
-        @can('parents-create')
-            @include('components.action_button', [
-                'icon' => 'parents.png',
-                'label' => trans('Sidebar.parents') . ' ' . trans('general.new'),
-                'route' => 'parents.create',
-            ])
-        @endcan
-        @can('grade-list')
-            @include('components.action_button', [
-                'icon' => 'score.png',
-                'label' => trans('Sidebar.Grade'),
-                'route' => 'grade.index',
-            ])
-        @endcan
-        @can('class_rooms-list')
-            @include('components.action_button', [
-                'icon' => 'classroom.png',
-                'label' => trans('Sidebar.Class_Rooms'),
-                'route' => 'class_rooms.index',
-            ])
-        @endcan
-        @can('schoolfees-create')
-            @include('components.action_button', [
-                'icon' => 'money.png',
-                'label' => trans('Sidebar.schoolfees'),
-                'route' => 'schoolfees.create',
-            ])
-        @endcan
-        @can('jobs-list')
-            @include('components.action_button', [
-                'icon' => 'job.png',
-                'label' => trans('Sidebar.jobs') . ' ' . trans('general.new'),
-                'route' => 'jobs.index',
-            ])
-        @endcan
-    </div>
+                                    <div class="row mb-30">
+                                        <div class="col-md-6 mb-30">
+                                            <div class="card h-100">
+                                                <div class="card-body">
+                                                    <h5 class="text-center card-title">{{ trans('Sidebar.accounting') }}</h5>
+                                                    <div class="chart-wrapper">
+                                                        <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
+                                                            <canvas id="canvas3" width="550"></canvas>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-30">
+                                                <div class="row">
+                                                <div class="col">
+                                                <div class="card h-100">
+                                                        <div class="card-body">
+                                                    <h5 class="text-center card-title">{{ trans('Sidebar.fast_actions') }}</h5>
+                                                                <div class="table-responsive">
+                                                                    <table class="table table-bordered">
+                                                                        <tr>
+                                                                            <td>
+                                                                                @can('Students-create')
+                                                                                @include('components.action_button', [
+            'icon' => 'students.png',
+            'label' => trans('Sidebar.Students') . ' ' . trans('general.new'),
+            'route' => 'Students.create',
+        ])
+                                                                            @endcan
+                                                                            </td>
+                                                                            <td>
+                                                                                @can('parents-create')
+                                                                                                                                                                                        @include('components.action_button', [
+                                                                                                                                                                                            'icon' => 'parents.png',
+                                                                                                                                                                                            'label' => trans('Sidebar.parents') . ' ' . trans('general.new'),
+                                                                                                                                                                                            'route' => 'parents.create',
+                                                                                                                                                                                        ])
+                                                                                @endcan 
+                                                                            </td>
+                                                                            <td>
+                                                                                @can('grade-list')
+                                                                                                                                                                                                                                                                                                                                                            @include('components.action_button', [
+                                                                                                                                                                                                                                                                                                                                                                'icon' => 'score.png',
+                                                                                                                                                                                                                                                                                                                                                                'label' => trans('Sidebar.Grade'),
+                                                                                                                                                                                                                                                                                                                                                                'route' => 'grade.index',
+                                                                                                                                                                                                                                                                                                                                                            ])
+                                                                                @endcan
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>
+                                                                                @can('class_rooms-list')
+                                                                                                                                                                                                                                                                                                                                                            @include('components.action_button', [
+                                                                                                                                                                                                                                                                                                                                                                'icon' => 'classroom.png',
+                                                                                                                                                                                                                                                                                                                                                                'label' => trans('Sidebar.Class_Rooms'),
+                                                                                                                                                                                                                                                                                                                                                                'route' => 'class_rooms.index',
+                                                                                                                                                                                                                                                                                                                                                            ])
+                                                                                @endcan  
+                                                                            </td>
+                                                                            <td>
+                                                                                @can('schoolfees-create')
+                                                                                                                                                                                                                                                                                                                                                            @include('components.action_button', [
+                                                                                                                                                                                                                                                                                                                                                                'icon' => 'money.png',
+                                                                                                                                                                                                                                                                                                                                                                'label' => trans('Sidebar.schoolfees'),
+                                                                                                                                                                                                                                                                                                                                                                'route' => 'schoolfees.create',
+                                                                                                                                                                                                                                                                                                                                                            ])
+                                                                                @endcan
+                                                                            </td>
+                                                                            <td>
+                                                                                @can('jobs-list')
+                                                                                                                                                                                                                                                                                                                                                            @include('components.action_button', [
+                                                                                                                                                                                                                                                                                                                                                                'icon' => 'job.png',
+                                                                                                                                                                                                                                                                                                                                                                'label' => trans('Sidebar.jobs') . ' ' . trans('general.new'),
+                                                                                                                                                                                                                                                                                                                                                                'route' => 'jobs.index',
+                                                                                                                                                                                                                                                                                                                                                            ])
+                                                                                @endcan
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                           </div>
+                                                </div>
+                                                </div>
+                                                </div>
+                                       <div class="row mb-30">
+                                    <div class="col-md-6 mb-30">
+                                                        <div class="card h-100">
+                                                            <div class="card-body">
+                                                    <h5 class="text-center card-title">{{ trans('report.student_numbers') }}</h5>
+                                                    <div class="chart-wrapper">
+                                                        <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
+                                                            <canvas id="canvas4" width="550"></canvas>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                             </div>
+
 @endsection
 
 @push('scripts')
@@ -117,7 +139,7 @@
                 datasets: [{
                     data: [{{ $credit }}, {{ $payment_parts }}, {{ $payments }}],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
+                       'rgba(255, 99, 132, 0.5)',
                         'rgba(255, 159, 64, 0.5)',
                         'rgba(255, 205, 86, 0.5)',
                     ],

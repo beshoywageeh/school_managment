@@ -109,7 +109,7 @@
                         'can'=>'except_fee-list'
                     ],
                     [
-                        'Name' => trans('general.payment_status'),
+                        'Name' => trans('General.payment_status'),
                         'Url' => '#payment_status',
                         'type' => 'button',
                         'can'=>'fee_invoice-list'
@@ -129,7 +129,7 @@
                             @can($acc_link['can'])
                                 <li class="">
                                     @if ($acc_link['type'] == 'link')
-                                        <a class="anchor" href="{{ $acc_link['Url'] }}">
+                                        <a class="anchor" target="_blank"href="{{ $acc_link['Url'] }}">
                                                {{ $acc_link['Name'] }}
                                         </a>
                                     @endif

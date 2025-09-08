@@ -9,7 +9,7 @@ return [
     'close' => 'مغلق',
     'teacher' => 'مدرس',
     'worker' => 'عامل',
-    'accountant' => 'محاسب',
+    'specialist' => 'أخصائي',
     'manegment' => 'إدارة',
     'CHANGE_PATH' => 'تحويل مسار',
     'MERGE' => 'دمج',
@@ -26,5 +26,13 @@ return [
     'fee_invoice' => 'فواتير دراسية',
     'payment_recipt' => 'مدفوعات دراسية',
     'fee_exception' => 'معافات',
+    'dealer' => 'وكيل',
+    'director'=>'موجه',
+    'mentor'=>'إشراف',
+    'security'=>'أمن',
+    'cleaner_supervisior'=>'إشراف عمال',
+    'visitor'=>'زائر',
+    'other'=>'أخرى',
+    
 
 ];

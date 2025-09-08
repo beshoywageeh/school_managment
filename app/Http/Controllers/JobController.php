@@ -25,7 +25,7 @@ class JobController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
+       // return $request;
 
         try {
             Job::create([
@@ -48,6 +48,7 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      */
+   
     public function show($id)
     {
         $school = $this->getSchool();
@@ -56,18 +57,16 @@ class JobController extends Controller
         return response()->json($jobs);
     }
 
-    public function edit($id) {}
-
     public function update(Request $request)
     {
-        //   return $request;
+        //    return $request;
 
         try {
             $Job = Job::findOrFail($request->id);
 
             $Job->update([
                 'name' => $request->job_name,
-                'main_job_id' => $request->type || $Job->main_job_id,
+                'type' => $request->worker_type,
             ]);
             $this->logActivity('تعديل', 'تم تعديل وظيفة '.$request->job_name);
             session()->flash('success', trans('general.success'));

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\http\Traits\LogsActivity;
+use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\order;
 use App\Models\stock;
@@ -35,7 +35,7 @@ class StockController extends Controller
                 ]);
                 $this->logActivity('إضافة', trans('system_lookup.field_create', ['value' => $stock['name']]));
             }
-            session()->flash('success', trans('General.success'));
+            session()->flash('success', trans('general.success'));
 
             return redirect()->route('stocks.index');
         } catch (Exception $e) {
@@ -52,8 +52,8 @@ class StockController extends Controller
                 'opening_stock' => $request->opening_qty,
                 'opening_stock_date' => date('Y-m-d'),
             ]);
-            $this->logActivity('تعديل', trans('system_lookup.field_update', ['value' => $request->name]));
-            session()->flash('success', trans('General.success'));
+            $this->logActivity('تعديل', trans('system_lookup.field_change', ['value' => $request->name]));
+            session()->flash('success', trans('general.success'));
 
             return redirect()->back();
         } catch (Exception $e) {
@@ -67,7 +67,7 @@ class StockController extends Controller
             $stock = stock::findorfail($id);
             $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $stock->name]));
             $stock->delete();
-            session()->flash('error', trans('General.deleted'));
+            session()->flash('error', trans('general.deleted'));
 
             return redirect()->back();
         } catch (Exception $e) {

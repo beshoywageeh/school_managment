@@ -23,7 +23,7 @@ class StudentDataTable extends DataTable
             ->addIndexColumn()
             ->setRowId('id')
             ->addColumn('std_fullname', function ($query) {
-                return $query->name.' '.$query->parent->father_name;
+                return $query->name . ' ' . $query->parent->father_name;
             })
             ->addColumn('action', 'components.student_-table_-action');
     }
@@ -52,7 +52,8 @@ class StudentDataTable extends DataTable
                     'url' => asset('assests/ar.json'),
                 ],
             ])->lengthMenu([[20, 40, 50, -1], [20, 40, 50, trans('General.all')]])
-            ->buttons([Button::make('csv'),
+            ->buttons([
+                Button::make('csv'),
                 Button::make('print'),
                 Button::make('reload')->text('<i class="fa fa-refresh"></i>'),
             ]);
@@ -86,6 +87,6 @@ class StudentDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Student_'.date('YmdHis');
+        return 'Student_' . date('YmdHis');
     }
 }

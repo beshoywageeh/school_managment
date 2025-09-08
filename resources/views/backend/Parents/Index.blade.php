@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('Parents.title') }}
+    {{ trans('parents.title') }}
 @endsection
 @section('content')
     <div class="mb-4 row">
@@ -9,7 +9,7 @@
                 <div class="card-body">
                     <div class="row card-title">
                         <div class="col">
-                            <h4>{{ trans('Parents.title') }}</h4>
+                            <h4>{{ trans('parents.title') }}</h4>
                         </div>
                         <div class="col text-md-right">
                             @can('parents-create')
@@ -22,13 +22,13 @@
                                 <button type="button" class="btn btn-primary" data-target="#Import_Excel"
                                     data-toggle="modal"><i class="ti-upload"></i>
                                     {{ trans('general.Import_Excel') }}</button>
-                                @include('backend.Parents.import')
+                                @include('backend.parents.import')
                             @endcan
                         </div>
                     </div>
                     <div class="table-responsive">
                         @can('parents-list')
-                        {!! $dataTable->table(['class' => 'datatable table table-sm table-striped table-hover dt-buttons'], true) !!}
+                        {!! $dataTable->table(['class' => 'datatable table table-sm table-striped table-hover'], true) !!}
                         @endcan
                     </div>
                 </div>

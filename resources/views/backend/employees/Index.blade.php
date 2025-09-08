@@ -43,6 +43,15 @@
                                     <th>{{ trans('employees.join_date') }}</th>
                                     <th>{{ trans('employees.birth_date') }}</th>
                                     <th>{{ trans('employees.job') }}</th>
+                                    <th>{{trans('employees.contract_start_date')}}</th>
+                                    <th>{{trans('employees.ministry_code')}}</th>
+                                    <th>{{trans('employees.sepicality')}}</th>
+                                    <th>{{trans('employees.phone')}}</th>
+                                    <th>{{trans('employees.national_id')}}</th>
+                                    <th>{{trans('employees.national_id_expire_date')}}</th>
+                                    <th>{{trans('employees.retirement_date')}}</th>
+                                    <th>{{trans('employees.date_until_retire')}}</th>
+                                    <th>{{trans('employees.working_years')}}</th>
                                     <th>{{ trans('general.actions') }}</th>
                                 </tr>
                                 </thead>
@@ -59,6 +68,15 @@
                                         <td>{{ $employee->date_of_hiring }}</td>
                                         <td>{{ $employee->date_of_birth }}</td>
                                         <td>{{ $employee->job->name ?? 'N/A' }}</td>
+                                        <td>{{ $employee->contract_start_date }}</td>
+                                        <td>{{ $employee->ministry_code }}</td>
+                                        <td>{{ $employee->sepicality }}</td>
+                                        <td>{{ $employee->phone }}</td>
+                                        <td>{{ $employee->national_id }}</td>
+                                        <td>{{ $employee->national_id_expire_date }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($employee->date_of_birth)->addYears(60)->toDateString() }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($employee->date_of_birth)->addYears(60)->diffInYears(\Carbon\Carbon::now()) }} </td>
+                                        <td>{{ \Carbon\Carbon::parse($employee->date_of_hiring)->diffInYears(\Carbon\Carbon::now()) }} </td>
                                         <td>
                                             <x-dropdown-table :buttonText="trans('general.actions')"
                                                               :items="[

@@ -66,11 +66,14 @@
                     @foreach ($Teachers as $Teacher)
                         <tr>
                             <td class="font-bold alert alert-primary">{{ $Teacher->name }}
+                                @can('scheduale-create')
+                                    
                                 <button wire:click="openScheduleModal({{ $Teacher->id }},{{ $Teacher->job_id }})"
                                     class="btn btn-sm btn-outline-primary position-absolute"
                                     style="top: 2px; right: 2px;">
                                     <i class="ti-plus"></i>
                                 </button>
+                                @endcan
 
                             </td>
                             @for ($i = 1; $i <= 8; $i++)

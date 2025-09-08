@@ -20,7 +20,7 @@ class OutOrderController extends Controller
         $type = 2;
         $school = $this->getSchool();
 
-        return view('backend.orders.index', compact('orders', 'type'));
+        return view('backend.orders.index', get_defined_vars());
     }
 
     public function new_transfer()

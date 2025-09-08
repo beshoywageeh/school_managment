@@ -2,14 +2,13 @@
 
 namespace App\Providers;
 
-use App\Http\Traits\SchoolTrait;
+use App\Models\settings;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-
+use App\Http\Traits\SchoolTrait;
 class ViewServiceProvider extends ServiceProvider
 {
     use SchoolTrait;
-
     /**
      * Register services.
      */

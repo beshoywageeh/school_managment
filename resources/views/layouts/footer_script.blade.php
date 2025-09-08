@@ -1,60 +1,60 @@
 <!-- jquery -->
-<script src="{{ asset('assests\js\jquery-3.3.1.min.js') }}"></script>
-<script src="{{ URL::asset('assests\js\datatable\datatables\jquery.dataTables.min.js') }}"></script>
-<script src="{{ URL::asset('assests\js\datatable\datatable-extension\dataTables.buttons.min.js') }}"></script>
-<script src="{{ URL::asset('assests\js\bootstrap-datatables\dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ URL::asset('assests\js\datatable\datatable-extension\buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
+<script src="{{ URL::asset('assests\js\jquery-3.3.1.min.js') }}"></script>
+
+
 <!-- plugin_path -->
 <script>
     var plugin_path = 'assests/js/';
 </script>
 <!-- plugins-jquery -->
-<script src="{{ asset('assests/js/plugins-jquery.js') }}"></script>
+<script src="{{ URL::asset('assests/js/plugins-jquery.js') }}"></script>
 
-
-<!-- calendar -->
-<script src="{{ asset('assests/js/calendar.init.js') }}"></script>
 
 <!-- charts sparkline -->
-<script src="{{ asset('assests/js/sparkline.init.js') }}"></script>
+<script src="{{ URL::asset('assests/js/sparkline.init.js') }}"></script>
 
 <!-- charts morris -->
-<script src="{{ asset('assests/js/morris.init.js') }}"></script>
+<script src="{{ URL::asset('assests/js/morris.init.js') }}"></script>
 
 <!-- datepicker -->
-<script src="{{ asset('assests/js/datepicker.js') }}"></script>
+<script src="{{ URL::asset('assests/js/datepicker.js') }}"></script>
 
 <!-- sweetalert2 -->
-<script src="{{ asset('assests/js/sweetalert2.all.js') }}"></script>
+<script src="{{ URL::asset('assests/js/sweetalert2.js') }}"></script>
 
 <!-- toastr -->
-<script src="{{ asset('assests/js/toastr.js') }}"></script>
+<script src="{{ URL::asset('assests/js/toastr.js') }}"></script>
 
 <!-- validation -->
-<script src="{{ asset('assests/js/validation.js') }}"></script>
+<script src="{{ URL::asset('assests/js/validation.js') }}"></script>
 
 <!-- lobilist -->
-<script src="{{ asset('assests/js/lobilist.js') }}"></script>
+<script src="{{ URL::asset('assests/js/lobilist.js') }}"></script>
 <!-- custom -->
-<script src="{{ asset('assests/js/select2.full.min.js') }}"></script>
+<script src="{{ URL::asset('assests/js/select2.full.min.js') }}"></script>
 
-<script src="{{ asset('assests/js/custom.js') }}"></script>
-
+<script src="{{ URL::asset('assests/js/custom.js') }}"></script>
+<script src="{{ URL::asset('assests\js\datatable\datatables\jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL::asset('assests\js\bootstrap-datatables\dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ URL::asset('assests\js\datatable\datatable-extension\buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ URL::asset('assests\js\datatable\datatable-extension\dataTables.buttons.min.js') }}"></script>
+<script src="{{ URL::asset('assests\vendor\datatables\buttons.server-side.js') }}"></script>
 @if (Session::has('success'))
-    <script>
-        Toast.fire({
-            icon: "success",
-            title: "{{ Session::get('success') }}"
-        });
-    </script>
-@elseif(Session::has('error'))
-    <script>
-        Toast.fire({
-            icon: "error",
-            title: "{{ Session::get('error') }}"
-        });
-    </script>
+<script>
+    alert('success')
+    Toast.fire({
+        icon: "success",
+        title: "{{ Session::get('success') }}"
+    });
+</script>
+@endif
+@if(Session::has('error'))
+<script>
+    Toast.fire({
+        icon: "error",
+        title: "{{ Session::get('error') }}"
+    });
+</script>
 @endif
 <script>
     if (navigator.onLine) {
@@ -90,16 +90,6 @@
     }
 </script>
 
-
-<script>
-    $(function() {
-        $("body").niceScroll({
-            cursorcolor: "#0a0a0a",
-            cursorwidth: "6px",
-            cursorborder: "none"
-        });
-    });
-</script>
 <script>
     function printDiv() {
         var printContents = document.getElementById('print').innerHTML;
@@ -127,20 +117,6 @@
 </script>
 <script>
     $(document).ready(function() {
-        $('#datatable').DataTable({
-            language: {
-                url: "{{ asset('assests/' . app()->getLocale() . '.json') }}"
-            },
-            responsive: true,
-            lengthMenu: [
-                [20, 40, 50, -1],
-                [20, 40, 50, "الكل"]
-            ]
-        })
-    })
-</script>
-<script>
-    $(document).ready(function() {
         $('form').attr('autocomplete', 'off');
     })
 </script>
@@ -149,4 +125,6 @@
         $('th').addClass('font-weight-bolder');
     })
 </script>
+
+
 @stack('scripts')

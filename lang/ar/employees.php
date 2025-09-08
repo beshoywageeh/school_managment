@@ -22,5 +22,13 @@ return [
     'insurance_number' => 'الرقم التأميني',
     'select_worker_type' => 'إختر الوظيفة',
     'lesson_count' => 'عدد الحصص',
+    'sepicality' => 'التخصص',
+    'national_id_expire_date' => 'تاريخ انتهاء الرقم القومي',
+    'contract_start_date' => 'تاريخ بداية العقد',
+    'notes' => 'ملاحظات',
+    'ministry_code' => 'الكود الوزاري',
+    'retirement_date' => 'تاريخ التقاعد',
+    'date_until_retire' => 'المتبقي علي التقاعد',
+    'working_years' => 'سنوات الخدمة',
 
 ];

@@ -21,7 +21,7 @@ class SettingsController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $school_info = settings::where('school_id', $school->id)->with('image')->first();
+        $school_info = settings::where('id', $school->id)->with('image')->first();
         $grades = Grade::where('school_id', $school->id)->withCount('students')->get();
         $std_count = Student::where('school_id', $school->id)->count();
         $grd_count = Grade::where('school_id', $school->id)->count();

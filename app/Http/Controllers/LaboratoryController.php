@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\Laboratory;
+use App\Models\laboratory;
 use Illuminate\Http\Request;
 
 class LaboratoryController extends Controller

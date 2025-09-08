@@ -52,7 +52,7 @@
                                         <th>{{ trans('orders.product_count') }}</th>
                                         <th>{{ trans('general.created_at') }}</th>
                                         <th>{{ trans('general.updated_at') }}</th>
-                                        <th>{{ trans('General.actions') }}</th>
+                                        <th>{{ trans('general.actions') }}</th>
                                     </tr>
                                     </theadv>
                                 <tbody>

@@ -16,12 +16,12 @@
                     @csrf
                     <div class="row mb-2">
                         <div class="col-3">
-                            <label for="">{{ trans('general.choose', ['value' => trans('academic_year.view')]) }}</label>
+                            <label for="">{{ trans('General.choose', ['value' => trans('academic_year.view')]) }}</label>
                         </div>
                         <div class="col-9">
                             <select name="acc_year" id="" class="custom-select w-100" style="width: 100%;">
-                                <option value="" selected disabled>{{ trans('general.academic_year') }}</option>
-                                <option value="0">{{ trans('general.all') }}</option>
+                                <option value="" selected disabled>{{ trans('General.academic_year') }}</option>
+                                <option value="0">{{ trans('General.all') }}</option>
                                 @foreach ($acadmeic_years as $acc_year)
                                     <option value="{{ $acc_year->id }}">{{ $acc_year->view }}</option>
                                 @endforeach

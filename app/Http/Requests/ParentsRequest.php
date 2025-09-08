@@ -30,7 +30,7 @@ class ParentsRequest extends FormRequest
             'Father_Learning' => 'nullable|string|max:255',
             'Mother_Name' => 'nullable|string|max:255',
             'Mother_National_Id' => 'nullable|string|min:14|max:14|regex:/[0-9]{14}/',
-            'Mother_Phone' => 'nullable|numeric|digits:11|regex:/^01[1-9]\d{8}$/',
+            'Mother_Phone' => 'nullable|numeric|digits:11|regex:/^01[0-9]\d{8}$/',
             'Mother_Job' => 'nullable|string|max:255',
             'Religion' => 'nullable|string|max:255',
             'Address' => 'nullable|string|max:255',

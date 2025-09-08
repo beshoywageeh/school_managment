@@ -17,12 +17,13 @@ class settingsFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->company(),
+                'name' => 'مدرسة المحبة الخاصة',
             'phone' => $this->faker->phoneNumber(),
             'address' => $this->faker->address(),
             'slug' => $this->faker->slug(),
             'heading_right' => $this->faker->word(),
             'heading_left' => $this->faker->word(),
+
         ];
     }
 }

@@ -44,7 +44,7 @@
                                         <th>{{ trans('stock.opening_balance') }}</th>
                                         <th>{{ trans('stock.opening_date') }}</th>
                                         <th>{{ trans('stock.current_stock') }}</th>
-                                        <th>{{ trans('General.actions') }}</th>
+                                        <th>{{ trans('general.actions') }}</th>
                                     </tr>
                                     </theadv>
                                 <tbody>

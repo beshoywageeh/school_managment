@@ -114,7 +114,7 @@ Route::group(
                 Route::get('/', 'index')->name('jobs.index');
                 Route::get('/create', 'create')->name('jobs.create');
                 Route::get('{id}/edit', 'edit')->name('jobs.edit');
-                Route::get('/{id}/destroy', 'destroy')->name('jobs.destroy');
+                Route::get('/destroy/{id}', 'destroy')->name('jobs.destroy');
                 Route::get('/{id}/show', 'show')->name('jobs.show');
                 Route::post('/store', 'store')->name('jobs.store');
                 Route::post('/update', 'update')->name('jobs.update');

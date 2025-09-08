@@ -21,37 +21,27 @@
     <!-- top bar right -->
     <ul class="ml-auto nav navbar-nav">
         <li class="nav-item">
+            <h5 class="m-auto text-center rounded alert alert-warning">{{ \Auth::user()->name }}</h5>
+            </li>
+            <li class="nav-item">
             <h6 class="m-auto text-center rounded alert alert-info" id="datetime"></h6>
         </li>
         <li class="nav-item fullscreen">
             <a id="btnFullscreen" href="#" class="nav-link"><i class="ti-fullscreen"></i></a>
         </li>
+        <li class="nav-item nav_item_header">
+            <a class="btn" style="padding-top: 12px" href="{{ route('profile.edit') }}"><i
+                    class="text-info ti-settings" ></i></a>
+        </li>
+        <li class="nav-item nav_item_header" style="margin-right:0">
 
-        <li class="nav-item dropdown mr-30">
-            <a class="nav-link nav-pill user-avatar" data-toggle="dropdown" href="#" role="button"
-                aria-haspopup="true" aria-expanded="false">
-                <img src="{{ URL::asset('assests/images/Sidebar/avatar3.png') }}" alt="avatar">
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <div class="dropdown-header">
-                    <div class="media">
-                        <div class="media-body">
-                            <h5 class="mt-0 mb-0">{{ \Auth::user()->name }}</h5>
-                            <span>{{ \Auth::user()->email }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ route('profile.edit') }}"><i
-                        class="text-info ti-settings"></i>{{ trans('general.profile') }}</a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="dropdown-item">
-                        <i class="text-danger ti-unlock"></i>
-                        <span>{{ trans('Header.logout') }}</span>
-                    </button>
-                </form>
-            </div>
+            <form method="POST" action="{{ route('logout') }}" class="logout_form">
+                @csrf
+                <button type="submit" class="btn">
+                    <i class="text-primary ti-unlock"></i>
+                </button>
+            </form>
         </li>
     </ul>
+
 </nav>

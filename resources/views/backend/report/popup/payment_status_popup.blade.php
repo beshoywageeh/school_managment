@@ -4,7 +4,7 @@
             <div class="modal-header">
                 <div class="modal-title" id="exampleModalLabel">
                     <div class="">
-                        <h6>{{ trans('general.payment_status') }}</h6>
+                        <h6>{{ trans('General.payment_status') }}</h6>
                     </div>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -18,15 +18,15 @@
                         <div class="col">
                             <div class="form-group">
                                 <label
-                                    for="">{{ trans('general.choose', ['value' => trans('Sidebar.Class_Rooms')]) }}</label>
+                                    for="">{{ trans('General.choose', ['value' => trans('Sidebar.Class_Rooms')]) }}</label>
                                 <select name="grade" id="" class="custom-select">
-                                    <option value="" selected disable>{{ trans('general.choose_grade') }}</option>
-                                    <option value="0">{{ trans('general.all') }}</option>
+                                    <option value="" selected disable>{{ trans('General.choose_grade') }}</option>
+                                    <option value="0">{{ trans('General.all') }}</option>
                                     @forelse($grades as $grade)
                                         <option value="{{ $grade->id }}">{{ $grade->name }}</option>
                                     @empty
                                     <option value="">
-                                        {{trans('general.noDataToShow')}}
+                                        {{trans('General.noDataToShow')}}
                                     </option>
                                     @endforelse
                                 </select>
@@ -35,11 +35,11 @@
                         <div class="col">
                             <div class="form-group">
 
-                                <label for="">{{ trans('general.payment_status') }}</label>
+                                <label for="">{{ trans('General.payment_status') }}</label>
 
                                 <select name="payment_status" id="" class="custom-select">
                                     <option value="" selected disabled>
-                                        {{ trans('general.choose', ['value'=> trans('report.payment_status')]) }}</option>
+                                        {{ trans('General.choose', ['value'=> trans('report.payment_status')]) }}</option>
                                     <option value="0">{{ trans('clothes.not_payed') }}</option>
                                     <option value="1">{{ trans('clothes.payed') }}</option>
                                 </select>

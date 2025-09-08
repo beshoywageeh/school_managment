@@ -25,10 +25,7 @@
                     </div>
                     <div class="row">
                         <div class="text-left col">
-                            <button type="submit" class="btn btn-success btn-block">{{ trans('login.login') }} </button>
-                        </div>
-                        <div class="mt-4 text-right col">
-                            <a class="text-primary" href="{{route('setup')}}">{{trans('login.setup')}}</a>
+                            <button type="submit" class="btn btn-success btn-block w-100">{{ trans('login.login') }} </button>
                         </div>
                     </div>
                 </form>

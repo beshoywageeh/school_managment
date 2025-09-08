@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class settings extends Model
 {
     use HasFactory,SoftDeletes;
-
+    protected $fillable=['name'];
     public function image()
     {
         return $this->morphOne('App\Models\Image', 'imageable');

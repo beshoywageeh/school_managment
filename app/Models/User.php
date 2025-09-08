@@ -46,6 +46,11 @@ class User extends Authenticatable
         'school_id',
         'user_id',
         'lesson_count',
+        'sepicality',
+        'national_id_expire_date',
+        'contract_start_date',
+        'notes',
+        'ministry_code'
     ];
 
     /**
@@ -68,7 +73,7 @@ class User extends Authenticatable
         'password' => 'hashed',
         'gender' => UserGender::class,
         'religion' => user_religion::class,
-        'type' => Jobs_types::class,
+        'type'=>Jobs_types::class
 
     ];
 

@@ -47,7 +47,11 @@ class PermissionTableSeeder extends Seeder
             ['table' => 'employees', 'name' => 'employees-info'],
             ['table' => 'employees', 'name' => 'employees-delete'],
             ['table' => 'employees', 'name' => 'employees-import_Excel'],
-
+            ['table' => 'teacher_schedaule', 'name' => 'scheduale-list'],
+            ['table' => 'teacher_schedaule', 'name' => 'scheduale-create'],
+            ['table' => 'teacher_schedaule', 'name' => 'scheduale-edit'],
+            ['table' => 'teacher_schedaule', 'name' => 'scheduale-info'],
+            ['table' => 'teacher_schedaule', 'name' => 'scheduale-delete'],
             ['table' => 'parents', 'name' => 'parents-list'],
             ['table' => 'parents', 'name' => 'parents-create'],
             ['table' => 'parents', 'name' => 'parents-edit'],

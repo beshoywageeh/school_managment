@@ -26,7 +26,7 @@ class fee_invoiceController extends Controller
         $school = $this->getSchool();
         $fee_invoices = Fee_invoice::where('school_id', $school)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'acd_year:id,view'])->withSum('fees', 'amount')->get();
 
-        return view('backend.fee_invoices.index', compact('fee_invoices'));
+        return view('backend.fee_invoices.index', get_defined_vars());
     }
 
     /**

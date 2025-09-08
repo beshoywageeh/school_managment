@@ -6,7 +6,7 @@
 
         <div class="mb-4 row">
             <div class="col-md-12">
-                <livewire:schedules/>
+                <livewire:Schedules/>
             </div>
         </div>
 @endsection
