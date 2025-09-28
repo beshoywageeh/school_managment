@@ -105,7 +105,7 @@ class ClassesController extends Controller
     public function tammen(classes $class)
     {
         $students = student::where('class_id', $class->id)->update(['tameen' => 1]);
-        //$class->update(['tameen'=>1]);
+        // $class->update(['tameen'=>1]);
         $c = classes::findorfail($class->id)->first();
         $c->update(['tameen' => 1]);
         $this->logActivity('تعديل', ' تعديل حالة تأمين للصف '.$class->title);

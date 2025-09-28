@@ -27,7 +27,7 @@ class UserFactory extends Factory
             'reiligon' => $this->faker->numberBetween(0, 1),
             'type' => $this->faker->numberBetween(1, 4),
             'email_verified_at' => $this->faker->optional()->dateTime(),
-            'email' =>'admin@ischool.com',
+            'email' => 'admin@ischool.com',
             'isAdmin' => '1',
             'login_allow' => '1',
             'password' => \Hash::make('hypervision'),

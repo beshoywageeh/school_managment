@@ -61,6 +61,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>{{ trans('jobs.title_name') }}</th>
+                                                <th>{{trans('jobs.employees_count')}}</th>
                                                 <th>{{ trans('general.actions') }}</th>
                                             </tr>
                                         </thead>
@@ -69,6 +70,7 @@
                                                 <tr>
                                                     <td> {{ $loop->iteration }}</td>
                                                     <td>{{ $job->lang() }}</td>
+                                                    <td>{{ $job->value ? \App\Models\user::where('type', $job->value)->count() : 0 }}</td>
                                                     <td>
                                                         @can('jobs-info')
                                                             <a class="text-white btn btn-info btn-sm show_jobs"
@@ -100,6 +102,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>{{ trans('jobs.job_name') }}</th>
+                                        <th>{{trans('jobs.employees_count')}}</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -153,6 +156,7 @@
                                     const tr = `<tr>
                             <td>${index + 1}</td>
                             <td>${job.name}</td>
+                            <td>${job.users_count}</td>
                             <td>
                                 @can('jobs-edit')
                                     

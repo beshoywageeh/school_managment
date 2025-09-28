@@ -43,7 +43,7 @@ class HomeController extends Controller
         $payments = Recipt_Payment::where('school_id', $school->id)->whereDate('date', $today)
             ->sum('Debit');
 
-        $employees = DB::table('users')->where('school_id', $school->id)->count();
+        $employees = DB::table('users')->where('school_id', $school->id)->where('code', '!=', '000001')->count();
         $grades = Grade::withCount('students')->where('school_id', $school->id)->get();
 
         return view('dashboard', get_defined_vars());

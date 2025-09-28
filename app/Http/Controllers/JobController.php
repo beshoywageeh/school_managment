@@ -17,7 +17,6 @@ class JobController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $jobs = Job::where('school_id', $school->id)->with('jobs')->get();
         $jobs_main = \App\Enums\Jobs_types::cases();
 
         return view('backend.Job.index', get_defined_vars());
@@ -25,7 +24,7 @@ class JobController extends Controller
 
     public function store(Request $request)
     {
-       // return $request;
+        // return $request;
 
         try {
             Job::create([
@@ -48,11 +47,9 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      */
-   
     public function show($id)
     {
-        $school = $this->getSchool();
-        $jobs = Job::where('type', $id)->get();
+        $jobs = Job::where('type', $id)->withCount('users')->get();
 
         return response()->json($jobs);
     }

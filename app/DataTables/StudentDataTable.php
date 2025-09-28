@@ -23,7 +23,7 @@ class StudentDataTable extends DataTable
             ->addIndexColumn()
             ->setRowId('id')
             ->addColumn('std_fullname', function ($query) {
-                return $query->name . ' ' . $query->parent->father_name;
+                return $query->name.' '.$query->parent->father_name;
             })
             ->addColumn('action', 'components.student_-table_-action');
     }
@@ -87,6 +87,6 @@ class StudentDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Student_' . date('YmdHis');
+        return 'Student_'.date('YmdHis');
     }
 }

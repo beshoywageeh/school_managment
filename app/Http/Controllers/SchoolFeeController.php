@@ -10,7 +10,7 @@ use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Fee_invoice;
 use App\Models\Grade;
-use App\Models\School_Fee;
+use App\Models\school_fee as School_Fee;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use Carbon\Carbon;

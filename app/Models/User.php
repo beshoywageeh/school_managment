@@ -50,7 +50,7 @@ class User extends Authenticatable
         'national_id_expire_date',
         'contract_start_date',
         'notes',
-        'ministry_code'
+        'ministry_code',
     ];
 
     /**
@@ -73,7 +73,7 @@ class User extends Authenticatable
         'password' => 'hashed',
         'gender' => UserGender::class,
         'religion' => user_religion::class,
-        'type'=>Jobs_types::class
+        'type' => Jobs_types::class,
 
     ];
 

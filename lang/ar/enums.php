@@ -27,12 +27,11 @@ return [
     'payment_recipt' => 'مدفوعات دراسية',
     'fee_exception' => 'معافات',
     'dealer' => 'وكيل',
-    'director'=>'موجه',
-    'mentor'=>'إشراف',
-    'security'=>'أمن',
-    'cleaner_supervisior'=>'إشراف عمال',
-    'visitor'=>'زائر',
-    'other'=>'أخرى',
-    
+    'director' => 'موجه',
+    'mentor' => 'إشراف',
+    'security' => 'أمن',
+    'cleaner_supervisior' => 'إشراف عمال',
+    'visitor' => 'زائر',
+    'other' => 'أخرى',
 
 ];

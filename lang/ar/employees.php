@@ -30,5 +30,7 @@ return [
     'retirement_date' => 'تاريخ التقاعد',
     'date_until_retire' => 'المتبقي علي التقاعد',
     'working_years' => 'سنوات الخدمة',
+    'insur' => 'مؤمن',
+    'contracted' => 'متعاقد',
 
 ];

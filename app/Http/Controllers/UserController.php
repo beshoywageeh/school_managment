@@ -10,6 +10,8 @@ use App\Models\Job;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Excel as ExcelExcel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -21,8 +23,9 @@ class UserController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $employees = User::where('school_id', $school->id)->with('job')->get();
 
+        // $jobs=job::all()->groupBy('type');
+        // return $jobs;
         return view('backend.employees.Index', get_defined_vars());
     }
 
@@ -66,7 +69,7 @@ class UserController extends Controller
             $user->insurance_number = $request->insurance_number;
             $user->insurance_date = $request->insurance_date ? $request->insurance_date : null;
             $user->national_id = $request->national_id;
-            $user->email = \Str::slug($request->name) . '@ischool.com';
+            $user->email = \Str::slug($request->name).'@ischool.com';
             $user->school_id = $this->getSchool()->id;
             $user->user_id = auth()->id();
             $user->lesson_count = $request->lesson_count;
@@ -76,10 +79,11 @@ class UserController extends Controller
             $user->notes = $request->notes;
             $user->ministry_code = $request->ministry_code;
             $user->save();
-            $this->verifyAndStoreImage($request, 'file', 'employees' . '/' . $request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
-            $this->logActivity('اضافة', 'تم إضافة الموظف ' . $request->name);
+            $this->verifyAndStoreImage($request, 'file', 'employees'.'/'.$request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
+            $this->logActivity('اضافة', 'تم إضافة الموظف '.$request->name);
             DB::commit();
             session()->flash('success', trans('general.success'));
+
             return redirect()->route('employees.index');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -152,8 +156,8 @@ class UserController extends Controller
             $user->notes = $request->notes;
             $user->ministry_code = $request->ministry_code;
             $user->save();
-            $this->verifyAndStoreImage($request, 'file', 'employees' . '/' . $request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
-            $this->logActivity('تعديل', 'تم تعديل الموظف ' . $request->name);
+            $this->verifyAndStoreImage($request, 'file', 'employees'.'/'.$request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
+            $this->logActivity('تعديل', 'تم تعديل الموظف '.$request->name);
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -173,7 +177,7 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            $this->logActivity('حذف', 'تم حذف الموظف ' . $user->name);
+            $this->logActivity('حذف', 'تم حذف الموظف '.$user->name);
             $user->delete();
             session()->flash('success', trans('general.success'));
 
@@ -189,7 +193,7 @@ class UserController extends Controller
     {
 
         $emp = User::where('id', $id)->restore();
-        $this->logActivity('استعادة', 'تم استعادة الموظف' . $emp->name);
+        $this->logActivity('استعادة', 'تم استعادة الموظف'.$emp->name);
         session()->flash('success', trans('general.success'));
 
         return redirect()->route('employees.index');
@@ -199,7 +203,6 @@ class UserController extends Controller
     {
         $employees = User::onlyTrashed()->get();
         $school = $this->getSchool();
-
 
         return view('backend.employees.resign', get_defined_vars());
     }
@@ -216,12 +219,14 @@ class UserController extends Controller
     {
         try {
             $path = $request->file('excel')->getRealPath();
-            \Excel::import(new WorkersImport, $path);
+            // Excel::import(new WorkersImport, $path);
+            Excel::import(new WorkersImport, $request->file('excel'), null, ExcelExcel::XLSX);
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+            \Log::error($e->getMessage());
 
             return redirect()->back()->withInput();
         }

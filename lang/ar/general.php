@@ -76,6 +76,6 @@ return [
     'academic_year' => 'العام الدراسي',
     'basic_info' => 'البيانات الاساسية',
     'attendance_request' => 'طلب التحاق بالمدرسة',
-    'employee_search'=> 'بحث الموظفين',
-    'per_page'=>'عرض بالصفحة',
+    'employee_search' => 'بحث الموظفين',
+    'per_page' => 'عرض بالصفحة',
 ];

@@ -35,7 +35,7 @@
 
             <!--for employee-->
             @if (Auth::user()->hasAnyPermission(['jobs-list', 'employees-list']))
-                <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.student_info') }} </li>
+                <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.employee_info') }} </li>
                 @can('jobs-list')
                     <x-nav_link :href="route('jobs.index')" :active="request()->is('*/jobs*')" :image="URL::asset('assests/images/Sidebar/job.png')">
                         {{ trans('Sidebar.jobs') }}

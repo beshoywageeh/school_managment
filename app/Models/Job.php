@@ -12,7 +12,7 @@ class Job extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $casts = ['status' => Status::class,'type'=>Jobs_types::class];
+    protected $casts = ['status' => Status::class, 'type' => Jobs_types::class];
 
     protected $table = 'work_jobs';
 
@@ -31,5 +31,10 @@ class Job extends Model
     public function jobs()
     {
         return $this->belongsTo(Job::class, 'main_job_id');
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'job_id');
     }
 }

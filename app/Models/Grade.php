@@ -16,7 +16,7 @@ class Grade extends Model
         'school_id',
     ];
 
-    //protected $primaryKey = 'id';
+    // protected $primaryKey = 'id';
     public function user()
     {
         return $this->belongsTo('App\Models\User');

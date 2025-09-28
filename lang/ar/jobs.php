@@ -7,4 +7,5 @@ return [
     'title' => 'الوظائف',
     'is_main' => 'وظيفة رئيسية',
     'title_name' => 'المسمي الوظيفي',
+    'employees_count' => 'عدد الموظفين',
 ];

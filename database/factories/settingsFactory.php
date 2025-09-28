@@ -17,7 +17,7 @@ class settingsFactory extends Factory
     public function definition(): array
     {
         return [
-                'name' => 'مدرسة المحبة الخاصة',
+            'name' => 'مدرسة المحبة الخاصة',
             'phone' => $this->faker->phoneNumber(),
             'address' => $this->faker->address(),
             'slug' => $this->faker->slug(),

@@ -14,6 +14,6 @@ class ActivityLogController extends Controller
         $school = $this->getSchool();
         $activities = ActivityLog::where('setting_id', $school->id)->with('user')->latest()->paginate('20');
 
-        return view('backend.system_monitor.index', compact('activities', 'school'));
+        return view('backend.system_monitor.Index', compact('activities', 'school'));
     }
 }

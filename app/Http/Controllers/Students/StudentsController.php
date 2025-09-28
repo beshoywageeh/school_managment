@@ -223,7 +223,7 @@ class StudentsController extends Controller
         try {
             $path = $request->file('excel')->getRealPath();
             Excel::import(new StudentImport, $path);
-            //Excel::import(new StudentImport, '/up/Student_Info2.xlsx', 'upload_attachments');
+            // Excel::import(new StudentImport, '/up/Student_Info2.xlsx', 'upload_attachments');
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('Students.index');

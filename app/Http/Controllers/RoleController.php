@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Traits\SchoolTrait;
 use DB;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use App\Http\Traits\SchoolTrait;
 
 class RoleController extends Controller
 {
@@ -24,24 +24,25 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         $roles = Role::orderBy('id', 'DESC')->withCount('permissions')->get();
-        $school=$this->getSchool();
-        return view('backend.roles.index', compact('roles','school'));
+        $school = $this->getSchool();
+
+        return view('backend.roles.index', compact('roles', 'school'));
     }
 
     /*** Show the form for creating a new resource.** @return \Illuminate\Http\Response*/
     public function create()
     {
         $permissions = Permission::get()->groupBy('table');
-        $school=$this->getSchool();
+        $school = $this->getSchool();
 
-        //return $permission;
-        return view('backend.roles.create', compact('permissions','school'));
+        // return $permission;
+        return view('backend.roles.create', compact('permissions', 'school'));
     }
 
     /*** Store a newly created resource in storage.** @param  \Illuminate\Http\Request  $request* @return \Illuminate\Http\Response*/
     public function store(Request $request)
     {
-        //return $request;
+        // return $request;
         try {
             $this->validate($request, ['name' => 'required|unique:roles,name', 'permission' => 'required']);
             $role = Role::create(['name' => $request->input('name')]);
@@ -58,9 +59,9 @@ class RoleController extends Controller
     {
         $role = Role::find($id);
         $rolePermissions = Permission::join('role_has_permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')->where('role_has_permissions.role_id', $id)->get()->groupBy('table');
-        $school=$this->getSchool();
+        $school = $this->getSchool();
 
-        return view('backend.roles.show', compact('role', 'rolePermissions','school'));
+        return view('backend.roles.show', compact('role', 'rolePermissions', 'school'));
     }
 
     /*** Show the form for editing the specified resource.** @param  int  $id* @return \Illuminate\Http\Response*/
@@ -69,9 +70,9 @@ class RoleController extends Controller
         $role = Role::find($id);
         $permissions = Permission::get()->groupBy('table');
         $rolePermissions = DB::table('role_has_permissions')->where('role_has_permissions.role_id', $id)->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')->all();
-        $school=$this->getSchool();
+        $school = $this->getSchool();
 
-        return view('backend.roles.edit', compact('role', 'permissions', 'rolePermissions','school'));
+        return view('backend.roles.edit', compact('role', 'permissions', 'rolePermissions', 'school'));
     }
 
     /*** Update the specified resource in storage.** @param  \Illuminate\Http\Request  $request* @param  int  $id* @return \Illuminate\Http\Response*/
