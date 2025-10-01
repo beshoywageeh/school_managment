@@ -36,7 +36,7 @@ class GradesController extends Controller
             'users' => User::select('id', 'name')->get(),
         ];
 
-        return view('backend.Grades.index', get_defined_vars());
+        return view('backend.Grades.Index', get_defined_vars());
     }
 
     public function create()
