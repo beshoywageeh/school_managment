@@ -73,7 +73,7 @@ class ParentsDataTable extends DataTable
             Column::make('Address')->title(trans('Parents.Address')),
             Column::make('students_count')->title(trans('Parents.children_count'))->searchable(false),
             Column::computed('action')
-                ->title(trans('General.actions'))
+                ->title(trans('general.actions'))
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)

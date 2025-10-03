@@ -85,7 +85,7 @@ class MyParentsController extends Controller
         $parent = My_parents::findorfail($id);
         $school = $this->getSchool();
 
-        return view('backend.parents.edit', get_defined_vars());
+        return view('backend.Parents.edit', get_defined_vars());
     }
 
     public function update(ParentsRequest $request)
