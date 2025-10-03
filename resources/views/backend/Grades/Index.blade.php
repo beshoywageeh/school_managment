@@ -3,7 +3,7 @@
     {{ trans('Grades.title') }}
 @endsection
 @section('content')
-    @include('backend.Grades.Create')
+    @include('backend.Grades.create')
     <div class="row">
         <div class="col-xl-12 mb-30">
             <div class="card card-statistics h-100">
@@ -29,10 +29,10 @@
                                 <thead class="font-bold">
                                     <td>#</td>
                                     <td>{{ trans('Grades.name') }}</td>
-                                    <td>{{ trans('grades.by') }}</td>
-                                    <td>{{ trans('General.created_at') }}</td>
-                                    <td>{{ trans('grades.class_count') }}</td>
-                                    <td>{{ trans('grades.student_count') }}</td>
+                                    <td>{{ trans('Grades.by') }}</td>
+                                    <td>{{ trans('general.created_at') }}</td>
+                                    <td>{{ trans('Grades.class_count') }}</td>
+                                    <td>{{ trans('Grades.student_count') }}</td>
                                     <td>{{ trans('general.actions') }}</td>
                                 </thead>
                                 <tbody>
@@ -77,7 +77,7 @@
                                         </tr>
                                         @include('backend.Grades.edit')
                                         @empty
-                                        <tr><td colspan="7">{{trans('General.noDataToShow')}}</td></tr>
+                                        <tr><td colspan="7">{{trans('general.noDataToShow')}}</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>

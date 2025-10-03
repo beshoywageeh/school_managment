@@ -37,6 +37,11 @@ return new class extends Migration
             $table->integer('lesson_count')->nullable();
             $table->boolean('resign')->default('0');
             $table->string('resign_reason')->nullable();
+            $table->string('sepicality')->nullable();
+            $table->date('national_id_expire_date')->nullable();
+            $table->date('contract_start_date')->nullable();
+            $table->string('notes')->nullable();
+            $table->string('ministry_code')->nullable();
             $table->unsignedBigInteger('school_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->rememberToken();

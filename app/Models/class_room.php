@@ -37,9 +37,9 @@ class class_room extends Model
     {
         $value = $this->tameen;
         if ($value == 0) {
-            print_r('<span class="badge badge-danger">'.trans('General.no_tammen').'</span>');
+            print_r('<span class="badge badge-danger">'.trans('general.no_tammen').'</span>');
         } else {
-            print_r('<span class="badge badge-success">'.trans('General.ok_tammen').'</span>');
+            print_r('<span class="badge badge-success">'.trans('general.ok_tammen').'</span>');
         }
 
     }

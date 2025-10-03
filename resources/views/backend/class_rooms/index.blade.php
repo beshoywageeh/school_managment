@@ -31,7 +31,7 @@
                                     <th>{{ trans('class_rooms.Name') }}</th>
                                     <th>{{ trans('class_rooms.grades') }}</th>
                                     <th>{{ trans('class_rooms.Added_By') }}</th>
-                                    <th>{{ trans('General.created_at') }}</th>
+                                    <th>{{ trans('general.created_at') }}</th>
                                     <th>{{ trans('class_rooms.Student_Count') }}</th>
                                     <th>{{ trans('general.actions') }}</th>
                                 </tr>
@@ -91,7 +91,7 @@
                     </div>
                 </div>
             </div>
-            @include('backend.class_rooms.Create')
+            @include('backend.class_rooms.create')
         </div>
 
     </div>
