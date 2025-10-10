@@ -1,6 +1,14 @@
 <?php
 
 return [
+    'index' => [
+        'title' => 'سجل النشاطات',
+        'user' => 'المستخدم',
+        'description' => 'الوصف',
+        'time' => 'الوقت',
+        'type' => 'النوع',
+        'date' => 'التاريخ',
+    ],
     'parents' => [
         'added' => 'تم إضافة ولي الأمر :name',
         'updated' => 'تم تعديل ولي أمر :name',

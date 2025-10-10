@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('system_lookup.title') }}
+    {{ trans('log.index.title') }}
 @endsection
 @push('css')
     <style>
@@ -16,10 +16,11 @@
                         <table class="table table-sm table-hover table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>{{trans('system_lookup.user')}}</th>
-                                    <th>{{trans('system_lookup.action')}}</th>
-                                    <th>{{trans('system_lookup.action')}}</th>
-                                    <th>{{trans('system_lookup.created_at')}}</th>
+                                    <th>{{ trans('log.index.user') }}</th>
+                                    <th>{{ trans('log.index.type') }}</th>
+                                    <th>{{ trans('log.index.description') }}</th>
+                                    <th>{{ trans('log.index.date') }}</th>
+                                    <th>{{ trans('log.index.time') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -34,7 +35,8 @@
                                                 -
                                             @endif
                                         </td>
-                                        <td>{{ $activity->created_at->diffForHumans() }}</td>
+                                        <td>{{ $activity->created_at->format('Y-m-d') }}</td>
+                                        <td>{{ $activity->created_at->format('H:i:s') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
