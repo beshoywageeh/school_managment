@@ -61,7 +61,7 @@ class MyParentsController extends Controller
                 'Father_Learning' => $request->Father_Learning,
                 'school_id' => \Auth::user()->school_id,
             ]);
-            $this->logActivity('اضافة', 'تم إضافة ولي الأمر '.$request->Father_Name);
+            $this->logActivity(trans('log.parents.added_action'), trans('log.parents.added', ['name' => $request->Father_Name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -116,7 +116,7 @@ class MyParentsController extends Controller
                 'Religion' => $request->religion,
                 'Father_Learning' => $request->Father_Learning,
             ]);
-            $this->logActivity('تعديل', 'تم تعديل ولي أمر '.$request->Father_Name);
+            $this->logActivity(trans('log.parents.updated_action'), trans('log.parents.updated', ['name' => $request->Father_Name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -133,7 +133,7 @@ class MyParentsController extends Controller
             $d = My_parents::withCount('Students')->findorfail($id);
             if ($d->Students_count == 0) {
                 $d->delete();
-                $this->logActivity('حذف', 'تم حذف ولي أمر '.$d->Father_Name);
+                $this->logActivity(trans('log.parents.deleted_action'), trans('log.parents.deleted', ['name' => $d->Father_Name]));
                 session()->flash('success', trans('general.deleted'));
 
                 return redirect()->route('parents.index');

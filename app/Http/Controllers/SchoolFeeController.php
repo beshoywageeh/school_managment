@@ -74,7 +74,7 @@ class SchoolFeeController extends Controller
                 $school_fee->title = $request->title;
                 $school_fee->school_id = $request->user()->school_id;
                 $school_fee->save();
-                $this->logActivity('إضافة', 'مصروفات دراسية بقيمة :'.\Number::currency($request->amount, 'EGP', 'ar'));
+                $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.added', ['amount' => \Number::currency($request->amount, 'EGP', 'ar')]));
             }
             $students = Student::where('grade_id', $request->grade_id)->whereIn('classroom_id', $request->classroom_id)->get();
             $ac_year = acadmice_year::where('status', '0')->first();
@@ -99,7 +99,7 @@ class SchoolFeeController extends Controller
                 $std->debit = $request->amount;
                 $std->credit = 0.00;
                 $std->save();
-                $this->logActivity('إضافة', 'تم اضافة فاتورة جديدة للطالب : '.$student->name.'بقيمة :'.\Number::currency($request->amount, 'EGP', 'ar'));
+                $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.invoice_added', ['name' => $student->name, 'amount' => \Number::currency($request->amount, 'EGP', 'ar')]));
             }
             session()->flash('success', trans('General.success'));
             DB::commit();
@@ -165,7 +165,7 @@ class SchoolFeeController extends Controller
                 'description' => $request->description,
                 'amount' => $request->amount,
             ]);
-            $this->logActivity('تعديل', 'تم تعديل مصروفات دراسية بقيمة :'.\Number::currency($request->amount, 'EGP', 'ar'));
+            $this->logActivity(trans('log.parents.updated_action'), trans('log.school_fee.updated', ['amount' => \Number::currency($request->amount, 'EGP', 'ar')]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('schoolfees.index');
@@ -183,7 +183,7 @@ class SchoolFeeController extends Controller
     {
         try {
             $fee = School_Fee::findorFail($id);
-            $this->logActivity('حذف', 'تم حذف مصروف دراسي بقيمة :'.\Number::currency($fee->amount, 'EGP', 'ar'));
+            $this->logActivity(trans('log.parents.deleted_action'), trans('log.school_fee.deleted', ['amount' => \Number::currency($fee->amount, 'EGP', 'ar')]));
             $fee->delete();
             session()->flash('success', trans('general_success'));
 

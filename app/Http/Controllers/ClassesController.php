@@ -43,7 +43,7 @@ class ClassesController extends Controller
                 ]);
             }
             session()->flash('success', trans('general.success'));
-            $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->class_name]));
+            $this->logActivity(trans('log.classes.added_action'), trans('system_lookup.field_add', ['value' => $request->class_name]));
 
             return redirect()->route('classes.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -64,7 +64,7 @@ class ClassesController extends Controller
         try {
             Student::whereIn('id', $request->student_id)->update(['class_id' => $request->class_id]);
             $class = classes::findorfail($request->class_id)->first()->title;
-            $this->logActivity('اضافة', ' تم إضافة طلاب للصف'.$class);
+            $this->logActivity(trans('log.classes.students_added_action'), trans('log.classes.students_added', ['class_name' => $class]));
 
             return redirect()->route('classes.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -83,7 +83,7 @@ class ClassesController extends Controller
                 'tameen' => 0,
             ]);
             $students = Student::where('class_id', $request->id)->update(['class_id' => null]);
-            $this->logActivity('تعديل', 'تم تعديل الفصل '.$request->title);
+            $this->logActivity(trans('log.classes.updated_action'), trans('log.classes.updated', ['class_name' => $request->title]));
 
             return redirect()->route('classes.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -108,7 +108,7 @@ class ClassesController extends Controller
         // $class->update(['tameen'=>1]);
         $c = classes::findorfail($class->id)->first();
         $c->update(['tameen' => 1]);
-        $this->logActivity('تعديل', ' تعديل حالة تأمين للصف '.$class->title);
+        $this->logActivity(trans('log.classes.tameen_status_updated_action'), trans('log.classes.tameen_status_updated', ['class_name' => $class->title]));
 
         return redirect()->route('classes.index')->with('success', trans('general.success'));
     }
@@ -121,7 +121,7 @@ class ClassesController extends Controller
             if ($student > 0) {
                 return redirect()->back()->with('info', trans('classes.cant_delete'));
             }
-            $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $class->title]));
+            $this->logActivity(trans('log.classes.deleted_action'), trans('system_lookup.field_delete', ['value' => $class->title]));
             $class->delete();
 
             return redirect()->route('classes.index')->with('success', trans('general.success'));

@@ -38,7 +38,7 @@ class ClothesController extends Controller
                 'school_id' => $this->getSchool()->id,
                 'user_id' => auth()->user()->id,
             ]);
-            $this->logActivity('اضافة', trans('system_lookup.field_create', ['value' => $request->name]));
+            $this->logActivity(trans('log.parents.added_action'), trans('log.clothes.added', ['name' => $request->name]));
 
             return redirect()->back()->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -61,7 +61,7 @@ class ClothesController extends Controller
                 'sales_price_set' => $request->sales_price_isset,
 
             ]);
-            $this->logActivity('تعديل', 'تم تعديل العنصر'.$request->name);
+            $this->logActivity(trans('log.parents.updated_action'), trans('log.clothes.updated', ['name' => $request->name]));
 
             return redirect()->back()->with('success', trans('general.success'));
         } catch (Exception $e) {
@@ -73,7 +73,7 @@ class ClothesController extends Controller
     {
         try {
             $clothes = clothes::findorfail($id);
-            $this->logActivity('حذف', 'تم حذف منتج '.$clothes->name);
+            $this->logActivity(trans('log.parents.deleted_action'), trans('log.clothes.deleted', ['name' => $clothes->name]));
             $clothes->delete();
 
             return redirect()->back()->with('success', trans('general.success'));

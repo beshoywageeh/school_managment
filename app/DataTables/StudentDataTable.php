@@ -23,7 +23,7 @@ class StudentDataTable extends DataTable
             ->addIndexColumn()
             ->setRowId('id')
             ->addColumn('std_fullname', function ($query) {
-                return $query->name.' '.$query->parent->father_name;
+                return $query->name.' '.($query->parent ? $query->parent->father_name : '');
             })
             ->addColumn('action', 'components.student_-table_-action');
     }
@@ -74,7 +74,7 @@ class StudentDataTable extends DataTable
             Column::make('address')->title(trans('student.address')),
             Column::make('national_id')->title(trans('student.national_id')),
             Column::computed('action')
-                ->title(trans('General.actions'))
+                ->title(trans('general.actions'))
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)

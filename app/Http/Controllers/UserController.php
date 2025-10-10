@@ -80,7 +80,7 @@ class UserController extends Controller
             $user->ministry_code = $request->ministry_code;
             $user->save();
             $this->verifyAndStoreImage($request, 'file', 'employees'.'/'.$request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
-            $this->logActivity('اضافة', 'تم إضافة الموظف '.$request->name);
+            $this->logActivity(trans('log.parents.added_action'), trans('log.user.added', ['name' => $request->name]));
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -157,7 +157,7 @@ class UserController extends Controller
             $user->ministry_code = $request->ministry_code;
             $user->save();
             $this->verifyAndStoreImage($request, 'file', 'employees'.'/'.$request->name, 'upload_attachments', $user->id, 'App\Model\Users', $request->name);
-            $this->logActivity('تعديل', 'تم تعديل الموظف '.$request->name);
+            $this->logActivity(trans('log.parents.updated_action'), trans('log.user.updated', ['name' => $request->name]));
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -177,7 +177,7 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            $this->logActivity('حذف', 'تم حذف الموظف '.$user->name);
+            $this->logActivity(trans('log.parents.deleted_action'), trans('log.user.deleted', ['name' => $user->name]));
             $user->delete();
             session()->flash('success', trans('general.success'));
 
@@ -193,7 +193,7 @@ class UserController extends Controller
     {
 
         $emp = User::where('id', $id)->restore();
-        $this->logActivity('استعادة', 'تم استعادة الموظف'.$emp->name);
+        $this->logActivity(trans('log.user.restored_action'), trans('log.user.restored', ['name' => $emp->name]));
         session()->flash('success', trans('general.success'));
 
         return redirect()->route('employees.index');

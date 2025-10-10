@@ -33,7 +33,7 @@ class JobController extends Controller
                 'created_by' => \Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
-            $this->logActivity('إضافة', 'تم اضافة وظيفة جديدة'.$request->job_name);
+            $this->logActivity(trans('log.parents.added_action'), trans('log.job.added', ['name' => $request->job_name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('jobs.index');
@@ -65,7 +65,7 @@ class JobController extends Controller
                 'name' => $request->job_name,
                 'type' => $request->worker_type,
             ]);
-            $this->logActivity('تعديل', 'تم تعديل وظيفة '.$request->job_name);
+            $this->logActivity(trans('log.parents.updated_action'), trans('log.job.updated', ['name' => $request->job_name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('jobs.index');
@@ -85,7 +85,7 @@ class JobController extends Controller
         try {
 
             $Job = Job::findorFail($id);
-            $this->logActivity('حذف', 'تم حذف وظيفة '.$Job->name);
+            $this->logActivity(trans('log.parents.deleted_action'), trans('log.job.deleted', ['name' => $Job->name]));
             $Job->delete();
 
             return redirect()->back();

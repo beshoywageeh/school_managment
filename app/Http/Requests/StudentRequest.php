@@ -24,7 +24,6 @@ class StudentRequest extends FormRequest
         return [
             'student_name' => ['required', 'string', 'max:255'],
             'birth_date' => ['required', 'date'],
-
             'address' => ['required', 'string', 'max:100'],
             'grade' => ['required'],
             'class_room' => ['required'],

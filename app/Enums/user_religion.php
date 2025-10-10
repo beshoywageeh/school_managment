@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum user_religion: string
+enum user_religion: int
 {
     case CHRISTIAN = 0;
     case MUSLIM = 1;

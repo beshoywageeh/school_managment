@@ -12,7 +12,7 @@ class EmployeesTable extends Component
 {
     use WithPagination;
 
-    public $job_id=1;
+    public $job_id = 1;
 
     public function render()
     {

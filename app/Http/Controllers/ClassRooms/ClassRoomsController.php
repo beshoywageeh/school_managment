@@ -65,7 +65,7 @@ class ClassRoomsController extends Controller
                 ]);
             }
             session()->flash('success', trans('general.success'));
-            $this->logActivity('اضافة', trans('system_lookup.field_add', ['value' => $request->class_name]));
+            $this->logActivity(trans('log.parents.added_action'), trans('system_lookup.field_add', ['value' => $request->class_name]));
 
             return redirect()->back();
         } catch (\Exception $e) {
@@ -119,7 +119,7 @@ class ClassRoomsController extends Controller
             $class_room->grade_id = $request->grade_name;
             $class_room->save();
             session()->flash('success', trans('general.success'));
-            $this->logActivity('تعديل', trans('system_lookup.change', ['value' => $request->class_name]));
+            $this->logActivity(trans('log.parents.updated_action'), trans('system_lookup.change', ['value' => $request->class_name]));
 
             return redirect()->route('class_rooms.index');
         } catch (\Exception $e) {
@@ -139,7 +139,7 @@ class ClassRoomsController extends Controller
             }
             $class->students->toQuery()->update(['tameen' => 1]);
             $class->update(['tameen' => 1]);
-            $this->logActivity('تعديل', trans('system_lookup.tammen_on_class', ['class' => $class->name]));
+            $this->logActivity(trans('log.parents.updated_action'), trans('system_lookup.tammen_on_class', ['class' => $class->name]));
             \DB::commit();
 
             return redirect()->back()->with('success', trans('General.success'));
@@ -163,7 +163,7 @@ class ClassRoomsController extends Controller
 
                 return redirect()->back()->with('success', trans('general.success'));
             }
-            $this->logActivity('حذف', trans('system_lookup.field_delete', ['value' => $class_room->class_name]));
+            $this->logActivity(trans('log.parents.deleted_action'), trans('system_lookup.field_delete', ['value' => $class_room->name]));
 
             return redirect()->back()->with('error', trans('class_rooms.cannot_deleted'));
         } catch (\Exception $e) {

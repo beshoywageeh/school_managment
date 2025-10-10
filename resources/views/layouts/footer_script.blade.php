@@ -4,7 +4,7 @@
 
 <!-- plugin_path -->
 <script>
-    var plugin_path = 'assests/js/';
+    var plugin_path = '{{ asset("assests/js") }}/';
 </script>
 <!-- plugins-jquery -->
 <script src="{{ URL::asset('assests/js/plugins-jquery.js') }}"></script>
@@ -34,11 +34,7 @@
 <script src="{{ URL::asset('assests/js/select2.full.min.js') }}"></script>
 
 <script src="{{ URL::asset('assests/js/custom.js') }}"></script>
-<script src="{{ URL::asset('assests\js\datatable\datatables\jquery.dataTables.min.js') }}"></script>
-<script src="{{ URL::asset('assests\js\bootstrap-datatables\dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ URL::asset('assests\js\datatable\datatable-extension\buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ URL::asset('assests\js\datatable\datatable-extension\dataTables.buttons.min.js') }}"></script>
-<script src="{{ URL::asset('assests\vendor\datatables\buttons.server-side.js') }}"></script>
+
 @if (Session::has('success'))
 <script>
     alert('success')
@@ -125,6 +121,10 @@
         $('th').addClass('font-weight-bolder');
     })
 </script>
+
+
+<script src="{{ URL::asset('assests\\js\\datatable\\datatables\\jquery.dataTables.min.js') }}"></script>
+<script src="{{ URL::asset('assests\\js\\bootstrap-datatables\\dataTables.bootstrap4.min.js') }}"></script>
 
 
 @stack('scripts')

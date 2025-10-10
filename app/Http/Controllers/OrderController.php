@@ -45,7 +45,7 @@ class OrderController extends Controller
                 'school_id' => $this->getSchool()->id,
                 'user_id' => auth()->user()->id,
             ]);
-            $this->logActivity('إضافة', 'إضافة أمر توريد رقم'.$order->auto_number);
+            $this->logActivity(trans('log.order.added_action'), trans('log.order.added', ['order_number' => $order->auto_number]));
 
             return redirect()->route('stock.tawreed', $order->id);
         } catch (Exception $e) {
@@ -86,7 +86,7 @@ class OrderController extends Controller
                 ];
                 $order->stocks()->syncWithPivotValues('order_id', $stocks);
             }
-            $this->logActivity('تعديل', 'تعديل أمر توريد رقم'.$order->auto_number);
+            $this->logActivity(trans('log.order.updated_action'), trans('log.order.updated', ['order_number' => $order->auto_number]));
             session()->flash('success', 'تم التعديل بنجاح');
 
             return redirect()->route('order.index');
@@ -105,7 +105,7 @@ class OrderController extends Controller
                 return redirect()->back();
             }
             $order->delete();
-            $this->logActivity('حذف', 'حذف أمر توريد رقم'.$order->auto_number);
+            $this->logActivity(trans('log.order.deleted_action'), trans('log.order.deleted', ['order_number' => $order->auto_number]));
             session()->flash('success', 'تم الحذف بنجاح');
 
             return redirect()->back();

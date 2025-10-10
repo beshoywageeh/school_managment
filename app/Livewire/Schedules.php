@@ -84,7 +84,7 @@ class Schedules extends Component
             'job_id' => $this->Selectedjob_id,
             'day' => $this->selectedDay,
         ]);
-        $this->logActivity('إضافة', 'تم إضافة حصة دراسية');
+        $this->logActivity(trans('log.schedules.added_action'), trans('log.schedules.added'));
         $this->closeScheduleModal();
         $this->dispatch('alert');
         request()->session()->flash('success', trans('General.success'));

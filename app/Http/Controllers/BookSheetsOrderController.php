@@ -61,7 +61,7 @@ class BookSheetsOrderController extends Controller
                     'order_id' => $order->id,
                 ]);
             }
-            $this->logActivity('إضافة', 'إضافة أمر توريد رقم'.$order->auto_number);
+            $this->logActivity(trans('log.parents.added_action'), trans('log.book_sheets_order.tawreed_added', ['number' => $order->auto_number]));
             DB::commit();
 
             return redirect()->route('books_sheets.index')->with('success', trans('general.success'));
@@ -100,13 +100,13 @@ class BookSheetsOrderController extends Controller
                 ]);
                 $bookSheet = book_sheet::find($book_sheet);
                 if ($request->sales[$key] != $bookSheet->sales_price) {
-                    $this->logActivity('تعديل', 'تعديل سعر صرف كتاب '.$bookSheet->name.' من قيمة '.$bookSheet->sales_price.' الى قيمة '.$request->sales[$key]);
+                    $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.price_updated', ['book_name' => $bookSheet->name, 'old_price' => $bookSheet->sales_price, 'new_price' => $request->sales[$key]]));
                     $bookSheet->update([
                         'sales_price' => $request->sales[$key],
                     ]);
 
                 }
-                $this->logActivity('تعديل', 'تعديل أمر توريد رقم'.$order->auto_number);
+                $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.tawreed_updated', ['number' => $order->auto_number]));
             }
             DB::commit();
 
@@ -153,7 +153,7 @@ class BookSheetsOrderController extends Controller
                     'order_id' => $order->id,
                 ]);
             }
-            $this->logActivity('إضافة', 'إضافة أمر صرف رقم'.$order->auto_number);
+            $this->logActivity(trans('log.parents.added_action'), trans('log.book_sheets_order.sarf_added', ['number' => $order->auto_number]));
             DB::commit();
 
             return redirect()->route('bookSheetsOrder.index', 2)->with('success', trans('general.success'));
@@ -203,7 +203,7 @@ class BookSheetsOrderController extends Controller
                     'quantity_in' => '0',
                     'order_id' => $request->order_id,
                 ]);
-                $this->logActivity('تعديل', 'تعديل أمر صرف رقم'.$order->auto_number);
+                $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.sarf_updated', ['number' => $order->auto_number]));
             }
 
             DB::commit();
@@ -255,7 +255,7 @@ class BookSheetsOrderController extends Controller
                     'quantity_out' => $qty < 0 ? abs($qty) : 0,
                     'quantity_in' => $qty > 0 ? $qty : 0,
                 ]);
-                $this->logActivity('إضافة', ' إضافة للمخزن'.$stock->name.'في الجرد رقم'.$request->id);
+                $this->logActivity(trans('log.parents.added_action'), trans('log.book_sheets_order.gard_added', ['stock_name' => $stock->name, 'inventory_number' => $order->auto_number]));
             }
 
             return redirect()->route('bookSheetsOrder.index', 3)->with('success', 'تم الاضافة بنجاح');
@@ -296,7 +296,7 @@ class BookSheetsOrderController extends Controller
                         'quantity_in' => $qty,
                     ]);
                 }
-                $this->logActivity('تعديل', ' تعديل للمخزن '.$stock->name.' في الجرد رقم '.$order->auto_number);
+                $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.gard_updated', ['stock_name' => $stock->name, 'inventory_number' => $order->auto_number]));
             }
 
             return redirect()->route('bookSheetsOrder.index', 3)->with('success', trans('general.success'));
@@ -310,7 +310,7 @@ class BookSheetsOrderController extends Controller
     {
         try {
             bookSheets_order::where('id', $id)->update(['is_payed' => 1]);
-            $this->logActivity('تعديل', 'تعديل حالة صرف رقم'.$id);
+            $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.status_updated', ['id' => $id]));
 
             return redirect()->route('bookSheetsOrder.index', 2)->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -322,7 +322,7 @@ class BookSheetsOrderController extends Controller
     {
         try {
             $order = bookSheets_order::find($id);
-            $this->logActivity('حذف', 'تم حذف أمر توريد رقم'.$order->auto_number);
+            $this->logActivity(trans('log.parents.deleted_action'), trans('log.book_sheets_order.deleted', ['number' => $order->auto_number]));
             $order->delete();
 
             return redirect()->back()->with('success', trans('general.success'));

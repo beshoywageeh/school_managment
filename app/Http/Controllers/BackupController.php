@@ -59,7 +59,7 @@ class BackupController extends Controller
             // log the results
             Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n".$output);
             session()->flash('success', trans('notifications.backup_successful_body', ['application_name' => config('app.name'), 'disk_name' => config('backup.backup.destination.disks')[0]]));
-            $this->logActivity('نسخه إحتياطية', 'بتاريخ'.Carbon::parse()->format('Y-M-d'));
+            $this->logActivity(trans('log.backup.created_action'), trans('log.backup.created', ['date' => Carbon::parse()->format('Y-M-d')]));
 
             return redirect()->back();
         } catch (\Exception $e) {
@@ -97,7 +97,7 @@ class BackupController extends Controller
             if ($disk->exists(config('backup.backup.name').'/'.$file_name)) {
                 $disk->delete(config('backup.backup.name').'/'.$file_name);
                 session()->flash('success', trans('notifications.cleanup_successful_subject_title'));
-                $this->logActivity('حذف نسخه إحتياطية', 'بتاريخ'.Carbon::parse()->format('Y-m-d'));
+                $this->logActivity(trans('log.backup.deleted_action'), trans('log.backup.deleted', ['date' => Carbon::parse()->format('Y-m-d')]));
 
                 return redirect()->back();
             } else {

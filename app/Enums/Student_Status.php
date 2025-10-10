@@ -16,32 +16,7 @@ enum Student_Status: int
     case FREEZED = 9;
     case STILL = 10;
 
-    public function color(): string
-    {
-        return match ($this) {
-            self::NEW => 'badge badge-pill badge-success',
-            self::TRASPORT_FROM => 'badge badge-pill badge-warning',
-            self::TRASPORT_TO => 'badge badge-pill badge-info',
-            self::TOTAL_ABSENT => 'badge badge-pill badge-danger',
-        };
-    }
-
-    public function text($key)
-    {
-        switch ($key) {
-            case 0:
-                return trans('enums.NEW');
-                break;
-            case 1:
-                return trans('enums.TRASPORT_FROM');
-                break;
-            default:
-                // code...
-                break;
-        }
-    }
-
-    public function lang(): string
+    public function lang()
     {
         return match ($this) {
             self::NEW => trans('enums.NEW'),
@@ -58,7 +33,7 @@ enum Student_Status: int
         };
     }
 
-    public static function fromString(string $std_status): ?self
+    public static function fromString($std_status)
     {
         return match (strtolower($std_status)) {
             'new' => self::NEW,

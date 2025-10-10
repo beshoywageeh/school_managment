@@ -60,7 +60,7 @@ class OutOrderController extends Controller
                     'quantity_out' => (int) ($stock['qty'] ?? 0),
                 ]);
                 $stock_name = stock::findorfail($stock['stock_id'])->name;
-                $this->logActivity('صرف', 'صرف من '.$stock_name.' كمية :  '.$stock['qty']);
+                $this->logActivity(trans('log.out_order.disbursement_action'), trans('log.out_order.disbursement_added', ['stock_name' => $stock_name, 'quantity' => $stock['qty']]));
             }
             \DB::commit();
 
@@ -114,7 +114,7 @@ class OutOrderController extends Controller
                 ];
                 $order->stocks()->syncWithPivotValues('order_id', $stocks);
             }
-            $this->logActivity('تعديل', 'تعديل أمر صرف رقم'.$order->auto_number);
+            $this->logActivity(trans('log.parents.updated_action'), trans('log.out_order.disbursement_updated', ['number' => $order->auto_number]));
             session()->flash('success', 'تم التعديل بنجاح');
 
             return redirect()->route('outorder.index');
@@ -128,7 +128,7 @@ class OutOrderController extends Controller
         try {
             $order = order::findorfail($id);
             $order->delete();
-            $this->logActivity('حذف', 'حذف أمر صرف رقم'.$order->auto_number);
+            $this->logActivity(trans('log.parents.deleted_action'), trans('log.out_order.disbursement_deleted', ['number' => $order->auto_number]));
             session()->flash('success', 'تم الحذف بنجاح');
 
             return redirect()->back();

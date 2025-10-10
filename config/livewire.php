@@ -113,7 +113,7 @@ return [
     | this behavior, you need to use @livewireStyles and @livewireScripts.
     |
     */
-    'asset_url' => '/public/vendor/livewire/livewire.js?id=923613aa',
+    'asset_url' => null,
 
     'inject_assets' => true,
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Students;
 
 use App\DataTables\StudentDataTable;
+use App\Enums\Student_Status;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
 use App\Http\Traits\LogsActivity;
@@ -15,7 +16,10 @@ use App\Models\My_parents;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Observers\GenerateCode;
+use App\Services\AgeCalculationService;
 
 class StudentsController extends Controller
 {
@@ -43,23 +47,13 @@ class StudentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StudentRequest $request)
+    public function store(StudentRequest $request, AgeCalculationService $ageCalculator)
     {
-
         try {
-            $inputDate = \Carbon\Carbon::parse($request->birth_date);
-            $firstOfOctober = \Carbon\Carbon::create(date('Y'), 10, 1);
-            $generate_code = Student::orderBy('code', 'desc')->first();
-            $years = $inputDate->diffInYears($firstOfOctober);
-            $months = $inputDate->diffInMonths($firstOfOctober) % 12;
-            $days = $inputDate->diffInDays($firstOfOctober->copy()->subYears($years)->subMonths($months));
-            $final_date = "{$years}-{$months}-{$days}";
             $religion = My_parents::findorfail($request->parents);
             $year = \Carbon\Carbon::parse()->format('Y');
             $acc_year = acadmice_year::whereYear('year_start', $year)->first()->id;
-            $id = $this->getSchool()->id;
             Student::create([
-                'code' => isset($generate_code) ? str_pad($generate_code->code + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'name' => $request->student_name,
                 'birth_date' => $request->birth_date,
                 'join_date' => Carbon::parse()->format('Y-m-d'),
@@ -71,13 +65,13 @@ class StudentsController extends Controller
                 'national_id' => $request->national_id,
                 'student_status' => $request->std_status,
                 'religion' => $religion->Religion,
-                'birth_at_begin' => $final_date,
+                'birth_at_begin' => $ageCalculator->calculateAgeAsOfOctoberFirst($request->birth_date),
                 'acadmiecyear_id' => $acc_year,
                 'nationality_id' => $request->nationality,
-                'user_id' => \Auth::Id(),
-                'school_id' => $id,
+                'user_id' => Auth::id(),
+                'school_id' => $this->getSchool()->id,
             ]);
-            $this->logActivity('اضافة', 'تم إضافة الطالب '.' '.$request->name);
+            $this->logActivity(trans('log.students.added_action'), trans('log.students.added', ['student_name' => $request->name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('Students.index');
@@ -127,7 +121,7 @@ class StudentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StudentRequest $request)
+    public function update(StudentRequest $request, AgeCalculationService $ageCalculator)
     {
         try {
             $student = Student::findorfail($request->id);
@@ -140,15 +134,16 @@ class StudentsController extends Controller
                 'parent_id' => $request->parents,
                 'classroom_id' => $request->class_room,
                 'address' => $request->address,
-                'student_status' => $request->std_status,
+                'student_status' => Student_Status::fromString($request->std_status),
                 'national_id' => $request->national_id,
                 'religion' => My_parents::findorfail($request->parents)->Religion,
+                'birth_at_begin' => $ageCalculator->calculateAgeAsOfOctoberFirst($request->birth_date),
 
                 'nationality_id' => $request->nationality,
                 'user_id' => \Auth::Id(),
             ]);
             session()->flash('success', trans('general.success'));
-            $this->logActivity('تعديل', trans('system_lookup.field_change', ['value' => $student->code]));
+            $this->logActivity(trans('log.students.updated_action'), trans('system_lookup.field_change', ['value' => $student->code]));
 
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
@@ -171,10 +166,9 @@ class StudentsController extends Controller
 
         $student = Student::where('id', $id)->first();
         $student->restore();
-        $this->logActivity('تخرج', 'تم ارجاع الطالب '.' '.$student->name);
+        $this->logActivity(trans('log.students.restored_action'), trans('log.students.restored', ['student_name' => $student->name]));
 
         return redirect()->route('Students.index')->with('success', trans('General.success'));
-
     }
 
     /**
@@ -185,7 +179,7 @@ class StudentsController extends Controller
         try {
             $student = Student::findorfail($id);
             $student->delete();
-            $this->logActivity('تخرج', 'تم تخرج الطالب '.' '.$student->name);
+            $this->logActivity(trans('log.students.graduated_action'), trans('log.students.graduated', ['student_name' => $student->name]));
 
             return redirect()->route('Students.graduated')->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -200,7 +194,7 @@ class StudentsController extends Controller
         try {
             $student = Student::onlyTrashed()->where('id', $id)->first();
 
-            $this->logActivity('حذف', 'تم حذف الطالب '.' '.$student->name);
+            $this->logActivity(trans('log.students.deleted_action'), trans('log.students.deleted', ['student_name' => $student->name]));
             $student->forceDelete();
 
             return redirect()->route('Students.graduated')->with('success', trans('general.success'));
