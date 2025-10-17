@@ -72,7 +72,6 @@ return [
         'deleted' => 'Deleted paid invoice for student :name',
     ],
 
-
     'laboratory' => [
         'added' => 'Added laboratory :name at location :location',
         'updated' => 'Updated laboratory :name at location :location',

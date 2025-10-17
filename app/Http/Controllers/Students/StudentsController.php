@@ -8,18 +8,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Imports\StudentImport;
 use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\Student;
+use App\Services\AgeCalculationService;
+use App\Services\StudentImportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Observers\GenerateCode;
-use App\Services\AgeCalculationService;
 
 class StudentsController extends Controller
 {
@@ -50,7 +48,7 @@ class StudentsController extends Controller
     public function store(StudentRequest $request, AgeCalculationService $ageCalculator)
     {
         try {
-            $religion = My_parents::findorfail($request->parents);
+            $religion = My_parents::findorfail($request->parents)->first(['Religion']);
             $year = \Carbon\Carbon::parse()->format('Y');
             $acc_year = acadmice_year::whereYear('year_start', $year)->first()->id;
             Student::create([
@@ -64,7 +62,7 @@ class StudentsController extends Controller
                 'address' => $request->address,
                 'national_id' => $request->national_id,
                 'student_status' => $request->std_status,
-                'religion' => $religion->Religion,
+                'religion' => $religion,
                 'birth_at_begin' => $ageCalculator->calculateAgeAsOfOctoberFirst($request->birth_date),
                 'acadmiecyear_id' => $acc_year,
                 'nationality_id' => $request->nationality,
@@ -212,12 +210,10 @@ class StudentsController extends Controller
         return response()->json($class_rooms);
     }
 
-    public function Excel_Import(Request $request)
+    public function Excel_Import(Request $request, StudentImportService $studentImportService)
     {
         try {
-            $path = $request->file('excel')->getRealPath();
-            Excel::import(new StudentImport, $path);
-            // Excel::import(new StudentImport, '/up/Student_Info2.xlsx', 'upload_attachments');
+            $studentImportService->StudentImport($request->file('excel'));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('Students.index');
