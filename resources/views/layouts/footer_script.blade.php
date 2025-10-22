@@ -20,6 +20,9 @@
 <script src="{{ URL::asset('assests/js/datepicker.js') }}"></script>
 
 <!-- sweetalert2 -->
+<script src="{{ URL::asset('assests/js/sweetalert2.all.js') }}"></script>
+
+<!-- sweetalert2 -->
 <script src="{{ URL::asset('assests/js/sweetalert2.js') }}"></script>
 
 <!-- toastr -->

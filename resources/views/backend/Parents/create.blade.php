@@ -101,6 +101,15 @@
                                     value="{{ old('Mother_Birth_Date') }}">{{ trans('Parents.Mother_Birth_Date') }}</x-input>
 
                             </div>
+                            <div class="col">
+                                <label>{{trans('Parents.Mother_Status')}}</label>
+                                <select class="custom-select">
+                                    <option value="" selected disabled>{{trans('general.choose')}}</option>
+                                    <option value="">{{trans('Parents.devorced')}}</option>
+                                    <option value="">{{trans('Parents.')}}</option>
+                                    <option value=""></option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

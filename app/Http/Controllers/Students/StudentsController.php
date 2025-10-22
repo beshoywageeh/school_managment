@@ -18,6 +18,8 @@ use App\Services\StudentImportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class StudentsController extends Controller
 {
@@ -51,6 +53,12 @@ class StudentsController extends Controller
             $religion = My_parents::findorfail($request->parents)->first(['Religion']);
             $year = \Carbon\Carbon::parse()->format('Y');
             $acc_year = acadmice_year::whereYear('year_start', $year)->first()->id;
+            $year = Carbon::parse()->format('Y');
+            $acc_year = acadmice_year::whereYear('year_start', $year)->where('status', 0)->first();
+            if (!$acc_year) {
+                session()->flash('error', trans('general.no_active_academic_year'));
+                return redirect()->back()->withInput();
+            }
             Student::create([
                 'name' => $request->student_name,
                 'birth_date' => $request->birth_date,
@@ -221,6 +229,48 @@ class StudentsController extends Controller
             session()->flash('error', $e->getMessage());
 
             return redirect()->back()->withInput();
+        }
+    }
+    public function fast_add_student(Request $request, AgeCalculationService $ageCalculator)
+    {
+
+
+        try {
+            $year = \Carbon\Carbon::parse()->format('Y');
+            $acc_year = acadmice_year::whereYear('year_start', $year)->where('status', 0)->first();
+
+            $year = \Carbon\Carbon::parse()->format('Y');
+
+
+            $parent = My_parents::create([
+                'Father_Name' => $request->Father_Name,
+                'user_id' => Auth::id(),
+                'school_id' => $this->getSchool()->id,
+            ]);
+            Student::create([
+                'name' => $request->student_name,
+                'birth_date' => $request->birth_date,
+                'join_date' => Carbon::parse()->format('Y-m-d'),
+                'grade_id' => $request->grade,
+                'classroom_id' => $request->class_room,
+                'address' => $request->address,
+                'national_id' => $request->national_id,
+                'student_status' => $request->std_status,
+
+                'birth_at_begin' => $ageCalculator->calculateAgeAsOfOctoberFirst($request->birth_date),
+                'acadmiecyear_id' => $acc_year->id,
+                'parent_id' => $parent->id,
+                'nationality_id' => $request->nationality,
+                'user_id' => Auth::id(),
+                'school_id' => $this->getSchool()->id,
+            ]);
+            $this->logActivity(trans('log.students.added_action'), trans('log.students.added', ['student_name' => $request->name]));
+
+            return response()->json(['success' => true, 'message' => trans('general.success')]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['success' => false, 'message' => trans('general.no_active_academic_year')], 400);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 }

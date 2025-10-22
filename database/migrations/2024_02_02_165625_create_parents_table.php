@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('parents', function (Blueprint $table) {
             $table->id();
             // Fatherinformation
-            $table->string('Father_Name')->nullable();
+            $table->string('Father_Name');
             $table->string('Father_National_Id')->nullable();
             $table->string('Father_Phone')->nullable();
             $table->string('Father_Job')->nullable();
@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('school_id')->unsigned();
-
+            $table->tinyInteger('mother_status')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
