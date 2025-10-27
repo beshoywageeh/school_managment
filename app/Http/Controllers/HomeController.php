@@ -33,7 +33,7 @@ class HomeController extends Controller
             $students = Student::where('school_id', $school->id)->whereIn('grade_id', $gradeIds)->count();
             $parents = My_parents::where('school_id', $school->id)->whereIn('student_id', $gradeIds)->count();
         }
-
+        $parents_data = My_parents::where('school_id', $school->id)->get(['id', 'Father_name']);
         $today = now()->toDateString();
 
         $credit = StudentAccount::sum('credit');

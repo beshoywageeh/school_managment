@@ -103,12 +103,14 @@
                             </div>
                             <div class="col">
                                 <label>{{trans('Parents.Mother_Status')}}</label>
-                                <select class="custom-select">
-                                    <option value="" selected disabled>{{trans('general.choose')}}</option>
-                                    <option value="">{{trans('Parents.devorced')}}</option>
-                                    <option value="">{{trans('Parents.')}}</option>
-                                    <option value=""></option>
-                                </select>
+                                <input list="mother_status_list" type="text" name="Mother_Status" class="form-control"
+                                    value="{{ old('Mother_Status') }}">
+                                <datalist id="mother_status_list">
+                                    @foreach($Mother_Status as $status)
+                                    <option value="{{ $status->Mother_Status }}">
+                                    @endforeach
+
+                                </datalist>
                             </div>
                         </div>
                     </div>
@@ -117,7 +119,7 @@
 
         </div>
 
-        <div class="row mb-4">
+        <div class="mb-4 row">
             <div class="col">
                 <div class="card">
                     <div class="card-body">

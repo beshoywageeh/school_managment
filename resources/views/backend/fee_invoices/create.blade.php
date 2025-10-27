@@ -33,7 +33,7 @@
 
                                             <select class="custom-select" name="fee">
                                                 <option value="" selected>{{trans('fee_invoice.selectschool')}}</option>
-                                                @foreach($School_Fees as $fee)
+                                                @foreach($school_fees as $fee)
                                                     <option value="{{$fee->id}}">
                                                         {{$fee->title}} - {{number_format($fee->amount,2)}}&nbsp;ج.م
                                                     </option>
@@ -43,13 +43,13 @@
                                         <div class="col">
                                             <label></label>
                                             <input class="btn btn-danger btn-block" data-repeater-delete type="button"
-                                                   value="{{trans('General.delete')}}"/>
+                                                   value="{{trans('general.delete')}}"/>
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
-                            <div class="row mt-20">
+                            <div class="mt-20 row">
                                 <div class="col-12">
                                     <input class="btn btn-primary" data-repeater-create type="button"
                                            value="{{trans('general.new')}}"/>
@@ -63,7 +63,7 @@
                                                                                                    name="classroom_id">
                         <div class="row">
                             <div class="col text-md-right">
-                                <button class="btn btn-success" type="submit">{{ trans('General.Submit') }}</button>
+                                <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
                             </div>
                         </div>
                     </form>

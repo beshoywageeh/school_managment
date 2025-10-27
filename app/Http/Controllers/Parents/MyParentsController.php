@@ -27,6 +27,7 @@ class MyParentsController extends Controller
     public function create()
     {
         $school = $this->getSchool();
+        $Mother_Status = My_parents::get('mother_status');
 
         return view('backend.Parents.create', get_defined_vars());
     }
@@ -60,6 +61,7 @@ class MyParentsController extends Controller
                 'user_id' => \Auth::Id(),
                 'Father_Learning' => $request->Father_Learning,
                 'school_id' => \Auth::user()->school_id,
+                'mother_status' => $request->Mother_Status,
             ]);
             $this->logActivity(trans('log.parents.added_action'), trans('log.parents.added', ['name' => $request->Father_Name]));
             session()->flash('success', trans('general.success'));
@@ -84,6 +86,7 @@ class MyParentsController extends Controller
     {
         $parent = My_parents::findorfail($id);
         $school = $this->getSchool();
+        $Mother_Status = My_parents::get('mother_status');
 
         return view('backend.Parents.edit', get_defined_vars());
     }
@@ -115,6 +118,7 @@ class MyParentsController extends Controller
                 'Address' => $request->Address,
                 'Religion' => $request->religion,
                 'Father_Learning' => $request->Father_Learning,
+                'mother_status' => $request->Mother_Status,
             ]);
             $this->logActivity(trans('log.parents.updated_action'), trans('log.parents.updated', ['name' => $request->Father_Name]));
             session()->flash('success', trans('general.success'));

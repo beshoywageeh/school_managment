@@ -11,17 +11,28 @@ class order extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['auto_number', 'type', 'laboratory_id', 'school_id', 'user_id'];
+    protected $guarded = [];
 
-    public function stocks()
-    {
+    // public function stocks()
+    // {
 
-        return $this->belongsToMany(stock::class, 'stocks_order', 'order_id', 'stock_id')->withPivot('quantity_in', 'quantity_out', 'manual', 'manual_date');
-    }
+    //     return $this->belongsToMany(stock::class, 'stocks_order', 'order_id', 'stock_id')->withPivot('quantity_in', 'quantity_out', 'manual', 'manual_date');
+    // }
 
     public function laboratory()
     {
 
         return $this->belongsTo(laboratory::class);
+    }
+
+    public function Student()
+    {
+
+        return $this->belongsTo(Student::class);
+    }
+
+    public function orderable()
+    {
+        return $this->morphTo();
     }
 }

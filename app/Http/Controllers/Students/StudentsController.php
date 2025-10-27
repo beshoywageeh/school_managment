@@ -10,15 +10,17 @@ use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\class_room;
+use App\Models\Fee_invoice;
 use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\Student;
 use App\Services\AgeCalculationService;
+use App\Services\StudentAccountService;
+use App\Services\StudentFinancialService;
 use App\Services\StudentImportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 class StudentsController extends Controller
@@ -47,7 +49,7 @@ class StudentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StudentRequest $request, AgeCalculationService $ageCalculator)
+    public function store(StudentRequest $request, AgeCalculationService $ageCalculator, StudentAccountService $StudentAccount)
     {
         try {
             $religion = My_parents::findorfail($request->parents)->first(['Religion']);
@@ -55,11 +57,12 @@ class StudentsController extends Controller
             $acc_year = acadmice_year::whereYear('year_start', $year)->first()->id;
             $year = Carbon::parse()->format('Y');
             $acc_year = acadmice_year::whereYear('year_start', $year)->where('status', 0)->first();
-            if (!$acc_year) {
+            if (! $acc_year) {
                 session()->flash('error', trans('general.no_active_academic_year'));
+
                 return redirect()->back()->withInput();
             }
-            Student::create([
+            $student = Student::create([
                 'name' => $request->student_name,
                 'birth_date' => $request->birth_date,
                 'join_date' => Carbon::parse()->format('Y-m-d'),
@@ -78,6 +81,23 @@ class StudentsController extends Controller
                 'school_id' => $this->getSchool()->id,
             ]);
             $this->logActivity(trans('log.students.added_action'), trans('log.students.added', ['student_name' => $request->name]));
+            $school_fee = DB::table('school__fees')->where('academic_year_id', $acc_year->id)->where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get();
+            // dd($school_fee);
+            foreach ($school_fee as $fee) {
+                $fees = new Fee_invoice;
+                $fees->invoice_date = \Carbon\Carbon::parse()->format('Y-m-d');
+                $fees->student_id = $student->id;
+                $fees->grade_id = $student->grade_id;
+                $fees->classroom_id = $student->classroom_id;
+                $fees->school_fee_id = $fee->id;
+                $fees->academic_year_id = $acc_year->id;
+                $fees->user_id = Auth::user()->id;
+                $fees->school_id = Auth::user()->school_id;
+                $fees->save();
+                // Student Account Service
+                $StudentAccount->CreateStudentAccount($student, $fees, $acc_year, $fee->amount);
+                $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.invoice_added', ['name' => $student->name, 'amount' => $fee->amount]));
+            }
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('Students.index');
@@ -231,23 +251,23 @@ class StudentsController extends Controller
             return redirect()->back()->withInput();
         }
     }
-    public function fast_add_student(Request $request, AgeCalculationService $ageCalculator)
+
+    public function fast_add_student(Request $request, AgeCalculationService $ageCalculator, StudentFinancialService $StudentAccount)
     {
 
-
         try {
+            DB::beginTransaction();
             $year = \Carbon\Carbon::parse()->format('Y');
             $acc_year = acadmice_year::whereYear('year_start', $year)->where('status', 0)->first();
 
             $year = \Carbon\Carbon::parse()->format('Y');
-
 
             $parent = My_parents::create([
                 'Father_Name' => $request->Father_Name,
                 'user_id' => Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
-            Student::create([
+            $student = Student::create([
                 'name' => $request->student_name,
                 'birth_date' => $request->birth_date,
                 'join_date' => Carbon::parse()->format('Y-m-d'),
@@ -265,9 +285,30 @@ class StudentsController extends Controller
                 'school_id' => $this->getSchool()->id,
             ]);
             $this->logActivity(trans('log.students.added_action'), trans('log.students.added', ['student_name' => $request->name]));
+            $school_fee = DB::table('school__fees')->where('academic_year_id', $acc_year->id)->where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get();
+            // dd($school_fee);
+            foreach ($school_fee as $fee) {
+                $fees = new Fee_invoice;
+                $fees->invoice_date = \Carbon\Carbon::parse()->format('Y-m-d');
+                $fees->student_id = $student->id;
+                $fees->grade_id = $student->grade_id;
+                $fees->classroom_id = $student->classroom_id;
+                $fees->school_fee_id = $fee->id;
+                $fees->academic_year_id = $acc_year->id;
+                $fees->user_id = Auth::user()->id;
+                $fees->school_id = Auth::user()->school_id;
+                $fees->save();
+
+                $StudentAccount->CreateStudentAccount($student, $fees, $acc_year, '1', $fee->amount);
+
+                $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.invoice_added', ['name' => $student->name, 'amount' => $fee->amount]));
+            }
+            DB::commit();
 
             return response()->json(['success' => true, 'message' => trans('general.success')]);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            DB::rollBack();
+
             return response()->json(['success' => false, 'message' => trans('general.no_active_academic_year')], 400);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);

@@ -20,8 +20,15 @@
                         </div>
                         <div class="col">
                             <!-- Form Coumn: Username -->
-                            <x-input name='Father_Name' value="{{ old('Father_Name') }}" class=''
-                                type='text'>{{ trans('Parents.Father_Name') }}</x-input>
+                            <label for="father_name" class="">{{ trans('Parents.Father_Name') }}</label>
+                            <input list="fathers_list" type="text" name="Father_Name" class="form-control"
+                                value="{{ old('father_name') }}">
+                            <datalist id="fathers_list">
+                                @foreach($parents_data as $parent)
+                                <option value="{{ $parent->Father_name }}">
+                                @endforeach
+                            </datalist>
+
                         </div>
 
                     </div>

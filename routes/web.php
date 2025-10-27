@@ -223,7 +223,7 @@ Route::group(
                 Route::get('/get_jobs/{id}', [UserController::class, 'getjobs']);
                 Route::get('/get_clothes/{id}', [ClothesOrderController::class, 'getClothes']);
                 Route::get('/get_books_sheets/{id}', [bookSheetsOrderController::class, 'get_books_sheets']);
-                Route::post('/fast_add',[StudentsController::class, 'fast_add_student']);
+                Route::post('/fast_add', [StudentsController::class, 'fast_add_student']);
             });
             Route::group(['prefix' => 'labs', 'controller' => LaboratoryController::class], function () {
                 Route::get('/', 'index')->name('labs.index');

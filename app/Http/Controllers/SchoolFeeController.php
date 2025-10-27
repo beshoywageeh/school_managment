@@ -10,10 +10,11 @@ use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Fee_invoice;
 use App\Models\Grade;
-use App\Models\school_fee as School_Fee;
+use App\Models\school_fee;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SchoolFeeController extends Controller
@@ -26,7 +27,7 @@ class SchoolFeeController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $School_Fees = School_Fee::where('school_id', $school->id)->with('grade:id,name', 'classroom:id,name', 'user:id,name', 'year:id,view')->get(['id', 'title', 'amount', 'academic_year_id', 'description', 'grade_id', 'classroom_id', 'user_id', 'created_at']);
+        $School_Fees = school_fee::where('school_id', $school->id)->with('grade:id,name', 'classroom:id,name', 'user:id,name', 'year:id,view')->get(['id', 'title', 'amount', 'academic_year_id', 'description', 'grade_id', 'classroom_id', 'user_id', 'created_at']);
 
         return view('backend.school_fees.index', get_defined_vars());
     }
@@ -47,7 +48,6 @@ class SchoolFeeController extends Controller
             }
 
             return view('backend.school_fees.create', get_defined_vars());
-
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -58,23 +58,22 @@ class SchoolFeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSchool_FeeRequest $request)
+    public function store(Storeschool_feeRequest $request)
     {
         DB::beginTransaction();
         try {
             foreach ($request->classroom_id as $class_rooms) {
-                $school_fee = new School_Fee;
+                $school_fee = new school_fee;
                 $school_fee->grade_id = $request->grade_id;
                 $school_fee->classroom_id = $class_rooms;
-                $school_fee->user_id = $request->user()->id;
-                $school_fee->school_id = $request->user()->school_id;
+                $school_fee->user_id = Auth::user()->id;
+                $school_fee->school_id = $this->getSchool()->id;
                 $school_fee->academic_year_id = $request->academic_year_id;
                 $school_fee->description = $request->description;
                 $school_fee->amount = $request->amount;
                 $school_fee->title = $request->title;
-                $school_fee->school_id = $request->user()->school_id;
                 $school_fee->save();
-                $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.added', ['amount' => \Number::currency($request->amount, 'EGP', 'ar')]));
+                $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.added', ['amount' => $request->amount]));
             }
             $students = Student::where('grade_id', $request->grade_id)->whereIn('classroom_id', $request->classroom_id)->get();
             $ac_year = acadmice_year::where('status', '0')->first();
@@ -87,6 +86,8 @@ class SchoolFeeController extends Controller
                 $fee->classroom_id = $student->classroom_id;
                 $fee->school_fee_id = $school_fee->id;
                 $fee->academic_year_id = $ac_year->id;
+                $fee->user_id = Auth::user()->id;
+                $fee->school_id = $this->getSchool()->id;
                 $fee->save();
                 $std = new StudentAccount;
                 $std->student_id = $student->id;
@@ -99,7 +100,7 @@ class SchoolFeeController extends Controller
                 $std->debit = $request->amount;
                 $std->credit = 0.00;
                 $std->save();
-                $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.invoice_added', ['name' => $student->name, 'amount' => \Number::currency($request->amount, 'EGP', 'ar')]));
+                $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.invoice_added', ['name' => $student->name, 'amount' => $request->amount]));
             }
             session()->flash('success', trans('General.success'));
             DB::commit();
@@ -118,7 +119,7 @@ class SchoolFeeController extends Controller
      */
     public function show($id)
     {
-        $school_fee = School_Fee::findorFail($id);
+        $school_fee = school_fee::findorFail($id);
         $students = Student::where('classroom_id', $school_fee->classroom_id)->where('grade_id', $school_fee->grade_id)->with('classroom:id,name', 'grade:id,name')->get(['code', 'name', 'classroom_id', 'grade_id']);
 
         return view('backend.school_fees.show', get_defined_vars());
@@ -131,7 +132,7 @@ class SchoolFeeController extends Controller
     {
         try {
             $school = $this->getSchool();
-            $school_Fee = School_Fee::findorFail($id);
+            $school_fee = school_fee::findorFail($id);
             $grades = Grade::where('school_id', $school->id)->get();
             $years = acadmice_year::where('status', 1)->get();
             $academic_years =
@@ -153,11 +154,11 @@ class SchoolFeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSchool_FeeRequest $request)
+    public function update(Updateschool_feeRequest $request)
     {
 
         try {
-            $school_fee = School_Fee::findorFail($request->id);
+            $school_fee = school_fee::findorFail($request->id);
             $school_fee->update([
                 'grade_id' => $request->grade_id,
                 'classroom_id' => $request->classroom_id,
@@ -182,7 +183,7 @@ class SchoolFeeController extends Controller
     public function destroy($id)
     {
         try {
-            $fee = School_Fee::findorFail($id);
+            $fee = school_fee::findorFail($id);
             $this->logActivity(trans('log.parents.deleted_action'), trans('log.school_fee.deleted', ['amount' => \Number::currency($fee->amount, 'EGP', 'ar')]));
             $fee->delete();
             session()->flash('success', trans('general_success'));

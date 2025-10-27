@@ -1,7 +1,14 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('general.new') }} | {{trans('Recipt_payments.title')}}
+    {{ trans('general.new') }} | {{trans('Recipt_Payments.title')}}
 @endsection
+@push('styles')
+<style>
+    .active{
+        background-color: none !important;
+    }
+</style>
+@endpush
 @section('content')
     <div class="mb-4 row">
         <div class="col">
@@ -11,7 +18,7 @@
                     <div class="row card-title">
 
                         <div class="col">
-                            <label for="">{{trans('Recipt_payments.man')}}</label>
+                            <label for="">{{trans('Recipt_Payments.man')}}</label>
                             <input type="text"
                                    class="form-control"
                                    disabled
@@ -19,11 +26,11 @@
 
                         </div>
                         <div class="col">
-                            <label for="">{{trans('Recipt_payments.total')}}</label>
+                            <label for="">{{trans('Recipt_Payments.total')}}</label>
                             <input type="text"
                                    class="form-control"
                                    disabled
-                                   value="{{Number::currency($Student->fees->sum('debit')-$Student->fees->sum('credit'),'EGP','AR')}}">
+                                   value="{{$Student->fees->sum('debit')-$Student->fees->sum('credit')}}">
 
                         </div>
                     </div>
@@ -66,10 +73,10 @@
                             >
                                 <table class="table table-bordered table-sm">
                                     <tr>
-                                        <th>{{trans('Recipt_payments.name')}}</th>
+                                        <th>{{trans('Recipt_Payments.name')}}</th>
                                         <th>{{trans('general.created_at')}}</th>
                                         <th>{{trans('fees.desc')}}</th>
-                                        <th>{{trans('Recipt_payments.amount')}}</th>
+                                        <th>{{trans('Recipt_Payments.amount')}}</th>
                                         <th></th>
                                     </tr>
                                     @forelse($feeInvoices as $feeInvoice)
@@ -102,10 +109,10 @@
                                                     $final = $feeInvoice->fees->amount;
                                                 }
                                                 @endphp
-                                                <td>{{Number::currency($final,'EGP','AR')}}</td>
+                                                <td>{{$final}}</td>
                                                 <td>
                                                     <button class="btn btn-success btn-block"
-                                                            type="submit">{{ trans('General.full_pay') }}</button>
+                                                            type="submit">{{ trans('general.full_pay') }}</button>
                                                 </td>
                                             </tr>
 
@@ -131,7 +138,7 @@
                             >
                                 <table class="table table-bordered table-sm">
                                     <tr>
-                                        <th>{{trans('Recipt_payments.name')}}</th>
+                                        <th>{{trans('Recipt_Payments.name')}}</th>
                                         <th>{{trans('PaymentParts.date')}}</th>
                                         <th>{{trans('PaymentParts.amount')}}</th>
                                         <th>{{trans('PaymentParts.pay_part')}}</th>
@@ -156,16 +163,16 @@
                                                     </select>
                                                 </td>
                                                 <td>{{$part->date}}</td>
-                                                <td>{{Number::currency($part->amount,'EGP','AR')}}</td>
+                                                <td>{{$part->amount}}</td>
                                                 <td>
                                                     <input type="number"
                                                            name="amount"
                                                            id=""
-                                                           class="form-control">
+                                                           class="form-control" value="{{$part->amount}}">
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-success btn-block"
-                                                            type="submit">{{ trans('General.Submit') }}</button>
+                                                            type="submit">{{ trans('general.Submit') }}</button>
                                                 </td>
                                             </tr>
 
@@ -188,7 +195,7 @@
 
                     <div class="row">
                         <div class="col">
-                            <h4 class="bg-info text-center my-4 py-2 text-white">{{trans('Recipt_Payments.mini_report')}}</h4>
+                            <h4 class="py-2 my-4 text-center text-white bg-info">{{trans('Recipt_Payments.mini_report')}}</h4>
                             <table class="table table-active table-bordered table-sm">
                                 <tr>
                                     <th>{{trans('Recipt_Payments.total_debit')}}</th>
@@ -196,9 +203,9 @@
                                     <th>{{trans('Recipt_Payments.total_final')}}</th>
                                 </tr>
                                 <tr>
-                                    <td>{{Number::currency($Student->fees->sum('debit'),'EGP','AR')}}</td>
-                                    <td>{{Number::currency($Student->fees->sum('credit'),'EGP','AR')}}</td>
-                                    <td>{{Number::currency($Student->fees->sum('debit')-$Student->fees->sum('credit'),'EGP','AR')}}</td>
+                                    <td>{{$Student->fees->sum('debit')}}</td>
+                                    <td>{{$Student->fees->sum('credit')}}</td>
+                                    <td>{{$Student->fees->sum('debit')-$Student->fees->sum('credit')}}</td>
                                 </tr>
                             </table>
                         </div>

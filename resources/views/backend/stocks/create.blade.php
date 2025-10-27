@@ -42,7 +42,7 @@
                                         <tr>
                                             <td colspan="4">
                                                 <input class="btn btn-primary btn-block" data-repeater-create
-                                                    type="button" value="{{ trans('General.new') }}" />
+                                                    type="button" value="{{ trans('general.new') }}" />
                                             </td>
                                         </tr>
                                     </tfoot>

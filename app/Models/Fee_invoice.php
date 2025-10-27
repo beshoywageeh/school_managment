@@ -13,7 +13,7 @@ class Fee_invoice extends Model
 
     protected $table = 'fee_invoices';
 
-    protected $fillable = ['status', 'user', 'school_id'];
+    protected $guarded = [];
 
     public function students()
     {
@@ -30,13 +30,13 @@ class Fee_invoice extends Model
     public function classes()
     {
 
-        return $this->belongsTo(Class_room::class, 'classroom_id');
+        return $this->belongsTo(class_room::class, 'classroom_id');
     }
 
     public function fees()
     {
 
-        return $this->belongsTo(School_Fee::class, 'school_fee_id');
+        return $this->belongsTo(school_fee::class, 'school_fee_id');
     }
 
     public function acd_year()

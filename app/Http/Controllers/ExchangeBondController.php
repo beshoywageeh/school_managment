@@ -9,6 +9,7 @@ use App\Models\Exchange_bond;
 use App\Models\fund_account;
 use App\Models\Student;
 use App\Models\StudentAccount;
+use App\Services\StudentFinancialService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,7 +33,7 @@ class ExchangeBondController extends Controller
         return view('backend.exchange_bond.create', get_defined_vars());
     }
 
-    public function store(Request $request)
+    public function store(Request $request, StudentFinancialService $StudentAccount)
     {
         try {
             $acc_year = acadmice_year::whereYear('year_start', date('Y'))->first();
@@ -49,17 +50,8 @@ class ExchangeBondController extends Controller
             $exchange->description = $request->note;
             $exchange->user_id = auth()->user()->id;
             $exchange->save();
-            $student_account = new StudentAccount;
-            $student_account->student_id = $request->student_id;
-            $student_account->academic_year_id = $acc_year->id;
-            $student_account->date = date('Y-m-d');
-            $student_account->debit = $request->amount;
-            $student_account->credit = 0.00;
-            $student_account->type = 4;
-            $student_account->grade_id = $student->grade_id;
-            $student_account->classroom_id = $student->classroom_id;
-            $student_account->exchange_bond_id = $exchange->id;
-            $student_account->save();
+
+            $StudentAccount->CreateStudentAccount($student, $exchange, $acc_year, 4, $request->amount, 0.00, null, null, $exchange->id);
             $fund_account = new fund_account;
             $fund_account->date = date('Y-m-d');
             $fund_account->user_id = auth()->user()->id;
@@ -89,7 +81,7 @@ class ExchangeBondController extends Controller
         return view('backend.exchange_bond.edit', get_defined_vars());
     }
 
-    public function update(Request $request)
+    public function update(Request $request,StudentFinancialService $StudentAccount)
     {
         try {
             $id = $request->id;
@@ -102,8 +94,8 @@ class ExchangeBondController extends Controller
             $exchange->description = $request->note;
             $exchange->user_id = auth()->user()->id;
             $exchange->save();
-            $student_account->debit = $request->amount;
-            $student_account->save();
+
+            $StudentAccount->CreateStudentAccount($exchange->student, $exchange, acadmice_year::find($exchange->academic_year_id), 4, $request->amount - $student_account->debit, 0.00, null, null, $exchange->id);
             $fund_account->Credit = $request->amount;
             $fund_account->save();
             DB::commit();

@@ -11,7 +11,7 @@
                     <div class="table-responsive">
                         <table class="table table-sm table-borderless">
                             <tr>
-                                <th>الرقم : {{ $order->auto_number }}</th>
+                                <th>الرقم : {{ $order }}</th>
                                 <th>النوع : {{ trans('stock.inventory_order') }}</th>
                                 <th>التاريخ : {{ $order->created_at->format('Y-M-d') }}</th>
                                 <th>الوقت : {{ $order->created_at->format('g : i : s A') }}</th>

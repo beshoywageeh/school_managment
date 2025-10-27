@@ -49,7 +49,7 @@ class StockController extends Controller
             $stock = stock::findorfail($request->id);
             $stock->update([
                 'name' => $request->name,
-                'opening_stock' => $request->opening_qty,
+                'opening_stock' => $request->quantity,
                 'opening_stock_date' => date('Y-m-d'),
             ]);
             $this->logActivity(trans('log.parents.updated_action'), trans('system_lookup.field_change', ['value' => $request->name]));

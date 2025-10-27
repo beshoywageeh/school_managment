@@ -7,11 +7,12 @@ use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Fee_invoice;
-use App\Models\School_Fee;
+use App\Models\school_fee;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class fee_invoiceController extends Controller
@@ -24,7 +25,7 @@ class fee_invoiceController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $fee_invoices = Fee_invoice::where('school_id', $school)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'acd_year:id,view'])->withSum('fees', 'amount')->get();
+        $fee_invoices = Fee_invoice::where('school_id', $school->id)->with(['students:id,name', 'grades:id,name', 'classes:id,name', 'acd_year:id,view'])->withSum('fees', 'amount')->get();
 
         return view('backend.fee_invoices.index', get_defined_vars());
     }
@@ -34,11 +35,24 @@ class fee_invoiceController extends Controller
      */
     public function create($student_id)
     {
-        $school = $this->getSchool();
-        $student = Student::where('school_id', $school)->where('id', $student_id)->first();
-        $School_Fees = School_Fee::where('school_id', $school)->where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get(['id', 'title', 'amount']);
+        try {
 
-        return view('backend.fee_invoices.create', get_defined_vars());
+            $school = $this->getSchool();
+            $student = Student::where('id', $student_id)->where('school_id', $school->id)->first();
+            $school_fees = school_fee::where('school_id', $school)->where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get(['id', 'title', 'amount']);
+
+            if (! $student || $school_fees->count() == 0) {
+                session()->flash('info', trans('general.no_data_found'));
+
+                return redirect()->back();
+            }
+
+            return view('backend.fee_invoices.create', get_defined_vars());
+        } catch (Exception $e) {
+            session()->flash('error', $e->getMessage());
+
+            return redirect()->back();
+        }
     }
 
     /**
@@ -58,9 +72,10 @@ class fee_invoiceController extends Controller
                 $fee->classroom_id = $request->classroom_id;
                 $fee->school_fee_id = $list_fee['fee'];
                 $fee->academic_year_id = $ac_year->id;
-                $fee->user = auth()->user()->id;
+                $fee->user_id = Auth::user()->id;
                 $fee->school_id = $this->getSchool()->id;
                 $fee->save();
+
                 $std = new StudentAccount;
                 $std->student_id = $list_fee['student_id'];
                 $std->grade_id = $request->grade_id;
@@ -69,11 +84,10 @@ class fee_invoiceController extends Controller
                 $std->fee_invoices_id = $fee->id;
                 $std->classroom_id = $request->classroom_id;
                 $std->academic_year_id = $ac_year->id;
-                $std->debit = School_Fee::where('id', $list_fee['fee'])->first()->amount;
+                $std->debit = school_fee::where('id', $list_fee['fee'])->first()->amount;
                 $std->credit = 0.00;
 
                 $std->save();
-
             }
             $this->logActivity(trans('log.parents.added_action'), trans('log.fee_invoice.added', ['name' => $fee->students->name]));
             DB::commit();
@@ -105,7 +119,7 @@ class fee_invoiceController extends Controller
     {
         $school = $this->getSchool();
         $fee = Fee_invoice::where('id', $id)->with('students', 'fees')->first();
-        $sfees = School_Fee::where('grade_id', $fee->grade_id)->where('classroom_id', $fee->classroom_id)->get();
+        $sfees = school_fee::where('grade_id', $fee->grade_id)->where('classroom_id', $fee->classroom_id)->get();
 
         return view('backend.fee_invoices.edit', get_defined_vars());
     }
@@ -137,7 +151,7 @@ class fee_invoiceController extends Controller
             $std->fee_invoices_id = $fee->id;
             $std->classroom_id = $request->classroom_id;
             $std->academic_year_id = $ac_year->id;
-            $std->debit = School_Fee::where('id', $request->fee)->first()->amount;
+            $std->debit = school_fee::where('id', $request->fee)->first()->amount;
             $std->credit = 0.00;
             $std->save();
             $this->logActivity(trans('log.parents.updated_action'), trans('log.fee_invoice.updated', ['name' => $fee->students->name]));

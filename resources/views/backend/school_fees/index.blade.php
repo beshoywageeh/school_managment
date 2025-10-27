@@ -15,7 +15,7 @@
                             @can('schoolfees-list')
                                 <a class="btn btn-success" href={{ route('schoolfees.create') }}>
                                     <i class="ti-plus"></i>
-                                    {{ trans('General.new') }}
+                                    {{ trans('general.new') }}
                                 </a>
                             @endcan
                         </div>
@@ -46,7 +46,7 @@
                                             <td>{{ $fee->classroom->name }}</td>
                                             <td>{{ $fee->year->view }}</td>
                                             <td>{{ $fee->description }}</td>
-                                            <td>{{ Number::currency($fee->amount, 'EGP', 'AR') }}</td>
+                                            <td>{{ $fee->amount}}</td>
                                             <td>{{ $fee->user->name }}</td>
                                             <td>{{ $fee->created_at->format('Y-m-d') }}</td>
                                             <td>

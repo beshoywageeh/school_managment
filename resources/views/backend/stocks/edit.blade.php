@@ -9,7 +9,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('clothe.update') }}" method="POST">
+            <form action="{{ route('stock.update') }}" method="POST">
                 @csrf
                 <input type="hidden" name="id" value="{{ $stock->id }}">
                 <div class="modal-body">
@@ -20,13 +20,13 @@
                                 <label for="">
                                     {{ trans('stock.name') }}
                                 </label>
-                                <input type="text" name="name" value={{ $stock->name }} class="form-control" />
+                                <input type="text" name="name" value="{{ $stock->name }}" class="form-control" />
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label>{{ trans('stock.quantity') }}</label>
-                                <input type="number" value="{{ $stock->opening_qty }}"name="quantity"
+                                <input type="number" value="{{ $stock->opening_stock }}"name="quantity"
                                     class="form-control" />
                             </div>
                         </div>

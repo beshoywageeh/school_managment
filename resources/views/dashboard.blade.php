@@ -13,7 +13,7 @@
                     <h4 class="text-center text-white bold">
                         <i class="ti-plus"></i>
 
-                        {{ trans('class_rooms.new') }}
+                        {{ trans('general.new') . ' ' . trans('Sidebar.Students') }}
                     </h4>
                 </x-button>
                 @include('backend.Students.fast_add_student')
@@ -279,15 +279,14 @@
                     data: formData,
                     success: function(response) {
                         if (response.success) {
-                            $('#fastadd').modal('hide');
+                            // $('#fastadd').modal('hide');
+                            $('#fastadd form')[0].reset();
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Success!',
                                 text: response.message,
                                 showConfirmButton: false,
                                 timer: 1500
-                            }).then(() => {
-                                location.reload();
                             });
                         } else {
                             Swal.fire({

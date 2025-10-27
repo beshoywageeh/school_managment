@@ -26,11 +26,11 @@ class GardController extends Controller
     {
         try {
             $school = $this->getSchool();
-            $stocks = stock::where('school_id', $school)->get();
+            $stocks = stock::where('school_id', $school->id)->get();
             if ($stocks->count() == 0) {
                 return redirect()->back()->with('error', 'لا يوجد مستودعات');
             }
-            $generate_code = order::where('school_id', $school)->where('type', '3')->orderBy('auto_number', 'desc')->first();
+            $generate_code = order::where('school_id', $school->id)->where('type', '3')->orderBy('auto_number', 'desc')->first();
             $order = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
             $type = 3;
             $this->logActivity(trans('log.parents.added_action'), trans('log.gard.order_added', ['number' => $order]));

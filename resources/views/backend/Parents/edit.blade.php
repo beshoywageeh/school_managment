@@ -99,13 +99,24 @@
                                 <x-input name='Mother_Birth_Date' class='' type="date"
                                     value="{{ old('Mother_Birth_Date', $parent->Mother_Birth_Date) }}">{{ trans('Parents.Mother_Birth_Date') }}</x-input>
                             </div>
+                            <div class="col">
+                                <label>{{trans('Parents.Mother_Status')}}</label>
+                                <input list="mother_status_list" type="text" name="Mother_Status" class="form-control"
+                                    value="{{ old('Mother_Status') }}">
+                                <datalist id="mother_status_list">
+                                    @foreach($Mother_Status as $status)
+                                    <option value="{{ $status->Mother_Status }}">
+                                    @endforeach
+
+                                </datalist>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mb-4">
+        <div class="mb-4 row">
             <div class="col">
                 <div class="card">
                     <div class="card-body">

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class PaymentPartsController extends Controller
 {
-    use LogsActivity,SchoolTrait;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
@@ -175,7 +175,7 @@ class PaymentPartsController extends Controller
                     'user_id' => auth()->user()->id,
                 ]);
                 $newPart->save();
-                $this->logActivity(trans('log.payment_parts.paid_partially_action'), trans('log.payment_parts.paid_partially', ['name' => $part->students->name]));
+                $this->logActivity(trans('log.payment_parts.paid_partially_action'), trans('log.payment_parts.paid_partially', ['name' => $student->name]));
                 $part->delete();
                 DB::commit();
             } elseif ($request->amount === $part->amount || $check->count() !== 0) {
@@ -188,7 +188,7 @@ class PaymentPartsController extends Controller
                 if ($fee_parts->sum('amount') == $check->sum('amount')) {
                     $fee->update(['status' => 1]);
                 }
-                $this->logActivity(trans('log.payment_parts.paid_fully_action'), trans('log.payment_parts.paid_fully', ['name' => $part->students->name]));
+                $this->logActivity(trans('log.payment_parts.paid_fully_action'), trans('log.payment_parts.paid_fully', ['name' => $student->name]));
                 DB::commit();
 
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
@@ -208,13 +208,13 @@ class PaymentPartsController extends Controller
 
             return redirect()->back();
         }
-
     }
 
     private function createReceipt($amount, $studentId, $academicYearId)
     {
         $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
         $manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
+        $student = Student::findOrFail($studentId);
         $receipt = new Recipt_Payment([
             'manual' => $manual,
             'date' => Carbon::today(),
@@ -224,7 +224,7 @@ class PaymentPartsController extends Controller
             'school_id' => $this->getSchool()->id,
             'user_id' => auth()->user()->id,
         ]);
-        $this->logActivity(trans('log.parents.added_action'), trans('log.payment_parts.receipt_added', ['name' => $receipt->students->name]));
+        $this->logActivity(trans('log.parents.added_action'), trans('log.payment_parts.receipt_added', ['name' => $student->name]));
         $receipt->save();
 
         return $receipt;
@@ -232,6 +232,8 @@ class PaymentPartsController extends Controller
 
     private function createStudentAccount($receiptId, $studentId, $gradeId, $classroomId, $academicYearId, $date, $credit, $debit, $type)
     {
+        $student = Student::findOrFail($studentId);
+
         $studentAccount = new StudentAccount([
             'student_id' => $studentId,
             'type' => $type,
@@ -243,7 +245,7 @@ class PaymentPartsController extends Controller
             'academic_year_id' => $academicYearId,
             'recipt__payments_id' => $receiptId,
         ]);
-        $this->logActivity(trans('log.parents.added_action'), trans('log.payment_parts.account_added', ['name' => $studentAccount->students->name]));
+        $this->logActivity(trans('log.parents.added_action'), trans('log.payment_parts.account_added', ['name' => $student->name]));
         $studentAccount->save();
     }
 }
