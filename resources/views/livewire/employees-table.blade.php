@@ -4,11 +4,12 @@
             <div class="row mb-40">
                 <div class="col">
                     <select wire:model.live="job_id" class="custom-select">
-                        <option selected disabled>{{trans('general.choose')}}</option>
+
+                        <option selected valur="null">الكل</option>
                         @foreach ($jobs as $job )
-                        
+
                         <option value="{{ $job->id }}">{{$job->name}}</option>
-                            
+
                         @endforeach
                     </select>
                 </div>
