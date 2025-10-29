@@ -3,6 +3,9 @@
         <div class="card-body">
             <div class="row mb-40">
                 <div class="col">
+                    <input type="text" wire:model.live="name" class="form-control" placeholder="بحث بالاسم">
+                </div>
+                <div class="col">
                     <select wire:model.live="job_id" class="custom-select">
 
                         <option selected valur="null">الكل</option>
@@ -64,7 +67,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($employees as $employee)
+                            @forelse ($employees as $employee)
                                 <tr>
                                     <td> {{ $loop->iteration }}</td>
                                     <td>{{ $employee->code }}</td>
@@ -118,7 +121,11 @@
 
                                     </td>
                                 </tr>
-                            @endforeach
+                                @empty
+                                <tr>
+                                    <td colspan="18" class="text-center">{{ trans('general.not_found') }}</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                     {{ $employees->links('vendor.livewire.bootstrap') }}

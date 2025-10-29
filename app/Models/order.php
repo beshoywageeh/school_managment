@@ -13,11 +13,11 @@ class order extends Model
 
     protected $guarded = [];
 
-    // public function stocks()
-    // {
+    public function stocks()
+    {
 
-    //     return $this->belongsToMany(stock::class, 'stocks_order', 'order_id', 'stock_id')->withPivot('quantity_in', 'quantity_out', 'manual', 'manual_date');
-    // }
+        return $this->belongsToMany(stock::class, 'stocks_order', 'order_id', 'stock_id')->withPivot('quantity_in', 'quantity_out', 'manual', 'manual_date');
+    }
 
     public function laboratory()
     {

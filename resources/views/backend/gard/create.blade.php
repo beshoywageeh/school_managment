@@ -13,8 +13,8 @@
                             <tr>
                                 <th>الرقم : {{ $order }}</th>
                                 <th>النوع : {{ trans('stock.inventory_order') }}</th>
-                                <th>التاريخ : {{ $order->created_at->format('Y-M-d') }}</th>
-                                <th>الوقت : {{ $order->created_at->format('g : i : s A') }}</th>
+                                <th>التاريخ : {{ now()->format('y-m-d') }}</th>
+                                <th>الوقت : {{ now()->format('y-m-d') }}</th>
                             </tr>
                         </table>
                     </div>
@@ -22,7 +22,7 @@
                     <form action="{{ route('gard.store') }}"method="post" autocomplete="off">
                 <div class="card-body">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $order->id }}">
+                    {{-- <input type="hidden" name="id" value="{{ $order->id }}"> --}}
                     <table class="table table-sm table-bordered">
                         <thead>
                             <tr>

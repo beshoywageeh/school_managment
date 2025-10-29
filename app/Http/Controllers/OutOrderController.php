@@ -42,6 +42,7 @@ class OutOrderController extends Controller
 
     public function submit_transfer(Request $request)
     {
+        // return $request;
         try {
             \DB::beginTransaction();
             $order_id = $request->id;

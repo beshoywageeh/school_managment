@@ -86,7 +86,8 @@
                                                             'can' => 'order-edit',
                                                         ],
                                                     ]" />
-                                                @elseif ($type == 2)
+                                                @endif
+                                                @if ($type == 2)
                                                     <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                         [
                                                             'type' => 'link',
@@ -94,17 +95,18 @@
                                                             'text' => trans('general.delete'),
                                                             'icon' => 'ti-trash',
                                                             'onclick' => 'confirmation(event)',
-                                                            'can' => 'out_order-delete',
+                                                            'can' => 'stocks-inventory_delete',
                                                         ],
                                                         [
                                                             'type' => 'link',
                                                             'url' => route('outorder.edit', $order->id),
                                                             'text' => trans('general.edit'),
                                                             'icon' => 'ti-pencil',
-                                                            'can' => 'out_order-edit',
+                                                            'can' => 'stocks-inventory_edit',
                                                         ],
                                                     ]" />
-                                                @elseif ($type == 3)
+                                                @endif
+                                                @if ($type == 3)
                                                     <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                         [
                                                             'type' => 'link',
@@ -122,8 +124,6 @@
                                                             'can' => 'stocks-inventory_edit',
                                                         ],
                                                     ]" />
-                                                @else
-                                                    1
                                                 @endif
                                             </td>
                                         </tr>

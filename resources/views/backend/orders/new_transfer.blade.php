@@ -30,7 +30,7 @@
                                     <div class="col"><select name="location_to" class="custom-select select2"
                                             id="location_to">
                                             <option selected disabled>
-                                                {{ trans('General.choose', ['value' => trans('orders.location_to')]) }}
+                                                {{ trans('General.Choose', ['value' => trans('orders.location_to')]) }}
                                             </option>
                                             @if ($labs->isNotEmpty())
                                                 @foreach ($labs as $lab)
@@ -88,7 +88,7 @@
                                             <tr>
                                                 <td colspan="4">
                                                     <input class="btn btn-success btn-block" data-repeater-create
-                                                        type="button" value="{{ trans('General.new') }}" />
+                                                        type="button" value="{{ trans('General.New') }}" />
                                                 </td>
                                             </tr>
                                         </tfoot>
