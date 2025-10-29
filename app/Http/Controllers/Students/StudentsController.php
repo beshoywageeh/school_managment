@@ -15,7 +15,6 @@ use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\Student;
 use App\Services\AgeCalculationService;
-use App\Services\StudentAccountService;
 use App\Services\StudentFinancialService;
 use App\Services\StudentImportService;
 use Carbon\Carbon;
@@ -49,7 +48,7 @@ class StudentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StudentRequest $request, AgeCalculationService $ageCalculator, StudentAccountService $StudentAccount)
+    public function store(StudentRequest $request, AgeCalculationService $ageCalculator, StudentFinancialService $StudentAccount)
     {
         try {
             $religion = My_parents::findorfail($request->parents)->first(['Religion']);
@@ -98,6 +97,8 @@ class StudentsController extends Controller
                 $StudentAccount->CreateStudentAccount($student, $fees, $acc_year, $fee->amount);
                 $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.invoice_added', ['name' => $student->name, 'amount' => $fee->amount]));
             }
+            $StudentAccount->AddStudentBookInvoice($student);
+            $StudentAccount->AddStudentClotheInvoice($student);
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('Students.index');
@@ -286,6 +287,7 @@ class StudentsController extends Controller
             ]);
             $this->logActivity(trans('log.students.added_action'), trans('log.students.added', ['student_name' => $request->name]));
             $school_fee = DB::table('school__fees')->where('academic_year_id', $acc_year->id)->where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get();
+
             // dd($school_fee);
             foreach ($school_fee as $fee) {
                 $fees = new Fee_invoice;
@@ -303,6 +305,8 @@ class StudentsController extends Controller
 
                 $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.invoice_added', ['name' => $student->name, 'amount' => $fee->amount]));
             }
+            $StudentAccount->AddStudentBookInvoice($student);
+            $StudentAccount->AddStudentClotheInvoice($student);
             DB::commit();
 
             return response()->json(['success' => true, 'message' => trans('general.success')]);

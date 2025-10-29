@@ -111,7 +111,7 @@
                                                         ],
                                                     ]" />
                                                 @endif
-                                                @if ($order->is_payed == 0)
+                                                @if ($order->is_payed == 1)
                                                     @if ($type == 2)
                                                         <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                           [

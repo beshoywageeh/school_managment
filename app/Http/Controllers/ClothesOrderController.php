@@ -27,6 +27,7 @@ class ClothesOrderController extends Controller
             ->with(['stocks', $type == 2 ? 'students' : null])
             ->get();
 
+
         return view('backend.clothes_order.index', get_defined_vars());
     }
 

@@ -15,7 +15,7 @@ class book_sheet extends Model
 
     public function grade()
     {
-        return $this->belongsTo(grade::class);
+        return $this->belongsTo(Grade::class);
     }
 
     public function classroom()

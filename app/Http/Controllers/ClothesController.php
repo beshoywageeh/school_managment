@@ -19,7 +19,7 @@ class ClothesController extends Controller
         $clothes = clothes::where('school_id', $school->id)->with('orders', 'grade', 'classroom')->get();
         $grades = Grade::all();
 
-        return view('backend.clothes.index', compact('clothes', 'grades'));
+        return view('backend.clothes.index', compact('clothes', 'grades','school'));
     }
 
     public function store(Request $request)

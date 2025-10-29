@@ -109,12 +109,13 @@
                         'can'=>'except_fee-list'
                     ],
                     [
-                        'Name' => trans('General.payment_status'),
+                        'Name' => trans('general.payment_status'),
                         'Url' => '#payment_status',
                         'type' => 'button',
                         'can'=>'fee_invoice-list'
                     ],
                 ],
+                trans('Sidebar.employees')=>[]
             ];
         @endphp
         @foreach ($reports_links as $heading => $report_links)
