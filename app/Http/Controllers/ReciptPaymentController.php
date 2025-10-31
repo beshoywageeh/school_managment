@@ -94,7 +94,7 @@ class ReciptPaymentController extends Controller
                 $fund->school_id = $this->getSchool()->id;
                 $fund->user_id = auth()->user()->id;
                 $fund->save();
-                $this->logActivity(trans('log.parents.added_action'), trans('log.receipt_payment.added', ['name' => Student::where('id', $request->student_id)->first()->name, 'date' => date('Y-m-d')]));
+                $this->logActivity(trans('log.actions.added'), trans('log.models.receipt_payment.created', ['name' => Student::where('id', $request->student_id)->first()->name, 'date' => date('Y-m-d')]));
                 DB::commit();
 
                 return redirect()->route('Recipt_Payment.print', $pay->id);
@@ -169,7 +169,7 @@ class ReciptPaymentController extends Controller
             $std->debit = 0.00;
             $std->recipt__payments_id = $pay->id;
             $std->save();
-            $this->logActivity(trans('log.parents.updated_action'), trans('log.receipt_payment.updated', ['name' => $request->student->name, 'date' => date('Y-m-d')]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.receipt_payment.updated', ['name' => $request->student->name, 'date' => date('Y-m-d')]));
             DB::commit();
 
             return redirect()->route('Recipt_Payment.index')->with('success', trans('general.success'));
@@ -189,7 +189,7 @@ class ReciptPaymentController extends Controller
 
             $Recipt_Payment = Recipt_Payment::findorFail($id);
             $Recipt_Payment->delete();
-            $this->logActivity(trans('log.parents.deleted_action'), trans('log.receipt_payment.deleted', ['name' => $Recipt_Payment->student->name, 'date' => date('Y-m-d')]));
+            $this->logActivity(trans('log.actions.deleted'), trans('log.models.receipt_payment.deleted', ['name' => $Recipt_Payment->student->name, 'date' => date('Y-m-d')]));
 
             return redirect()->route('Recipt_Payment.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {

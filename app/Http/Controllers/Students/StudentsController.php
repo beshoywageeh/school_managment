@@ -79,7 +79,7 @@ class StudentsController extends Controller
                 'user_id' => Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
-            $this->logActivity(trans('log.students.added_action'), trans('log.students.added', ['student_name' => $request->name]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.student.created', ['student_name' => $request->name]));
             $school_fee = DB::table('school__fees')->where('academic_year_id', $acc_year->id)->where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get();
             // dd($school_fee);
             foreach ($school_fee as $fee) {
@@ -94,8 +94,7 @@ class StudentsController extends Controller
                 $fees->school_id = Auth::user()->school_id;
                 $fees->save();
                 // Student Account Service
-                $StudentAccount->CreateStudentAccount($student, $fees, $acc_year, $fee->amount);
-                $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.invoice_added', ['name' => $student->name, 'amount' => $fee->amount]));
+                $this->logActivity(trans('log.actions.added'), trans('log.models.school_fee.invoice_added', ['name' => $student->name, 'amount' => $fee->amount]));
             }
             $StudentAccount->AddStudentBookInvoice($student);
             $StudentAccount->AddStudentClotheInvoice($student);
@@ -170,7 +169,7 @@ class StudentsController extends Controller
                 'user_id' => \Auth::Id(),
             ]);
             session()->flash('success', trans('general.success'));
-            $this->logActivity(trans('log.students.updated_action'), trans('system_lookup.field_change', ['value' => $student->code]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.student.updated', ['student_code' => $student->code]));
 
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
@@ -193,7 +192,7 @@ class StudentsController extends Controller
 
         $student = Student::where('id', $id)->first();
         $student->restore();
-        $this->logActivity(trans('log.students.restored_action'), trans('log.students.restored', ['student_name' => $student->name]));
+        $this->logActivity(trans('log.actions.restored'), trans('log.models.student.restored', ['student_name' => $student->name]));
 
         return redirect()->route('Students.index')->with('success', trans('General.success'));
     }
@@ -206,7 +205,7 @@ class StudentsController extends Controller
         try {
             $student = Student::findorfail($id);
             $student->delete();
-            $this->logActivity(trans('log.students.graduated_action'), trans('log.students.graduated', ['student_name' => $student->name]));
+            $this->logActivity(trans('log.actions.graduated'), trans('log.models.student.graduated', ['student_name' => $student->name]));
 
             return redirect()->route('Students.graduated')->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -221,7 +220,7 @@ class StudentsController extends Controller
         try {
             $student = Student::onlyTrashed()->where('id', $id)->first();
 
-            $this->logActivity(trans('log.students.deleted_action'), trans('log.students.deleted', ['student_name' => $student->name]));
+            $this->logActivity(trans('log.actions.deleted'), trans('log.models.student.deleted', ['student_name' => $student->name]));
             $student->forceDelete();
 
             return redirect()->route('Students.graduated')->with('success', trans('general.success'));
@@ -285,7 +284,7 @@ class StudentsController extends Controller
                 'user_id' => Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
-            $this->logActivity(trans('log.students.added_action'), trans('log.students.added', ['student_name' => $request->name]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.student.created', ['student_name' => $request->name]));
             $school_fee = DB::table('school__fees')->where('academic_year_id', $acc_year->id)->where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get();
 
             // dd($school_fee);
@@ -303,7 +302,7 @@ class StudentsController extends Controller
 
                 $StudentAccount->CreateStudentAccount($student, $fees, $acc_year, '1', $fee->amount);
 
-                $this->logActivity(trans('log.parents.added_action'), trans('log.school_fee.invoice_added', ['name' => $student->name, 'amount' => $fee->amount]));
+                $this->logActivity(trans('log.actions.added'), trans('log.models.school_fee.invoice_added', ['name' => $student->name, 'amount' => $fee->amount]));
             }
             $StudentAccount->AddStudentBookInvoice($student);
             $StudentAccount->AddStudentClotheInvoice($student);

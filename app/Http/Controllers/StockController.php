@@ -33,7 +33,7 @@ class StockController extends Controller
                     'school_id' => $this->getSchool()->id,
                     'user_id' => auth()->user()->id,
                 ]);
-                $this->logActivity(trans('log.parents.added_action'), trans('system_lookup.field_create', ['value' => $stock['name']]));
+                $this->logActivity(trans('log.actions.added'), trans('log.models.stock.created', ['value' => $stock['name']]));
             }
             session()->flash('success', trans('general.success'));
 
@@ -52,7 +52,7 @@ class StockController extends Controller
                 'opening_stock' => $request->quantity,
                 'opening_stock_date' => date('Y-m-d'),
             ]);
-            $this->logActivity(trans('log.parents.updated_action'), trans('system_lookup.field_change', ['value' => $request->name]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.stock.updated', ['value' => $request->name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
@@ -65,7 +65,7 @@ class StockController extends Controller
     {
         try {
             $stock = stock::findorfail($id);
-            $this->logActivity(trans('log.parents.deleted_action'), trans('system_lookup.field_delete', ['value' => $stock->name]));
+            $this->logActivity(trans('log.actions.deleted'), trans('log.models.stock.deleted', ['value' => $stock->name]));
             $stock->delete();
             session()->flash('error', trans('general.deleted'));
 

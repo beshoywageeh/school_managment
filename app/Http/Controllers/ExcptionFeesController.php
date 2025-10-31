@@ -79,7 +79,7 @@ class ExcptionFeesController extends Controller
             $std->debit = 0.00;
             $std->excpetion_id = $pay->id;
             $std->save();
-            $this->logActivity(trans('log.exception_fees.added_action'), trans('log.exception_fees.added', ['student_name' => $pay->students->name]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.exception_fee.created', ['student_name' => $pay->students->name]));
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -152,7 +152,7 @@ class ExcptionFeesController extends Controller
             $std->classroom_id = Student::where('id', $request->student_id)->first()->classroom_id;
             $std->debit = 0.00;
             $std->save();
-            $this->logActivity(trans('log.exception_fees.updated_action'), trans('log.exception_fees.updated', ['student_name' => $pay->students->name]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.exception_fee.updated', ['student_name' => $pay->students->name]));
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -174,7 +174,7 @@ class ExcptionFeesController extends Controller
             $pay = ExcptionFees::findorfail($id);
 
             $pay->delete();
-            $this->logActivity(trans('log.exception_fees.deleted_action'), trans('log.exception_fees.deleted', ['student_name' => $pay->students->name]));
+            $this->logActivity(trans('log.actions.deleted'), trans('log.models.exception_fee.deleted', ['student_name' => $pay->students->name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('except_fee.index');

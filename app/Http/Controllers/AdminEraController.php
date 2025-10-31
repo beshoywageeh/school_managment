@@ -33,7 +33,7 @@ class AdminEraController extends Controller
             'email' => $request->email ? $request->email : '',
         ]);
         $employee->assignRole([$request->role]);
-        $this->logActivity(trans('log.admin_era.status_changed_action'), trans('log.admin_era.status_changed_description'), 'emp_active', $employee->id);
+        $this->logActivity(trans('log.actions.status_changed'), trans('log.models.user.status_changed', ['name' => $employee->name]));
 
         return redirect()->back()->with('success', trans('General.success'));
 

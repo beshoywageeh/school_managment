@@ -46,7 +46,7 @@ class BookSheetController extends Controller
                     'school_id' => $this->getSchool()->id,
                     'user_id' => auth()->user()->id,
                 ]);
-                $this->logActivity(trans('log.parents.added_action'), trans('log.book_sheet.added', ['name' => $book['name']]));
+                $this->logActivity(trans('log.actions.added'), trans('log.models.book_sheet.created', ['name' => $book['name']]));
             }
             session()->flash('success', trans('general.success'));
 
@@ -85,7 +85,7 @@ class BookSheetController extends Controller
                 'sales_price' => $request->sales_price,
                 'is_book' => isset($book['is_book']) ? true : false,
             ]);
-            $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheet.updated', ['name' => $request->name]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.book_sheet.updated', ['name' => $request->name]));
 
             session()->flash('success', trans('general.success'));
 
@@ -106,7 +106,7 @@ class BookSheetController extends Controller
         try {
 
             $book_sheet = book_sheet::findorFail($id);
-            $this->logActivity(trans('log.parents.deleted_action'), trans('log.book_sheet.deleted', ['name' => $book_sheet->name]));
+            $this->logActivity(trans('log.actions.deleted'), trans('log.models.book_sheet.deleted', ['name' => $book_sheet->name]));
             $book_sheet->delete();
             session()->flash('success', trans('general.success'));
 

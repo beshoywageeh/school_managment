@@ -63,7 +63,7 @@ class MyParentsController extends Controller
                 'school_id' => \Auth::user()->school_id,
                 'mother_status' => $request->Mother_Status,
             ]);
-            $this->logActivity(trans('log.parents.added_action'), trans('log.parents.added', ['name' => $request->Father_Name]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.parent.created', ['name' => $request->Father_Name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -120,7 +120,7 @@ class MyParentsController extends Controller
                 'Father_Learning' => $request->Father_Learning,
                 'mother_status' => $request->Mother_Status,
             ]);
-            $this->logActivity(trans('log.parents.updated_action'), trans('log.parents.updated', ['name' => $request->Father_Name]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.parent.updated', ['name' => $request->Father_Name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -137,7 +137,7 @@ class MyParentsController extends Controller
             $d = My_parents::withCount('Students')->findorfail($id);
             if ($d->Students_count == 0) {
                 $d->delete();
-                $this->logActivity(trans('log.parents.deleted_action'), trans('log.parents.deleted', ['name' => $d->Father_Name]));
+                $this->logActivity(trans('log.actions.deleted'), trans('log.models.parent.deleted', ['name' => $d->Father_Name]));
                 session()->flash('success', trans('general.deleted'));
 
                 return redirect()->route('parents.index');

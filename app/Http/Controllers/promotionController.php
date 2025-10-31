@@ -68,7 +68,7 @@ class promotionController extends Controller
                     'school_id' => $this->getSchool()->id,
                     'user_id' => auth()->user()->id,
                 ]);
-                $this->logActivity(trans('log.promotion.promoted_action'), trans('log.promotion.promoted', ['name' => $Students->where('id', $student->id)->first()->name]));
+                $this->logActivity(trans('log.actions.promoted'), trans('log.models.promotion.promoted', ['name' => $Students->where('id', $student->id)->first()->name]));
             }
             DB::commit();
 
@@ -118,7 +118,7 @@ class promotionController extends Controller
                     'grade_id' => $promotions->from_grade,
                 ]);
             $promotions->delete();
-            $this->logActivity(trans('log.promotion.promoted_action'), trans('log.promotion.canceled', ['name' => $promotions->student->name]));
+            $this->logActivity(trans('log.actions.canceled'), trans('log.models.promotion.canceled', ['name' => $promotions->student->name]));
             DB::commit();
 
             return redirect()->route('promotion.index')->with('success', trans('general.success'));

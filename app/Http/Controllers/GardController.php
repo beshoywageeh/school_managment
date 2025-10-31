@@ -33,7 +33,7 @@ class GardController extends Controller
             $generate_code = order::where('school_id', $school->id)->where('type', '3')->orderBy('auto_number', 'desc')->first();
             $order = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
             $type = 3;
-            $this->logActivity(trans('log.parents.added_action'), trans('log.gard.order_added', ['number' => $order]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.gard.order_added', ['number' => $order]));
 
             return view('backend.gard.create', get_defined_vars());
         } catch (Exception $e) {
@@ -65,7 +65,7 @@ class GardController extends Controller
                     'quantity_out' => $quantity_out,
                     'quantity_in' => $quantity_in,
                 ]);
-                $this->logActivity(trans('log.parents.added_action'), trans('log.gard.stock_added', ['stock_name' => $stock->name, 'inventory_number' => $order->auto_number]));
+                $this->logActivity(trans('log.actions.added'), trans('log.models.gard.stock_added', ['stock_name' => $stock->name, 'inventory_number' => $order->auto_number]));
             }
 
             return redirect()->route('stocks.index')->with('success', 'تم الاضافة بنجاح');
@@ -110,7 +110,7 @@ class GardController extends Controller
                         'quantity_out' => -$qty,
                     ]);
                 }
-                $this->logActivity(trans('log.parents.updated_action'), trans('log.gard.stock_updated', ['stock_name' => $stock->name, 'inventory_number' => $order->auto_number]));
+                $this->logActivity(trans('log.actions.updated'), trans('log.models.gard.stock_updated', ['stock_name' => $stock->name, 'inventory_number' => $order->auto_number]));
             }
 
             return redirect()->route('stocks.index')->with('success', trans('general.success'));
@@ -136,7 +136,7 @@ class GardController extends Controller
     {
         try {
             $gard = order::findorfail($id);
-            $this->logActivity(trans('log.parents.deleted_action'), trans('log.gard.order_deleted', ['number' => $gard->auto_number]));
+            $this->logActivity(trans('log.actions.deleted'), trans('log.models.gard.order_deleted', ['number' => $gard->auto_number]));
             $gard->delete();
 
             return redirect()->back()->with('success', trans('general.success'));

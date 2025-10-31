@@ -89,7 +89,7 @@ class fee_invoiceController extends Controller
 
                 $std->save();
             }
-            $this->logActivity(trans('log.parents.added_action'), trans('log.fee_invoice.added', ['name' => $fee->students->name]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.fee_invoice.created', ['name' => $fee->students->name]));
             DB::commit();
 
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));
@@ -154,7 +154,7 @@ class fee_invoiceController extends Controller
             $std->debit = school_fee::where('id', $request->fee)->first()->amount;
             $std->credit = 0.00;
             $std->save();
-            $this->logActivity(trans('log.parents.updated_action'), trans('log.fee_invoice.updated', ['name' => $fee->students->name]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.fee_invoice.updated', ['name' => $fee->students->name]));
             DB::commit();
 
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));
@@ -172,7 +172,7 @@ class fee_invoiceController extends Controller
     {
         try {
             $fee = Fee_invoice::findorFail($id);
-            $this->logActivity(trans('log.parents.deleted_action'), trans('log.fee_invoice.deleted', ['name' => $fee->students->name]));
+            $this->logActivity(trans('log.actions.deleted'), trans('log.models.fee_invoice.deleted', ['name' => $fee->students->name]));
             $fee->delete();
 
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));

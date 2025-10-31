@@ -49,7 +49,7 @@ class AcadmiceYearController extends Controller
                 'school_id' => $this->getSchool()->id,
 
             ]);
-            $this->logActivity(trans('log.academic_year.added_action'), trans('system_lookup.field_add', ['value' => $request->view]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.academic_year.created', ['view' => $request->view]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
@@ -96,7 +96,7 @@ class AcadmiceYearController extends Controller
             $acadmice_year->status = ($request->status) ? 0 : 1;
             $acadmice_year->save();
             session()->flash('success', trans('general.success'));
-            $this->logActivity(trans('log.academic_year.updated_action'), trans('system_lookup.field_change', ['value' => $request->view]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.academic_year.updated', ['view' => $request->view]));
 
             return redirect()->back();
         } catch (\Exception $e) {
@@ -116,7 +116,7 @@ class AcadmiceYearController extends Controller
             $acadmice_year = acadmice_year::findorFail($id);
             $acadmice_year->delete();
             session()->flash('success', trans('general.success'));
-            $this->logActivity(trans('log.academic_year.deleted_action'), trans('system_lookup.field_delete', ['value' => $acadmice_year->view]));
+            $this->logActivity(trans('log.actions.deleted'), trans('log.models.academic_year.deleted', ['view' => $acadmice_year->view]));
 
             return redirect()->back();
         } catch (\Exception $e) {

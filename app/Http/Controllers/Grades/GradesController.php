@@ -57,7 +57,7 @@ class GradesController extends Controller
                 'school_id' => $this->getSchool()->id,
             ]);
             $grade->users()->attach($request->user_id, ['school_id' => $this->getSchool()->id]);
-            $this->logActivity(trans('log.parents.added_action'), trans('system_lookup.field_add', ['value' => $request->Grade_Name]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.grade.created', ['value' => $request->Grade_Name]));
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -119,7 +119,7 @@ class GradesController extends Controller
             } else {
                 $grade->users()->sync([]);
             }
-            $this->logActivity(trans('log.parents.updated_action'), trans('system_lookup.field_change', ['value' => $request->Grade_Name]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.grade.updated', ['value' => $request->Grade_Name]));
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -141,7 +141,7 @@ class GradesController extends Controller
         $grade = Grade::where('id', $id)->withcount('class_room')->first();
         if ($grade->class_room_count == 0) {
             $grade->delete();
-            $this->logActivity(trans('log.parents.deleted_action'), trans('system_lookup.field_delete', ['value' => $grade->name]));
+            $this->logActivity(trans('log.actions.deleted'), trans('log.models.grade.deleted', ['value' => $grade->name]));
 
             return redirect()->back()->with('success', trans('general.success'));
         }

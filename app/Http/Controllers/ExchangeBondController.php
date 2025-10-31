@@ -61,7 +61,7 @@ class ExchangeBondController extends Controller
             $fund_account->Debit = 0.00;
             $fund_account->save();
             DB::commit();
-            $this->LogActivity(trans('log.exchange_bond.added_action'), trans('log.exchange_bond.added'));
+            $this->LogActivity(trans('log.actions.added'), trans('log.models.exchange_bond.created'));
 
             return redirect()->route('exchange_bonds.print', $exchange->id);
         } catch (\Exception $e) {
@@ -99,7 +99,7 @@ class ExchangeBondController extends Controller
             $fund_account->Credit = $request->amount;
             $fund_account->save();
             DB::commit();
-            $this->LogActivity(trans('log.exchange_bond.updated_action'), trans('log.exchange_bond.updated'));
+            $this->LogActivity(trans('log.actions.updated'), trans('log.models.exchange_bond.updated'));
 
             return redirect()->route('exchange_bonds.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -129,7 +129,7 @@ class ExchangeBondController extends Controller
             $student_account->delete();
             $fund_account->delete();
             DB::commit();
-            $this->LogActivity(trans('log.exchange_bond.deleted_action'), trans('log.exchange_bond.deleted'));
+            $this->LogActivity(trans('log.actions.deleted'), trans('log.models.exchange_bond.deleted'));
 
             return redirect()->route('exchange_bonds.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {

@@ -33,7 +33,7 @@ class JobController extends Controller
                 'created_by' => \Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
-            $this->logActivity(trans('log.parents.added_action'), trans('log.job.added', ['name' => $request->job_name]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.job.created', ['name' => $request->job_name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('jobs.index');
@@ -65,7 +65,7 @@ class JobController extends Controller
                 'name' => $request->job_name,
                 'type' => $request->worker_type,
             ]);
-            $this->logActivity(trans('log.parents.updated_action'), trans('log.job.updated', ['name' => $request->job_name]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.job.updated', ['name' => $request->job_name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('jobs.index');
@@ -85,7 +85,7 @@ class JobController extends Controller
         try {
 
             $Job = Job::findorFail($id);
-            $this->logActivity(trans('log.parents.deleted_action'), trans('log.job.deleted', ['name' => $Job->name]));
+            $this->logActivity(trans('log.actions.deleted'), trans('log.models.job.deleted', ['name' => $Job->name]));
             $Job->delete();
 
             return redirect()->back();
