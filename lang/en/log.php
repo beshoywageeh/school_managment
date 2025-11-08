@@ -148,6 +148,9 @@ return [
             'graduated' => 'Student :student_name was graduated',
             'deleted' => 'Student :student_name was deleted',
         ],
+        'schedules' => [
+            'added' => 'Schedule was added',
+        ],
     ],
     'actions' => [
         'added' => 'Added',

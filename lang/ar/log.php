@@ -148,6 +148,9 @@ return [
             'graduated' => 'تم تخرج الطالب :student_name',
             'deleted' => 'تم حذف الطالب :student_name',
         ],
+        'schedules' => [
+            'added' => 'تم إضافة جدول',
+        ],
     ],
     'actions' => [
         'added' => 'إضافة',

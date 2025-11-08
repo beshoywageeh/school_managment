@@ -21,16 +21,17 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class StudentsController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
-    public function index(StudentDataTable $datatable)
+    public function index()
     {
         $school = $this->getSchool();
 
-        return $datatable->render('backend.Students.Index', get_defined_vars());
+        return view('backend.Students.Index', get_defined_vars());
     }
 
     /**
@@ -114,7 +115,19 @@ class StudentsController extends Controller
     public function show(string $id)
     {
         try {
-            $student = Student::where('id', $id)->with(['user:id,name', 'grade:id,name', 'classroom:id,name', 'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone,Father_Job', 'StudentAccount', 'nationality'])->withsum('StudentAccount', 'debit')->withsum('StudentAccount', 'credit')->first();
+            $student = Student::where('id', $id)
+                ->with(
+                    [
+                        'user:id,name',
+                        'grade:id,name',
+                        'classroom:id,name',
+                        'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone,Father_Job',
+                        'StudentAccount',
+                        'nationality'
+                    ])
+                ->withsum('StudentAccount', 'debit')
+                ->withsum('StudentAccount', 'credit')
+                ->first();
             $school = $this->getSchool();
 
             return view('backend.Students.show', get_defined_vars());
@@ -247,7 +260,7 @@ class StudentsController extends Controller
             return redirect()->route('Students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
-
+            Log::error($e->getMessage());
             return redirect()->back()->withInput();
         }
     }
@@ -300,7 +313,7 @@ class StudentsController extends Controller
                 $fees->school_id = Auth::user()->school_id;
                 $fees->save();
 
-                $StudentAccount->CreateStudentAccount($student, $fees, $acc_year, '1', $fee->amount);
+                $StudentAccount->CreateStudentAccount($student, $fees->id, $acc_year, '1', $fee->amount);
 
                 $this->logActivity(trans('log.actions.added'), trans('log.models.school_fee.invoice_added', ['name' => $student->name, 'amount' => $fee->amount]));
             }

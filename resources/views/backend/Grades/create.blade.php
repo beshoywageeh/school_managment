@@ -21,17 +21,17 @@
                     <x-input name='Grade_Name'
                              class=''
                              type='text'
-                             value='{{old("Grade_Name")}}'>{{ trans('grades.name') }}</x-input>
-                    <div class="form-group">
+                             value='{{old("Grade_Name")}}'>{{ trans('Grades.name') }}</x-input>
+                    <div class="row">
+                        <div class="col">
                         <label for="exampleFormControlSelect2">{{ trans('Grades.select_res') }}</label>
-                        <select multiple=""
-                                name="user_id[]"
-                                class="form-control"
-                                id="tom-select">
+                        <select
+                            class="custom-select" multiple name="user_id[]" >
                             @foreach ($data['users'] as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
                             @endforeach
                         </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

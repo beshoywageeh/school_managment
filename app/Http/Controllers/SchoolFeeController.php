@@ -186,7 +186,7 @@ class SchoolFeeController extends Controller
             $fee = school_fee::findorFail($id);
             $this->logActivity(trans('log.actions.deleted'), trans('log.models.school_fee.deleted', ['amount' => \Number::currency($fee->amount, 'EGP', 'ar')]));
             $fee->delete();
-            session()->flash('success', trans('general_success'));
+            session()->flash('success', trans('general.success'));
 
             return redirect()->route('schoolfees.index');
         } catch (\Exception $e) {

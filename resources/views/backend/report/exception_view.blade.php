@@ -59,60 +59,60 @@
 </style>
 
 <body>
-    <htmlpageheader name="page-header">
-        <div style="height: 5px; width: 95%; margin: auto;">
-            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
-                <table class="data-table" style="width:100%">
-                    <tr>
-                        <td class="text-center" width="25%">
-                            {!! $school->heading_right !!}
-                        </td>
-                        <td class="text-center" width="50%">
-                            {{ trans('report.period', ['from' => $data['begin'], 'to' => $data['end']]) }}
-                        </td>
-                        <td class="text-left">
-                            @if ($school->image == null)
-                                <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
-                            @else
-                                <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                                    alt="{{ $school->name }}">
-                            @endif
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </htmlpageheader>
-    <htmlpagefooter name="page-footer">
-        <div style="height: 5px; width: 95%; margin: auto;">
-            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">
-                <table class="data-table" style="width:100%">
-                    <tr>
-                        <td class="text-right" width="20%">
-                            <div class="text-center">
-                                <center>
+{{--    <htmlpageheader name="page-header">--}}
+{{--        <div style="height: 5px; width: 95%; margin: auto;">--}}
+{{--            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">--}}
+{{--                <table class="data-table" style="width:100%">--}}
+{{--                    <tr>--}}
+{{--                        <td class="text-center" width="25%">--}}
+{{--                            {!! $school->heading_right !!}--}}
+{{--                        </td>--}}
+{{--                        <td class="text-center" width="50%">--}}
+{{--                            {{ trans('report.period', ['from' => $data['begin'], 'to' => $data['end']]) }}--}}
+{{--                        </td>--}}
+{{--                        <td class="text-left">--}}
+{{--                            @if ($school->image == null)--}}
+{{--                                <img class="img-fluid" style="max-width:10%"--}}
+{{--                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">--}}
+{{--                            @else--}}
+{{--                                <img class="img-fluid" style="max-width:10%"--}}
+{{--                                    src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"--}}
+{{--                                    alt="{{ $school->name }}">--}}
+{{--                            @endif--}}
+{{--                        </td>--}}
+{{--                    </tr>--}}
+{{--                </table>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </htmlpageheader>--}}
+{{--    <htmlpagefooter name="page-footer">--}}
+{{--        <div style="height: 5px; width: 95%; margin: auto;">--}}
+{{--            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">--}}
+{{--                <table class="data-table" style="width:100%">--}}
+{{--                    <tr>--}}
+{{--                        <td class="text-right" width="20%">--}}
+{{--                            <div class="text-center">--}}
+{{--                                <center>--}}
 
-                                </center>
-                            </div>
-                        </td>
-                        <td class="text-center" width="50%">
-                            {PAGENO}
-                        </td>
-                        <td class="text-left">
+{{--                                </center>--}}
+{{--                            </div>--}}
+{{--                        </td>--}}
+{{--                        <td class="text-center" width="50%">--}}
+{{--                            {PAGENO}--}}
+{{--                        </td>--}}
+{{--                        <td class="text-left">--}}
 
-                            <center>
+{{--                            <center>--}}
 
-                                {!! $school->footer_left !!}
-                            </center>
+{{--                                {!! $school->footer_left !!}--}}
+{{--                            </center>--}}
 
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </htmlpagefooter>
+{{--                        </td>--}}
+{{--                    </tr>--}}
+{{--                </table>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </htmlpagefooter>--}}
 
     <div class="table-responsive" id="data">
         <table class="table text-center table-striped table-bordered table-sm">

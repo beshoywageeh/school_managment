@@ -14,15 +14,15 @@
                 </div>
                 <form id="form-with-multiple-column" class="max-w-full" action="{{ route('schoolfees.update','test') }}" method="post">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $school_Fee->id }}">
+                    <input type="hidden" name="id" value="{{ $school_fee->id }}">
                     <div class="row">
                         <!-- Form Row: One -->
                         <div class="col">
                             <!-- Form Column: Username -->
-                            <x-input name='description' value="{{ $school_Fee->description }}" class='' type='text'>{{ trans('fees.desc') }}</x-input>
+                            <x-input name='description' value="{{ $school_fee->description }}" class='' type='text'>{{ trans('fees.desc') }}</x-input>
                         </div>
                         <div class="col">
-                            <x-input name='amount' class='' value="{{ $school_Fee->amount }}" type='number'>{{ trans('fees.amount') }}</x-input>
+                            <x-input name='amount' class='' value="{{ $school_fee->amount }}" type='number'>{{ trans('fees.amount') }}</x-input>
                         </div>
                     </div>
                         <!-- Form Row: Two -->
@@ -34,7 +34,7 @@
                             <select class='custom-select' name="grade_id" id="grades">
                                 <option> {{ trans('student.choose_grade') }}</option>
                                 @foreach ($grades as $grade)
-                                    <option value="{{ $grade->id }}" @selected( $school_Fee->grade_id == $grade->id)>{{ $grade->name }}</option>
+                                    <option value="{{ $grade->id }}" @selected( $school_fee->grade_id == $grade->id)>{{ $grade->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -44,7 +44,7 @@
                             </label>
                             <select class='custom-select' name="classroom_id" id="classrooms">
 
-                                <option value="{{ $school_Fee->classroom_id }}" selected>{{ $school_Fee->classroom->name }}</option>
+                                <option value="{{ $school_fee->classroom_id }}" selected>{{ $school_fee->classroom->name }}</option>
                             </select>
                         </div>
                         <div class="col">
@@ -52,7 +52,7 @@
                                 {{ trans('fees.academic_year') }}
                             </label>
                             <select class='custom-select' name="academic_year_id">
-                                <option value="{{$school_Fee->academic_year_id}}" selected>{{$school_Fee->year->view}}</option>
+                                <option value="{{$school_fee->academic_year_id}}" selected>{{$school_fee->year->view}}</option>
                                 @forelse ($academic_years as $year)
                                     <option value="{{ $year['id'] }}">{{ $year['academic_year'] }}</option>
                                 @empty

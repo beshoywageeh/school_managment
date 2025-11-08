@@ -165,7 +165,7 @@ Route::group(
                 Route::get('/{id}/destroy', 'destroy')->name('Recipt_Payment.destroy');
                 Route::get('/{id?}/show', 'show')->name('Recipt_Payment.show');
                 Route::get('/{id?}/print', 'print')->name('Recipt_Payment.print');
-
+Route::get('/payall','payall');
             });
             Route::group(['prefix' => 'except_fee', 'controller' => ExcptionFeesController::class], function () {
                 Route::get('/', 'index')->name('except_fee.index');

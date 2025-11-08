@@ -1,33 +1,41 @@
 <div>
     <div class="card mb-40">
         <div class="card-body">
-            <div class="row mb-40">
-                <div class="col">
-                    <input type="text" wire:model.live="name" class="form-control" placeholder="بحث بالاسم">
+            <div class="row mb-20">
+                <div class="col-md-3">
+                    <label>{{ trans('employees.search') }}</label>
+                    <input type="text" wire:model.live.debounce.300ms="name" class="form-control" placeholder="{{ trans('employees.search_placeholder') }}">
                 </div>
-                <div class="col">
+                <div class="col-md-2">
+                    <label>{{ trans('employees.job') }}</label>
                     <select wire:model.live="job_id" class="custom-select">
-
-                        <option selected valur="null">الكل</option>
-                        @foreach ($jobs as $job )
-
-                        <option value="{{ $job->id }}">{{$job->name}}</option>
-
+                        <option value="">{{ trans('employees.all_jobs') }}</option>
+                        @foreach ($jobs as $job)
+                            <option value="{{ $job->id }}">{{ $job->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="col text-md-right">
+                <div class="col-md-2">
+                    <label>{{ trans('employees.join_date_from') }}</label>
+                    <input wire:model.live="startDate" type="date" class="form-control">
+                </div>
+                <div class="col-md-2">
+                    <label>{{ trans('employees.join_date_to') }}</label>
+                    <input wire:model.live="endDate" type="date" class="form-control">
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button wire:click="resetFilters" class="btn btn-secondary">{{ trans('employees.reset_filters') }}</button>
+                </div>
+            </div>
 
+            <div class="row">
+                <div class="col text-md-right">
                     @can('employees-create')
                         <a href="{{ route('employees.create') }}" class="btn btn-success">
                             <i class="ti-plus"></i>
                             {{ trans('general.new') }}
                         </a>
                     @endcan
-                </div>
-            </div>
-            <div class="row">
-                <div class="col text-md-right">
                     @can('employees-import_Excel')
                         <button type="button" class="btn btn-primary" data-target="#Import_Excel" data-toggle="modal"><i
                                 class="ti-upload"></i>
@@ -47,12 +55,12 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>{{ trans('employees.code') }}</th>
-                                <th>{{ trans('employees.name') }}</th>
+                                <th wire:click="sortBy('code')" style="cursor: pointer;">{{ trans('employees.code') }}</th>
+                                <th wire:click="sortBy('name')" style="cursor: pointer;">{{ trans('employees.name') }}</th>
                                 <th>{{ trans('employees.learning') }}</th>
                                 <th>{{ trans('employees.grade_year') }}</th>
-                                <th>{{ trans('employees.join_date') }}</th>
-                                <th>{{ trans('employees.birth_date') }}</th>
+                                <th wire:click="sortBy('date_of_hiring')" style="cursor: pointer;">{{ trans('employees.join_date') }}</th>
+                                <th wire:click="sortBy('date_of_birth')" style="cursor: pointer;">{{ trans('employees.birth_date') }}</th>
                                 <th>{{ trans('employees.job') }}</th>
                                 <th>{{ trans('employees.contract_start_date') }}</th>
                                 <th>{{ trans('employees.ministry_code') }}</th>

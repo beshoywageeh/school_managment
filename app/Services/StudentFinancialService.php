@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 class StudentFinancialService
 {
     use logsActivity;
-    public function CreateStudentAccount($student, $fees, $acc_year, $type, $debit = 0.00, $credit = 0.00, $recipt_id = null, $excpetion_id = null, $exchange_bond_id = null)
+    public function CreateStudentAccount($student, $fees = null, $acc_year, $type, $debit = 0.00, $credit = 0.00, $recipt_id = null, $excpetion_id = null, $exchange_bond_id = null)
     {
 
         $StudentAccount = new StudentAccount;
@@ -18,10 +18,10 @@ class StudentFinancialService
         $StudentAccount->grade_id = $student->grade_id;
         $StudentAccount->classroom_id = $student->classroom_id;
         $StudentAccount->recipt__payments_id = $recipt_id;
-        $StudentAccount->fee_invoices_id = $fees->id;
+        $StudentAccount->fee_invoices_id = $fees;
         $StudentAccount->excpetion_id = $excpetion_id;
         $StudentAccount->exchange_bond_id = $exchange_bond_id;
-        $StudentAccount->date = $fees->invoice_date;
+        $StudentAccount->date = date('Y-m-d');
         $StudentAccount->type = $type;
         $StudentAccount->classroom_id = $student->classroom_id;
         $StudentAccount->academic_year_id = $acc_year->id;

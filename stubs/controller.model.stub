@@ -39,9 +39,7 @@ class {{ class }} extends Controller
     public function store({{ storeRequest }} $request)
     {
          try{
-                $this->syslog('','App\Models\{{model}}',\Auth::id(),$request->input(),$request->ip());
-            session()->flash('success',trans('general_success'));
-            return view('',get_defined_vars());
+            session()->flash('success',trans('general.success'));
         }catch(\Exception $e){
             session()->flash('error',$e->getMessage());
             return redirect()->back();
@@ -62,9 +60,7 @@ class {{ class }} extends Controller
     public function edit({{ model }} ${{ modelVariable }})
     {
         try{
-            ${{modelVariable}}= {{model}}::findorFail(${{modelVariable}})
-            session()->flash('success',trans('general_success'));
-            return view('',get_defined_vars());
+            session()->flash('success',trans('general.success'));
         }catch(\Exception $e){
             session()->flash('error',$e->getMessage());
             return redirect()->back();
@@ -78,9 +74,7 @@ class {{ class }} extends Controller
     {
         try{
 
-             $this->syslog('','App\Models\{{model}}',\Auth::id(),[$old,$request->input()],$request->ip());
-            session()->flash('success',trans('general_success'));
-            return view('',get_defined_vars());
+            session()->flash('success',trans('general.success'));
         }catch(\Exception $e){
 
             session()->flash('error',$e->getMessage());
@@ -97,7 +91,7 @@ class {{ class }} extends Controller
 
             ${{model}}={{ model }}::findorFail(${{ modelVariable }});
              $this->syslog('','App\Models\{{model}}',\Auth::id(),${{model}},$request->ip());
-            session()->flash('success',trans('general_success'));
+            session()->flash('success',trans('general.success'));
             return view('',get_defined_vars());
         }catch(\Exception $e){
             session()->flash('error',$e->getMessage());

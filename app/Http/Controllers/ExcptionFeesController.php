@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
+use App\Models\acadmice_year;
 use App\Models\ExcptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Student;
 use App\Models\StudentAccount;
+use App\Services\StudentFinancialService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -35,6 +37,7 @@ class ExcptionFeesController extends Controller
             $Excpetion = Student::where('id', $id)->with('StudentAccount')->first();
             $fees = Fee_invoice::where('student_id', $id)->where('status', 0)->with('fees')->get();
             $balance = $Excpetion->StudentAccount->sum('debit') - $Excpetion->StudentAccount->sum('credit');
+
             $school = $this->getSchool();
             if ($fees->isEmpty() || $balance <= 0) {
                 session()->flash('info', trans('General.noInvoiceToExcept'));
@@ -53,33 +56,34 @@ class ExcptionFeesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,StudentFinancialService $studentFinanc)
     {
+//        return $request;
         try {
             DB::beginTransaction();
-            $pay = new ExcptionFees;
+            $student = Student::findorfail($request->student_id);
+            $academic_year=acadmice_year::findorfail($student->acadmiecyear_id);
+            $fee = Fee_invoice::findorfail($request->fee_id)->with('fees')->first();
+        if($request->amount == $fee->fees->amount)
+        {
+
+            $fee->delete();
+        }
+
+        $pay = new ExcptionFees;
             $pay->date = date('Y-m-d');
-            $pay->student_id = $request->student_id;
+            $pay->student_id = $student->id;
             $pay->amount = $request->amount;
-            $pay->academic_year_id = Student::where('id', $request->student_id)->first()->acadmiecyear_id;
-            $pay->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
-            $pay->class_id = Student::where('id', $request->student_id)->first()->classroom_id;
+            $pay->academic_year_id = $academic_year->id;
+            $pay->grade_id = $student->grade_id;
+            $pay->class_id = $student->classroom_id;
             $pay->fee_id = $request->fee_id;
             $pay->school_id = $this->getSchool()->id;
             $pay->user_id = auth()->id();
             $pay->save();
-            $std = new StudentAccount;
-            $std->student_id = $request->student_id;
-            $std->date = $pay->date;
-            $std->type = '3';
-            $std->credit = $request->amount;
-            $std->academic_year_id = Student::where('id', $request->student_id)->first()->acadmiecyear_id;
-            $std->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
-            $std->classroom_id = Student::where('id', $request->student_id)->first()->classroom_id;
-            $std->debit = 0.00;
-            $std->excpetion_id = $pay->id;
-            $std->save();
-            $this->logActivity(trans('log.actions.added'), trans('log.models.exception_fee.created', ['student_name' => $pay->students->name]));
+        $studentFinanc->CreateStudentAccount($student,null,$academic_year,3,0.00,$request->amount,null,$pay->id);
+
+            $this->logActivity(trans('log.actions.added'), trans('log.models.exception_fee.created', ['student_name' => $student->name]));
             DB::commit();
             session()->flash('success', trans('general.success'));
 

@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="col-6 text-end">
-            <h1 class="h3">{{trans('Recipt_payments.title')}}</h1>
+            <h1 class="h3">{{trans('Recipt_Payments.title')}}</h1>
             <p class="mb-0">{{trans('general.created_at')}}: {{$report_data['recipt']->date}}</p>
             <p class="mb-0">{{trans('Recipt_Payments.man')}}: {{$report_data['recipt']->manual}}</p>
         </div>
@@ -42,6 +42,13 @@
     <div class="row">
         <div class="text-center col-12">
             <h2 class="h4">{{ $report_data['tafqeet']}}</h2>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col">
+            <h5 class="text-right">{{trans('Recipt_Payments.sign')}}</h5>
         </div>
     </div>
 </div>

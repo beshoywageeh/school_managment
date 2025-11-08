@@ -2,10 +2,70 @@
 @section('title')
     {{ trans('report.title') }}
 @endsection
+
 @push('css')
+    <style>
+        .report-card {
+            transition: all 0.3s ease-in-out;
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+        }
+
+        .report-card .card-header {
+            background: linear-gradient(45deg, #7B1FA2, #4A148C);
+            color: #fff;
+            border-bottom: none;
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            padding: 1.25rem;
+        }
+
+        .report-card .card-header h4 {
+            font-weight: 700;
+            font-size: 1.4rem; /* Increased */
+            margin: 0;
+        }
+
+        .report-item {
+            padding: 1.25rem 1.5rem; /* Increased padding */
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .report-item:last-child {
+            border-bottom: none;
+        }
+
+        .report-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .report-item-name {
+            font-weight: 600; /* Bolder */
+            font-size: 1rem; /* Increased */
+            color: #212529;
+        }
+
+        .report-item .btn {
+            font-size: 0.85rem; /* Increased */
+            font-weight: 600;
+            padding: 0.5rem 1.2rem; /* Increased */
+        }
+    </style>
 @endpush
+
 @section('content')
-    <div class="mb-40 row">
+    <div class="row">
         @php
             $reports_links = [
                 trans('Sidebar.Students') => [
@@ -82,7 +142,7 @@
                         'Name' => trans('Sidebar.fees_invoice'),
                         'Url' => '#fees_invoices',
                         'type' => 'button',
-                        'can'=>'fee_invloice-list'
+                        'can'=>'fee_invoice-list'
                     ],
                     [
                         'Name' => trans('Sidebar.Recipt_Payment'),
@@ -117,42 +177,49 @@
                 ],
                 trans('Sidebar.employees')=>[]
             ];
-        @endphp
-        @foreach ($reports_links as $heading => $report_links)
-            <div class="col">
-                <div class="mb-4 card h-100">
-                    <div class="text-center card-header">
-                        <h4><strong>{{ trans('report.title') }} | {{ $heading }}</strong></h4>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-unstyled">
-                            @foreach ($report_links as $acc_link)
-                            @can($acc_link['can'])
-                                <li class="">
-                                    @if ($acc_link['type'] == 'link')
-                                        <a class="anchor" target="_blank"href="{{ $acc_link['Url'] }}">
-                                               {{ $acc_link['Name'] }}
-                                        </a>
-                                    @endif
-                                    @if ($acc_link['type'] == 'button')
-                                        <button class="anchor" data-toggle="modal"
-                                            data-target="{{ $acc_link['Url'] }}">
-                                           {{ $acc_link['Name'] }}
-                                        </button>
-                                    @endif
 
-                                </li>
-                                <hr>
+            $category_icons = [
+                trans('Sidebar.Students') => 'fa-user-graduate',
+                trans('Sidebar.stores') => 'fa-store-alt',
+                trans('Sidebar.accounting') => 'fa-calculator',
+                trans('Sidebar.employees') => 'fa-users',
+            ];
+        @endphp
+
+        @foreach ($reports_links as $heading => $report_links)
+            @if(!empty($report_links))
+                <div class="col-lg-6 col-xl-4 mb-4">
+                    <div class="card report-card h-100">
+                        <div class="text-center card-header">
+                            <h4><i class="fas {{ $category_icons[$heading] ?? 'fa-file-alt' }} mr-2"></i><strong>{{ $heading }}</strong></h4>
+                        </div>
+                        <div class="p-0 card-body">
+                            @foreach ($report_links as $acc_link)
+                                @can($acc_link['can'])
+                                    <div class="report-item">
+                                        <span class="report-item-name">{{ $acc_link['Name'] }}</span>
+                                        <div>
+                                            @if ($acc_link['type'] == 'link')
+                                                <a class="btn btn-sm btn-outline-primary rounded-pill" target="_blank" href="{{ $acc_link['Url'] }}">
+                                                    <i class="fas fa-external-link-alt mr-1"></i> {{ trans('general.open') }}
+                                                </a>
+                                            @endif
+                                            @if ($acc_link['type'] == 'button')
+                                                <button class="btn btn-sm btn-outline-secondary rounded-pill" data-toggle="modal" data-target="{{ $acc_link['Url'] }}">
+                                                    <i class="fas fa-cogs mr-1"></i> {{ trans('general.generate') }}
+                                                </button>
+                                            @endif
+                                        </div>
+                                    </div>
                                 @endcan
                             @endforeach
-
-                        </ul>
-
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
         @endforeach
     </div>
+
     @php
         $popups = [
             'exception_popup',
@@ -166,9 +233,11 @@
             'payments_popup','payment_part_popup','credit_popup'
         ];
     @endphp
+
     @foreach ($popups as $popup)
         @include('backend.report.popup.' . $popup)
     @endforeach
-    @push('scripts')
-    @endpush
 @endsection
+
+@push('scripts')
+@endpush

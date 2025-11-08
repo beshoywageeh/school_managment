@@ -3,7 +3,7 @@
       <div class="col-md-6">
         <div class="text-center text-md-left">
           <p class="mb-0">
-            <bdi> جميع الحقوق محفوظة بشوي وجيه</bdi> © {{\carbon\carbon::now()->year }}    </p>
+            <bdi> {{ trans('footer.rights') }}</bdi> © {{\carbon\carbon::now()->year }}    </p>
         </div>
       </div>
       <div class="col-md-6">
@@ -11,7 +11,7 @@
 
           <li class="list-inline-item">
             <a href="https://www.facebook.com/LoopLabsDev" target="_blank">
-                LoopLabsDev </a>
+                {{ trans('footer.dev') }} </a>
           </li>
         </ul>
       </div>

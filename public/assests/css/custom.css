@@ -51,7 +51,7 @@ padding-bottom: 1rem;
 font-weight: 600;
 text-transform: capitalize;
 }
-.active{
+.active-menu{
 background-color: var(--custom_green) !important;
 text-align: center !important;
 }

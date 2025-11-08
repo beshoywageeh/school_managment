@@ -1,6 +1,6 @@
 @props(['active', 'image'])
 
-<li @class(['sidebar-menu', 'active' => $active])>
+<li @class(['sidebar-menu', 'active-menu' => $active])>
     <a {{ $attributes }}>
         @isset($image)
         <img class="img-fluid" width="25" height="25" src="{{ $image }}" alt="{{ $slot }}" />

@@ -38,7 +38,7 @@
                                             <td> {{ $loop->iteration }}</td>
                                             <td>{{ \Carbon\Carbon::parse($fee_invoice->invoice_date)->format('Y-m-d') }}</td>
                                             <td><a target='_blank'
-                                                    href="{{ route('Students.show', $fee_invoice->student_id) }}">{{ $fee_invoice->students->name }}</a>
+                                                    href="{{ route('Students.show', $fee_invoice->student_id) }}">{{ $fee_invoice->students->name ?? '-' }}</a>
                                             </td>
                                             <td>{{ $fee_invoice->created_at->format('Y-m-d') }}</td>
                                             <td>{{ number_format($fee_invoice->fees_sum_amount, 2) }}&nbsp;ج.م</td>

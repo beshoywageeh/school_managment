@@ -11,4 +11,5 @@ return [
     'total_debit' => 'إجمالي الدائن',
     'total_credit' => 'إجمالي المدين',
     'total_final' => 'إجمالي المطلوب',
+    'sign'=>'التوقيع'
 ];

@@ -11,7 +11,7 @@
                     <x-Student-header />
                     <div class="table-responsive">
                         @can('Students-list')
-                            {!! $dataTable->table(['class' => 'datatable table table-sm table-striped table-hover dt-buttons'], true) !!}
+                            <livewire:student-table />
                         @endcan
                         @include('backend.Students.import')
                     </div>
@@ -21,7 +21,4 @@
         </div>
 
     </div>
-    @push('scripts')
-        {!! $dataTable->scripts(attributes: ['type' => 'module']) !!}
-    @endpush
 @endsection

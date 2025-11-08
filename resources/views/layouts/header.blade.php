@@ -3,9 +3,9 @@
 
     <div class="text-left navbar-brand-wrapper">
         <a class="navbar-brand brand-logo" href="https://www.facebook.com/LoopLabsDev"><img
-                src="{{ asset('assests/images/logo-icon-dark.png') }}" alt=""><span>Loop Labs</span></a>
+                src="{{ asset('assests/images/logo-icon-dark.png') }}" alt="{{ trans('general.loop_labs') }}"><span>{{ trans('general.loop_labs') }}</span></a>
         <a class="navbar-brand brand-logo-mini" href="index.html"><img
-                src="{{ asset('assests/images/logo-icon-dark.png') }}" alt=""></a>
+                src="{{ asset('assests/images/logo-icon-dark.png') }}" alt="{{ trans('general.loop_labs') }}"></a>
         <title>{{ env('APP_NAME') }}&nbsp;@yield('page_title')</title>
 
     </div>

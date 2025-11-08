@@ -11,7 +11,7 @@ use App\Models\ExcptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Grade;
 use App\Models\PaymentParts;
-use App\Models\Recipt_payment;
+use App\Models\Recipt_Payment;
 use App\Models\School_Fee;
 use App\Models\stock;
 use App\Models\Student;
@@ -284,7 +284,7 @@ class ReportController extends Controller
     {
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
-        $data['payment'] = Recipt_payment::whereBetween('date', [$data['from'], $data['to']])->with(['student' => function ($q) {
+        $data['payment'] = Recipt_Payment::whereBetween('date', [$data['from'], $data['to']])->with(['student' => function ($q) {
             $q->with('classroom');
         }], 'acc_year')->get();
         $pdf = PDF::loadView('backend.report.payments', ['data' => $data], [], [

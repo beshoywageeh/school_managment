@@ -32,5 +32,11 @@ return [
     'working_years' => 'سنوات الخدمة',
     'insur' => 'مؤمن',
     'contracted' => 'متعاقد',
+    'search' => 'بحث',
+    'search_placeholder' => 'البحث بالاسم أو البريد الإلكتروني...',
+    'all_jobs' => 'الكل',
+    'join_date_from' => 'تاريخ التعيين من',
+    'join_date_to' => 'تاريخ التعيين إلى',
+    'reset_filters' => 'إعادة تعيين الفلاتر',
 
 ];

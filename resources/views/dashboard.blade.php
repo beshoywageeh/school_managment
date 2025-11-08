@@ -4,103 +4,268 @@
     {{ trans('Sidebar.Dashboard') }}
 @endsection
 
+@push('css')
+<style>
+    /* General Dashboard Styles */
+    .main-content {
+        background-color: #f4f7f6;
+    }
+
+    .dashboard-heading {
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Fast Add Button */
+    .fast-add-btn {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        border: none;
+        color: white;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        width: 100%;
+        text-align: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    }
+    .fast-add-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        color: white;
+    }
+
+    /* Stat Cards */
+    .dashboard-stat-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        overflow: hidden;
+    }
+    .dashboard-stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.12);
+    }
+    .dashboard-stat-card .card-body {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+    }
+    .dashboard-stat-card .stat-icon {
+        font-size: 2.5rem;
+        padding: 1rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+    }
+    .dashboard-stat-card .stat-count {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        color: #333;
+    }
+    .dashboard-stat-card .stat-label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #6c757d;
+        margin: 0;
+    }
+
+    /* Quick Actions */
+    .quick-action-tile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        border-radius: 1rem;
+        padding: 1.5rem 1rem;
+        text-align: center;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
+        height: 100%;
+    }
+    .quick-action-tile:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.12);
+        color: #007bff;
+    }
+    .quick-action-tile .action-icon {
+        margin-bottom: 1rem;
+        color: #007bff;
+    }
+    .quick-action-tile .action-label {
+        font-weight: 600;
+        margin: 0;
+    }
+
+    /* Chart Cards */
+    .chart-card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
+        padding: 1.5rem;
+    }
+</style>
+@endpush
+
 @section('content')
+
+    @php
+    $stat_icons = [
+        'Students' => ['icon' => 'fa-user-graduate', 'color' => 'bg-primary'],
+        'parents' => ['icon' => 'fa-users', 'color' => 'bg-success'],
+        'employees' => ['icon' => 'fa-user-tie', 'color' => 'bg-info'],
+    ];
+
+    $action_icons = [
+        'Students' => 'fa-user-plus',
+        'parents' => 'fa-user-friends',
+        'Grade' => 'fa-layer-group',
+        'Class_Rooms' => 'fa-chalkboard',
+        'schoolfees' => 'fa-file-invoice-dollar',
+        'jobs' => 'fa-briefcase',
+        'backup' => 'fa-database',
+    ];
+    @endphp
+
+    <!-- Fast Add Button -->
     @can('classes-create')
-        <div class="row mb-30">
-
-            <div class="col ">
-                <x-button type="" data-toggle="modal" data-target="#fastadd" class="primary btn-block">
-                    <h4 class="text-center text-white bold">
-                        <i class="ti-plus"></i>
-
-                        {{ trans('general.new') . ' ' . trans('Sidebar.Students') }}
-                    </h4>
-                </x-button>
+        <div class="row mb-4">
+            <div class="col">
+                <a href="#" data-toggle="modal" data-target="#fastadd" class="fast-add-btn">
+                    <i class="fas fa-plus mr-2"></i>
+                    {{ trans('general.new') . ' ' . trans('Sidebar.Students') }}
+                </a>
                 @include('backend.Students.fast_add_student')
             </div>
         </div>
     @endcan
-    <!--Stat Card-->
-    <div class="row mb-30">
+
+    <!-- Stat Cards -->
+    <div class="row mb-4">
         @can('Students-list')
-            @include('components.stat_card', [
-                'icon' => 'students.png',
-                'count' => $students,
-                'label' => trans('Sidebar.Students'),
-                'route' => 'Students.index',
-            ])
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card dashboard-stat-card h-100">
+                    <div class="card-body">
+                        <div class="stat-icon {{ $stat_icons['Students']['color'] }}">
+                            <i class="fas {{ $stat_icons['Students']['icon'] }}"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="stat-count">{{ $students }}</h3>
+                            <p class="stat-label">{{ trans('Sidebar.Students') }}</p>
+                        </div>
+                        <a href="{{ route('Students.index') }}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
         @endcan
         @can('parents-list')
-            @include('components.stat_card', [
-                'icon' => 'parents.png',
-                'count' => $parents,
-                'label' => trans('Sidebar.parents'),
-                'route' => 'parents.index',
-            ])
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card dashboard-stat-card h-100">
+                    <div class="card-body">
+                        <div class="stat-icon {{ $stat_icons['parents']['color'] }}">
+                            <i class="fas {{ $stat_icons['parents']['icon'] }}"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="stat-count">{{ $parents }}</h3>
+                            <p class="stat-label">{{ trans('Sidebar.parents') }}</p>
+                        </div>
+                        <a href="{{ route('parents.index') }}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
         @endcan
         @can('employees-list')
-            @include('components.stat_card', [
-                'icon' => 'employees.png',
-                'count' => $employees,
-                'label' => trans('Sidebar.employees'),
-                'route' => 'employees.index',
-            ])
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card dashboard-stat-card h-100">
+                    <div class="card-body">
+                        <div class="stat-icon {{ $stat_icons['employees']['color'] }}">
+                            <i class="fas {{ $stat_icons['employees']['icon'] }}"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="stat-count">{{ $employees }}</h3>
+                            <p class="stat-label">{{ trans('Sidebar.employees') }}</p>
+                        </div>
+                        <a href="{{ route('employees.index') }}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
         @endcan
     </div>
-    <!--Fasty Action Button-->
-    <div class="row mb-30">
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="dashboard-heading">{{ trans('general.quick_actions') }}</h4>
+        </div>
         @can('Students-create')
-            @include('components.action_button', [
-                'icon' => 'students.png',
-                'label' => trans('Sidebar.Students'),
-                'route' => 'Students.create',
-            ])
+            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{{ route('Students.create') }}" class="quick-action-tile">
+                    <div class="action-icon"><i class="fas {{ $action_icons['Students'] }} fa-2x"></i></div>
+                    <p class="action-label">{{ trans('general.new') }} {{ trans('Sidebar.Students') }}</p>
+                </a>
+            </div>
         @endcan
         @can('parents-create')
-            @include('components.action_button', [
-                'icon' => 'parents.png',
-                'label' => trans('Sidebar.parents'),
-                'route' => 'parents.create',
-            ])
+            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{{ route('parents.create') }}" class="quick-action-tile">
+                    <div class="action-icon"><i class="fas {{ $action_icons['parents'] }} fa-2x"></i></div>
+                    <p class="action-label">{{ trans('general.new') }} {{ trans('Sidebar.parents') }}</p>
+                </a>
+            </div>
         @endcan
         @can('grade-list')
-            @include('components.action_button', [
-                'icon' => 'score.png',
-                'label' => trans('Sidebar.Grade'),
-                'route' => 'grade.index',
-            ])
+            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{{ route('grade.index') }}" class="quick-action-tile">
+                    <div class="action-icon"><i class="fas {{ $action_icons['Grade'] }} fa-2x"></i></div>
+                    <p class="action-label">{{ trans('Sidebar.Grade') }}</p>
+                </a>
+            </div>
         @endcan
         @can('class_rooms-list')
-            @include('components.action_button', [
-                'icon' => 'classroom.png',
-                'label' => trans('Sidebar.Class_Rooms'),
-                'route' => 'class_rooms.index',
-            ])
+            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{{ route('class_rooms.index') }}" class="quick-action-tile">
+                    <div class="action-icon"><i class="fas {{ $action_icons['Class_Rooms'] }} fa-2x"></i></div>
+                    <p class="action-label">{{ trans('Sidebar.Class_Rooms') }}</p>
+                </a>
+            </div>
         @endcan
         @can('schoolfees-create')
-            @include('components.action_button', [
-                'icon' => 'money.png',
-                'label' => trans('Sidebar.schoolfees'),
-                'route' => 'schoolfees.create',
-            ])
+            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{{ route('schoolfees.create') }}" class="quick-action-tile">
+                    <div class="action-icon"><i class="fas {{ $action_icons['schoolfees'] }} fa-2x"></i></div>
+                    <p class="action-label">{{ trans('Sidebar.schoolfees') }}</p>
+                </a>
+            </div>
         @endcan
         @can('jobs-list')
-            @include('components.action_button', [
-                'icon' => 'job.png',
-                'label' => trans('Sidebar.jobs'),
-                'route' => 'jobs.index',
-            ])
+            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{{ route('jobs.index') }}" class="quick-action-tile">
+                    <div class="action-icon"><i class="fas {{ $action_icons['jobs'] }} fa-2x"></i></div>
+                    <p class="action-label">{{ trans('Sidebar.jobs') }}</p>
+                </a>
+            </div>
         @endcan
         @can('backup-list')
-            @include('components.action_button', [
-                'icon' => 'data-recovery.png',
-                'label' => trans('backup.create'),
-                'route' => 'backup.create',
-            ])
+            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
+                <a href="{{ route('backup.create') }}" class="quick-action-tile">
+                    <div class="action-icon"><i class="fas {{ $action_icons['backup'] }} fa-2x"></i></div>
+                    <p class="action-label">{{ trans('backup.create') }}</p>
+                </a>
+            </div>
         @endcan
     </div>
+
     <!--Charts-->
-    <div class="row mb-30">
+    <div class="row mb-4">
         @if (Auth::user()->hasAnyPermission([
                 'academic_year-list',
                 'schoolfees-list',
@@ -110,33 +275,21 @@
                 'payment_parts-list',
                 'exchange_bonds-list',
             ]))
-            <div class="col-md-6 mb-30">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="text-center card-title">
-                            {{ trans('Sidebar.accounting') }}
-                        </h5>
-                        <div class="chart-wrapper">
-                            <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
-                                <canvas id="canvas3" width="550"></canvas>
-                            </div>
-                        </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card chart-card h-100">
+                    <h5 class="card-title text-center dashboard-heading">{{ trans('Sidebar.accounting') }}</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="canvas3" style="width: 100%; height: 300px;"></canvas>
                     </div>
                 </div>
             </div>
         @endif
         @if (Auth::user()->hasAnyPermission(['Students-list', 'grade-list']))
-            <div class="col-md-6 mb-30">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="text-center card-title">
-                            {{ trans('report.student_numbers') }}
-                        </h5>
-                        <div class="chart-wrapper">
-                            <div id="canvas-holder" style="width: 100%; margin: 0 auto; height: 300px;">
-                                <canvas id="canvas4" width="550"></canvas>
-                            </div>
-                        </div>
+            <div class="col-lg-6 mb-4">
+                <div class="card chart-card h-100">
+                    <h5 class="card-title text-center dashboard-heading">{{ trans('report.student_numbers') }}</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="canvas4" style="width: 100%; height: 300px;"></canvas>
                     </div>
                 </div>
             </div>
@@ -145,6 +298,7 @@
 @endsection
 
 @push('scripts')
+    {{-- Scripts are unchanged --}}
     <script>
         const ctx3 = document.getElementById('canvas3').getContext('2d');
         new Chart(ctx3, {
@@ -153,10 +307,12 @@
                 datasets: [{
                     data: [{{ $credit }}, {{ $payment_parts }}, {{ $payments }}],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(255, 159, 64, 0.5)',
-                        'rgba(255, 205, 86, 0.5)',
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
                     ],
+                    borderColor: '#fff',
+                    borderWidth: 2,
                     label: 'Dataset 1'
                 }],
                 labels: [
@@ -167,11 +323,17 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 legend: {
                     position: 'bottom',
                     labels: {
-                        fontColor: "#9295a2",
+                        fontColor: "#6c757d",
+                        padding: 20
                     },
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
                 }
             }
         });
@@ -181,29 +343,31 @@
             type: 'bar',
             data: {
                 datasets: [{
-                    data: {!! json_encode($grades->pluck('students_count')) !!},
-                    backgroundColor: {!! json_encode(
-                        $grades->map(function () {
-                            return 'rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0, 255) . ', 0.2)';
-                        }),
-                    ) !!},
-                    borderColor: {!! json_encode(
-                        $grades->map(function ($grade, $index) {
-                            return 'rgba(' . rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(0, 255) . ', 1)';
-                        }),
-                    ) !!},
-                    borderWidth: 2,
-                    label: ''
+                    data: {!! json_encode($chart_data) !!},
+                    backgroundColor: {!! json_encode($chart_bg_colors) !!},
+                    borderColor: {!! json_encode($chart_border_colors) !!},
+                    borderWidth: 1,
+                    borderRadius: 5
                 }],
-                labels: {!! json_encode($grades->pluck('name')) !!}
+                labels: {!! json_encode($chart_labels) !!}
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 legend: {
-                    position: 'bottom',
-                    labels: {
-                        fontColor: "#9295a2"
-                    }
+                    display: false,
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            autoSkip: false
+                        }
+                    }]
                 }
             }
         });
@@ -235,7 +399,7 @@
                     checkBirthInput.value = `${years} سنه, ${months} شهر, ${days} يوم`;
                 });
             } else {
-                console.error('Input elements not found');
+                // console.error('Input elements not found');
             }
         });
     </script>
