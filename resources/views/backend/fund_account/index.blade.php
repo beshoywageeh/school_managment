@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-{{trans('sidebar.fund_account')}}
+{{trans('Sidebar.fund_account')}}
 @endsection
 @section('content')
 

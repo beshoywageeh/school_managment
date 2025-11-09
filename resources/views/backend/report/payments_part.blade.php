@@ -1,3 +1,4 @@
+@if($data['is_pdf'])
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -92,7 +93,7 @@
                 <table class="data-table" style="width:100%">
                     <tr>
                         <td class="text-center" width="25%">
-                            {!! $school->heading_right !!}
+                            {!! $data['school_data']->heading_right !!}
                         </td>
                         <td class="text-center" width="50%">
                             {{ trans('report.payments_parts') }}
@@ -106,13 +107,13 @@
 
                         </td>
                         <td class="text-left">
-                            @if ($school->image == null)
+                            @if ($data['school_data']->image == null)
                                 <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
+                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $data['school_data']->name }}">
                             @else
                                 <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                                    alt="{{ $school->name }}">
+                                    src="{{ storage_path('app/attachments/schools/' . $data['school_data']->slug . '/' . $data['school_data']->image->filename) }}"
+                                    alt="{{ $data['school_data']->name }}">
                             @endif
                         </td>
                     </tr>
@@ -160,3 +161,42 @@
 </body>
 
 </html>
+@else
+    @extends('layouts.app')
+    @section('content')
+        <a href="{{ route('report.payment_parts.pdf', request()->query()) }}" class="btn btn-primary">Export to PDF</a>
+        <table class="table text-center table-striped table-bordered table-sm">
+            <thead>
+
+                <tr class="text-white bg-dark">
+                    <th>#</th>
+                    <th>{{ trans('report.student') }}</th>
+                    <th>{{ trans('General.grade') }}</th>
+                    <th>{{ trans('report.classroom') }}</th>
+                    <th>{{ trans('report.date') }}</th>
+                    <th>{{ trans('General.status') }}</th>
+                    <th>{{ trans('report.amount') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($data['parts'] as $payment)
+                    <tr>
+                        <td width="5%">{{ $loop->index + 1 }}</td>
+                        <td>{{ $payment->students->name }}</td>
+                        <td>{{ $payment->grades->name }}</td>
+                        <td>{{ $payment->classes->name }}</td>
+                        <td>{{ $payment->date }}</td>
+                        <td>{{ $payment->status }}</td>
+                        <td>{{ Number::currency($payment->amount, 'EGP', 'ar') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="6">{{ trans('report.total') }}</th>
+                    <th>{{ Number::currency($data['parts']->sum('amount'), 'EGP', 'ar') }}</th>
+                </tr>
+            </tfoot>
+        </table>
+    @endsection
+@endif

@@ -15,9 +15,10 @@ use App\Models\Recipt_Payment;
 use App\Models\School_Fee;
 use App\Models\stock;
 use App\Models\Student;
+use App\Services\PDFExportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use PDF;
+
 
 class ReportController extends Controller
 {
@@ -35,29 +36,32 @@ class ReportController extends Controller
         return view('backend.report.index', get_defined_vars());
     }
 
-    public function ExportStudents()
+    private function get_export_students_data()
     {
-        $data = Grade::select('id', 'name', 'created_at', 'updated_at')->withCount('students')->get();
-        $data->load('students:id,name,grade_id,student_status,birth_date,birth_at_begin,gender,parent_id');
-
-        $pdf = PDF::loadView('backend.report.students', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 2,
-            'margin_right' => 2,
-            'margin_top' => 35,
-            'margin_bottom' => 10,
-            'margin_header' => 2,
-            'margin_footer' => 2,
-            'orientation' => 'L',
-        ]);
-
-        return $pdf->download('students.pdf');
-        // return view('backend.report.students', get_defined_vars());
+        $data=[];
+        $data['grade'] = Grade::select('id', 'name', 'created_at', 'updated_at')->withCount('students')->get();
+        $data['grade']->load('students:id,name,grade_id,student_status,birth_date,birth_at_begin,gender,parent_id');
+        $data['school_data']=$this->getSchool();
+        return $data;
     }
 
-    public function payment_parts(Request $request)
+    public function export_students_view()
     {
+        $data = $this->get_export_students_data();
+        $data['is_pdf'] = false;
+        return view('backend.report.students', ['data' => $data]);
+    }
+
+    public function export_students_pdf(PDFExportService $PDFExportService)
+    {
+        $data = $this->get_export_students_data();
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('students','stream',$data,'L');
+    }
+
+    private function get_payment_parts_data(Request $request)
+    {
+        $data = [];
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
         $query = PaymentParts::whereBetween('date', [$data['from'], $data['to']])->with('students', 'grades', 'classes');
@@ -65,143 +69,170 @@ class ReportController extends Controller
             $query->where('payment_status', $request->payment_status);
         }
         $data['parts'] = $query->get();
-
-        $pdf = PDF::loadView('backend.report.payments_part', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 2,
-            'margin_right' => 2,
-            'margin_top' => 25,
-            'margin_bottom' => 10,
-            'margin_header' => 2,
-            'margin_footer' => 2,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('payment_parts.pdf');
+        $data['school_data']=$this->getSchool();
+        return $data;
     }
 
-    public function StockProducts()
+    public function payment_parts_view(Request $request)
     {
+        $data = $this->get_payment_parts_data($request);
+        $data['is_pdf'] = false;
+        return view('backend.report.payments_part', ['data' => $data]);
+    }
+
+    public function payment_parts_pdf(Request $request, PDFExportService $PDFExportService)
+    {
+        $data = $this->get_payment_parts_data($request);
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('payments_part','stream',$data,'P');
+    }
+
+    private function get_stock_products_data()
+    {
+        $data=[];
         $data['stocks'] = stock::with('orders')->get();
-        $pdf = PDF::loadView('backend.report.stock_product', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_header' => 1,
-            'margin_footer' => 2,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('stocks.pdf');
+        $data['school_data']=$this->getSchool();
+        return $data;
     }
 
-    public function clothes_stocks()
+    public function stock_products_view()
     {
-        $data = clothes::with('orders', 'classroom', 'grade')->get();
-        $pdf = PDF::loadView('backend.report.clothes_stocks', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 25,
-            'margin_bottom' => 10,
-            'margin_header' => 1,
-            'margin_footer' => 2,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('clothes.pdf');
+        $data = $this->get_stock_products_data();
+        $data['is_pdf'] = false;
+        return view('backend.report.stock_products', ['data' => $data]);
     }
 
-    public function books_sheets()
+    public function stock_products_pdf(PDFExportService $PDFExportService)
     {
-        $data = book_sheet::with('orders', 'classroom', 'grade')->get();
-        $pdf = PDF::loadView('backend.report.books_sheets_stocks', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 25,
-            'margin_bottom' => 10,
-            'margin_header' => 1,
-            'margin_footer' => 2,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('clothes.pdf');
+        $data = $this->get_stock_products_data();
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('stock_products','stream',$data,'P');
     }
 
-    public function clothe_stock(Request $request)
+    private function get_clothes_stocks_data()
     {
+        $data=[];
+        $data['school_data']=$this->getSchool();
+
+        $data['clothes'] = clothes::with('orders', 'classroom', 'grade')->get();
+        return $data;
+    }
+
+    public function clothes_stocks_view()
+    {
+        $data = $this->get_clothes_stocks_data();
+        $data['is_pdf'] = false;
+        return view('backend.report.clothes_stocks', ['data' => $data]);
+    }
+
+    public function clothes_stocks_pdf(PDFExportService $PDFExportService)
+    {
+        $data = $this->get_clothes_stocks_data();
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('clothes','stream',$data,'P');
+    }
+
+    public function books_sheets(PDFExportService $PDFExportService)
+    {
+        $data=[];
+        $data['school_data']=$this->getSchool();
+
+        $data['book_sheet'] = book_sheet::with('orders', 'classroom', 'grade')->get();
+        return $PDFExportService->PrintPDF('books_sheet','stream',$data,'P');
+
+    }
+
+    public function clothe_stock(Request $request,PDFExportService $PDFExportService)
+    {
+        $data=[];
         $id = $request->stock;
         $data['stock'] = clothes::where('id', $id)->with('orders')->first();
 
+        if (!$data['stock']) {
+            return redirect()->back()->with('info', trans('report.no_data_found'));
+        }
+
         $data['total'] = $this->calculateTotals($data['stock']);
 
-        $pdf = PDF::loadView('backend.report.clothe_stock', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 25,
-            'margin_bottom' => 10,
-            'margin_header' => 1,
-            'margin_footer' => 2,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('clothes.pdf');
+        $data['school_data']=$this->getSchool();
+        return $PDFExportService->PrintPDF('clothe_stock','stream',$data,'P');
+        
     }
 
-    public function book_sheet_stock(Request $request)
+    private function get_book_sheet_stock_data(Request $request)
     {
         $id = $request->stock;
         $data['stock'] = book_sheet::where('id', $id)->with('orders')->first();
 
+        if (!$data['stock']) {
+            return null;
+        }
+
         $data['total'] = $this->calculateTotals($data['stock']);
-
-        $pdf = PDF::loadView('backend.report.book_sheet_stock', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_top' => 25,
-            'margin_bottom' => 10,
-            'margin_header' => 1,
-            'margin_footer' => 2,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('book_sheet.pdf');
+        $data['school_data'] = $this->getSchool();
+        return $data;
     }
 
-    public function stock_product(Request $request)
+    public function book_sheet_stock_view(Request $request)
+    {
+        $data = $this->get_book_sheet_stock_data($request);
+        if (!$data) {
+            return redirect()->back()->with('info', trans('report.no_data_found'));
+        }
+        $data['is_pdf'] = false;
+        return view('backend.report.book_sheet_stock', ['data' => $data]);
+    }
+
+    public function book_sheet_stock_pdf(Request $request, PDFExportService $PDFExportService)
+    {
+        $data = $this->get_book_sheet_stock_data($request);
+        if (!$data) {
+            return redirect()->back()->with('info', trans('report.no_data_found'));
+        }
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('book_sheet_stock', 'stream', $data, 'P');
+    }
+
+    private function get_stock_product_data(Request $request)
     {
         $data['stock'] = stock::where('id', $request->stock)->with('orders')->first();
 
-        $data['stocks'] = $this->calculateTotals($data['stock']);
-        $pdf = PDF::loadView('backend.report.stock_product_view', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 10,
-            'margin_right' => 10,
-            'margin_header' => 1,
-            'margin_footer' => 10,
-            'orientation' => 'P',
-        ]);
+        if (!$data['stock']) {
+            return null;
+        }
 
-        return $pdf->stream($data['stock']->name.'.pdf');
+        $data['stocks'] = $this->calculateTotals($data['stock']);
+        $data['school_data'] = $this->getSchool();
+        return $data;
     }
 
-    public function student_report($type, Request $request)
+    public function stock_product_view(Request $request)
+    {
+        $data = $this->get_stock_product_data($request);
+        if (!$data) {
+            return redirect()->back()->with('info', trans('report.no_data_found'));
+        }
+        $data['is_pdf'] = false;
+        return view('backend.report.stock_product_view', ['data' => $data]);
+    }
+
+    public function stock_product_pdf(Request $request, PDFExportService $PDFExportService)
+    {
+        $data = $this->get_stock_product_data($request);
+        if (!$data) {
+            return redirect()->back()->with('info', trans('report.no_data_found'));
+        }
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('stock_product_view', 'stream', $data, 'P');
+    }
+
+    private function get_student_report_data($type, Request $request)
     {
         $year_start = Carbon::now()->format('Y');
         $data['acc'] = acadmice_year::whereYear('year_start', $year_start)->first();
 
         if (is_null($data['acc'])) {
-            return redirect()->back()->with('info', trans('General.noDataToShow'));
+            return null;
         }
         if ($type == 41) {
             $data['students'] = Student::where('classroom_id', $request->classroom_id)->where('student_status', 0)->where('acadmiecyear_id', $data['acc']->id)
@@ -213,43 +244,56 @@ class ReportController extends Controller
 
             $data['classroom'] = class_room::where('id', $request->classroom_id)->with('grade')->first();
 
-            // Stream PDF generation to handle memory efficiently
-            return \PDF::loadView('backend.report.41', compact('data'), [], [
-                'format' => 'A4',
-                'default_font_size' => 10,
-                'margin_left' => 5,
-                'margin_right' => 5,
-                'margin_top' => 35,
-                'margin_bottom' => 20,
-                'margin_header' => 1,
-                'margin_footer' => 1,
-                'orientation' => 'L',
-            ])
-                ->stream('student_41.pdf');
+            $data['school_data'] = $this->getSchool();
+            return $data;
         }
+        return null; // Handle other types or no data found
     }
 
-    public function exception_fee(Request $request)
+    public function student_report_view($type, Request $request)
+    {
+        $data = $this->get_student_report_data($type, $request);
+        if (is_null($data)) {
+            return redirect()->back()->with('info', trans('General.noDataToShow'));
+        }
+        $data['is_pdf'] = false;
+        return view('backend.report.41', ['data' => $data]);
+    }
+
+    public function student_report_pdf($type, Request $request, PDFExportService $PDFExportService)
+    {
+        $data = $this->get_student_report_data($type, $request);
+        if (is_null($data)) {
+            return redirect()->back()->with('info', trans('General.noDataToShow'));
+        }
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('41', 'stream', $data, 'L');
+    }
+
+    private function get_exception_fee_data(Request $request)
     {
         $data['begin'] = Carbon::parse($request->start_date)->format('Y-m-d');
         $data['end'] = Carbon::parse($request->end_date)->format('Y-m-d');
         $data['exception_list'] = ExcptionFees::whereBetween('date', [$data['begin'], $data['end']])->with('students:id,name,parent_id')->get();
-        $pdf = PDF::loadView('backend.report.exception_view', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 5,
-            'margin_right' => 5,
-            'margin_top' => 25,
-            'margin_bottom' => 25,
-            'margin_header' => 1,
-            'margin_footer' => 1,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('exception_fee.pdf');
+        $data['school_data'] = $this->getSchool();
+        return $data;
     }
 
-    public function payment_status(Request $request)
+    public function exception_fee_view(Request $request)
+    {
+        $data = $this->get_exception_fee_data($request);
+        $data['is_pdf'] = false;
+        return view('backend.report.exception_view', ['data' => $data]);
+    }
+
+    public function exception_fee_pdf(Request $request, PDFExportService $PDFExportService)
+    {
+        $data = $this->get_exception_fee_data($request);
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('exception_view', 'stream', $data, 'P');
+    }
+
+    private function get_payment_status_data(Request $request)
     {
         $year = Carbon::now()->format('Y');
         $data['acc_year'] = acadmice_year::whereYear('year_start', $year)->first(['id', 'view']);
@@ -265,45 +309,50 @@ class ReportController extends Controller
         }
 
         $data['exp'] = $query->get()->groupBy('grades.name');
-        $pdf = PDF::loadView('backend.report.payment_status_view', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 5,
-            'margin_right' => 5,
-            'margin_top' => 5,
-            'margin_bottom' => 25,
-            'margin_header' => 1,
-            'margin_footer' => 1,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('payment_status.pdf');
+        $data['school_data'] = $this->getSchool();
+        return $data;
     }
 
-    public function payments(Request $request)
+    public function payment_status_view(Request $request)
+    {
+        $data = $this->get_payment_status_data($request);
+        $data['is_pdf'] = false;
+        return view('backend.report.payment_status_view', ['data' => $data]);
+    }
+
+    public function payment_status_pdf(Request $request, PDFExportService $PDFExportService)
+    {
+        $data = $this->get_payment_status_data($request);
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('payment_status_view', 'stream', $data, 'P');
+    }
+
+    private function get_payments_data(Request $request)
     {
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
         $data['payment'] = Recipt_Payment::whereBetween('date', [$data['from'], $data['to']])->with(['student' => function ($q) {
             $q->with('classroom');
         }], 'acc_year')->get();
-        $pdf = PDF::loadView('backend.report.payments', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 5,
-            'margin_right' => 5,
-            'margin_top' => 25,
-            'margin_bottom' => 25,
-            'margin_header' => 1,
-            'margin_footer' => 1,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('payments.pdf');
-
+        $data['school_data'] = $this->getSchool();
+        return $data;
     }
 
-    public function fees_invoices(Request $request)
+    public function payments_view(Request $request)
+    {
+        $data = $this->get_payments_data($request);
+        $data['is_pdf'] = false;
+        return view('backend.report.payments', ['data' => $data]);
+    }
+
+    public function payments_pdf(Request $request, PDFExportService $PDFExportService)
+    {
+        $data = $this->get_payments_data($request);
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('payments', 'stream', $data, 'P');
+    }
+
+    private function get_fees_invoices_data(Request $request)
     {
         $year = Carbon::now()->format('Y');
         $data['acc_year'] = acadmice_year::whereYear('year_start', $year)->first(['id', 'view']);
@@ -351,22 +400,25 @@ class ReportController extends Controller
             'grades.name',
             'classes.name',
         ]);
-        $pdf = PDF::loadView('backend.report.fee_invoices', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 5,
-            'margin_right' => 5,
-            'margin_top' => 20,
-            'margin_bottom' => 25,
-            'margin_header' => 2,
-            'margin_footer' => 1,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('fee_invoices.pdf');
+        $data['school_data'] = $this->getSchool();
+        return $data;
     }
 
-    public function student_tameen(Request $request)
+    public function fees_invoices_view(Request $request)
+    {
+        $data = $this->get_fees_invoices_data($request);
+        $data['is_pdf'] = false;
+        return view('backend.report.fee_invoices', ['data' => $data]);
+    }
+
+    public function fees_invoices_pdf(Request $request, PDFExportService $PDFExportService)
+    {
+        $data = $this->get_fees_invoices_data($request);
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('fee_invoices', 'stream', $data, 'P');
+    }
+
+    private function get_student_tameen_data(Request $request)
     {
         $data['type'] = $request->type;
         $data['classroom'] = class_room::findorfail($request->classroom_id);
@@ -374,41 +426,42 @@ class ReportController extends Controller
         $data['aa'] = acadmice_year::whereyear('year_start', $date)->first();
         $data['students'] = student::where('classroom_id', $request->classroom_id)->where('tameen', 1)->with('parent:id,Father_Phone,address')->get(['name', 'national_id', 'parent_id', 'birth_date', 'gender']);
         if (is_null($data['students'])) {
-            return redirect()->back()->with('info', trans('report.no_data_found'));
+            return null;
         }
 
+        $data['school_data'] = $this->getSchool();
+        return $data;
+    }
+
+    public function student_tameen_view(Request $request)
+    {
+        $data = $this->get_student_tameen_data($request);
+        if (is_null($data)) {
+            return redirect()->back()->with('info', trans('report.no_data_found'));
+        }
+        $data['is_pdf'] = false;
         if ($data['type'] == 1) {
-            $pdf = PDF::loadView('backend.report.student_tameen_1', ['data' => $data], [], [
-                'format' => 'A4',
-                'default_font_size' => 10,
-                'margin_left' => 5,
-                'margin_right' => 5,
-                'margin_top' => 20,
-                'margin_bottom' => 25,
-                'margin_header' => 2,
-                'margin_footer' => 1,
-                'orientation' => 'P',
-            ]);
-
-            return $pdf->stream('tammen.pdf');
+            return view('backend.report.student_tameen_1', ['data' => $data]);
         } else {
-            $pdf = PDF::loadView('backend.report.student_tameen_2', ['data' => $data], [], [
-                'format' => 'A4',
-                'default_font_size' => 10,
-                'margin_left' => 5,
-                'margin_right' => 5,
-                'margin_top' => 20,
-                'margin_bottom' => 25,
-                'margin_header' => 2,
-                'margin_footer' => 1,
-                'orientation' => 'P',
-            ]);
-
-            return $pdf->stream('tammen.pdf');
+            return view('backend.report.student_tameen_2', ['data' => $data]);
         }
     }
 
-    public function credit(Request $request)
+    public function student_tameen_pdf(Request $request, PDFExportService $PDFExportService)
+    {
+        $data = $this->get_student_tameen_data($request);
+        if (is_null($data)) {
+            return redirect()->back()->with('info', trans('report.no_data_found'));
+        }
+        $data['is_pdf'] = true;
+        if ($data['type'] == 1) {
+            return $PDFExportService->PrintPDF('student_tameen_1', 'stream', $data, 'P');
+        } else {
+            return $PDFExportService->PrintPDF('student_tameen_2', 'stream', $data, 'P');
+        }
+    }
+
+    private function get_credit_data(Request $request)
     {
         $query = Fee_invoice::where('status', 0)->with('students', 'grades', 'classes', 'fees', 'acd_year');
 
@@ -418,39 +471,45 @@ class ReportController extends Controller
         }
         $data['credit'] = $query->get();
 
-        $pdf = PDF::loadView('backend.report.credit', ['data' => $data], [], [
-            'format' => 'A4',
-            'default_font_size' => 10,
-            'margin_left' => 5,
-            'margin_right' => 5,
-            'margin_top' => 20,
-            'margin_bottom' => 20,
-            'margin_header' => 1,
-            'margin_footer' => 1,
-            'orientation' => 'P',
-        ]);
-
-        return $pdf->stream('credit.pdf');
+        $data['school_data'] = $this->getSchool();
+        return $data;
     }
 
-    public function school_fees()
+    public function credit_view(Request $request)
+    {
+        $data = $this->get_credit_data($request);
+        $data['is_pdf'] = false;
+        return view('backend.report.credit', ['data' => $data]);
+    }
+
+    public function credit_pdf(Request $request, PDFExportService $PDFExportService)
+    {
+        $data = $this->get_credit_data($request);
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('credit', 'stream', $data, 'P');
+    }
+
+    private function get_school_fees_data()
     {
         $date = date('Y');
         $data['acc_year'] = acadmice_year::whereYear('year_start', $date)->first(['id', 'view']);
         $data['school_fees'] = School_Fee::where('academic_year_id', $data['acc_year']->id)->with(['grade:id,name', 'classroom:id,name'])->get()->groupBy(['grade.name', 'classroom.name']);
-        $pdf = PDF::loadView('backend.report.school_fees', ['data' => $data], [], [
-            'format' => 'A5',
-            'default_font_size' => 10,
-            'margin_left' => 5,
-            'margin_right' => 5,
-            'margin_top' => 20,
-            'margin_bottom' => 20,
-            'margin_header' => 1,
-            'margin_footer' => 1,
-            'orientation' => 'P',
-        ]);
+        $data['school_data'] = $this->getSchool();
+        return $data;
+    }
 
-        return $pdf->stream('school_fee.pdf');
+    public function school_fees_view()
+    {
+        $data = $this->get_school_fees_data();
+        $data['is_pdf'] = false;
+        return view('backend.report.school_fees', ['data' => $data]);
+    }
+
+    public function school_fees_pdf(PDFExportService $PDFExportService)
+    {
+        $data = $this->get_school_fees_data();
+        $data['is_pdf'] = true;
+        return $PDFExportService->PrintPDF('school_fees', 'stream', $data, 'P');
     }
 
     private function calculateTotals($stocks)
@@ -458,14 +517,17 @@ class ReportController extends Controller
         $previousstock = 0;
         $totals = [];
 
-        foreach ($stocks->orders->sortBy('created_at') as $stock) {
-            $previousstock += $stock->pivot->quantity_in - $stock->pivot->quantity_out;
-            $totals[$stock->id] = [
-                'stk' => $stock,
-                'total' => $previousstock,
-            ];
+        if ($stocks && $stocks->orders) {
+            foreach ($stocks->orders->sortBy('created_at') as $stock) {
+                $previousstock += $stock->pivot->quantity_in - $stock->pivot->quantity_out;
+                $totals[$stock->id] = [
+                    'stk' => $stock,
+                    'total' => $previousstock,
+                ];
+            }
         }
 
         return $totals;
     }
 }
+

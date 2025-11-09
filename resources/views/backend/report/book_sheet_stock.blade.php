@@ -1,3 +1,4 @@
+@if($data['is_pdf'])
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -55,6 +56,71 @@
 </style>
 
 <body>
+    <htmlpageheader name="page-header">
+        <div style="height: 5px; width: 95%; margin: auto;">
+            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
+                <table class="data-table" style="width:100%">
+                    <tr>
+                        <td class="text-center" width="25%">
+                            <center>
+
+                                {!! $data['school_data']->heading_right !!}
+                            </center>
+                        </td>
+                        <td class="text-center" width="50%">
+                            <center>
+                                <p>{{$data['stock']->name}}
+                                    </p><br>
+                                <p>{{trans('report.print_date',['date'=>date('Y-m-d')])}}</p>
+                            </center>
+                        </td>
+                        <td class="text-left">
+                            @if ($data['school_data']->image == null)
+                                <img class="img-fluid" style="max-width:10%"
+                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $data['school_data']->name }}">
+                            @else
+                                <img class="img-fluid" style="max-width:10%"
+                                    src="{{ storage_path('app/attachments/schools/' . $data['school_data']->slug . '/' . $data['school_data']->image->filename) }}"
+                                    alt="{{ $data['school_data']->name }}">
+                            @endif
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </htmlpageheader>
+    <htmlpagefooter name="page-footer">
+        <div style="height: 5px; width: 95%; margin: auto;">
+            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">
+                <table class="data-table" style="width:100%">
+                    <tr>
+                        <td class="text-right" width="20%">
+                            <div class="text-center">
+                                <center>
+
+
+                                </center>
+                            </div>
+                        </td>
+                        <td class="text-center" width="50%">
+                            <center>
+
+                                {PAGENO}
+                            </center>
+                        </td>
+                        <td class="text-left">
+
+                            <center>
+
+                                {!! $data['school_data']->footer_left !!}
+                            </center>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </htmlpagefooter>
     <table class="table">
 
         <thead>
@@ -112,71 +178,69 @@
             </tr>
         </tfoot>
     </table>
-    <htmlpageheader name="page-header">
-        <div style="height: 5px; width: 95%; margin: auto;">
-            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
-                <table class="data-table" style="width:100%">
-                    <tr>
-                        <td class="text-center" width="25%">
-                            <center>
-
-                                {!! $school->heading_right !!}
-                            </center>
-                        </td>
-                        <td class="text-center" width="50%">
-                            <center>
-                                <p>{{$data['stock']->name}}
-                                    </p><br>
-                                <p>{{trans('report.print_date',['date'=>date('Y-m-d')])}}</p>
-                            </center>
-                        </td>
-                        <td class="text-left">
-                            @if ($school->image == null)
-                                <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
-                            @else
-                                <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                                    alt="{{ $school->name }}">
-                            @endif
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </htmlpageheader>
-    <htmlpagefooter name="page-footer">
-        <div style="height: 5px; width: 95%; margin: auto;">
-            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">
-                <table class="data-table" style="width:100%">
-                    <tr>
-                        <td class="text-right" width="20%">
-                            <div class="text-center">
-                                <center>
-
-
-                                </center>
-                            </div>
-                        </td>
-                        <td class="text-center" width="50%">
-                            <center>
-
-                                {PAGENO}
-                            </center>
-                        </td>
-                        <td class="text-left">
-
-                            <center>
-
-                                {!! $school->footer_left !!}
-                            </center>
-
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </htmlpagefooter>
 </body>
 
 </html>
+@else
+    @extends('layouts.app')
+    @section('content')
+        <a href="{{ route('report.book_sheet_stock.pdf', request()->query()) }}" class="btn btn-primary">Export to PDF</a>
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{{ trans('report.auto_number') }}</th>
+                    <th>{{ trans('general.created_at') }}</th>
+                    <th>{{ trans('report.type') }}</th>
+                    <th>{{ trans('report.quantity_in') }}</th>
+                    <th>{{ trans('report.quantity_out') }}</th>
+                    <th>{{ trans('report.quantity_total') }}</th>
+                </tr>
+            </thead>
+            @forelse ($data['total'] as $order)
+                @if ($loop->first)
+                    <tr>
+                        <td>{{ $loop->index + 1 }}</td>
+                        <td>{{ $data['stock']->name }}</td>
+                        <td>{{ $data['stock']->opening_stock_date }}</td>
+                        <td colspan="4">
+                            <h6>{{ trans('report.opening_stock') }}
+                                &nbsp;&nbsp;===========>&nbsp;&nbsp;{{ number_format($data['stock']->opening_qty, 2) }}
+                            </h6>
+                        </td>
+                    </tr>
+                @endif
+                <tr>
+                    <td>{{ $loop->index + 1 }}</td>
+                    <td>{{ $order['stk']->auto_number }}</td>
+                    <td>{{ $order['stk']->created_at->format('Y-m-d') }}</td>
+                    <td>
+                        @if ($order['stk']->type == '1')
+                            {{ trans('report.inorder') }}
+                        @elseif($order['stk']->type == '2')
+                            {{ trans('report.outorder') }}
+                        @else
+                            {{ trans('report.inventory') }}
+                        @endif
+                    </td>
+                    <td>{{ number_format($order['stk']->pivot->quantity_in, 2) }}</td>
+                    <td>{{ number_format($order['stk']->pivot->quantity_out, 2) }}</td>
+                    <td>{{ number_format($order['total'] + $data['stock']->opening_qty, 2) }}</td>
+                </tr>
+            @empty
+                <tr class="text-center alert-info">
+                    <td colspan="7">{{ trans('report.no_data_found') }}</td>
+                </tr>
+            @endforelse
+            <tfoot>
+                <tr>
+                    <th colspan='4'>{{ trans('report.total') }}</th>
+                    <th>{{ number_format($data['stock']->orders->sum('pivot.quantity_in') + $data['stock']->opening_qty, 2) }}</th>
+                    <th>{{ number_format($data['stock']->orders->sum('pivot.quantity_out'), 2) }}</th>
+                    <th>{{ number_format($order['total'] + $data['stock']->opening_qty, 2) }}</th>
+                </tr>
+            </tfoot>
+        </table>
+    @endsection
+@endif

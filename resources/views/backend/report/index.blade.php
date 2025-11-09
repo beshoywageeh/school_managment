@@ -19,7 +19,7 @@
         }
 
         .report-card .card-header {
-            background: linear-gradient(45deg, #7B1FA2, #4A148C);
+            background: linear-gradient(90deg,rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%);
             color: #fff;
             border-bottom: none;
             border-top-left-radius: 1rem;

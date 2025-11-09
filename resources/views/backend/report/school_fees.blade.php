@@ -1,3 +1,4 @@
+@if($data['is_pdf'])
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -68,7 +69,7 @@ p {
                         <td class="text-right" width="20%">
                             <div class="text-center">
                                 <center>
-
+                                    {!! $data['school_data']->footer_right !!}
                                 </center>
                             </div>
                         </td>
@@ -77,6 +78,7 @@ p {
                         </td>
                         <td class="text-left">
                             <center>
+                                {!! $data['school_data']->footer_left !!}
                             </center>
 
                         </td>
@@ -94,7 +96,7 @@ p {
                         <td class="text-center" width="25%">
                             <center>
 
-                                {!! $school->heading_right !!}
+                                {!! $data['school_data']->heading_right !!}
                             </center>
                         </td>
                         <td class="text-center" width="50%">
@@ -105,13 +107,13 @@ p {
                             </center>
                         </td>
                         <td class="text-left">
-                            @if ($school->image == null)
+                            @if ($data['school_data']->image == null)
                             <img class="img-fluid" style="max-width:10%"
-                                src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
+                                src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $data['school_data']->name }}">
                             @else
                             <img class="img-fluid" style="max-width:10%"
-                                src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                                alt="{{ $school->name }}">
+                                src="{{ storage_path('app/attachments/schools/' . $data['school_data']->slug . '/' . $data['school_data']->image->filename) }}"
+                                alt="{{ $data['school_data']->name }}">
                             @endif
                         </td>
                     </tr>
@@ -170,3 +172,54 @@ p {
 </body>
 
 </html>
+@else
+    @extends('layouts.app')
+    @section('content')
+        <a href="{{ route('report.school_fees.pdf', request()->query()) }}" class="btn btn-primary">Export to PDF</a>
+        @foreach ($data['school_fees'] as $grade => $classrooms)
+            @foreach ($classrooms as $classroom => $fees)
+                <table class="table" style="margin-bottom: 0.5rem">
+                    <tr>
+                        <th>
+                            <h5>{{ $grade }}</h5>
+                        </th>
+                        <th>
+                            <h5>{{ $classroom }}</h5>
+                        </th>
+                    </tr>
+                </table>
+                <table class="table text-center table-striped table-bordered table-sm">
+                    <thead>
+
+                        <tr class="text-white bg-dark">
+                            <th>#</th>
+                            <th>{{ trans('report.fee_title') }}</th>
+                            <th>{{ trans('report.amount') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($fees as $fee)
+                            <tr>
+                                <td width="5%">{{ $loop->index + 1 }}</td>
+                                <td>{{ $fee->title }}</td>
+                                <td>{{ Number::currency($fee->amount, 'EGP', 'ar') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">{{ trans('report.total') }}</th>
+                            <th colspan="1">{{ Number::currency($fees->sum('amount'), 'EGP', 'ar') }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                @if (!$loop->last)
+                    <pagebreak></pagebreak>
+                @endif
+            @endforeach
+            @if (!$loop->last)
+                <pagebreak></pagebreak>
+            @endif
+        @endforeach
+    @endsection
+@endif

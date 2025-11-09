@@ -1,3 +1,4 @@
+@if($data['is_pdf'])
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -60,69 +61,66 @@
 
 <body>
 
-{{--    <htmlpagefooter name="page-footer">--}}
-{{--        <div style="height: 5px; width: 95%; margin: auto;">--}}
-{{--            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">--}}
-{{--                <table class="data-table" style="width:100%">--}}
-{{--                    <tr>--}}
-{{--                        <td class="text-right" width="20%">--}}
-{{--                            <div class="text-center">--}}
-{{--                                <center>--}}
+    <htmlpagefooter name="page-footer">
+        <div style="height: 5px; width: 95%; margin: auto;">
+            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">
+                <table class="data-table" style="width:100%">
+                    <tr>
+                        <td class="text-right" width="20%">
+                            <div class="text-center">
+                                <center>
+                                    {!! $data['school_data']->footer_right !!}
+                                </center>
+                            </div>
+                        </td>
+                        <td class="text-center" width="50%">
+                            {PAGENO}
+                        </td>
+                        <td class="text-left">
+                            <center>
+                                {!! $data['school_data']->footer_left !!}
+                            </center>
 
-{{--                                </center>--}}
-{{--                            </div>--}}
-{{--                        </td>--}}
-{{--                        <td class="text-center" width="50%">--}}
-{{--                            {PAGENO}--}}
-{{--                        </td>--}}
-{{--                        <td class="text-left">--}}
-{{--                            <center>--}}
-{{--                            </center>--}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </htmlpagefooter>
 
-{{--                        </td>--}}
-{{--                    </tr>--}}
-{{--                </table>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </htmlpagefooter>--}}
+    <htmlpageheader name="page-header">
+        <div style="height: 5px; width: 95%; margin: auto;">
+            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
+                <table class="data-table" style="width:100%">
+                    <tr>
+                        <td class="text-center" width="25%">
+                            <center>
 
-{{--    <htmlpageheader name="page-header">--}}
-{{--        <div style="height: 5px; width: 95%; margin: auto;">--}}
-{{--            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">--}}
-{{--                <table class="data-table" style="width:100%">--}}
-{{--                    <tr>--}}
-{{--                        <td class="text-center" width="25%">--}}
-{{--                            <center>--}}
-
-{{--                                {!! $school->heading_right !!}--}}
-{{--                            </center>--}}
-{{--                        </td>--}}
-{{--                        <td class="text-center" width="50%">--}}
-{{--                            <center>--}}
-{{--                                <p>{{ trans('report.daily_payment') }}</p>--}}
-{{--                                <br>--}}
-{{--                                <p>--}}
-{{--                                    {{ trans('report.period', ['from' => $data['begin'], 'to' => $data['end']]) }}--}}
-{{--                                </p>--}}
-{{--                                <br>--}}
-{{--                                <p>{{trans('report.print_date',['date'=>date('Y-m-d')])}}</p>--}}
-{{--                            </center>--}}
-{{--                        </td>--}}
-{{--                        <td class="text-left">--}}
-{{--                            @if ($school->image == null)--}}
-{{--                                <img class="img-fluid" style="max-width:10%"--}}
-{{--                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">--}}
-{{--                            @else--}}
-{{--                                <img class="img-fluid" style="max-width:10%"--}}
-{{--                                    src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"--}}
-{{--                                    alt="{{ $school->name }}">--}}
-{{--                            @endif--}}
-{{--                        </td>--}}
-{{--                    </tr>--}}
-{{--                </table>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </htmlpageheader>--}}
+                                {!! $data['school_data']->heading_right !!}
+                            </center>
+                        </td>
+                        <td class="text-center" width="50%">
+                            <center>
+                                <p>{{ trans('report.daily_payment') }}</p>
+                                <br>
+                                <p>{{trans('report.print_date',['date'=>date('Y-m-d')])}}</p>
+                            </center>
+                        </td>
+                        <td class="text-left">
+                            @if ($data['school_data']->image == null)
+                                <img class="img-fluid" style="max-width:10%"
+                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $data['school_data']->name }}">
+                            @else
+                                <img class="img-fluid" style="max-width:10%"
+                                    src="{{ storage_path('app/attachments/schools/' . $data['school_data']->slug . '/' . $data['school_data']->image->filename) }}"
+                                    alt="{{ $data['school_data']->name }}">
+                            @endif
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </htmlpageheader>
 
     <table class="table text-center table-striped table-bordered table-sm">
         <thead>
@@ -139,16 +137,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($data['credit'] as $credit)
+            @foreach ($data['credit'] as $credit_item)
                 <tr>
                     <td width="5%">{{ $loop->index + 1 }}</td>
-                    <td>{{ $credit->invoice_date }}</td>
-                    <td>{{ $credit->students->name }}</td>
-                    <td>{{ $credit->classes->name }}</td>
-                    <td>{{ $credit->grades->name }}</td>
-                    <td>{{ $credit->acd_year->view }}</td>
-                    <td>{{ $credit->fees->title }}</td>
-                    <td>{{ Number::currency($credit->fees->amount, 'EGP', 'ar') }}</td>
+                    <td>{{ $credit_item->invoice_date }}</td>
+                    <td>{{ $credit_item->students->name }}</td>
+                    <td>{{ $credit_item->classes->name }}</td>
+                    <td>{{ $credit_item->grades->name }}</td>
+                    <td>{{ $credit_item->acd_year->view }}</td>
+                    <td>{{ $credit_item->fees->title }}</td>
+                    <td>{{ Number::currency($credit_item->fees->amount, 'EGP', 'ar') }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -165,3 +163,44 @@
 </body>
 
 </html>
+@else
+    @extends('layouts.app')
+    @section('content')
+        <a href="{{ route('report.credit.pdf', request()->query()) }}" class="btn btn-primary">Export to PDF</a>
+        <table class="table text-center table-striped table-bordered table-sm">
+            <thead>
+
+                <tr class="text-white bg-dark">
+                    <th>#</th>
+                    <th>{{ trans('report.date') }}</th>
+                    <th>{{ trans('report.student') }}</th>
+                    <th>{{ trans('report.classroom') }}</th>
+                    <th>{{ trans('General.grade') }}</th>
+                    <th>{{ trans('academic_year.view') }}</th>
+                    <th>{{ trans('report.fee_title') }}</th>
+                    <th>{{ trans('report.amount') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($data['credit'] as $credit_item)
+                    <tr>
+                        <td width="5%">{{ $loop->index + 1 }}</td>
+                        <td>{{ $credit_item->invoice_date }}</td>
+                        <td>{{ $credit_item->students->name }}</td>
+                        <td>{{ $credit_item->classes->name }}</td>
+                        <td>{{ $credit_item->grades->name }}</td>
+                        <td>{{ $credit_item->acd_year->view }}</td>
+                        <td>{{ $credit_item->fees->title }}</td>
+                        <td>{{ Number::currency($credit_item->fees->amount, 'EGP', 'ar') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="7">{{ trans('report.total') }}</th>
+                    <th>{{ Number::currency($data['credit']->sum('fees.amount'), 'EGP', 'ar') }}</th>
+                </tr>
+            </tfoot>
+        </table>
+    @endsection
+@endif

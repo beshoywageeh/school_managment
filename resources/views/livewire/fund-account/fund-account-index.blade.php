@@ -5,7 +5,7 @@
         <!-- أدوات التحكم -->
         <div class="row">
             <div class="col">
-                <h5>{{ trans('sidebar.fund_account') }}</h5>
+                <h5>{{ trans('Sidebar.fund_account') }}</h5>
             </div>
             <div class="col">
                 <input type="date" wire:model.live.debounce500ms="date" class="form-control">

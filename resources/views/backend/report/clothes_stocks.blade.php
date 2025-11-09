@@ -1,3 +1,4 @@
+@if($data['is_pdf'])
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -67,7 +68,7 @@
         <th>{{trans('stock.current_stock')}}</th>
     </tr>
 </thead>
-    @foreach ($data as $clothe)
+    @foreach ($data['clothes'] as $clothe)
 <tr>
     <td>{{$loop->index+1}}</td>
     <td>{{$clothe->name}}</td>
@@ -83,7 +84,7 @@
             <table class="data-table" style="width:100%">
                 <tr>
                     <td class="text-center" width="25%">
-                        {!! $school->heading_right !!}
+                        {!! $data['school_data']->heading_right !!}
                     </td>
                     <td class="text-center" width="50%">
                         <center>
@@ -91,13 +92,13 @@
                         </center>
                     </td>
                     <td class="text-left">
-                        @if ($school->image == null)
+                        @if ($data['school_data']->image == null)
                             <img class="img-fluid" style="max-width:10%"
-                                src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
+                                src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $data['school_data']->name }}">
                         @else
                             <img class="img-fluid" style="max-width:10%"
-                                src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                                alt="{{ $school->name }}">
+                                src="{{ storage_path('app/attachments/schools/' . $data['school_data']->slug . '/' . $data['school_data']->image->filename) }}"
+                                alt="{{ $data['school_data']->name }}">
                         @endif
                     </td>
                 </tr>
@@ -124,7 +125,7 @@
 
                         <center>
 
-                            {!! $school->footer_left !!}
+                            {!! $data['school_data']->footer_left !!}
                         </center>
 
                     </td>
@@ -136,3 +137,30 @@
 </body>
 
 </html>
+@else
+    @extends('layouts.app')
+    @section('content')
+        <a href="{{ route('report.clothes_stocks.pdf', request()->query()) }}" class="btn btn-primary">Export to PDF</a>
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{{trans('stock.name')}}</th>
+                    <th>{{trans('grades.name')}}</th>
+                    <th>{{trans('class_rooms.Name')}}</th>
+                    <th>{{trans('stock.current_stock')}}</th>
+                </tr>
+            </thead>
+                @foreach ($data['clothes'] as $clothe)
+            <tr>
+                <td>{{$loop->index+1}}</td>
+                <td>{{$clothe->name}}</td>
+                <td>{{$clothe->grade->name}}</td>
+                <td>{{$clothe->classroom->name}}</td>
+                <td>{{($clothe->orders->sum('pivot.quantity_in')+$clothe->opening_qty)-$clothe->orders->sum('pivot.quantity_out')}}</td>
+            </tr>
+                @endforeach
+            </table>
+    @endsection
+@endif

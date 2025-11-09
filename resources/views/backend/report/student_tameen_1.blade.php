@@ -1,3 +1,4 @@
+@if($data['is_pdf'])
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -65,7 +66,7 @@
                 <table class="data-table" style="width:100%">
                     <tr>
                         <td class="text-center" width="25%">
-                            {!! $school->heading_right !!}
+                            {!! $data['school_data']->heading_right !!}
                         </td>
                         <td class="text-center" width="50%">
                             {{ trans('report.acc_year', ['aa' => $data['aa']->view]) }}<br>
@@ -73,13 +74,13 @@
                             {{ trans('report.classroom',['class'=>$data['classroom']->name]) }}
                         </td>
                         <td class="text-left">
-                            @if ($school->image == null)
+                            @if ($data['school_data']->image == null)
                                 <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
+                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $data['school_data']->name }}">
                             @else
                                 <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                                    alt="{{ $school->name }}">
+                                    src="{{ storage_path('app/attachments/schools/' . $data['school_data']->slug . '/' . $data['school_data']->image->filename) }}"
+                                    alt="{{ $data['school_data']->name }}">
                             @endif
                         </td>
                     </tr>
@@ -96,7 +97,7 @@
                             <div class="text-center">
                                 <center>
 
-                                    {!! $school->footer_right !!}
+                                    {!! $data['school_data']->footer_right !!}
                                 </center>
                             </div>
                         </td>
@@ -107,7 +108,7 @@
 
                             <center>
 
-                                {!! $school->footer_left !!}
+                                {!! $data['school_data']->footer_left !!}
                             </center>
 
                         </td>
@@ -151,3 +152,40 @@
 </body>
 
 </html>
+@else
+    @extends('layouts.app')
+    @section('content')
+        <a href="{{ route('report.student_tameen.pdf', array_merge(['type' => $data['type']], request()->query())) }}" class="btn btn-primary">Export to PDF</a>
+        <div class="table-responsive" id="data">
+            <table class="table text-center table-striped table-bordered table-sm">
+                <thead>
+                    <tr class="text-white bg-dark">
+                        <th>#</th>
+                        <th>{{ trans('student.name') }}</td>
+                        <th>{{ trans('student.national_id') }}</th>
+                        <th>{{ trans('Parents.Father_Phone') }}</th>
+                        <th>{{ trans('report.come') }}</th>
+                        <th>{{ trans('report.positive') }}</th>
+                        <th>{{ trans('report.negative') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($data['students'] as $student)
+                        <tr>
+                            <td>{{ $loop->index + 1 }}</td>
+                            <td>{{ $student->name }}</td>
+                            <td>{{$student->national_id}}</td>
+                            <td>{{$student->parent->Father_Phone}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    @empty
+                        <h5>{{ trans('report.no_data_found') }}</h5>
+                    @endforelse
+                </tbody>
+        
+            </table>
+        </div>
+    @endsection
+@endif
