@@ -7,7 +7,7 @@ enum user_religion: int
     case CHRISTIAN = 0;
     case MUSLIM = 1;
 
-    public function lang(): string
+    public function lang()
     {
         return match ($this) {
             self::CHRISTIAN => trans('enums.christian'),
@@ -15,7 +15,7 @@ enum user_religion: int
         };
     }
 
-    public static function fromString(string $religion): ?self
+    public static function fromString($religion)
     {
         return match (strtolower($religion)) {
             'christian' => self::CHRISTIAN,

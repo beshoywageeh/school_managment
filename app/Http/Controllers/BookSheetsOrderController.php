@@ -23,7 +23,7 @@ class BookSheetsOrderController extends Controller
             ->with($relations)
             ->get();
 
-        return view('backend.book_sheets_order.index', compact('orders', 'type','school'));
+        return view('backend.book_sheets_order.index', compact('orders', 'type', 'school'));
     }
 
     public function create_tawreed()
@@ -175,7 +175,7 @@ class BookSheetsOrderController extends Controller
             $order = bookSheets_order::where('id', $id)->with('stocks', 'students')->first();
         }
 
-        return view('backend.book_sheets_order.show', compact('order','school'));
+        return view('backend.book_sheets_order.show', compact('order', 'school'));
     }
 
     public function edit_sarf($id)

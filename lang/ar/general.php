@@ -108,11 +108,11 @@ return [
     'of' => 'من',
     'results' => 'نتائج',
     'Pagination Navigation' => 'تنقل الصفحات',
-    'loop_laps'=>'loop laps',
+    'loop_laps' => 'loop laps',
     'open' => 'فتح',
     'generate' => 'إنشاء',
 
     'quick_actions' => 'إجراءات سريعة',
-    'loop_labs'=>'loop labs'
+    'loop_labs' => 'loop labs',
 
 ];

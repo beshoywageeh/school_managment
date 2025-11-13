@@ -81,7 +81,7 @@ class ExchangeBondController extends Controller
         return view('backend.exchange_bond.edit', get_defined_vars());
     }
 
-    public function update(Request $request,StudentFinancialService $StudentAccount)
+    public function update(Request $request, StudentFinancialService $StudentAccount)
     {
         try {
             $id = $request->id;

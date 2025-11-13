@@ -120,18 +120,18 @@
 
     @php
     $stat_icons = [
-        'Students' => ['icon' => 'fa-user-graduate', 'color' => 'bg-primary'],
+        'Students' => ['icon' => 'fa-graduation-cap', 'color' => 'bg-primary'],
         'parents' => ['icon' => 'fa-users', 'color' => 'bg-success'],
-        'employees' => ['icon' => 'fa-user-tie', 'color' => 'bg-info'],
+        'employees' => ['icon' => 'fa-black-tie', 'color' => 'bg-info'],
     ];
 
     $action_icons = [
         'Students' => 'fa-user-plus',
-        'parents' => 'fa-user-friends',
-        'Grade' => 'fa-layer-group',
-        'Class_Rooms' => 'fa-chalkboard',
-        'schoolfees' => 'fa-file-invoice-dollar',
-        'jobs' => 'fa-briefcase',
+        'parents' => 'fa-users',
+        'Grade' => 'fa-list-alt',
+        'Class_Rooms' => 'fa-list-ol',
+        'schoolfees' => 'fa-money',
+        'jobs' => 'fa-black-tie',
         'backup' => 'fa-database',
     ];
     @endphp
@@ -141,7 +141,7 @@
         <div class="row mb-4">
             <div class="col">
                 <a href="#" data-toggle="modal" data-target="#fastadd" class="fast-add-btn">
-                    <i class="fas fa-plus mr-2"></i>
+                    <i class="fa fa-plus mr-2"></i>
                     {{ trans('general.new') . ' ' . trans('Sidebar.Students') }}
                 </a>
                 @include('backend.Students.fast_add_student')
@@ -156,7 +156,7 @@
                 <div class="card dashboard-stat-card h-100">
                     <div class="card-body">
                         <div class="stat-icon {{ $stat_icons['Students']['color'] }}">
-                            <i class="fas {{ $stat_icons['Students']['icon'] }}"></i>
+                            <i class="fa {{ $stat_icons['Students']['icon'] }}"></i>
                         </div>
                         <div class="ml-4">
                             <h3 class="stat-count">{{ $students }}</h3>
@@ -172,7 +172,7 @@
                 <div class="card dashboard-stat-card h-100">
                     <div class="card-body">
                         <div class="stat-icon {{ $stat_icons['parents']['color'] }}">
-                            <i class="fas {{ $stat_icons['parents']['icon'] }}"></i>
+                            <i class="fa {{ $stat_icons['parents']['icon'] }}"></i>
                         </div>
                         <div class="ml-4">
                             <h3 class="stat-count">{{ $parents }}</h3>
@@ -188,7 +188,7 @@
                 <div class="card dashboard-stat-card h-100">
                     <div class="card-body">
                         <div class="stat-icon {{ $stat_icons['employees']['color'] }}">
-                            <i class="fas {{ $stat_icons['employees']['icon'] }}"></i>
+                            <i class="fa {{ $stat_icons['employees']['icon'] }}"></i>
                         </div>
                         <div class="ml-4">
                             <h3 class="stat-count">{{ $employees }}</h3>
@@ -209,7 +209,7 @@
         @can('Students-create')
             <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{{ route('Students.create') }}" class="quick-action-tile">
-                    <div class="action-icon"><i class="fas {{ $action_icons['Students'] }} fa-2x"></i></div>
+                    <div class="action-icon"><i class="fa {{ $action_icons['Students'] }} fa-2x"></i></div>
                     <p class="action-label">{{ trans('general.new') }} {{ trans('Sidebar.Students') }}</p>
                 </a>
             </div>
@@ -217,7 +217,7 @@
         @can('parents-create')
             <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{{ route('parents.create') }}" class="quick-action-tile">
-                    <div class="action-icon"><i class="fas {{ $action_icons['parents'] }} fa-2x"></i></div>
+                    <div class="action-icon"><i class="fa {{ $action_icons['parents'] }} fa-2x"></i></div>
                     <p class="action-label">{{ trans('general.new') }} {{ trans('Sidebar.parents') }}</p>
                 </a>
             </div>
@@ -225,7 +225,7 @@
         @can('grade-list')
             <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{{ route('grade.index') }}" class="quick-action-tile">
-                    <div class="action-icon"><i class="fas {{ $action_icons['Grade'] }} fa-2x"></i></div>
+                    <div class="action-icon"><i class="fa {{ $action_icons['Grade'] }} fa-2x"></i></div>
                     <p class="action-label">{{ trans('Sidebar.Grade') }}</p>
                 </a>
             </div>
@@ -233,7 +233,7 @@
         @can('class_rooms-list')
             <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{{ route('class_rooms.index') }}" class="quick-action-tile">
-                    <div class="action-icon"><i class="fas {{ $action_icons['Class_Rooms'] }} fa-2x"></i></div>
+                    <div class="action-icon"><i class="fa {{ $action_icons['Class_Rooms'] }} fa-2x"></i></div>
                     <p class="action-label">{{ trans('Sidebar.Class_Rooms') }}</p>
                 </a>
             </div>
@@ -241,7 +241,7 @@
         @can('schoolfees-create')
             <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{{ route('schoolfees.create') }}" class="quick-action-tile">
-                    <div class="action-icon"><i class="fas {{ $action_icons['schoolfees'] }} fa-2x"></i></div>
+                    <div class="action-icon"><i class="fa {{ $action_icons['schoolfees'] }} fa-2x"></i></div>
                     <p class="action-label">{{ trans('Sidebar.schoolfees') }}</p>
                 </a>
             </div>
@@ -249,7 +249,7 @@
         @can('jobs-list')
             <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{{ route('jobs.index') }}" class="quick-action-tile">
-                    <div class="action-icon"><i class="fas {{ $action_icons['jobs'] }} fa-2x"></i></div>
+                    <div class="action-icon"><i class="fa {{ $action_icons['jobs'] }} fa-2x"></i></div>
                     <p class="action-label">{{ trans('Sidebar.jobs') }}</p>
                 </a>
             </div>
@@ -257,7 +257,7 @@
         @can('backup-list')
             <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{{ route('backup.create') }}" class="quick-action-tile">
-                    <div class="action-icon"><i class="fas {{ $action_icons['backup'] }} fa-2x"></i></div>
+                    <div class="action-icon"><i class="fa {{ $action_icons['backup'] }} fa-2x"></i></div>
                     <p class="action-label">{{ trans('backup.create') }}</p>
                 </a>
             </div>

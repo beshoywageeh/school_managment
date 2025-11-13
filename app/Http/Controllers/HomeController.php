@@ -44,7 +44,7 @@ class HomeController extends Controller
             ->sum('Debit');
 
         $employees = DB::table('users')->where('school_id', $school->id)->where('code', '!=', '000001')->count();
-        $grades = Grade::with(['class_rooms' => function($query) {
+        $grades = Grade::with(['class_rooms' => function ($query) {
             $query->withCount('students');
         }])->where('school_id', $school->id)->get();
 
@@ -66,7 +66,7 @@ class HomeController extends Controller
 
         foreach ($grades as $grade) {
             // Assign a base color to the grade
-            if (!isset($grade_colors[$grade->id])) {
+            if (! isset($grade_colors[$grade->id])) {
                 $base_color = $base_colors[$color_index % count($base_colors)];
                 $grade_colors[$grade->id] = $base_color;
                 $color_index++;
@@ -74,7 +74,7 @@ class HomeController extends Controller
             $current_base_color = $grade_colors[$grade->id];
 
             foreach ($grade->class_rooms as $classroom) {
-                $chart_labels[] = $grade->name . ' - ' . $classroom->name;
+                $chart_labels[] = $grade->name.' - '.$classroom->name;
                 $chart_data[] = $classroom->students_count;
 
                 // Use the base color for the grade, with varying alpha for backgrounds

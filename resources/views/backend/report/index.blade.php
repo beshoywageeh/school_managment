@@ -71,13 +71,13 @@
                 trans('Sidebar.Students') => [
                     [
                         'Name' => trans('report.student_info'),
-                        'Url' => route('reports.export_student'),
-                        'type' => 'link',
+                       'Url' => '#students',
+                        'type' => 'button',
                         'can'=>'Students-list'
                     ],
                     [
                         'Name' => trans('report.tammen'),
-                        'Url' => route('reports.export_student'),
+                       'Url' => route('reports.export_student'),
                         'type' => 'link',
                         'can'=>'Students-list'
                     ],
@@ -96,7 +96,7 @@
                 trans('Sidebar.stores') => [
                     [
                         'Name' => trans('report.stock_product'),
-                        'Url' => route('reports.stock_product'),
+                       'Url' => route('reports.stock_product'),
                         'type' => 'link',
                         'can'=>'order-index'
                     ],
@@ -179,19 +179,20 @@
             ];
 
             $category_icons = [
-                trans('Sidebar.Students') => 'fa-user-graduate',
+                trans('Sidebar.Students') => 'fa-graduation-cap',
                 trans('Sidebar.stores') => 'fa-store-alt',
                 trans('Sidebar.accounting') => 'fa-calculator',
-                trans('Sidebar.employees') => 'fa-users',
+                trans('Sidebar.employees') => 'fa-graduation-cap',
             ];
         @endphp
+
 
         @foreach ($reports_links as $heading => $report_links)
             @if(!empty($report_links))
                 <div class="col-lg-6 col-xl-4 mb-4">
                     <div class="card report-card h-100">
                         <div class="text-center card-header">
-                            <h4><i class="fas {{ $category_icons[$heading] ?? 'fa-file-alt' }} mr-2"></i><strong>{{ $heading }}</strong></h4>
+                            <h4><i class="fa {{ $category_icons[$heading] ?? 'fa-file-alt' }} mr-2"></i><strong>{{ $heading }}</strong></h4>
                         </div>
                         <div class="p-0 card-body">
                             @foreach ($report_links as $acc_link)
@@ -201,12 +202,12 @@
                                         <div>
                                             @if ($acc_link['type'] == 'link')
                                                 <a class="btn btn-sm btn-outline-primary rounded-pill" target="_blank" href="{{ $acc_link['Url'] }}">
-                                                    <i class="fas fa-external-link-alt mr-1"></i> {{ trans('general.open') }}
+                                                    <i class="fa fa-external-link-square mr-1"></i> {{ trans('general.open') }}
                                                 </a>
                                             @endif
                                             @if ($acc_link['type'] == 'button')
                                                 <button class="btn btn-sm btn-outline-secondary rounded-pill" data-toggle="modal" data-target="{{ $acc_link['Url'] }}">
-                                                    <i class="fas fa-cogs mr-1"></i> {{ trans('general.generate') }}
+                                                    <i class="fa fa-cogs mr-1"></i> {{ trans('general.generate') }}
                                                 </button>
                                             @endif
                                         </div>
@@ -230,7 +231,7 @@
             'fees_invoices_popup',
             'incoming_students_popup',
             'tammen_1_popup',
-            'payments_popup','payment_part_popup','credit_popup'
+            'payments_popup','payment_part_popup','credit_popup','students_popup'
         ];
     @endphp
 
@@ -240,4 +241,35 @@
 @endsection
 
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.grades').on('change', function() {
+                $('.classrooms').innerHTML = '<option>{{ trans('general.loading') }}</option>';
+                let grade = $(this).val();
+                if (grade) {
+                    $.ajax({
+                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('.classrooms').empty();
+                            $('.classrooms').append(
+                                '<option selected disabled>{{ trans('student.choose_classroom') }}</option>',
+                                '<option value="0">{{ trans('general.all') }}</option>'
+
+                            );
+                            $.each(data, function(key, value) {
+                                console.log(key);
+                                console.log(value.name);
+                                $('.classrooms').append(
+                                    `<option value="${value.id}">${value.name}</option>`
+                                );
+
+                            });
+                        },
+                    });
+                };
+            });
+        });
+    </script>
 @endpush

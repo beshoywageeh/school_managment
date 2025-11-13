@@ -6,25 +6,30 @@ use App\Http\Traits\SchoolTrait;
 use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Carbon\Carbon;
 
 class StudentTable extends Component
 {
-    use WithPagination, SchoolTrait;
+    use SchoolTrait, WithPagination;
 
     // Filters
     public $search = '';
+
     public $grade_id = null;
+
     public $classroom_id = null;
+
     public $joinDateFrom = null;
+
     public $joinDateTo = null;
 
     // Sorting
     public $sortField = 'students.name';
+
     public $sortDirection = 'asc';
 
     // Per Page
@@ -77,9 +82,10 @@ class StudentTable extends Component
 
     public function getClassroomsProperty()
     {
-        if (!$this->grade_id) {
+        if (! $this->grade_id) {
             return collect();
         }
+
         return class_room::where('grade_id', $this->grade_id)->get();
     }
 
@@ -95,9 +101,9 @@ class StudentTable extends Component
             ->whereNull('students.deleted_at')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('students.name', 'like', '%' . $this->search . '%')
-                      ->orWhere('parents.Father_Name', 'like', '%' . $this->search . '%')
-                      ->orWhere('students.address', 'like', '%' . $this->search . '%');
+                    $q->where('students.name', 'like', '%'.$this->search.'%')
+                        ->orWhere('parents.Father_Name', 'like', '%'.$this->search.'%')
+                        ->orWhere('students.address', 'like', '%'.$this->search.'%');
                 });
             })
             ->when($this->grade_id, function ($query) {
@@ -120,7 +126,7 @@ class StudentTable extends Component
             ])
             ->orderBy($this->sortField, $this->sortDirection);
 
-        if (!Auth::user()->hasRole('Admin')) {
+        if (! Auth::user()->hasRole('Admin')) {
             $gradeIds = DB::table('teacher_grade')->where('teacher_id', Auth::id())->pluck('grade_id');
             $query->whereIn('students.grade_id', $gradeIds);
         }
@@ -132,4 +138,3 @@ class StudentTable extends Component
         ]);
     }
 }
-

@@ -4,11 +4,10 @@ namespace App\Livewire;
 
 use App\Models\Job;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Carbon\Carbon;
 
 class EmployeesTable extends Component
 {
@@ -16,14 +15,17 @@ class EmployeesTable extends Component
 
     // Filter properties
     public $name = '';
+
     public $job_id = null;
 
     // Add advanced date filters
     public $startDate = null;
+
     public $endDate = null;
 
     // Sorting properties
     public $sortField = 'name';
+
     public $sortDirection = 'asc';
 
     protected $queryString = [
@@ -71,7 +73,7 @@ class EmployeesTable extends Component
 
                     // Force collation for the 'name' column to handle Arabic search
                     $q->where('name', 'like', '%'.$this->name.'%')
-                      ->orWhere('email', 'like', $this->name);
+                        ->orWhere('email', 'like', $this->name);
                 });
             })
             ->when($this->job_id, function ($query) {

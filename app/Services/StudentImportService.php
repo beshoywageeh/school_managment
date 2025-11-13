@@ -11,6 +11,6 @@ class StudentImportService
     public function StudentImport($file)
     {
         $path = $file->getRealPath();
-        Excel::import(new StudentImport, $path,null,ExcelExcel::XLSX);
+        Excel::import(new StudentImport, $path, null, ExcelExcel::XLSX);
     }
 }

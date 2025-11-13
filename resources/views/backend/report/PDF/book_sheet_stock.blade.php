@@ -57,37 +57,7 @@
 
 <body>
     <htmlpageheader name="page-header">
-        <div style="height: 5px; width: 95%; margin: auto;">
-            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
-                <table class="data-table" style="width:100%">
-                    <tr>
-                        <td class="text-center" width="25%">
-                            <center>
 
-                                {!! $data['school_data']->heading_right !!}
-                            </center>
-                        </td>
-                        <td class="text-center" width="50%">
-                            <center>
-                                <p>{{$data['stock']->name}}
-                                    </p><br>
-                                <p>{{trans('report.print_date',['date'=>date('Y-m-d')])}}</p>
-                            </center>
-                        </td>
-                        <td class="text-left">
-                            @if ($data['school_data']->image == null)
-                                <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $data['school_data']->name }}">
-                            @else
-                                <img class="img-fluid" style="max-width:10%"
-                                    src="{{ storage_path('app/attachments/schools/' . $data['school_data']->slug . '/' . $data['school_data']->image->filename) }}"
-                                    alt="{{ $data['school_data']->name }}">
-                            @endif
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
     </htmlpageheader>
     <htmlpagefooter name="page-footer">
         <div style="height: 5px; width: 95%; margin: auto;">

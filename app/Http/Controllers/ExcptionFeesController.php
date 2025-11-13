@@ -56,21 +56,20 @@ class ExcptionFeesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request,StudentFinancialService $studentFinanc)
+    public function store(Request $request, StudentFinancialService $studentFinanc)
     {
-//        return $request;
+        //        return $request;
         try {
             DB::beginTransaction();
             $student = Student::findorfail($request->student_id);
-            $academic_year=acadmice_year::findorfail($student->acadmiecyear_id);
+            $academic_year = acadmice_year::findorfail($student->acadmiecyear_id);
             $fee = Fee_invoice::findorfail($request->fee_id)->with('fees')->first();
-        if($request->amount == $fee->fees->amount)
-        {
+            if ($request->amount == $fee->fees->amount) {
 
-            $fee->delete();
-        }
+                $fee->delete();
+            }
 
-        $pay = new ExcptionFees;
+            $pay = new ExcptionFees;
             $pay->date = date('Y-m-d');
             $pay->student_id = $student->id;
             $pay->amount = $request->amount;
@@ -81,7 +80,7 @@ class ExcptionFeesController extends Controller
             $pay->school_id = $this->getSchool()->id;
             $pay->user_id = auth()->id();
             $pay->save();
-        $studentFinanc->CreateStudentAccount($student,null,$academic_year,3,0.00,$request->amount,null,$pay->id);
+            $studentFinanc->CreateStudentAccount($student, null, $academic_year, 3, 0.00, $request->amount, null, $pay->id);
 
             $this->logActivity(trans('log.actions.added'), trans('log.models.exception_fee.created', ['student_name' => $student->name]));
             DB::commit();

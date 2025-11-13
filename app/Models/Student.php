@@ -34,7 +34,6 @@ class Student extends Model
         'gender' => UserGender::class,
         'religion' => user_religion::class,
         'student_status' => Student_Status::class,
-
     ];
 
     public function user()

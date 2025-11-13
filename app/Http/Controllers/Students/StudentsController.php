@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Students;
 
-use App\DataTables\StudentDataTable;
 use App\Enums\Student_Status;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StudentRequest;
@@ -123,7 +122,7 @@ class StudentsController extends Controller
                         'classroom:id,name',
                         'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone,Father_Job',
                         'StudentAccount',
-                        'nationality'
+                        'nationality',
                     ])
                 ->withsum('StudentAccount', 'debit')
                 ->withsum('StudentAccount', 'credit')
@@ -261,6 +260,7 @@ class StudentsController extends Controller
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
             Log::error($e->getMessage());
+
             return redirect()->back()->withInput();
         }
     }

@@ -1,4 +1,4 @@
-<div class="modal fade" id="fees_invoices" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="students" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -11,7 +11,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('report.fees_invoices') }}" method="post">
+            <form action="{{route('reports.export_student')}}" method="post">
                 <div class="modal-body">
                     @csrf
                     <div class="row mb-2">
@@ -37,37 +37,6 @@
 
                                 <option value="0">{{ trans('general.all') }}</option>
 
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-3">
-                            <label for="">{{ trans('academic_year.year_start') }}</label>
-                        </div>
-                        <div class="col-9">
-                            <input type="date" class="form-control" name="from">
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-3">
-                            <label for="">{{ trans('academic_year.year_end') }}</label>
-                        </div>
-                        <div class="col-9">
-                            <input type="date" class="form-control" name="to">
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col-3">
-                            <label for="">{{ trans('General.payment_status') }}</label>
-                        </div>
-                        <div class="col-9">
-                            <select name="payment_status" id="" class="custom-select">
-                                <option value="" selected disabled>
-                                    {{ trans('general.choose', ['value'=> trans('report.payment_status')]) }}</option>
-                                <option value="0">{{ trans('general.all') }}</option>
-
-                                <option value="1">{{ trans('clothes.not_payed') }}</option>
-                                <option value="2">{{ trans('clothes.payed') }}</option>
                             </select>
                         </div>
                     </div>

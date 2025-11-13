@@ -20,12 +20,12 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 class StudentImport implements ToCollection, WithChunkReading
 {
     protected $batchSize = 1000; // Define batch size
-//    protected $userId;
+    //    protected $userId;
 
-//    public function __construct($userId)
-//    {
-//        $this->userId = $userId;
-//    }
+    //    public function __construct($userId)
+    //    {
+    //        $this->userId = $userId;
+    //    }
 
     public function collection(Collection $rows)
     {
@@ -35,7 +35,7 @@ class StudentImport implements ToCollection, WithChunkReading
             ['Father_Name' => 'Default Parent'],
             [
                 'user_id' => Auth::user()->id,
-                'school_id' => Auth::user()->school_id
+                'school_id' => Auth::user()->school_id,
             ]
         );
         $defaultParentId = $defaultParent->id;
@@ -55,17 +55,17 @@ class StudentImport implements ToCollection, WithChunkReading
             $classId = $classes[$row[9]] ?? null;
 
             $parentName = ltrim($row[10]);
-            if (!empty($parentName)) {
+            if (! empty($parentName)) {
                 if (isset($parents[$parentName])) {
                     $parentId = $parents[$parentName];
                 } else {
 
-                    $newParent = My_parents::updateorcreate(['Father_Name' => $parentName],[
+                    $newParent = My_parents::updateorcreate(['Father_Name' => $parentName], [
                         'Father_Name' => $parentName,
                         'user_id' => Auth::user()->id,
-                        'school_id'=>Auth::user()->school_id,
+                        'school_id' => Auth::user()->school_id,
                         'address' => $row[2],
-                        'Father_Phone'=>$row[12],
+                        'Father_Phone' => $row[12],
                     ]);
                     $parentId = $newParent->id;
                     $parents[$parentName] = $parentId; // Cache it for the current import
@@ -97,10 +97,10 @@ class StudentImport implements ToCollection, WithChunkReading
             try {
                 $arabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
                 $western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-                $date= str_replace($arabic, $western, $row[1]);
+                $date = str_replace($arabic, $western, $row[1]);
                 $birthDate = Carbon::parse($date);
-//                $birthDate = Carbon::createFromFormat($row[1],$birthDate);
-//                $birthDate=Carbon::createFromTimeString($row[1]);
+                //                $birthDate = Carbon::createFromFormat($row[1],$birthDate);
+                //                $birthDate=Carbon::createFromTimeString($row[1]);
                 $joinDate = Carbon::parse($row[3]);
             } catch (\Exception $e) {
                 Log::error("Could not parse date for student: {$row[0]}. Error: {$e->getMessage()}");
@@ -115,9 +115,9 @@ class StudentImport implements ToCollection, WithChunkReading
 
             $code = str_pad($nextCode, 6, '0', STR_PAD_LEFT);
             $nextCode++;
-//            $std_ltrim=($row[0]);
-//            $std_rtrim=($std_ltrim);
-//            $student_name=explode($std_rtrim,' ');
+            //            $std_ltrim=($row[0]);
+            //            $std_rtrim=($std_ltrim);
+            //            $student_name=explode($std_rtrim,' ');
             $students[] = [
                 'code' => $code,
                 'name' => $row[0],
@@ -133,9 +133,9 @@ class StudentImport implements ToCollection, WithChunkReading
                 'parent_id' => $parentId,
                 'classroom_id' => $classId,
                 'birth_at_begin' => $birth_at_begin,
-                'school_id'=>Auth::user()->school_id,
-                'acadmiecyear_id'=>1,
-                'nationality_id'=>64
+                'school_id' => Auth::user()->school_id,
+                'acadmiecyear_id' => 1,
+                'nationality_id' => 64,
             ];
 
             // Dispatch job if batch size is reached

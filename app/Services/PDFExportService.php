@@ -2,24 +2,28 @@
 
 namespace App\Services;
 
-use Carbon\Carbon;
 use PDF;
+use App\Http\Traits\SchoolTrait;
+
 class PDFExportService
 {
-    public function PrintPDF($view,$type,$data,$oriantation)
+    public function PrintPDF($view, $type, $data, $orientation,$heading)
     {
-        $pdf = PDF::loadView('backend.report.'.$view, ['data' => $data], [], [
+
+        
+        $pdf = PDF::loadView('backend.report.PDF.' . $view, ['data' => $data,'school'=>$heading], [], [
             'format' => 'A4',
             'default_font_size' => 10,
-            'margin_left' => 2,
-            'margin_right' => 2,
-            'margin_top' => 35,
-            'margin_bottom' => 10,
-            'margin_header' => 2,
-            'margin_footer' => 2,
-            'orientation' => $oriantation,
+            'margin_left' => 10,
+            'margin_right' => 10,
+            'margin_top' => 30,
+            'margin_bottom' => 20,
+            'margin_header' => 10,
+            'margin_footer' => 10,
+            'orientation' => $orientation,
         ]);
 
-        return $pdf->$type($view.'.pdf');
+       
+        return $pdf->$type($view . '.pdf');
     }
 }
