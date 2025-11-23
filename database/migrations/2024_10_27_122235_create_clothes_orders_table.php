@@ -18,11 +18,12 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('school_id')->nullable();
             $table->date('date');
-            $table->smallInteger('type');
-            $table->boolean('isset_order')->default('1');
+            $table->enum('isset', ['yes', 'no'])->default('no');
             $table->string('manual_number')->nullable();
             $table->date('manual_date')->nullable();
-            $table->boolean('is_payed')->default(0);
+            $table->enum('status', ['payed', 'notpayed'])->default('notpayed');
+            $table->enum('type', ['inventory', 'sales', 'gard']);
+
             $table->timestamps();
             $table->softDeletes();
         });

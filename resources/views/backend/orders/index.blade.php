@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('title')
-    @if ($type == 1)
+    @if ($type == 'inventory')
         {{ trans('stock.income_order') }}
-    @elseif ($type == 2)
+    @elseif ($type == 'sales')
         {{ trans('stock.outcome_order') }}
-    @elseif ($type == 3)
+    @elseif ($type == 'gard')
         {{ trans('stock.inventory_order') }}
     @else
     @endif
@@ -19,17 +19,17 @@
                         <div class="col-lg-6"></div>
                         <div class="col-lg-6 text-md-right">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                @if ($type == 1)
+                                @if ($type == 'inventory')
                                     @can('stocks-income_order')
                                         <a href="{{ route('order.store') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                     @endcan
-                                @elseif ($type == 2)
+                                @elseif ($type == 'sales')
                                     @can('stocks-outcome_order')
                                         <a href="{{ route('outorder.new_transfer') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
                                     @endcan
-                                @elseif ($type == 3)
+                                @elseif ($type == 'gard')
                                     @can('stocks-inventory_order-create')
                                         <a href="{{ route('gard.create') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>

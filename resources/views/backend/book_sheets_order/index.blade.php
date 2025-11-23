@@ -1,12 +1,12 @@
 @extends('layouts.app')
 @section('title')
-    @if ($type == 1)
+    @if ($type == 'inventory')
         {{ trans('stock.income_order') }} : {{ trans('sidebar.books_sheets') }}
     @endif
-    @if ($type == 2)
+    @if ($type == 'sales')
         {{ trans('stock.outcome_order') }} : {{ trans('sidebar.books_sheets') }}
     @endif
-    @if ($type == 3)
+    @if ($type == 'gard')
         {{ trans('stock.inventory_order') }} : {{ trans('sidebar.books_sheets') }}
     @endif
 @endsection
@@ -20,19 +20,19 @@
                         <div class="col-lg-6"></div>
                         <div class="col-lg-6 text-md-right">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                @if ($type == 1)
+                                @if ($type == 'inventory')
                                     @can('books_sheets-income_order-create')
                                         <a href="{{ route('bookSheetsOrder.create') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                     @endcan
                                 @endif
-                                @if ($type == 2)
+                                @if ($type == 'sales')
                                     @can('books_sheets-outcome_order-create')
                                         <a href="{{ route('bookSheetsOrder.create_sarf') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
                                     @endcan
                                 @endif
-                                @if ($type == 3)
+                                @if ($type == 'gard')
                                     @can('books_sheets-inventory_order-create')
                                         <a href="{{ route('bookSheetsOrder.create_gard') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>

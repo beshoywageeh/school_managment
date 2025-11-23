@@ -16,8 +16,8 @@ class OutOrderController extends Controller
 
     public function index()
     {
-        $orders = order::where('type', 2)->withcount('stocks')->get();
-        $type = 2;
+        $orders = order::where('type', 'sales')->withcount('stocks')->get();
+        $type = 'sales';
         $school = $this->getSchool();
 
         return view('backend.orders.index', get_defined_vars());
@@ -26,7 +26,7 @@ class OutOrderController extends Controller
     public function new_transfer()
     {
         try {
-            $generate_code = order::where('type', '2')->orderBy('auto_number', 'desc')->first();
+            $generate_code = order::where('type', 'sales')->orderBy('auto_number', 'desc')->first();
             $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6) : '000001';
             $labs = Laboratory::where('is_main', 1)->with('sub_locations')->get();
             $stocks = stock::all();
@@ -49,7 +49,7 @@ class OutOrderController extends Controller
             $list_stocks = $request->list_outorder;
             $order_id = order::create([
                 'auto_number' => $request->auto_number,
-                'type' => 2,
+                'type' => 'sales',
                 'laboratory_id' => $request->location_to,
                 'school_id' => $this->getSchool()->id,
                 'user_id' => auth()->user()->id,
@@ -79,7 +79,7 @@ class OutOrderController extends Controller
     {
         try {
             $order = order::with('stocks')->findorFail($id);
-            $type = 2;
+            $type = 'sales';
             $school = $this->getSchool();
 
             return view('backend.orders.show', get_defined_vars());
@@ -94,7 +94,7 @@ class OutOrderController extends Controller
             $order = order::with('stocks')->findorFail($id);
             $stocks = stock::get();
             $school = $this->getSchool();
-            $type = 2;
+            $type = 'sales';
 
             return view('backend.orders.edit', get_defined_vars());
         } catch (Exception $e) {

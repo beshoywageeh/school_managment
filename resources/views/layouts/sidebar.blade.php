@@ -202,17 +202,17 @@
                             @endcan
                             @can('clothes-income_order')
                                 <li> <a
-                                        href="{{ route('clothes_order.index', ['type' => '1']) }}">{{ trans('orders.income') }}</a>
+                                        href="{{ route('clothes_order.index', ['type' => 'inventory']) }}">{{ trans('orders.income') }}</a>
                                 </li>
                             @endcan
                             @can('clothes-outcome_order')
                                 <li> <a
-                                        href="{{ route('clothes_order.index', ['type' => '2']) }}">{{ trans('stock.outcome_order') }}</a>
+                                        href="{{ route('clothes_order.index', ['type' => 'sales']) }}">{{ trans('stock.outcome_order') }}</a>
                                 </li>
                             @endcan
                             @can('clothes-inventory_order')
                                 <li> <a
-                                        href="{{ route('clothes_order.index', ['type' => '3']) }}">{{ trans('stock.inventory_order') }}</a>
+                                        href="{{ route('clothes_order.index', ['type' => 'gard']) }}">{{ trans('stock.inventory_order') }}</a>
                                 </li>
                             @endcan
                         </ul>
@@ -238,17 +238,17 @@
                             @endcan
                             @can('books_sheets-income_order')
                                 <li> <a
-                                        href="{{ route('bookSheetsOrder.index', ['type' => '1']) }}">{{ trans('orders.income') }}</a>
+                                        href="{{ route('bookSheetsOrder.index', ['type' => 'inventory']) }}">{{ trans('orders.income') }}</a>
                                 </li>
                             @endcan
                             @can('books_sheets-outcome_order')
                                 <li> <a
-                                        href="{{ route('bookSheetsOrder.index', ['type' => '2']) }}">{{ trans('stock.outcome_order') }}</a>
+                                        href="{{ route('bookSheetsOrder.index', ['type' => 'sales']) }}">{{ trans('stock.outcome_order') }}</a>
                                 </li>
                             @endcan
                             @can('books_sheets-inventory_order')
                                 <li> <a
-                                        href="{{ route('bookSheetsOrder.index', ['type' => '3']) }}">{{ trans('stock.inventory_order') }}</a>
+                                        href="{{ route('bookSheetsOrder.index', ['type' => 'gard']) }}">{{ trans('stock.inventory_order') }}</a>
                                 </li>
                             @endcan
                         </ul>

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('school_id');
             $table->unsignedBigInteger('user_id');
             $table->decimal('sales_price', 10, 2)->default(0);
-            $table->boolean('is_book')->default(0);
+            $table->enum('type', ['book', 'sheet']);
             $table->timestamps();
             $table->softDeletes();
         });

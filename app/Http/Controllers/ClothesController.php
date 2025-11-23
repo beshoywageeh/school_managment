@@ -32,7 +32,7 @@ class ClothesController extends Controller
                 'purchase_price' => $request->purchase_price,
                 'name' => $request->name,
                 'opening_qty' => $request->quantity,
-                'isset' => ($request->isset == 'on') ? 1 : 0,
+                'isset' => ($request->isset == 'on') ? 'yes' : 'no',
                 'opening_date' => date('Y-m-d'),
                 'sales_price_set' => $request->sales_price_isset,
                 'school_id' => $this->getSchool()->id,
@@ -57,7 +57,7 @@ class ClothesController extends Controller
                 'purchase_price' => $request->purchase_price,
                 'opening_qty' => $request->quantity,
                 'name' => $request->name,
-                'isset' => ($request->isset == 'on') ? 1 : 0,
+                'isset' => ($request->isset == 'on') ? 'yes' : 'no',
                 'sales_price_set' => $request->sales_price_isset,
 
             ]);

@@ -9,10 +9,9 @@ use App\Models\acadmice_year;
 use App\Models\Fee_invoice;
 use App\Models\school_fee;
 use App\Models\Student;
-use App\Models\StudentAccount;
+use App\Services\FinancialService;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class fee_invoiceController extends Controller
@@ -58,38 +57,19 @@ class fee_invoiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, FinancialService $service)
     {
         $List_Fees = $request->list_fees;
         DB::beginTransaction();
         try {
             $ac_year = acadmice_year::where('status', '0')->first();
             foreach ($List_Fees as $list_fee) {
-                $fee = new Fee_invoice;
-                $fee->invoice_date = date('Y-m-d');
-                $fee->student_id = $list_fee['student_id'];
-                $fee->grade_id = $request->grade_id;
-                $fee->classroom_id = $request->classroom_id;
-                $fee->school_fee_id = $list_fee['fee'];
-                $fee->academic_year_id = $ac_year->id;
-                $fee->user_id = Auth::user()->id;
-                $fee->school_id = $this->getSchool()->id;
-                $fee->save();
-
-                $std = new StudentAccount;
-                $std->student_id = $list_fee['student_id'];
-                $std->grade_id = $request->grade_id;
-                $std->date = $fee->invoice_date;
-                $std->type = '1';
-                $std->fee_invoices_id = $fee->id;
-                $std->classroom_id = $request->classroom_id;
-                $std->academic_year_id = $ac_year->id;
-                $std->debit = school_fee::where('id', $list_fee['fee'])->first()->amount;
-                $std->credit = 0.00;
-
-                $std->save();
+                $amount = school_fee::where('id', $list_fee['fee'])->first()->amount;
+                $student = Student::findorfail($list_fee['student_id']);
+                $service->FeeInvoice($student, $list_fee['fee'], $ac_year->id, $this->getSchool()->id);
+                $service->CreateStudentAccount($student, $list_fee['fee'], $ac_year->id, 'invoice', 0.00, $amount);
             }
-            $this->logActivity(trans('log.actions.added'), trans('log.models.fee_invoice.created', ['name' => $fee->students->name]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.fee_invoice.created', ['name' => $student->name]));
             DB::commit();
 
             return redirect()->route('fee_invoice.index')->with('success', trans('general.success'));
@@ -127,33 +107,18 @@ class fee_invoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, FinancialService $service)
     {
         DB::beginTransaction();
         try {
             // Retrieve the existing fee invoice by its ID
             $fee = Fee_invoice::findOrFail($request->id);
-
-            // Update the fee invoice details
-            $fee->invoice_date = date('Y-m-d');
-            $fee->student_id = $request->student_id;
-            $fee->grade_id = $request->grade_id;
-            $fee->classroom_id = $request->classroom_id;
-            $fee->school_fee_id = $request->fee;
+            $student = Student::findorfail('student_id');
             $ac_year = acadmice_year::where('status', '0')->first();
-            $fee->academic_year_id = $ac_year->id;
-            $fee->save();
 
-            // Update the corresponding student account record
-            $std = StudentAccount::where('fee_invoices_id', $fee->id)->firstOrFail();
-            $std->student_id = $request->student_id;
-            $std->grade_id = $request->grade_id;
-            $std->fee_invoices_id = $fee->id;
-            $std->classroom_id = $request->classroom_id;
-            $std->academic_year_id = $ac_year->id;
-            $std->debit = school_fee::where('id', $request->fee)->first()->amount;
-            $std->credit = 0.00;
-            $std->save();
+            $service->FeeInvoice($student, $fee->id, $ac_year->id, $this->getSchool()->id);
+            $service->CreateStudentAccount($student, $fee->id, $ac_year->id, 'invoice', 0.00, $fee->amount);
+
             $this->logActivity(trans('log.actions.updated'), trans('log.models.fee_invoice.updated', ['name' => $fee->students->name]));
             DB::commit();
 

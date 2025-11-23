@@ -14,7 +14,7 @@ use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\Student;
 use App\Services\AgeCalculationService;
-use App\Services\StudentFinancialService;
+use App\Services\FinancialService;
 use App\Services\StudentImportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -48,7 +48,7 @@ class StudentsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StudentRequest $request, AgeCalculationService $ageCalculator, StudentFinancialService $StudentAccount)
+    public function store(StudentRequest $request, AgeCalculationService $ageCalculator, FinancialService $StudentAccount)
     {
         try {
             $religion = My_parents::findorfail($request->parents)->first(['Religion']);
@@ -83,16 +83,8 @@ class StudentsController extends Controller
             $school_fee = DB::table('school__fees')->where('academic_year_id', $acc_year->id)->where('grade_id', $student->grade_id)->where('classroom_id', $student->classroom_id)->get();
             // dd($school_fee);
             foreach ($school_fee as $fee) {
-                $fees = new Fee_invoice;
-                $fees->invoice_date = \Carbon\Carbon::parse()->format('Y-m-d');
-                $fees->student_id = $student->id;
-                $fees->grade_id = $student->grade_id;
-                $fees->classroom_id = $student->classroom_id;
-                $fees->school_fee_id = $fee->id;
-                $fees->academic_year_id = $acc_year->id;
-                $fees->user_id = Auth::user()->id;
-                $fees->school_id = Auth::user()->school_id;
-                $fees->save();
+
+                $StudentAccount->FeeInvoice($student, $fee->id, $acc_year->id, $this->getSchool()->id);
                 // Student Account Service
                 $this->logActivity(trans('log.actions.added'), trans('log.models.school_fee.invoice_added', ['name' => $student->name, 'amount' => $fee->amount]));
             }
@@ -265,7 +257,7 @@ class StudentsController extends Controller
         }
     }
 
-    public function fast_add_student(Request $request, AgeCalculationService $ageCalculator, StudentFinancialService $StudentAccount)
+    public function fast_add_student(Request $request, AgeCalculationService $ageCalculator, FinancialService $StudentAccount)
     {
 
         try {

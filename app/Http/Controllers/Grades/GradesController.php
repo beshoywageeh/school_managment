@@ -1,8 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 namespace App\Http\Controllers\Grades;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GradeStoreRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\Grade;
@@ -44,13 +47,10 @@ class GradesController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store(GradeStoreRequest $request)
     {
         DB::beginTransaction();
         try {
-            $request->validate([
-                'Grade_Name' => ['required', 'string', 'max:255'],
-            ]);
             $grade = Grade::create([
                 'name' => $request->Grade_Name,
                 'user_id' => \Auth::Id(),
@@ -103,13 +103,11 @@ class GradesController extends Controller
 
     public function edit(string $id) {}
 
-    public function update(Request $request)
+    public function update(GradeStoreRequest $request)
     {
         DB::beginTransaction();
         try {
-            $request->validate([
-                'Grade_Name' => ['required', 'string', 'max:255'],
-            ]);
+
             $grade = Grade::where('id', $request->id)->first();
             $grade->update([
                 'name' => $request->Grade_Name,

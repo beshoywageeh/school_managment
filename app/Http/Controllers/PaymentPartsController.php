@@ -7,10 +7,8 @@ use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Fee_invoice;
 use App\Models\PaymentParts;
-use App\Models\Recipt_Payment;
 use App\Models\Student;
-use App\Models\StudentAccount;
-use Carbon\Carbon;
+use App\Services\FinancialService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -45,23 +43,15 @@ class PaymentPartsController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(Request $request, FinancialService $service)
     {
         $List_Parts = $request->list_parts;
         try {
             foreach ($List_Parts as $list_part) {
-                $fee = new PaymentParts;
-                $fee->date = $list_part['pay_at'];
-                $fee->student_id = $list_part['student_id'];
-                $fee->grade_id = $request->grade_id;
-                $fee->class_id = $request->class_id;
-                $fee->school_fees_id = $list_part['fee_id'];
-                $fee->amount = $list_part['amount'];
-                $fee->academic_year_id = acadmice_year::where('status', '0')->first()->id;
-                $fee->school_id = $this->getSchool()->id;
-                $fee->user_id = auth()->user()->id;
-                $fee->save();
-                $this->logActivity(trans('log.actions.added'), trans('log.models.payment_part.created', ['name' => $fee->students->name]));
+                $acc_year = acadmice_year::where('status', '0')->first()->id;
+                $student = Student::findorfail($list_part['student_id']);
+                $this->logActivity(trans('log.actions.added'), trans('log.models.payment_part.created', ['name' => $student->name]));
+                $service->PaymentParts($student, $list_part['fee_id'], $acc_year, $this->GetSchool()->id, $list_part['pay_at'], $list_part['amount']);
             }
             session()->flash('success', trans('general.success'));
 
@@ -150,7 +140,7 @@ class PaymentPartsController extends Controller
         }
     }
 
-    public function submit_pay(Request $request)
+    public function submit_pay(Request $request, FinancialService $service)
     {
         try {
             DB::beginTransaction();
@@ -160,40 +150,29 @@ class PaymentPartsController extends Controller
             $fee_parts = PaymentParts::where('school_fees_id', $part->school_fees_id)->where('student_id', $part->student_id)->get();
             $student = Student::findOrFail($request->student_id);
             $currentYear = acadmice_year::where('status', '0 ')->firstOrFail();
-            $currentDate = Carbon::today();
+
             if ($request->amount != $part->amount) {
                 // Handling partial payments
-                $newPart = new PaymentParts([
-                    'date' => $currentDate,
-                    'student_id' => $student->id,
-                    'grade_id' => $student->grade_id,
-                    'class_id' => $student->classroom_id,
-                    'amount' => $part->amount - $request->amount,
-                    'school_fees_id' => $part->school_fees_id,
-                    'academic_year_id' => $currentYear->id,
-                    'school_id' => $this->getSchool()->id,
-                    'user_id' => auth()->user()->id,
-                ]);
-                $newPart->save();
+                $service->submit_pay_less($student, $part, $request->amount, $currentYear->id, $this->GetSchool()->id);
                 $this->logActivity(trans('log.actions.paid_partially'), trans('log.models.payment_part.paid_partially', ['name' => $student->name]));
                 $part->delete();
                 DB::commit();
             } elseif ($request->amount === $part->amount || $check->count() !== 0) {
 
                 // Handling full payment
-                $part->update(['payment_status' => 1]);
-                $this->createStudentAccount(null, $request->student_id, $student->grade_id, $student->classroom_id, $currentYear->id, $currentDate, $part->amount, 0.00, '2');
+                $part->update(['status' => 'payed']);
                 $totalAmount = $request->amount;
-                $receipt = $this->createReceipt($totalAmount, $request->student_id, $currentYear->id);
+                $receipt = $service->createReceipt($totalAmount, $student, $currentYear->id, $this->GetSchool()->id);
+                $service->CreateStudentAccount($student, $receipt->id, $currentYear->id, 'payment', $part->amount);
                 if ($fee_parts->sum('amount') == $check->sum('amount')) {
-                    $fee->update(['status' => 1]);
+                    $fee->update(['status' => 'payed']);
                 }
                 $this->logActivity(trans('log.actions.paid_fully'), trans('log.models.payment_part.paid_fully', ['name' => $student->name]));
                 DB::commit();
 
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
             } else {
-                $part->update(['payment_status' => 1]);
+                $part->update(['status' => 'payed']);
                 DB::commit();
 
                 return redirect()->route('Recipt_Payment.print', $receipt->id);
@@ -208,44 +187,5 @@ class PaymentPartsController extends Controller
 
             return redirect()->back();
         }
-    }
-
-    private function createReceipt($amount, $studentId, $academicYearId)
-    {
-        $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
-        $manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
-        $student = Student::findOrFail($studentId);
-        $receipt = new Recipt_Payment([
-            'manual' => $manual,
-            'date' => Carbon::today(),
-            'student_id' => $studentId,
-            'Debit' => $amount,
-            'academic_year_id' => $academicYearId,
-            'school_id' => $this->getSchool()->id,
-            'user_id' => auth()->user()->id,
-        ]);
-        $this->logActivity(trans('log.actions.added'), trans('log.models.payment_part.receipt_added', ['name' => $student->name]));
-        $receipt->save();
-
-        return $receipt;
-    }
-
-    private function createStudentAccount($receiptId, $studentId, $gradeId, $classroomId, $academicYearId, $date, $credit, $debit, $type)
-    {
-        $student = Student::findOrFail($studentId);
-
-        $studentAccount = new StudentAccount([
-            'student_id' => $studentId,
-            'type' => $type,
-            'date' => $date,
-            'credit' => $credit,
-            'grade_id' => $gradeId,
-            'classroom_id' => $classroomId,
-            'debit' => $debit,
-            'academic_year_id' => $academicYearId,
-            'recipt__payments_id' => $receiptId,
-        ]);
-        $this->logActivity(trans('log.actions.added'), trans('log.models.payment_part.account_added', ['name' => $student->name]));
-        $studentAccount->save();
     }
 }

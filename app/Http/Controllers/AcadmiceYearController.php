@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AcadmiceYearStoreRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
@@ -30,13 +31,10 @@ class AcadmiceYearController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AcadmiceYearStoreRequest $request)
     {
 
         try {
-            $validated = $request->validate([
-                'year_end' => 'required|date|unique:acadmice_years,year_end',
-            ]);
             $year_start = date('Y-m-d', strtotime($request->year_start));
             $year_end = date('Y-m-d', strtotime($request->year_end));
             $view = Carbon::parse($year_start)->format('Y').' - '.Carbon::parse($year_end)->format('Y');
@@ -82,7 +80,7 @@ class AcadmiceYearController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function update(Request $request)
+    public function update(AcadmiceYearStoreRequest $request)
     {
         //   return $request;
         try {

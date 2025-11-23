@@ -42,7 +42,7 @@ class BookSheetController extends Controller
                     'name' => $book['name'],
                     'opening_qty' => $book['opening_qty'],
                     'sales_price' => $request->sales_price,
-                    'is_book' => isset($book['is_book']) ? true : false,
+                    'type' => isset($book['is_book']) ? 'book' : 'sheet',
                     'school_id' => $this->getSchool()->id,
                     'user_id' => auth()->user()->id,
                 ]);
@@ -83,7 +83,7 @@ class BookSheetController extends Controller
                 'name' => $request->name,
                 'opening_qty' => $request->opening_qty,
                 'sales_price' => $request->sales_price,
-                'is_book' => isset($book['is_book']) ? true : false,
+                'type' => isset($book['is_book']) ? 'book' : 'sheet',
             ]);
             $this->logActivity(trans('log.actions.updated'), trans('log.models.book_sheet.updated', ['name' => $request->name]));
 

@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('auto_number');
             $table->unsignedBigInteger('laboratory_id')->nullable();
             $table->unsignedBigInteger('student_id')->nullable();
-            $table->enum('type');   // inventory - out - gard
-            $table->enum('isset'); // set - notset
+            $table->enum('type',['inventory','sales','gard']);   // inventory - out - gard
+            $table->enum('isset',['set','notset']); // set - notset
             $table->integer('manual_number')->nullable();
             $table->date('manual_date')->nullable();
-            $table->enum->('payed');
+            $table->enum('status', ['payed', 'notpayed'])->default('notpayed');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('school_id')->nullable();
             $table->date('date');

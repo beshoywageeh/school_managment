@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('exchange_bond_id')->nullable();
             $table->unsignedBigInteger('academic_year_id');
             $table->date('date');
-            $table->tinyInteger('type')->comment('Invoice => 1 , Payment => 2 , Expcition => 3');
+            $table->enum('type', ['invoice', 'payment', 'exciption', 'exchange']);
             $table->decimal('debit', 10, 2);
             $table->decimal('credit', 10, 2);
             $table->timestamps();

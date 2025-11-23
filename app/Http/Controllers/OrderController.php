@@ -16,8 +16,8 @@ class OrderController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $orders = order::where('school_id', $school->id)->where('type', 1)->withcount('stocks')->get();
-        $type = 1;
+        $orders = order::where('school_id', $school->id)->where('type', 'inventory')->withcount('stocks')->get();
+        $type = 'inventory';
 
         return view('backend.orders.index', get_defined_vars());
     }
@@ -26,7 +26,7 @@ class OrderController extends Controller
     {
         try {
             $order = order::with('stocks')->findorFail($id);
-            $type = 1;
+            $type = 'inventory';
             $school = $this->getSchool();
 
             return view('backend.orders.show', get_defined_vars());
@@ -38,10 +38,10 @@ class OrderController extends Controller
     public function store()
     {
         try {
-            $generate_code = order::where('type', '1')->orderBy('auto_number', 'desc')->first();
+            $generate_code = order::where('type', 'inventory')->orderBy('auto_number', 'desc')->first();
             $order = order::create([
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
-                'type' => '1',
+                'type' => 'inventory',
                 'school_id' => $this->getSchool()->id,
                 'user_id' => auth()->user()->id,
             ]);
@@ -60,7 +60,7 @@ class OrderController extends Controller
         try {
             $order = order::with('stocks')->findorFail($id);
             $stocks = stock::get('id', 'name');
-            $type = 1;
+            $type = 'inventory';
             $school = $this->getSchool();
 
             return view('backend.orders.edit', get_defined_vars());

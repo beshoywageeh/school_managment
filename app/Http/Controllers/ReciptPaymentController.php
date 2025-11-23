@@ -12,7 +12,7 @@ use App\Models\PaymentParts;
 use App\Models\Recipt_Payment;
 use App\Models\Student;
 use App\Models\StudentAccount;
-use App\Services\StudentFinancialService;
+use App\Services\FinancialService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -58,7 +58,7 @@ class ReciptPaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, StudentFinancialService $studentFinancial)
+    public function store(Request $request, FinancialService $studentFinancial)
     {
         try {
 
@@ -67,27 +67,11 @@ class ReciptPaymentController extends Controller
                 $student = Student::findorfail($request->student_id);
                 DB::beginTransaction();
                 $invoice = Fee_invoice::where('id', $request->feeInvoice)->with('fees:id,title,amount')->first();
-                $pay = new Recipt_Payment;
-                $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
-                $pay->manual = $lastPayment ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT) : '00001';
-                $pay->date = date('Y-m-d');
-                $pay->student_id = $student->id;
-                $pay->Debit = $invoice->fees->amount;
-                $pay->academic_year_id = $academic_year->id;
-                $pay->school_id = $this->getSchool()->id;
-                $pay->user_id = auth()->user()->id;
-                $pay->save();
+                $pay = $studentFinancial->createReceipt($invoice->fees->amount, $student, $academic_year->id, $this->getSchool()->id);
+                $studentFinancial->CreateStudentAccount($student, $invoice->id, $academic_year, 'payment', 0.00, $invoice->fees->amount, $pay->id);
+                $invoice->update(['status' => 'payed']);
+                $studentFinancial->Fund_Account($this->GetSchool()->id, null, null, $invoice->fees_amount, $pay->id);
 
-                $studentFinancial->CreateStudentAccount($student, $invoice->id, $academic_year, 2, 0.00, $invoice->fees->amount, $pay->id);
-                $invoice->update(['status' => 1]);
-                $fund = new fund_account;
-                $fund->date = date('Y-m-d');
-                $fund->receipt_id = $pay->id;
-                $fund->Credit = 0.00;
-                $fund->Debit = $invoice->fees->amount;
-                $fund->school_id = $this->getSchool()->id;
-                $fund->user_id = auth()->user()->id;
-                $fund->save();
                 $this->logActivity(trans('log.actions.added'), trans('log.models.receipt_payment.created', ['name' => Student::where('id', $request->student_id)->first()->name, 'date' => date('Y-m-d')]));
                 DB::commit();
 
@@ -98,7 +82,7 @@ class ReciptPaymentController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
 
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back();
         }
     }
 
@@ -202,7 +186,7 @@ class ReciptPaymentController extends Controller
 
     }
 
-    public function payall(StudentFinancialService $studentFinancial)
+    public function payall(FinancialService $studentFinancial)
     {
         $academic_year = acadmice_year::where('status', '0')->first();
         DB::beginTransaction();

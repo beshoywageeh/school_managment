@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('school_id');
             $table->date('date');
             $table->decimal('amount', 10, 2);
-            $table->tinyInteger('payment_status')->default(0);
+            $table->enum('status', ['payed', 'notpayed'])->default('notpayed');
             $table->unsignedBigInteger('school_fees_id');
             $table->timestamps();
             $table->softDeletes();

@@ -9,7 +9,7 @@ use App\Models\ExcptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Student;
 use App\Models\StudentAccount;
-use App\Services\StudentFinancialService;
+use App\Services\FinancialService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -56,7 +56,7 @@ class ExcptionFeesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, StudentFinancialService $studentFinanc)
+    public function store(Request $request, FinancialService $studentFinanc)
     {
         //        return $request;
         try {
@@ -65,22 +65,10 @@ class ExcptionFeesController extends Controller
             $academic_year = acadmice_year::findorfail($student->acadmiecyear_id);
             $fee = Fee_invoice::findorfail($request->fee_id)->with('fees')->first();
             if ($request->amount == $fee->fees->amount) {
-
                 $fee->delete();
             }
-
-            $pay = new ExcptionFees;
-            $pay->date = date('Y-m-d');
-            $pay->student_id = $student->id;
-            $pay->amount = $request->amount;
-            $pay->academic_year_id = $academic_year->id;
-            $pay->grade_id = $student->grade_id;
-            $pay->class_id = $student->classroom_id;
-            $pay->fee_id = $request->fee_id;
-            $pay->school_id = $this->getSchool()->id;
-            $pay->user_id = auth()->id();
-            $pay->save();
-            $studentFinanc->CreateStudentAccount($student, null, $academic_year, 3, 0.00, $request->amount, null, $pay->id);
+            $studentFinanc->exciption_fee($student, $request, $academic_year->id, $this->GetSchool()->id);
+            $studentFinanc->CreateStudentAccount($student, null, $academic_year, 'exciption', 0.00, $request->amount, null, $pay->id);
 
             $this->logActivity(trans('log.actions.added'), trans('log.models.exception_fee.created', ['student_name' => $student->name]));
             DB::commit();
@@ -132,7 +120,7 @@ class ExcptionFeesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request, FinancialService $service)
     {
         DB::beginTransaction();
         try {
