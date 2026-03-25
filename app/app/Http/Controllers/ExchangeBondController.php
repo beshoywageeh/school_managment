@@ -46,7 +46,7 @@ class ExchangeBondController extends Controller
             DB::commit();
             $this->LogActivity(trans('log.actions.added'), trans('log.models.exchange_bond.created'));
 
-            return redirect()->route('exchange_bonds.print', $exchange->id);
+            return redirect()->route('exchange-bonds.print', $exchange->id);
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
@@ -84,7 +84,7 @@ class ExchangeBondController extends Controller
             DB::commit();
             $this->LogActivity(trans('log.actions.updated'), trans('log.models.exchange_bond.updated'));
 
-            return redirect()->route('exchange_bonds.index')->with('success', trans('general.success'));
+            return redirect()->route('exchange-bonds.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
@@ -114,7 +114,7 @@ class ExchangeBondController extends Controller
             DB::commit();
             $this->LogActivity(trans('log.actions.deleted'), trans('log.models.exchange_bond.deleted'));
 
-            return redirect()->route('exchange_bonds.index')->with('success', trans('general.success'));
+            return redirect()->route('exchange-bonds.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());

@@ -15,7 +15,8 @@
                     <div class="row mb-30">
                         <div class="col">
                             <label for="">{{ trans('labs.location') }}</label>
-                            <input class="form-control" list="location_list" name="location" value="{{ old('location') }}" placeholder="{{ trans('labs.location') }}">
+                            <input class="form-control" list="location_list" name="location"
+                                value="{{ old('location') }}" placeholder="{{ trans('labs.location') }}">
                             <datalist id="location_list">
                                 @foreach ($labs_main as $lab)
                                     <option value="{{ $lab->location }}">
@@ -35,10 +36,11 @@
                                 <tr data-repeater-item>
                                     <td>
                                         <input type="text" name="name" class="form-control"
-                                        value="{{ old('name') }}">
+                                            value="{{ old('name') }}">
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-block" data-repeater-delete ><i class="ti-trash"></i></button>
+                                        <button type="button" class="btn btn-danger btn-block" data-repeater-delete><i
+                                                class="ti-trash"></i></button>
                                     </td>
                                 </tr>
                             </tbody>

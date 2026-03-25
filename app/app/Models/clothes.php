@@ -20,7 +20,7 @@ class clothes extends Model
 
     public function grade()
     {
-        return $this->belongsTo(Grade::class);
+        return $this->belongsTo(grade::class);
     }
 
     public function classroom()

@@ -54,13 +54,16 @@
         </div>
         <div class="row">
             <div class="col alert alert-success">
-                <h5>{{trans('fund_account.total_credit')}} {{Number::currency($accounts->sum('Credit'),'EGP')}}</h5>
+                <h5>{{ trans('fund_account.total_credit') }} {{ Number::currency($accounts->sum('Credit'), 'EGP') }}
+                </h5>
             </div>
             <div class="col alert alert-warning">
-                <h5>{{trans('fund_account.total_debit')}} {{Number::currency($accounts->sum('Debit'),'EGP')}}</h5>
+                <h5>{{ trans('fund_account.total_debit') }} {{ Number::currency($accounts->sum('Debit'), 'EGP') }}
+                </h5>
             </div>
             <div class="col alert alert-danger">
-                <h5>{{trans('fund_account.grand_total')}} {{Number::currency($accounts->sum('Debit')-$accounts->sum('Credit'),'EGP')}}</h5>
+                <h5>{{ trans('fund_account.grand_total') }}
+                    {{ Number::currency($accounts->sum('Debit') - $accounts->sum('Credit'), 'EGP') }}</h5>
             </div>
         </div>
     </div>

@@ -21,12 +21,15 @@ class Student extends Model
         'user_id',
         'grade_id',
         'classroom_id',
-        'address', 'join_date',
+        'address',
+        'join_date',
         'national_id',
         'birth_at_begin',
         'student_status',
         'religion',
-        'code', 'acadmiecyear_id', 'nationality_id',
+        'code',
+        'acadmiecyear_id',
+        'nationality_id',
         'school_id',
     ];
 
@@ -38,41 +41,41 @@ class Student extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo("App\Models\User");
     }
 
     public function grade()
     {
-        return $this->belongsTo('App\Models\Grade', 'grade_id', 'id');
+        return $this->belongsTo("App\Models\Grade", 'grade_id', 'id');
     }
 
     public function classroom()
     {
-        return $this->belongsTo('App\Models\class_room');
+        return $this->belongsTo("App\Models\class_room");
     }
 
     public function parent()
     {
-        return $this->belongsTo('App\Models\My_parents');
-    }
-
-    public function fees()
-    {
-        return $this->hasMany('App\Models\StudentAccount');
+        return $this->belongsTo("App\Models\My_parents");
     }
 
     public function StudentAccount()
     {
-        return $this->hasMany('App\Models\StudentAccount');
+        return $this->hasMany("App\Models\StudentAccount");
     }
 
     public function Acadmice_year()
     {
-        return $this->hasMany('App\Models\acadmice_year');
+        return $this->hasMany("App\Models\acadmice_year");
     }
 
     public function nationality()
     {
         return $this->belongsTo('App\Models\nationality');
+    }
+
+    public function fee_invoice()
+    {
+        return $this->hasMany(Fee_invoice::class);
     }
 }

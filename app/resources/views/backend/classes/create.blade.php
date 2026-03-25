@@ -21,13 +21,12 @@
                                         <select class="custom-select" name="grade_name">
                                             <option value="" @disabled(true)>
                                                 {{ trans('class_rooms.select_grade') }}</option>
-                                            @foreach ($class_rooms as $key=>$class_room)
-                                            <optgroup label="{{$key}}">
-                                                @foreach ($class_room as $item)
-
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                                @endforeach
-                                            </optgroup>
+                                            @foreach ($class_rooms as $key => $class_room)
+                                                <optgroup label="{{ $key }}">
+                                                    @foreach ($class_room as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
                                             @endforeach
                                         </select>
                                     </div>

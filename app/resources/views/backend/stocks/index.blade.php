@@ -17,7 +17,7 @@
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                 @endcan
                                 @can('stocks-outcome_order')
-                                    <a href="{{route('outorder.new_transfer')}}"
+                                    <a href="{{ route('outorder.new_transfer') }}"
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
                                 @endcan
 
@@ -59,7 +59,7 @@
                                             <td> <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                 [
                                                     'type' => 'link',
-                                                    'url' => route('stock.destroy', $stock->id),
+                                                    'url' => route('stocks.destroy', $stock->id),
                                                     'text' => trans('general.delete'),
                                                     'icon' => 'ti-trash',
                                                     'onclick' => 'confirmation(event)',
@@ -70,7 +70,7 @@
                                                     'text' => trans('general.edit'),
                                                     'icon' => 'ti-pencil',
                                                     'toggle' => 'modal',
-                                                    'target' => '#editItem-'.$stock->id,
+                                                    'target' => '#editItem-' . $stock->id,
                                                     'can' => 'stocks-update',
                                                 ],
                                             ]" /></td>
@@ -93,18 +93,18 @@
         @include('backend.stocks.create')
     </div>
     @push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('.list_stocks').repeater({
+        <script>
+            $(document).ready(function() {
+                $('.list_stocks').repeater({
 
-                show: function() {
-                    $(this).slideDown();
-                },
-                hide: function(deleteElement) {
-                    $(this).slideUp(deleteElement);
-                }
+                    show: function() {
+                        $(this).slideDown();
+                    },
+                    hide: function(deleteElement) {
+                        $(this).slideUp(deleteElement);
+                    }
+                });
             });
-        });
-    </script>
+        </script>
     @endpush
 @endsection

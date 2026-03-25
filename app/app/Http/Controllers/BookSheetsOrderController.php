@@ -17,13 +17,13 @@ class BookSheetsOrderController extends Controller
     public function index($type)
     {
         $school = $this->getSchool();
-        $relations = ($type == 'sales') ? ['stocks', 'students'] : ['stocks'];
+        $relations = ($type == 2) ? ['stocks', 'students'] : ['stocks'];
         $orders = bookSheets_order::where('school_id', $school->id)
             ->where('type', $type)
             ->with($relations)
             ->get();
 
-        return view('backend.book_sheets_order.index', compact('orders', 'type', 'school'));
+        return view('backend.book_sheets_order.index', compact('orders', 'type'));
     }
 
     public function create_tawreed()
@@ -33,7 +33,7 @@ class BookSheetsOrderController extends Controller
         if ($books_sheets->count() == 0) {
             return redirect()->route('books_sheets.index')->with('info', trans('general.noDataToShow'));
         }
-        $generate_code = bookSheets_order::where('type', 'inventory')->orderBy('auto_number', 'desc')->first();
+        $generate_code = bookSheets_order::where('type', '1')->orderBy('auto_number', 'desc')->first();
         $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
 
         return view('backend.book_sheets_order.create_tawreed', compact('auto_number', 'books_sheets'));
@@ -43,10 +43,10 @@ class BookSheetsOrderController extends Controller
     {
         try {
             DB::begintransaction();
-            $generate_code = bookSheets_order::where('type', 'inventory')->orderBy('auto_number', 'desc')->first();
+            $generate_code = bookSheets_order::where('type', '1')->orderBy('auto_number', 'desc')->first();
             $order = bookSheets_order::create([
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
-                'type' => 'inventory',
+                'type' => '1',
                 'date' => date('Y-m-d'),
                 'manual_date' => $request->manual_date,
                 'manual_number' => $request->manual_num,
@@ -61,7 +61,7 @@ class BookSheetsOrderController extends Controller
                     'order_id' => $order->id,
                 ]);
             }
-            $this->logActivity(trans('log.actions.added'), trans('log.models.book_sheets_order.tawreed_added', ['number' => $order->auto_number]));
+            $this->logActivity(trans('log.parents.added_action'), trans('log.book_sheets_order.tawreed_added', ['number' => $order->auto_number]));
             DB::commit();
 
             return redirect()->route('books_sheets.index')->with('success', trans('general.success'));
@@ -100,13 +100,13 @@ class BookSheetsOrderController extends Controller
                 ]);
                 $bookSheet = book_sheet::find($book_sheet);
                 if ($request->sales[$key] != $bookSheet->sales_price) {
-                    $this->logActivity(trans('log.actions.updated'), trans('log.models.book_sheets_order.price_updated', ['book_name' => $bookSheet->name, 'old_price' => $bookSheet->sales_price, 'new_price' => $request->sales[$key]]));
+                    $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.price_updated', ['book_name' => $bookSheet->name, 'old_price' => $bookSheet->sales_price, 'new_price' => $request->sales[$key]]));
                     $bookSheet->update([
                         'sales_price' => $request->sales[$key],
                     ]);
 
                 }
-                $this->logActivity(trans('log.actions.updated'), trans('log.models.book_sheets_order.tawreed_updated', ['number' => $order->auto_number]));
+                $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.tawreed_updated', ['number' => $order->auto_number]));
             }
             DB::commit();
 
@@ -125,7 +125,7 @@ class BookSheetsOrderController extends Controller
         if ($students->count() == 0) {
             return redirect()->route('bookSheetsOrder.index', 2)->with('info', trans('general.noDataToShow'));
         }
-        $generate_code = bookSheets_order::where('type', 'sales')->orderBy('auto_number', 'desc')->first();
+        $generate_code = bookSheets_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
 
         $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
 
@@ -136,10 +136,10 @@ class BookSheetsOrderController extends Controller
     {
         try {
             DB::begintransaction();
-            $generate_code = bookSheets_order::where('type', 'sales')->orderBy('auto_number', 'desc')->first();
+            $generate_code = bookSheets_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
             $order = bookSheets_order::create([
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
-                'type' => 'sales',
+                'type' => '2',
                 'date' => date('Y-m-d'),
                 'student_id' => $request->student_id,
                 'school_id' => $this->getSchool()->id,
@@ -153,7 +153,7 @@ class BookSheetsOrderController extends Controller
                     'order_id' => $order->id,
                 ]);
             }
-            $this->logActivity(trans('log.actions.added'), trans('log.models.book_sheets_order.sarf_added', ['number' => $order->auto_number]));
+            $this->logActivity(trans('log.parents.added_action'), trans('log.book_sheets_order.sarf_added', ['number' => $order->auto_number]));
             DB::commit();
 
             return redirect()->route('bookSheetsOrder.index', 2)->with('success', trans('general.success'));
@@ -168,14 +168,14 @@ class BookSheetsOrderController extends Controller
     {
         $school = $this->getSchool();
         $o = bookSheets_order::findorfail($id);
-        if ($o->type == 'inventory' || $o->type == 'gard') {
+        if ($o->type == 1 || $o->type == 3) {
             $order = bookSheets_order::where('id', $id)->with('stocks')->first();
         }
-        if ($o->type == 'sales') {
+        if ($o->type == 2) {
             $order = bookSheets_order::where('id', $id)->with('stocks', 'students')->first();
         }
 
-        return view('backend.book_sheets_order.show', compact('order', 'school'));
+        return view('backend.book_sheets_order.show', compact('order'));
     }
 
     public function edit_sarf($id)
@@ -203,7 +203,7 @@ class BookSheetsOrderController extends Controller
                     'quantity_in' => '0',
                     'order_id' => $request->order_id,
                 ]);
-                $this->logActivity(trans('log.actions.updated'), trans('log.models.book_sheets_order.sarf_updated', ['number' => $order->auto_number]));
+                $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.sarf_updated', ['number' => $order->auto_number]));
             }
 
             DB::commit();
@@ -224,7 +224,7 @@ class BookSheetsOrderController extends Controller
                 return redirect()->back()->with('info', trans('general.noDataToShow'));
             }
             $school = $this->getSchool();
-            $generate_code = bookSheets_order::where('type', 'gard')->orderBy('auto_number', 'desc')->first();
+            $generate_code = bookSheets_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
             $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
 
             return view('backend.book_sheets_order.gard_create', compact('auto_number', 'stocks', 'school'));
@@ -236,10 +236,10 @@ class BookSheetsOrderController extends Controller
     public function submit_gard(Request $request)
     {
         try {
-            $generate_code = bookSheets_order::where('type', 'gard')->orderBy('auto_number', 'desc')->first();
+            $generate_code = bookSheets_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
             $order = bookSheets_order::create([
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
-                'type' => 'gard',
+                'type' => '3',
                 'date' => date('Y-m-d'),
                 'school_id' => $this->getSchool()->id,
                 'user_id' => auth()->user()->id,
@@ -255,7 +255,7 @@ class BookSheetsOrderController extends Controller
                     'quantity_out' => $qty < 0 ? abs($qty) : 0,
                     'quantity_in' => $qty > 0 ? $qty : 0,
                 ]);
-                $this->logActivity(trans('log.actions.added'), trans('log.models.book_sheets_order.gard_added', ['stock_name' => $stock->name, 'inventory_number' => $order->auto_number]));
+                $this->logActivity(trans('log.parents.added_action'), trans('log.book_sheets_order.gard_added', ['stock_name' => $stock->name, 'inventory_number' => $order->auto_number]));
             }
 
             return redirect()->route('bookSheetsOrder.index', 3)->with('success', 'تم الاضافة بنجاح');
@@ -296,7 +296,7 @@ class BookSheetsOrderController extends Controller
                         'quantity_in' => $qty,
                     ]);
                 }
-                $this->logActivity(trans('log.actions.updated'), trans('log.models.book_sheets_order.gard_updated', ['stock_name' => $stock->name, 'inventory_number' => $order->auto_number]));
+                $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.gard_updated', ['stock_name' => $stock->name, 'inventory_number' => $order->auto_number]));
             }
 
             return redirect()->route('bookSheetsOrder.index', 3)->with('success', trans('general.success'));
@@ -309,8 +309,8 @@ class BookSheetsOrderController extends Controller
     public function pay($id)
     {
         try {
-            bookSheets_order::where('id', $id)->update(['status' => 'payed']);
-            $this->logActivity(trans('log.actions.updated'), trans('log.models.book_sheets_order.status_updated', ['id' => $id]));
+            bookSheets_order::where('id', $id)->update(['is_payed' => 1]);
+            $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.status_updated', ['id' => $id]));
 
             return redirect()->route('bookSheetsOrder.index', 2)->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -322,7 +322,7 @@ class BookSheetsOrderController extends Controller
     {
         try {
             $order = bookSheets_order::find($id);
-            $this->logActivity(trans('log.actions.deleted'), trans('log.models.book_sheets_order.deleted', ['number' => $order->auto_number]));
+            $this->logActivity(trans('log.parents.deleted_action'), trans('log.book_sheets_order.deleted', ['number' => $order->auto_number]));
             $order->delete();
 
             return redirect()->back()->with('success', trans('general.success'));

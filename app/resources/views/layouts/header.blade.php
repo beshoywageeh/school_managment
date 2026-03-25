@@ -3,7 +3,8 @@
 
     <div class="text-left navbar-brand-wrapper">
         <a class="navbar-brand brand-logo" href="https://www.facebook.com/LoopLabsDev"><img
-                src="{{ asset('assests/images/logo-icon-dark.png') }}" alt="{{ trans('general.loop_labs') }}"><span>{{ trans('general.loop_labs') }}</span></a>
+                src="{{ asset('assests/images/logo-icon-dark.png') }}"
+                alt="{{ trans('general.loop_labs') }}"><span>{{ trans('general.loop_labs') }}</span></a>
         <a class="navbar-brand brand-logo-mini" href="index.html"><img
                 src="{{ asset('assests/images/logo-icon-dark.png') }}" alt="{{ trans('general.loop_labs') }}"></a>
         <title>{{ env('APP_NAME') }}&nbsp;@yield('page_title')</title>
@@ -22,8 +23,8 @@
     <ul class="ml-auto nav navbar-nav">
         <li class="nav-item">
             <h5 class="m-auto text-center rounded alert alert-warning">{{ \Auth::user()->name }}</h5>
-            </li>
-            <li class="nav-item">
+        </li>
+        <li class="nav-item">
             <h6 class="m-auto text-center rounded alert alert-info" id="datetime"></h6>
         </li>
         <li class="nav-item fullscreen">
@@ -31,7 +32,7 @@
         </li>
         <li class="nav-item nav_item_header">
             <a class="btn" style="padding-top: 12px" href="{{ route('profile.edit') }}"><i
-                    class="text-info ti-settings" ></i></a>
+                    class="text-info ti-settings"></i></a>
         </li>
         <li class="nav-item nav_item_header" style="margin-right:0">
 

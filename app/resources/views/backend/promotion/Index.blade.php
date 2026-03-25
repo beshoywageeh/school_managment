@@ -33,7 +33,7 @@
                                         <th class="alert alert-success">{{ trans('promotions.to_gradename') }}</th>
                                         <th class="alert alert-success">{{ trans('promotions.to_classroom') }}</th>
                                         <th class="alert alert-success">{{ trans('promotions.to_year') }}</th>
-                                        <th>{{trans('General.created_at')}}</th>
+                                        <th>{{ trans('General.created_at') }}</th>
                                         <th>{{ trans('general.actions') }}</th>
                                     </tr>
                                 </thead>
@@ -48,13 +48,13 @@
                                             <td>{{ $promotion->t_grade->name }}</td>
                                             <td>{{ $promotion->t_class->name }}</td>
                                             <td> {{ $promotion->t_acc->view }}</td>
-                                            <td>{{$promotion->created_at->format('d-m-Y')}}</td>
+                                            <td>{{ $promotion->created_at->format('d-m-Y') }}</td>
                                             <td>
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
                                                         'url' => route('promotions.destroy', $promotion->id),
                                                         'text' => trans('general.delete'),
-                                                        'type'=>'link',
+                                                        'type' => 'link',
                                                         'icon' => 'ti-trash',
                                                         'onclick' => 'confirmation(event)',
                                                         'can' => 'promotion-delete',
@@ -78,8 +78,6 @@
     </div>
 
     @push('scripts')
-    <script>
-
-    </script>
+        <script></script>
     @endpush
 @endsection

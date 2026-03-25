@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('stock.title') }} : {{trans('Sidebar.clothes')}}
+    {{ trans('stock.title') }} : {{ trans('sidebar.clothes') }}
 @endsection
 @section('content')
     @include('backend.msg')
@@ -17,7 +17,7 @@
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                 @endcan
                                 @can('clothes-outcome_order')
-                                    <a href="{{route('clothes_out_order.create')}}"
+                                    <a href="{{ route('clothes_out_order.create') }}"
                                         class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
                                 @endcan
                                 @can('clothes-inventory_order')
@@ -39,7 +39,7 @@
                                 <thead class="alert-info">
                                     <tr>
                                         <th>#</th>
-                                        <th>{{ trans('Grades.name') }}</th>
+                                        <th>{{ trans('grades.title') }}</th>
                                         <th>{{ trans('class_rooms.title') }}</th>
                                         <th>{{ trans('stock.name') }}</th>
                                         <th>{{ trans('stock.opening_balance') }}</th>
@@ -48,9 +48,9 @@
                                         <th>{{ trans('clothes.purchase_price') }}</th>
                                         <th>{{ trans('clothes.sales_price') }}</th>
                                         <th>{{ trans('clothes.sales_isset') }}</th>
-                                        <th>{{ trans('general.actions') }}</th>
+                                        <th>{{ trans('General.actions') }}</th>
                                     </tr>
-                                    </thead>
+                                    </theadv>
                                 <tbody>
                                     @forelse ($clothes as $stock)
                                         <tr>
@@ -58,14 +58,14 @@
                                             <td>{{ $stock->grade->name }}</td>
                                             <td>{{ $stock->classroom->name }}</td>
                                             <td>{{ $stock->name }}</td>
-                                            <td>{{ number_format($stock->opening_qty,2) }}</td>
+                                            <td>{{ number_format($stock->opening_qty, 2) }}</td>
                                             <td>{{ $stock->opening_stock_date }}</td>
-                                            <td>{{ number_format(($stock->orders()->sum('quantity_in') + $stock->opening_qty) - $stock->orders()->sum('quantity_out'),2) }}
+                                            <td>{{ number_format($stock->orders()->sum('quantity_in') + $stock->opening_qty - $stock->orders()->sum('quantity_out'), 2) }}
                                             </td>
-                                            <td>{{ Number::currency($stock->purchase_price,'EGP','ar') }}</td>
-                                            <td>{{ Number::currency($stock->sales_price,'EGP','ar') }}</td>
+                                            <td>{{ Number::currency($stock->purchase_price, 'EGP', 'ar') }}</td>
+                                            <td>{{ Number::currency($stock->sales_price, 'EGP', 'ar') }}</td>
 
-                                            <td>{{ Number::currency($stock->sales_price_set,'EGP','ar') }}</td>
+                                            <td>{{ Number::currency($stock->sales_price_set, 'EGP', 'ar') }}</td>
                                             <td> <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                 [
                                                     'type' => 'link',
@@ -88,7 +88,7 @@
                                         @include('backend.stocks.edit')
                                     @empty
                                         <tr>
-                                            <td colspan='11'>
+                                            <td colspan='8'>
                                                 {{ trans('general.404') }}
                                             </td>
                                         </tr>
@@ -117,59 +117,61 @@
                 });
             });
         </script>
-     <script>
-        $(document).ready(function() {
-            $('#grades_create').on('change', function() {
-                let grade = $(this).val();
-                if (grade) {
-                    $.ajax({
-                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-                            $('#classrooms_create').empty();
-                            $('#classrooms_create').append(
-                                '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
-                            );
-                            $.each(data,function(key, value) {
-
+        <script>
+            $(document).ready(function() {
+                $('#grades_create').on('change', function() {
+                    let grade = $(this).val();
+                    if (grade) {
+                        $.ajax({
+                            url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                            type: "GET",
+                            dataType: "json",
+                            success: function(data) {
+                                $('#classrooms_create').empty();
                                 $('#classrooms_create').append(
-                                    `<option value="${value.id}">${value.name}</option>`);
+                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                                );
+                                $.each(data, function(key, value) {
 
-                            });
-                        },
-                    });
-                };
+                                    $('#classrooms_create').append(
+                                        `<option value="${value.id}">${value.name}</option>`
+                                    );
+
+                                });
+                            },
+                        });
+                    };
+                });
             });
-        });
-    </script>
+        </script>
 
 
-    <script>
-        $(document).ready(function() {
-            $('#grades').on('change', function() {
-                let grade = $(this).val();
-                if (grade) {
-                    $.ajax({
-                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-                            $('#classrooms').empty();
-                            $('#classrooms').append(
-                                '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
-                            );
-                            $.each(data,function(key, value) {
-
+        <script>
+            $(document).ready(function() {
+                $('#grades').on('change', function() {
+                    let grade = $(this).val();
+                    if (grade) {
+                        $.ajax({
+                            url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                            type: "GET",
+                            dataType: "json",
+                            success: function(data) {
+                                $('#classrooms').empty();
                                 $('#classrooms').append(
-                                    `<option value="${value.id}">${value.name}</option>`);
+                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                                );
+                                $.each(data, function(key, value) {
 
-                            });
-                        },
-                    });
-                };
+                                    $('#classrooms').append(
+                                        `<option value="${value.id}">${value.name}</option>`
+                                    );
+
+                                });
+                            },
+                        });
+                    };
+                });
             });
-        });
-    </script>
+        </script>
     @endpush
 @endsection

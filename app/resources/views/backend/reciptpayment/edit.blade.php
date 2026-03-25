@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('general.edit') }} | {{trans('Recipt_payments.title')}}
+    {{ trans('general.edit') }} | {{ trans('Recipt_payments.title') }}
 @endsection
 @section('content')
     <div class="mb-4 row">
@@ -14,28 +14,30 @@
                         </div>
                     </div>
                     <form id="form-with-multiple-column" class="max-w-full" action="{{ route('Recipt_Payment.update') }}"
-                          method="post">
+                        method="post">
                         @csrf
-                        <input type="hidden" name="id" value="{{$recipt_Payment->id}}">
+                        <input type="hidden" name="id" value="{{ $recipt_Payment->id }}">
                         <div class="row">
                             <div class="col">
-                                <label for="">{{trans('Recipt_payments.man')}}</label>
-                                <input type="text" class="form-control" disabled value="{{$recipt_Payment->manual}}">
+                                <label for="">{{ trans('Recipt_payments.man') }}</label>
+                                <input type="text" class="form-control" disabled value="{{ $recipt_Payment->manual }}">
                             </div>
                         </div>
                         <br>
                         <div class="row">
                             <div class="col">
-                                <label for="">{{trans('Recipt_payments.name')}}</label>
+                                <label for="">{{ trans('Recipt_payments.name') }}</label>
                                 <select name="student_id" class="custom-select">
 
-                                    <option value="{{$recipt_Payment->student->id}}">{{$recipt_Payment->student->name}}</option>
+                                    <option value="{{ $recipt_Payment->student->id }}">{{ $recipt_Payment->student->name }}
+                                    </option>
 
                                 </select>
                             </div>
                             <div class="col">
-                                <label for="">{{trans('Recipt_payments.amount')}}</label>
-                                <input type="number" class="form-control" name="amount" value="{{$recipt_Payment->Debit}}">
+                                <label for="">{{ trans('Recipt_payments.amount') }}</label>
+                                <input type="number" class="form-control" name="amount"
+                                    value="{{ $recipt_Payment->Debit }}">
                             </div>
 
                         </div>

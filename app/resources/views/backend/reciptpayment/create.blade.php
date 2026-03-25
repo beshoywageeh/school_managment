@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('general.new') }} | {{trans('Recipt_Payments.title')}}
+    {{ trans('general.new') }} | {{ trans('Recipt_Payments.title') }}
 @endsection
 @push('styles')
-<style>
-    .active{
-        background-color: none !important;
-    }
-</style>
+    <style>
+        .active {
+            background-color: none !important;
+        }
+    </style>
 @endpush
 @section('content')
     <div class="mb-4 row">
@@ -18,194 +18,138 @@
                     <div class="row card-title">
 
                         <div class="col">
-                            <label for="">{{trans('Recipt_Payments.man')}}</label>
-                            <input type="text"
-                                   class="form-control"
-                                   disabled
-                                   value="{{$invoice_manual}}">
+                            <label for="">{{ trans('Recipt_Payments.man') }}</label>
+                            <input type="text" class="form-control" disabled value="{{ $invoice_manual }}">
 
                         </div>
                         <div class="col">
-                            <label for="">{{trans('Recipt_Payments.total')}}</label>
-                            <input type="text"
-                                   class="form-control"
-                                   disabled
-                                   value="{{$Student->fees->sum('debit')-$Student->fees->sum('credit')}}">
-
+                            <lablel>{{ trans('general.choose', ['value' => trans('Recipt_Payments.title')]) }}</label>
+                                <select class="form-control" id="payment_type">
+                                    <option selected value="">
+                                        {{ trans('general.choose', ['value' => trans('Recipt_Payments.title')]) }}</option>
+                                    <option value="fee_invoice">{{ trans('Sidebar.fees_invoice') }}</option>
+                                    <option value="payment_parts">{{ trans('Sidebar.payment_parts') }}</option>
+                                </select>
+                        </div>
+                        <!-- Student Info -->
+                        <div class="col">
+                            <span class="d-block display-4 border-4"> {{ $Student->name }}</span>
                         </div>
                     </div>
+                   
+                    <!-- Payment Info -->
+                    <div class="block row">
+                        <div class="col d-none" id="fee_invoice">
+                            <table class="table table-bordered table-sm">
+                                <tr>
+                                    <th>{{ trans('general.created_at') }}</th>
+                                    <th>{{ trans('fees.desc') }}</th>
+                                    <th>{{ trans('Recipt_Payments.amount') }}</th>
+                                    <th></th>
+                                </tr>
+                                @forelse($feeInvoices as $feeInvoice)
+                                    <form id="form-with-multiple-column" autocomplete="off" class="max-w-full"
+                                        action="{{ route('receipt-payment.store') }}" method="post">
 
+                                        @csrf
+                                        <tr>
+                                            <input type="hidden" name="type" value="full">
+                                            <input type="hidden" name="feeInvoice" value="{{ $feeInvoice->id }}">
+                                            <input type="hidden" value="{{ $Student->id }}" name="student_id">
 
-                    <div class="tab">
-                        <ul class="nav nav-tabs"
-                            role="tablist">
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link active show"
-                                    id="home-tab"
-                                    data-toggle="tab"
-                                    href="#payment_invoice"
-                                    role="tab"
-                                    aria-controls="home"
-                                    aria-selected="true"
-                                >{{trans('Sidebar.fees_invoice')}}</a
-                                >
-                            </li>
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link"
-                                    id="profile-tab"
-                                    data-toggle="tab"
-                                    href="#payment_part"
-                                    role="tab"
-                                    aria-controls="profile"
-                                    aria-selected="false"
-                                >{{trans('Sidebar.payment_parts')}}</a
-                                >
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div
-                                class="tab-pane fade active show"
-                                id="payment_invoice"
-                                role="tabpanel"
-                                aria-labelledby="home-tab"
-                            >
-                                <table class="table table-bordered table-sm">
-                                    <tr>
-                                        <th>{{trans('Recipt_Payments.name')}}</th>
-                                        <th>{{trans('general.created_at')}}</th>
-                                        <th>{{trans('fees.desc')}}</th>
-                                        <th>{{trans('Recipt_Payments.amount')}}</th>
-                                        <th></th>
-                                    </tr>
-                                    @forelse($feeInvoices as $feeInvoice)
-                                        <form id="form-with-multiple-column" autocomplete="off"
-                                              class="max-w-full"
-                                              action="{{ route('Recipt_Payment.store') }}"
-                                              method="post">
-
-                                            @csrf
-                                            <tr>
-                                                <input type="hidden"
-                                                       name="type"
-                                                       value="full">
-                                                <input type="hidden"
-                                                       name="feeInvoice"
-                                                       value="{{$feeInvoice->id}}">
-                                                <td>
-                                                    <select name="student_id"
-                                                            class="custom-select">
-                                                        <option value="{{$Student->id}}">{{$Student->name}}</option>
-                                                    </select>
-                                                </td>
-                                                <td>{{$feeInvoice->invoice_date}}</td>
-                                                <td>{{$feeInvoice->fees->title}}</td>
-                                                @php
-                                                $get_fees = \App\Models\ExcptionFees::where('student_id',$Student->id)->where('fee_id',$feeInvoice->id)->first();
-                                                if($get_fees != null){
+                                            <td>{{ $feeInvoice->invoice_date }}</td>
+                                            <td>{{ $feeInvoice->fees->title }}</td>
+                                            @php
+                                                $get_fees = \App\Models\ExcptionFees::where('student_id', $Student->id)
+                                                    ->where('fee_id', $feeInvoice->id)
+                                                    ->first();
+                                                if ($get_fees != null) {
                                                     $final = $feeInvoice->fees->amount - $get_fees->amount;
-                                                }else{
+                                                } else {
                                                     $final = $feeInvoice->fees->amount;
                                                 }
-                                                @endphp
-                                                <td>{{$final}}</td>
-                                                <td>
-                                                    <button class="btn btn-success btn-block"
-                                                            type="submit">{{ trans('general.full_pay') }}</button>
-                                                </td>
-                                            </tr>
-
-                                        </form>
-
-                                    @empty
-                                        <tr>
-                                            <td colspan="5"
-                                                class="alert alert-info">
-                                                {{trans('general.noDataToShow')}}
+                                            @endphp
+                                            <td>{{ $final }}</td>
+                                            <td>
+                                                <button class="btn btn-success btn-block"
+                                                    type="submit">{{ trans('general.full_pay') }}</button>
                                             </td>
-
                                         </tr>
-                                    @endforelse
 
-                                </table>
-                            </div>
-                            <div
-                                class="tab-pane fade"
-                                id="payment_part"
-                                role="tabpanel"
-                                aria-labelledby="profile-tab"
-                            >
-                                <table class="table table-bordered table-sm">
+                                    </form>
+
+                                @empty
                                     <tr>
-                                        <th>{{trans('Recipt_Payments.name')}}</th>
-                                        <th>{{trans('PaymentParts.date')}}</th>
-                                        <th>{{trans('PaymentParts.amount')}}</th>
-                                        <th>{{trans('PaymentParts.pay_part')}}</th>
-                                        <th></th>
+                                        <td colspan="5" class="alert alert-info">
+                                            {{ trans('general.noDataToShow') }}
+                                        </td>
+
                                     </tr>
-                                    @forelse($parts as $part)
-                                        <form id="form-with-multiple-column" autocomplete="off"
-                                              class="max-w-full"
-                                              action="{{ route('payment_parts.submit_pay') }}"
-                                              method="post">
+                                @endforelse
 
-                                            @csrf
-                                            <tr>
-                                                <input type="hidden"
-                                                       name="type" value="full">
-                                                <input type="hidden"
-                                                       name="id" value="{{$part->id}}">
-                                                <td>
-                                                    <select name="student_id"
-                                                            class="custom-select">
-                                                        <option value="{{$Student->id}}">{{$Student->name}}</option>
-                                                    </select>
-                                                </td>
-                                                <td>{{$part->date}}</td>
-                                                <td>{{$part->amount}}</td>
-                                                <td>
-                                                    <input type="number"
-                                                           name="amount"
-                                                           id=""
-                                                           class="form-control" value="{{$part->amount}}">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-success btn-block"
-                                                            type="submit">{{ trans('general.Submit') }}</button>
-                                                </td>
-                                            </tr>
+                            </table>
+                        </div>
+                        <div class="col d-none" id="payment_parts">
+                            <table class="table table-bordered table-sm">
+                                <tr>
+                                    <th>{{ trans('PaymentParts.date') }}</th>
+                                    <th>{{ trans('PaymentParts.amount') }}</th>
+                                    <th>{{ trans('PaymentParts.pay_part') }}</th>
+                                    <th></th>
+                                </tr>
+                                @forelse($parts as $part)
+                                    <form id="form-with-multiple-column" autocomplete="off" class="max-w-full"
+                                        action="{{ route('payment_parts.submit_pay') }}" method="post">
 
-                                        </form>
-
-                                    @empty
+                                        @csrf
                                         <tr>
-                                            <td colspan="5" class="alert alert-info">
-                                                {{trans('general.noDataToShow')}}
+                                            <input type="hidden" name="type" value="full">
+                                            <input type="hidden" name="id" value="{{ $part->id }}">
+                                            <input type="hidden" value="{{ $Student->id }}" name="student_id">
+
+
+                                            <td>{{ $part->date }}</td>
+                                            <td>{{ $part->amount }}</td>
+                                            <td>
+                                                <input type="number" name="amount" id="" class="form-control"
+                                                    value="{{ $part->amount }}">
                                             </td>
-
+                                            <td>
+                                                <button class="btn btn-success btn-block"
+                                                    type="submit">{{ trans('general.Submit') }}</button>
+                                            </td>
                                         </tr>
-                                    @endforelse
 
-                                </table>
-                            </div>
+                                    </form>
 
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="alert alert-info">
+                                            {{ trans('general.noDataToShow') }}
+                                        </td>
+
+                                    </tr>
+                                @endforelse
+
+                            </table>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col">
-                            <h4 class="py-2 my-4 text-center text-white bg-info">{{trans('Recipt_Payments.mini_report')}}</h4>
+                            <h4 class="py-2 my-4 text-center text-white bg-info">{{ trans('Recipt_Payments.mini_report') }}
+                            </h4>
                             <table class="table table-active table-bordered table-sm">
                                 <tr>
-                                    <th>{{trans('Recipt_Payments.total_debit')}}</th>
-                                    <th>{{trans('Recipt_Payments.total_credit')}}</th>
-                                    <th>{{trans('Recipt_Payments.total_final')}}</th>
+                                    <th>{{ trans('Recipt_Payments.total_debit') }}</th>
+                                    <th>{{ trans('Recipt_Payments.total_credit') }}</th>
+                                    <th>{{ trans('Recipt_Payments.total_final') }}</th>
                                 </tr>
                                 <tr>
-                                    <td>{{$Student->fees->sum('debit')}}</td>
-                                    <td>{{$Student->fees->sum('credit')}}</td>
-                                    <td>{{$Student->fees->sum('debit')-$Student->fees->sum('credit')}}</td>
+                                    <td>{{ $Student->fee_invoice->sum('debit') }}</td>
+                                    <td>{{ $Student->fee_invoice->sum('credit') }}</td>
+                                    <td>{{ $Student->fee_invoice->sum('debit') - $Student->fee_invoice->sum('credit') }}
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -218,5 +162,23 @@
 
 
     @push('scripts')
+        <script>
+            let payment_type = document.querySelector("#payment_type"),
+                fee_invoice_div = document.querySelector("#fee_invoice"),
+                payment_parts_div = document.querySelector("#payment_parts");
+            payment_type.addEventListener('click', function() {
+                if (payment_type.value === "fee_invoice") {
+                    fee_invoice_div.classList.remove("d-none");
+                    payment_parts_div.classList.add("d-none");
+
+                } else if (payment_type.value === "payment_parts") {
+                    payment_parts_div.classList.remove("d-none");
+                    fee_invoice_div.classList.add("d-none");
+                } else {
+                    payment_parts_div.classList.add("d-none");
+                    fee_invoice_div.classList.add("d-none");
+                }
+            });
+        </script>
     @endpush
 @endsection

@@ -16,8 +16,8 @@ class OrderController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $orders = order::where('school_id', $school->id)->where('type', 'inventory')->withcount('stocks')->get();
-        $type = 'inventory';
+        $orders = order::where('school_id', $school->id)->where('type', 1)->withcount('stocks')->get();
+        $type = 1;
 
         return view('backend.orders.index', get_defined_vars());
     }
@@ -26,7 +26,7 @@ class OrderController extends Controller
     {
         try {
             $order = order::with('stocks')->findorFail($id);
-            $type = 'inventory';
+            $type = 1;
             $school = $this->getSchool();
 
             return view('backend.orders.show', get_defined_vars());
@@ -38,14 +38,14 @@ class OrderController extends Controller
     public function store()
     {
         try {
-            $generate_code = order::where('type', 'inventory')->orderBy('auto_number', 'desc')->first();
+            $generate_code = order::where('type', '1')->orderBy('auto_number', 'desc')->first();
             $order = order::create([
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
-                'type' => 'inventory',
+                'type' => '1',
                 'school_id' => $this->getSchool()->id,
                 'user_id' => auth()->user()->id,
             ]);
-            $this->logActivity(trans('log.actions.added'), trans('log.models.order.created', ['order_number' => $order->auto_number]));
+            $this->logActivity(trans('log.order.added_action'), trans('log.order.added', ['order_number' => $order->auto_number]));
 
             return redirect()->route('stock.tawreed', $order->id);
         } catch (Exception $e) {
@@ -60,7 +60,7 @@ class OrderController extends Controller
         try {
             $order = order::with('stocks')->findorFail($id);
             $stocks = stock::get('id', 'name');
-            $type = 'inventory';
+            $type = 1;
             $school = $this->getSchool();
 
             return view('backend.orders.edit', get_defined_vars());
@@ -86,7 +86,7 @@ class OrderController extends Controller
                 ];
                 $order->stocks()->syncWithPivotValues('order_id', $stocks);
             }
-            $this->logActivity(trans('log.actions.updated'), trans('log.models.order.updated', ['order_number' => $order->auto_number]));
+            $this->logActivity(trans('log.order.updated_action'), trans('log.order.updated', ['order_number' => $order->auto_number]));
             session()->flash('success', 'تم التعديل بنجاح');
 
             return redirect()->route('order.index');
@@ -105,7 +105,7 @@ class OrderController extends Controller
                 return redirect()->back();
             }
             $order->delete();
-            $this->logActivity(trans('log.actions.deleted'), trans('log.models.order.deleted', ['order_number' => $order->auto_number]));
+            $this->logActivity(trans('log.order.deleted_action'), trans('log.order.deleted', ['order_number' => $order->auto_number]));
             session()->flash('success', 'تم الحذف بنجاح');
 
             return redirect()->back();

@@ -3,61 +3,61 @@
     {{ trans('permissions.title') }} | {{ trans('general.new') }}
 @endsection
 @section('content')
-<div class="container-fluid">
-    <div class="mb-4 row">
-        <form action="{{ route('roles.store') }}" method="post">
-            @csrf
-            <div class="alert alert-success">
-                <div class="row">
-                    <div class="col-9">
-                        <x-input name="name" type="text">{{ trans('permissions.create') }}</x-input>
-                    </div>
-                    <div class="col-3">
-                        <br>
-                        <br>
-                        <button type="submit" class="btn btn-primary btn-block">{{ trans('general.Submit') }}</button>
+    <div class="container-fluid">
+        <div class="mb-4 row">
+            <form action="{{ route('roles.store') }}" method="post">
+                @csrf
+                <div class="alert alert-success">
+                    <div class="row">
+                        <div class="col-9">
+                            <x-input name="name" type="text">{{ trans('permissions.create') }}</x-input>
+                        </div>
+                        <div class="col-3">
+                            <br>
+                            <br>
+                            <button type="submit" class="btn btn-primary btn-block">{{ trans('general.Submit') }}</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="">
-                <div class="row">
-                    @foreach ($permissions as $table => $roles)
-                        <div class="mb-4 col-md-3">
-                            <div class="card h-100">
-                                <div class="text-white card-header bg-primary">
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <h5 class="text-white"><strong>{{ trans('permissions.' . $table) }}</strong>
-                                            </h5>
-                                        </div>
-                                        <div class="text-right col-5">
-                                            <label><strong>{{ trans('permissions.select_all') }}</strong></label>
-                                            <input type="checkbox" class="form-select" name=""
-                                                onchange="checkAll(this, '{{ $table }}')">
+                <div class="">
+                    <div class="row">
+                        @foreach ($permissions as $table => $roles)
+                            <div class="mb-4 col-md-3">
+                                <div class="card h-100">
+                                    <div class="text-white card-header bg-primary">
+                                        <div class="row">
+                                            <div class="col-7">
+                                                <h5 class="text-white"><strong>{{ trans('permissions.' . $table) }}</strong>
+                                                </h5>
+                                            </div>
+                                            <div class="text-right col-5">
+                                                <label><strong>{{ trans('permissions.select_all') }}</strong></label>
+                                                <input type="checkbox" class="form-select" name=""
+                                                    onchange="checkAll(this, '{{ $table }}')">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="list list-unstyled ">
-                                        @forelse ($roles as $role)
-                                            <li>
-                                                <input type="checkbox" name="permission[{{ $table }}][]"
-                                                    value="{{ $role->name }}" id="">
-                                                <span><strong>{{ trans('permissions.' . $role->name) }}</strong></span>
-                                            </li>
-                                        @empty
-                                        @endforelse
+                                    <div class="card-body">
+                                        <ul class="list list-unstyled ">
+                                            @forelse ($roles as $role)
+                                                <li>
+                                                    <input type="checkbox" name="permission[{{ $table }}][]"
+                                                        value="{{ $role->name }}" id="">
+                                                    <span><strong>{{ trans('permissions.' . $role->name) }}</strong></span>
+                                                </li>
+                                            @empty
+                                            @endforelse
 
-                                    </ul>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 @endsection
 
 @push('scripts')

@@ -28,7 +28,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('parents-list')
-                        <livewire:parents-table />
+                            <livewire:parents-table />
                         @endcan
                     </div>
                 </div>

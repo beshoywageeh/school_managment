@@ -128,62 +128,62 @@
         <!-- 2. Fees-->
         <h4 class="text-center section-title gray-row">
             {{ trans('report.finalyear.pay_head', ['total' => Number::currency($payed, 'EGP', 'AR', true)]) }}</h4>
-            <table style="width: 100%;">
-                <tr>
-        @foreach ($students_accounts_query as $classroom => $data)
-            <th>
-                <table class="table-custom">
-                    <tr>
+        <table style="width: 100%;">
+            <tr>
+                @foreach ($students_accounts_query as $classroom => $data)
+                    <th>
                         <table class="table-custom">
-                            <thead>
+                            <tr>
+                                <table class="table-custom">
+                                    <thead>
 
-                                <tr>
-                                    <th colspan="3">{{ $classroom }}</th>
-                                </tr>
-                            </thead>
+                                        <tr>
+                                            <th colspan="3">{{ $classroom }}</th>
+                                        </tr>
+                                    </thead>
 
-                            <tbody>
-                                <tr>
-                                    <td>القسط الاول</td>
-                                    <td>{{ $data->count('debit') }}</td>
-                                    <td>{{ Number::currency($data->sum('debit'), 'EGP', 'AR', true) }}</td>
+                                    <tbody>
+                                        <tr>
+                                            <td>القسط الاول</td>
+                                            <td>{{ $data->count('debit') }}</td>
+                                            <td>{{ Number::currency($data->sum('debit'), 'EGP', 'AR', true) }}</td>
 
-                                </tr>
-                            </tbody>
-                        </table>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-            </th>
-        @endforeach
-        </tr>
+                    </th>
+                @endforeach
+            </tr>
         </table>
 
         <h4 class="text-center section-title gray-row">{{ trans('report.finalyear.not_pay_head') }}</h4>
- <table style="width: 100%;">
-                <tr>
+        <table style="width: 100%;">
+            <tr>
 
-                    @foreach ($excpetion as $classroom => $data)
-            <th>
-         <table class="table-custom">
-            <thead>
+                @foreach ($excpetion as $classroom => $data)
+                    <th>
+                        <table class="table-custom">
+                            <thead>
 
 
-                <tr>
+                                <tr>
 
-                    <th colspan="3">{{ $classroom }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                    <tr>
+                                    <th colspan="3">{{ $classroom }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
 
-                            <td>{{ $data->count('amount') }}</td>
-                            <td>{{ Number::currency($data->sum('amount'), 'EGP', 'AR', true) }}</td>
-                    </tr>
-                </table>
+                                    <td>{{ $data->count('amount') }}</td>
+                                    <td>{{ Number::currency($data->sum('amount'), 'EGP', 'AR', true) }}</td>
+                                </tr>
+                        </table>
 
-            </th>
-            @endforeach
+                    </th>
+                @endforeach
 
-        </tr>
+            </tr>
         </table>
 
     </div>

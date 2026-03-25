@@ -20,11 +20,12 @@
                         <div class="row">
                             <div class="col">
                                 <!-- Form Column: Username -->
-                                <x-input name='Father_Name' value="{{ old('Father_Name', $parent->Father_Name) }}" class=''
-                                    type='text'>{{ trans('Parents.Father_Name') }}</x-input>
+                                <x-input name='Father_Name' value="{{ old('Father_Name', $parent->Father_Name) }}"
+                                    class='' type='text'>{{ trans('Parents.Father_Name') }}</x-input>
                             </div>
                             <div class="col">
-                                <x-input name='Father_Phone' class='' value="{{ old('Father_Phone', $parent->Father_Phone) }}"
+                                <x-input name='Father_Phone' class=''
+                                    value="{{ old('Father_Phone', $parent->Father_Phone) }}"
                                     type='text'>{{ trans('Parents.Father_Phone') }}</x-input>
                             </div>
                         </div>
@@ -35,7 +36,8 @@
                                     type='text'>{{ trans('Parents.Father_Job') }}</x-input>
                             </div>
                             <div class="col">
-                                <x-input name='Father_National_Id' value="{{ old('Father_National_Id', $parent->Father_National_Id) }}" class=''
+                                <x-input name='Father_National_Id'
+                                    value="{{ old('Father_National_Id', $parent->Father_National_Id) }}" class=''
                                     data="Father_National_Id" type='text'>{{ trans('Parents.Father_National_Id') }}
                                 </x-input>
                             </div>
@@ -55,7 +57,8 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <x-input name='Father_Learning' class="" value="{{ old('Father_Learning', $parent->Father_Learning) }}"
+                                <x-input name='Father_Learning' class=""
+                                    value="{{ old('Father_Learning', $parent->Father_Learning) }}"
                                     type='text'>{{ trans('Parents.Father_Learning') }}</x-input>
                             </div>
                         </div>
@@ -75,21 +78,25 @@
                         <div class="row">
                             <div class="col">
                                 <!-- Form Column: Username -->
-                                <x-input name='Mother_Name' class='' value="{{ old('Mother_Name', $parent->Mother_Name) }}"
+                                <x-input name='Mother_Name' class=''
+                                    value="{{ old('Mother_Name', $parent->Mother_Name) }}"
                                     type='text'>{{ trans('Parents.Mother_Name') }}</x-input>
                             </div>
                             <div class="col">
-                                <x-input name='Mother_Phone' class='' value="{{ old('Mother_Phone', $parent->Mother_Phone) }}"
+                                <x-input name='Mother_Phone' class=''
+                                    value="{{ old('Mother_Phone', $parent->Mother_Phone) }}"
                                     type='text'>{{ trans('Parents.Mother_Phone') }}</x-input>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <x-input name='Mother_Job' class='' value="{{ old('Mother_Job', $parent->Mother_Job) }}"
+                                <x-input name='Mother_Job' class=''
+                                    value="{{ old('Mother_Job', $parent->Mother_Job) }}"
                                     type='text'>{{ trans('Parents.Mother_Job') }}</x-input>
                             </div>
                             <div class="col">
-                                <x-input name='Mother_National_Id' class='' value="{{ old('Mother_National_Id', $parent->Mother_National_Id) }}"
+                                <x-input name='Mother_National_Id' class=''
+                                    value="{{ old('Mother_National_Id', $parent->Mother_National_Id) }}"
                                     type='text'>{{ trans('Parents.Mother_National_Id') }}</x-input>
                             </div>
                         </div>
@@ -100,12 +107,12 @@
                                     value="{{ old('Mother_Birth_Date', $parent->Mother_Birth_Date) }}">{{ trans('Parents.Mother_Birth_Date') }}</x-input>
                             </div>
                             <div class="col">
-                                <label>{{trans('Parents.Mother_Status')}}</label>
+                                <label>{{ trans('Parents.Mother_Status') }}</label>
                                 <input list="mother_status_list" type="text" name="Mother_Status" class="form-control"
                                     value="{{ old('Mother_Status') }}">
                                 <datalist id="mother_status_list">
-                                    @foreach($Mother_Status as $status)
-                                    <option value="{{ $status->Mother_Status }}">
+                                    @foreach ($Mother_Status as $status)
+                                        <option value="{{ $status->Mother_Status }}">
                                     @endforeach
 
                                 </datalist>

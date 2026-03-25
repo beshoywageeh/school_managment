@@ -17,9 +17,9 @@
                     <div class="table">
                         <table class="table table-sm table-bordered">
                             <tr>
-                            <th>{{ trans('academic_year.year_start') }}</th>
-                            <th>{{ trans('academic_year.year_end') }}</th>
-                            <th>{{ trans('academic_year.status') }}</th>
+                                <th>{{ trans('academic_year.year_start') }}</th>
+                                <th>{{ trans('academic_year.year_end') }}</th>
+                                <th>{{ trans('academic_year.status') }}</th>
                             </tr>
                             <tr>
                                 <td>

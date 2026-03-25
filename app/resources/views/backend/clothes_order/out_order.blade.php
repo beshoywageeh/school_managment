@@ -104,7 +104,7 @@
         <td>${item.sales_price}</td>
         <td><input class="form-control" name="quantity[]" value="1" type="number"/></td>
     </tr>`;
-                                table.innerHTML+=row;
+                                table.innerHTML += row;
                             });
                         };
                     }

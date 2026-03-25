@@ -16,13 +16,13 @@
                         <div class="col text-md-right">
                             @can('books_sheets-create')
                                 <button data-target="#BookSheet" data-toggle="modal"
-                                    class="btn btn-primary">{{ trans('general.new') }}</button>
+                                    class="btn btn-primary">{{ trans('General.new') }}</button>
                             @endcan
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
+                    <div class="table-reponsive">
                         <table class="table table-bordered table-striped" id="datatable">
                             <thead>
                                 <tr>
@@ -32,8 +32,8 @@
                                     <th>{{ trans('book_sheet.classroom') }}</th>
                                     <th>{{ trans('book_sheet.opening_qty') }}</th>
                                     <th>{{ trans('book_sheet.sales-price') }}</th>
-                                    <th>{{ trans('general.created_at') }}</th>
-                                    <th>{{ trans('general.actions') }}</th>
+                                    <th>{{ trans('General.created_at') }}</th>
+                                    <th>{{ trans('General.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -88,60 +88,62 @@
     </div>
 @endsection
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        $('#grades_create').on('change', function() {
-            let grade = $(this).val();
-            if (grade) {
-                $.ajax({
-                    url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data) {
-                        $('#classrooms_create').empty();
-                        $('#classrooms_create').append(
-                            '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
-                        );
-                        $.each(data,function(key, value) {
-
+    <script>
+        $(document).ready(function() {
+            $('#grades_create').on('change', function() {
+                let grade = $(this).val();
+                if (grade) {
+                    $.ajax({
+                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#classrooms_create').empty();
                             $('#classrooms_create').append(
-                                `<option value="${value.id}">${value.name}</option>`);
+                                '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                            );
+                            $.each(data, function(key, value) {
 
-                        });
-                    },
-                });
-            };
+                                $('#classrooms_create').append(
+                                    `<option value="${value.id}">${value.name}</option>`
+                                );
+
+                            });
+                        },
+                    });
+                };
+            });
         });
-    });
-</script>
+    </script>
 
 
-<script>
-    $(document).ready(function() {
-        $('#grades').on('change', function() {
-            let grade = $(this).val();
-            if (grade) {
-                $.ajax({
-                    url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data) {
-                        $('#classrooms').empty();
-                        $('#classrooms').append(
-                            '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
-                        );
-                        $.each(data,function(key, value) {
-
+    <script>
+        $(document).ready(function() {
+            $('#grades').on('change', function() {
+                let grade = $(this).val();
+                if (grade) {
+                    $.ajax({
+                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(data) {
+                            $('#classrooms').empty();
                             $('#classrooms').append(
-                                `<option value="${value.id}">${value.name}</option>`);
+                                '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                            );
+                            $.each(data, function(key, value) {
 
-                        });
-                    },
-                });
-            };
+                                $('#classrooms').append(
+                                    `<option value="${value.id}">${value.name}</option>`
+                                );
+
+                            });
+                        },
+                    });
+                };
+            });
         });
-    });
-</script>
+    </script>
     <script>
         $(document).ready(function() {
             $('.book_list').repeater({

@@ -1,4 +1,4 @@
-<div class="modal fade" id="editItem-{{$stock->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="editItem-{{ $stock->id }}" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
@@ -13,14 +13,16 @@
                 @csrf
                 <div class="modal-body">
                     <div class="row">
-                        <input type="hidden" name="id" value="{{$stock->id}}">
+                        <input type="hidden" name="id" value="{{ $stock->id }}">
                         <div class="col">
-                            <x-input name="name" type="text" value="{{$stock->name}}">{{ trans('stock.name') }}</x-input>
+                            <x-input name="name" type="text"
+                                value="{{ $stock->name }}">{{ trans('stock.name') }}</x-input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <x-input name="opening_qty" value="{{$stock->opening_stock}}" type="number">{{ trans('stock.opening_balance') }}</x-input>
+                            <x-input name="opening_qty" value="{{ $stock->opening_stock }}"
+                                type="number">{{ trans('stock.opening_balance') }}</x-input>
                         </div>
                     </div>
                 </div>

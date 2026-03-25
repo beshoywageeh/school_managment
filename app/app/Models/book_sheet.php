@@ -11,11 +11,11 @@ class book_sheet extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['grade_id', 'classroom_id', 'name', 'opening_qty', 'sales_price', 'type', 'school_id', 'user_id'];
+    protected $fillable = ['grade_id', 'classroom_id', 'name', 'opening_qty', 'sales_price', 'is_book', 'school_id', 'user_id'];
 
     public function grade()
     {
-        return $this->belongsTo(Grade::class);
+        return $this->belongsTo(grade::class);
     }
 
     public function classroom()

@@ -20,11 +20,6 @@ class LaboratoryController extends Controller
         return view('backend.labs.index', get_defined_vars());
     }
 
-    public function create()
-    {
-        return view('backend.labs.create');
-    }
-
     public function store(Request $request)
     {
 
@@ -41,7 +36,7 @@ class LaboratoryController extends Controller
                     'school_id' => $this->getSchool()->id,
                     'user_id' => auth()->user()->id,
                 ]);
-                $this->logActivity(trans('log.actions.added'), trans('log.models.laboratory.created', ['name' => $lab['name'], 'location' => $main_location]));
+                $this->logActivity(trans('log.parents.added_action'), trans('log.laboratory.added', ['name' => $lab['name'], 'location' => $main_location]));
             }
 
             return redirect()->back()->with('success', trans('General.success'));
@@ -66,7 +61,7 @@ class LaboratoryController extends Controller
             $laboratory->update(['location' => $request->location]);
             foreach ($request->sub_location_id as $index => $sub_location_id) {
                 Laboratory::where('id', $sub_location_id)->update(['sub_location' => $request->sub_locations[$index]]);
-                $this->logActivity(trans('log.actions.updated'), trans('log.models.laboratory.updated', ['name' => $request->sub_locations[$index], 'location' => $laboratory->location]));
+                $this->logActivity(trans('log.parents.updated_action'), trans('log.laboratory.updated', ['name' => $request->sub_locations[$index], 'location' => $laboratory->location]));
             }
 
             return redirect()->route('labs.index')->with('success', trans('General.success'));

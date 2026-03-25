@@ -1,0 +1,254 @@
+{
+  "project": {
+    "name": "",
+    "path": "/data/projects/laravel_projects/school_managment/app/app"
+  },
+  "summary": {
+    "total_findings": 16,
+    "by_severity": {
+      "High": 11,
+      "Info": 1,
+      "Medium": 4
+    },
+    "duration": "1.677144049s",
+    "scanners_run": [
+      "env-scanner",
+      "config-scanner",
+      "dependency-scanner",
+      "rules-scanner"
+    ]
+  },
+  "findings": [
+    {
+      "id": "ENV-001",
+      "title": "No .env file found",
+      "description": "The project has no .env file. While this may be intentional in containerized deployments, ensure environment configuration is provided through another mechanism.",
+      "severity": "Info",
+      "category": "Configuration",
+      "scanner": "env-scanner",
+      "file": ".env",
+      "remediation": "Copy .env.example to .env and configure your environment variables."
+    },
+    {
+      "id": "DEBUG-001",
+      "title": "dd() call left in code",
+      "description": "dd() (dump and die) stops execution and dumps variable contents to the browser. Left in production code, it breaks functionality and can expose sensitive data structures, database contents, or environment variables.\n",
+      "severity": "High",
+      "category": "Debug",
+      "scanner": "rules-scanner",
+      "file": "Http/Controllers/Parents/MyParentsController.php",
+      "line": 153,
+      "code_snippet": "//  dd($request-\u003efile('file'));",
+      "remediation": "Remove dd() calls before deploying:\n  Use Laravel Telescope or logging for debugging in non-local environments.\n  Log::debug('message', $context);\n",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/215.html"
+      ]
+    },
+    {
+      "id": "DEBUG-001",
+      "title": "dd() call left in code",
+      "description": "dd() (dump and die) stops execution and dumps variable contents to the browser. Left in production code, it breaks functionality and can expose sensitive data structures, database contents, or environment variables.\n",
+      "severity": "High",
+      "category": "Debug",
+      "scanner": "rules-scanner",
+      "file": "Http/Controllers/Students/StudentsController.php",
+      "line": 64,
+      "code_snippet": "// dd($school_fee);",
+      "remediation": "Remove dd() calls before deploying:\n  Use Laravel Telescope or logging for debugging in non-local environments.\n  Log::debug('message', $context);\n",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/215.html"
+      ]
+    },
+    {
+      "id": "DEBUG-001",
+      "title": "dd() call left in code",
+      "description": "dd() (dump and die) stops execution and dumps variable contents to the browser. Left in production code, it breaks functionality and can expose sensitive data structures, database contents, or environment variables.\n",
+      "severity": "High",
+      "category": "Debug",
+      "scanner": "rules-scanner",
+      "file": "Http/Controllers/Students/StudentsController.php",
+      "line": 336,
+      "code_snippet": "// dd($school_fee);",
+      "remediation": "Remove dd() calls before deploying:\n  Use Laravel Telescope or logging for debugging in non-local environments.\n  Log::debug('message', $context);\n",
+      "references": [
+        "https://cwe.mitre.org/data/definitions/215.html"
+      ]
+    },
+    {
+      "id": "DEBUG-003",
+      "title": "var_dump() or print_r() in source",
+      "description": "Native PHP debug functions output raw data to the browser. In production these expose internal variable contents and data structures.\n",
+      "severity": "Medium",
+      "category": "Debug",
+      "scanner": "rules-scanner",
+      "file": "Models/class_room.php",
+      "line": 40,
+      "code_snippet": "print_r('\u003cspan class=\"badge badge-danger\"\u003e'.trans('general.no_tammen').'\u003c/span\u003e');",
+      "remediation": "Replace with structured logging:\n  Log::debug('variable state', ['data' =\u003e $data]);\n"
+    },
+    {
+      "id": "DEBUG-003",
+      "title": "var_dump() or print_r() in source",
+      "description": "Native PHP debug functions output raw data to the browser. In production these expose internal variable contents and data structures.\n",
+      "severity": "Medium",
+      "category": "Debug",
+      "scanner": "rules-scanner",
+      "file": "Models/class_room.php",
+      "line": 42,
+      "code_snippet": "print_r('\u003cspan class=\"badge badge-success\"\u003e'.trans('general.ok_tammen').'\u003c/span\u003e');",
+      "remediation": "Replace with structured logging:\n  Log::debug('variable state', ['data' =\u003e $data]);\n"
+    },
+    {
+      "id": "DEBUG-003",
+      "title": "var_dump() or print_r() in source",
+      "description": "Native PHP debug functions output raw data to the browser. In production these expose internal variable contents and data structures.\n",
+      "severity": "Medium",
+      "category": "Debug",
+      "scanner": "rules-scanner",
+      "file": "Models/classes.php",
+      "line": 48,
+      "code_snippet": "print_r('\u003cspan class=\"badge badge-danger\"\u003e'.trans('General.no_tammen').'\u003c/span\u003e');",
+      "remediation": "Replace with structured logging:\n  Log::debug('variable state', ['data' =\u003e $data]);\n"
+    },
+    {
+      "id": "DEBUG-003",
+      "title": "var_dump() or print_r() in source",
+      "description": "Native PHP debug functions output raw data to the browser. In production these expose internal variable contents and data structures.\n",
+      "severity": "Medium",
+      "category": "Debug",
+      "scanner": "rules-scanner",
+      "file": "Models/classes.php",
+      "line": 50,
+      "code_snippet": "print_r('\u003cspan class=\"badge badge-success\"\u003e'.trans('General.ok_tammen').'\u003c/span\u003e');",
+      "remediation": "Replace with structured logging:\n  Log::debug('variable state', ['data' =\u003e $data]);\n"
+    },
+    {
+      "id": "CONFIG-004",
+      "title": "Empty $guarded array on Eloquent model",
+      "description": "Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().\n",
+      "severity": "High",
+      "category": "Configuration",
+      "scanner": "rules-scanner",
+      "file": "Models/ExcptionFees.php",
+      "line": 13,
+      "code_snippet": "protected $guarded = [];",
+      "remediation": "Use $fillable to explicitly list allowed fields:\n  protected $fillable = ['name', 'email', 'password'];\nOr set $guarded to protect sensitive fields:\n  protected $guarded = ['id', 'is_admin', 'role'];\n",
+      "references": [
+        "https://owasp.org/Top10/A04_2021-Insecure_Design/",
+        "https://cwe.mitre.org/data/definitions/915.html"
+      ]
+    },
+    {
+      "id": "CONFIG-004",
+      "title": "Empty $guarded array on Eloquent model",
+      "description": "Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().\n",
+      "severity": "High",
+      "category": "Configuration",
+      "scanner": "rules-scanner",
+      "file": "Models/Fee_invoice.php",
+      "line": 16,
+      "code_snippet": "protected $guarded = [];",
+      "remediation": "Use $fillable to explicitly list allowed fields:\n  protected $fillable = ['name', 'email', 'password'];\nOr set $guarded to protect sensitive fields:\n  protected $guarded = ['id', 'is_admin', 'role'];\n",
+      "references": [
+        "https://owasp.org/Top10/A04_2021-Insecure_Design/",
+        "https://cwe.mitre.org/data/definitions/915.html"
+      ]
+    },
+    {
+      "id": "CONFIG-004",
+      "title": "Empty $guarded array on Eloquent model",
+      "description": "Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().\n",
+      "severity": "High",
+      "category": "Configuration",
+      "scanner": "rules-scanner",
+      "file": "Models/PaymentParts.php",
+      "line": 14,
+      "code_snippet": "protected $guarded = [];",
+      "remediation": "Use $fillable to explicitly list allowed fields:\n  protected $fillable = ['name', 'email', 'password'];\nOr set $guarded to protect sensitive fields:\n  protected $guarded = ['id', 'is_admin', 'role'];\n",
+      "references": [
+        "https://owasp.org/Top10/A04_2021-Insecure_Design/",
+        "https://cwe.mitre.org/data/definitions/915.html"
+      ]
+    },
+    {
+      "id": "CONFIG-004",
+      "title": "Empty $guarded array on Eloquent model",
+      "description": "Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().\n",
+      "severity": "High",
+      "category": "Configuration",
+      "scanner": "rules-scanner",
+      "file": "Models/Recipt_Payment.php",
+      "line": 13,
+      "code_snippet": "protected $guarded = [];",
+      "remediation": "Use $fillable to explicitly list allowed fields:\n  protected $fillable = ['name', 'email', 'password'];\nOr set $guarded to protect sensitive fields:\n  protected $guarded = ['id', 'is_admin', 'role'];\n",
+      "references": [
+        "https://owasp.org/Top10/A04_2021-Insecure_Design/",
+        "https://cwe.mitre.org/data/definitions/915.html"
+      ]
+    },
+    {
+      "id": "CONFIG-004",
+      "title": "Empty $guarded array on Eloquent model",
+      "description": "Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().\n",
+      "severity": "High",
+      "category": "Configuration",
+      "scanner": "rules-scanner",
+      "file": "Models/StudentAccount.php",
+      "line": 15,
+      "code_snippet": "protected $guarded = [];",
+      "remediation": "Use $fillable to explicitly list allowed fields:\n  protected $fillable = ['name', 'email', 'password'];\nOr set $guarded to protect sensitive fields:\n  protected $guarded = ['id', 'is_admin', 'role'];\n",
+      "references": [
+        "https://owasp.org/Top10/A04_2021-Insecure_Design/",
+        "https://cwe.mitre.org/data/definitions/915.html"
+      ]
+    },
+    {
+      "id": "CONFIG-004",
+      "title": "Empty $guarded array on Eloquent model",
+      "description": "Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().\n",
+      "severity": "High",
+      "category": "Configuration",
+      "scanner": "rules-scanner",
+      "file": "Models/clothes_order.php",
+      "line": 14,
+      "code_snippet": "protected $guarded = [];",
+      "remediation": "Use $fillable to explicitly list allowed fields:\n  protected $fillable = ['name', 'email', 'password'];\nOr set $guarded to protect sensitive fields:\n  protected $guarded = ['id', 'is_admin', 'role'];\n",
+      "references": [
+        "https://owasp.org/Top10/A04_2021-Insecure_Design/",
+        "https://cwe.mitre.org/data/definitions/915.html"
+      ]
+    },
+    {
+      "id": "CONFIG-004",
+      "title": "Empty $guarded array on Eloquent model",
+      "description": "Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().\n",
+      "severity": "High",
+      "category": "Configuration",
+      "scanner": "rules-scanner",
+      "file": "Models/order.php",
+      "line": 14,
+      "code_snippet": "protected $guarded = [];",
+      "remediation": "Use $fillable to explicitly list allowed fields:\n  protected $fillable = ['name', 'email', 'password'];\nOr set $guarded to protect sensitive fields:\n  protected $guarded = ['id', 'is_admin', 'role'];\n",
+      "references": [
+        "https://owasp.org/Top10/A04_2021-Insecure_Design/",
+        "https://cwe.mitre.org/data/definitions/915.html"
+      ]
+    },
+    {
+      "id": "CONFIG-004",
+      "title": "Empty $guarded array on Eloquent model",
+      "description": "Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().\n",
+      "severity": "High",
+      "category": "Configuration",
+      "scanner": "rules-scanner",
+      "file": "Models/promotion.php",
+      "line": 12,
+      "code_snippet": "protected $guarded = [];",
+      "remediation": "Use $fillable to explicitly list allowed fields:\n  protected $fillable = ['name', 'email', 'password'];\nOr set $guarded to protect sensitive fields:\n  protected $guarded = ['id', 'is_admin', 'role'];\n",
+      "references": [
+        "https://owasp.org/Top10/A04_2021-Insecure_Design/",
+        "https://cwe.mitre.org/data/definitions/915.html"
+      ]
+    }
+  ]
+}

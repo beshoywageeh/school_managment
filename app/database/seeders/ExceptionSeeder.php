@@ -11,6 +11,6 @@ class ExceptionSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\ExcptionFees::factory(10000)->create();
+        \App\Models\ExcptionFees::factory(100)->create();
     }
 }

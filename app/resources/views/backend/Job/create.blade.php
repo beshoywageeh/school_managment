@@ -15,14 +15,14 @@
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <x-input.job_type/>
-                             </div>
+                                <x-input.job_type />
+                            </div>
                         </div>
                         <div class="col">
                             <x-input name="job_name" label="job_name" type="text"
-                            value="{{ old('job_name') }}">{{ trans('jobs.job_name') }}</x-input>
+                                value="{{ old('job_name') }}">{{ trans('jobs.job_name') }}</x-input>
                         </div>
-                    </div> 
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>

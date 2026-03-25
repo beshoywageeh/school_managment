@@ -1,0 +1,11 @@
+{
+    "agents": [
+        "gemini",
+        "opencode"
+    ],
+    "editors": [
+        "gemini",
+        "opencode"
+    ],
+    "guidelines": []
+}

@@ -41,7 +41,7 @@ class AcadmiceYearController extends Controller
                 'year_end' => $year_end,
                 'view' => $view,
                 'created_by' => Auth::id(),
-                'status' => ($request->status) ? 0 : 1,
+                'status' => ($request->status) ? 1 : 0,
                 'school_id' => $this->getSchool()->id,
 
             ]);
@@ -78,7 +78,7 @@ class AcadmiceYearController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function update(AcadmiceYearStoreRequest $request)
+    public function update(Request $request)
     {
         //   return $request;
         try {
@@ -89,7 +89,7 @@ class AcadmiceYearController extends Controller
             $acadmice_year->year_end = $year_end;
             $acadmice_year->updated_by = Auth::id();
             $acadmice_year->view = $view;
-            $acadmice_year->status = ($request->status) ? 0 : 1;
+            $acadmice_year->status = ($request->status) ? 1 : 0;
             $acadmice_year->save();
             session()->flash('success', trans('general.success'));
             $this->logActivity(trans('log.actions.updated'), trans('log.models.academic_year.updated', ['view' => $request->view]));

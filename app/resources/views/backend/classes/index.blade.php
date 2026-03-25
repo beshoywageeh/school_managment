@@ -40,8 +40,8 @@
                                     @forelse ($classes as $class)
                                         <tr>
                                             <td> {{ $loop->iteration }}</td>
-                                            <td><a href={{route('classes.show',$class)}}>{{ $class->title }}</a>
-                                                 &nbsp; {{ $class->tammen() }}</td>
+                                            <td><a href={{ route('classes.show', $class) }}>{{ $class->title }}</a>
+                                                &nbsp; {{ $class->tammen() }}</td>
                                             <td> {{ $class->grade->name }}</td>
                                             <td>{{ $class->class_room->name }}</td>
                                             <td>{{ $class->students_count }}</td>
@@ -53,7 +53,8 @@
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info',
                                                         'can' => 'classes-addstudent',
-                                                    ], [
+                                                    ],
+                                                    [
                                                         'type' => 'link',
                                                         'url' => route('classes.add_students', $class),
                                                         'text' => trans('classes.add_Students'),

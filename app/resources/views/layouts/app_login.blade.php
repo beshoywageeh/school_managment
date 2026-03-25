@@ -32,6 +32,7 @@
         animation: pulse 2s infinite;
     }
 </style>
+
 <body>
     <div class="wrapper">
         <div id="pre-loader" class="pulse">

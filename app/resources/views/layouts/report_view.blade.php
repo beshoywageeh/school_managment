@@ -43,7 +43,9 @@
         <div class="my-2 row no-print">
             <div class="col"><a href="{{ url()->previous() }}" class="btn btn-primary">{{ trans('report.back') }}</a>
             </div>
-            <div class="col"><h6 class="alert alert-secondary">{{now()->format('Y-m-d s : i : g A')}}</h6></div>
+            <div class="col">
+                <h6 class="alert alert-secondary">{{ now()->format('Y-m-d s : i : g A') }}</h6>
+            </div>
             <div class="col">
                 <button class="btn btn-success" onclick="window.print();">{{ trans('report.print') }}</button>
             </div>

@@ -16,7 +16,8 @@
                     @csrf
                     <div class="row mb-2">
                         <div class="col-3">
-                            <label for="">{{ trans('General.choose', ['value' => trans('academic_year.view')]) }}</label>
+                            <label
+                                for="">{{ trans('General.choose', ['value' => trans('academic_year.view')]) }}</label>
                         </div>
                         <div class="col-9">
                             <select name="acc_year" id="" class="custom-select w-100" style="width: 100%;">

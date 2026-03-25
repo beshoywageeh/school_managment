@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,7 @@
         border: 1px solid black !important;
         width: 100%;
         border-collapse: collapse;
-        text-align:center
+        text-align: center
     }
 
     .table td,
@@ -52,6 +53,7 @@
         footer: page-footer;
     }
 </style>
+
 <body>
     <htmlpageheader name="page-header">
         <div style="height: 5px; width: 95%; margin: auto;">
@@ -69,10 +71,10 @@
                                 </p>
                                 <br>
                                 <p>
-                                    {{ trans('report.print_date',['date'=>date('Y-m-d') ]) }}
+                                    {{ trans('report.print_date', ['date' => date('Y-m-d')]) }}
                                 </p>
                             </center>
-                             </td>
+                        </td>
                         <td class="text-left">
                             @if ($school->image == null)
                                 <img class="img-fluid" style="max-width:10%"
@@ -122,32 +124,31 @@
     </htmlpagefooter>
     <div class="container-fluid">
 
-    <div class="row">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th>#</th>
-                    <th>{{ trans('stock.name') }}</th>
-                    <th>{{ trans('stock.quantity') }}</th>
-                    <th>{{ trans('General.created_at') }}</th>
-                    <th>{{ trans('General.updated_at') }}</th>
-                </tr>
-                @forelse ($data['stocks'] as $stock)
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
                     <tr>
-                        <td>{{ $loop->index + 1 }}</td>
-                        <td>{{ $stock->name }}</td>
-                        <td>{{ $stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out') }}
-                        </td>
-                        <td>{{ $stock->created_at->format('Y-m-d') }}</td>
-                        <td>{{ $stock->updated_at->format('Y-m-d') }}</td>
+                        <th>#</th>
+                        <th>{{ trans('stock.name') }}</th>
+                        <th>{{ trans('stock.quantity') }}</th>
+                        <th>{{ trans('General.created_at') }}</th>
+                        <th>{{ trans('General.updated_at') }}</th>
                     </tr>
-                @empty
-                @endforelse
-            </table>
+                    @forelse ($data['stocks'] as $stock)
+                        <tr>
+                            <td>{{ $loop->index + 1 }}</td>
+                            <td>{{ $stock->name }}</td>
+                            <td>{{ $stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out') }}
+                            </td>
+                            <td>{{ $stock->created_at->format('Y-m-d') }}</td>
+                            <td>{{ $stock->updated_at->format('Y-m-d') }}</td>
+                        </tr>
+                    @empty
+                    @endforelse
+                </table>
+            </div>
         </div>
     </div>
-    </div>
 </body>
+
 </html>
-
-

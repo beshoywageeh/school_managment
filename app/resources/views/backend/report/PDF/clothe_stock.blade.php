@@ -106,7 +106,8 @@
         <tfoot>
             <tr>
                 <th colspan='4'>{{ trans('report.total') }}</th>
-                <th>{{ number_format($data['stock']->orders->sum('pivot.quantity_in') + $data['stock']->opening_qty, 2) }}</th>
+                <th>{{ number_format($data['stock']->orders->sum('pivot.quantity_in') + $data['stock']->opening_qty, 2) }}
+                </th>
                 <th>{{ number_format($data['stock']->orders->sum('pivot.quantity_out'), 2) }}</th>
                 <th>{{ number_format($order['total'] + $data['stock']->opening_qty, 2) }}</th>
             </tr>

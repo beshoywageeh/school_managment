@@ -19,7 +19,8 @@
                     <div class="card-body" id="print">
                         <div class="row">
                             <div class="col">
-                                <h6>{{ trans('orders.num') }} : {{ $auto_number }} <input type="hidden" name="auto_number" value="{{ $auto_number }}"></h6>
+                                <h6>{{ trans('orders.num') }} : {{ $auto_number }} <input type="hidden" name="auto_number"
+                                        value="{{ $auto_number }}"></h6>
                             </div>
                             <div class="col">
                                 <h6>{{ trans('general.date') }} : {{ date('Y-m-d') }}</h6>
@@ -73,7 +74,8 @@
                                                             {{ trans('General.choose', ['value' => trans('stock.name')]) }}
                                                         </option>
                                                         @foreach ($stocks->pluck('name', 'id') as $id => $name)
-                                                            <option value="{{ $id }}">{{ $name }}</option>
+                                                            <option value="{{ $id }}">{{ $name }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </td>

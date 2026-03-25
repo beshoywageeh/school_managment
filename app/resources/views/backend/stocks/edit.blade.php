@@ -9,7 +9,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('stock.update') }}" method="POST">
+            <form action="{{ route('stocks.update') }}" method="POST">
                 @csrf
                 <input type="hidden" name="id" value="{{ $stock->id }}">
                 <div class="modal-body">

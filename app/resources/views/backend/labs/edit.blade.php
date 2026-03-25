@@ -21,7 +21,8 @@
                                     value="{{ $laboratory->location }}">
                             </div>
                             <div class="col-md-2 text-right">
-                                <button class="btn btn-success btn-block" type="submit">{{ trans('General.Submit') }}</button>
+                                <button class="btn btn-success btn-block"
+                                    type="submit">{{ trans('General.Submit') }}</button>
                             </div>
                         </div>
                     </div>

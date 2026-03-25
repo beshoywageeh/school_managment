@@ -11,21 +11,25 @@
 @endsection
 @push('css')
     <style>
-        @media print{
-            @page{
-                size:A5;
-                width:210mm;
-                height:148mm;
+        @media print {
+            @page {
+                size: A5;
+                width: 210mm;
+                height: 148mm;
             }
         }
+
         .table {
-            border:3px solid black;
+            border: 3px solid black;
         }
-        .table td, .table th {
-            border:3px solid black;
+
+        .table td,
+        .table th {
+            border: 3px solid black;
         }
-        .table th{
-            background-color:#ddd;
+
+        .table th {
+            background-color: #ddd;
             font-weight: 1.2rem
         }
     </style>
@@ -47,7 +51,11 @@
                 <div class="card-body" id="print">
                     <div class="table-responsive">
                         <table class="table">
-                            <tr><td colspan="2"><h6>{{$school->name}}</h6></td></tr>
+                            <tr>
+                                <td colspan="2">
+                                    <h6>{{ $school->name }}</h6>
+                                </td>
+                            </tr>
                             <tr>
                                 <th>{{ trans('orders.num') }}</th>
                                 <td>{{ $order->auto_number }}</td>
@@ -62,18 +70,18 @@
                         {{-- @can('orders-index') --}}
                         <table class="table">
 
-                                <tr>
-                                    <th>#</th>
-                                    <th>{{ trans('stock.name') }}</th>
-                                    <th>{{ trans('Grades.name') }}</th>
-                                    <th>{{ trans('class_rooms.Name') }}</th>
-                                    <th>{{ trans('clothes.sales_price') }}</th>
-                                    @if($order->type == 1)
+                            <tr>
+                                <th>#</th>
+                                <th>{{ trans('stock.name') }}</th>
+                                <th>{{ trans('Grades.name') }}</th>
+                                <th>{{ trans('class_rooms.Name') }}</th>
+                                <th>{{ trans('clothes.sales_price') }}</th>
+                                @if ($order->type == 1)
                                     <th>{{ trans('clothes.purchase_price') }}</th>
-                                    @endif
-                                    <th>{{ trans('stock.quantity') }}</th>
-                                    <th>{{ trans('clothes.total_price') }}</th>
-                                </tr>
+                                @endif
+                                <th>{{ trans('stock.quantity') }}</th>
+                                <th>{{ trans('clothes.total_price') }}</th>
+                            </tr>
 
                             <tbody>
                                 @forelse ($order->stocks as $stock)
@@ -83,19 +91,21 @@
                                         <td>{{ $stock->grade->name }}</td>
                                         <td>{{ $stock->classroom->name }}</td>
                                         @if ($order->isset == 1)
-                                        <td>{{ Number::currency($stock->sales_price_set,'EGP','ar') }}</td>
+                                            <td>{{ Number::currency($stock->sales_price_set, 'EGP', 'ar') }}</td>
                                         @else
-                                        <td>{{ Number::currency($stock->sales_price,'EGP','ar') }}</td>
+                                            <td>{{ Number::currency($stock->sales_price, 'EGP', 'ar') }}</td>
                                         @endif
-                                        @if($order->type == 1)
-                                        <td>{{ Number::currency($stock->purchase_price,'EGP','ar') }}</td>
+                                        @if ($order->type == 1)
+                                            <td>{{ Number::currency($stock->purchase_price, 'EGP', 'ar') }}</td>
                                         @endif
                                         @if ($order->isset == 1)
-                                        <td>{{ number_format($stock->pivot->quantity_out, 2) }}</td>
-                                        <td>{{ Number::currency($stock->pivot->quantity_out * $stock->sales_price_set, 'EGP','ar') }}</td>
+                                            <td>{{ number_format($stock->pivot->quantity_out, 2) }}</td>
+                                            <td>{{ Number::currency($stock->pivot->quantity_out * $stock->sales_price_set, 'EGP', 'ar') }}
+                                            </td>
                                         @else
-                                        <td>{{ number_format($stock->pivot->quantity_out, 2) }}</td>
-                                        <td>{{ Number::currency($stock->pivot->quantity_out * $stock->sales_price, 'EGP','ar') }}</td>
+                                            <td>{{ number_format($stock->pivot->quantity_out, 2) }}</td>
+                                            <td>{{ Number::currency($stock->pivot->quantity_out * $stock->sales_price, 'EGP', 'ar') }}
+                                            </td>
                                         @endif
 
                                     </tr>
@@ -109,24 +119,30 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="{{$order->type==1?6:5}}"><strong>{{trans('general.total')}}</strong></td>
+                                    <td colspan="{{ $order->type == 1 ? 6 : 5 }}">
+                                        <strong>{{ trans('general.total') }}</strong>
+                                    </td>
                                     @if ($order->isset == 1)
-                                    <td>
-                                        {{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out),2) }}</td>
-                                    <td>
-                                        {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out * $stock->sales_price_set),'EGP','ar') }}
-                                    </td>
+                                        <td>
+                                            {{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out), 2) }}
+                                        </td>
+                                        <td>
+                                            {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out * $stock->sales_price_set), 'EGP', 'ar') }}
+                                        </td>
                                     @else
-                                    <td>
-                                        {{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out),2) }}</td>
-                                    <td>
-                                        {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out * $stock->sales_price),'EGP','ar') }}
-                                    </td>
+                                        <td>
+                                            {{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out), 2) }}
+                                        </td>
+                                        <td>
+                                            {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out * $stock->sales_price), 'EGP', 'ar') }}
+                                        </td>
                                     @endif
 
                                 </tr>
                                 <tr>
-                                    <td colspan="7">{{Numbers::TafqeetMoney($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out * $stock->sales_price),'EGP')}}</td>
+                                    <td colspan="7">
+                                        {{ Numbers::TafqeetMoney($order->stocks->sum(fn($stock) => $stock->pivot->quantity_out * $stock->sales_price), 'EGP') }}
+                                    </td>
                                 </tr>
                             </tfoot>
                         </table>

@@ -29,22 +29,25 @@
                         <table class="table table-bordered">
 
                             @forelse ($laboratory->orders as $order)
-                            <tr><td colspan="2">{{trans('stock.manual_num')}} | {{$order->auto_number}}</td>
-                            <td colspan="2">{{trans('stock.manual_date')}} | {{$order->created_at->format('Y-m-d')}}</td></tr>
-                            <tr>
-                                <th>#</th>
-                                <th>{{ trans('stock.name') }}</th>
-                                <th>{{ trans('stock.quantity') }}</th>
-                                <th>{{ trans('stock.current_stock') }}</th>
-                            </tr>
-                            @foreach ($order->stocks as $stock)
-                            <tr>
-                                <td>{{ $loop->index + 1 }}</td>
-                                <td>{{ $stock->name }}</td>
-                                <td>{{ $stock->pivot->quantity_out }}</td>
-                                <td></td>
-                            </tr>
-                            @endforeach
+                                <tr>
+                                    <td colspan="2">{{ trans('stock.manual_num') }} | {{ $order->auto_number }}</td>
+                                    <td colspan="2">{{ trans('stock.manual_date') }} |
+                                        {{ $order->created_at->format('Y-m-d') }}</td>
+                                </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>{{ trans('stock.name') }}</th>
+                                    <th>{{ trans('stock.quantity') }}</th>
+                                    <th>{{ trans('stock.current_stock') }}</th>
+                                </tr>
+                                @foreach ($order->stocks as $stock)
+                                    <tr>
+                                        <td>{{ $loop->index + 1 }}</td>
+                                        <td>{{ $stock->name }}</td>
+                                        <td>{{ $stock->pivot->quantity_out }}</td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach
                             @empty
                                 <tr>
                                     <td colspan="4">{{ trans('General.noDataToShow') }}</td>

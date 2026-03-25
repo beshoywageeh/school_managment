@@ -12,8 +12,6 @@ use App\Models\StudentAccount;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
-
 
 class HomeController extends Controller
 {

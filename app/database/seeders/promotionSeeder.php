@@ -12,6 +12,6 @@ class promotionSeeder extends Seeder
      */
     public function run(): void
     {
-        promotion::factory(30000)->create();
+        promotion::factory(300)->create();
     }
 }

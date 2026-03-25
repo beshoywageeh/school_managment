@@ -15,9 +15,15 @@
                         </div>
                         <div class="col-lg text-md-right">
                             <div class="row text-center ">
-                                <div class="col"><h5>{{ $class->grade->name }}</h5></div>
-                                <div class="col"><h5>{{ $class->class_room->name }}</h5></div>
-                                <div class="col"><h5>{{ $class->title }}</h5></div>
+                                <div class="col">
+                                    <h5>{{ $class->grade->name }}</h5>
+                                </div>
+                                <div class="col">
+                                    <h5>{{ $class->class_room->name }}</h5>
+                                </div>
+                                <div class="col">
+                                    <h5>{{ $class->title }}</h5>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -27,7 +33,7 @@
                             <input type="hidden" name="class_id" value="{{ $class->id }}">
                             <div class="row my-2">
                                 <div class="col-lg-12">
-                                    <label for="">{{trans('classes.choose_student')}}</label>
+                                    <label for="">{{ trans('classes.choose_student') }}</label>
                                     <select name="student_id[]" id="" multiple class="custom-select select2 w-100">
                                         @foreach ($students as $student)
                                             <option value="{{ $student->id }}">{{ $student->name }}</option>

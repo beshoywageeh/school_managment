@@ -4,7 +4,7 @@
 
 <!-- plugin_path -->
 <script>
-    var plugin_path = '{{ asset("assests/js") }}/';
+    var plugin_path = '{{ asset('assests/js') }}/';
 </script>
 <!-- plugins-jquery -->
 <script src="{{ URL::asset('assests/js/plugins-jquery.js') }}"></script>

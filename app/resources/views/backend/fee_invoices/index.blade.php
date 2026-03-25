@@ -18,13 +18,13 @@
                     </div>
                     <div class="table-responsive">
                         @can('fee_invoice-list')
-                            <table id="datatable" class="table text-center table-striped table-bordered table-sm">
+                            <table id="" class="table text-center table-striped table-bordered table-sm">
                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>{{ trans('fee_invoice.date') }}</th>
                                         <th>{{ trans('fee_invoice.name') }}</th>
-                                        <th>{{ trans('General.created_at') }}</th>
+                                        <th>{{ trans('general.created.at') }}</th>
                                         <th>{{ trans('fee_invoice.debit') }}</th>
                                         <th>{{ trans('fee_invoice.grade') }}</th>
                                         <th>{{ trans('fee_invoice.class') }}</th>
@@ -38,7 +38,7 @@
                                             <td> {{ $loop->iteration }}</td>
                                             <td>{{ \Carbon\Carbon::parse($fee_invoice->invoice_date)->format('Y-m-d') }}</td>
                                             <td><a target='_blank'
-                                                    href="{{ route('Students.show', $fee_invoice->student_id) }}">{{ $fee_invoice->students->name ?? '-' }}</a>
+                                                    href="{{ route('students.show', $fee_invoice->student_id) }}">{{ $fee_invoice->students->name ?? '-' }}</a>
                                             </td>
                                             <td>{{ $fee_invoice->created_at->format('Y-m-d') }}</td>
                                             <td>{{ number_format($fee_invoice->fees_sum_amount, 2) }}&nbsp;ج.م</td>
@@ -49,24 +49,24 @@
 
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
-                                                        'type'=>'link',
-                                                        'url' => route('fee_invoice.destroy', $fee_invoice->id),
+                                                        'type' => 'link',
+                                                        'url' => route('fee-invoice.destroy', $fee_invoice->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
                                                         'onclick' => 'confirmation(event)',
                                                         'can' => 'fee_invoice-delete',
                                                     ],
                                                     [
-                                                        'type'=>'link',
-                                                        'url' => route('fee_invoice.show', $fee_invoice->id),
+                                                        'type' => 'link',
+                                                        'url' => route('fee-invoice.show', $fee_invoice->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info-alt',
                                                         'target' => '_blank',
                                                         'can' => 'fee_invoice-info',
                                                     ],
                                                     [
-                                                        'type'=>'link',
-                                                        'url' => route('fee_invoice.edit', $fee_invoice->id),
+                                                        'type' => 'link',
+                                                        'url' => route('fee-invoice.edit', $fee_invoice->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',
                                                         'target' => '_blank',
@@ -78,6 +78,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            {{ $fee_invoices->links('components.Paginatortion') }}
                         @endcan
                     </div>
                 </div>

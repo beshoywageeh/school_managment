@@ -23,7 +23,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('schoolfees-list')
-                            <table class="table table-striped table-bordered table-sm table-hover" id="datatable">
+                            <table class="table table-striped table-bordered table-sm table-hover" id="">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -47,14 +47,14 @@
                                             <td>{{ $fee->classroom->name }}</td>
                                             <td>{{ $fee->year->view }}</td>
                                             <td>{{ $fee->description }}</td>
-                                            <td>{{ $fee->amount}}</td>
+                                            <td>{{ $fee->amount }}</td>
                                             <td>{{ $fee->user->name }}</td>
                                             <td>{{ $fee->created_at->format('Y-m-d') }}</td>
                                             <td>
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
                                                         'type' => 'link',
-                                                        'url' => route('schoolfees.destroy', $fee->id),
+                                                        'url' => route('school-fees.destroy', $fee->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
                                                         'onclick' => 'confirmation(event)',
@@ -62,7 +62,7 @@
                                                     ],
                                                     [
                                                         'type' => 'link',
-                                                        'url' => route('schoolfees.show', $fee->id),
+                                                        'url' => route('school-fees.show', $fee->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info-alt',
                                                         'target' => '_blank',
@@ -70,7 +70,7 @@
                                                     ],
                                                     [
                                                         'type' => 'link',
-                                                        'url' => route('schoolfees.edit', $fee->id),
+                                                        'url' => route('school-fees.edit', $fee->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',
                                                         'can' => 'schoolfees-edit',
@@ -85,6 +85,7 @@
                                     @endforelse
                                 </tbody>
                             </table>
+                            {{ $School_Fees->links('components.Paginatortion') }}
                         @endcan
                     </div>
                 </div>
@@ -93,31 +94,31 @@
     </div>
     @push('scripts')
         <script>
-        $(document).ready(function() {
-            $('#grades').on('change', function() {
-                classrooms.innerHTML = '<option>{{ trans('General.loading') }}</option>';
-                let grade = $(this).val();
-                if (grade) {
-                    $.ajax({
-                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-                            $('#classrooms').empty();
-                             $('#classrooms').append(
-                                 '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
-                             );
-                            $.each(data,function(key, value) {
+            $(document).ready(function() {
+                $('#grades').on('change', function() {
+                    classrooms.innerHTML = '<option>{{ trans('General.loading') }}</option>';
+                    let grade = $(this).val();
+                    if (grade) {
+                        $.ajax({
+                            url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
+                            type: "GET",
+                            dataType: "json",
+                            success: function(data) {
+                                $('#classrooms').empty();
                                 $('#classrooms').append(
-                                    `<option value="${value.id}">${value.name}</option>`);
+                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
+                                );
+                                $.each(data, function(key, value) {
+                                    $('#classrooms').append(
+                                        `<option value="${value.id}">${value.name}</option>`
+                                    );
 
-                            });
-                        },
-                    });
-                };
+                                });
+                            },
+                        });
+                    };
+                });
             });
-        });
-    </script>
-
+        </script>
     @endpush
 @endsection

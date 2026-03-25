@@ -25,9 +25,9 @@
                                     @forelse($grades as $grade)
                                         <option value="{{ $grade->id }}">{{ $grade->name }}</option>
                                     @empty
-                                    <option value="">
-                                        {{trans('General.noDataToShow')}}
-                                    </option>
+                                        <option value="">
+                                            {{ trans('General.noDataToShow') }}
+                                        </option>
                                     @endforelse
                                 </select>
                             </div>
@@ -39,7 +39,8 @@
 
                                 <select name="payment_status" id="" class="custom-select">
                                     <option value="" selected disabled>
-                                        {{ trans('General.choose', ['value'=> trans('report.payment_status')]) }}</option>
+                                        {{ trans('General.choose', ['value' => trans('report.payment_status')]) }}
+                                    </option>
                                     <option value="0">{{ trans('clothes.not_payed') }}</option>
                                     <option value="1">{{ trans('clothes.payed') }}</option>
                                 </select>

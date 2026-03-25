@@ -30,7 +30,7 @@ class SchoolFeeController extends Controller
         $school = $this->getSchool();
         $grades = Grade::where('school_id', $school->id)->get();
         $years = acadmice_year::where('school_id', $school->id)->where('status', 0)->get();
-        $School_Fees = school_fee::where('school_id', $school->id)->with('grade:id,name', 'classroom:id,name', 'user:id,name', 'year:id,view')->get(['id', 'title', 'amount', 'academic_year_id', 'description', 'grade_id', 'classroom_id', 'user_id', 'created_at']);
+        $School_Fees = school_fee::where('school_id', $school->id)->with('grade:id,name', 'classroom:id,name', 'user:id,name', 'year:id,view')->paginate(10);
 
         return view('backend.school_fees.index', get_defined_vars());
     }
@@ -86,7 +86,7 @@ class SchoolFeeController extends Controller
             session()->flash('success', trans('General.success'));
             DB::commit();
 
-            return redirect()->route('schoolfees.index');
+            return redirect()->route('school-fees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
             DB::rollBack();
@@ -152,7 +152,7 @@ class SchoolFeeController extends Controller
             $this->logActivity(trans('log.actions.updated'), trans('log.models.school_fee.updated', ['amount' => \Number::currency($request->amount, 'EGP', 'ar')]));
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('schoolfees.index');
+            return redirect()->route('school-fees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -171,7 +171,7 @@ class SchoolFeeController extends Controller
             $fee->delete();
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('schoolfees.index');
+            return redirect()->route('school-fees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

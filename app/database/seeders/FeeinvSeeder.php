@@ -12,6 +12,6 @@ class FeeinvSeeder extends Seeder
      */
     public function run(): void
     {
-        Fee_invoice::factory(10000)->create();
+        Fee_invoice::factory(100)->create();
     }
 }

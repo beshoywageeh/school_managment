@@ -1,12 +1,11 @@
 @extends('layouts.app')
 @section('title')
-{{trans('schedules.schedules')}}
+    {{ trans('schedules.schedules') }}
 @endsection
 @section('content')
-
-        <div class="mb-4 row">
-            <div class="col-md-12">
-                <livewire:Schedules/>
-            </div>
+    <div class="mb-4 row">
+        <div class="col-md-12">
+            <livewire:Schedules />
         </div>
+    </div>
 @endsection

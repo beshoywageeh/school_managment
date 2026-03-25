@@ -12,16 +12,17 @@
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <tr>
-                                      <td rowspan="4">
-                                        @if ($school_info->image == null)
-                                            <img class="img-fluid rounded-circle"
-                                                src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school_info->name }}"/>
-                                        @else
-                                            <img class="img-fluid rounded-circle"
-                                                src="{{URL::asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename)}}"
-                                                alt="{{ $school_info->name }}"/>
-                                        @endif
-                                      </td>
+                                        <td rowspan="4">
+                                            @if ($school_info->image == null)
+                                                <img class="img-fluid rounded-circle"
+                                                    src="{{ asset('assests/images/loop_labs.png') }}"
+                                                    alt="{{ $school_info->name }}" />
+                                            @else
+                                                <img class="img-fluid rounded-circle"
+                                                    src="{{ URL::asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
+                                                    alt="{{ $school_info->name }}" />
+                                            @endif
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>{{ trans('setting.total_student') }}</th>
@@ -38,9 +39,10 @@
                                     <tr>
                                         <td colspan="3">
                                             <p>
-                                            {{ $school_info->address }}
-                                        </p>
-                                        <p>{{ $school_info->phone }}</p></td>
+                                                {{ $school_info->address }}
+                                            </p>
+                                            <p>{{ $school_info->phone }}</p>
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -92,7 +94,7 @@
                                 </div>
                             </div>
 
-                            <form method="post" action="{{ route('setting.update_password') }}">
+                            <form method="post" action="{{ route('settings.update_password') }}">
                                 @csrf
                                 <div class="row">
                                     <div class="col">
@@ -154,12 +156,14 @@
                                     <th><label for="">{{ trans('general.logo') }}</label></th>
                                 </tr>
                                 <tr>
-                                    <th><textarea class="form-control" rows="4" name="address">{{ $school_info->address }}</textarea>
-                                    @error('address')
-                                        <div class="mt-1 alert alert-error">{{ $message }}</div>
-                                    @enderror</th>
+                                    <th>
+                                        <textarea class="form-control" rows="4" name="address">{{ $school_info->address }}</textarea>
+                                        @error('address')
+                                            <div class="mt-1 alert alert-error">{{ $message }}</div>
+                                        @enderror
+                                    </th>
                                     <th><input type="file" name="logo" accept="image/*" class="form-control">
-                                   </th>
+                                    </th>
                                 </tr>
                             </table>
                         </div>
@@ -178,7 +182,7 @@
                                 <label>
                                     {{ trans('setting.footer_right') }}
                                 </label>
-                                <textarea class="form-control" rows="4"  name="footer_right">{{ $school_info->footer_right }}</textarea>
+                                <textarea class="form-control" rows="4" name="footer_right">{{ $school_info->footer_right }}</textarea>
                                 @error('footer_right')
                                     <div class="mt-1 alert alert-error">{{ $message }}</div>
                                 @enderror
@@ -196,7 +200,8 @@
                         <!-- heading  -->
                         <div class="mt-4 row">
                             <div class="text-right col">
-                                <button type="submit" class="btn btn-block btn-primary">{{ trans('general.buttons.save') }}</button>
+                                <button type="submit"
+                                    class="btn btn-block btn-primary">{{ trans('general.buttons.save') }}</button>
                             </div>
                         </div>
                     </form>
@@ -204,5 +209,4 @@
             </div>
         </div>
     </div>
-
 @endsection

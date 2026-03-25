@@ -1,168 +1,169 @@
-@if($data['is_pdf'])
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+@if ($data['is_pdf'])
+    <!DOCTYPE html>
+    <html lang="ar" dir="rtl">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>credit</title>
-</head>
-<style>
-    body {
-        font-size: 0.875rem;
-    }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>credit</title>
+    </head>
+    <style>
+        body {
+            font-size: 0.875rem;
+        }
 
-    .table {
-        border: 1px solid black !important;
-        width: 100%;
-        border-collapse: collapse;
-        text-align: center;
-    }
+        .table {
+            border: 1px solid black !important;
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
 
-    .table td,
-    .table th {
-        border: 1px solid black !important;
-        border-collapse: collapse;
-        padding: 3px;
-    }
+        .table td,
+        .table th {
+            border: 1px solid black !important;
+            border-collapse: collapse;
+            padding: 3px;
+        }
 
-    .table th {
-        font-weight: 1.2rem !important;
-    }
+        .table th {
+            font-weight: 1.2rem !important;
+        }
 
-    p {
-        margin: 0;
-        padding: 0;
-    }
+        p {
+            margin: 0;
+            padding: 0;
+        }
 
-    #heading {
-        padding-top: 15px;
-        padding-bottom: 15px;
-    }
+        #heading {
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
 
-    .text-right {
-        text-align: right;
-    }
+        .text-right {
+            text-align: right;
+        }
 
-    .text-left {
-        text-align: left;
-    }
+        .text-left {
+            text-align: left;
+        }
 
-    .text-center {
-        text-align: center;
-    }
+        .text-center {
+            text-align: center;
+        }
 
-    @page {
-        header: page-header;
-        footer: page-footer;
-    }
-</style>
+        @page {
+            header: page-header;
+            footer: page-footer;
+        }
+    </style>
 
-<body>
+    <body>
 
-    <htmlpagefooter name="page-footer">
-        <div style="height: 5px; width: 95%; margin: auto;">
-            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">
-                <table class="data-table" style="width:100%">
-                    <tr>
-                        <td class="text-right" width="20%">
-                            <div class="text-center">
+        <htmlpagefooter name="page-footer">
+            <div style="height: 5px; width: 95%; margin: auto;">
+                <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-top:2px solid black">
+                    <table class="data-table" style="width:100%">
+                        <tr>
+                            <td class="text-right" width="20%">
+                                <div class="text-center">
+                                    <center>
+                                        {!! $data['school_data']->footer_right !!}
+                                    </center>
+                                </div>
+                            </td>
+                            <td class="text-center" width="50%">
+                                {PAGENO}
+                            </td>
+                            <td class="text-left">
                                 <center>
-                                    {!! $data['school_data']->footer_right !!}
+                                    {!! $data['school_data']->footer_left !!}
                                 </center>
-                            </div>
-                        </td>
-                        <td class="text-center" width="50%">
-                            {PAGENO}
-                        </td>
-                        <td class="text-left">
-                            <center>
-                                {!! $data['school_data']->footer_left !!}
-                            </center>
 
-                        </td>
-                    </tr>
-                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </div>
-    </htmlpagefooter>
+        </htmlpagefooter>
 
-    <htmlpageheader name="page-header">
-        <div style="height: 5px; width: 95%; margin: auto;">
-            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
-                <table class="data-table" style="width:100%">
-                    <tr>
-                        <td class="text-center" width="25%">
-                            <center>
+        <htmlpageheader name="page-header">
+            <div style="height: 5px; width: 95%; margin: auto;">
+                <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
+                    <table class="data-table" style="width:100%">
+                        <tr>
+                            <td class="text-center" width="25%">
+                                <center>
 
-                                {!! $data['school_data']->heading_right !!}
-                            </center>
-                        </td>
-                        <td class="text-center" width="50%">
-                            <center>
-                                <p>{{ trans('report.daily_payment') }}</p>
-                                <br>
-                                <p>{{trans('report.print_date',['date'=>date('Y-m-d')])}}</p>
-                            </center>
-                        </td>
-                        <td class="text-left">
-                            @if ($data['school_data']->image == null)
-                                <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $data['school_data']->name }}">
-                            @else
-                                <img class="img-fluid" style="max-width:10%"
-                                    src="{{ storage_path('app/attachments/schools/' . $data['school_data']->slug . '/' . $data['school_data']->image->filename) }}"
-                                    alt="{{ $data['school_data']->name }}">
-                            @endif
-                        </td>
-                    </tr>
-                </table>
+                                    {!! $data['school_data']->heading_right !!}
+                                </center>
+                            </td>
+                            <td class="text-center" width="50%">
+                                <center>
+                                    <p>{{ trans('report.daily_payment') }}</p>
+                                    <br>
+                                    <p>{{ trans('report.print_date', ['date' => date('Y-m-d')]) }}</p>
+                                </center>
+                            </td>
+                            <td class="text-left">
+                                @if ($data['school_data']->image == null)
+                                    <img class="img-fluid" style="max-width:10%"
+                                        src="{{ asset('assests/images/loop_labs.png') }}"
+                                        alt="{{ $data['school_data']->name }}">
+                                @else
+                                    <img class="img-fluid" style="max-width:10%"
+                                        src="{{ storage_path('app/attachments/schools/' . $data['school_data']->slug . '/' . $data['school_data']->image->filename) }}"
+                                        alt="{{ $data['school_data']->name }}">
+                                @endif
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-        </div>
-    </htmlpageheader>
+        </htmlpageheader>
 
-    <table class="table text-center table-striped table-bordered table-sm">
-        <thead>
+        <table class="table text-center table-striped table-bordered table-sm">
+            <thead>
 
-            <tr class="text-white bg-dark">
-                <th>#</th>
-                <th>{{ trans('report.date') }}</th>
-                <th>{{ trans('report.student') }}</th>
-                <th>{{ trans('report.classroom') }}</th>
-                <th>{{ trans('General.grade') }}</th>
-                <th>{{ trans('academic_year.view') }}</th>
-                <th>{{ trans('report.fee_title') }}</th>
-                <th>{{ trans('report.amount') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($data['credit'] as $credit_item)
-                <tr>
-                    <td width="5%">{{ $loop->index + 1 }}</td>
-                    <td>{{ $credit_item->invoice_date }}</td>
-                    <td>{{ $credit_item->students->name }}</td>
-                    <td>{{ $credit_item->classes->name }}</td>
-                    <td>{{ $credit_item->grades->name }}</td>
-                    <td>{{ $credit_item->acd_year->view }}</td>
-                    <td>{{ $credit_item->fees->title }}</td>
-                    <td>{{ Number::currency($credit_item->fees->amount, 'EGP', 'ar') }}</td>
+                <tr class="text-white bg-dark">
+                    <th>#</th>
+                    <th>{{ trans('report.date') }}</th>
+                    <th>{{ trans('report.student') }}</th>
+                    <th>{{ trans('report.classroom') }}</th>
+                    <th>{{ trans('General.grade') }}</th>
+                    <th>{{ trans('academic_year.view') }}</th>
+                    <th>{{ trans('report.fee_title') }}</th>
+                    <th>{{ trans('report.amount') }}</th>
                 </tr>
-            @endforeach
-        </tbody>
-        <tfoot>
-            <tr>
-                <th colspan="7">{{ trans('report.total') }}</th>
-                <th>{{ Number::currency($data['credit']->sum('fees.amount'), 'EGP', 'ar') }}</th>
-            </tr>
-        </tfoot>
-    </table>
+            </thead>
+            <tbody>
+                @foreach ($data['credit'] as $credit_item)
+                    <tr>
+                        <td width="5%">{{ $loop->index + 1 }}</td>
+                        <td>{{ $credit_item->invoice_date }}</td>
+                        <td>{{ $credit_item->students->name }}</td>
+                        <td>{{ $credit_item->classes->name }}</td>
+                        <td>{{ $credit_item->grades->name }}</td>
+                        <td>{{ $credit_item->acd_year->view }}</td>
+                        <td>{{ $credit_item->fees->title }}</td>
+                        <td>{{ Number::currency($credit_item->fees->amount, 'EGP', 'ar') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="7">{{ trans('report.total') }}</th>
+                    <th>{{ Number::currency($data['credit']->sum('fees.amount'), 'EGP', 'ar') }}</th>
+                </tr>
+            </tfoot>
+        </table>
 
 
 
-</body>
+    </body>
 
-</html>
+    </html>
 @else
     @extends('layouts.app')
     @section('content')

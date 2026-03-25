@@ -18,7 +18,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('Recipt_Payment-list')
-                            <table id="datatable" class="table text-center table-sm table-striped table-bordered">
+                            <table id="" class="table text-center table-sm table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -38,7 +38,7 @@
                                             <td>
                                                 @can('Recipt_Payment-info')
                                                     <a target='_blank'
-                                                        href="{{ route('Recipt_Payment.show', $Recipt_Payment->student->id) }}">{{ $Recipt_Payment->student->name }}</a>
+                                                        href="{{ route('receipt-payment.show', $Recipt_Payment->student->id) }}">{{ $Recipt_Payment->student->name }}</a>
                                                 @endcan
                                             </td>
                                             <td>{{ Number::currency($Recipt_Payment->Debit, 'EGP', 'ar') }}</td>
@@ -48,7 +48,7 @@
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
                                                         'type' => 'link',
-                                                        'url' => route('Recipt_Payment.destroy', $Recipt_Payment->id),
+                                                        'url' => route('receipt-payment.destroy', $Recipt_Payment->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
                                                         'onclick' => 'confirmation(event)',
@@ -56,7 +56,7 @@
                                                     ],
                                                     [
                                                         'type' => 'link',
-                                                        'url' => route('Recipt_Payment.show', $Recipt_Payment->id),
+                                                        'url' => route('receipt-payment.show', $Recipt_Payment->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info-alt',
                                                         'target' => '_blank',
@@ -64,7 +64,7 @@
                                                     ],
                                                     [
                                                         'type' => 'link',
-                                                        'url' => route('Recipt_Payment.edit', $Recipt_Payment->id),
+                                                        'url' => route('receipt-payment.edit', $Recipt_Payment->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',
                                                         'can' => 'Recipt_Payment-edit',
@@ -75,6 +75,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            {{ $Recipt_Payments->links('components.Paginatortion') }}
                         @endcan
                     </div>
                 </div>

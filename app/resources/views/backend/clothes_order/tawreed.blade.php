@@ -50,8 +50,8 @@
                                             <input type="hidden" name="id[]"
                                                 value="{{ $clothe->id }}">{{ $clothe->name }}
                                         </td>
-                                        <td>{{$clothe->grade->name}}</td>
-                                        <td>{{$clothe->classroom->name}}</td>
+                                        <td>{{ $clothe->grade->name }}</td>
+                                        <td>{{ $clothe->classroom->name }}</td>
                                         <td>
                                             <input type="text" name="manual_num" class="form-control">
                                         </td>
@@ -62,29 +62,32 @@
                                             <input type="number" value="0" name="qty[]" class="form-control qty">
                                         </td>
                                         <td>
-                                            <input type="number" value="0" name="purchase[]" class="form-control purchase">
+                                            <input type="number" value="0" name="purchase[]"
+                                                class="form-control purchase">
                                         </td>
                                         <td>
                                             <input type="number" value="0" name="sales[]" class="form-control">
-                                        </td>    <td>
+                                        </td>
+                                        <td>
                                             <input type="number" value="0" name="sales_isset[]" class="form-control">
                                         </td>
                                         <td>
-                                            <input type="text" disabled value="0" class="form-control total_product">
+                                            <input type="text" disabled value="0"
+                                                class="form-control total_product">
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="2">{{trans('clothes.total_qty')}}</td>
+                                    <td colspan="2">{{ trans('clothes.total_qty') }}</td>
                                     <td colspan="2">
-                                        <input type="text"  disabled value="0" class="form-control" id="grand_qty">
+                                        <input type="text" disabled value="0" class="form-control" id="grand_qty">
                                     </td>
                                     <td></td>
-                                    <td colspan="2">{{trans('clothes.total_price')}}</td>
+                                    <td colspan="2">{{ trans('clothes.total_price') }}</td>
                                     <td colspan="2">
-                                        <input type="text"  disabled value="0" class="form-control" id="grand_total">
+                                        <input type="text" disabled value="0" class="form-control" id="grand_total">
                                     </td>
                                 </tr>
                             </tfoot>
@@ -125,16 +128,20 @@
                 var actual_stock = $(this).closest('tr').find('.purchase').val();
                 var inv_stock = $(this).closest('tr').find('.qty').val();
                 var total_product = parseFloat(actual_stock) * parseFloat(inv_stock);
-                $(this).closest('tr').find('.total_product').val(total_product.toLocaleString('en-EG', {style: 'currency', currency: 'EGP'}));
+                $(this).closest('tr').find('.total_product').val(total_product.toLocaleString('en-EG', {
+                    style: 'currency',
+                    currency: 'EGP'
+                }));
 
                 var total = 0;
                 $('.total_product').each(function() {
                     total += parseFloat($(this).val().replace(/[^\d\.\-]/g, ''));
                 });
-                $('#grand_total').val(total.toLocaleString('en-EG', {style: 'currency', currency: 'EGP'}));
+                $('#grand_total').val(total.toLocaleString('en-EG', {
+                    style: 'currency',
+                    currency: 'EGP'
+                }));
             });
         });
     </script>
-
-
 @endpush

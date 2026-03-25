@@ -5,116 +5,123 @@
 @endsection
 
 @push('css')
-<style>
-    /* General Dashboard Styles */
-    .main-content {
-        background-color: #f4f7f6;
-    }
+    <style>
+        /* General Dashboard Styles */
+        .main-content {
+            background-color: #f4f7f6;
+        }
 
-    .dashboard-heading {
-        font-weight: 700;
-        color: #333;
-        margin-bottom: 1.5rem;
-    }
+        .dashboard-heading {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
 
 
-    /* Stat Cards */
-    .dashboard-stat-card {
-        border: none;
-        border-radius: 1rem;
-        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-        overflow: hidden;
-    }
-    .dashboard-stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0.75rem 1.5rem rgba(0,0,0,0.12);
-    }
-    .dashboard-stat-card .card-body {
-        display: flex;
-        align-items: center;
-        padding: 1.5rem;
-    }
-    .dashboard-stat-card .stat-icon {
-        font-size: 2.5rem;
-        padding: 1rem;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-    }
-    .dashboard-stat-card .stat-count {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin: 0;
-        color: #333;
-    }
-    .dashboard-stat-card .stat-label {
-        font-size: 1rem;
-        font-weight: 500;
-        color: #6c757d;
-        margin: 0;
-    }
+        /* Stat Cards */
+        .dashboard-stat-card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
 
-    /* Quick Actions */
-    .quick-action-tile {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(45deg, #007bff, #0056b3);
-        border-radius: 1rem;
-        padding: 1.5rem 1rem;
-        text-align: center;
-        color: #fff;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
-        height: 100%;
-    }
-    .quick-action-tile:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
-        color: white;
-    }
-    .quick-action-tile .action-icon {
-        margin-bottom: 1rem;
-        color: #fff;
-    }
-    .quick-action-tile .action-label {
-        font-weight: 600;
-        margin: 0;
-    }
+        .dashboard-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+        }
 
-    /* Chart Cards */
-    .chart-card {
-        border: none;
-        border-radius: 1rem;
-        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.08);
-        padding: 1.5rem;
-    }
-</style>
+        .dashboard-stat-card .card-body {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .dashboard-stat-card .stat-icon {
+            font-size: 2.5rem;
+            padding: 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .dashboard-stat-card .stat-count {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: #333;
+        }
+
+        .dashboard-stat-card .stat-label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6c757d;
+            margin: 0;
+        }
+
+        /* Quick Actions */
+        .quick-action-tile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border-radius: 1rem;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+            height: 100%;
+        }
+
+        .quick-action-tile:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+            color: white;
+        }
+
+        .quick-action-tile .action-icon {
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .quick-action-tile .action-label {
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Chart Cards */
+        .chart-card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+        }
+    </style>
 @endpush
 
 @section('content')
-
     @php
-    $stat_icons = [
-        'Students' => ['icon' => 'fa-graduation-cap', 'color' => 'bg-primary'],
-        'parents' => ['icon' => 'fa-users', 'color' => 'bg-success'],
-        'employees' => ['icon' => 'fa-black-tie', 'color' => 'bg-info'],
-    ];
+        $stat_icons = [
+            'Students' => ['icon' => 'fa-graduation-cap', 'color' => 'bg-primary'],
+            'parents' => ['icon' => 'fa-users', 'color' => 'bg-success'],
+            'employees' => ['icon' => 'fa-black-tie', 'color' => 'bg-info'],
+        ];
 
-    $action_icons = [
-        'Students' => 'fa-user-plus',
-        'parents' => 'fa-users',
-        'Grade' => 'fa-list-alt',
-        'Class_Rooms' => 'fa-list-ol',
-        'schoolfees' => 'fa-money',
-        'jobs' => 'fa-black-tie',
-        'backup' => 'fa-database',
-    ];
+        $action_icons = [
+            'Students' => 'fa-user-plus',
+            'parents' => 'fa-users',
+            'Grade' => 'fa-list-alt',
+            'Class_Rooms' => 'fa-list-ol',
+            'schoolfees' => 'fa-money',
+            'jobs' => 'fa-black-tie',
+            'backup' => 'fa-database',
+        ];
     @endphp
 
     <!-- Stat Cards -->
@@ -222,7 +229,7 @@
             <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
                 <a href="{{ route('backup.create') }}" class="quick-action-tile">
                     <div class="action-icon"><i class="fa {{ $action_icons['backup'] }} fa-2x"></i></div>
-                    <p class="action-label">{{ trans('general.buttons.create').' '.trans('backup.title') }}</p>
+                    <p class="action-label">{{ trans('general.buttons.create') . ' ' . trans('backup.title') }}</p>
                 </a>
             </div>
         @endcan

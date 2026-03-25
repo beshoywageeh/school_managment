@@ -3,7 +3,7 @@
     {{ trans('student.title') }} | {{ trans('general.edit') }}
 @endsection
 @section('content')
-    <form action="{{ route('Students.update', 'test') }}" method="post">
+    <form action="{{ route('students.update', $student->id) }}" method="post">
         <input type="hidden" name="id" value="{{ $student->id }}">
         @csrf
         <div class="row mb-30">
@@ -46,7 +46,8 @@
                                 <div class="col">
                                     <label for="nationality" class="">{{ trans('general.nationality') }}</label>
                                     <select id="nationality" class="custom-select select2" name="nationality">
-                                        <option value="" selected disabled>{{ trans('general.nationality') }}</option>
+                                        <option value="" selected disabled>{{ trans('general.nationality') }}
+                                        </option>
                                         @foreach (\App\Models\nationality::all() as $nationality)
                                             <option value="{{ $nationality->id }}" @selected(old('nationality', $student->nationality_id) == $nationality->id)>
                                                 {{ $nationality->name }}</option>
@@ -84,7 +85,8 @@
                                 <select class='custom-select' name="grade" id="grades">
                                     <option> {{ trans('student.choose_grade') }}</option>
                                     @foreach ($grades as $grade)
-                                        <option @selected($student->grade_id == $grade->id) value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                        <option @selected($student->grade_id == $grade->id) value="{{ $grade->id }}">
+                                            {{ $grade->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -93,7 +95,8 @@
                                     {{ trans('student.choose_classroom') }}
                                 </label>
                                 <select class='custom-select' name="class_room" id="classrooms">
-                                    <option selected value="{{ $student->classroom_id }}">{{ $student->classroom->name }}</option>
+                                    <option selected value="{{ $student->classroom_id }}">{{ $student->classroom->name }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -104,7 +107,8 @@
                                     <option> {{ trans('student.parent') }}</option>
 
                                     @foreach ($parents as $parent)
-                                        <option @selected($student->parent_id == $parent->id) value="{{ $parent->id }}">{{ $parent->Father_Name }}</option>
+                                        <option @selected($student->parent_id == $parent->id) value="{{ $parent->id }}">
+                                            {{ $parent->Father_Name }}</option>
                                     @endforeach
                                 </select>
                             </div>

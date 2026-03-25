@@ -16,11 +16,24 @@ class ActivityLog extends Model
         'action',
         'description',
         'ip',
+        'user_agent',
         'setting_id',
+        'model_type',
+        'model_id',
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function subject()
+    {
+        return $this->morphTo('model_type', 'model_id');
     }
 }

@@ -1,0 +1,521 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Ward",
+          "informationUri": "https://github.com/Eljakani/ward",
+          "version": "v0.4.0",
+          "semanticVersion": "v0.4.0",
+          "rules": [
+            {
+              "id": "ENV-001",
+              "name": "No .env file found",
+              "shortDescription": {
+                "text": "No .env file found"
+              },
+              "fullDescription": {
+                "text": "The project has no .env file. While this may be intentional in containerized deployments, ensure environment configuration is provided through another mechanism."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "help": {
+                "text": "Copy .env.example to .env and configure your environment variables."
+              },
+              "properties": {
+                "tags": [
+                  "Configuration"
+                ],
+                "security-severity": "informational"
+              }
+            },
+            {
+              "id": "DEBUG-001",
+              "name": "dd() call left in code",
+              "shortDescription": {
+                "text": "dd() call left in code"
+              },
+              "fullDescription": {
+                "text": "dd() (dump and die) stops execution and dumps variable contents to the browser. Left in production code, it breaks functionality and can expose sensitive data structures, database contents, or environment variables.\n"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": "Remove dd() calls before deploying:\n  Use Laravel Telescope or logging for debugging in non-local environments.\n  Log::debug('message', $context);\n"
+              },
+              "properties": {
+                "tags": [
+                  "Debug"
+                ],
+                "security-severity": "high"
+              }
+            },
+            {
+              "id": "DEBUG-003",
+              "name": "var_dump() or print_r() in source",
+              "shortDescription": {
+                "text": "var_dump() or print_r() in source"
+              },
+              "fullDescription": {
+                "text": "Native PHP debug functions output raw data to the browser. In production these expose internal variable contents and data structures.\n"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "help": {
+                "text": "Replace with structured logging:\n  Log::debug('variable state', ['data' =\u003e $data]);\n"
+              },
+              "properties": {
+                "tags": [
+                  "Debug"
+                ],
+                "security-severity": "medium"
+              }
+            },
+            {
+              "id": "CONFIG-004",
+              "name": "Empty $guarded array on Eloquent model",
+              "shortDescription": {
+                "text": "Empty $guarded array on Eloquent model"
+              },
+              "fullDescription": {
+                "text": "Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().\n"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "help": {
+                "text": "Use $fillable to explicitly list allowed fields:\n  protected $fillable = ['name', 'email', 'password'];\nOr set $guarded to protect sensitive fields:\n  protected $guarded = ['id', 'is_admin', 'role'];\n"
+              },
+              "properties": {
+                "tags": [
+                  "Configuration"
+                ],
+                "security-severity": "high"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "ENV-001",
+          "ruleIndex": 0,
+          "level": "note",
+          "message": {
+            "text": "No .env file found"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".env"
+                },
+                "region": {
+                  "startLine": 1
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "c1db7201ea1e29f2e711b85d"
+          }
+        },
+        {
+          "ruleId": "DEBUG-001",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "dd() call left in code"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Http/Controllers/Parents/MyParentsController.php"
+                },
+                "region": {
+                  "startLine": 153,
+                  "snippet": {
+                    "text": "//  dd($request-\u003efile('file'));"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "858412f15d16132a3206446f"
+          }
+        },
+        {
+          "ruleId": "DEBUG-001",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "dd() call left in code"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Http/Controllers/Students/StudentsController.php"
+                },
+                "region": {
+                  "startLine": 64,
+                  "snippet": {
+                    "text": "// dd($school_fee);"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "a460635b9e2a05508c647878"
+          }
+        },
+        {
+          "ruleId": "DEBUG-001",
+          "ruleIndex": 1,
+          "level": "error",
+          "message": {
+            "text": "dd() call left in code"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Http/Controllers/Students/StudentsController.php"
+                },
+                "region": {
+                  "startLine": 336,
+                  "snippet": {
+                    "text": "// dd($school_fee);"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "8d673a2bed6e3d4d24fd1b43"
+          }
+        },
+        {
+          "ruleId": "DEBUG-003",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "var_dump() or print_r() in source"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/class_room.php"
+                },
+                "region": {
+                  "startLine": 40,
+                  "snippet": {
+                    "text": "print_r('\u003cspan class=\"badge badge-danger\"\u003e'.trans('general.no_tammen').'\u003c/span\u003e');"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "76dd7535bdb2f9b7199a9325"
+          }
+        },
+        {
+          "ruleId": "DEBUG-003",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "var_dump() or print_r() in source"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/class_room.php"
+                },
+                "region": {
+                  "startLine": 42,
+                  "snippet": {
+                    "text": "print_r('\u003cspan class=\"badge badge-success\"\u003e'.trans('general.ok_tammen').'\u003c/span\u003e');"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "7d69a9038279fe85d780603f"
+          }
+        },
+        {
+          "ruleId": "DEBUG-003",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "var_dump() or print_r() in source"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/classes.php"
+                },
+                "region": {
+                  "startLine": 48,
+                  "snippet": {
+                    "text": "print_r('\u003cspan class=\"badge badge-danger\"\u003e'.trans('General.no_tammen').'\u003c/span\u003e');"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "c538a87b3b4cee22074d24fb"
+          }
+        },
+        {
+          "ruleId": "DEBUG-003",
+          "ruleIndex": 2,
+          "level": "warning",
+          "message": {
+            "text": "var_dump() or print_r() in source"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/classes.php"
+                },
+                "region": {
+                  "startLine": 50,
+                  "snippet": {
+                    "text": "print_r('\u003cspan class=\"badge badge-success\"\u003e'.trans('General.ok_tammen').'\u003c/span\u003e');"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "8b572a57c7e15052755fafa6"
+          }
+        },
+        {
+          "ruleId": "CONFIG-004",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Empty $guarded array on Eloquent model"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/ExcptionFees.php"
+                },
+                "region": {
+                  "startLine": 13,
+                  "snippet": {
+                    "text": "protected $guarded = [];"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "0b26144f39bc190cfcc6c2d7"
+          }
+        },
+        {
+          "ruleId": "CONFIG-004",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Empty $guarded array on Eloquent model"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/Fee_invoice.php"
+                },
+                "region": {
+                  "startLine": 16,
+                  "snippet": {
+                    "text": "protected $guarded = [];"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "f17e3102ed183ddf78e26846"
+          }
+        },
+        {
+          "ruleId": "CONFIG-004",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Empty $guarded array on Eloquent model"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/PaymentParts.php"
+                },
+                "region": {
+                  "startLine": 14,
+                  "snippet": {
+                    "text": "protected $guarded = [];"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "2a793f18cefe50c015cf424f"
+          }
+        },
+        {
+          "ruleId": "CONFIG-004",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Empty $guarded array on Eloquent model"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/Recipt_Payment.php"
+                },
+                "region": {
+                  "startLine": 13,
+                  "snippet": {
+                    "text": "protected $guarded = [];"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "5a034eff7ff30c48f133ac5c"
+          }
+        },
+        {
+          "ruleId": "CONFIG-004",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Empty $guarded array on Eloquent model"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/StudentAccount.php"
+                },
+                "region": {
+                  "startLine": 15,
+                  "snippet": {
+                    "text": "protected $guarded = [];"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "ff57ca1f361dd78a5f0f6b8d"
+          }
+        },
+        {
+          "ruleId": "CONFIG-004",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Empty $guarded array on Eloquent model"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/clothes_order.php"
+                },
+                "region": {
+                  "startLine": 14,
+                  "snippet": {
+                    "text": "protected $guarded = [];"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "0b515a42701d8e07bd5d3f05"
+          }
+        },
+        {
+          "ruleId": "CONFIG-004",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Empty $guarded array on Eloquent model"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/order.php"
+                },
+                "region": {
+                  "startLine": 14,
+                  "snippet": {
+                    "text": "protected $guarded = [];"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "30d25da60fc7b146c3584a1f"
+          }
+        },
+        {
+          "ruleId": "CONFIG-004",
+          "ruleIndex": 3,
+          "level": "error",
+          "message": {
+            "text": "Empty $guarded array on Eloquent model"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Models/promotion.php"
+                },
+                "region": {
+                  "startLine": 12,
+                  "snippet": {
+                    "text": "protected $guarded = [];"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "primaryLocationLineHash/v1": "bdff8a148e72e1c96c13f460"
+          }
+        }
+      ]
+    }
+  ]
+}

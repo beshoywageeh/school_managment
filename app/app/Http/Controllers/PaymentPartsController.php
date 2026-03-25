@@ -55,7 +55,7 @@ class PaymentPartsController extends Controller
             }
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('payment_parts.index');
+            return redirect()->route('payment-parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -102,7 +102,7 @@ class PaymentPartsController extends Controller
             $this->logActivity(trans('log.actions.updated'), trans('log.models.payment_part.updated', ['name' => $paymentpart->students->name]));
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('payment_parts.index');
+            return redirect()->route('payment-parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -118,7 +118,7 @@ class PaymentPartsController extends Controller
             $pay->delete();
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('payment_parts.index');
+            return redirect()->route('payment-parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -170,17 +170,17 @@ class PaymentPartsController extends Controller
                 $this->logActivity(trans('log.actions.paid_fully'), trans('log.models.payment_part.paid_fully', ['name' => $student->name]));
                 DB::commit();
 
-                return redirect()->route('Recipt_Payment.print', $receipt->id);
+                return redirect()->route('receipt-payment.print', $receipt->id);
             } else {
                 $part->update(['status' => 'payed']);
                 DB::commit();
 
-                return redirect()->route('Recipt_Payment.print', $receipt->id);
+                return redirect()->route('receipt-payment.print', $receipt->id);
             }
             DB::commit();
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('payment_parts.index');
+            return redirect()->route('payment-parts.index');
         } catch (\Exception $e) {
             DB::rollback();
             session()->flash('error', $e->getMessage());

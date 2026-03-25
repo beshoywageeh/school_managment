@@ -16,10 +16,12 @@
                     @csrf
                     <div class="row mb-2">
                         <div class="col-3">
-                            <label for="">{{ trans('general.choose', ['value' => trans('Grades.name')]) }}</label>
+                            <label
+                                for="">{{ trans('general.choose', ['value' => trans('Grades.name')]) }}</label>
                         </div>
                         <div class="col-9">
-                            <select name="grade" id="" class="custom-select w-100 grades" style="width: 100%;">
+                            <select name="grade" id="" class="custom-select w-100 grades"
+                                style="width: 100%;">
                                 <option value="" selected disabled>{{ trans('general.choose_grade') }}</option>
                                 <option value="0">{{ trans('general.all') }}</option>
                                 @foreach ($grades as $grade)
@@ -30,10 +32,12 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-3">
-                            <label for="">{{ trans('general.choose', ['value' => trans('class_rooms.Name')]) }}</label>
+                            <label
+                                for="">{{ trans('general.choose', ['value' => trans('class_rooms.Name')]) }}</label>
                         </div>
                         <div class="col-9">
-                            <select name="classroom" id="" class="custom-select w-100 classrooms" style="width: 100%;">
+                            <select name="classroom" id="" class="custom-select w-100 classrooms"
+                                style="width: 100%;">
 
                                 <option value="0">{{ trans('general.all') }}</option>
 
@@ -63,7 +67,7 @@
                         <div class="col-9">
                             <select name="payment_status" id="" class="custom-select">
                                 <option value="" selected disabled>
-                                    {{ trans('general.choose', ['value'=> trans('report.payment_status')]) }}</option>
+                                    {{ trans('general.choose', ['value' => trans('report.payment_status')]) }}</option>
                                 <option value="0">{{ trans('general.all') }}</option>
 
                                 <option value="1">{{ trans('clothes.not_payed') }}</option>

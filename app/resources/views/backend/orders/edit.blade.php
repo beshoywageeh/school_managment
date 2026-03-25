@@ -79,15 +79,15 @@
                                                     class="form_control" name="manual_date"></td>
                                         @endif
                                         <td>
-                                            @if($type==1)
-                                            <input type="number" class="form-control" name="quantity[]"
-                                            value="{{ $stock->pivot->quantity_in ?? '' }}">
+                                            @if ($type == 1)
+                                                <input type="number" class="form-control" name="quantity[]"
+                                                    value="{{ $stock->pivot->quantity_in ?? '' }}">
                                             @elseif($type == 2)
-                                            <input type="number" class="form-control" name="quantity[]"
-                                            value="{{ $stock->pivot->quantity_out ?? '' }}">
-@else
-@endif
-                                           </td>
+                                                <input type="number" class="form-control" name="quantity[]"
+                                                    value="{{ $stock->pivot->quantity_out ?? '' }}">
+                                            @else
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>

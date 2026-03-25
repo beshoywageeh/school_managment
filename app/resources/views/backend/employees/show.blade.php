@@ -37,14 +37,14 @@
                                     <td>{{ $user->job->name ?? 'N/A' }}</td>
                                 </tr>
                                 <tr>
-                                    <th>{{trans('employees.insurance_status')}}</th>
-                                    <th>{{trans('employees.insurance_number')}}</th>
-                                    <th>{{trans('employees.insurance_date')}}</th>
+                                    <th>{{ trans('employees.insurance_status') }}</th>
+                                    <th>{{ trans('employees.insurance_number') }}</th>
+                                    <th>{{ trans('employees.insurance_date') }}</th>
                                 </tr>
                                 <tr>
-                                    <td>{{($user->insurance == 0) ? 'غير مؤمن' : ' مؤمن'}}</td>
-                                    <td>{{$user->insurance_number}}</td>
-                                    <td>{{$user->insurance_date}}</td>
+                                    <td>{{ $user->insurance == 0 ? 'غير مؤمن' : ' مؤمن' }}</td>
+                                    <td>{{ $user->insurance_number }}</td>
+                                    <td>{{ $user->insurance_date }}</td>
 
                                 </tr>
                                 </tbody>

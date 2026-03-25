@@ -19,7 +19,7 @@ class ClothesController extends Controller
         $clothes = clothes::where('school_id', $school->id)->with('orders', 'grade', 'classroom')->get();
         $grades = Grade::all();
 
-        return view('backend.clothes.index', compact('clothes', 'grades', 'school'));
+        return view('backend.clothes.index', compact('clothes', 'grades'));
     }
 
     public function store(Request $request)
@@ -32,13 +32,13 @@ class ClothesController extends Controller
                 'purchase_price' => $request->purchase_price,
                 'name' => $request->name,
                 'opening_qty' => $request->quantity,
-                'isset' => ($request->isset == 'on') ? 'yes' : 'no',
+                'isset' => ($request->isset == 'on') ? 1 : 0,
                 'opening_date' => date('Y-m-d'),
                 'sales_price_set' => $request->sales_price_isset,
                 'school_id' => $this->getSchool()->id,
                 'user_id' => auth()->user()->id,
             ]);
-            $this->logActivity(trans('log.actions.added'), trans('log.models.clothe.created', ['name' => $request->name]));
+            $this->logActivity(trans('log.parents.added_action'), trans('log.clothes.added', ['name' => $request->name]));
 
             return redirect()->back()->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -57,11 +57,11 @@ class ClothesController extends Controller
                 'purchase_price' => $request->purchase_price,
                 'opening_qty' => $request->quantity,
                 'name' => $request->name,
-                'isset' => ($request->isset == 'on') ? 'yes' : 'no',
+                'isset' => ($request->isset == 'on') ? 1 : 0,
                 'sales_price_set' => $request->sales_price_isset,
 
             ]);
-            $this->logActivity(trans('log.actions.updated'), trans('log.models.clothe.updated', ['name' => $request->name]));
+            $this->logActivity(trans('log.parents.updated_action'), trans('log.clothes.updated', ['name' => $request->name]));
 
             return redirect()->back()->with('success', trans('general.success'));
         } catch (Exception $e) {
@@ -73,7 +73,7 @@ class ClothesController extends Controller
     {
         try {
             $clothes = clothes::findorfail($id);
-            $this->logActivity(trans('log.actions.deleted'), trans('log.models.clothe.deleted', ['name' => $clothes->name]));
+            $this->logActivity(trans('log.parents.deleted_action'), trans('log.clothes.deleted', ['name' => $clothes->name]));
             $clothes->delete();
 
             return redirect()->back()->with('success', trans('general.success'));

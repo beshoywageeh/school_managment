@@ -32,7 +32,7 @@
                             <div class="col-6">
                                 <label>{{ trans('ExcptionFee.student_account') }}</label>
                                 <input type="text" class="form-control" readonly
-                                    value={{ Number::currency($Excpetion->StudentAccount->sum('debit') - $Excpetion->StudentAccount->sum('credit'),'EGP') }}>
+                                    value={{ Number::currency($Excpetion->StudentAccount->sum('debit') - $Excpetion->StudentAccount->sum('credit'), 'EGP') }}>
                             </div>
                             <div class="col-6 ">
                                 <label for="">{{ trans('ExcptionFee.amount') }}</label>

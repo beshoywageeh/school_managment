@@ -70,7 +70,7 @@
                                                                         [
                                                                             'type' => 'link',
                                                                             'url' => route('backup.download', $file),
-                                                                            'text'=>trans('general.buttons.download'),
+                                                                            'text' => trans('general.buttons.download'),
                                                                             'icon' => 'ti-download',
                                                                             'can' => 'backup-download',
                                                                         ],
@@ -133,7 +133,7 @@
                                                     [
                                                         'type' => 'link',
                                                         'url' => route('backup.download', $backup['file_name']),
-                                                        'text'=>trans('general.buttons.download'),
+                                                        'text' => trans('general.buttons.download'),
                                                         'icon' => 'ti-download',
                                                         'can' => 'backup-download',
                                                     ],
@@ -157,11 +157,11 @@
 
 @endsection
 @push('scripts')
-<script>
-    let btn = document.querySelector('#create');
-    btn.addEventListener('click',function(){
-        btn.classList.add('disabled');
-        btn.innerHTML=`{{ trans('general.Messages.loading') }}`;
-    });
-</script>
+    <script>
+        let btn = document.querySelector('#create');
+        btn.addEventListener('click', function() {
+            btn.classList.add('disabled');
+            btn.innerHTML = `{{ trans('general.Messages.loading') }}`;
+        });
+    </script>
 @endpush

@@ -33,7 +33,7 @@
 
     </div>
     <div class="card-body">
-       @if(session('success'))
+        @if (session('success'))
             <div class="bg-white border alert border-success alert-dismissible fade show" role="alert">
                 <h5 class='text-success'><strong>{{ session('success') }}</strong></h5>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -67,12 +67,11 @@
                         <tr>
                             <td class="font-bold alert alert-primary">{{ $Teacher->name }}
                                 @can('scheduale-create')
-                                    
-                                <button wire:click="openScheduleModal({{ $Teacher->id }},{{ $Teacher->job_id }})"
-                                    class="btn btn-sm btn-outline-primary position-absolute"
-                                    style="top: 2px; right: 2px;">
-                                    <i class="ti-plus"></i>
-                                </button>
+                                    <button wire:click="openScheduleModal({{ $Teacher->id }},{{ $Teacher->job_id }})"
+                                        class="btn btn-sm btn-outline-primary position-absolute"
+                                        style="top: 2px; right: 2px;">
+                                        <i class="ti-plus"></i>
+                                    </button>
                                 @endcan
 
                             </td>
@@ -121,7 +120,8 @@
                             <select class="custom-select" wire:model="period">
                                 <option selected value="">{{ trans('schedules.selected_period') }}</option>
                                 @for ($i = 1; $i <= 8; $i++)
-                                    <option value="{{ $i }}">{{trans('schedules.period').' '. $i }}</option>
+                                    <option value="{{ $i }}">{{ trans('schedules.period') . ' ' . $i }}
+                                    </option>
                                 @endfor
                             </select>
                         </div>

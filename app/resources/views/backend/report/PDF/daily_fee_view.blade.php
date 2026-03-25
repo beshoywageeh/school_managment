@@ -16,7 +16,7 @@
         border: 1px solid black !important;
         width: 100%;
         border-collapse: collapse;
-        text-align:center
+        text-align: center
     }
 
     .table td,
@@ -74,7 +74,7 @@
                                     {{ trans('report.period', ['from' => $data['begin'], 'to' => $data['end']]) }}
                                 </p>
                                 <br>
-                                <p>{{trans('report.print_date',['date'=>date('Y-m-d')])}}</p>
+                                <p>{{ trans('report.print_date', ['date' => date('Y-m-d')]) }}</p>
                             </center>
                         </td>
                         <td class="text-left">

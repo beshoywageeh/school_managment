@@ -3,7 +3,8 @@
         <div class="card-body">
             <div class="clearfix">
                 <div class="float-left icon-box-fixed img-state">
-                    <img class="img img-responsive" width="50" src="{{ URL::asset('assests/images/Sidebar/' . $icon) }}">
+                    <img class="img img-responsive" width="50"
+                        src="{{ URL::asset('assests/images/Sidebar/' . $icon) }}">
                 </div>
                 <div class="float-right text-right ">
                     <h4 class="text-black">{{ $count }}</h4>

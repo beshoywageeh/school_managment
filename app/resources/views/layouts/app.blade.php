@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="icon" href="{{ asset('assests/images/logo-icon-dark.png') }}" type="image/png" />
-  
-  <title>@yield('title')</title>
+
+    <title>@yield('title')</title>
 
     @include('layouts.header_css')
 

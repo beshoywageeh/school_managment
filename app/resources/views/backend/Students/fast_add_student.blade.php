@@ -9,11 +9,11 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form >
+            <form>
                 @csrf
                 <div class="modal-body">
                     <div class="row">
-                       <div class="col">
+                        <div class="col">
                             <x-input type="text" name="student_name"
                                 value="{{ old('student_name') }}">{{ trans('student.name') }}
                             </x-input>
@@ -21,11 +21,11 @@
                         <div class="col">
                             <!-- Form Coumn: Username -->
                             <label for="father_name" class="">{{ trans('Parents.Father_Name') }}</label>
-                            <input list="fathers_list" type="text" name="Father_Name" class="form-control"
+                            <input list="parents" type="text" name="parents" class="form-control"
                                 value="{{ old('father_name') }}">
-                            <datalist id="fathers_list">
-                                @foreach($parents_data as $parent)
-                                <option value="{{ $parent->Father_name }}">
+                            <datalist id="parents" class="bg-gray-500">
+                                @foreach ($parents_data as $parent)
+                                    <option value="{{ $parent->Father_name }}">
                                 @endforeach
                             </datalist>
 
@@ -61,7 +61,7 @@
                             <select class='custom-select' name="grade" id="grades">
                                 <option> {{ trans('student.choose_grade') }}</option>
                                 @foreach ($grades as $grade)
-                                <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                    <option value="{{ $grade->id }}">{{ $grade->name }}</option>
                                 @endforeach
                             </select>
                         </div>

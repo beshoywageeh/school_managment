@@ -16,27 +16,26 @@ class ImportStudentsJob implements ShouldQueue
 
     protected $students;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
     public function __construct(array $students)
     {
         $this->students = $students;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
+    public function handle(): void
     {
         try {
             DB::table('students')->insert($this->students);
-        } catch (\Exception $e) {
-            Log::error('Error inserting students: '.$e->getMessage());
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::error('Error inserting students batch: '.$e->getMessage());
+            throw new \Exception('Failed to insert students: '.$e->getMessage());
         }
+    }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('ImportStudentsJob failed permanently: '.$exception->getMessage());
+
+        $batchCount = count($this->students);
+        Log::warning("A batch of {$batchCount} students failed to import. Manual intervention required.");
     }
 }

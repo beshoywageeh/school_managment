@@ -17,50 +17,51 @@
                 الوقت : {{ $order->created_at->format('s : i : g A') }}
             </div>
             <div class="col">
-                {{$order->students->name}}
-                </div>
+                {{ $order->students->name }}
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead class="">
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="">
+                <tr>
+                    <th><strong>#</strong></th>
+                    <th><strong>{{ trans('Grades.name') }}</strong></th>
+                    <th><strong>{{ trans('stock.name') }}</strong></th>
+                    <th><strong>{{ trans('clothes.sales_price') }}</strong></th>
+                    <th><strong>{{ trans('stock.quantity') }}</strong></th>
+                </tr>
+            </thead>
+            <tbody id="invoice_data">
+                @forelse ($order->stocks as $stock)
                     <tr>
-                        <th><strong>#</strong></th>
-                        <th><strong>{{ trans('Grades.name') }}</strong></th>
-                        <th><strong>{{ trans('stock.name') }}</strong></th>
-                        <th><strong>{{ trans('clothes.sales_price') }}</strong></th>
-                        <th><strong>{{ trans('stock.quantity') }}</strong></th>
-                    </tr>
-                </thead>
-                <tbody id="invoice_data">
-                    @forelse ( $order->stocks as $stock )
-                    <tr>
-                        <td>{{$loop->index+1}}</td>
-                        <td>{{$stock->grade->name}}</td>
-                        <td>{{$stock->name}}</td>
-                        <td>{{($order->isset_order == 1)?Number::currency($stock->sales_price,'EGP','ar'):Number::currency($stock->sales_price_set,'EGP','ar')}}</td>
-                        <td>{{number_format($stock->pivot->qty_out,2)}}</td>
-                    </tr>
-                    @empty
-                    @endforelse
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="3">{{trans('General.total')}}</td>
-                        <td>
-                            @if($order->isset== 1)
-                            {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->qty_out * $stock->sales_price_set),'EGP','ar') }}
-                            @else
-                            {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->qty_out * $stock->sales_price),'EGP','ar') }}
-                            @endif
+                        <td>{{ $loop->index + 1 }}</td>
+                        <td>{{ $stock->grade->name }}</td>
+                        <td>{{ $stock->name }}</td>
+                        <td>{{ $order->isset_order == 1 ? Number::currency($stock->sales_price, 'EGP', 'ar') : Number::currency($stock->sales_price_set, 'EGP', 'ar') }}
                         </td>
-                        <td>
-                            {{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->qty_out),2) }}</td>
+                        <td>{{ number_format($stock->pivot->qty_out, 2) }}</td>
                     </tr>
-                </tfoot>
+                @empty
+                @endforelse
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">{{ trans('General.total') }}</td>
+                    <td>
+                        @if ($order->isset == 1)
+                            {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->qty_out * $stock->sales_price_set), 'EGP', 'ar') }}
+                        @else
+                            {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->qty_out * $stock->sales_price), 'EGP', 'ar') }}
+                        @endif
+                    </td>
+                    <td>
+                        {{ number_format($order->stocks->sum(fn($stock) => $stock->pivot->qty_out), 2) }}</td>
+                </tr>
+            </tfoot>
 
-            </table>
-        </div>
+        </table>
+    </div>
     </div>
 @endsection
 @push('js')

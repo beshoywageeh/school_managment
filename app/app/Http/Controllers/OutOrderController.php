@@ -16,8 +16,8 @@ class OutOrderController extends Controller
 
     public function index()
     {
-        $orders = order::where('type', 'sales')->withcount('stocks')->get();
-        $type = 'sales';
+        $orders = order::where('type', 2)->withcount('stocks')->get();
+        $type = 2;
         $school = $this->getSchool();
 
         return view('backend.orders.index', get_defined_vars());
@@ -26,7 +26,7 @@ class OutOrderController extends Controller
     public function new_transfer()
     {
         try {
-            $generate_code = order::where('type', 'sales')->orderBy('auto_number', 'desc')->first();
+            $generate_code = order::where('type', '2')->orderBy('auto_number', 'desc')->first();
             $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6) : '000001';
             $labs = Laboratory::where('is_main', 1)->with('sub_locations')->get();
             $stocks = stock::all();
@@ -42,14 +42,13 @@ class OutOrderController extends Controller
 
     public function submit_transfer(Request $request)
     {
-        // return $request;
         try {
             \DB::beginTransaction();
             $order_id = $request->id;
             $list_stocks = $request->list_outorder;
             $order_id = order::create([
                 'auto_number' => $request->auto_number,
-                'type' => 'sales',
+                'type' => 2,
                 'laboratory_id' => $request->location_to,
                 'school_id' => $this->getSchool()->id,
                 'user_id' => auth()->user()->id,
@@ -61,7 +60,7 @@ class OutOrderController extends Controller
                     'quantity_out' => (int) ($stock['qty'] ?? 0),
                 ]);
                 $stock_name = stock::findorfail($stock['stock_id'])->name;
-                $this->logActivity(trans('log.actions.disbursement'), trans('log.models.out_order.disbursement_added', ['stock_name' => $stock_name, 'quantity' => $stock['qty']]));
+                $this->logActivity(trans('log.out_order.disbursement_action'), trans('log.out_order.disbursement_added', ['stock_name' => $stock_name, 'quantity' => $stock['qty']]));
             }
             \DB::commit();
 
@@ -75,21 +74,11 @@ class OutOrderController extends Controller
         }
     }
 
-    public function store(Request $request)
-    {
-        return redirect()->back()->with('success', trans('general.success'));
-    }
-
-    public function transfer(Request $request)
-    {
-        return redirect()->back()->with('success', trans('general.success'));
-    }
-
     public function show($id)
     {
         try {
             $order = order::with('stocks')->findorFail($id);
-            $type = 'sales';
+            $type = 2;
             $school = $this->getSchool();
 
             return view('backend.orders.show', get_defined_vars());
@@ -104,7 +93,7 @@ class OutOrderController extends Controller
             $order = order::with('stocks')->findorFail($id);
             $stocks = stock::get();
             $school = $this->getSchool();
-            $type = 'sales';
+            $type = 2;
 
             return view('backend.orders.edit', get_defined_vars());
         } catch (Exception $e) {
@@ -125,7 +114,7 @@ class OutOrderController extends Controller
                 ];
                 $order->stocks()->syncWithPivotValues('order_id', $stocks);
             }
-            $this->logActivity(trans('log.actions.updated'), trans('log.models.out_order.disbursement_updated', ['number' => $order->auto_number]));
+            $this->logActivity(trans('log.parents.updated_action'), trans('log.out_order.disbursement_updated', ['number' => $order->auto_number]));
             session()->flash('success', 'تم التعديل بنجاح');
 
             return redirect()->route('outorder.index');
@@ -139,7 +128,7 @@ class OutOrderController extends Controller
         try {
             $order = order::findorfail($id);
             $order->delete();
-            $this->logActivity(trans('log.actions.deleted'), trans('log.models.out_order.disbursement_deleted', ['number' => $order->auto_number]));
+            $this->logActivity(trans('log.parents.deleted_action'), trans('log.out_order.disbursement_deleted', ['number' => $order->auto_number]));
             session()->flash('success', 'تم الحذف بنجاح');
 
             return redirect()->back();

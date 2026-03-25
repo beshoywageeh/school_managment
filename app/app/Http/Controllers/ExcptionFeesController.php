@@ -22,7 +22,7 @@ class ExcptionFeesController extends Controller
      */
     public function index()
     {
-        $ExcptionFees = ExcptionFees::with('students')->get();
+        $ExcptionFees = ExcptionFees::with('students')->paginate(10);
         $school = $this->getSchool();
 
         return view('backend.fee_exception.index', get_defined_vars());
@@ -42,7 +42,7 @@ class ExcptionFeesController extends Controller
             if ($fees->isEmpty() || $balance <= 0) {
                 session()->flash('info', trans('General.noInvoiceToExcept'));
 
-                return redirect()->route('Students.index');
+                return redirect()->route('students.index');
             }
 
             return view('backend.fee_exception.create', get_defined_vars());
@@ -74,7 +74,7 @@ class ExcptionFeesController extends Controller
             DB::commit();
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('except_fee.index');
+            return redirect()->route('except-fee.index');
         } catch (\Exception $e) {
             DB::rollback();
             session()->flash('error', $e->getMessage());
@@ -147,7 +147,7 @@ class ExcptionFeesController extends Controller
             DB::commit();
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('except_fee.index');
+            return redirect()->route('except-fee.index');
         } catch (\Exception $e) {
             DB::rollback();
             session()->flash('error', $e->getMessage());
@@ -168,7 +168,7 @@ class ExcptionFeesController extends Controller
             $this->logActivity(trans('log.actions.deleted'), trans('log.models.exception_fee.deleted', ['student_name' => $pay->students->name]));
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('except_fee.index');
+            return redirect()->route('except-fee.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

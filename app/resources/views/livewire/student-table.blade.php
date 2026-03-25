@@ -5,22 +5,24 @@
             <div class="row">
                 <div class="col">
                     <label>{{ trans('student.search') }}</label>
-                    <input wire:model.live.debounce.300ms="search" type="text" class="form-control" placeholder="{{ trans('student.search_placeholder') }}">
+                    <input wire:model.live.debounce.300ms="search" type="text" class="form-control"
+                        placeholder="{{ trans('student.search_placeholder') }}">
                 </div>
                 <div class="col">
                     <label>{{ trans('student.grade') }}</label>
                     <select wire:model.live="grade_id" class="custom-select">
                         <option value="">{{ trans('student.all_grades') }}</option>
-                        @foreach($this->grades as $grade)
+                        @foreach ($this->grades as $grade)
                             <option value="{{ $grade->id }}">{{ $grade->name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col">
                     <label>{{ trans('student.class') }}</label>
-                    <select wire:model.live="classroom_id" class="custom-select" @if(count($this->classrooms) == 0) disabled @endif>
+                    <select wire:model.live="classroom_id" class="custom-select"
+                        @if (count($this->classrooms) == 0) disabled @endif>
                         <option value="">{{ trans('student.all_classrooms') }}</option>
-                        @foreach($this->classrooms as $classroom)
+                        @foreach ($this->classrooms as $classroom)
                             <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
                         @endforeach
                     </select>
@@ -54,11 +56,16 @@
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th wire:click="sortBy('students.name')" style="cursor: pointer;">{{ trans('student.name') }}</th>
-                            <th wire:click="sortBy('parent_name')" style="cursor: pointer;">{{ trans('student.parent_header') }}</th>
-                            <th wire:click="sortBy('grade_name')" style="cursor: pointer;">{{ trans('student.grade') }}</th>
-                            <th wire:click="sortBy('classroom_name')" style="cursor: pointer;">{{ trans('student.class') }}</th>
-                            <th wire:click="sortBy('students.join_date')" style="cursor: pointer;">{{ trans('student.join_date') }}</th>
+                            <th wire:click="sortBy('students.name')" style="cursor: pointer;">
+                                {{ trans('student.name') }}</th>
+                            <th wire:click="sortBy('parent_name')" style="cursor: pointer;">
+                                {{ trans('student.parent_header') }}</th>
+                            <th wire:click="sortBy('grade_name')" style="cursor: pointer;">{{ trans('student.grade') }}
+                            </th>
+                            <th wire:click="sortBy('classroom_name')" style="cursor: pointer;">
+                                {{ trans('student.class') }}</th>
+                            <th wire:click="sortBy('students.join_date')" style="cursor: pointer;">
+                                {{ trans('student.join_date') }}</th>
                             <th>{{ trans('general.buttons.action') }}</th>
                         </tr>
                     </thead>

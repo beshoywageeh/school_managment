@@ -9,7 +9,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('stock.store') }}" method="POST">
+            <form action="{{ route('stocks.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
 

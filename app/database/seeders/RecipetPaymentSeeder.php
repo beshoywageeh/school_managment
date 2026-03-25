@@ -12,6 +12,6 @@ class RecipetPaymentSeeder extends Seeder
      */
     public function run(): void
     {
-        Recipt_Payment::factory(40000)->create();
+        Recipt_Payment::factory(400)->create();
     }
 }

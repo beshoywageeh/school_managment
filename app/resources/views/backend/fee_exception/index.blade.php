@@ -18,7 +18,7 @@
                     </div>
                     <div class="table-responsive">
                         @can('except_fee-list')
-                            <table id="datatable" class="table text-center table-sm table-striped table-bordered">
+                            <table id="" class="table text-center table-sm table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -34,7 +34,8 @@
                                             <td> {{ $loop->iteration }}</td>
                                             <td>{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
                                             <td><a target='_blank'
-                                                    href="{{ route('except_fee.show', $ExcptionFee->students->id) }}">{{ $ExcptionFee->students->name }}</a>
+                                                    href="{{ route('except-fee.show', $ExcptionFee->students->id) }}">
+                                                    {{ $ExcptionFee->students->name }}</a>
                                             </td>
                                             <td>{{ Number::currency($ExcptionFee->amount, 'EGP', 'ar') }}</td>
 
@@ -42,24 +43,24 @@
 
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
-                                                        'type'=>'link',
-                                                        'url' => route('except_fee.destroy', $ExcptionFee->id),
+                                                        'type' => 'link',
+                                                        'url' => route('except-fee.destroy', $ExcptionFee->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
                                                         'onclick' => 'confirmation(event)',
                                                         'can' => 'except_fee-delete',
                                                     ],
                                                     [
-                                                        'type'=>'link',
-                                                        'url' => route('except_fee.show', $ExcptionFee->students->id),
+                                                        'type' => 'link',
+                                                        'url' => route('except-fee.show', $ExcptionFee->students->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info-alt',
                                                         'target' => '_blank',
                                                         'can' => 'except_fee-info',
                                                     ],
                                                     [
-                                                        'type'=>'link',
-                                                        'url' => route('except_fee.edit', $ExcptionFee->id),
+                                                        'type' => 'link',
+                                                        'url' => route('except-fee.edit', $ExcptionFee->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',
                                                         'can' => 'except_fee-edit',
@@ -70,6 +71,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            {{ $ExcptionFees->links('components.Paginatortion') }}
                         @endcan
                     </div>
                 </div>

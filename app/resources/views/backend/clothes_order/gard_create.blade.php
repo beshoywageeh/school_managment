@@ -9,10 +9,18 @@
             <div class="card">
                 <div class="card-header">
                     <div class="my-2 text-center row">
-                        <div class="col"><h6>الرقم : {{ $order->auto_number }}</h6></div>
-                        <div class="col"><h6>النوع : {{ trans('stock.inventory_order') }}</h6></div>
-                        <div class="col"><h6>التاريخ : {{ $order->created_at->format('Y-m-d') }}</h6></div>
-                        <div class="col"><h6>الوقت : {{ $order->created_at->format('g : i : s A') }}</h6></div>
+                        <div class="col">
+                            <h6>الرقم : {{ $order->auto_number }}</h6>
+                        </div>
+                        <div class="col">
+                            <h6>النوع : {{ trans('stock.inventory_order') }}</h6>
+                        </div>
+                        <div class="col">
+                            <h6>التاريخ : {{ $order->created_at->format('Y-m-d') }}</h6>
+                        </div>
+                        <div class="col">
+                            <h6>الوقت : {{ $order->created_at->format('g : i : s A') }}</h6>
+                        </div>
                     </div>
                 </div>
                 <form action="{{ route('clothes_gard.submit') }}"method="post" autocomplete="off">

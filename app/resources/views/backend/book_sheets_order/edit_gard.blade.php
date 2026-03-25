@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <form action="{{ route('bookSheetsOrder.update_gard') }}"method="post" autocomplete="off">
-<input type="hidden" name="order_id" value="{{ $order->id }}">
+                    <input type="hidden" name="order_id" value="{{ $order->id }}">
                     <div class="card-body">
                         @csrf
                         <table class="table table-bordered">
@@ -51,7 +51,7 @@
                                         </td>
                                         <td>
                                             <input type="text" disabled name="inv_stock[]" class="form-control inv_stock"
-                                                value="{{ $stock->orders()->sum('quantity_out')-$stock->orders()->sum('quantity_in')+($stock->opening_qty - $stock->orders()->sum('quantity_out'))   }}" />
+                                                value="{{ $stock->orders()->sum('quantity_out') - $stock->orders()->sum('quantity_in') + ($stock->opening_qty - $stock->orders()->sum('quantity_out')) }}" />
                                         </td>
                                         <td>
                                             <input type="number" name="actual_stock[]" class="form-control actual_stock"

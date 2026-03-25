@@ -102,12 +102,12 @@
 
                             </div>
                             <div class="col">
-                                <label>{{trans('Parents.Mother_Status')}}</label>
+                                <label>{{ trans('Parents.Mother_Status') }}</label>
                                 <input list="mother_status_list" type="text" name="Mother_Status" class="form-control"
                                     value="{{ old('Mother_Status') }}">
                                 <datalist id="mother_status_list">
-                                    @foreach($Mother_Status as $status)
-                                    <option value="{{ $status->Mother_Status }}">
+                                    @foreach ($Mother_Status as $status)
+                                        <option value="{{ $status->Mother_Status }}">
                                     @endforeach
 
                                 </datalist>

@@ -3,7 +3,7 @@
     {{ trans('student.title') }} | {{ trans('general.new') }}
 @endsection
 @section('content')
-    <form action="{{ route('Students.store') }}" method="post">
+    <form action="{{ route('students.store') }}" method="post">
         @csrf
         <div class="row mb-30">
             <div class="col">
@@ -86,14 +86,16 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col">
-                                <label for="parent" class="">{{ trans('student.parent') }}</label>
-                                <select name="parents" id="" class="custom-select select2">
-                                    <option> {{ trans('student.parent') }}</option>
-
+                                <!-- Form Coumn: Username -->
+                                <label for="father_name" class="">{{ trans('Parents.Father_Name') }}</label>
+                                <input list="fathers_list" type="text" name="parents" class="form-control"
+                                    value="{{ old('father_name') }}">
+                                <datalist id="fathers_list" class="bg-gray-500">
                                     @foreach ($parents as $parent)
-                                        <option value="{{ $parent->id }}">{{ $parent->Father_Name }}</option>
+                                        <option value="{{ $parent->Father_name }}">
                                     @endforeach
-                                </select>
+                                </datalist>
+
                             </div>
                         </div>
                     </div>
@@ -132,7 +134,6 @@
                     birthDateInput.addEventListener('change', () => {
                         const birthDate = new Date(birthDateInput.value);
                         const checkDate = new Date(makeDate());
-                        console.log(checkDate);
                         const diffTime = Math.abs(checkDate - birthDate);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                         const years = Math.floor(diffDays / 365);

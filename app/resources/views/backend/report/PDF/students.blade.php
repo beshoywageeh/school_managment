@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -47,16 +46,17 @@
         .text-left {
             text-align: left;
         }
-           @page {
-        header: page-header;
-        footer: page-footer;
-    }
+
+        @page {
+            header: page-header;
+            footer: page-footer;
+        }
     </style>
 </head>
 
 
 <body>
- <htmlpageheader name="page-header">
+    <htmlpageheader name="page-header">
         <div style="height: 5px; width: 95%; margin: auto;">
             <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
                 <table class="data-table" style="width:100%">
@@ -73,8 +73,8 @@
                                     src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
                             @else
                                 <img class="img-fluid" style="max-width:10%"
-                                   src="{{URL::asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename)}}"
-                                     alt="{{ $school->name }}">
+                                    src="{{ URL::asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
+                                    alt="{{ $school->name }}">
                             @endif
                         </td>
                     </tr>
@@ -111,7 +111,7 @@
             </div>
         </div>
     </htmlpagefooter>
-    @foreach ($data as $grade=>$student)
+    @foreach ($data as $grade => $student)
         <table class="table" id="heading">
             <tr>
                 <th>{{ trans('Grades.name') }}</th>
@@ -148,7 +148,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $stud->name }}</td>
-                        <td>{{ $stud->religion->lang()}}</td>
+                        <td>{{ $stud->religion->lang() }}</td>
                         <td>{{ $stud->student_status->lang() }}</td>
                         <td>{{ $stud->national_id }}</td>
                         <td>{{ $stud->birth_date }}</td>
@@ -163,10 +163,8 @@
             </tbody>
 
         </table>
-
     @endforeach
 
 </body>
 
 </html>
-

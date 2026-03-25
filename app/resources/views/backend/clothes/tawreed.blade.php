@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('title')
-@if ($type == 1)
-{{ trans('stock.income_order') }}
-@elseif ($type == 2)
-{{ trans('stock.outcome_order') }}
-@elseif ($type == 3)
-{{ trans('stock.gard') }}
-@else
-@endif
+    @if ($type == 1)
+        {{ trans('stock.income_order') }}
+    @elseif ($type == 2)
+        {{ trans('stock.outcome_order') }}
+    @elseif ($type == 3)
+        {{ trans('stock.gard') }}
+    @else
+    @endif
 @endsection
 @section('content')
     @include('backend.msg')
@@ -19,17 +19,17 @@
                         <table class="table table-sm table-borderless">
                             <tr>
                                 <th>الرقم : {{ $order->auto_number }}</th>
-                                <th>النوع :   @if ($type == 1)
-                                    {{ trans('stock.income_order') }}
-                                @elseif ($type == 2)
-                                    {{ trans('stock.outcome_order') }}
-                                @elseif ($type == 3)
-                                    {{ trans('stock.gard') }}
-                                @else
-                                @endif
+                                <th>النوع : @if ($type == 1)
+                                        {{ trans('stock.income_order') }}
+                                    @elseif ($type == 2)
+                                        {{ trans('stock.outcome_order') }}
+                                    @elseif ($type == 3)
+                                        {{ trans('stock.gard') }}
+                                    @else
+                                    @endif
                                 </th>
-                                @if($type==2)
-                                <th>إلي : {{ $order->location }}</th>
+                                @if ($type == 2)
+                                    <th>إلي : {{ $order->location }}</th>
                                 @endif
                                 <th>التاريخ : {{ $order->created_at->format('Y-M-d') }}</th>
                                 <th>الوقت : {{ $order->created_at->format('h : i : s A') }}</th>
@@ -60,13 +60,13 @@
                         <tbody data-repeater-list="List_stocks">
                             <tr data-repeater-item>
                                 <td>
-                                   <select name="name" class="custom-select">
+                                    <select name="name" class="custom-select">
                                         <option value="" selected disabled>{{ trans('general.select') }}</option>
                                         @forelse ($stocks as $stock)
                                             <option value={{ $stock->id }}>
                                                 {{ $stock->name }}
                                             </option>
-                                            @empty
+                                        @empty
                                             <option value="">{{ trans('General.noDataToShow') }}</option>
                                         @endforelse
                                     </select>

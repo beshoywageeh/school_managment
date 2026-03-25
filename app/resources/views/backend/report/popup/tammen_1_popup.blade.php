@@ -16,7 +16,8 @@
                     @csrf
                     <div class="mb-4 row">
                         <div class="col-3">
-                            <label for="">{{ trans('General.choose', ['value' => trans('report.type')]) }}</label>
+                            <label
+                                for="">{{ trans('General.choose', ['value' => trans('report.type')]) }}</label>
                         </div>
                         <div class="col-9">
                             <div class="row">

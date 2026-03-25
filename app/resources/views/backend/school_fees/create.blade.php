@@ -7,7 +7,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form id="form-with-multiple-column" action="{{ route('schoolfees.store') }}" method="post">
+            <form id="form-with-multiple-column" action="{{ route('school-fees.store') }}" method="post">
                 @csrf
                 <div class="modal-body">
                     @include('backend.msg')
@@ -32,14 +32,15 @@
                         </div>
                         <div class="col-md-4">
                             <label for="classrooms">{{ trans('student.choose_classroom') }}</label>
-                            <select class="custom-select" name="classroom_id" id="classrooms" >
+                            <select class="custom-select" name="classroom_id" id="classrooms">
                                 <option disabled>{{ trans('student.choose_classroom') }}</option>
                             </select>
                         </div>
                         <div class="col-md-4">
                             <label>{{ trans('fees.academic_year') }}</label>
                             <select class="custom-select" name="academic_year_id">
-                                <option value="" selected disabled>{{ trans('fees.choose_academic_year') }}</option>
+                                <option value="" selected disabled>{{ trans('fees.choose_academic_year') }}
+                                </option>
                                 @forelse ($years as $year)
                                     <option value="{{ $year->id }}">{{ $year->view }}</option>
                                 @empty
@@ -52,7 +53,8 @@
                     <div class="row mt-3">
                         <div class="col-12">
                             <label for="description">{{ trans('fees.desc') }}</label>
-                            <textarea class="form-control" name="description" id="description" rows="3" placeholder="{{ trans('fees.desc') }}"></textarea>
+                            <textarea class="form-control" name="description" id="description" rows="3"
+                                placeholder="{{ trans('fees.desc') }}"></textarea>
                         </div>
                     </div>
                 </div>

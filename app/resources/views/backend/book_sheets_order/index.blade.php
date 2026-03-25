@@ -1,12 +1,12 @@
 @extends('layouts.app')
 @section('title')
-    @if ($type == 'inventory')
+    @if ($type == 1)
         {{ trans('stock.income_order') }} : {{ trans('sidebar.books_sheets') }}
     @endif
-    @if ($type == 'sales')
+    @if ($type == 2)
         {{ trans('stock.outcome_order') }} : {{ trans('sidebar.books_sheets') }}
     @endif
-    @if ($type == 'gard')
+    @if ($type == 3)
         {{ trans('stock.inventory_order') }} : {{ trans('sidebar.books_sheets') }}
     @endif
 @endsection
@@ -20,19 +20,19 @@
                         <div class="col-lg-6"></div>
                         <div class="col-lg-6 text-md-right">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                @if ($type == 'inventory')
+                                @if ($type == 1)
                                     @can('books_sheets-income_order-create')
                                         <a href="{{ route('bookSheetsOrder.create') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                     @endcan
                                 @endif
-                                @if ($type == 'sales')
+                                @if ($type == 2)
                                     @can('books_sheets-outcome_order-create')
                                         <a href="{{ route('bookSheetsOrder.create_sarf') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
                                     @endcan
                                 @endif
-                                @if ($type == 'gard')
+                                @if ($type == 3)
                                     @can('books_sheets-inventory_order-create')
                                         <a href="{{ route('bookSheetsOrder.create_gard') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.inventory_order') }}</strong></a>
@@ -111,31 +111,31 @@
                                                         ],
                                                     ]" />
                                                 @endif
-                                                @if ($order->is_payed == 1)
+                                                @if ($order->is_payed == 0)
                                                     @if ($type == 2)
                                                         <x-dropdown-table :buttonText="trans('general.actions')" :items="[
-                                                          [
-                                                            'type' => 'link',
-                                                            'url' => route('bookSheetsOrder.destroy', $order->id),
-                                                            'text' => trans('general.delete'),
-                                                            'icon' => 'ti-trash',
-                                                            'onclick' => 'confirmation(event)',
-                                                            'can' => 'books_sheets-outcome_order-delete',
-                                                        ],
-                                                        [
-                                                            'type' => 'link',
-                                                            'url' => route('bookSheetsOrder.edit_sarf', $order->id),
-                                                            'text' => trans('general.edit'),
-                                                            'icon' => 'ti-pencil',
-                                                            'can' => 'books_sheets-outcome_order-update',
-                                                        ],
-                                                        [
-                                                            'type' => 'link',
-                                                            'url' => route('bookSheetsOrder.show', $order->id),
-                                                            'text' => trans('general.show'),
-                                                            'icon' => 'fa fa-print',
-                                                            'can' => 'books_sheets-order_show',
-                                                        ],
+                                                            [
+                                                                'type' => 'link',
+                                                                'url' => route('bookSheetsOrder.destroy', $order->id),
+                                                                'text' => trans('general.delete'),
+                                                                'icon' => 'ti-trash',
+                                                                'onclick' => 'confirmation(event)',
+                                                                'can' => 'books_sheets-outcome_order-delete',
+                                                            ],
+                                                            [
+                                                                'type' => 'link',
+                                                                'url' => route('bookSheetsOrder.edit_sarf', $order->id),
+                                                                'text' => trans('general.edit'),
+                                                                'icon' => 'ti-pencil',
+                                                                'can' => 'books_sheets-outcome_order-update',
+                                                            ],
+                                                            [
+                                                                'type' => 'link',
+                                                                'url' => route('bookSheetsOrder.show', $order->id),
+                                                                'text' => trans('general.show'),
+                                                                'icon' => 'fa fa-print',
+                                                                'can' => 'books_sheets-order_show',
+                                                            ],
                                                             [
                                                                 'type' => 'link',
                                                                 'url' => route('bookSheetsOrder.pay', $order->id),

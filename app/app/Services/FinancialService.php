@@ -144,7 +144,7 @@ class FinancialService
         $receipt = new Recipt_Payment([
             'manual' => $manual,
             'date' => Carbon::today(),
-            'student_id' => $student,
+            'student_id' => $student->id,
             'Debit' => $amount,
             'academic_year_id' => $academicYearId,
             'school_id' => $school_id,

@@ -35,7 +35,7 @@
                                     <td>{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
                                     <td>{{ $ExcptionFee->students->name }}</td>
                                     <td>{{ $ExcptionFee->academic_year->view }}</td>
-                                    <td>{{ Number::currency($ExcptionFee->amount, 'EGP', 'ar')}}</td>
+                                    <td>{{ Number::currency($ExcptionFee->amount, 'EGP', 'ar') }}</td>
                                     <td>{{ $ExcptionFee->grade->name }}</td>
                                     <td>{{ $ExcptionFee->classroom->name }}</td>
                                 </tr>

@@ -49,14 +49,14 @@
                                             <td>
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
-                                                        'type'=>'button',
-                                                        'target'=>'#grade-edit-'.$grade->id,
-                                                        'text'=>trans('general.edit'),
-                                                        'icon'=>'ti-pencil-alt',
-                                                        'can'=>'grade-edit'
-                                            ],
+                                                        'type' => 'button',
+                                                        'target' => '#grade-edit-' . $grade->id,
+                                                        'text' => trans('general.edit'),
+                                                        'icon' => 'ti-pencil-alt',
+                                                        'can' => 'grade-edit',
+                                                    ],
                                                     [
-                                                        'type'=>'link',
+                                                        'type' => 'link',
                                                         'url' => route('grade.destroy', $grade->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
@@ -64,20 +64,21 @@
                                                         'can' => 'grade-delete',
                                                     ],
                                                     [
-                                                        'type'=>'link',
+                                                        'type' => 'link',
                                                         'url' => route('grade.show', $grade->id),
                                                         'text' => trans('general.info'),
                                                         'icon' => 'ti-info-alt',
                                                         'target' => '_blank',
                                                         'can' => 'grade-info',
                                                     ],
-
                                                 ]" />
                                             </td>
                                         </tr>
                                         @include('backend.Grades.edit')
-                                        @empty
-                                        <tr><td colspan="7">{{trans('general.noDataToShow')}}</td></tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7">{{ trans('general.noDataToShow') }}</td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>
@@ -90,6 +91,5 @@
     </div>
 
     @push('scripts')
-
     @endpush
 @endsection

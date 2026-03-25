@@ -11,7 +11,7 @@
                     <button class="btn btn-primary" onclick="printDiv()"><i class="fa fa-print"></i></button>
                 </div>
                 <form action="{{ route('clothes_out_order.update') }}" method="POST" id="invo_submit">@csrf
-                    <input type="hidden" name="order_id" value="{{$order->id}}">
+                    <input type="hidden" name="order_id" value="{{ $order->id }}">
                     <div class="card-body" style="height:50vh;">
                         <div class="contaier" style="border-bottom:1px solid black; margin-bottom:5px;padding-bottom:5px">
                             <div class="row">
@@ -32,7 +32,8 @@
                                         <select name="student_id" id="student" class="select2 student">
                                             <option value="" selected disabled>{{ trans('general.select') }}</option>
                                             @forelse ($students as $student)
-                                                <option @selected($order->student_id == $student->id) value="{{ $student->id }}">{{ $student->name }}</option>
+                                                <option @selected($order->student_id == $student->id) value="{{ $student->id }}">
+                                                    {{ $student->name }}</option>
                                             @empty
                                             @endforelse
                                         </select>
@@ -51,18 +52,19 @@
                                     </tr>
                                 </thead>
                                 <tbody id="invoice_data">
-                                    @forelse ( $order->stocks as $stock )
+                                    @forelse ($order->stocks as $stock)
                                         <tr>
-                                            <td>{{$loop->index+1}}</td>
-                                            <td><input type="hidden" name="id[]" value="{{$stock->id}}">{{$stock->name}}</td>
-                                            <td>{{$stock->sales_price}}</td>
-                                            <td><input class="form-control" value="{{$stock->pivot->quantity_out}}" name="quantity[]"/></td>
+                                            <td>{{ $loop->index + 1 }}</td>
+                                            <td><input type="hidden" name="id[]"
+                                                    value="{{ $stock->id }}">{{ $stock->name }}</td>
+                                            <td>{{ $stock->sales_price }}</td>
+                                            <td><input class="form-control" value="{{ $stock->pivot->quantity_out }}"
+                                                    name="quantity[]" /></td>
                                         </tr>
                                     @empty
-
                                     @endforelse
 
-                                    </tbody>
+                                </tbody>
 
                             </table>
 
@@ -74,7 +76,8 @@
                         <div class="row">
                             <div class="col"></div>
                             <div class="text-right col">
-                                <button onclick="document.getElementById('invo_submit').submit();" class="btn btn-primary" type="submit">{{ trans('General.Submit') }}</button>
+                                <button onclick="document.getElementById('invo_submit').submit();" class="btn btn-primary"
+                                    type="submit">{{ trans('General.Submit') }}</button>
                             </div>
                         </div>
                     </div>
@@ -84,36 +87,36 @@
     </div>
 @endsection
 @push('scripts')
-<script>
-    $(document).ready(function() {
-        const table = document.querySelector('#invoice_data');
-        $("#student").on("select2:select", function() {
-            table.innerHTML =
-                '<tr><td colspan="4"><img src="{{ asset('assests/images/ajax-loader.gif') }}"/></td></tr>';
-            var select_val = $(this).val();
-            $.ajax({
-                url: "{{ URL::to('/ajax/get_clothes/') }}/" + select_val,
-                type: "GET",
-                dataType: "json",
-                success: function(data) {
-                    table.innerHTML = '';
-                    if (data.length === 0) {
-                        table.innerHTML =
-                            '<tr><td colspan="4" class="alert alert-danger">{{ trans('general.noDataToShow') }}</td></tr>';
-                    } else {
-                        $.each(data, (index, item) => {
-                            var row = `<tr>
+    <script>
+        $(document).ready(function() {
+            const table = document.querySelector('#invoice_data');
+            $("#student").on("select2:select", function() {
+                table.innerHTML =
+                    '<tr><td colspan="4"><img src="{{ asset('assests/images/ajax-loader.gif') }}"/></td></tr>';
+                var select_val = $(this).val();
+                $.ajax({
+                    url: "{{ URL::to('/ajax/get_clothes/') }}/" + select_val,
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        table.innerHTML = '';
+                        if (data.length === 0) {
+                            table.innerHTML =
+                                '<tr><td colspan="4" class="alert alert-danger">{{ trans('general.noDataToShow') }}</td></tr>';
+                        } else {
+                            $.each(data, (index, item) => {
+                                var row = `<tr>
     <td>${index + 1}</td>
     <td><input type="hidden" name="id[]" value="${item.id}">${item.name}</td>
     <td>${item.sales_price}</td>
     <td><input class="form-control" name="quantity[]" value="1" type="number"/></td>
 </tr>`;
-                            table.innerHTML+=row;
-                        });
-                    };
-                }
+                                table.innerHTML += row;
+                            });
+                        };
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 @endpush

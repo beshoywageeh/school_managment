@@ -25,6 +25,7 @@ use App\Http\Controllers\Parents\MyParentsController;
 use App\Http\Controllers\PaymentPartsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\promotionController;
+use App\Http\Controllers\ReciptPaymentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\schedulesController;
@@ -34,7 +35,6 @@ use App\Http\Controllers\SetupController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\Students\StudentsController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ReciptPaymentController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
 
@@ -144,20 +144,6 @@ Route::prefix(LaravelLocalization::setLocale())
                 ->group(function () {
                     Route::get('/', 'index')->name('index');
                     Route::get('/{id}/destroy', 'destroy')->name(
-                        'destroy',
-                    );
-                    Route::get('/{id}/show', 'show')->name('show');
-                    Route::post('/store', 'store')->name('store');
-                    Route::post('/update', 'update')->name('update');
-                });
-            Route::prefix('jobs')
-                ->name('jobs.')
-                ->controller(JobController::class)
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::get('{id}/edit', 'edit')->name('edit');
-                    Route::get('/destroy/{id}', 'destroy')->name(
                         'destroy',
                     );
                     Route::get('/{id}/show', 'show')->name('show');
@@ -289,6 +275,16 @@ Route::prefix(LaravelLocalization::setLocale())
                         'submit_pay',
                     );
                 });
+
+            Route::group(['prefix' => 'labs', 'controller' => LaboratoryController::class], function () {
+                Route::get('/', 'index')->name('labs.index');
+                Route::get('/create', 'create')->name('labs.create');
+                Route::post('/store', 'store')->name('labs.store');
+                Route::get('/{id}/edit', 'edit')->name('labs.edit');
+                Route::post('/update', 'update')->name('labs.update');
+                Route::get('/{id}/destroy', 'destroy')->name('labs.destroy');
+                Route::get('/{id?}/show', 'show')->name('labs.show');
+            });
             Route::name('report.')
                 ->prefix('report')
                 ->controller(ReportController::class)
@@ -379,33 +375,11 @@ Route::prefix(LaravelLocalization::setLocale())
                     UserController::class,
                     'getjobs',
                 ]);
-                Route::get('/get_clothes/{id}', [
-                    ClothesOrderController::class,
-                    'getClothes',
-                ]);
-                Route::get('/get_books_sheets/{id}', [
-                    bookSheetsOrderController::class,
-                    'get_books_sheets',
-                ]);
                 Route::post('/fast_add', [
                     StudentsController::class,
                     'fast_add_student',
                 ]);
             });
-            Route::name('labs.')
-                ->prefix('labs')
-                ->controller(LaboratoryController::class)
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::get('/create', 'create')->name('create');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/{id}/edit', 'edit')->name('edit');
-                    Route::post('/update', 'update')->name('update');
-                    Route::get('/{id}/destroy', 'destroy')->name(
-                        'destroy',
-                    );
-                    Route::get('/{id?}/show', 'show')->name('show');
-                });
             Route::prefix('backup')
                 ->name('backup.')
                 ->controller(BackupController::class)
@@ -450,21 +424,6 @@ Route::prefix(LaravelLocalization::setLocale())
                         '/update_password',
                         'update_password',
                     )->name('update_password');
-                });
-            Route::prefix('stocks')
-                ->name('stocks.')
-                ->controller(StockController::class)
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::post('/update', 'update')->name('update');
-                    Route::post('/stocks_submit', 'stocks_submit')->name(
-                        'stock_submit.store',
-                    );
-                    Route::get('/delete/{id}', 'destroy')->name('destroy');
-                    Route::get('/tawreed/{id}', 'new_tawreed_order')->name(
-                        'tawreed',
-                    );
                 });
             Route::name('order.')
                 ->prefix('orders')
@@ -512,129 +471,6 @@ Route::prefix(LaravelLocalization::setLocale())
                         'destroy',
                     );
                 });
-            Route::name('clothes.')
-                ->prefix('clothe')
-                ->controller(ClothesController::class)
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::get('/destroy/{id}', 'destroy')->name(
-                        'destroy',
-                    );
-                    Route::post('/update', 'update')->name('update');
-                });
-            Route::name('clothes-order.')
-                ->prefix('clothe-order')
-                ->controller(ClothesOrderController::class)
-                ->group(function () {
-                    Route::get('/{type}', 'index')->name('index');
-                    Route::get('/tawreed', 'tawreed')->name('tawreed');
-                    Route::get('/delete/{id}', 'destroy')->name('delete');
-                    Route::get('/show/{id}', 'show')->name('show');
-                    Route::get('/edit/{id}', 'edit')->name('edit');
-                    Route::post('/update', 'clothes_stock_update')->name(
-                        'stock_submit.update',
-                    );
-                    Route::post(
-                        '/clothes_stock_submit',
-                        'clothes_stock_submit',
-                    )->name('stock_submit.store');
-                    Route::get(
-                        '/clothes_out_order',
-                        'clothes_out_order',
-                    )->name('out_order.create');
-                    Route::get(
-                        '/clothes_out_order_edit/{id}',
-                        'clothes_out_order_edit',
-                    )->name('out_order.edit');
-                    Route::get(
-                        '/clothes_gard',
-                        'clothes_order_gard',
-                    )->name('gard');
-                    Route::post(
-                        '/clothes_out_order_submit',
-                        'clothes_out_order_submit',
-                    )->name('out_order.store');
-                    Route::post(
-                        '/clothes_out_order_update',
-                        'clothes_out_order_update',
-                    )->name('out_order.update');
-                    Route::post(
-                        '/clothes_order_gard_submit',
-                        'clothes_order_gard_submit',
-                    )->name('gard.submit');
-                    Route::get(
-                        '/clothes_order_gard_edit/{id}',
-                        'clothes_order_gard_edit',
-                    )->name('inventory_order.edit');
-                    Route::post(
-                        '/clothes_order_gard_update',
-                        'clothes_order_gard_update',
-                    )->name('inventory_order.update');
-                    Route::get('/pay/{id}', 'pay')->name('pay');
-                    Route::get(
-                        '/print/{id}',
-                        'clothes_out_order_print',
-                    )->name('print');
-                });
-            Route::name('books-sheets.')
-                ->prefix('books-sheets')
-                ->controller(BookSheetController::class)
-                ->group(function () {
-                    Route::get('/', 'index')->name('index');
-                    Route::post('/store', 'store')->name('store');
-                    Route::post('/update', 'update')->name('update');
-                    Route::get('/destroy/{id}', 'destroy')->name(
-                        'destroy',
-                    );
-                });
-            Route::name('books-sheets-order.')
-                ->prefix('book-sheets-order')
-                ->controller(BookSheetsOrderController::class)
-                ->group(function () {
-                    Route::get('/{type}', 'index')->name('index');
-                    Route::get('/create_tawreed', 'create_tawreed')->name(
-                        'create',
-                    );
-                    Route::post('/store_tawreed', 'store_tawreed')->name(
-                        'store_tawreed',
-                    );
-                    Route::get('/edit_tawreed/{id}', 'edit_tawreed')->name(
-                        'edit_tawreed',
-                    );
-                    Route::post('/update_tawreed', 'update_tawreed')->name(
-                        'update_tawreed',
-                    );
-                    Route::get('/create_sarf', 'create_sarf')->name(
-                        'create_sarf',
-                    );
-                    Route::post('/store_sarf', 'store_sarf')->name(
-                        'store_sarf',
-                    );
-                    Route::get('/edit_sarf/{id}', 'edit_sarf')->name(
-                        'edit_sarf',
-                    );
-                    Route::post('/update_sarf', 'update_sarf')->name(
-                        'update_sarf',
-                    );
-                    Route::get('/create_gard', 'create_gard')->name(
-                        'create_gard',
-                    );
-                    Route::post('/submit_gard', 'submit_gard')->name(
-                        'submit_gard',
-                    );
-                    Route::get('/edit_gard/{id}', 'edit_gard')->name(
-                        'edit_gard',
-                    );
-                    Route::post('/update_gard', 'update_gard')->name(
-                        'update_gard',
-                    );
-                    Route::get('/show/{id}', 'show')->name('show');
-                    Route::get('/pay/{id}', 'pay')->name('pay');
-                    Route::get('/destroy/{id}', 'destroy')->name(
-                        'destroy',
-                    );
-                });
             Route::name('exchange-bonds.')
                 ->prefix('exchange-bonds')
                 ->controller(ExchangeBondController::class)
@@ -649,6 +485,91 @@ Route::prefix(LaravelLocalization::setLocale())
                         'destroy',
                     );
                 });
+            Route::name('stocks.')->prefix('stocks')->controller(StockController::class)->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::post('/store', 'store')->name('store');
+                Route::post('/update', 'update')->name('update');
+                Route::post('/stocks_submit', 'stocks_submit')->name('store');
+                Route::get('/delete/{id}', 'destroy')->name('destroy');
+                Route::get('/tawreed/{id}', 'new_tawreed_order')->name('tawreed');
+            });
+            Route::group(['prefix' => 'orders', 'controller' => OrderController::class], function () {
+                Route::get('/', 'index')->name('order.index');
+                Route::get('/show/{id}', 'show')->name('order.show');
+                Route::get('/edit/{id}', 'edit')->name('order.edit');
+                Route::post('/update', 'update')->name('order.update');
+                Route::get('/delete/{id}', 'destroy')->name('order.destroy');
+                Route::get('/store', 'store')->name('order.store');
+            });
+            Route::group(['prefix' => 'outorder', 'controller' => OutOrderController::class], function () {
+                Route::get('/', 'index')->name('outorder.index');
+                Route::get('/show/{id}', 'show')->name('outorder.show');
+                Route::get('/edit/{id}', 'edit')->name('outorder.edit');
+                Route::get('/create', 'new_transfer')->name('outorder.new_transfer');
+                Route::post('/update', 'update')->name('outorder.update');
+                Route::get('/delete/{id}', 'destroy')->name('outorder.destroy');
+                Route::post('/store', 'store')->name('outorder.store');
+                Route::post('/transfer', 'transfer')->name('orders.transfer');
+                Route::post('/submit_transfer', 'submit_transfer')->name('outorder.submit_transfer');
+            });
+            Route::group(['prefix' => 'gard', 'controller' => GardController::class], function () {
+                Route::get('/', 'index')->name('gard.index');
+                Route::get('/create', 'create')->name('gard.create');
+                Route::get('/show/{id}', 'show')->name('gard.show');
+                Route::get('/edit/{id}', 'edit')->name('gard.edit');
+                Route::post('/store', 'store')->name('gard.store');
+                Route::post('/update', 'update')->name('gard.update');
+                Route::get('/destroy/{id}', 'destroy')->name('gard.destroy');
+            });
+            Route::group(['prefix' => 'clothe', 'controller' => ClothesController::class], function () {
+                Route::get('/', 'index')->name('clothes.index');
+                Route::post('/store', 'store')->name('clothes.store');
+                Route::get('/destroy/{id}', 'destroy')->name('clothe.destroy');
+                Route::post('/update', 'update')->name('clothe.update');
+            });
+            Route::group(['prefix' => 'clothes_order', 'controller' => ClothesOrderController::class], function () {
+                Route::get('//{type}', 'index')->name('clothes_order.index');
+                Route::get('/tawreed', 'tawreed')->name('clothes_order.tawreed');
+                Route::get('/delete/{id}', 'destroy')->name('clothes_order.delete');
+                Route::get('/show/{id}', 'show')->name('clothes_order.show');
+                Route::get('/edit/{id}', 'edit')->name('clothes_order.edit');
+                Route::post('/update', 'clothes_stock_update')->name('clothes_stock_submit.update');
+                Route::post('/clothes_stock_submit', 'clothes_stock_submit')->name('clothes_stock_submit.store');
+                Route::get('/clothes_out_order', 'clothes_out_order')->name('clothes_out_order.create');
+                Route::get('/clothes_out_order_edit/{id}', 'clothes_out_order_edit')->name('clothes_out_order.edit');
+                Route::get('/clothes_gard', 'clothes_order_gard')->name('clothes.gard');
+                Route::post('/clothes_out_order_submit', 'clothes_out_order_submit')->name('clothes_out_order.store');
+                Route::post('/clothes_out_order_update', 'clothes_out_order_update')->name('clothes_out_order.update');
+                Route::post('/clothes_order_gard_submit', 'clothes_order_gard_submit')->name('clothes_gard.submit');
+                Route::get('/clothes_order_gard_edit/{id}', 'clothes_order_gard_edit')->name('clothes_inventory_order.edit');
+                Route::post('/clothes_order_gard_update', 'clothes_order_gard_update')->name('clothes_inventory_order.update');
+                Route::get('/pay/{id}', 'pay')->name('clothes_order.pay');
+                Route::get('/print/{id}', 'clothes_out_order_print')->name('clothes_order.print');
+            });
+            Route::group(['prefix' => 'books_sheets', 'controller' => BookSheetController::class], function () {
+                Route::get('/', 'index')->name('books_sheets.index');
+                Route::post('/store', 'store')->name('books_sheets.store');
+                Route::post('/update', 'update')->name('books_sheets.update');
+                Route::get('/destroy/{id}', 'destroy')->name('books_sheets.destroy');
+            });
+            Route::group(['prefix' => 'bookSheetsOrder', 'controller' => BookSheetsOrderController::class], function () {
+                Route::get('/{type}', 'index')->name('bookSheetsOrder.index');
+                Route::get('/create_tawreed', 'create_tawreed')->name('bookSheetsOrder.create');
+                Route::post('/store_tawreed', 'store_tawreed')->name('bookSheetsOrder.store_tawreed');
+                Route::get('/edit_tawreed/{id}', 'edit_tawreed')->name('bookSheetsOrder.edit_tawreed');
+                Route::post('/update_tawreed', 'update_tawreed')->name('bookSheetsOrder.update_tawreed');
+                Route::get('/create_sarf', 'create_sarf')->name('bookSheetsOrder.create_sarf');
+                Route::post('/store_sarf', 'store_sarf')->name('bookSheetsOrder.store_sarf');
+                Route::get('/edit_sarf/{id}', 'edit_sarf')->name('bookSheetsOrder.edit_sarf');
+                Route::post('/update_sarf', 'update_sarf')->name('bookSheetsOrder.update_sarf');
+                Route::get('/create_gard', 'create_gard')->name('bookSheetsOrder.create_gard');
+                Route::post('/submit_gard', 'submit_gard')->name('bookSheetsOrder.submit_gard');
+                Route::get('/edit_gard/{id}', 'edit_gard')->name('bookSheetsOrder.edit_gard');
+                Route::post('/update_gard', 'update_gard')->name('bookSheetsOrder.update_gard');
+                Route::get('/show/{id}', 'show')->name('bookSheetsOrder.show');
+                Route::get('/pay/{id}', 'pay')->name('bookSheetsOrder.pay');
+                Route::get('/destroy/{id}', 'destroy')->name('bookSheetsOrder.destroy');
+            });
             Route::prefix('schedule')
                 ->name('schedule.')
                 ->controller(schedulesController::class)

@@ -19,8 +19,9 @@
                             <label for="">{{ trans('report.stock') }}</label>
                         </div>
                         <div class="col-9">
-                            <select name="stock" id="stock" class="custom-select w-100 select2" style="width: 100%;">
-                                <option selected disabled>{{trans('report.select_stock')}}</option>
+                            <select name="stock" id="stock" class="custom-select w-100 select2"
+                                style="width: 100%;">
+                                <option selected disabled>{{ trans('report.select_stock') }}</option>
                                 @foreach ($stocks as $stock)
                                     <option value="{{ $stock->id }}">{{ $stock->name }}</option>
                                 @endforeach

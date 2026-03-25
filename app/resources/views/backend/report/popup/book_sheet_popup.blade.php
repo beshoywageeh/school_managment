@@ -19,10 +19,13 @@
                             <label for="">{{ trans('report.stock') }}</label>
                         </div>
                         <div class="col-9">
-                            <select name="stock" id="stock" class="form-control w-100 select2" style="width: 100%;">
-                                <option selected disabled>{{trans('report.select_stock')}}</option>
+                            <select name="stock" id="stock" class="form-control w-100 select2"
+                                style="width: 100%;">
+                                <option selected disabled>{{ trans('report.select_stock') }}</option>
                                 @foreach ($books_sheets as $stock)
-                                    <option value="{{ $stock->id }}">{{ $stock->grade->name.' - '.$stock->classroom->name .' - ' .$stock->name }}</option>
+                                    <option value="{{ $stock->id }}">
+                                        {{ $stock->grade->name . ' - ' . $stock->classroom->name . ' - ' . $stock->name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>

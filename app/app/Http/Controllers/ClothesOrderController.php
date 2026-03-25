@@ -18,13 +18,13 @@ class ClothesOrderController extends Controller
     {
         $school = $this->getSchool();
 
-        $validTypes = ['inventory', 'sales', 'gard'];
+        $validTypes = [1, 2, 3];
         if (! in_array($type, $validTypes)) {
             abort(404);
         }
 
         $orders = clothes_order::where('school_id', $school->id)->where('type', $type)
-            ->with(['stocks', $type == 'sales' ? 'students' : null])
+            ->with(['stocks', $type == 2 ? 'students' : null])
             ->get();
 
         return view('backend.clothes_order.index', get_defined_vars());
@@ -37,7 +37,7 @@ class ClothesOrderController extends Controller
         if ($clothes->count() == 0) {
             return redirect()->route('clothes.index')->with('info', trans('General.noDataToShow'));
         }
-        $generate_code = clothes_order::where('type', 'inventory')->orderBy('auto_number', 'desc')->first();
+        $generate_code = clothes_order::where('type', '1')->orderBy('auto_number', 'desc')->first();
         $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
 
         return view('backend.clothes_order.tawreed', get_defined_vars());
@@ -49,7 +49,7 @@ class ClothesOrderController extends Controller
 
         try {
             $order = clothes_order::where('id', $id)->with('stocks')->first();
-            $type = 'gard';
+            $type = 3;
 
             // return $order;
             return view('backend.clothes_order.inventory_edit', get_defined_vars());
@@ -62,7 +62,7 @@ class ClothesOrderController extends Controller
     {
         try {
             $order = clothes_order::where('id', $request->id)->with('stocks')->first();
-            $type = 'gard';
+            $type = 3;
             foreach ($request->stock_id as $key => $stock) {
                 $stock = clothes::find($stock);
                 $current_qty = $stock->orders()->where('clothes_orders.id', '!=', $order->id)->where('clothes_id', $stock->id);
@@ -78,7 +78,7 @@ class ClothesOrderController extends Controller
                         'quantity_in' => $qty,
                     ]);
                 }
-                $this->logActivity(trans('log.actions.stock_updated'), trans('log.models.clothes_order.stock_updated', ['stock_name' => $stock->name, 'order_number' => $order->auto_number]));
+                $this->logActivity(trans('log.clothes_order.stock_updated_action'), trans('log.clothes_order.stock_updated', ['stock_name' => $stock->name, 'order_number' => $order->auto_number]));
             }
 
             return redirect()->route('clothes.index', 1)->with('success', trans('general.success'));
@@ -92,10 +92,10 @@ class ClothesOrderController extends Controller
     {
         try {
             \DB::beginTransaction();
-            $generate_code = clothes_order::where('type', 'inventory')->orderBy('auto_number', 'desc')->first();
+            $generate_code = clothes_order::where('type', '1')->orderBy('auto_number', 'desc')->first();
             $order = clothes_order::create([
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
-                'type' => 'inventory',
+                'type' => '1',
                 'date' => date('Y-m-d'),
                 'manual_number' => $request->manual_num,
                 'manual_date' => Carbon::parse($request->manual_date)->format('Y-m-d'),
@@ -115,7 +115,7 @@ class ClothesOrderController extends Controller
                     'sales_price_set' => $request->sales_isset[$key],
                 ]);
             }
-            $this->logActivity(trans('log.actions.supply_added'), trans('log.models.clothes_order.supply_added', ['order_id' => $order->id]));
+            $this->logActivity(trans('log.clothes_order.supply_added_action'), trans('log.clothes_order.supply_added', ['order_id' => $order->id]));
             \DB::commit();
 
             return redirect()->route('clothes_order.index', 1)->with('success', trans('general.success'));
@@ -150,7 +150,7 @@ class ClothesOrderController extends Controller
                     'sales_price_set' => $request->sales_isset[$key],
                 ]);
             }
-            $this->logActivity(trans('log.actions.supply_updated'), trans('log.models.clothes_order.supply_updated', ['order_number' => $order->auto_number]));
+            $this->logActivity(trans('log.clothes_order.supply_updated_action'), trans('log.clothes_order.supply_updated', ['order_number' => $order->auto_number]));
             \DB::commit();
 
             return redirect()->route('clothes_order.index')->with('success', trans('general.success'));
@@ -188,10 +188,10 @@ class ClothesOrderController extends Controller
     public function clothes_out_order()
     {
         $school = $this->getSchool();
-        $generate_code = clothes_order::where('type', 'sales')->orderBy('auto_number', 'desc')->first();
+        $generate_code = clothes_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
         $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001';
         $students = Student::get();
-        $type = 'sales';
+        $type = 2;
 
         return view('backend.clothes_order.out_order', get_defined_vars());
     }
@@ -200,7 +200,7 @@ class ClothesOrderController extends Controller
     {
         try {
             $order = clothes_order::find($id);
-            $this->logActivity(trans('log.actions.deleted'), trans('log.models.clothes_order.supply_deleted', ['order_number' => $order->auto_number]));
+            $this->logActivity(trans('log.clothes_order.supply_deleted_action'), trans('log.clothes_order.supply_deleted', ['order_number' => $order->auto_number]));
             $order->delete();
 
             return redirect()->back()->with('success', trans('general.success'));
@@ -213,13 +213,13 @@ class ClothesOrderController extends Controller
     {
         try {
             \DB::beginTransaction();
-            $generate_code = clothes_order::where('type', 'sales')->orderBy('auto_number', 'desc')->first();
+            $generate_code = clothes_order::where('type', '2')->orderBy('auto_number', 'desc')->first();
             $order = clothes_order::create([
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
                 'type' => '2',
                 'date' => date('Y-m-d'),
                 'student_id' => $request->student_id,
-                'isset_order' => ($request->isset == 'on') ? 'yes' : 'no',
+                'isset_order' => ($request->isset == 'on') ? 1 : 0,
                 'school_id' => $this->getSchool()->id,
                 'user_id' => auth()->user()->id,
             ]);
@@ -231,7 +231,7 @@ class ClothesOrderController extends Controller
                     'order_id' => $order->id,
                 ]);
             }
-            $this->logActivity(trans('log.actions.out_order_added'), trans('log.models.clothes_order.out_order_added', ['order_id' => $order->id, 'student_name' => Student::findorfail($request->student_id)->name]));
+            $this->logActivity(trans('log.clothes_order.out_order_added_action'), trans('log.clothes_order.out_order_added', ['order_id' => $order->id, 'student_name' => Student::findorfail($request->student_id)->name]));
             \DB::commit();
 
             return redirect()->route('clothes_order.print', $order->id)->with('success', trans('general.success'));
@@ -283,7 +283,7 @@ class ClothesOrderController extends Controller
 
                 $order->stocks()->syncWithPivotValues($order_id, $clothes);
             }
-            $this->logActivity(trans('log.actions.out_order_updated'), trans('log.models.clothes_order.out_order_updated', ['order_id' => $order->id, 'student_name' => Student::findorfail($request->student_id)->name]));
+            $this->logActivity(trans('log.clothes_order.out_order_updated_action'), trans('log.clothes_order.out_order_updated', ['order_id' => $order->id, 'student_name' => Student::findorfail($request->student_id)->name]));
 
             return redirect()->route('clothes_order.print', $order->id)->with('success', trans('general.success'));
         } catch (\Exception $e) {
@@ -302,10 +302,10 @@ class ClothesOrderController extends Controller
             $generate_code = clothes_order::where('type', '3')->orderBy('auto_number', 'desc')->first();
             $order = clothes_order::create([
                 'auto_number' => isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6, '0', STR_PAD_LEFT) : '000001',
-                'type' => 'gard',
+                'type' => '3',
                 'date' => date('Y-m-d'),
             ]);
-            $this->logActivity(trans('log.actions.inventory_order_added'), trans('log.models.clothes_order.inventory_order_added', ['order_number' => $order->auto_number]));
+            $this->logActivity(trans('log.clothes_order.inventory_order_added_action'), trans('log.clothes_order.inventory_order_added', ['order_number' => $order->auto_number]));
 
             return view('backend.clothes_order.gard_create', compact('order', 'stocks'));
         } catch (\Exception $e) {
@@ -326,7 +326,7 @@ class ClothesOrderController extends Controller
                     'quantity_out' => $qty < 0 ? abs($qty) : 0,
                     'quantity_in' => $qty > 0 ? $qty : 0,
                 ]);
-                $this->logActivity(trans('log.actions.stock_added_to_inventory'), trans('log.models.clothes_order.stock_added_to_inventory', ['stock_name' => $stock->name, 'inventory_number' => $request->id]));
+                $this->logActivity(trans('log.clothes_order.stock_added_to_inventory_action'), trans('log.clothes_order.stock_added_to_inventory', ['stock_name' => $stock->name, 'inventory_number' => $request->id]));
             }
 
             return redirect()->route('clothes.index')->with('success', 'تم الاضافة بنجاح');
@@ -340,10 +340,10 @@ class ClothesOrderController extends Controller
         try {
             $school = $this->getSchool();
             $order = clothes_order::findorfail($id);
-            $order->update(['status' => 'payed']);
-            $this->logActivity(trans('log.actions.receipt_updated_to_paid'), trans('log.models.clothes_order.receipt_updated_to_paid', ['order_number' => $order->auto_number]));
+            $order->update(['is_payed' => 1]);
+            $this->logActivity(trans('log.clothes_order.receipt_updated_to_paid_action'), trans('log.clothes_order.receipt_updated_to_paid', ['order_number' => $order->auto_number]));
 
-            return redirect()->route('clothes_order.index', ['type' => 'sales'])->with('info', 'تم الدفع بنجاح');
+            return redirect()->route('clothes_order.index', ['type' => 2])->with('info', 'تم الدفع بنجاح');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

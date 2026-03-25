@@ -14,7 +14,7 @@
                             <div class="row">
                                 <div class="col"></div>
                                 <div class="text-right col">
-                                    
+
                                 </div>
                             </div>
 
@@ -35,29 +35,29 @@
                                 <tbody>
                                     @forelse ($exchanges as $exchange)
                                         <tr>
-                                            <td> {{ $loop->index +1 }}</td>
+                                            <td> {{ $loop->index + 1 }}</td>
                                             <td> {{ $exchange->manual ?? '-' }}</td>
                                             <td>{{ $exchange->acadmic_year->view }}</td>
                                             <td>{{ $exchange->student->name }}</td>
-                                            <td>{{ Number::currency($exchange->amount,'EGP') }}</td>
+                                            <td>{{ Number::currency($exchange->amount, 'EGP') }}</td>
                                             <td>{{ $exchange->description }}</td>
                                             <td>
                                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                     [
-                                                        'type'=>'link',
+                                                        'type' => 'link',
                                                         'url' => route('exchange_bonds.edit', $exchange->id),
                                                         'text' => trans('general.edit'),
                                                         'icon' => 'ti-pencil',
                                                         'can' => 'exchange_bonds-edit',
                                                     ],
                                                     [
-                                                        'type'=>'link',
+                                                        'type' => 'link',
                                                         'url' => route('exchange_bonds.destroy', $exchange->id),
                                                         'text' => trans('general.delete'),
                                                         'icon' => 'ti-trash',
                                                         'onclick' => 'confirmation(event)',
                                                         'can' => 'exchange_bonds-delete',
-                                                    ],  
+                                                    ],
                                                 ]" />
                                             </td>
                                         </tr>
@@ -69,7 +69,7 @@
                                 </tbody>
                             </table>
                         </div>
-                 
+
                     </div>
                 </div>
             </div>

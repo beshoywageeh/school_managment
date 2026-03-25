@@ -121,7 +121,7 @@ class ClassRoomsController extends Controller
             session()->flash('success', trans('general.success'));
             $this->logActivity(trans('log.actions.updated'), trans('log.models.classroom.updated', ['class_name' => $request->class_name]));
 
-            return redirect()->route('class_rooms.index');
+            return redirect()->route('class-rooms.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

@@ -4,7 +4,8 @@
             <div class="row mb-20">
                 <div class="col-md-3">
                     <label>{{ trans('employees.search') }}</label>
-                    <input type="text" wire:model.live.debounce.300ms="name" class="form-control" placeholder="{{ trans('employees.search_placeholder') }}">
+                    <input type="text" wire:model.live.debounce.300ms="name" class="form-control"
+                        placeholder="{{ trans('employees.search_placeholder') }}">
                 </div>
                 <div class="col-md-2">
                     <label>{{ trans('employees.job') }}</label>
@@ -24,7 +25,8 @@
                     <input wire:model.live="endDate" type="date" class="form-control">
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
-                    <button wire:click="resetFilters" class="btn btn-secondary">{{ trans('employees.reset_filters') }}</button>
+                    <button wire:click="resetFilters"
+                        class="btn btn-secondary">{{ trans('employees.reset_filters') }}</button>
                 </div>
             </div>
 
@@ -59,8 +61,10 @@
                                 <th wire:click="sortBy('name')" style="cursor: pointer;">{{ trans('employees.name') }}</th>
                                 <th>{{ trans('employees.learning') }}</th>
                                 <th>{{ trans('employees.grade_year') }}</th>
-                                <th wire:click="sortBy('date_of_hiring')" style="cursor: pointer;">{{ trans('employees.join_date') }}</th>
-                                <th wire:click="sortBy('date_of_birth')" style="cursor: pointer;">{{ trans('employees.birth_date') }}</th>
+                                <th wire:click="sortBy('date_of_hiring')" style="cursor: pointer;">
+                                    {{ trans('employees.join_date') }}</th>
+                                <th wire:click="sortBy('date_of_birth')" style="cursor: pointer;">
+                                    {{ trans('employees.birth_date') }}</th>
                                 <th>{{ trans('employees.job') }}</th>
                                 <th>{{ trans('employees.contract_start_date') }}</th>
                                 <th>{{ trans('employees.ministry_code') }}</th>
@@ -129,7 +133,7 @@
 
                                     </td>
                                 </tr>
-                                @empty
+                            @empty
                                 <tr>
                                     <td colspan="18" class="text-center">{{ trans('general.not_found') }}</td>
                                 </tr>

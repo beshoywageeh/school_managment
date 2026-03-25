@@ -223,7 +223,7 @@ class UserController extends Controller
             Excel::import(new WorkersImport, $request->file('excel'), null, ExcelExcel::XLSX);
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('Students.index');
+            return redirect()->route('students.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
             \Log::error($e->getMessage());

@@ -1,56 +1,58 @@
 <x-dropdown-table :buttonText="trans('general.buttons.action')" :items="[
     [
-        'type'=>'link',
+        'type' => 'link',
         'url' => route('students.destroy', $id),
         'text' => trans('student.graduated'),
         'icon' => '',
-        'can'=>'Students-graduated'
+        'can' => 'Students-graduated',
     ],
     [
-        'type'=>'link',
+        'type' => 'link',
         'url' => route('students.show', $id),
         'text' => trans('general.buttons.view'),
         'icon' => 'ti-info-alt',
-        'can'=>'Students-info'
+        'can' => 'Students-info',
     ],
     [
-        'type'=>'link',
+        'type' => 'link',
         'url' => route('students.edit', $id),
         'text' => trans('general.buttons.edit'),
         'icon' => 'ti-pencil',
         'can' => 'Students-edit',
     ],
     [
-        'type'=>'link',
+        'type' => 'link',
         'url' => route('fee-invoice.create', $id),
         'text' => trans('general.fee_invoice'),
         'icon' => 'ti-money',
-        'can'=>'fee_invoice-create'
-    ],[
-        'type'=>'link',
+        'can' => 'fee_invoice-create',
+    ],
+    [
+        'type' => 'link',
         'url' => route('receipt-payment.create', $id),
         'text' => trans('general.Recipt_Payment'),
         'icon' => 'fa fa-money',
-        'can'=>'Recipt_Payment-create'
+        'can' => 'Recipt_Payment-create',
     ],
     [
-        'type'=>'link',
+        'type' => 'link',
         'url' => route('except-fee.create', $id),
         'text' => trans('general.except_fee'),
         'icon' => 'fa fa-money',
-        'can'=>'except_fee-create'
-    ],[
-        'type'=>'link',
+        'can' => 'except_fee-create',
+    ],
+    [
+        'type' => 'link',
         'url' => route('payment-parts.create', $id),
         'text' => trans('PaymentParts.title'),
         'icon' => 'fa fa-money',
-        'can'=>'payment_parts-create'
+        'can' => 'payment_parts-create',
     ],
     [
-        'type'=>'link',
+        'type' => 'link',
         'url' => route('exchange-bonds.create', $id),
         'text' => trans('exchange_bonds.title'),
         'icon' => 'fa fa-money',
-        'can'=>'exchange_bonds-create'
+        'can' => 'exchange_bonds-create',
     ],
 ]" />
