@@ -5,29 +5,29 @@
                 <span class="font-bold">{{ $school->name }}</span>
             </li>
             <!-- school name -->
-            <x-nav_link :href="route('dashboard')" :active="request()->is('*/')" :image="URL::asset('assests/images/Sidebar/dashboard.png')">
+            <x-nav_link :href="route('dashboard')" :active="request()->is('*/')" icon="fa fa-dashboard">
                 {{ trans('Sidebar.Dashboard') }}
             </x-nav_link>
             <!--for student-->
             @if (Auth::user()->hasAnyPermission(['Students-list', 'parents-list', 'promotion-list', 'graduated_list']))
                 <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.student_info') }} </li>
                 @can('parents-list')
-                    <x-nav_link :href="route('parents.index')" :active="request()->is('*/parents*')" :image="URL::asset('assests/images/Sidebar/parents.png')">
+                    <x-nav_link :href="route('parents.index')" :active="request()->is('*/parents*')" icon="fa fa-users">
                         {{ trans('Sidebar.parents') }}
                     </x-nav_link>
                 @endcan
                 @can('Students-list')
-                    <x-nav_link :href="route('students.index')" :active="request()->is('*/students') || request()->is('*/students/create')" :image="URL::asset('assests/images/Sidebar/students.png')">
+                    <x-nav_link :href="route('students.index')" :active="request()->is('*/students') || request()->is('*/students/create')" icon="fa fa-graduation-cap">
                         {{ trans('Sidebar.Students') }}
                     </x-nav_link>
                 @endcan
                 @can('promotion-list')
-                    <x-nav_link :href="route('promotion.index')" :active="request()->is('*/promotion') || request()->is('*/promotion/create')" :image="URL::asset('assests/images/Sidebar/promotion.png')">
+                    <x-nav_link :href="route('promotion.index')" :active="request()->is('*/promotion') || request()->is('*/promotion/create')" icon="fa fa-level-up">
                         {{ trans('Sidebar.promotion') }}
                     </x-nav_link>
                 @endcan
                 @can('graduated-list')
-                    <x-nav_link :href="route('students.graduated')" :active="request()->is('*/students/graduated*')" :image="URL::asset('assests/images/Sidebar/promotion.png')">
+                    <x-nav_link :href="route('students.graduated')" :active="request()->is('*/students/graduated*')" icon="fa fa-graduation-cap">
                         {{ trans('Sidebar.graduated') }}
                     </x-nav_link>
                 @endcan
@@ -37,22 +37,22 @@
             @if (Auth::user()->hasAnyPermission(['jobs-list', 'employees-list']))
                 <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.employee_info') }} </li>
                 @can('jobs-list')
-                    <x-nav_link :href="route('jobs.index')" :active="request()->is('*/jobs*')" :image="URL::asset('assests/images/Sidebar/job.png')">
+                    <x-nav_link :href="route('jobs.index')" :active="request()->is('*/jobs*')" icon="fa fa-briefcase">
                         {{ trans('Sidebar.jobs') }}
                     </x-nav_link>
                 @endcan
                 @can('employees-list')
-                    <x-nav_link :href="route('employees.index')" :active="request()->is('*/employees*')" :image="URL::asset('assests/images/Sidebar/employees.png')">
+                    <x-nav_link :href="route('employees.index')" :active="request()->is('*/employees*')" icon="fa fa-id-card-o">
                         {{ trans('Sidebar.employees') }}
                     </x-nav_link>
                 @endcan
                 @can('scheduale-list')
                     <x-nav_link :href="route('schedule.index')" :active="request()->is('*/schedule*')"
-                        :image="URL::asset('assests/images/Sidebar/schedules.png')">{{ trans('schedules.schedules') }}</x-nav_link>
+                        icon="fa fa-calendar-check-o">{{ trans('schedules.schedules') }}</x-nav_link>
                 @endcan
 
                 @can('employees-list')
-                    <x-nav_link :href="route('employees.return_list')" :active="request()->is('*/employees/return_list*')">
+                    <x-nav_link :href="route('employees.return_list')" :active="request()->is('*/employees/return_list*')" icon="fa fa-user-times">
                         {{ trans('general.resign') }}
                     </x-nav_link>
                 @endcan
@@ -69,41 +69,41 @@
                 ]))
                 <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.accounting') }} </li>
                 @can('academic_year-list')
-                    <x-nav_link :href="route('academic_year.index')" :active="request()->is('*/academic_year*')" :image="URL::asset('assests/images/Sidebar/calendar.png')">
+                    <x-nav_link :href="route('academic_year.index')" :active="request()->is('*/academic_year*')" icon="fa fa-calendar">
                         {{ trans('academic_year.title') }}
                     </x-nav_link>
                 @endcan
                 @can('schoolfees-list')
-                    <x-nav_link :href="route('school-fees.index')" :active="request()->is('*/school_fees*')" :image="URL::asset('assests/images/Sidebar/money.png')">
+                    <x-nav_link :href="route('school-fees.index')" :active="request()->is('*/school_fees*')" icon="fa fa-money">
                         {{ trans('Sidebar.schoolfees') }}
                     </x-nav_link>
                 @endcan
                 @can('fee_invoice-list')
-                    <x-nav_link :href="route('fee-invoice.index')" :active="request()->is('*/fee-invoice*')" :image="URL::asset('assests/images/Sidebar/invoice.png')">
+                    <x-nav_link :href="route('fee-invoice.index')" :active="request()->is('*/fee-invoice*')" icon="fa fa-file-text-o">
                         {{ trans('Sidebar.fees_invoice') }}
                     </x-nav_link>
                 @endcan
                 @can('Recipt_Payment-list')
-                    <x-nav_link :href="route('receipt-payment.index')" :active="request()->is('*/receipt-payment*')" :image="URL::asset('assests/images/Sidebar/bill.png')">
+                    <x-nav_link :href="route('receipt-payment.index')" :active="request()->is('*/receipt-payment*')" icon="fa fa-credit-card">
                         {{ trans('Sidebar.Recipt_Payment') }}
                     </x-nav_link>
                 @endcan
                 @can('except_fee-list')
-                    <x-nav_link :href="route('except-fee.index')" :active="request()->is('*/except-fee*')" :image="URL::asset('assests/images/Sidebar/declined.png')">
+                    <x-nav_link :href="route('except-fee.index')" :active="request()->is('*/except-fee*')" icon="fa fa-minus-circle">
                         {{ trans('Sidebar.except_fee') }}
                     </x-nav_link>
                 @endcan
                 @can('payment_parts-list')
-                    <x-nav_link :href="route('payment-parts.index')" :active="request()->is('*/payment-parts*')" :image="URL::asset('assests/images/Sidebar/down-payment.png')">
+                    <x-nav_link :href="route('payment-parts.index')" :active="request()->is('*/payment-parts*')" icon="fa fa-arrow-circle-o-down">
                         {{ trans('Sidebar.payment_parts') }}
                     </x-nav_link>
                 @endcan
                 @can('exchange_bonds-list')
-                    <x-nav_link :href="route('exchange-bonds.index')" :active="request()->is('*/exchange-bonds*')" :image="URL::asset('assests/images/Sidebar/bill.png')">
+                    <x-nav_link :href="route('exchange-bonds.index')" :active="request()->is('*/exchange-bonds*')" icon="fa fa-credit-card">
                         {{ trans('Sidebar.exchange_bonds') }}
                     </x-nav_link>
                 @endcan
-                <x-nav_link :href="route('fund-account.index')" :active="request()->is('*/fund-account*')" :image="URL::asset('assests/images/Sidebar/bill.png')">
+                <x-nav_link :href="route('fund-account.index')" :active="request()->is('*/fund-account*')" icon="fa fa-university">
                     {{ trans('Sidebar.fund_account') }}
                 </x-nav_link>
                 </li>
@@ -113,17 +113,17 @@
                 <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.grades_setting') }}
                 </li>
                 @can('grade-list')
-                    <x-nav_link :href="route('grade.index')" :active="request()->is('*/grade*')" :image="URL::asset('assests/images/Sidebar/score.png')">
+                    <x-nav_link :href="route('grade.index')" :active="request()->is('*/grade*')" icon="fa fa-line-chart">
                         {{ trans('Sidebar.Grade') }}
                     </x-nav_link>
                 @endcan
                 @can('class_rooms-list')
-                    <x-nav_link :href="route('class-rooms.index')" :active="request()->is('*/class-rooms*')" :image="URL::asset('assests/images/Sidebar/classroom.png')">
+                    <x-nav_link :href="route('class-rooms.index')" :active="request()->is('*/class-rooms*')" icon="fa fa-building-o">
                         {{ trans('Sidebar.Class_Rooms') }}
                     </x-nav_link>
                 @endcan
                 @can('classes-list')
-                    <x-nav_link :href="route('classes.index')" :active="request()->is('*/classes*')" :image="URL::asset('assests/images/Sidebar/classes.png')">
+                    <x-nav_link :href="route('classes.index')" :active="request()->is('*/classes*')" icon="fa fa-list-alt">
                         {{ trans('Sidebar.classes') }}
                     </x-nav_link>
                 @endcan
@@ -155,7 +155,9 @@
                     {{-- stocks-inventory --}}
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse"
-                            data-target="#stocks">{{ trans('Sidebar.stocks') }}
+                            data-target="#stocks">
+                            <i class="fa fa-archive fa-lg fa-fw"></i>
+                            <span class="mx-3 right-nav-text">{{ trans('Sidebar.stocks') }}</span>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
                         </a>
@@ -191,7 +193,8 @@
                     {{-- clothes-inventory --}}
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#clothes">
-                            {{ trans('stock.clothes') }}
+                            <i class="fa fa-shirtsinbulk fa-lg fa-fw"></i>
+                            <span class="mx-3 right-nav-text">{{ trans('stock.clothes') }}</span>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
                         </a>
@@ -226,7 +229,8 @@
                     ]))
                     <li>
                         <a href="javascript:void(0);" data-toggle="collapse" data-target="#book_sheets">
-                            {{ trans('Sidebar.books_sheets') }}
+                            <i class="fa fa-book fa-lg fa-fw"></i>
+                            <span class="mx-3 right-nav-text">{{ trans('Sidebar.books_sheets') }}</span>
                             <div class="pull-right"><i class="ti-plus"></i></div>
                             <div class="clearfix"></div>
                         </a>
@@ -261,27 +265,27 @@
                 <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.security') }}</li>
 
                 @can('settings-info')
-                    <x-nav_link :href="route('create-new-school')" :active="request()->is('*/create-new-school*')" :image="URL::asset('assests/images/Sidebar/cogwheel.png')">
+                    <x-nav_link :href="route('create-new-school')" :active="request()->is('*/create-new-school*')" icon="fa fa-cog">
                         {{ trans('Sidebar.setting') }}
                     </x-nav_link>
                 @endcan
 
-                <x-nav_link :href="route('system-lookup')" :active="request()->is('*/monitor')" :image="URL::asset('assests/images/Sidebar/security.png')">
+                <x-nav_link :href="route('system-lookup')" :active="request()->is('*/monitor')" icon="fa fa-shield">
                     {{ trans('Sidebar.look_up') }}
                 </x-nav_link>
                 @can('backup-list')
-                    <x-nav_link :href="route('backup.index')" :active="request()->is('*/backup*')" :image="URL::asset('assests/images/Sidebar/data-recovery.png')">
+                    <x-nav_link :href="route('backup.index')" :active="request()->is('*/backup*')" icon="fa fa-database">
                         {{ trans('Sidebar.backup') }}
                     </x-nav_link>
                 @endcan
                 @can('role-list')
-                    <x-nav_link :href="route('roles.index')" :active="request()->is('*/permission*')" :image="URL::asset('assests/images/Sidebar/shield.png')">
+                    <x-nav_link :href="route('roles.index')" :active="request()->is('*/permission*')" icon="fa fa-lock">
                         {{ trans('Sidebar.permission') }}
                     </x-nav_link>
                 @endcan
             @endif
             @if (\Auth::user()->isAdmin)
-                <x-nav_link :href="route('admin-era.index')" :active="request()->is('*/admin-era*')" :image="URL::asset('assests/images/Sidebar/admin.png')">
+                <x-nav_link :href="route('admin-era.index')" :active="request()->is('*/admin-era*')" icon="fa fa-user-secret">
                     {{ trans('Sidebar.admin_era') }}
                 </x-nav_link>
             @endif
@@ -289,7 +293,7 @@
             <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title"> {{ trans('Sidebar.report') }}</li>
 
             <!--for report-->
-            <x-nav_link :href="route('report.index')" :active="request()->is('*/reports*')" :image="URL::asset('assests/images/Sidebar/report.png')">
+            <x-nav_link :href="route('report.index')" :active="request()->is('*/reports*')" icon="fa fa-bar-chart">
                 {{ trans('Sidebar.report') }}
             </x-nav_link>
         </ul>

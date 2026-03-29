@@ -57,7 +57,7 @@ class StudentsController extends Controller
             $data = $StudentRegeister->StudentRegeister($request);
 
             $school_fee = DB::table('school__fees')
-                ->where('academic_year_id', $data['acc_year']->id)
+                ->where('academic_year_id', $data['student']->acadmiecyear_id)
                 ->where('grade_id', $data['student']->grade_id)
                 ->where('classroom_id', $data['student']->classroom_id)
                 ->get();
@@ -78,8 +78,8 @@ class StudentsController extends Controller
                     ]),
                 );
             }
-            // $StudentAccount->AddStudentBookInvoice($student);
-            // $StudentAccount->AddStudentClotheInvoice($student);
+            $StudentAccount->AddStudentBookInvoice($student);
+            $StudentAccount->AddStudentClotheInvoice($student);
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('students.index');
@@ -328,7 +328,7 @@ class StudentsController extends Controller
             $data = $StudentRegeister->StudentRegeister($request);
 
             $school_fee = DB::table('school__fees')
-                ->where('academic_year_id', $data['acc_year']->id)
+                ->where('academic_year_id', $data['student']->acadmiecyear_id)
                 ->where('grade_id', $data['student']->grade_id)
                 ->where('classroom_id', $data['student']->classroom_id)
                 ->get();
@@ -343,15 +343,14 @@ class StudentsController extends Controller
                 $fees->grade_id = $data['student']->grade_id;
                 $fees->classroom_id = $data['student']->classroom_id;
                 $fees->school_fee_id = $fee->id;
-                $fees->academic_year_id = $data['acc_year']->id;
+                $fees->academic_year_id = $data['student']->acadmiecyear_id;
                 $fees->user_id = Auth::user()->id;
                 $fees->school_id = Auth::user()->school_id;
                 $fees->save();
-
                 $StudentAccount->CreateStudentAccount(
                     $data['student'],
                     $fees->id,
-                    $data['acc_year'],
+                    $request->academic_year,
                     '1',
                     $fee->amount,
                 );
@@ -364,8 +363,8 @@ class StudentsController extends Controller
                     ]),
                 );
             }
-            // $StudentAccount->AddStudentBookInvoice($student);
-            // $StudentAccount->AddStudentClotheInvoice($student);
+            $StudentAccount->AddStudentBookInvoice($data['student']);
+            $StudentAccount->AddStudentClotheInvoice($data['student']);
             DB::commit();
 
             return response()->json([

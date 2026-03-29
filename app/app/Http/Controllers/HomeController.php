@@ -9,6 +9,7 @@ use App\Models\PaymentParts;
 use App\Models\Recipt_Payment;
 use App\Models\Student;
 use App\Models\StudentAccount;
+use App\Models\acadmice_year;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +31,7 @@ class HomeController extends Controller
             $schoolId,
             $isAdmin,
         );
-
+        $academic_years = acadmice_year::where('school_id', $schoolId)->get();
         // Get financial data for today
         $financialData = $this->getTodayFinancialData($schoolId);
 
@@ -70,6 +71,7 @@ class HomeController extends Controller
                     'grades',
                     'school',
                     'data',
+                    'academic_years'
                 ),
                 $financialData,
                 $chartData,

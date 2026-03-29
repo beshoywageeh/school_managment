@@ -12,8 +12,8 @@
             <form action="{{ route('grade.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    <x-input name='Grade_Name' class='' type='text'
-                        value='{{ old('Grade_Name') }}'>{{ trans('Grades.name') }}</x-input>
+                    <x-input name="Grade_Name" class="" type="text" :value="old('Grade_Name')">
+                        {{ trans('Grades.name') }}</x-input>
                     <div class="row">
                         <div class="col">
                             <label for="">{{ trans('Grades.select_res') }}</label>

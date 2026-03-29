@@ -16,36 +16,16 @@ class StudentRegeister
 
     public function StudentRegeister($request)
     {
-        // if ($request->parents) {
-        //     $parent = My_parents::findorfail($request->parents);
-
-        // } else {
-        //     $parent = My_parents::create([
-        //         'Father_Name' => $request->parents,
-        //         'user_id' => Auth::id(),
-        //         'school_id' => $this->getSchool()->id,
-        //     ]);
-        // }
         $parent = My_parents::firstOrCreate(
             ['Father_Name' => $request->parents],
             [
                 'Father_Name' => $request->parents,
+                'Religion' => $request->religion,
                 'user_id' => Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
 
-        $year = Carbon::parse()->format('Y');
-        $acc_year = acadmice_year::whereYear('year_start', $year)
-            ->where('status', 0)
-            ->first();
-        if (! $acc_year) {
-            session()->flash(
-                'error',
-                trans('general.no_active_academic_year'),
-            );
-
-            return redirect()->back()->withInput();
-        }
+        
         $student = Student::create([
             'name' => $request->student_name,
             'birth_date' => $request->birth_date,
@@ -57,11 +37,11 @@ class StudentRegeister
             'address' => $request->address,
             'national_id' => $request->national_id,
             'student_status' => $request->std_status,
-            'religion' => $parent->Religion,
+            'religion' => $parent->Religion ?? $request->religion,
             'birth_at_begin' => (new AgeCalculationService)->calculateAgeAsOfOctoberFirst(
                 $request->birth_date,
             ),
-            'acadmiecyear_id' => $acc_year->id,
+            'acadmiecyear_id' => $request->academic_year,
             'nationality_id' => $request->nationality,
             'user_id' => Auth::id(),
             'school_id' => $this->getSchool()->id,
@@ -73,6 +53,6 @@ class StudentRegeister
             ]),
         );
 
-        return ['student' => $student, 'parent' => $parent, 'acc_year' => $acc_year];
+        return ['student' => $student, 'parent' => $parent];
     }
 }

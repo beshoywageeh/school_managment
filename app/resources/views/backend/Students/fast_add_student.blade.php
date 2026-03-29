@@ -47,7 +47,7 @@
 
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mb-4">
 
                         <div class="col">
                             <x-input.Student_Status />
@@ -72,6 +72,23 @@
                             <select class='custom-select' name="class_room" id="classrooms">
                                 <option>{{ trans('student.choose_classroom') }}</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <x-input.nationality />
+                        <x-input.gender-select />
+                        <x-input.religion-select />
+                        <div class="col">
+                            <label>{{trans('general.academic_year')}}</label>
+                            <select name="academic_year" id="academic_year" class="custom-select">
+                                <option value="">{{trans('general.academic_year')}}</option>
+                                @foreach ($academic_years as $academic_year)
+                                    <option value="{{ $academic_year->id }}">{{ $academic_year->view }}</option>
+                                @endforeach
+                            </select>
+                            @error('academic_year')
+                                <div class="mt-1 alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
 

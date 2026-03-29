@@ -18,6 +18,7 @@
         "mcamara/laravel-localization": "^1.8",
         "mckenziearts/laravel-notify": "^2.4",
         "nwidart/laravel-modules": "10",
+        "opcodesio/log-viewer": "^3.24",
         "openspout/openspout": "^4.23",
         "php-flasher/flasher-laravel": "^1.15",
         "spatie/laravel-backup": "^8.6",
