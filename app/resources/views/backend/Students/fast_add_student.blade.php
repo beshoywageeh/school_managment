@@ -23,11 +23,11 @@
                             <label for="father_name" class="">{{ trans('Parents.Father_Name') }}</label>
                             <input list="parents" type="text" name="parents" class="form-control"
                                 value="{{ old('father_name') }}">
-                            <datalist id="parents" class="bg-gray-500">
-                                @foreach ($parents_data as $parent)
+                            {{-- <datalist id="parents" class="bg-gray-500">
+                                @foreach ($parents as $parent)
                                     <option value="{{ $parent->Father_name }}">
                                 @endforeach
-                            </datalist>
+                            </datalist> --}}
 
                         </div>
 

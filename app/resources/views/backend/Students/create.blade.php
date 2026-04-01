@@ -117,35 +117,38 @@
     </form>
 
     @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const birthDateInput = document.querySelector('input[name="birth_date"]');
-                const checkBirthInput = document.querySelector('input[name="check_birth"]');
+     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const birthDateInput = document.querySelector('input[name="birth_date"]');
+            const checkBirthInput = document.querySelector('input[name="check_birth"]');
 
-                if (birthDateInput && checkBirthInput) {
-                    const makeDate = () => {
-                        const date = new Date();
-                        date.setFullYear(new Date().getFullYear()); // Set to current year
-                        date.setMonth(9); // October (months are 0-indexed)
-                        date.setDate(1);
-                        return date;
-                    };
+            if (birthDateInput && checkBirthInput) {
+                birthDateInput.addEventListener('change', () => {
+                    const birthDate = new Date(birthDateInput.value);
+                    const now = new Date();
 
-                    birthDateInput.addEventListener('change', () => {
-                        const birthDate = new Date(birthDateInput.value);
-                        const checkDate = new Date(makeDate());
-                        const diffTime = Math.abs(checkDate - birthDate);
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        const years = Math.floor(diffDays / 365);
-                        const months = Math.floor((diffDays % 365) / 30);
-                        const days = (diffDays % 365) % 30;
-                        checkBirthInput.value = `${years} سنه, ${months} شهر, ${days} يوم`;
-                    });
-                } else {
-                    console.error('Input elements not found');
-                }
-            });
-        </script>
+                    let years = now.getFullYear() - birthDate.getFullYear();
+                    let months = now.getMonth() - birthDate.getMonth();
+                    let days = now.getDate() - birthDate.getDate();
+
+                    if (days < 0) {
+                        months--;
+                        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                        days += prevMonth.getDate();
+                    }
+
+                    if (months < 0) {
+                        years--;
+                        months += 12;
+                    }
+
+                    checkBirthInput.value = `${years} سنه, ${months} شهر, ${days} يوم`;
+                });
+            } else {
+                // console.error('Input elements not found');
+            }
+        });
+    </script>
         <script>
             $(document).ready(function() {
                 $('#grades').on('change', function() {

@@ -102,6 +102,49 @@
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
             padding: 1.5rem;
         }
+
+        /* Activity Log */
+        .activity-item {
+            border-left: 2px solid #e9ecef;
+            padding-left: 1.5rem;
+            padding-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .activity-item:last-child {
+            border-left: none;
+            padding-bottom: 0;
+        }
+
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #007bff;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .activity-user {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Tables */
+        .dashboard-table thead th {
+            border-top: none;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            color: #6c757d;
+        }
     </style>
 @endpush
 
@@ -111,6 +154,9 @@
             'Students' => ['icon' => 'fa-graduation-cap', 'color' => 'bg-primary'],
             'parents' => ['icon' => 'fa-users', 'color' => 'bg-success'],
             'employees' => ['icon' => 'fa-black-tie', 'color' => 'bg-info'],
+            'totalInvoiced' => ['icon' => 'fa-money', 'color' => 'bg-warning'],
+            'totalPaid' => ['icon' => 'fa-check-circle', 'color' => 'bg-success'],
+            'pending' => ['icon' => 'fa-exclamation-triangle', 'color' => 'bg-danger'],
         ];
 
         $action_icons = [
@@ -176,6 +222,54 @@
         @endcan
     </div>
 
+    <!-- Financial Summary Cards -->
+    @if (Auth::user()->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'Recipt_Payment-list']))
+        <div class="row mb-4">
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card dashboard-stat-card h-100 border-left-warning">
+                    <div class="card-body">
+                        <div class="stat-icon {{ $stat_icons['totalInvoiced']['color'] }}">
+                            <i class="fa {{ $stat_icons['totalInvoiced']['icon'] }}"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="stat-count">{{ number_format($totalInvoiced, 2) }}</h3>
+                            <p class="stat-label">{{ trans('Sidebar.fee_invoice') }} (Total)</p>
+                        </div>
+                        <a href="{{ route('fee-invoice.index') }}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card dashboard-stat-card h-100 border-left-success">
+                    <div class="card-body">
+                        <div class="stat-icon {{ $stat_icons['totalPaid']['color'] }}">
+                            <i class="fa {{ $stat_icons['totalPaid']['icon'] }}"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="stat-count">{{ number_format($totalPaid, 2) }}</h3>
+                            <p class="stat-label">{{ trans('Sidebar.Recipt_Payment') }} (Total)</p>
+                        </div>
+                        <a href="{{ route('receipt-payment.index') }}" class="stretched-link"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card dashboard-stat-card h-100 border-left-danger">
+                    <div class="card-body">
+                        <div class="stat-icon {{ $stat_icons['pending']['color'] }}">
+                            <i class="fa {{ $stat_icons['pending']['icon'] }}"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="stat-count">{{ number_format($totalInvoiced - $totalPaid, 2) }}</h3>
+                            <p class="stat-label">Pending Balance</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
     <!-- Quick Actions -->
     <div class="row mb-4">
 
@@ -235,6 +329,20 @@
         @endcan
     </div>
 
+    <!-- Revenue Trend Chart -->
+    @if (Auth::user()->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'Recipt_Payment-list']))
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card chart-card">
+                    <h5 class="card-title text-center dashboard-heading">Monthly Revenue Trend (Last 6 Months)</h5>
+                    <div class="chart-wrapper">
+                        <canvas id="revenueTrendChart" style="width: 100%; height: 350px;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!--Charts-->
     <div class="row mb-4">
         @if (Auth::user()->hasAnyPermission([
@@ -266,11 +374,124 @@
             </div>
         @endif
     </div>
+
+    <!-- Latest Students & Recent Activity -->
+    <div class="row mb-4">
+        @can('Students-list')
+            <div class="col-lg-8 mb-4">
+                <div class="card chart-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="card-title dashboard-heading mb-0">Latest Registered Students</h5>
+                        <a href="{{ route('students.index') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table dashboard-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Grade</th>
+                                    <th>Classroom</th>
+                                    <th>Registered At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($latestStudents as $student)
+                                    <tr>
+                                        <td>{{ $student->name }}</td>
+                                        <td>{{ $student->grade->name ?? 'N/A' }}</td>
+                                        <td>{{ $student->classroom->name ?? 'N/A' }}</td>
+                                        <td>{{ $student->created_at->format('Y-m-d') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        @endcan
+
+        <div class="col-lg-4 mb-4">
+            <div class="card chart-card h-100">
+                <h5 class="card-title dashboard-heading">Recent Activity</h5>
+                <div class="activity-feed mt-3">
+                    @forelse($recentActivities as $activity)
+                        <div class="activity-item">
+                            <div class="d-flex justify-content-between">
+                                <span class="activity-user">{{ $activity->user->name ?? 'System' }}</span>
+                                <span class="activity-time">{{ $activity->created_at->diffForHumans() }}</span>
+                            </div>
+                            <p class="mb-0 text-muted small">{{ $activity->description }}</p>
+                        </div>
+                    @empty
+                        <p class="text-center text-muted">No recent activities found.</p>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
+
 @push('scripts')
-    {{-- Scripts are unchanged --}}
     <script>
+        // Monthly Revenue Trend Chart
+        @if (Auth::user()->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'Recipt_Payment-list']))
+            const ctxTrend = document.getElementById('revenueTrendChart').getContext('2d');
+            new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: {!! json_encode($revenue_trend_labels) !!},
+                    datasets: [{
+                        label: 'Revenue',
+                        data: {!! json_encode($revenue_trend_data) !!},
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#007bff',
+                        pointHoverRadius: 5,
+                        pointRadius: 4,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value) {
+                                    return value.toLocaleString();
+                                }
+                            },
+                            gridLines: {
+                                color: "rgba(0, 0, 0, 0.05)",
+                            }
+                        }],
+                        xAxes: [{
+                            gridLines: {
+                                display: false
+                            }
+                        }]
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                return 'Revenue: ' + tooltipItem.yLabel.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            });
+        @endif
+
         const ctx3 = document.getElementById('canvas3').getContext('2d');
         new Chart(ctx3, {
             type: 'doughnut',
@@ -350,23 +571,25 @@
             const checkBirthInput = document.querySelector('input[name="check_birth"]');
 
             if (birthDateInput && checkBirthInput) {
-                const makeDate = () => {
-                    const date = new Date();
-                    date.setFullYear(new Date().getFullYear()); // Set to current year
-                    date.setMonth(9); // October (months are 0-indexed)
-                    date.setDate(1);
-                    return date;
-                };
-
                 birthDateInput.addEventListener('change', () => {
                     const birthDate = new Date(birthDateInput.value);
-                    const checkDate = new Date(makeDate());
-                    console.log(checkDate);
-                    const diffTime = Math.abs(checkDate - birthDate);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    const years = Math.floor(diffDays / 365);
-                    const months = Math.floor((diffDays % 365) / 30);
-                    const days = (diffDays % 365) % 30;
+                    const now = new Date();
+
+                    let years = now.getFullYear() - birthDate.getFullYear();
+                    let months = now.getMonth() - birthDate.getMonth();
+                    let days = now.getDate() - birthDate.getDate();
+
+                    if (days < 0) {
+                        months--;
+                        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                        days += prevMonth.getDate();
+                    }
+
+                    if (months < 0) {
+                        years--;
+                        months += 12;
+                    }
+
                     checkBirthInput.value = `${years} سنه, ${months} شهر, ${days} يوم`;
                 });
             } else {
