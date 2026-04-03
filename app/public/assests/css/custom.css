@@ -53,6 +53,7 @@ text-transform: capitalize;
 }
 .active-menu{
 background-color: var(--custom_green) !important;
+color:white;
 text-align: center !important;
 }
 .dash-card{

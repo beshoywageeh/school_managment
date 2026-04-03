@@ -23,12 +23,13 @@
 
                         </div>
                         <div class="col">
-                            <lablel>{{ trans('general.choose', ['value' => trans('Recipt_Payments.title')]) }}</label>
+                            <label>{{ trans('general.choose', ['value' => trans('Recipt_Payments.title')]) }}</label>
                                 <select class="form-control" id="payment_type">
                                     <option selected value="">
                                         {{ trans('general.choose', ['value' => trans('Recipt_Payments.title')]) }}</option>
                                     <option value="fee_invoice">{{ trans('Sidebar.fees_invoice') }}</option>
                                     <option value="payment_parts">{{ trans('Sidebar.payment_parts') }}</option>
+                                    <option value="pay_all">{{ trans('Sidebar.pay_all') }}</option>
                                 </select>
                         </div>
                         <!-- Student Info -->
@@ -36,7 +37,7 @@
                             <span class="d-block display-4 border-4"> {{ $Student->name }}</span>
                         </div>
                     </div>
-                   
+
                     <!-- Payment Info -->
                     <div class="block row">
                         <div class="col d-none" id="fee_invoice">
@@ -166,17 +167,24 @@
             let payment_type = document.querySelector("#payment_type"),
                 fee_invoice_div = document.querySelector("#fee_invoice"),
                 payment_parts_div = document.querySelector("#payment_parts");
+                pay_all_div = document.querySelector("#pay_all");
             payment_type.addEventListener('click', function() {
                 if (payment_type.value === "fee_invoice") {
                     fee_invoice_div.classList.remove("d-none");
                     payment_parts_div.classList.add("d-none");
-
+                    pay_all_div.classList.add("d-none");
                 } else if (payment_type.value === "payment_parts") {
                     payment_parts_div.classList.remove("d-none");
                     fee_invoice_div.classList.add("d-none");
-                } else {
+                    pay_all_div.classList.add("d-none");
+                } else if (payment_type.value === "pay_all") {
+                    pay_all_div.classList.remove("d-none");
                     payment_parts_div.classList.add("d-none");
                     fee_invoice_div.classList.add("d-none");
+                } else {
+                    fee_invoice_div.classList.add("d-none");
+                    payment_parts_div.classList.add("d-none");
+                    pay_all_div.classList.add("d-none");
                 }
             });
         </script>

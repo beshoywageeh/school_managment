@@ -44,9 +44,11 @@
                                         <th>{{ trans('stock.opening_balance') }}</th>
                                         <th>{{ trans('stock.opening_date') }}</th>
                                         <th>{{ trans('stock.current_stock') }}</th>
+                                        <th>{{ trans('stock.price') }}</th>
+                                        <th>{{ trans('stock.total_price') }}</th>
                                         <th>{{ trans('general.actions') }}</th>
                                     </tr>
-                                    </theadv>
+                                    </thead>
                                 <tbody>
                                     @forelse ($stocks as $stock)
                                         <tr>
@@ -55,6 +57,9 @@
                                             <td>{{ $stock->opening_stock }}</td>
                                             <td>{{ $stock->opening_stock_date }}</td>
                                             <td>{{ $stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out') }}
+                                            </td>
+                                            <td>{{ number_format($stock->price, 2) }}</td>
+                                            <td>{{ number_format($stock->price * ($stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out')), 2) }}
                                             </td>
                                             <td> <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                 [

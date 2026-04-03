@@ -150,6 +150,8 @@ return [
         ],
         'schedules' => [
             'added' => 'Schedule was added',
+            'auto_generated' => 'Schedule was auto-generated',
+            'cleared' => 'Schedule was cleared',
         ],
     ],
     'actions' => [
@@ -174,5 +176,7 @@ return [
         'inventory_order_added' => 'Inventory Order Added',
         'stock_added_to_inventory' => 'Stock Added To Inventory',
         'receipt_updated_to_paid' => 'Receipt Updated To Paid',
+        'auto_generated' => 'Auto-generated',
+        'cleared' => 'Cleared',
     ],
 ];

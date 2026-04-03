@@ -28,6 +28,12 @@
                 <button class="mt-4 btn btn-primary" wire:click="$emit('print')">
                     <i class="ti ti-print"></i> طباعة
                 </button>
+                <button class="mt-4 btn btn-success" wire:click="autoGenerate">
+                    <i class="ti ti-settings"></i> توليد تلقائي
+                </button>
+                <button class="mt-4 btn btn-danger" wire:click="clearSchedule" onclick="confirm('هل أنت متأكد من مسح الجدول؟') || event.stopImmediatePropagation()">
+                    <i class="ti ti-trash"></i> مسح الجدول
+                </button>
             </div>
         </div>
 

@@ -489,7 +489,7 @@ Route::prefix(LaravelLocalization::setLocale())
                 Route::get('/', 'index')->name('index');
                 Route::post('/store', 'store')->name('store');
                 Route::post('/update', 'update')->name('update');
-                Route::post('/stocks_submit', 'stocks_submit')->name('store');
+                Route::post('/stocks_submit', 'stocks_submit')->name('submit');
                 Route::get('/delete/{id}', 'destroy')->name('destroy');
                 Route::get('/tawreed/{id}', 'new_tawreed_order')->name('tawreed');
             });

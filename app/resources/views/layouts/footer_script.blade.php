@@ -63,11 +63,11 @@
     setInterval(updateDateTime, 1000);
     updateDateTime();
 </script>
-<script>
+{{-- <script>
     $(document).ready(function() {
         $('form').attr('autocomplete', 'off');
     })
-</script>
+</script> --}}
 <script>
     $(document).ready(function() {
         $('th').addClass('font-weight-bolder');

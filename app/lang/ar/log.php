@@ -150,6 +150,8 @@ return [
         ],
         'schedules' => [
             'added' => 'تم إضافة جدول',
+            'auto_generated' => 'تم توليد الجدول تلقائياً',
+            'cleared' => 'تم مسح الجدول',
         ],
     ],
     'actions' => [
@@ -174,5 +176,7 @@ return [
         'inventory_order_added' => 'إضافة طلب جرد',
         'stock_added_to_inventory' => 'إضافة مخزون إلى الجرد',
         'receipt_updated_to_paid' => 'تحديث الإيصال إلى مدفوع',
+        'auto_generated' => 'توليد تلقائي',
+        'cleared' => 'مسح الجدول',
     ],
 ];

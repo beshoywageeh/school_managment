@@ -1,5 +1,5 @@
 <div class="modal fade" id="newItem" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title">
@@ -21,16 +21,25 @@
                                         <tr>
                                             <th><strong>{{ trans('stock.name') }}</strong></th>
                                             <th><strong>{{ trans('stock.opening_balance') }}</strong></th>
+                                            <th><strong>{{ trans('stock.price') }}</strong></th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody data-repeater-list="list_stocks">
                                         <tr data-repeater-item>
                                             <td>
-                                                <input type="text" name="name" class="form-control">
+                                                <input type="text" name="name" list="stocks" class="form-control"/>
+                                                <datalist id="stocks">
+                                                    @foreach ($stocks as $stock)
+                                                        <option value="{{ $stock->name }}">
+                                                    @endforeach
+                                                </datalist>
                                             </td>
                                             <td>
                                                 <input type="number" name="opening_qty" class="form-control">
+                                            </td>
+                                            <td>
+                                                <input type="number" name="price" class="form-control">
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-block"

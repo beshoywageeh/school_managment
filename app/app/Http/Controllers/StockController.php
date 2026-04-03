@@ -25,11 +25,12 @@ class StockController extends Controller
     {
         try {
             $stocks = $request->list_stocks;
-            foreach ($stocks as $stock) {
+            foreach ($stocks as $key => $stock) {
                 stock::create([
                     'name' => $stock['name'],
                     'opening_stock' => $stock['opening_qty'],
                     'opening_stock_date' => date('Y-m-d'),
+                    'price' => $stock['price'],
                     'school_id' => $this->getSchool()->id,
                     'user_id' => auth()->user()->id,
                 ]);
@@ -50,6 +51,7 @@ class StockController extends Controller
             $stock->update([
                 'name' => $request->name,
                 'opening_stock' => $request->quantity,
+                'price' => $request->price,
                 'opening_stock_date' => date('Y-m-d'),
             ]);
             $this->logActivity(trans('log.parents.updated_action'), trans('system_lookup.field_change', ['value' => $request->name]));

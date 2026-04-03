@@ -233,7 +233,7 @@
                         </div>
                         <div class="ml-4">
                             <h3 class="stat-count">{{ number_format($totalInvoiced, 2) }}</h3>
-                            <p class="stat-label">{{ trans('Sidebar.fee_invoice') }} (Total)</p>
+                            <p class="stat-label">{{ trans('Sidebar.fees_invoice') }} (Total)</p>
                         </div>
                         <a href="{{ route('fee-invoice.index') }}" class="stretched-link"></a>
                     </div>
@@ -261,7 +261,7 @@
                         </div>
                         <div class="ml-4">
                             <h3 class="stat-count">{{ number_format($totalInvoiced - $totalPaid, 2) }}</h3>
-                            <p class="stat-label">Pending Balance</p>
+                            <p class="stat-label">{{trans('Sidebar.pending_balance')}}</p>
                         </div>
                     </div>
                 </div>
@@ -329,19 +329,7 @@
         @endcan
     </div>
 
-    <!-- Revenue Trend Chart -->
-    @if (Auth::user()->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'Recipt_Payment-list']))
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card chart-card">
-                    <h5 class="card-title text-center dashboard-heading">Monthly Revenue Trend (Last 6 Months)</h5>
-                    <div class="chart-wrapper">
-                        <canvas id="revenueTrendChart" style="width: 100%; height: 350px;"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+
 
     <!--Charts-->
     <div class="row mb-4">
@@ -375,195 +363,10 @@
         @endif
     </div>
 
-    <!-- Latest Students & Recent Activity -->
-    <div class="row mb-4">
-        @can('Students-list')
-            <div class="col-lg-8 mb-4">
-                <div class="card chart-card h-100">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="card-title dashboard-heading mb-0">Latest Registered Students</h5>
-                        <a href="{{ route('students.index') }}" class="btn btn-sm btn-outline-primary">View All</a>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table dashboard-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Grade</th>
-                                    <th>Classroom</th>
-                                    <th>Registered At</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($latestStudents as $student)
-                                    <tr>
-                                        <td>{{ $student->name }}</td>
-                                        <td>{{ $student->grade->name ?? 'N/A' }}</td>
-                                        <td>{{ $student->classroom->name ?? 'N/A' }}</td>
-                                        <td>{{ $student->created_at->format('Y-m-d') }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        @endcan
-
-        <div class="col-lg-4 mb-4">
-            <div class="card chart-card h-100">
-                <h5 class="card-title dashboard-heading">Recent Activity</h5>
-                <div class="activity-feed mt-3">
-                    @forelse($recentActivities as $activity)
-                        <div class="activity-item">
-                            <div class="d-flex justify-content-between">
-                                <span class="activity-user">{{ $activity->user->name ?? 'System' }}</span>
-                                <span class="activity-time">{{ $activity->created_at->diffForHumans() }}</span>
-                            </div>
-                            <p class="mb-0 text-muted small">{{ $activity->description }}</p>
-                        </div>
-                    @empty
-                        <p class="text-center text-muted">No recent activities found.</p>
-                    @endforelse
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 
-@push('scripts')
-    <script>
-        // Monthly Revenue Trend Chart
-        @if (Auth::user()->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'Recipt_Payment-list']))
-            const ctxTrend = document.getElementById('revenueTrendChart').getContext('2d');
-            new Chart(ctxTrend, {
-                type: 'line',
-                data: {
-                    labels: {!! json_encode($revenue_trend_labels) !!},
-                    datasets: [{
-                        label: 'Revenue',
-                        data: {!! json_encode($revenue_trend_data) !!},
-                        borderColor: '#007bff',
-                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#fff',
-                        pointBorderColor: '#007bff',
-                        pointHoverRadius: 5,
-                        pointRadius: 4,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                callback: function(value) {
-                                    return value.toLocaleString();
-                                }
-                            },
-                            gridLines: {
-                                color: "rgba(0, 0, 0, 0.05)",
-                            }
-                        }],
-                        xAxes: [{
-                            gridLines: {
-                                display: false
-                            }
-                        }]
-                    },
-                    tooltips: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            label: function(tooltipItem, data) {
-                                return 'Revenue: ' + tooltipItem.yLabel.toLocaleString();
-                            }
-                        }
-                    }
-                }
-            });
-        @endif
-
-        const ctx3 = document.getElementById('canvas3').getContext('2d');
-        new Chart(ctx3, {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [{{ $credit }}, {{ $payment_parts }}, {{ $payments }}],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(255, 206, 86, 0.7)',
-                    ],
-                    borderColor: '#fff',
-                    borderWidth: 2,
-                    label: 'Dataset 1'
-                }],
-                labels: [
-                    '{{ trans('Sidebar.credit') }}',
-                    '{{ trans('Sidebar.payment_parts') }}',
-                    '{{ trans('Sidebar.Recipt_Payment') }}'
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        fontColor: "#6c757d",
-                        padding: 20
-                    },
-                },
-                animation: {
-                    animateScale: true,
-                    animateRotate: true
-                }
-            }
-        });
-
-        const ctx4 = document.getElementById('canvas4').getContext('2d');
-        new Chart(ctx4, {
-            type: 'bar',
-            data: {
-                datasets: [{
-                    data: {!! json_encode($chart_data) !!},
-                    backgroundColor: {!! json_encode($chart_bg_colors) !!},
-                    borderColor: {!! json_encode($chart_border_colors) !!},
-                    borderWidth: 1,
-                    borderRadius: 5
-                }],
-                labels: {!! json_encode($chart_labels) !!}
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                legend: {
-                    display: false,
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            autoSkip: false
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
+@push('js')
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

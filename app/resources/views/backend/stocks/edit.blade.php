@@ -37,6 +37,11 @@
                                     id="">
                             </div>
                         </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">{{ trans('    stock.price') }}</label>
+                                <input type="number" value="{{ $stock->price }}" name="price" class="form-control" id="">
+                            </div>
                     </div>
 
 
