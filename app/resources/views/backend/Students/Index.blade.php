@@ -11,14 +11,12 @@
                     <x-Student-header />
                     <div class="table-responsive">
                         @can('Students-list')
-                            <livewire:student-table />
+                            <livewire:students.students />
                         @endcan
-                        @include('backend.Students.import')
                     </div>
-
                 </div>
             </div>
         </div>
-
     </div>
+    @include('backend.Students.import')
 @endsection

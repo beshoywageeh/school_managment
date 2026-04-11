@@ -29,6 +29,7 @@ class My_parents extends Model
         'Father_Birth_Date',
         'Mother_Birth_Date',
         'school_id',
+        'slug',
     ];
 
     public function user()

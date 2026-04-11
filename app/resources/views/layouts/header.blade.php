@@ -38,8 +38,8 @@
 
             <form method="POST" action="{{ route('logout') }}" class="logout_form">
                 @csrf
-                <button type="submit" class="btn">
-                    <i class="text-primary ti-unlock"></i>
+                <button type="submit" class="btn btn-block btn-danger" style="height:7vh">
+                    <i class=" ti-unlock"></i>
                 </button>
             </form>
         </li>

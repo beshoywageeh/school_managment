@@ -5,8 +5,9 @@
     <div class="col text-md-right">
         <div class="btn-group" role="group" aria-label="Basic example">
             @can('Students-create')
-                <a href="{{ route('students.create') }}" class="btn btn-primary"><i class="ti-plus"></i>
-                    {{ trans('general.buttons.create') }}</a>
+            <button type="button" class="btn btn-primary" data-target="#Create_Student" data-toggle="modal"><i
+                    class="ti-plus"></i>
+                {{ trans('general.buttons.create') }}</button>
             @endcan
             @can('Students-Import_Excel')
                 <button type="button" class="btn btn-primary" data-target="#Import_Excel" data-toggle="modal"><i
