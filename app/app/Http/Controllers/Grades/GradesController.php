@@ -51,7 +51,7 @@ class GradesController extends Controller
         try {
             $grade = Grade::create([
                 'name' => $request->Grade_Name,
-                'user_id' => \Auth::Id(),
+                'user_id' => Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
             $grade->users()->attach($request->user_id, ['school_id' => $this->getSchool()->id]);

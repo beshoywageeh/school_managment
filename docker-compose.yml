@@ -12,7 +12,7 @@ services:
     depends_on:
       - db
   nginx:
-    image: nginx:latest
+    image: nginx:stable-alpine
     ports:
       - "8080:80"
     volumes:
@@ -21,11 +21,12 @@ services:
     depends_on:
       - web
   db:
-    image: mysql:8.0
+    image: mariadb:latest
     environment:
-      MYSQL_USER: school_user
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: school_management
+      MARIADB_USER: school_user
+      MARIADB_PASSWORD: secret
+      MARIADB_ROOT_PASSWORD: secret
+      MARIADB_DATABASE: school_management
     ports:
       - "3306:3306"
     volumes:
@@ -35,17 +36,16 @@ services:
     image: phpmyadmin/phpmyadmin:latest
     environment:
       PMA_HOST: db
-      PMA_PORT: 5432
-      PMA_USER: school_user
+      PMA_PORT: 3306
+      PMA_USER: root
       PMA_PASSWORD: secret
+
     ports:
       - "8081:80"
     depends_on:
       - db
-    volumes:
-      - phpmyadmin_data:/var/lib/phpmyadmin
-      - mysql_backups:/backups
+
 volumes:
   dbdata:
-  phpmyadmin_data:
   mysql_backups:
+
