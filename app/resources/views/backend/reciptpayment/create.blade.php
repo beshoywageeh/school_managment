@@ -29,6 +29,8 @@
                                         {{ trans('general.choose', ['value' => trans('Recipt_Payments.title')]) }}</option>
                                     <option value="fee_invoice">{{ trans('Sidebar.fees_invoice') }}</option>
                                     <option value="payment_parts">{{ trans('Sidebar.payment_parts') }}</option>
+                                    <option value="clothes">{{ trans('Sidebar.clothes') }}</option>
+                                    <option value="books">{{ trans('Sidebar.books') }}</option>
                                     <option value="pay_all">{{ trans('Sidebar.pay_all') }}</option>
                                 </select>
                         </div>
@@ -134,6 +136,98 @@
 
                             </table>
                         </div>
+                        <div class="col d-none" id="clothes">
+                            <table class="table table-bordered table-sm">
+                                <tr>
+                                    <th>{{ trans('general.date') }}</th>
+                                    <th>{{ trans('fees.desc') }}</th>
+                                    <th>{{ trans('Recipt_Payments.amount') }}</th>
+                                    <th></th>
+                                </tr>
+                                @forelse($clothesOrders as $order)
+                                    <form id="form-clothes-{{ $order->id }}" autocomplete="off" class="max-w-full"
+                                        action="{{ route('receipt-payment.pay-clothes') }}" method="post">
+
+                                        @csrf
+                                        <tr>
+                                            <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                            <input type="hidden" value="{{ $Student->id }}" name="student_id">
+
+                                            <td>{{ $order->date }}</td>
+                                            <td>{{ trans('Sidebar.clothes') }} - {{ $order->auto_number }}</td>
+                                            <td>
+                                                @php
+                                                    $totalAmount = $order->stocks->sum(function($stock) {
+                                                        return $stock->pivot->quantity_out * $stock->sales_price;
+                                                    });
+                                                @endphp
+                                                {{ $totalAmount }}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-success btn-block"
+                                                    type="submit">{{ trans('general.full_pay') }}</button>
+                                            </td>
+                                        </tr>
+
+                                    </form>
+
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="alert alert-info">
+                                            {{ trans('general.noDataToShow') }}
+                                        </td>
+
+                                    </tr>
+                                @endforelse
+
+                            </table>
+                        </div>
+                        <div class="col d-none" id="books">
+                            <table class="table table-bordered table-sm">
+                                <tr>
+                                    <th>{{ trans('general.date') }}</th>
+                                    <th>{{ trans('fees.desc') }}</th>
+                                    <th>{{ trans('Recipt_Payments.amount') }}</th>
+                                    <th></th>
+                                </tr>
+                                @forelse($bookOrders as $order)
+                                    <form id="form-books-{{ $order->id }}" autocomplete="off" class="max-w-full"
+                                        action="{{ route('receipt-payment.pay-books') }}" method="post">
+
+                                        @csrf
+                                        <tr>
+                                            <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                            <input type="hidden" value="{{ $Student->id }}" name="student_id">
+
+                                            <td>{{ $order->date }}</td>
+                                            <td>{{ trans('Sidebar.books') }} - {{ $order->auto_number }}</td>
+                                            <td>
+                                                @php
+                                                    $totalAmount = $order->stocks->sum(function($stock) {
+                                                        return $stock->pivot->quantity_out * $stock->sales_price;
+                                                    });
+                                                @endphp
+                                                {{ $totalAmount }}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-success btn-block"
+                                                    type="submit">{{ trans('general.full_pay') }}</button>
+                                            </td>
+                                        </tr>
+
+                                    </form>
+
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="alert alert-info">
+                                            {{ trans('general.noDataToShow') }}
+                                        </td>
+
+                                    </tr>
+                                @endforelse
+
+                            </table>
+                        </div>
                     </div>
 
                     <div class="row">
@@ -166,24 +260,46 @@
         <script>
             let payment_type = document.querySelector("#payment_type"),
                 fee_invoice_div = document.querySelector("#fee_invoice"),
-                payment_parts_div = document.querySelector("#payment_parts");
+                payment_parts_div = document.querySelector("#payment_parts"),
+                clothes_div = document.querySelector("#clothes"),
+                books_div = document.querySelector("#books"),
                 pay_all_div = document.querySelector("#pay_all");
             payment_type.addEventListener('click', function() {
                 if (payment_type.value === "fee_invoice") {
                     fee_invoice_div.classList.remove("d-none");
                     payment_parts_div.classList.add("d-none");
+                    clothes_div.classList.add("d-none");
+                    books_div.classList.add("d-none");
                     pay_all_div.classList.add("d-none");
                 } else if (payment_type.value === "payment_parts") {
                     payment_parts_div.classList.remove("d-none");
                     fee_invoice_div.classList.add("d-none");
+                    clothes_div.classList.add("d-none");
+                    books_div.classList.add("d-none");
+                    pay_all_div.classList.add("d-none");
+                } else if (payment_type.value === "clothes") {
+                    clothes_div.classList.remove("d-none");
+                    fee_invoice_div.classList.add("d-none");
+                    payment_parts_div.classList.add("d-none");
+                    books_div.classList.add("d-none");
+                    pay_all_div.classList.add("d-none");
+                } else if (payment_type.value === "books") {
+                    books_div.classList.remove("d-none");
+                    fee_invoice_div.classList.add("d-none");
+                    payment_parts_div.classList.add("d-none");
+                    clothes_div.classList.add("d-none");
                     pay_all_div.classList.add("d-none");
                 } else if (payment_type.value === "pay_all") {
                     pay_all_div.classList.remove("d-none");
                     payment_parts_div.classList.add("d-none");
                     fee_invoice_div.classList.add("d-none");
+                    clothes_div.classList.add("d-none");
+                    books_div.classList.add("d-none");
                 } else {
                     fee_invoice_div.classList.add("d-none");
                     payment_parts_div.classList.add("d-none");
+                    clothes_div.classList.add("d-none");
+                    books_div.classList.add("d-none");
                     pay_all_div.classList.add("d-none");
                 }
             });

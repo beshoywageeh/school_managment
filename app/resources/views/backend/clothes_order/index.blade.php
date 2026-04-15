@@ -2,7 +2,7 @@
 @section('title')
     @if ($type == 1)
         {{ trans('stock.income_order') }} : {{ trans('sidebar.clothes') }}
-    @elseif ($type == 2)
+    @elseif ($type == 'sales')
         {{ trans('stock.outcome_order') }}
     @elseif ($type == 3)
         {{ trans('stock.inventory_order') }}
@@ -24,7 +24,7 @@
                                         <a href="{{ route('clothes_order.tawreed') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.income_order') }}</strong></a>
                                     @endcan
-                                @elseif ($type == 2)
+                                @elseif ($type == 'sales')
                                     @can('clothes-outcome_order')
                                         <a href="{{ route('clothes_out_order.create') }}"
                                             class="px-4 btn btn-primary"><strong>{{ trans('stock.outcome_order') }}</strong></a>
@@ -49,7 +49,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>{{ trans('orders.num') }}</th>
-                                        @if ($type == 2)
+                                        @if ($type == 'sales')
                                             <th>{{ trans('student.name') }}</th>
                                         @endif
                                         <th>{{ trans('orders.product_count') }}</th>
@@ -65,15 +65,15 @@
                                             <td><a class="btn btn-outline-primary btn-sm"
                                                     target="_blank"href="{{ route('clothes_order.show', $order->id) }}">
                                                     {{ $order->auto_number }}</a>
-                                                @if ($order->is_payed == 0 && $order->type == 2)
+                                                @if ($order->status == 'notpayed' && $order->type == 'sales')
                                                     <span
                                                         class="badge badge-danger">{{ trans('clothes.not_payed') }}</span>
                                                 @endif
-                                                @if ($order->is_payed == 1 && $order->type == 2)
+                                                @if ($order->status == 'payed' && $order->type == 'sales')
                                                     <span class="badge badge-success">{{ trans('clothes.payed') }}</span>
                                                 @endif
                                             </td>
-                                            @if ($order->type == 2)
+                                            @if ($order->type == 'sales')
                                                 <th>{{ $order->students->name }}</th>
                                             @endif
 
@@ -83,7 +83,7 @@
                                             <td>{{ $order->updated_at ? $order->updated_at->format('Y-m-d') : '' }}
                                             </td>
                                             <td>
-                                                @if ($type == 1)
+                                                @if ($type == 'sales' && $order->status == 'payed')
                                                     <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                         [
                                                             'type' => 'link',
@@ -102,8 +102,8 @@
                                                         ],
                                                     ]" />
                                                 @endif
-                                                @if ($order->is_payed == 0)
-                                                    @if ($type == 2)
+                                                @if ($order->status == 'notpayed' && $order->type == 'sales')
+                                                    @if ($type == 'sales')
                                                         <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                                             [
                                                                 'type' => 'link',

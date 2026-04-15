@@ -108,7 +108,7 @@ class FinancialService
                     STR_PAD_LEFT,
                 )
                 : '000001',
-            'type' => '2',
+            'type' => 'sales',
             'date' => date('Y-m-d'),
             'student_id' => $student->id,
             'school_id' => auth()->user()->school_id,
@@ -144,7 +144,7 @@ class FinancialService
                     STR_PAD_LEFT,
                 )
                 : '000001',
-            'type' => '2',
+            'type' => 'sales',
             'date' => date('Y-m-d'),
             'student_id' => $student->id,
             'isset' => 1,
@@ -263,7 +263,7 @@ class FinancialService
 
     public function Fund_Account(
         $school,
-        $exchange,
+        $exchange = null,
         $Credit = 0.0,
         $Debit = 0.0,
         $receipt = null,
@@ -273,10 +273,9 @@ class FinancialService
         $fund_account->user_id = auth()->user()->id;
         $fund_account->school_id = $school->id;
         $fund_account->exchange_bond_id = $exchange;
-        $fund_account->receipt_id = $receipt;
+        $fund_account->receipt_id = is_object($receipt) ? $receipt->id : $receipt;
         $fund_account->Credit = $Credit;
         $fund_account->Debit = $Debit;
         $fund_account->save();
-        // return $receipt;
     }
 }

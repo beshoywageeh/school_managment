@@ -55,18 +55,19 @@ class StudentsController extends Controller
 
         try {
             $data = $StudentRegeister->StudentRegeister($request);
+            $student = $data['student'];
 
             $school_fee = DB::table('school__fees')
-                ->where('academic_year_id', $data['student']->acadmiecyear_id)
-                ->where('grade_id', $data['student']->grade_id)
-                ->where('classroom_id', $data['student']->classroom_id)
+                ->where('academic_year_id', $student->acadmiecyear_id)
+                ->where('grade_id', $student->grade_id)
+                ->where('classroom_id', $student->classroom_id)
                 ->get();
             // dd($school_fee);
             foreach ($school_fee as $fee) {
                 $StudentAccount->FeeInvoice(
                     $student,
                     $fee->id,
-                    $acc_year->id,
+                    $student->acadmiecyear_id,
                     $this->getSchool()->id,
                 );
                 // Student Account Service

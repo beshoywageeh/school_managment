@@ -146,10 +146,10 @@ class PaymentPartsController extends Controller
             DB::beginTransaction();
             $part = PaymentParts::findOrFail($request->id);
             $check = PaymentParts::where('school_fees_id', $part->school_fees_id)->where('student_id', $part->student_id)->get();
-            $fee = Fee_invoice::where('school_fee_id', $part->school_fees_id)->where('student_id', $part->student_id)->where('status', '0')->with('fees')->first();
+            $fee = Fee_invoice::where('school_fee_id', $part->school_fees_id)->where('student_id', $part->student_id)->where('status', 'notpayed')->with('fees')->first();
             $fee_parts = PaymentParts::where('school_fees_id', $part->school_fees_id)->where('student_id', $part->student_id)->get();
             $student = Student::findOrFail($request->student_id);
-            $currentYear = acadmice_year::where('status', '0 ')->firstOrFail();
+            $currentYear = acadmice_year::where('status', '0')->firstOrFail();
 
             if ($request->amount != $part->amount) {
                 // Handling partial payments
@@ -163,7 +163,7 @@ class PaymentPartsController extends Controller
                 $part->update(['status' => 'payed']);
                 $totalAmount = $request->amount;
                 $receipt = $service->createReceipt($totalAmount, $student, $currentYear->id, $this->GetSchool()->id);
-                $service->CreateStudentAccount($student, $receipt->id, $currentYear->id, 'payment', $part->amount);
+                $service->CreateStudentAccount($student, $receipt->id, $currentYear->id, 'payment', 0.0, $part->amount, $receipt);
                 if ($fee_parts->sum('amount') == $check->sum('amount')) {
                     $fee->update(['status' => 'payed']);
                 }
@@ -175,7 +175,7 @@ class PaymentPartsController extends Controller
                 $part->update(['status' => 'payed']);
                 DB::commit();
 
-                return redirect()->route('receipt-payment.print', $receipt->id);
+                return redirect()->route('payment-parts.index');
             }
             DB::commit();
             session()->flash('success', trans('general.success'));

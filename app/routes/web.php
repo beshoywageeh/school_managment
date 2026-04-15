@@ -242,6 +242,8 @@ Route::prefix(LaravelLocalization::setLocale())
                     Route::get('/{id?}/show', 'show')->name('show');
                     Route::get('/{id?}/print', 'print')->name('print');
                     Route::get('/payall', 'payall');
+                    Route::post('/pay-clothes', 'payClothes')->name('pay-clothes');
+                    Route::post('/pay-books', 'payBooks')->name('pay-books');
                 });
             Route::prefix('except-fee')
                 ->name('except-fee.')

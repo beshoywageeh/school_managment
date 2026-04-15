@@ -18,15 +18,16 @@ class ClothesOrderController extends Controller
     {
         $school = $this->getSchool();
 
-        $validTypes = [1, 2, 3];
+        $validTypes = [1, 2, 3, 'sales'];
         if (! in_array($type, $validTypes)) {
             abort(404);
         }
 
         $orders = clothes_order::where('school_id', $school->id)->where('type', $type)
-            ->with(['stocks', $type == 2 ? 'students' : null])
+            ->with(['stocks', $type == 'sales' ? 'students' : null])
             ->get();
 
+        // return $orders;
         return view('backend.clothes_order.index', get_defined_vars());
     }
 
@@ -340,10 +341,10 @@ class ClothesOrderController extends Controller
         try {
             $school = $this->getSchool();
             $order = clothes_order::findorfail($id);
-            $order->update(['is_payed' => 1]);
+            $order->update(['status' => 'payed']);
             $this->logActivity(trans('log.clothes_order.receipt_updated_to_paid_action'), trans('log.clothes_order.receipt_updated_to_paid', ['order_number' => $order->auto_number]));
 
-            return redirect()->route('clothes_order.index', ['type' => 2])->with('info', 'تم الدفع بنجاح');
+            return redirect()->route('clothes_order.index', ['type' => 'sales'])->with('info', 'تم الدفع بنجاح');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

@@ -210,7 +210,7 @@
                             @endcan
                             @can('clothes-outcome_order')
                                 <li> <a
-                                        href="{{ route('clothes_order.index', ['type' => '2']) }}">{{ trans('stock.outcome_order') }}</a>
+                                        href="{{ route('clothes_order.index', ['type' => 'sales']) }}">{{ trans('stock.outcome_order') }}</a>
                                 </li>
                             @endcan
                             @can('clothes-inventory_order')
