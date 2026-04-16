@@ -28,7 +28,7 @@ class Students extends Component
 
     public $classroom_id = null;
 
-    public $joinDateFrom = null;
+    public $birth_date_filter = null;
 
     public $joinDateTo = null;
 
@@ -65,11 +65,13 @@ class Students extends Component
 
     public $check_birth = '';
 
+    public $check_birth_store = '';
+
     protected $queryString = [
         'search' => ['except' => ''],
         'grade_id' => ['except' => null],
         'classroom_id' => ['except' => null],
-        'joinDateFrom' => ['except' => null],
+        'birth_date_filter' => ['except' => null],
         'joinDateTo' => ['except' => null],
         'sortField' => ['except' => 'students.name'],
         'sortDirection' => ['except' => 'asc'],
@@ -78,7 +80,7 @@ class Students extends Component
 
     public function updating($name)
     {
-        if (in_array($name, ['search', 'grade_id', 'classroom_id', 'joinDateFrom', 'joinDateTo', 'perPage'])) {
+        if (in_array($name, ['search', 'grade_id', 'classroom_id', 'birth_date_filter', 'joinDateTo', 'perPage'])) {
             $this->resetPage();
         }
     }
@@ -111,8 +113,11 @@ class Students extends Component
             $diff = $birthDate->diff($targetDate);
 
             $this->check_birth = $diff->y.' '.trans('student.year').', '.
-                                 $diff->m.' '.trans('student.month').', '.
-                                 $diff->d.' '.trans('student.day');
+                $diff->m.' '.trans('student.month').', '.
+                $diff->d.' '.trans('student.day');
+            $this->check_birth_store = $diff->y.' - '.
+                $diff->m.' - '.
+                $diff->d;
         } catch (\Exception $e) {
             $this->check_birth = '';
         }
@@ -227,7 +232,7 @@ class Students extends Component
                 'join_date' => now(),
                 'acadmiecyear_id' => $academicYear->id,
                 'slug' => Str::slug($this->student_name).'-'.mt_rand(1000, 9999),
-                'birth_at_begin' => $this->check_birth,
+                'birth_at_begin' => $this->check_birth_store,
             ]);
 
             // Financial Services Integration
@@ -268,7 +273,6 @@ class Students extends Component
             $this->resetForm();
             $this->dispatch('close-modal', id: 'Create_Student');
             session()->flash('success', trans('general.Message.Success'));
-
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
@@ -316,8 +320,8 @@ class Students extends Component
             ->when($this->classroom_id, function ($query) {
                 $query->where('students.classroom_id', $this->classroom_id);
             })
-            ->when($this->joinDateFrom, function ($query) {
-                $query->whereDate('students.join_date', '>=', Carbon::parse($this->joinDateFrom));
+            ->when($this->birth_date_filter, function ($query) {
+                $query->whereDate('students.birth_date', '>=', Carbon::parse($this->birth_date_filter));
             })
             ->when($this->joinDateTo, function ($query) {
                 $query->whereDate('students.join_date', '<=', Carbon::parse($this->joinDateTo));

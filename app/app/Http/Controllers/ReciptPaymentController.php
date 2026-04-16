@@ -67,7 +67,7 @@ class ReciptPaymentController extends Controller
                 ->where('status', 'notpayed')
                 ->with('stocks')
                 ->get();
-
+            // return $clothesOrders;
             $bookOrders = bookSheets_order::where('student_id', $id)
                 ->where('status', 'notpayed')
                 ->with('stocks')

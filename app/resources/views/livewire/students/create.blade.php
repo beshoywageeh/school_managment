@@ -156,7 +156,7 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="parent_name_input"><strong>{{ trans('Parents.Father_Name') }}</strong></label>
+                                            <label for="parent_name_input"><strong>{{ trans('Parents.father-name') }}</strong></label>
                                             <input list="parents_list" type="text" wire:model.live.debounce.300ms="parent_name_input" class="form-control @error('parent_name_input') is-invalid @enderror" id="parent_name_input" placeholder="{{ trans('student.choose_parent') }}">
                                             <datalist id="parents_list">
                                                 @foreach ($this->parents as $parent)

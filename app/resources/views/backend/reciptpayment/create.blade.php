@@ -30,7 +30,7 @@
                                     <option value="fee_invoice">{{ trans('Sidebar.fees_invoice') }}</option>
                                     <option value="payment_parts">{{ trans('Sidebar.payment_parts') }}</option>
                                     <option value="clothes">{{ trans('Sidebar.clothes') }}</option>
-                                    <option value="books">{{ trans('Sidebar.books') }}</option>
+                                    <option value="books">{{ trans('Sidebar.books_sheets') }}</option>
                                     <option value="pay_all">{{ trans('Sidebar.pay_all') }}</option>
                                 </select>
                         </div>
@@ -136,7 +136,7 @@
 
                             </table>
                         </div>
-                        <div class="col d-none" id="clothes">
+                        <div class="col d-none" id="clothe">
                             <table class="table table-bordered table-sm">
                                 <tr>
                                     <th>{{ trans('general.date') }}</th>
@@ -146,7 +146,7 @@
                                 </tr>
                                 @forelse($clothesOrders as $order)
                                     <form id="form-clothes-{{ $order->id }}" autocomplete="off" class="max-w-full"
-                                        action="{{ route('receipt-payment.pay-clothes') }}" method="post">
+                                        action="{{ route('clothes_order.pay', $order->id) }}" method="get">
 
                                         @csrf
                                         <tr>
@@ -200,7 +200,7 @@
                                             <input type="hidden" value="{{ $Student->id }}" name="student_id">
 
                                             <td>{{ $order->date }}</td>
-                                            <td>{{ trans('Sidebar.books') }} - {{ $order->auto_number }}</td>
+                                            <td>{{ trans('Sidebar.books_sheets') }} - {{ $order->auto_number }}</td>
                                             <td>
                                                 @php
                                                     $totalAmount = $order->stocks->sum(function($stock) {
@@ -227,6 +227,9 @@
                                 @endforelse
 
                             </table>
+                        </div>
+                        <div class="col d-none" id="pay_all">
+                            <p class="alert alert-info">{{ trans('general.noDataToShow') }}</p>
                         </div>
                     </div>
 
@@ -258,50 +261,39 @@
 
     @push('scripts')
         <script>
-            let payment_type = document.querySelector("#payment_type"),
-                fee_invoice_div = document.querySelector("#fee_invoice"),
-                payment_parts_div = document.querySelector("#payment_parts"),
-                clothes_div = document.querySelector("#clothes"),
-                books_div = document.querySelector("#books"),
-                pay_all_div = document.querySelector("#pay_all");
-            payment_type.addEventListener('click', function() {
-                if (payment_type.value === "fee_invoice") {
-                    fee_invoice_div.classList.remove("d-none");
-                    payment_parts_div.classList.add("d-none");
-                    clothes_div.classList.add("d-none");
-                    books_div.classList.add("d-none");
-                    pay_all_div.classList.add("d-none");
-                } else if (payment_type.value === "payment_parts") {
-                    payment_parts_div.classList.remove("d-none");
-                    fee_invoice_div.classList.add("d-none");
-                    clothes_div.classList.add("d-none");
-                    books_div.classList.add("d-none");
-                    pay_all_div.classList.add("d-none");
-                } else if (payment_type.value === "clothes") {
-                    clothes_div.classList.remove("d-none");
-                    fee_invoice_div.classList.add("d-none");
-                    payment_parts_div.classList.add("d-none");
-                    books_div.classList.add("d-none");
-                    pay_all_div.classList.add("d-none");
-                } else if (payment_type.value === "books") {
-                    books_div.classList.remove("d-none");
-                    fee_invoice_div.classList.add("d-none");
-                    payment_parts_div.classList.add("d-none");
-                    clothes_div.classList.add("d-none");
-                    pay_all_div.classList.add("d-none");
-                } else if (payment_type.value === "pay_all") {
-                    pay_all_div.classList.remove("d-none");
-                    payment_parts_div.classList.add("d-none");
-                    fee_invoice_div.classList.add("d-none");
-                    clothes_div.classList.add("d-none");
-                    books_div.classList.add("d-none");
-                } else {
-                    fee_invoice_div.classList.add("d-none");
-                    payment_parts_div.classList.add("d-none");
-                    clothes_div.classList.add("d-none");
-                    books_div.classList.add("d-none");
-                    pay_all_div.classList.add("d-none");
-                }
+            document.addEventListener('DOMContentLoaded', function() {
+                let payment_type = document.querySelector("#payment_type");
+                let fee_invoice_div = document.querySelector("#fee_invoice");
+                let payment_parts_div = document.querySelector("#payment_parts");
+                let clothes_div = document.querySelector("#clothe");
+                let books_div = document.querySelector("#books");
+                let pay_all_div = document.querySelector("#pay_all");
+
+                if (!payment_type) return;
+
+                payment_type.addEventListener('change', function() {
+                    let value = payment_type.value;
+
+                    // Hide all first
+                    if (fee_invoice_div) fee_invoice_div.classList.add("d-none");
+                    if (payment_parts_div) payment_parts_div.classList.add("d-none");
+                    if (clothes_div) clothes_div.classList.add("d-none");
+                    if (books_div) books_div.classList.add("d-none");
+                    if (pay_all_div) pay_all_div.classList.add("d-none");
+
+                    // Show selected
+                    if (value === "fee_invoice" && fee_invoice_div) {
+                        fee_invoice_div.classList.remove("d-none");
+                    } else if (value === "payment_parts" && payment_parts_div) {
+                        payment_parts_div.classList.remove("d-none");
+                    } else if (value === "clothes" && clothes_div) {
+                        clothes_div.classList.remove("d-none");
+                    } else if (value === "books" && books_div) {
+                        books_div.classList.remove("d-none");
+                    } else if (value === "pay_all" && pay_all_div) {
+                        pay_all_div.classList.remove("d-none");
+                    }
+                });
             });
         </script>
     @endpush

@@ -17,13 +17,13 @@ class BookSheetsOrderController extends Controller
     public function index($type)
     {
         $school = $this->getSchool();
-        $relations = ($type == 2) ? ['stocks', 'students'] : ['stocks'];
+        $relations = ($type == 'sales') ? ['stocks', 'students'] : ['stocks'];
         $orders = bookSheets_order::where('school_id', $school->id)
             ->where('type', $type)
             ->with($relations)
             ->get();
 
-        return view('backend.book_sheets_order.index', compact('orders', 'type'));
+        return view('backend.book_sheets_order.index', compact('orders', 'type', 'school'));
     }
 
     public function create_tawreed()

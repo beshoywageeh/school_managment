@@ -29,8 +29,8 @@
                     </select>
                 </div>
                 <div class="col">
-                    <label>{{ trans('student.join_date_from') }}</label>
-                    <input wire:model.live="joinDateFrom" type="date" class="form-control">
+                    <label>{{ trans('student.birth_date') }}</label>
+                    <input wire:model.live="birth_date_filter" type="date" class="form-control">
                 </div>
                 <div class="col">
                     <label>{{ trans('student.join_date_to') }}</label>
@@ -73,7 +73,7 @@
                     <tbody>
                         @forelse($students as $student)
                             <tr>
-                                <td>{{ $student->name }}</td>
+                                <td>{{ $student->name.' '.$student->parent_name }}</td>
                                 <td>{{ $student->parent_name }}</td>
                                 <td>{{ $student->grade_name }}</td>
                                 <td>{{ $student->classroom_name }}</td>
