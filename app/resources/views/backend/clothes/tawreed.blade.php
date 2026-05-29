@@ -54,7 +54,7 @@
                                     <th>{{ trans('stock.manual_date') }}</th>
                                 @endif
                                 <th>{{ trans('stock.quantity') }}</th>
-                                <th>{{ trans('General.delete') }}</th>
+                                <th>{{ trans('general.delete') }}</th>
                             </tr>
                         </thead>
                         <tbody data-repeater-list="List_stocks">
@@ -67,7 +67,7 @@
                                                 {{ $stock->name }}
                                             </option>
                                         @empty
-                                            <option value="">{{ trans('General.noDataToShow') }}</option>
+                                            <option value="">{{ trans('general.noDataToShow') }}</option>
                                         @endforelse
                                     </select>
                                 </td>
@@ -76,7 +76,7 @@
                                         <input type="text" name="manual_num" class="form-control" />
                                     </td>
                                     <td>
-                                        <input type="date" name="manual_date" class="form-control" />
+                                        <input type="date" name="manual_date" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                                     </td>
                                 @endif
                                 <td>
@@ -84,7 +84,7 @@
                                 </td>
                                 <td>
                                     <input class="btn btn-danger btn-block" data-repeater-delete type="button"
-                                        value="{{ trans('General.delete') }}" />
+                                        value="{{ trans('general.delete') }}" />
                                 </td>
                             </tr>
                         </tbody>

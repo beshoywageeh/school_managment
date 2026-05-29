@@ -131,8 +131,8 @@
                         <th>#</th>
                         <th>{{ trans('stock.name') }}</th>
                         <th>{{ trans('stock.quantity') }}</th>
-                        <th>{{ trans('General.created_at') }}</th>
-                        <th>{{ trans('General.updated_at') }}</th>
+                        <th>{{ trans('general.created_at') }}</th>
+                        <th>{{ trans('general.updated_at') }}</th>
                     </tr>
                     @forelse ($data['stocks'] as $stock)
                         <tr>

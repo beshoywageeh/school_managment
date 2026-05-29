@@ -61,7 +61,7 @@
             <tr>
                 <th>#</th>
                 <th>{{ trans('stock.name') }}</th>
-                <th>{{ trans('grades.name') }}</th>
+                <th>{{ trans('Grades.name') }}</th>
                 <th>{{ trans('class_rooms.Name') }}</th>
                 <th>{{ trans('stock.current_stock') }}</th>
             </tr>

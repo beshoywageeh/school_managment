@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>فاتورة | @yield('title')</title>
-    <link rel="stylesheet" href="{{ asset('assests/css/bootstrap-rtl.min.css') }}">
 </head>
 
 <style>
@@ -62,27 +61,30 @@
 
 <body>
     <div class="text-center container text-middle">
-        <div class="my-2 row no-print">
-            <div class="col"><a href="{{ url()->previous() }}" class="btn btn-primary">{{ trans('report.back') }}</a>
+        <div class="my-2 flex justify-between items-center no-print">
+            <div>
+                <a href="{{ url()->previous() }}"
+                    class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">{{ trans('report.back') }}</a>
             </div>
-            <div class="col">
-                <h6 class="alert alert-secondary">{{ now()->format('Y-m-d s : i : g A') }}</h6>
+            <div>
+                <h6 class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg">{{ now()->format('Y-m-d s : i : g A') }}</h6>
             </div>
-            <div class="col">
-                <button class="btn btn-success" onclick="window.print();">{{ trans('report.print') }}</button>
+            <div>
+                <button class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                    onclick="window.print();">{{ trans('report.print') }}</button>
             </div>
         </div>
-        <div class="row" style="margin-bottom: 5px; border-bottom:1px solid black;">
-            <div class="col">{!! $school->heading_right !!}</div>
-            <div class="col"></div>
-            <div class="col">
+        <div class="flex justify-between items-center mb-2 pb-2" style="border-bottom:1px solid black;">
+            <div class="flex-1">{!! $school->heading_right !!}</div>
+            <div class="flex-1"></div>
+            <div class="flex-1">
                 @if ($school->image == null)
-                    <img class="img-fluid w-25 rounded-lg" style="width: 104px"
-                        src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
+                    <img class="w-1/4 rounded-lg" style="width: 104px" src="{{ asset('assests/images/loop_labs.png') }}"
+                        alt="{{ $school->name }}"/>
                 @else
-                    <img class="img-fluid w-25 rounded-lg"
+                    <img class="w-1/4 rounded-lg"
                         src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                        alt="{{ $school->name }}">
+                        alt="{{ $school->name }}"/>
                 @endif
             </div>
         </div>

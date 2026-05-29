@@ -1,101 +1,67 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('stock.income_order') }}
+    {{ trans('stock.outcome_order') }}
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="row mb-30">
-        <div class="col">
-            <div class="card">
-                <form action="{{ route('bookSheetsOrder.store_sarf') }}"method="post" autocomplete="off">
-                    @csrf
-
-                    <div class="card-header">
-                        <div class="text-center row">
-                            <div class="col">
-                                <h6>الرقم : {{ $auto_number }}</h6>
-                            </div>
-                            <div class="col">
-                                <h6>النوع : {{ trans('stock.income_order') }}</h6>
-                            </div>
-                            <div class="col">
-                                <h6>التاريخ : {{ date('Y-m-d') }}</h6>
-                            </div>
-                            <div class="col">
-                                <h6>الوقت : {{ date('g:i:s') }}</h6>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="">{{ trans('student.name') }}</label>
-                                    <select name="student_id" id="student" class="select2 student">
-                                        <option value="" selected disabled>{{ trans('general.select') }}</option>
-                                        @forelse ($students as $student)
-                                            <option value="{{ $student->id }}">{{ $student->name }}</option>
-                                        @empty
-                                        @endforelse
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <table class="table text-center table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>{{ trans('stock.name') }}</th>
-                                    <th>{{ trans('stock.quantity') }}</th>
-                                    <th>{{ trans('clothes.sales_price') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody id="invoice_data">
-                                <tr class="alert alert-warning">
-                                    <th colspan="4">{{ trans('general.choose_student') }}</th>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="card-footer">
-                        <div class="text-md-right">
-                            <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
-                        </div>
-                    </div>
-                </form>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-4 border-b border-gray-100">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 text-center">
+                <div>
+                    <h6 class="text-gray-700 font-medium">الرقم : {{ $auto_number }}</h6>
+                </div>
+                <div>
+                    <h6 class="text-gray-700 font-medium">النوع : {{ trans('stock.outcome_order') }}</h6>
+                </div>
+                <div>
+                    <h6 class="text-gray-700 font-medium">التاريخ : {{ date('Y-m-d') }}</h6>
+                </div>
+                <div>
+                    <h6 class="text-gray-700 font-medium">الوقت : {{ date('g:i:s') }}</h6>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.name') }}</label>
+                    <select name="student_id" id="student" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 select2 student">
+                        <option value="" selected disabled>{{ trans('general.select') }}</option>
+                        @forelse ($students as $student)
+                            <option value="{{ $student->id }}">{{ $student->name }}</option>
+                        @empty
+                        @endforelse
+                    </select>
+                </div>
             </div>
         </div>
+        <form action="{{ route('bookSheetsOrder.store_sarf') }}"method="post" autocomplete="off">
+            @csrf
+            <div class="p-6">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm text-center">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">#</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('stock.name') }}</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('stock.quantity') }}</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('clothes.sales_price') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoice_data" class="divide-y divide-gray-100">
+                            <tr class="bg-yellow-50">
+                                <th colspan="4" class="px-4 py-4 text-yellow-700">{{ trans('general.choose_student') }}</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end">
+                <button class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium" type="submit">{{ trans('general.Submit') }}</button>
+            </div>
+        </form>
     </div>
-@endsection
 @push('scripts')
     <script>
         $(document).ready(function() {
-            const table = document.querySelector('#invoice_data');
-            $("#student").on("select2:select", function() {
-                table.innerHTML =
-                    '<tr><td colspan="4"><img src="{{ asset('assests/images/ajax-loader.gif') }}"/></td></tr>';
-                var select_val = $(this).val();
-                $.ajax({
-                    url: "{{ URL::to('/ajax/get_books_sheets/') }}/" + select_val,
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data) {
-                        table.innerHTML = '';
-                        if (data.length === 0) {
-                            table.innerHTML =
-                                '<tr><td colspan="4" class="alert alert-danger">{{ trans('general.noDataToShow') }}</td></tr>';
-                        } else {
-                            $.each(data, (index, item) => {
-                                var row = `<tr>
-    <td>${index + 1}</td>
-    <td><input type="hidden" name="id[]" value="${item.id}">${item.name}</td>
-    <td>${item.sales_price}</td>
-    <td><input class="form-control" name="quantity[]" value="1" type="number"/></td>
-</tr>`;
-                                table.innerHTML += row;
-                            });
-                        };
-                    }
-                });
-            });
+            $('.select2').select2();
         });
     </script>
 @endpush
+@endsection

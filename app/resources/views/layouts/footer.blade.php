@@ -1,20 +1,15 @@
-  <footer class="p-4 fixed-bottom-footer bg-white">
-      <div class="row">
-          <div class="col-md-6">
-              <div class="text-center text-md-left">
-                  <p class="mb-0">
-                      <bdi> {{ trans('footer.rights') }}</bdi> © {{ \carbon\carbon::now()->year }}
-                  </p>
-              </div>
-          </div>
-          <div class="col-md-6">
-              <ul class="text-center text-md-right">
-
-                  <li class="list-inline-item">
-                      <a href="https://www.facebook.com/LoopLabsDev" target="_blank">
-                          {{ trans('footer.dev') }} </a>
-                  </li>
-              </ul>
-          </div>
-      </div>
-  </footer>
+<footer class="bg-white border-t border-gray-200 py-4 px-6 shrink-0">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="text-center md:text-start mb-2 md:mb-0">
+            <p class="text-sm text-gray-600">
+                <bdi>{{ trans('footer.rights') }}</bdi> &copy; {{ \Carbon\Carbon::now()->year }}
+            </p>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="https://www.facebook.com/LoopLabsDev" target="_blank"
+                class="text-sm text-blue-600 hover:text-blue-800">
+                {{ trans('footer.dev') }}
+            </a>
+        </div>
+    </div>
+</footer>

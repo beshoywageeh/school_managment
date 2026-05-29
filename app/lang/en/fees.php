@@ -1,8 +1,9 @@
 <?php
 
 return [
-    'title' => 'Fees',
+    'title' => 'School Fees',
     'grade' => 'Grade',
+    'no_fees_found' => 'No fees found',
     'classroom' => 'Classroom',
     'by' => 'By',
     'desc' => 'Description',

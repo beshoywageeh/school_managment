@@ -38,6 +38,7 @@ return [
     'parent_name_job' => 'اسم ولقب والد التلميذ وصناعته',
     'parent_assest_name_job' => 'اسم ولقب ولي أمر الطالب و صناعته',
     'parent_sender_name_job' => 'اسم ولقب مراسل التلميذ وصناعته',
+    'parent_info' => 'بيانات ولي الأمر',
     'total_degree' => 'مجموع الدرجات',
     'write_at' => 'تحريرا في',
     'parent_sign' => 'توقيع ولي أمر التلميذ',

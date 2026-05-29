@@ -36,7 +36,7 @@
                                     </div>
                                     <div class="col">
                                         <input class="btn btn-danger btn-block" data-repeater-delete type="button"
-                                            value="{{ trans('General.delete') }}" />
+                                            value="{{ trans('general.delete') }}" />
                                     </div>
                                 </div>
                             </div>

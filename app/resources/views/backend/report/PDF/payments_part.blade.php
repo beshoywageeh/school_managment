@@ -129,10 +129,10 @@
                 <tr class="text-white bg-dark">
                     <th>#</th>
                     <th>{{ trans('report.student') }}</th>
-                    <th>{{ trans('General.grade') }}</th>
+                    <th>{{ trans('general.grade') }}</th>
                     <th>{{ trans('report.classroom') }}</th>
                     <th>{{ trans('report.date') }}</th>
-                    <th>{{ trans('General.status') }}</th>
+                    <th>{{ trans('general.status') }}</th>
                     <th>{{ trans('report.amount') }}</th>
                 </tr>
             </thead>
@@ -172,10 +172,10 @@
                 <tr class="text-white bg-dark">
                     <th>#</th>
                     <th>{{ trans('report.student') }}</th>
-                    <th>{{ trans('General.grade') }}</th>
+                    <th>{{ trans('general.grade') }}</th>
                     <th>{{ trans('report.classroom') }}</th>
                     <th>{{ trans('report.date') }}</th>
-                    <th>{{ trans('General.status') }}</th>
+                    <th>{{ trans('general.status') }}</th>
                     <th>{{ trans('report.amount') }}</th>
                 </tr>
             </thead>

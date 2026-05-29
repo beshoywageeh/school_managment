@@ -110,6 +110,13 @@ return [
     'Pagination Navigation' => 'Pagination Navigation',
     'open' => 'Open',
     'generate' => 'Generate',
+    'Choose' => 'Choose',
+    'New' => 'New',
+    'no_data' => 'No data available',
+    'not_found' => 'Not found',
+    'search' => 'Search',
+    'loop_labs' => 'Laboratories',
+    'upload_image' => 'Upload Image',
 
     // Nested keys for buttons (used in views)
     'buttons' => [
@@ -144,6 +151,7 @@ return [
         '404' => 'Page not found',
         'error' => 'Error',
         'loading' => 'Loading...',
+        'view' => 'View',
     ],
     'created' => [
         'by' => 'Created by',

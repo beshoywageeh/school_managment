@@ -24,7 +24,6 @@ return [
     'except_fee' => 'الإعفاءات',
     'payment_parts' => 'تقسيط',
     'credit' => 'مستحقات',
-    'fast_method' => 'حركات سريعة',
     'permission' => 'الأدوار والصلاحيات',
     'report' => 'التقارير',
     'admin_era' => 'تفعيل الحسابات',
@@ -46,4 +45,8 @@ return [
     'fast_actions' => 'إجراءات سريعة',
     'pending_balance' => 'الرصيد المعلق',
     'pay_all' => 'دفع كامل',
+    'exciption' => 'الإعفاءات',
+    'payment' => 'المدفوعات',
+    'exchange' => 'سندات الصرف',
+    'invoice' => 'فاتورة دراسية',
 ];

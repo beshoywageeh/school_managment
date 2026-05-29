@@ -2,210 +2,166 @@
 @section('title')
     {{ trans('setting.title') }}
 @endsection
+
 @section('content')
-    <div class="row mb-30">
-        <div class="col-xl-4">
-            <div class="row mb-30">
-                <div class="col-xl-12">
-                    <div class="card card-statistics h-100">
-                        <div class="text-center card-body position-relative">
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <td rowspan="4">
-                                            @if ($school_info->image == null)
-                                                <img class="img-fluid rounded-circle"
-                                                    src="{{ asset('assests/images/loop_labs.png') }}"
-                                                    alt="{{ $school_info->name }}" />
-                                            @else
-                                                <img class="img-fluid rounded-circle"
-                                                    src="{{ URL::asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                                                    alt="{{ $school_info->name }}" />
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{ trans('setting.total_student') }}</th>
-                                        <td>{{ $std_count }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{ trans('setting.total_teacher') }}</th>
-                                        <td>{{ $teach_count }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>{{ trans('setting.total_classroom') }}</th>
-                                        <td>{{ $grd_count }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <p>
-                                                {{ $school_info->address }}
-                                            </p>
-                                            <p>{{ $school_info->phone }}</p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="text-center">
+                    <div class="mb-4">
+                        @if($school_info->image == null)
+                            <img class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-gray-100" src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school_info->name }}" />
+                        @else
+                            <img class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-gray-100" src="{{ URL::asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}" alt="{{ $school_info->name }}" />
+                        @endif
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">{{ $school_info->name }}</h3>
+                    <div class="mt-6 space-y-3">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-gray-500">{{ trans('setting.total_student') }}</span>
+                            <span class="text-lg font-bold text-blue-600">{{ $std_count }}</span>
                         </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-gray-500">{{ trans('setting.total_teacher') }}</span>
+                            <span class="text-lg font-bold text-green-600">{{ $teach_count }}</span>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <span class="text-gray-500">{{ trans('setting.total_classroom') }}</span>
+                            <span class="text-lg font-bold text-purple-600">{{ $grd_count }}</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-gray-100 text-right">
+                        <p class="text-gray-600 text-sm">{{ $school_info->address }}</p>
+                        <p class="text-gray-600 text-sm mt-1">{{ $school_info->phone }}</p>
                     </div>
                 </div>
             </div>
-            <div class="row mb-40">
-                <div class="col-xl-12">
-                    <div class="card card-statistics h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ trans('Sidebar.Grade') }}</h5>
-                            <ul class="list-unstyled">
-                                @foreach ($grades as $grade)
-                                    <li class="mb-20">
-                                        <div class="media">
 
-                                            <div class="media-body">
-                                                <h6 class="mt-0 mb-0">
-                                                    {{ $grade->name }}
-                                                    <span class="float-right text-danger">
-                                                        {{ $grade->students_count }}</span>
-                                                </h6>
-                                            </div>
-                                        </div>
-                                        <div class="mt-20 divider dotted"></div>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h5 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('Sidebar.Grade') }}</h5>
+                <div class="space-y-3">
+                    @foreach($grades as $grade)
+                    <div class="flex justify-between items-center py-2 border-b border-dotted border-gray-200">
+                        <span class="text-gray-700">{{ $grade->name }}</span>
+                        <span class="px-2 py-1 bg-red-100 text-red-600 text-xs font-medium rounded-full">{{ $grade->students_count }}</span>
                     </div>
+                    @endforeach
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row card-title">
-                                <div class="col">
-                                    <h2>
-                                        {{ trans('setting.auth_details') }}</h2>
-                                    <p class="mb-4 text-sm font-normal text-slate-400">
-                                        {{ trans('setting.auth_details_desc') }}
-                                    </p>
-                                </div>
-                                <div class="col text-md-right">
-                                    <span class="my-1">{{ trans('setting.auth_name') }} : </span>
-                                    <h4>{{ $user->name }}</h4>
-                                </div>
-                            </div>
 
-                            <form method="post" action="{{ route('settings.update_password') }}">
-                                @csrf
-                                <div class="row">
-                                    <div class="col">
-                                        <label class="block my-1">{{ trans('setting.old_password') }}</label>
-                                        <input type="password" name="old_password" class="form-control" id="old_password" />
-                                    </div>
-                                    <div class="col">
-                                        <label class="block my-1" for="new-password">
-                                            {{ trans('setting.new_password') }}
-                                        </label>
-                                        <input type="password" name="new_password" class="form-control" id="new-password" />
-                                    </div>
-                                    <div class="col text-md-right">
-                                        <label for=""></label>
-                                        <!-- Button  -->
-                                        <button type="submit"
-                                            class="btn btn-danger btn-block">{{ trans('general.buttons.edit') }}</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h5 class="text-lg font-semibold text-gray-800 mb-2">{{ trans('setting.auth_details') }}</h5>
+                <p class="text-sm text-gray-500 mb-4">{{ trans('setting.auth_details_desc') }}</p>
+                <div class="text-left mb-4">
+                    <span class="text-sm text-gray-500">{{ trans('setting.auth_name') }}: </span>
+                    <span class="text-gray-800 font-medium">{{ $user->name }}</span>
                 </div>
+
+                <form method="post" action="{{ route('settings.update_password') }}">
+                    @csrf
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('setting.old_password') }}</label>
+                            <input type="password" name="old_password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" id="old_password" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1" for="new-password">{{ trans('setting.new_password') }}</label>
+                            <input type="password" name="new_password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" id="new-password" />
+                        </div>
+                        <button type="submit" class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition-colors">
+                            {{ trans('general.buttons.edit') }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title">
-                        {{ trans('setting.school_details') }}</h2>
-                    <form action="{{ route('settings.update') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $school_info->id }}">
-                        <!-- Name  -->
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tr>
-                                    <th><label class="" for="first-name">{{ trans('setting.name') }}</label></th>
-                                    <th><label class="" for="last-name">{{ trans('setting.phone') }}</label></th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <input type="text" class="form-control" value="{{ $school_info->name }}"
-                                            name="school_name" />
-                                        @error('school_name')
-                                            <div class="mt-1 alert alert-error">{{ $message }}</div>
-                                        @enderror
-                                    </th>
-                                    <th>
-                                        <input type="text" class="form-control" value="{{ $school_info->phone }}"
-                                            name="school_phone" />
-                                        @error('school_phone')
-                                            <div class="mt-1 alert alert-error">{{ $message }}</div>
-                                        @enderror
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th><label>{{ trans('setting.address') }}</label></th>
-                                    <th><label for="">{{ trans('general.logo') }}</label></th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <textarea class="form-control" rows="4" name="address">{{ $school_info->address }}</textarea>
-                                        @error('address')
-                                            <div class="mt-1 alert alert-error">{{ $message }}</div>
-                                        @enderror
-                                    </th>
-                                    <th><input type="file" name="logo" accept="image/*" class="form-control">
-                                    </th>
-                                </tr>
-                            </table>
-                        </div>
 
-                        <div class="row">
-                            <div class="col">
-                                <label>
-                                    {{ trans('setting.heading_right') }}
-                                </label>
-                                <textarea class="form-control" rows="4" name="head_right">{{ $school_info->heading_right }}</textarea>
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">{{ trans('setting.school_details') }}</h2>
+                <form action="{{ route('settings.update') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $school_info->id }}">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="school-name">{{ trans('setting.name') }}</label>
+                            <input type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" value="{{ $school_info->name }}" name="school_name" />
+                            @error('school_name')
+                                <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="school-phone">{{ trans('setting.phone') }}</label>
+                            <input type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" value="{{ $school_info->phone }}" name="school_phone" />
+                            @error('school_phone')
+                                <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('setting.address') }}</label>
+                            <textarea class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" rows="3" name="address">{{ $school_info->address }}</textarea>
+                            @error('address')
+                                <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('general.logo') }}</label>
+                            <div class="relative">
+                                <input type="file" name="logo" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors bg-gray-50" id="logo-preview">
+                                    @if($school_info->image)
+                                        <img src="{{ URL::asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}" class="w-20 h-20 mx-auto rounded-lg object-cover mb-2" />
+                                    @else
+                                        <svg class="w-10 h-10 mx-auto text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    @endif
+                                    <span class="text-sm text-gray-500">{{ trans('general.upload_image') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('setting.print_settings') }}</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('setting.heading_right') }}</label>
+                                <textarea class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" rows="2" name="head_right">{{ $school_info->heading_right }}</textarea>
                                 @error('head_right')
-                                    <div class="mt-1 alert alert-error">{{ $message }}</div>
+                                    <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col">
-                                <label>
-                                    {{ trans('setting.footer_right') }}
-                                </label>
-                                <textarea class="form-control" rows="4" name="footer_right">{{ $school_info->footer_right }}</textarea>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('setting.footer_right') }}</label>
+                                <textarea class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" rows="2" name="footer_right">{{ $school_info->footer_right }}</textarea>
                                 @error('footer_right')
-                                    <div class="mt-1 alert alert-error">{{ $message }}</div>
+                                    <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col">
-                                <label>
-                                    {{ trans('setting.footer_left') }}
-                                </label>
-                                <textarea class="form-control" rows="4" id="" name="footer_left">{{ $school_info->footer_left }}</textarea>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('setting.footer_left') }}</label>
+                                <textarea class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" rows="2" name="footer_left">{{ $school_info->footer_left }}</textarea>
                                 @error('footer_left')
-                                    <div class="mt-1 alert alert-error">{{ $message }}</div>
+                                    <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
-                        <!-- heading  -->
-                        <div class="mt-4 row">
-                            <div class="text-right col">
-                                <button type="submit"
-                                    class="btn btn-block btn-primary">{{ trans('general.buttons.save') }}</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium transition-colors flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                            {{ trans('general.buttons.save') }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

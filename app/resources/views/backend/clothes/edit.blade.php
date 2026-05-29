@@ -1,3 +1,5 @@
+
+<div x-data="{ open: false }">
 <div class="modal fade" id="editItem-{{ $stock->id }}" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -33,4 +35,5 @@
             </form>
         </div>
     </div>
+</div>
 </div>

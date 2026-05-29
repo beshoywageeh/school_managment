@@ -20,5 +20,6 @@ return [
     'total_classroom' => 'إجمالي الفصول الدراسية',
     'footer_right' => 'تذيل صفحة يمين',
     'footer_left' => 'تذيل صفحة يسار',
+    'print_settings' => 'إعدادات الطباعة',
 
 ];

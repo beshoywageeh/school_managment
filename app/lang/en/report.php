@@ -22,6 +22,17 @@ return [
     'select_stock' => 'Select Stock',
     'stock_transaction' => 'Product Stock Transaction',
     'auto_number' => 'Serial Number',
+    'of' => 'of',
+    'finalize_year' => 'End of Year Report',
+    'finalyear' => [
+        'title' => 'End of Financial Year Report',
+        'pay_head' => 'Paid amounts for the current academic year totaling - :total',
+        'not_pay_head' => 'Unpaid amounts for the current academic year',
+    ],
+    'general' => [
+        'count' => 'Count',
+        'total' => 'Total',
+    ],
     'quantity_in' => 'Quantity In',
     'quantity_out' => 'Quantity Out',
     'quantity_total' => 'Total',

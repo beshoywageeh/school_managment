@@ -3,35 +3,41 @@
     {{ trans('login.login') }}
 @endsection
 @section('login')
-    <div class="text-center row justify-content-center no-gutters vertical-align">
-        <div class="bg-white col-lg-6 col-md-4">
-            <div class="clearfix pb-40 login-fancy">
-                <h3 class="mb-30">{{ trans('login.enter_data') }}</h3>
-                <form method="POST" action="{{ route('login') }}" autocomplete="off">
-                    @csrf
-                    <div class="mb-20 section-field">
+    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div class="p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">{{ trans('login.enter_data') }}</h3>
 
-                        <input id="name" class="web form-control" type="email" value="" name="email"
-                            placeholder="{{ trans('login.email') }} ">
-                        @error('email')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-20 section-field">
-                        <input id="Password" class="Password form-control" type="password"
-                            placeholder="{{ trans('login.password') }}" name="password">
-                        @error('password')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="row">
-                        <div class="text-left col">
-                            <button type="submit" class="btn btn-success btn-block w-100">{{ trans('login.login') }}
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+            <form method="POST" action="{{ route('login') }}" autocomplete="off">
+                @csrf
+
+                <div class="mb-6">
+                    <label for="email"
+                        class="block text-sm font-medium text-gray-700 mb-2">{{ trans('login.email') }}</label>
+                    <input id="email"
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                        type="email" name="email" value="{{ old('email') }}" placeholder="{{ trans('login.email') }}"
+                        required>
+                    @error('email')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-6">
+                    <label for="password"
+                        class="block text-sm font-medium text-gray-700 mb-2">{{ trans('login.password') }}</label>
+                    <input id="password"
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+                        type="password" name="password" placeholder="{{ trans('login.password') }}" required>
+                    @error('password')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200">
+                    {{ trans('login.login') }}
+                </button>
+            </form>
         </div>
     </div>
 @endsection

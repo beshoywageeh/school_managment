@@ -5,80 +5,75 @@
 @push('css')
 @endpush
 @section('content')
-    <div class="row">
-        <div class="col-xl-12 mb-30">
-
-            <div class="table-responsive">
-                <table class='table table-bordered table-striped'>
-                    <thead class='alert-success'>
-                        <tr>
-                            <th>#</th>
-                            <th>{{ trans('adminera.code') }}</th>
-                            <th>{{ trans('adminera.name') }}</th>
-                            <th>{{ trans('adminera.email') }}</th>
-                            <th>{{ trans('adminera.isAdmin') }}</th>
-                            <th>{{ trans('adminera.login_Allow') }}</th>
-                            <th>{{ trans('adminera.type') }}</th>
-                            <th>{{ trans('adminera.password') }}</th>
-                            <th>{{ trans('adminera.permission') }}</th>
-                            <th>{{ trans('General.actions') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($Employees as $employee)
-                            <form method="post" action="{{ route('employee.update', $employee->id) }}"
-                                id="form-{{ $employee->id }}">
-                                @csrf
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $employee->code }}</td>
-                                    <td>{{ $employee->name }}</td>
-                                    <td>
-                                        <input type="email" name="email" class="form-control"
-                                            value="{{ $employee->email }}"{{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
-                                    </td>
-                                    <td><input type="checkbox" class="form-control" name="isAdmin"
-                                            @checked($employee->isAdmin == 1)
-                                            {{ $employee->id == \Auth::id() ? 'disabled' : '' }} /></td>
-                                    <td>
-                                        <input type="checkbox" name="login_allow" class="form-control"
-                                            @checked($employee->login_allow == 1)
-                                            {{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
-                                    </td>
-                                    <td>{{ $employee->type->lang() ?? 'N/A' }}</td>
-                                    <td>
-                                        <input type="password" name="password" class="form-control"
-                                            {{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
-                                    </td>
-                                    <td>
-                                        <select name="role" class="custom-select"
-                                            {{ $employee->id == \Auth::id() ? 'disabled' : '' }}>
-                                            @forelse ($Permissions as $permission)
-                                                <option value="{{ $permission->name }}">
-                                                    {{ trans('permissions.' . $permission->name) }}</option>
-                                            @empty
-                                            @endforelse
-                                        </select>
-                                    </td>
-                                    <td>
-                                        @if (\Auth::user()->isAdmin == 1)
-                                            <button type="submit"
-                                                class="btn btn-outline-primary btn-sm">{{ trans('General.Submit') }}</button>
-                                        @endif
-                                    </td>
-                                </tr>
-                            </form>
-                        @empty
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead class="bg-green-50">
+                    <tr>
+                        <th class="px-4 py-2 text-center text-xs font-medium text-green-700 uppercase">#</th>
+                        <th class="px-4 py-2 text-start text-xs font-medium text-green-700 uppercase">{{ trans('adminera.code') }}</th>
+                        <th class="px-4 py-2 text-start text-xs font-medium text-green-700 uppercase">{{ trans('adminera.name') }}</th>
+                        <th class="px-4 py-2 text-start text-xs font-medium text-green-700 uppercase">{{ trans('adminera.email') }}</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium text-green-700 uppercase">{{ trans('adminera.isAdmin') }}</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium text-green-700 uppercase">{{ trans('adminera.login_Allow') }}</th>
+                        <th class="px-4 py-2 text-start text-xs font-medium text-green-700 uppercase">{{ trans('adminera.type') }}</th>
+                        <th class="px-4 py-2 text-start text-xs font-medium text-green-700 uppercase">{{ trans('adminera.password') }}</th>
+                        <th class="px-4 py-2 text-start text-xs font-medium text-green-700 uppercase">{{ trans('adminera.permission') }}</th>
+                        <th class="px-4 py-2 text-center text-xs font-medium text-green-700 uppercase">{{ trans('general.actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    @forelse ($Employees as $employee)
+                        <form method="post" action="{{ route('employee.update', $employee->id) }}"
+                            id="form-{{ $employee->id }}">
+                            @csrf
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-center text-gray-600">{{ $loop->iteration }}</td>
+                                <td class="px-4 py-2 text-gray-800">{{ $employee->code }}</td>
+                                <td class="px-4 py-2 text-gray-800 font-medium">{{ $employee->name }}</td>
+                                <td class="px-4 py-2">
+                                    <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                        value="{{ $employee->email }}"{{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
+                                </td>
+                                <td class="px-4 py-2 text-center">
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="isAdmin"
+                                        @checked($employee->isAdmin == 1)
+                                        {{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
+                                </td>
+                                <td class="px-4 py-2 text-center">
+                                    <input type="checkbox" name="login_allow" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                        @checked($employee->login_allow == 1)
+                                        {{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
+                                </td>
+                                <td class="px-4 py-2 text-gray-600">{{ $employee->type->lang() ?? 'N/A' }}</td>
+                                <td class="px-4 py-2">
+                                    <input type="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                        {{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
+                                </td>
+                                <td class="px-4 py-2">
+                                    <select name="role" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                        {{ $employee->id == \Auth::id() ? 'disabled' : '' }}>
+                                        @forelse ($Permissions as $permission)
+                                            <option value="{{ $permission->name }}">
+                                                {{ trans('permissions.' . $permission->name) }}</option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                </td>
+                                <td class="px-4 py-2 text-center">
+                                    @if (\Auth::user()->isAdmin == 1)
+                                        <button type="submit"
+                                            class="px-3 py-1 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600">{{ trans('general.Submit') }}</button>
+                                    @endif
+                                </td>
+                            </tr>
+                        </form>
+                    @empty
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
-
-
-
 
     @push('scripts')
         <script></script>

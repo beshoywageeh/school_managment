@@ -43,7 +43,7 @@
                             </div>
                             <div class="row">
                                 <div class="col text-right">
-                                    <button class="btn btn-success" type="submit">{{ trans('General.Submit') }}</button>
+                                    <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
                                 </div>
                             </div>
                         </form>

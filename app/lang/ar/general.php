@@ -110,7 +110,12 @@ return [
     'Pagination Navigation' => 'تصفح الصفحات',
     'open' => 'فتح',
     'generate' => 'إنشاء',
-
+    'upload_image' => 'رفع صورة',
+    'Choose' => 'اختر',
+    'New' => 'جديد',
+    'no_data' => 'لا توجد بيانات',
+    'not_found' => 'غير موجود',
+    'search' => 'بحث',
     // Nested keys for views (buttons)
     'buttons' => [
         'create' => 'إنشاء',
@@ -145,6 +150,7 @@ return [
         '404' => 'الصفحة غير موجودة',
         'error' => 'خطأ',
         'loading' => 'جار التحميل .....',
+        'view' => 'عرض',
     ],
     'created' => [
         'by' => 'تم الإضافة بواسطة',

@@ -3,71 +3,56 @@
     {{ trans('employees.title') }} : {{ trans('general.resign') }}
 @endsection
 @section('content')
-    <div class="mb-4 row">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row card-title">
-                        <div class="col">
-                            <h4> {{ trans('employees.title') }} : {{ trans('general.resign') }}</h4>
-                        </div>
-                        <div class="col text-md-right">
-
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        @can('employees-list')
-                            <table class="table table-striped table-bordered table-sm" id="datatable">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{{ trans('employees.code') }}</th>
-                                        <th>{{ trans('employees.name') }}</th>
-                                        <th>{{ trans('employees.learning') }}</th>
-                                        <th>{{ trans('employees.grade_year') }}</th>
-                                        <th>{{ trans('employees.join_date') }}</th>
-                                        <th>{{ trans('employees.birth_date') }}</th>
-                                        <th>{{ trans('general.resign') }}</th>
-                                        <th>{{ trans('general.actions') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($employees as $employee)
-                                        <tr>
-                                            <td> {{ $loop->iteration }}</td>
-                                            <td>{{ $employee->code }}</td>
-                                            <td>{{ $employee->name }}
-                                            </td>
-                                            <td> {{ $employee->learning }}</td>
-                                            <td>{{ $employee->grade_year }}</td>
-                                            <td>{{ $employee->date_of_hiring }}</td>
-                                            <td>{{ $employee->date_of_birth }}</td>
-                                            <td>{{ $employee->deleted_at->format('Y-m-d') }}</td>
-                                            <td>
-                                                <x-dropdown-table :buttonText="trans('general.actions')" :items="[
-                                                    [
-                                                        'type' => 'link',
-                                                        'url' => route('employees.return', $employee->id),
-                                                        'text' => trans('general.return'),
-                                                        'icon' => 'ti-reload',
-                                                
-                                                        'can' => 'employees-delete',
-                                                    ],
-                                                ]" />
-
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @endcan
-                    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-4 border-b border-gray-100">
+            <h4 class="text-lg font-semibold text-gray-800"> {{ trans('employees.title') }} : {{ trans('general.resign') }}</h4>
+        </div>
+        <div class="p-6">
+            @can('employees-list')
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm" id="datatable">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">#</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.code') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.name') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.learning') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.grade_year') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.join_date') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.birth_date') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('general.resign') }}</th>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">{{ trans('general.actions') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach ($employees as $employee)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center text-gray-600"> {{ $loop->iteration }}</td>
+                                    <td class="px-4 py-2 text-gray-800">{{ $employee->code }}</td>
+                                    <td class="px-4 py-2 text-gray-800 font-medium">{{ $employee->name }}</td>
+                                    <td class="px-4 py-2 text-gray-600"> {{ $employee->learning }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->grade_year }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->date_of_hiring }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->date_of_birth }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->deleted_at->format('Y-m-d') }}</td>
+                                    <td class="px-4 py-2 text-center">
+                                        <x-dropdown-table :buttonText="trans('general.actions')" :items="[
+                                            [
+                                                'type' => 'link',
+                                                'url' => route('employees.return', $employee->id),
+                                                'text' => trans('general.return'),
+                                                'icon' => 'ti-reload',
+                                                'can' => 'employees-delete',
+                                            ],
+                                        ]" />
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+            @endcan
         </div>
     </div>
 
-    @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @endpush
 @endsection

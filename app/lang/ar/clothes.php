@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'title' => 'الزي المدرسي',
+    'amount' => 'القيمة',
     'sales_price' => 'سعر البيع',
     'purchase_price' => 'سعر الشراء',
     'total_qty' => 'الكمية الكلية',
@@ -11,4 +13,5 @@ return [
     'not_payed' => 'لم يتم الدفع',
     'payed' => 'تم الدفع',
     'pay' => 'دفع',
+    'qty' => 'الكمية',
 ];

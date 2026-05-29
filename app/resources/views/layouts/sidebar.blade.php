@@ -1,63 +1,93 @@
-<div class="side-menu-fixed">
-    <div class="scrollbar side-menu-bg">
-        <ul class="nav navbar-nav side-menu" id="Sidebarnav">
-            <li class="py-3 m-auto my-2 text-center bg-white">
-                <span class="font-bold">{{ $school->name }}</span>
-            </li>
-            <!-- school name -->
-            <x-nav_link :href="route('dashboard')" :active="request()->is('*/')" icon="fa fa-dashboard">
-                {{ trans('Sidebar.Dashboard') }}
-            </x-nav_link>
-            <!--for student-->
+<aside class="w-64 bg-gray-900 text-white shrink-0 h-screen overflow-hidden fixed top-0 start-0" dir="rtl"
+    style="overflow-y: auto !important; overflow-x: hidden !important;">
+    <div class="h-full flex flex-col">
+        <!-- Logo -->
+        <div class="p-4 border-b border-gray-700 flex-shrink-0">
+            <div class="text-center">
+                <span class="text-lg font-bold">{{ $school->name }}</span>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto p-2 space-y-1" style="overflow-y: auto !important;">
+            <!-- Dashboard -->
+            <a href="{{ route('dashboard') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('/') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                <x-hero-icon name="dashboard" class="w-5 h-5" />
+                <span class="text-sm font-medium">{{ trans('Sidebar.Dashboard') }}</span>
+            </a>
+
+            <!-- Student Section -->
             @if (Auth::user()->hasAnyPermission(['Students-list', 'parents-list', 'promotion-list', 'graduated_list']))
-                <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.student_info') }} </li>
+                <div class="pt-4 pb-2">
+                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.student_info') }}</span>
+                </div>
                 @can('parents-list')
-                    <x-nav_link :href="route('parents.index')" :active="request()->is('*/parents*')" icon="fa fa-users">
-                        {{ trans('Sidebar.parents') }}
-                    </x-nav_link>
+                    <a href="{{ route('parents.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/parents*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="users" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.parents') }}</span>
+                    </a>
                 @endcan
                 @can('Students-list')
-                    <x-nav_link :href="route('students.index')" :active="request()->is('*/students') || request()->is('*/students/create')" icon="fa fa-graduation-cap">
-                        {{ trans('Sidebar.Students') }}
-                    </x-nav_link>
+                    <a href="{{ route('students.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/students*') && !request()->is('*/students/graduated*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="graduation-cap" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.Students') }}</span>
+                    </a>
                 @endcan
                 @can('promotion-list')
-                    <x-nav_link :href="route('promotion.index')" :active="request()->is('*/promotion') || request()->is('*/promotion/create')" icon="fa fa-level-up">
-                        {{ trans('Sidebar.promotion') }}
-                    </x-nav_link>
+                    <a href="{{ route('promotion.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/promotion*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="level-up" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.promotion') }}</span>
+                    </a>
                 @endcan
                 @can('graduated-list')
-                    <x-nav_link :href="route('students.graduated')" :active="request()->is('*/students/graduated*')" icon="fa fa-graduation-cap">
-                        {{ trans('Sidebar.graduated') }}
-                    </x-nav_link>
+                    <a href="{{ route('students.graduated') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/students/graduated*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="graduation-cap" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.graduated') }}</span>
+                    </a>
                 @endcan
             @endif
 
-            <!--for employee-->
+            <!-- Employee Section -->
             @if (Auth::user()->hasAnyPermission(['jobs-list', 'employees-list']))
-                <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.employee_info') }} </li>
+                <div class="pt-4 pb-2">
+                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.employee_info') }}</span>
+                </div>
                 @can('jobs-list')
-                    <x-nav_link :href="route('jobs.index')" :active="request()->is('*/jobs*')" icon="fa fa-briefcase">
-                        {{ trans('Sidebar.jobs') }}
-                    </x-nav_link>
+                    <a href="{{ route('jobs.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/jobs*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="briefcase" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.jobs') }}</span>
+                    </a>
                 @endcan
                 @can('employees-list')
-                    <x-nav_link :href="route('employees.index')" :active="request()->is('*/employees*')" icon="fa fa-id-card-o">
-                        {{ trans('Sidebar.employees') }}
-                    </x-nav_link>
+                    <a href="{{ route('employees.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/employees*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="id-card" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.employees') }}</span>
+                    </a>
                 @endcan
                 @can('scheduale-list')
-                    <x-nav_link :href="route('schedule.index')" :active="request()->is('*/schedule*')"
-                        icon="fa fa-calendar-check-o">{{ trans('schedules.schedules') }}</x-nav_link>
+                    <a href="{{ route('schedule.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/schedule*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="calendar-check" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('schedules.schedules') }}</span>
+                    </a>
                 @endcan
-
                 @can('employees-list')
-                    <x-nav_link :href="route('employees.return_list')" :active="request()->is('*/employees/return_list*')" icon="fa fa-user-times">
-                        {{ trans('general.resign') }}
-                    </x-nav_link>
+                    <a href="{{ route('employees.return_list') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/employees/return_list*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="user-times" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('general.resign') }}</span>
+                    </a>
                 @endcan
             @endif
-            <!--for acounting-->
+
+            <!-- Accounting Section -->
             @if (Auth::user()->hasAnyPermission([
                     'academic_year-list',
                     'schoolfees-list',
@@ -67,67 +97,94 @@
                     'payment_parts-list',
                     'exchange_bonds-list',
                 ]))
-                <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.accounting') }} </li>
+                <div class="pt-4 pb-2">
+                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.accounting') }}</span>
+                </div>
                 @can('academic_year-list')
-                    <x-nav_link :href="route('academic_year.index')" :active="request()->is('*/academic_year*')" icon="fa fa-calendar">
-                        {{ trans('academic_year.title') }}
-                    </x-nav_link>
+                    <a href="{{ route('academic_year.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/academic-year*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="calendar" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('academic_year.title') }}</span>
+                    </a>
                 @endcan
                 @can('schoolfees-list')
-                    <x-nav_link :href="route('school-fees.index')" :active="request()->is('*/school_fees*')" icon="fa fa-money">
-                        {{ trans('Sidebar.schoolfees') }}
-                    </x-nav_link>
+                    <a href="{{ route('school_fees.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/school-fees*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="money" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.schoolfees') }}</span>
+                    </a>
                 @endcan
                 @can('fee_invoice-list')
-                    <x-nav_link :href="route('fee-invoice.index')" :active="request()->is('*/fee-invoice*')" icon="fa fa-file-text-o">
-                        {{ trans('Sidebar.fees_invoice') }}
-                    </x-nav_link>
+                    <a href="{{ route('fee_invoice.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/fee-invoice*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="file-text" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.fees_invoice') }}</span>
+                    </a>
                 @endcan
                 @can('Recipt_Payment-list')
-                    <x-nav_link :href="route('receipt-payment.index')" :active="request()->is('*/receipt-payment*')" icon="fa fa-credit-card">
-                        {{ trans('Sidebar.Recipt_Payment') }}
-                    </x-nav_link>
+                    <a href="{{ route('receipt_payment.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/receipt-payment*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="credit-card" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.Recipt_Payment') }}</span>
+                    </a>
                 @endcan
                 @can('except_fee-list')
-                    <x-nav_link :href="route('except-fee.index')" :active="request()->is('*/except-fee*')" icon="fa fa-minus-circle">
-                        {{ trans('Sidebar.except_fee') }}
-                    </x-nav_link>
+                    <a href="{{ route('except_fee.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/except-fee*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="minus-circle" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.except_fee') }}</span>
+                    </a>
                 @endcan
                 @can('payment_parts-list')
-                    <x-nav_link :href="route('payment-parts.index')" :active="request()->is('*/payment-parts*')" icon="fa fa-arrow-circle-o-down">
-                        {{ trans('Sidebar.payment_parts') }}
-                    </x-nav_link>
+                    <a href="{{ route('payment_parts.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/payment-parts*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="arrow-circle-down" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.payment_parts') }}</span>
+                    </a>
                 @endcan
                 @can('exchange_bonds-list')
-                    <x-nav_link :href="route('exchange-bonds.index')" :active="request()->is('*/exchange-bonds*')" icon="fa fa-credit-card">
-                        {{ trans('Sidebar.exchange_bonds') }}
-                    </x-nav_link>
+                    <a href="{{ route('exchange-bonds.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/exchange-bonds*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="credit-card" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.exchange_bonds') }}</span>
+                    </a>
                 @endcan
-                <x-nav_link :href="route('fund-account.index')" :active="request()->is('*/fund-account*')" icon="fa fa-university">
-                    {{ trans('Sidebar.fund_account') }}
-                </x-nav_link>
-                </li>
+                <a href="{{ route('fund_account.index') }}"
+                    class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/fund-account*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                    <x-hero-icon name="university" class="w-5 h-5" />
+                    <span class="text-sm font-medium">{{ trans('Sidebar.fund_account') }}</span>
+                </a>
             @endif
-            <!--for grades_setting-->
+
+            <!-- Grades Setting Section -->
             @if (Auth::user()->hasAnyPermission(['grade-list', 'class_rooms-list', 'classes-list']))
-                <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.grades_setting') }}
-                </li>
+                <div class="pt-4 pb-2">
+                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.grades_setting') }}</span>
+                </div>
                 @can('grade-list')
-                    <x-nav_link :href="route('grade.index')" :active="request()->is('*/grade*')" icon="fa fa-line-chart">
-                        {{ trans('Sidebar.Grade') }}
-                    </x-nav_link>
+                    <a href="{{ route('grade.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/grade*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="line-chart" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.Grade') }}</span>
+                    </a>
                 @endcan
                 @can('class_rooms-list')
-                    <x-nav_link :href="route('class-rooms.index')" :active="request()->is('*/class-rooms*')" icon="fa fa-building-o">
-                        {{ trans('Sidebar.Class_Rooms') }}
-                    </x-nav_link>
+                    <a href="{{ route('class_rooms.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/class-rooms*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="building" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.Class_Rooms') }}</span>
+                    </a>
                 @endcan
                 @can('classes-list')
-                    <x-nav_link :href="route('classes.index')" :active="request()->is('*/classes*')" icon="fa fa-list-alt">
-                        {{ trans('Sidebar.classes') }}
-                    </x-nav_link>
+                    <a href="{{ route('classes.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/classes*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="list-alt" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.classes') }}</span>
+                    </a>
                 @endcan
             @endif
+
+            <!-- Stores Section -->
             @if (Auth::user()->hasAnyPermission([
                     'stocks-index',
                     'orders-index',
@@ -142,9 +199,10 @@
                     'books_sheets-inventory_order',
                     'clothes-inventory_order',
                 ]))
-                <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.stores') }}</li>
+                <div class="pt-4 pb-2">
+                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.stores') }}</span>
+                </div>
 
-                <!--for stores-->
                 @if (Auth::user()->hasAnyPermission([
                         'stocks-index',
                         'orders-index',
@@ -152,150 +210,193 @@
                         'stocks-inventory_order-index',
                         'labortories-index',
                     ]))
-                    {{-- stocks-inventory --}}
-                    <li>
-                        <a href="javascript:void(0);" data-toggle="collapse"
-                            data-target="#stocks">
-                            <i class="fa fa-archive fa-lg fa-fw"></i>
-                            <span class="mx-3 right-nav-text">{{ trans('Sidebar.stocks') }}</span>
-                            <div class="pull-right"><i class="ti-plus"></i></div>
-                            <div class="clearfix"></div>
-                        </a>
-                        <ul id="stocks" class="collapse">
+                    @php $stocksOpen = request()->is('*stocks*') || request()->is('*labs*') || request()->is('*gard*') || request()->is('*order*') ? 'true' : 'false'; @endphp
+                    <div x-data="{ stocksOpen: {{ $stocksOpen }} }">
+                        <button @click="stocksOpen = !stocksOpen" type="button"
+                            class="flex items-center gap-3 w-full px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200">
+                            <x-hero-icon name="archive" class="w-5 h-5" />
+                            <span class="text-sm font-medium flex-1 text-start">{{ trans('Sidebar.stocks') }}</span>
+                            <svg class="w-4 h-4 transition-transform duration-200"
+                                :class="{ 'rotate-180': stocksOpen }" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="stocksOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden"
+                            style="display: none;">
                             @can('labortories-index')
-                                <li> <a href="{{ route('labs.index') }}">{{ trans('Sidebar.lab_index') }}</a>
-                                </li>
+                                <a href="{{ route('labs.index') }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.lab_index') }}</a>
                             @endcan
                             @can('stocks-index')
-                                <li> <a href="{{ route('stocks.index') }}">{{ trans('Sidebar.stocks_show') }}</a>
-                                </li>
+                                <a href="{{ route('stocks.index') }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.stocks_show') }}</a>
                             @endcan
                             @can('orders-index')
-                                <li> <a href="{{ route('order.index') }}">{{ trans('orders.income') }}</a> </li>
+                                <a href="{{ route('order.index') }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
                             @endcan
                             @can('order_out-index')
-                                <li> <a href="{{ route('outorder.index') }}">{{ trans('stock.outcome_order') }}</a>
-                                </li>
+                                <a href="{{ route('outorder.index') }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
                             @endcan
                             @can('stocks-inventory_order-index')
-                                <li> <a href="{{ route('gard.index') }}">{{ trans('stock.inventory_order') }}</a>
-                                </li>
+                                <a href="{{ route('gard.index') }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
                             @endcan
-                        </ul>
-                    </li>
+                        </div>
+                    </div>
                 @endif
+
                 @if (Auth::user()->hasAnyPermission([
                         'clothes-income_order',
                         'clothes-index',
                         'clothes-outcome_order',
                         'clothes-inventory_order',
                     ]))
-                    {{-- clothes-inventory --}}
-                    <li>
-                        <a href="javascript:void(0);" data-toggle="collapse" data-target="#clothes">
-                            <i class="fa fa-shirtsinbulk fa-lg fa-fw"></i>
-                            <span class="mx-3 right-nav-text">{{ trans('stock.clothes') }}</span>
-                            <div class="pull-right"><i class="ti-plus"></i></div>
-                            <div class="clearfix"></div>
-                        </a>
-                        <ul id="clothes" class="collapse">
+                    @php $clothesOpen = request()->is('*clothes*') ? 'true' : 'false'; @endphp
+                    <div x-data="{ clothesOpen: {{ $clothesOpen }} }">
+                        <button @click="clothesOpen = !clothesOpen" type="button"
+                            class="flex items-center gap-3 w-full px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200">
+                            <x-hero-icon name="shirt" class="w-5 h-5" />
+                            <span class="text-sm font-medium flex-1 text-start">{{ trans('stock.clothes') }}</span>
+                            <svg class="w-4 h-4 transition-transform duration-200"
+                                :class="{ 'rotate-180': clothesOpen }" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="clothesOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden"
+                            style="display: none;">
                             @can('clothes-index')
-                                <li> <a href="{{ route('clothes.index') }}">{{ trans('Sidebar.clothes_show') }}</a>
-                                </li>
+                                <a href="{{ route('clothes.index') }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.clothes_show') }}</a>
                             @endcan
                             @can('clothes-income_order')
-                                <li> <a
-                                        href="{{ route('clothes_order.index', ['type' => '1']) }}">{{ trans('orders.income') }}</a>
-                                </li>
+                                <a href="{{ route('clothes-order.index', ['type' => 'inventory']) }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
                             @endcan
                             @can('clothes-outcome_order')
-                                <li> <a
-                                        href="{{ route('clothes_order.index', ['type' => 'sales']) }}">{{ trans('stock.outcome_order') }}</a>
-                                </li>
+                                <a href="{{ route('clothes-order.index', ['type' => 'sales']) }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
                             @endcan
                             @can('clothes-inventory_order')
-                                <li> <a
-                                        href="{{ route('clothes_order.index', ['type' => '3']) }}">{{ trans('stock.inventory_order') }}</a>
-                                </li>
+                                <a href="{{ route('clothes-order.index', ['type' => 'inventory']) }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
                             @endcan
-                        </ul>
-                    </li>
+                        </div>
+                    </div>
                 @endif
+
                 @if (Auth::user()->hasAnyPermission([
                         'books_sheets-index',
                         'books_sheets-outcome_order',
                         'books_sheets-income_order',
                         'books_sheets-inventory_order',
                     ]))
-                    <li>
-                        <a href="javascript:void(0);" data-toggle="collapse" data-target="#book_sheets">
-                            <i class="fa fa-book fa-lg fa-fw"></i>
-                            <span class="mx-3 right-nav-text">{{ trans('Sidebar.books_sheets') }}</span>
-                            <div class="pull-right"><i class="ti-plus"></i></div>
-                            <div class="clearfix"></div>
-                        </a>
-                        <ul id="book_sheets" class="collapse">
+                    @php $booksOpen = request()->is('*book*') ? 'true' : 'false'; @endphp
+                    <div x-data="{ booksOpen: {{ $booksOpen }} }">
+                        <button @click="booksOpen = !booksOpen" type="button"
+                            class="flex items-center gap-3 w-full px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200">
+                            <x-hero-icon name="book" class="w-5 h-5" />
+                            <span
+                                class="text-sm font-medium flex-1 text-start">{{ trans('Sidebar.books_sheets') }}</span>
+                            <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': booksOpen }"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="booksOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden"
+                            style="display: none;">
                             @can('books_sheets-index')
-                                <li> <a
-                                        href="{{ route('books_sheets.index') }}">{{ trans('Sidebar.books_sheets_show') }}</a>
-                                </li>
+                                <a href="{{ route('books_sheets.index') }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.books_sheets_show') }}</a>
                             @endcan
                             @can('books_sheets-income_order')
-                                <li> <a
-                                        href="{{ route('bookSheetsOrder.index', ['type' => '1']) }}">{{ trans('orders.income') }}</a>
-                                </li>
+                                <a href="{{ route('bookSheetsOrder.index', ['type' => '1']) }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
                             @endcan
                             @can('books_sheets-outcome_order')
-                                <li> <a
-                                        href="{{ route('bookSheetsOrder.index', ['type' => '2']) }}">{{ trans('stock.outcome_order') }}</a>
-                                </li>
+                                <a href="{{ route('bookSheetsOrder.index', ['type' => '2']) }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
                             @endcan
                             @can('books_sheets-inventory_order')
-                                <li> <a
-                                        href="{{ route('bookSheetsOrder.index', ['type' => '3']) }}">{{ trans('stock.inventory_order') }}</a>
-                                </li>
+                                <a href="{{ route('bookSheetsOrder.index', ['type' => '3']) }}"
+                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
                             @endcan
-                        </ul>
-                    </li>
+                        </div>
+                    </div>
                 @endif
-
             @endif
-            <!--for security-->
+
+            <!-- Security Section -->
             @if (Auth::user()->hasAnyPermission(['settings-info', 'role-list', 'back-list']))
-                <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title">{{ trans('Sidebar.security') }}</li>
-
+                <div class="pt-4 pb-2">
+                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.security') }}</span>
+                </div>
                 @can('settings-info')
-                    <x-nav_link :href="route('create-new-school')" :active="request()->is('*/create-new-school*')" icon="fa fa-cog">
-                        {{ trans('Sidebar.setting') }}
-                    </x-nav_link>
+                    <a href="{{ route('create-new-school') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/create-new-school*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="cog" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.setting') }}</span>
+                    </a>
                 @endcan
-
-                <x-nav_link :href="route('system-lookup')" :active="request()->is('*/monitor')" icon="fa fa-shield">
-                    {{ trans('Sidebar.look_up') }}
-                </x-nav_link>
+                <a href="{{ route('system-lookup') }}"
+                    class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/monitor') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                    <x-hero-icon name="shield" class="w-5 h-5" />
+                    <span class="text-sm font-medium">{{ trans('Sidebar.look_up') }}</span>
+                </a>
                 @can('backup-list')
-                    <x-nav_link :href="route('backup.index')" :active="request()->is('*/backup*')" icon="fa fa-database">
-                        {{ trans('Sidebar.backup') }}
-                    </x-nav_link>
+                    <a href="{{ route('backup.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/backup*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="database" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.backup') }}</span>
+                    </a>
                 @endcan
                 @can('role-list')
-                    <x-nav_link :href="route('roles.index')" :active="request()->is('*/permission*')" icon="fa fa-lock">
-                        {{ trans('Sidebar.permission') }}
-                    </x-nav_link>
+                    <a href="{{ route('roles.index') }}"
+                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/permission*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="lock" class="w-5 h-5" />
+                        <span class="text-sm font-medium">{{ trans('Sidebar.permission') }}</span>
+                    </a>
                 @endcan
             @endif
+
             @if (\Auth::user()->isAdmin)
-                <x-nav_link :href="route('admin-era.index')" :active="request()->is('*/admin-era*')" icon="fa fa-user-secret">
-                    {{ trans('Sidebar.admin_era') }}
-                </x-nav_link>
+                <a href="{{ route('admin_era.index') }}"
+                    class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/admin-era*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                    <x-hero-icon name="user-secret" class="w-5 h-5" />
+                    <span class="text-sm font-medium">{{ trans('Sidebar.admin_era') }}</span>
+                </a>
             @endif
 
-            <li class="pl-4 mt-10 mb-10 font-medium text-muted menu-title"> {{ trans('Sidebar.report') }}</li>
-
-            <!--for report-->
-            <x-nav_link :href="route('report.index')" :active="request()->is('*/reports*')" icon="fa fa-bar-chart">
-                {{ trans('Sidebar.report') }}
-            </x-nav_link>
-        </ul>
+            <div class="pt-4 pb-2">
+                <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.report') }}</span>
+            </div>
+            <a href="{{ route('report.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/reports*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                <x-hero-icon name="bar-chart" class="w-5 h-5" />
+                <span class="text-sm font-medium">{{ trans('Sidebar.report') }}</span>
+            </a>
+        </nav>
     </div>
-</div>
+</aside>
+
+<style>
+    aside::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    aside::-webkit-scrollbar-track {
+        background: #1f2937;
+    }
+
+    aside::-webkit-scrollbar-thumb {
+        background: #4b5563;
+        border-radius: 3px;
+    }
+
+    aside::-webkit-scrollbar-thumb:hover {
+        background: #6b7280;
+    }
+</style>

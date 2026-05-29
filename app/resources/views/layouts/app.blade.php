@@ -5,64 +5,163 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <link rel="icon" href="{{ asset('assests/images/logo-icon-dark.png') }}" type="image/png" />
-
     <title>@yield('title')</title>
-
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @include('layouts.header_css')
-
     @livewireStyles
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
 
+        body {
+            overflow-x: hidden;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-dialog {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+    </style>
 </head>
 
-<body>
-    <!-- Wrapper Starts -->
-    <div class="wrapper">
-        <div id="pre-loader" class="pulse">
-            <img src="{{ asset('assests/images/logo-dark.png') }}" alt="">
+<body class="bg-gray-100 font-sans">
+    <!-- Pre-loader - hidden after 2 seconds as fallback -->
+    <div id="pre-loader" class="fixed inset-0 bg-white flex items-center justify-center z-[9999]">
+        <img src="{{ asset('assests/images/logo-dark.png') }}" alt="Loading" class="w-32">
+    </div>
+    <script>
+        setTimeout(function() {
+            var loader = document.getElementById('pre-loader');
+            if (loader) loader.style.display = 'none';
+        }, 2000);
+        window.addEventListener('load', function() {
+            document.getElementById('pre-loader').style.display = 'none';
+        });
 
-        </div>
-        <!-- Header Starts -->
+        // Modal handling with persistence across Livewire re-renders
+        (function() {
+            function showModal(id) {
+                var el = document.getElementById(id.replace('#', ''));
+                if (el) {
+                    el.style.display = 'flex';
+                    el.setAttribute('data-open', 'true');
+                }
+            }
+
+            function hideModal(id) {
+                var el = document.getElementById(id.replace('#', ''));
+                if (el) {
+                    el.style.display = 'none';
+                    el.setAttribute('data-open', 'false');
+                }
+            }
+
+            function restoreModals() {
+                document.querySelectorAll('.modal[data-open="true"]').forEach(function(el) {
+                    el.style.display = 'flex';
+                });
+            }
+
+            // Open modals
+            document.addEventListener('click', function(e) {
+                var btn = e.target.closest('[data-toggle="modal"]');
+                if (btn) {
+                    showModal(btn.getAttribute('data-target'));
+                    e.preventDefault();
+                }
+
+                var closeBtn = e.target.closest('[data-dismiss="modal"]');
+                if (closeBtn) {
+                    var modal = closeBtn.closest('.modal');
+                    if (modal) hideModal('#' + modal.id);
+                }
+            });
+
+            // Close on backdrop click
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal') && e.target.style.display === 'flex') {
+                    hideModal('#' + e.target.id);
+                }
+            });
+
+            // Restore modals after Livewire re-renders - run on every lifecycle hook
+            if (window.Livewire) {
+                Livewire.hook('message.processed', function(message, component) {
+                    restoreModals();
+                });
+
+                Livewire.hook('element.initialized', function(el) {
+                    restoreModals();
+                });
+            }
+
+            // Also run on any Livewire event
+            document.addEventListener('livewire:update', function() {
+                setTimeout(restoreModals, 10);
+            });
+        })();
+    </script>
+
+    <!-- Sidebar - Fixed -->
+    @include('layouts.sidebar')
+
+    <!-- Main Content Wrapper -->
+    <div class="ms-64 flex flex-col min-h-screen">
+        <x-toasts />
+        <x-alert />
+        <!-- Header -->
         @include('layouts.header')
-        <div class="container-fluid">
-            <div class="row">
 
-                @include('layouts.sidebar')
-                <div class="content-wrapper">
-                    <!-- Sidebar Starts -->
-                    <!-- Sidebar Ends -->
-                    <div class="page-title mb-30">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <h4 class="mb-0 font_cairo">@yield('title')</h4>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol class="float-left pt-0 pr-0 breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"></li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Page Title Ends -->
-
-                    @yield('content')
-                    <!-- Footer Starts -->
-                    @include('layouts.footer')
-                    <!-- Footer Ends -->
-                </div>
+        <!-- Content Area -->
+        <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+            <div class="mb-6">
+                <h4 class="text-2xl font-bold text-gray-800">@yield('title')</h4>
             </div>
+            @yield('content')
+        </main>
+        @if (session('success'))
+            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: '{{ session('success') }}', type: 'success', sticky: false, duration: 4000, progress: 100 } }))"></div>
+        @endif
 
-        </div>
-        <!-- Header Ends -->
+        @if (session('error'))
+            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: '{{ session('error') }}', type: 'danger', sticky: false, duration: 4000, progress: 100 } }))"></div>
+        @endif
 
+        @if (session('info'))
+            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: '{{ session('info') }}', type: 'info', sticky: false, duration: 4000, progress: 100 } }))"></div>
+        @endif
 
-
+        @if (session('warning'))
+            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: '{{ session('warning') }}', type: 'warning', sticky: false, duration: 4000, progress: 100 } }))"></div>
+        @endif
+        <!-- Footer -->
+        @include('layouts.footer')
     </div>
 
-    <!-- Page Content Ends -->
-
     @include('layouts.footer_script')
+
     @livewireScripts
 </body>
 

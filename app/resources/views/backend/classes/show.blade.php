@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('General.info') }}
+    {{ trans('general.info') }}
 @endsection
 @push('css')
     <style>

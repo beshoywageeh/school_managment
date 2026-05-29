@@ -4,44 +4,41 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="row mb-30">
-        <div class="col">
-            <div class="card">
-                <form action="{{ route('labs.update') }}" method="post">
-                    @csrf
-                    <div class="card-header bg-info">
-                        <div class="row">
-                            <div class="col">
-
-                                <input type="hidden" name="id" value="{{ $laboratory->id }}">
-                                <label class="text-white">{{ trans('labs.location') }}</label>
-                            </div>
-                            <div class="col">
-                                <input type="text" name="location" class="form-control"
-                                    value="{{ $laboratory->location }}">
-                            </div>
-                            <div class="col-md-2 text-right">
-                                <button class="btn btn-success btn-block"
-                                    type="submit">{{ trans('General.Submit') }}</button>
-                            </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <form action="{{ route('labs.update') }}" method="post">
+            @csrf
+            <div class="bg-blue-500 p-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+                    <div>
+                        <input type="hidden" name="id" value="{{ $laboratory->id }}">
+                        <label class="text-white text-sm font-medium">{{ trans('labs.location') }}</label>
+                    </div>
+                    <div class="md:col-span-2">
+                        <input type="text" name="location" class="w-full px-4 py-2 border border-white/30 rounded-lg bg-white/20 text-white placeholder-white/70"
+                            value="{{ $laboratory->location }}">
+                    </div>
+                    <div>
+                        <button class="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium"
+                            type="submit">{{ trans('general.Submit') }}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                @forelse ($laboratory->sub_locations as $location)
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="text-sm font-medium text-gray-700">{{ trans('labs.name') }}</label>
+                        </div>
+                        <div>
+                            <input type="hidden" name="sub_location_id[]" value="{{ $location->id }}">
+                            <input type="text" name="sub_locations[]" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                value="{{ $location->sub_location }}">
                         </div>
                     </div>
-                    <div class="card-body">
-                        @forelse ($laboratory->sub_locations as $location)
-                            <div class="row mb-4">
-                                <div class="col"><label>{{ trans('labs.name') }}</label></div>
-                                <div class="col">
-                                    <input type="hidden" name="sub_location_id[]" value="{{ $location->id }}">
-                                    <input type="text" name="sub_locations[]" class="form-control"
-                                        value="{{ $location->sub_location }}">
-                                </div>
-                            </div>
-                        @empty
-                        @endforelse
-                    </div>
-                </form>
+                @empty
+                @endforelse
             </div>
-        </div>
+        </form>
     </div>
 @endsection
 @push('scripts')

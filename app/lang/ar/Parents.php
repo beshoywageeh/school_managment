@@ -56,4 +56,6 @@ return [
     'Religion' => 'الديانة',
     'new' => 'ولى أمر جديد',
     'Father_Phone' => 'رقم هاتف الأب',
+    'Mother_Status' => 'حالة الأم',
+    'address' => 'العنوان',
 ];

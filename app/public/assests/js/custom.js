@@ -42,6 +42,7 @@ NOTE: This file contains all scripts for the actual Template.
 [ End table content ]
 ======================================*/
 //POTENZA var
+var plugin_path = "assests/js/";
 
 (function ($) {
     "use strict";
@@ -66,8 +67,8 @@ NOTE: This file contains all scripts for the actual Template.
     /*************************
       Tooltip
 *************************/
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]').popover();
+    if ($.fn.tooltip) $('[data-toggle="tooltip"]').tooltip();
+    if ($.fn.popover) $('[data-toggle="popover"]').popover();
 
     /*************************
         Preloader
@@ -117,6 +118,7 @@ NOTE: This file contains all scripts for the actual Template.
         loadScript(
             plugin_path + "nicescroll/jquery.nicescroll.js",
             function () {
+                if (!$.fn.niceScroll) return;
                 $(".scrollbar").niceScroll({
                     scrollspeed: 150,
                     mousescrollstep: 38,
@@ -311,7 +313,7 @@ NOTE: This file contains all scripts for the actual Template.
        Search
 *************************/
     POTENZA.searchbox = function () {
-        if (jQuery(".search").exists()) {
+        if (jQuery(".search").length) {
             jQuery(".search-btn").on("click", function () {
                 jQuery(".search").toggleClass("search-open");
                 return false;

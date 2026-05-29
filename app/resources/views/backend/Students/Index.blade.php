@@ -4,19 +4,13 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="row mb-30">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <x-Student-header />
-                    <div class="table-responsive">
-                        @can('Students-list')
-                            <livewire:students.students />
-                        @endcan
-                    </div>
-                </div>
-            </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6">
+            <x-Student-header />
         </div>
+        @can('Students-list')
+            <livewire:students.students />
+        @endcan
     </div>
-    @include('backend.Students.import')
+    
 @endsection

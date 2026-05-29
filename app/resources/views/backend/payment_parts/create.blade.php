@@ -3,91 +3,91 @@
     {{ trans('general.new') }} | {{ trans('PaymentParts.title') }}
 @endsection
 @section('content')
-    <div class="mb-4 row">
-        <div class="col">
-            @include('backend.msg')
-            <div class="card">
-                <div class="card-body">
-                    <div class="row card-title">
-                        <div class="col">
-                            <input type="text" class="form-control" readonly value="">
-                        </div>
+  <form id="form-with-multiple-column" class="max-w-full" action="{{ route('payment_parts.store') }}" x-data="{
+        parts: [{ fee_id: '', pay_at: '', amount: '' }],
+    addRow() {
+        this.parts.push({ fee_id: '', pay_at: '', amount: '' });
+    },
+     removeRow(index) {
+        if (this.parts.length > 1) this.parts.splice(index, 1);
+    },
+        }"
+            method="post">
+            @csrf
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        @include('backend.msg')
+        <div class="mb-6">
+            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly value="{{ $student->name .' '.$student->parent->Father_Name }}">
+            
+        </div>
+      
+
+            <input type="hidden" hidden name="student_id" value="{{ $student->id }}">
+            <input type="hidden" name="acd_year" value="{{ $student->acadmiecyear_id }}">
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="min-w-full  text-center">
+                            <thead>
+                                <tr class="bg-gray-50 border-b border-gray-200">
+                                    <th class="px-4 py-2.5 text-start text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ trans('fee_invoice.title') }}</th>
+                                    <th class="px-4 py-2.5 text-start text-xs font-semibold text-gray-500 uppercase tracking-wide w-36">{{ trans('PaymentParts.date') }}</th>
+                                    <th class="px-4 py-2.5 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide w-24">{{ trans('PaymentParts.amount') }}</th>
+                                    <th class="px-4 py-2.5 w-12"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                               <template x-for="(part,index) in parts" :key="index" >
+                            <tr  class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2">
+                                <select class=" px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" :name="`parts[${index}][fee_id]`">
+                                    <option value="" selected>{{ trans('general.choose',['value'=>trans('Sidebar.fees_invoice')]) }}
+                                    </option>
+                                    @foreach ($student->fee_invoice as $fee_invoice)
+ 
+                                    <option value="{{ $fee_invoice->fees->id }}">{{ $fee_invoice->fees->title }}
+                                        - {{ $fee_invoice->fees->amount }}</option>
+                                  
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td class="px-4 py-2">
+                                <input type="date" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" :name="`parts[${index}][pay_at]`" id="">
+                            </td>
+                            <td class="px-4 py-2">
+                                <input type="number" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" :name="`parts[${index}][amount]`" id="">
+                            </td>
+                            <td class="px-4 py-2">
+                                <button type="button" x-on:click="removeRow(index)"
+                                                class="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                </svg>
+                                            </button>
+                            </td>
+                        </tr>
+            </template>
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-gray-50 border-t border-gray-200">
+                                    <td colspan="4" class="px-4 py-2">
+                                         <button type="button" x-on:click="addRow()"
+                                            class="w-full px-4 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-200 rounded-lg hover:bg-blue-50 hover:border-blue-400 transition cursor-pointer">
+                                            {{ trans('general.new') }}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
-                    <form id="form-with-multiple-column" class="max-w-full" action="{{ route('payment_parts.store') }}"
-                        method="post">
-                        @csrf
 
-                        <input type="hidden" hidden name="student_id" value="{{ $student[0]->students->id }}">
+                           <div class="flex items-center justify-end gap-2 px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-xl">
 
-                        <div class="repeater">
-                            <div data-repeater-list="list_parts">
-                                <div data-repeater-item>
-                                    <div class="row mb-30">
-                                        <div class="col">
-                                            <label for="">{{ trans('fee_invoice.name') }}</label>
-                                            <select class="custom-select" name="student_id">
-                                                <option value="{{ $student[0]->students->id }}" selected>
-                                                    {{ $student[0]->students->name }}</option>
-                                            </select>
-
-                                        </div>
-                                        <div class="col">
-                                            <label for="">{{ trans('fee_invoice.title') }}</label>
-                                            <select class="custom-select" name="fee_id">
-                                                <option value="" selected>----
-                                                </option>
-                                                @foreach ($student as $std)
-                                                    <option value="{{ $std->fees->id }}">{{ $std->fees->title }}
-                                                        - {{ $std->fees->amount }}</option>
-                                                @endforeach
-                                            </select>
-
-                                        </div>
-
-                                        <div class="col">
-                                            <label for="">{{ trans('PaymentParts.date') }}</label>
-                                            <input type="date" class="form-control" name="pay_at" id="">
-                                        </div>
-                                        <div class="col">
-                                            <label for="">{{ trans('PaymentParts.amount') }}</label>
-                                            <input type="number" class="form-control" name="amount" id="">
-                                        </div>
-                                        <div class="col">
-                                            <label for=""></label>
-                                            <input class="btn btn-danger btn-block mx-auto" data-repeater-delete
-                                                type="button" value="{{ trans('General.delete') }}" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="row mt-20">
-                                <div class="col-12">
-                                    <input class="btn btn-primary" data-repeater-create type="button"
-                                        value="{{ trans('general.new') }}" />
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-
-                        <input type="hidden" name="grade_id" value="{{ $student[0]->grades->id }}"><input
-                            type="hidden" />
-                        <input type="hidden" name="class_id" value="{{ $student[0]->classes->id }}"><input
-                            type="hidden" />
-                        <input type="hidden" name="acd_year" value="{{ $student[0]->acd_year->id }}"><input
-                            type="hidden" />
-                        <div class="row">
-                            <div class="col text-md-right">
-                                <button class="btn btn-success btn-lg"
-                                    type="submit">{{ trans('General.Submit') }}</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                 <button type="submit"
+                        class="h-9 px-4 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                        {{ trans('general.Submit') }}
+                    </button>
             </div>
         </div>
-    </div>
-
+    </form>
 
     @push('scripts')
     @endpush

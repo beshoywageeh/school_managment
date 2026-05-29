@@ -10,4 +10,7 @@ return [
     'is_book' => 'Is Book',
     'book' => 'Book',
     'not_book' => 'Sheet',
+    'sheet' => 'Sheet',
+    'qty' => 'Quantity',
+    'total_price' => 'Total Price',
 ];

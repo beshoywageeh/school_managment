@@ -1,62 +1,57 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('employees.title') }} | {{ trans('General.show') }}
+    {{ trans('employees.title') }} | {{ trans('general.show') }}
 @endsection
 @section('content')
-    <div class="mb-4 row">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row card-title">
-                        <div class="col">
-                            <h4>{{ $user->name }}</h4>
-                        </div>
-                        <div class="col text-md-right">
-                            <button class="btn btn-info" onclick="printDiv()">{{ trans('general.print') }}</button>
-                        </div>
-                    </div>
-                    <div id="print" class="table-responsive">
-                        @can('employees-list')
-                            <table class="table table-striped table-bordered table-sm">
-                                <tr>
-                                    <th>{{ trans('employees.code') }}</th>
-                                    <th>{{ trans('employees.name') }}</th>
-                                    <th>{{ trans('employees.learning') }}</th>
-                                    <th>{{ trans('employees.grade_year') }}</th>
-                                    <th>{{ trans('employees.join_date') }}</th>
-                                    <th>{{ trans('employees.birth_date') }}</th>
-                                    <th>{{ trans('employees.job') }}</th>
-                                </tr>
-                                <tr>
-                                    <td>{{ $user->code }}</td>
-                                    <td>{{ $user->name }}</td>
-                                    <td> {{ $user->learning }}</td>
-                                    <td>{{ $user->grade_year }}</td>
-                                    <td>{{ $user->date_of_hiring }}</td>
-                                    <td>{{ $user->date_of_birth }}</td>
-                                    <td>{{ $user->job->name ?? 'N/A' }}</td>
-                                </tr>
-                                <tr>
-                                    <th>{{ trans('employees.insurance_status') }}</th>
-                                    <th>{{ trans('employees.insurance_number') }}</th>
-                                    <th>{{ trans('employees.insurance_date') }}</th>
-                                </tr>
-                                <tr>
-                                    <td>{{ $user->insurance == 0 ? 'غير مؤمن' : ' مؤمن' }}</td>
-                                    <td>{{ $user->insurance_number }}</td>
-                                    <td>{{ $user->insurance_date }}</td>
-
-                                </tr>
-                                </tbody>
-                            </table>
-                        @endcan
-                    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+            <h4 class="text-lg font-semibold text-gray-800">{{ $user->name }}</h4>
+            <button class="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 font-medium" onclick="printDiv()">{{ trans('general.print') }}</button>
+        </div>
+        <div id="print" class="p-6">
+            @can('employees-list')
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.code') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.name') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.learning') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.grade_year') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.join_date') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.birth_date') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.job') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-800">{{ $user->code }}</td>
+                                <td class="px-4 py-2 text-gray-800 font-medium">{{ $user->name }}</td>
+                                <td class="px-4 py-2 text-gray-600"> {{ $user->learning }}</td>
+                                <td class="px-4 py-2 text-gray-600">{{ $user->grade_year }}</td>
+                                <td class="px-4 py-2 text-gray-600">{{ $user->date_of_hiring }}</td>
+                                <td class="px-4 py-2 text-gray-600">{{ $user->date_of_birth }}</td>
+                                <td class="px-4 py-2 text-gray-600">{{ $user->job->name ?? 'N/A' }}</td>
+                            </tr>
+                        </tbody>
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.insurance_status') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('employees.insurance_number') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase" colspan="2">{{ trans('employees.insurance_date') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-800">{{ $user->insurance == 0 ? 'غير مؤمن' : ' مؤمن' }}</td>
+                                <td class="px-4 py-2 text-gray-600">{{ $user->insurance_number }}</td>
+                                <td class="px-4 py-2 text-gray-600" colspan="2">{{ $user->insurance_date }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
+            @endcan
         </div>
     </div>
 
-    @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @endpush
 @endsection

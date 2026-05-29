@@ -4,76 +4,71 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="row mb-30">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <div class="my-2 text-center row">
-                        <div class="col">
-                            <h6>الرقم : {{ $order->auto_number }}</h6>
-                        </div>
-                        <div class="col">
-                            <h6>النوع : {{ trans('stock.inventory_order') }}</h6>
-                        </div>
-                        <div class="col">
-                            <h6>التاريخ : {{ $order->created_at->format('Y-m-d') }}</h6>
-                        </div>
-                        <div class="col">
-                            <h6>الوقت : {{ $order->created_at->format('g : i : s A') }}</h6>
-                        </div>
-                    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-4 border-b border-gray-100">
+            <div class="grid grid-cols-4 gap-4 text-center">
+                <div>
+                    <h6 class="text-gray-700 font-medium">الرقم : {{ $order->auto_number }}</h6>
                 </div>
-                <form action="{{ route('clothes_gard.submit') }}"method="post" autocomplete="off">
-                    <div class="card-body">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $order->id }}">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr class="my-1">
-                                    <th><strong>#</strong></th>
-                                    <th><strong>{{ trans('Grades.name') }}</strong></th>
-                                    <th><strong>{{ trans('class_rooms.Name') }}</strong></th>
-                                    <th><strong>{{ trans('stock.name') }}</strong></th>
-                                    <th><strong>{{ trans('gard.inv_stock') }}</strong></th>
-                                    <th><strong>{{ trans('gard.actual_stock') }}</strong></th>
-                                    <th><strong>{{ trans('gard.different') }}</strong></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($stocks as $stock)
-                                    <tr>
-                                        <td>{{ $loop->index + 1 }}</td>
-                                        <td>{{ $stock->grade->name }}</td>
-                                        <td>{{ $stock->classroom->name }}</td>
-                                        <td>
-                                            <label>{{ $stock->name }}</label>
-                                            <input type="hidden" value="{{ $stock->id }}" name="stock_id[]">
-                                        </td>
-                                        <td>
-                                            <input type="text" disabled name="inv_stock[]" class="form-control inv_stock"
-                                                value="{{ $stock->orders()->sum('quantity_in') + $stock->opening_qty - $stock->orders()->sum('quantity_out') }}" />
-                                        </td>
-                                        <td>
-                                            <input type="number" name="actual_stock[]" class="form-control actual_stock" />
-                                        </td>
-                                        <td>
-                                            <input type="number" disabled name="different[]"
-                                                class="font-extrabold form-control different" value="0" />
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-
-                        </table>
-                    </div>
-                    <div class="card-footer">
-                        <div class="text-md-right">
-                            <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
-                        </div>
-                    </div>
-                </form>
+                <div>
+                    <h6 class="text-gray-700 font-medium">النوع : {{ trans('stock.inventory_order') }}</h6>
+                </div>
+                <div>
+                    <h6 class="text-gray-700 font-medium">التاريخ : {{ $order->created_at->format('Y-m-d') }}</h6>
+                </div>
+                <div>
+                    <h6 class="text-gray-700 font-medium">الوقت : {{ $order->created_at->format('g : i : s A') }}</h6>
+                </div>
             </div>
         </div>
+        <form action="{{ route('clothes_gard.submit') }}"method="post" autocomplete="off">
+            <div class="p-6">
+                @csrf
+                <input type="hidden" name="id" value="{{ $order->id }}">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase"><strong>#</strong></th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('Grades.name') }}</strong></th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('class_rooms.Name') }}</strong></th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('stock.name') }}</strong></th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('gard.inv_stock') }}</strong></th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('gard.actual_stock') }}</strong></th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('gard.different') }}</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach ($stocks as $stock)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center text-gray-600">{{ $loop->index + 1 }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $stock->grade->name }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $stock->classroom->name }}</td>
+                                    <td class="px-4 py-2">
+                                        <label class="text-gray-800 font-medium">{{ $stock->name }}</label>
+                                        <input type="hidden" value="{{ $stock->id }}" name="stock_id[]">
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="text" disabled name="inv_stock[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 inv_stock"
+                                            value="{{ $stock->orders()->sum('quantity_in') + $stock->opening_qty - $stock->orders()->sum('quantity_out') }}" />
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="number" name="actual_stock[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 actual_stock" />
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="number" disabled name="different[]"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 font-bold text-gray-800 different" value="0" />
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end">
+                <button class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium" type="submit">{{ trans('general.Submit') }}</button>
+            </div>
+        </form>
     </div>
     @push('scripts')
         <script>

@@ -1,91 +1,75 @@
-<!-- resources/views/livewire/schedule-management.blade.php -->
-
-<div class="card">
-    <div class="card-header">
-        <!-- أدوات التحكم -->
-
-        <div class="row">
-            <div class="col-md-4">
-                <h3>جدول المدرسين اليومي</h3>
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="p-4 border-b border-gray-100">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <h3 class="text-lg font-semibold text-gray-800">جدول المدرسين اليومي</h3>
             </div>
-
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>اليوم</label>
-                    <select wire:model.live="selectedDay" class="custom-select">
-                        <option value="">اختر اليوم</option>
-                        <option value="saturday">السبت</option>
-                        <option value="sunday">الأحد</option>
-                        <option value="monday">الاثنين</option>
-                        <option value="tuesday">الثلاثاء</option>
-                        <option value="wednesday">الأربعاء</option>
-                        <option value="thursday">الخميس</option>
-                    </select>
-
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">اليوم</label>
+                <select wire:model.live="selectedDay" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                    <option value="">اختر اليوم</option>
+                    <option value="saturday">السبت</option>
+                    <option value="sunday">الأحد</option>
+                    <option value="monday">الاثنين</option>
+                    <option value="tuesday">الثلاثاء</option>
+                    <option value="wednesday">الأربعاء</option>
+                    <option value="thursday">الخميس</option>
+                </select>
             </div>
-            <div class="col-md-4">
-                <button class="mt-4 btn btn-primary" wire:click="$emit('print')">
+            <div class="flex flex-wrap gap-2 items-start">
+                <button class="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm" wire:click="$emit('print')">
                     <i class="ti ti-print"></i> طباعة
                 </button>
-                <button class="mt-4 btn btn-success" wire:click="autoGenerate">
+                <button class="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm" wire:click="autoGenerate">
                     <i class="ti ti-settings"></i> توليد تلقائي
                 </button>
-                <button class="mt-4 btn btn-danger" wire:click="clearSchedule" onclick="confirm('هل أنت متأكد من مسح الجدول؟') || event.stopImmediatePropagation()">
+                <button class="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm" wire:click="clearSchedule" onclick="confirm('هل أنت متأكد من مسح الجدول؟') || event.stopImmediatePropagation()">
                     <i class="ti ti-trash"></i> مسح الجدول
                 </button>
             </div>
         </div>
-
     </div>
-    <div class="card-body">
+    <div class="p-6">
         @if (session('success'))
-            <div class="bg-white border alert border-success alert-dismissible fade show" role="alert">
-                <h5 class='text-success'><strong>{{ session('success') }}</strong></h5>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+            <div class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
+                <strong>{{ session('success') }}</strong>
             </div>
         @endif
-        <!-- الجدول -->
-        <div class="table-responsive">
-            <table class="table table-bordered">
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
                 <thead>
                     <tr>
-                        <td colspan="9" class="bg-light">
-                            <h5>{{ trans('schedules.' . $selectedDay) }}</h5>
+                        <td colspan="9" class="bg-gray-50 px-4 py-2">
+                            <h5 class="text-gray-800 font-semibold">{{ trans('schedules.' . $selectedDay) }}</h5>
                         </td>
                     </tr>
-                    <tr class="font-bold alert alert-primary">
-                        <th class="text-center align-middle">اسم المدرس</th>
-                        <th class="text-center">الحصة الأولى</th>
-                        <th class="text-center">الحصة الثانية</th>
-                        <th class="text-center">الحصة الثالثة</th>
-                        <th class="text-center">الحصة الرابعة</th>
-                        <th class="text-center">الحصة الخامسة</th>
-                        <th class="text-center">الحصة السادسة</th>
-                        <th class="text-center">الحصة السابعة</th>
-                        <th class="text-center">الحصة الثامنة</th>
+                    <tr class="bg-blue-50 font-semibold">
+                        <th class="px-4 py-2 text-center text-gray-700">اسم المدرس</th>
+                        <th class="px-4 py-2 text-center text-gray-700">الحصة الأولى</th>
+                        <th class="px-4 py-2 text-center text-gray-700">الحصة الثانية</th>
+                        <th class="px-4 py-2 text-center text-gray-700">الحصة الثالثة</th>
+                        <th class="px-4 py-2 text-center text-gray-700">الحصة الرابعة</th>
+                        <th class="px-4 py-2 text-center text-gray-700">الحصة الخامسة</th>
+                        <th class="px-4 py-2 text-center text-gray-700">الحصة السادسة</th>
+                        <th class="px-4 py-2 text-center text-gray-700">الحصة السابعة</th>
+                        <th class="px-4 py-2 text-center text-gray-700">الحصة الثامنة</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-100">
                     @foreach ($Teachers as $Teacher)
-                        <tr>
-                            <td class="font-bold alert alert-primary">{{ $Teacher->name }}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-2 relative">
+                                <span class="font-semibold text-gray-800">{{ $Teacher->name }}</span>
                                 @can('scheduale-create')
                                     <button wire:click="openScheduleModal({{ $Teacher->id }},{{ $Teacher->job_id }})"
-                                        class="btn btn-sm btn-outline-primary position-absolute"
-                                        style="top: 2px; right: 2px;">
+                                        class="absolute top-1 right-1 p-1 text-blue-500 hover:bg-blue-50 rounded">
                                         <i class="ti-plus"></i>
                                     </button>
                                 @endcan
-
                             </td>
                             @for ($i = 1; $i <= 8; $i++)
-                                <td>{{ $Schedules->where('user_id', $Teacher->id)->where('period', $i)->first()->class->title ?? '-' }}
-                                </td>
+                                <td class="px-4 py-2 text-center text-gray-600">{{ $Schedules->where('user_id', $Teacher->id)->where('period', $i)->first()->class->title ?? '-' }}</td>
                             @endfor
-
                         </tr>
                     @endforeach
                 </tbody>
@@ -93,56 +77,47 @@
         </div>
     </div>
 
-    <!-- Modal إضافة/تعديل الجدول -->
     @if ($showScheduleModal)
-        <div class="modal fade show" style="display: block;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">إضافة حصة</h5>
-                        <button wire:click="closeScheduleModal" class="close">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        @error('error')
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>{{ $message }}</strong>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        @enderror
-                        <div class="form-group">
-                            <label>الفصل</label>
-                            <select wire:model="class_id" class="custom-select">
-                                <option value="">اختر الفصل</option>
-                                @foreach ($classes as $classroom)
-                                    <option value="{{ $classroom->id }}">{{ $classroom->title }}</option>
-                                @endforeach
-                            </select>
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-4">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                    <h3 class="text-lg font-semibold text-gray-800">إضافة حصة</h3>
+                    <button wire:click="closeScheduleModal" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6">
+                    @error('error')
+                        <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                            <strong>{{ $message }}</strong>
                         </div>
-
-                        <div class="form-group">
-                            <label>{{ trans('schedules.period') }}</label>
-                            <select class="custom-select" wire:model="period">
-                                <option selected value="">{{ trans('schedules.selected_period') }}</option>
-                                @for ($i = 1; $i <= 8; $i++)
-                                    <option value="{{ $i }}">{{ trans('schedules.period') . ' ' . $i }}
-                                    </option>
-                                @endfor
-                            </select>
-                        </div>
+                    @enderror
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">الفصل</label>
+                        <select wire:model="class_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                            <option value="">اختر الفصل</option>
+                            @foreach ($classes as $classroom)
+                                <option value="{{ $classroom->id }}">{{ $classroom->title }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                    <div class="modal-footer">
-                        <button wire:click="saveSchedule" class="btn btn-primary">حفظ</button>
-                        <button wire:click="closeScheduleModal" class="btn btn-secondary">إلغاء</button>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('schedules.period') }}</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" wire:model="period">
+                            <option selected value="">{{ trans('schedules.selected_period') }}</option>
+                            @for ($i = 1; $i <= 8; $i++)
+                                <option value="{{ $i }}">{{ trans('schedules.period') . ' ' . $i }}</option>
+                            @endfor
+                        </select>
                     </div>
+                </div>
+                <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-xl">
+                    <button wire:click="closeScheduleModal" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium">إلغاء</button>
+                    <button wire:click="saveSchedule" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium">حفظ</button>
                 </div>
             </div>
         </div>
-        <div class="modal-backdrop fade show"></div>
     @endif
-
-
-
-
 </div>

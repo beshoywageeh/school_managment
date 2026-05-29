@@ -154,6 +154,14 @@ return [
             'cleared' => 'Schedule was cleared',
         ],
     ],
+    'index' => [
+        'title' => 'Activity Log',
+        'description' => 'Description',
+        'type' => 'Type',
+        'user' => 'User',
+        'date' => 'Date',
+        'time' => 'Time',
+    ],
     'actions' => [
         'added' => 'Added',
         'updated' => 'Updated',

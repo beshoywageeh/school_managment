@@ -47,7 +47,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3">{{ trans('General.total') }}</td>
+                    <td colspan="3">{{ trans('general.total') }}</td>
                     <td>
                         @if ($order->isset == 1)
                             {{ Number::currency($order->stocks->sum(fn($stock) => $stock->pivot->qty_out * $stock->sales_price_set), 'EGP', 'ar') }}

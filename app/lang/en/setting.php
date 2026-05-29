@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Settings',
+    'print_settings' => 'Print Settings',
     'school_details' => 'School Details',
     'name' => 'School Name',
     'phone' => 'Phone Number',

@@ -4,99 +4,95 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="row mb-30">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <div class="text-center row">
-                        <div class="col">
-                            <h6>الرقم : {{ $order->auto_number }}</h6>
-                        </div>
-                        <div class="col">
-                            <h6>النوع : {{ trans('stock.income_order') }}</h6>
-                        </div>
-                        <div class="col">
-                            <h6>التاريخ : {{ $order->date }}</h6>
-                        </div>
-                        <div class="col">
-                            <h6>الوقت : {{ $order->created_at->format('g:i:s') }}</h6>
-                        </div>
-                    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-4 border-b border-gray-100">
+            <div class="grid grid-cols-4 gap-4 text-center">
+                <div>
+                    <h6 class="text-gray-700 font-medium">الرقم : {{ $order->auto_number }}</h6>
                 </div>
-                <form action="{{ route('bookSheetsOrder.update_tawreed') }}"method="post" autocomplete="off">
-                    <input type="hidden" name="order_id" value="{{ $order->id }}">
-                    <div class="card-body">
-                        @csrf
-                        <table class="table text-center table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>{{ trans('stock.name') }}</th>
-                                    <th>{{ trans('Grades.name') }}</th>
-                                    <th>{{ trans('class_rooms.Name') }}</th>
-                                    <th>{{ trans('stock.manual_num') }}</th>
-                                    <th>{{ trans('stock.manual_date') }}</th>
-                                    <th>{{ trans('stock.quantity') }}</th>
-                                    <th>{{ trans('clothes.sales_price') }}</th>
-                                    <th>{{ trans('report.quantity_total') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($order->stocks as $stock)
-                                    <tr>
-                                        <td>
-                                            <input type="hidden" name="id[]"
-                                                value="{{ $stock->id }}">{{ $stock->name }}
-                                        </td>
-                                        <td>{{ $stock->grade->name }}</td>
-                                        <td>{{ $stock->classroom->name }}</td>
-                                        <td>
-                                            <input type="text" name="manual_num" class="form-control"
-                                                value="{{ $order->manual_number }}">
-                                        </td>
-                                        <td>
-                                            <input type="date" name="manual_date" value="{{ $order->manual_date }}"
-                                                class="form-control">
-                                        </td>
-                                        <td>
-                                            <input type="number" value="0" name="qty[]" class="form-control qty"
-                                                value="{{ $stock->pivot->quantity_in }}">
-                                        </td>
-                                        <td>
-                                            <input type="number" value="0" name="sales[]" class="form-control sales"
-                                                value="{{ $stock->sales_price }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" disabled value="0" class="form-control total_product"
-                                                value="{{ $stock->pivot->quantity_in * $stock->sales_price }}">
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="2">{{ trans('clothes.total_qty') }}</td>
-                                    <td colspan="2">
-                                        <input type="text" disabled value="0" class="form-control" id="grand_qty"
-                                            value="{{ $order->stocks->sum(fn($stock) => $stock->pivot->quantity_in) }}">
-                                    </td>
-                                    <td></td>
-                                    <td colspan="2">{{ trans('clothes.total_price') }}</td>
-                                    <td colspan="2">
-                                        <input type="text" disabled value="0" class="form-control" id="grand_total"
-                                            value="{{ $order->stocks->sum(fn($stock) => $stock->pivot->quantity_in * $stock->sales_price) }}">
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                    <div class="card-footer">
-                        <div class="text-md-right">
-                            <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
-                        </div>
-                    </div>
-                </form>
+                <div>
+                    <h6 class="text-gray-700 font-medium">النوع : {{ trans('stock.income_order') }}</h6>
+                </div>
+                <div>
+                    <h6 class="text-gray-700 font-medium">التاريخ : {{ $order->date }}</h6>
+                </div>
+                <div>
+                    <h6 class="text-gray-700 font-medium">الوقت : {{ $order->created_at->format('g:i:s') }}</h6>
+                </div>
             </div>
         </div>
+        <form action="{{ route('bookSheetsOrder.update_tawreed') }}"method="post" autocomplete="off">
+            <input type="hidden" name="order_id" value="{{ $order->id }}">
+            <div class="p-6">
+                @csrf
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm text-center">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('stock.name') }}</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('Grades.name') }}</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('class_rooms.Name') }}</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('stock.manual_num') }}</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('stock.manual_date') }}</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('stock.quantity') }}</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('clothes.sales_price') }}</th>
+                                <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('report.quantity_total') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach ($order->stocks as $stock)
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2">
+                                        <input type="hidden" name="id[]" value="{{ $stock->id }}">
+                                        <span class="text-gray-800 font-medium">{{ $stock->name }}</span>
+                                    </td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $stock->grade->name }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $stock->classroom->name }}</td>
+                                    <td class="px-4 py-2">
+                                        <input type="text" name="manual_num" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                            value="{{ $order->manual_number }}">
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="date" name="manual_date" value="{{ $order->manual_date }}"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="number" value="0" name="qty[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 qty"
+                                            value="{{ $stock->pivot->quantity_in }}">
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="number" value="0" name="sales[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 sales"
+                                            value="{{ $stock->sales_price }}">
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        <input type="text" disabled value="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 total_product"
+                                            value="{{ $stock->pivot->quantity_in * $stock->sales_price }}">
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot class="bg-gray-50">
+                            <tr>
+                                <td colspan="2" class="px-4 py-2 text-right font-medium text-gray-700">{{ trans('clothes.total_qty') }}</td>
+                                <td colspan="2" class="px-4 py-2">
+                                    <input type="text" disabled value="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" id="grand_qty"
+                                        value="{{ $order->stocks->sum(fn($stock) => $stock->pivot->quantity_in) }}">
+                                </td>
+                                <td></td>
+                                <td colspan="2" class="px-4 py-2 text-right font-medium text-gray-700">{{ trans('clothes.total_price') }}</td>
+                                <td colspan="2" class="px-4 py-2">
+                                    <input type="text" disabled value="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" id="grand_total"
+                                        value="{{ $order->stocks->sum(fn($stock) => $stock->pivot->quantity_in * $stock->sales_price) }}">
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end">
+                <button class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium" type="submit">{{ trans('general.Submit') }}</button>
+            </div>
+        </form>
     </div>
 @endsection
 @push('scripts')

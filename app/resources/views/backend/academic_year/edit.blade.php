@@ -1,53 +1,25 @@
-<div class="modal fade" id="Edit_year-{{ $acadmice_year->id }}" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title" id="exampleModalLabel">
-                    <div class="">
-                        <h6>{{ trans('academic_year.title') }} | {{ trans('general.edit') }}</h6>
-                    </div>
+<x-modal id="editAcademicYear_{{ $acadmice_year->id }}" title="{{ trans('academic_year.title') }} | {{ trans('general.edit') }}" can="academic_year-edit" icon="pencil">
+    <form action="{{ route('academic_year.update') }}" method="post" id="editAcademicYear_{{ $acadmice_year->id }}">
+        @csrf
+        <input type="hidden" name="id" value="{{ $acadmice_year->id }}">
+        <div class="px-6 py-5 space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-medium text-gray-500">{{ trans('academic_year.year_start') }}</label>
+                    <input name="year_start" type="date" value="{{ $acadmice_year->year_start }}"
+                        class="w-full h-9 rounded-lg border border-gray-200 bg-white text-sm text-gray-900 px-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="space-y-1.5">
+                    <label class="text-xs font-medium text-gray-500">{{ trans('academic_year.year_end') }}</label>
+                    <input name="year_end" type="date" value="{{ $acadmice_year->year_end }}"
+                        class="w-full h-9 rounded-lg border border-gray-200 bg-white text-sm text-gray-900 px-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">
+                </div>
             </div>
-            <form action="{{ route('academic_year.update') }}" method="post">
-                <div class="modal-body">
-                    <input type="hidden" name="id" value="{{ $acadmice_year->id }}">
-                    @csrf
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th>{{ trans('academic_year.year_end') }}</th>
-                                <th>
-                                    {{ trans('academic_year.status') }}
-                                </th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="input-group date display-years" id="datepicker-action">
-                                        <input class="form-control" name="year_end" type="text"
-                                            value="{{ $acadmice_year->year_end }}">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="status" class="form-control"
-                                        @checked($acadmice_year->status == 1)>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">{{ trans('general.Submit') }}</button>
-                    <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">{{ trans('general.close') }}</button>
-                </div>
-            </form>
+            <div class="flex items-center gap-2">
+                <input type="checkbox" name="status" id="edit_status_{{ $acadmice_year->id }}"
+                    class="w-4 h-4 accent-blue-600 rounded" @checked($acadmice_year->status == 1)>
+                <label for="edit_status_{{ $acadmice_year->id }}" class="text-sm text-gray-700">{{ trans('academic_year.status') }}</label>
+            </div>
         </div>
-    </div>
-</div>
+    </form>
+    </x-modal>

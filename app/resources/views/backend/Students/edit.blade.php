@@ -6,162 +6,107 @@
     <form action="{{ route('students.update', $student->id) }}" method="post">
         <input type="hidden" name="id" value="{{ $student->id }}">
         @csrf
-        <div class="row mb-30">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ trans('student.student_info') }}</h4>
-                        <div class="row">
-                            <div class="col">
-                                <x-input type="text" name="student_name"
-                                    value="{{ $student->name }}">{{ trans('student.name') }}
-                                </x-input>
-                            </div>
-                            <div class="col">
-                                <x-input type="date" name="birth_date" class="form-control"
-                                    value="{{ $student->birth_date }}">
-                                    {{ trans('student.birth_date') }}
-                                </x-input>
-                            </div>
-
-                            <div class="col">
-                                <label for="check_birth" class="">{{ trans('student.checkbirth_date') }}</label>
-                                <input type="text" disabled name="check_birth" class="form-control">
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="national_id">{{ trans('student.national_id') }}</label>
-                                    <input type="text" value="{{ $student->national_id }}" name="national_id"
-                                        class="form-control" id="national_id" maxlength="14"
-                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                                    @error('national_id')
-                                        <div class="mt-1 alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="col">
-                                    <label for="nationality" class="">{{ trans('general.nationality') }}</label>
-                                    <select id="nationality" class="custom-select select2" name="nationality">
-                                        <option value="" selected disabled>{{ trans('general.nationality') }}
-                                        </option>
-                                        @foreach (\App\Models\nationality::all() as $nationality)
-                                            <option value="{{ $nationality->id }}" @selected(old('nationality', $student->nationality_id) == $nationality->id)>
-                                                {{ $nationality->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('nationality')
-                                        <div class="mt-1 alert alert-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <x-input.gender-select name="gender" />
-                            <x-input.Student_Status />
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <label>{{ trans('student.address') }}</label>
-                                <textarea class="form-control" name="address" id="" rows="5">{{ $student->address }}</textarea>
-                            </div>
-                        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('student.student_info') }}</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <x-input type="text" name="student_name"
+                            value="{{ $student->name }}">{{ trans('student.name') }}
+                        </x-input>
+                    </div>
+                    <div>
+                        <x-input type="date" name="birth_date"
+                            value="{{ $student->birth_date }}">
+                            {{ trans('student.birth_date') }}
+                        </x-input>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="check_birth" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.checkbirth_date') }}</label>
+                        <input type="text" disabled name="check_birth" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500">
                     </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ trans('student.study_info') }}</h4>
-                        <div class="row">
-
-                            <div class="col">
-                                <label class="" for="form-horizontal-full-name">
-                                    {{ trans('student.choose_grade') }}
-                                </label>
-                                <select class='custom-select' name="grade" id="grades">
-                                    <option> {{ trans('student.choose_grade') }}</option>
-                                    @foreach ($grades as $grade)
-                                        <option @selected($student->grade_id == $grade->id) value="{{ $grade->id }}">
-                                            {{ $grade->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label class="" for="form-horizontal-full-name">
-                                    {{ trans('student.choose_classroom') }}
-                                </label>
-                                <select class='custom-select' name="class_room" id="classrooms">
-                                    <option selected value="{{ $student->classroom_id }}">{{ $student->classroom->name }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col">
-                                <label for="parent" class="">{{ trans('student.parent') }}</label>
-                                <select name="parents" id="" class="custom-select select2">
-                                    <option> {{ trans('student.parent') }}</option>
-
-                                    @foreach ($parents as $parent)
-                                        <option @selected($student->parent_id == $parent->id) value="{{ $parent->id }}">
-                                            {{ $parent->Father_Name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div>
+                        <label for="national_id" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.national_id') }}</label>
+                        <input type="text" value="{{ $student->national_id }}" name="national_id"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" id="national_id" maxlength="14"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                        @error('national_id')
+                            <div class="mt-1 text-sm text-red-600">{{ $message }}</div>
+                        @enderror
                     </div>
-                    <div class="card-footer">
-                        <div class="row">
-                            <div class="col text-md-right">
-
-                                <x-button accesskey="s" class="primary btn-block" type="submit">
-                                    {{ trans('general.Submit') }}</x-button>
-                            </div>
-                        </div>
+                    <div>
+                        <label for="nationality" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('general.nationality') }}</label>
+                        <select id="nationality" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="nationality">
+                            <option value="" selected disabled>{{ trans('general.nationality') }}
+                            </option>
+                            @foreach (\App\Models\nationality::all() as $nationality)
+                                <option value="{{ $nationality->id }}" @selected(old('nationality', $student->nationality_id) == $nationality->id)>
+                                    {{ $nationality->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('nationality')
+                            <div class="mt-1 text-sm text-red-600">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <x-input.gender-select name="gender" />
+                    <x-input.Student_Status />
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.address') }}</label>
+                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="address" rows="5">{{ $student->address }}</textarea>
+                </div>
             </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('student.study_info') }}</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="form-horizontal-full-name">
+                            {{ trans('student.choose_grade') }}
+                        </label>
+                        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="grade" id="grades">
+                            <option> {{ trans('student.choose_grade') }}</option>
+                            @foreach ($grades as $grade)
+                                <option @selected($student->grade_id == $grade->id) value="{{ $grade->id }}">
+                                    {{ $grade->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="form-horizontal-full-name">
+                            {{ trans('student.choose_classroom') }}
+                        </label>
+                        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="class_room" id="classrooms">
+                            <option selected value="{{ $student->classroom_id }}">{{ $student->classroom->name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label for="parent" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.parent') }}</label>
+                    <select name="parents" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                        <option> {{ trans('student.parent') }}</option>
 
-
+                        @foreach ($parents as $parent)
+                            <option @selected($student->parent_id == $parent->id) value="{{ $parent->id }}">
+                                {{ $parent->Father_Name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <x-button accesskey="s" class="primary" type="submit">
+                        {{ trans('general.Submit') }}</x-button>
+                </div>
+            </div>
         </div>
 
     </form>
 
     @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const birthDateInput = document.querySelector('input[name="birth_date"]');
-                const checkBirthInput = document.querySelector('input[name="check_birth"]');
-
-                if (birthDateInput && checkBirthInput) {
-                    const makeDate = () => {
-                        const date = new Date();
-                        date.setFullYear(new Date().getFullYear()); // Set to current year
-                        date.setMonth(9); // October (months are 0-indexed)
-                        date.setDate(1);
-                        return date;
-                    };
-
-                    birthDateInput.addEventListener('change', () => {
-                        const birthDate = new Date(birthDateInput.value);
-                        const checkDate = new Date(makeDate());
-                        console.log(checkDate);
-                        const diffTime = Math.abs(checkDate - birthDate);
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                        const years = Math.floor(diffDays / 365);
-                        const months = Math.floor((diffDays % 365) / 30);
-                        const days = (diffDays % 365) % 30;
-                        checkBirthInput.value = `${years} سنه, ${months} شهر, ${days} يوم`;
-                    });
-                } else {
-                    console.error('Input elements not found');
-                }
-            });
-        </script>
+      
         <script>
             $(document).ready(function() {
                 $('#grades').on('change', function() {
@@ -183,7 +128,6 @@
                                     $('#classrooms').append(
                                         `<option value="${value.id}">${value.name}</option>`
                                     );
-
                                 });
                             },
                         });

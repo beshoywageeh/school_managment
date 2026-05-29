@@ -2,99 +2,101 @@
 @section('title')
     {{ trans('class_rooms.title') }}
 @endsection
-@push('css')
-@endpush
+
 @section('content')
-    <div class="row">
-        <div class="col">
-            <div class="mb-4 card">
-                <div class="card-body">
-                    <div class="row card-title">
-                        <div class="col-lg">
-                            <h4>{{ trans('class_rooms.title') }}</h4>
-                        </div>
-                        <div class="col-lg text-md-right">
-                            @can('class_rooms-create')
-                                <x-button type="" data-toggle="modal" data-target="#CreateClassRoom" class="primary">
-                                    <i class="ti-plus"></i>
-                                    {{ trans('class_rooms.new') }}
-                                </x-button>
-                            @endcan
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        @can('class_rooms-list')
-                            <table class="table table-striped table-bordered table-sm" id="datatable">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>{{ trans('class_rooms.Name') }}</th>
-                                        <th>{{ trans('class_rooms.grades') }}</th>
-                                        <th>{{ trans('class_rooms.Added_By') }}</th>
-                                        <th>{{ trans('general.created_at') }}</th>
-                                        <th>{{ trans('class_rooms.Student_Count') }}</th>
-                                        <th>{{ trans('general.actions') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($data['class_rooms'] as $class_room)
-                                        <tr>
-                                            <td> {{ $loop->iteration }}</td>
-                                            <td><a target='_blank'
-                                                    href="{{ route('class-rooms.show', $class_room->id) }}">{{ $class_room->name }}</a>
-                                                &nbsp; {{ $class_room->tammen() }}
-                                            </td>
-                                            <td> {{ $class_room->grade->name }}</td>
-                                            <td>{{ $class_room->user->name }}</td>
-                                            <td>{{ $class_room->created_at->format('Y/m/d') }}</td>
-                                            <td>{{ $class_room->students_count }}</td>
-                                            <td>
-                                                <x-dropdown-table :buttonText="trans('general.actions')" :items="[
-                                                    [
-                                                        'type' => 'button',
-                                                        'target' => '#class-edit-' . $class_room->id,
-                                                        'text' => trans('general.edit'),
-                                                        'icon' => 'ti-pencil-alt',
-                                                        'can' => 'class_rooms-edit',
-                                                    ],
-                                                    [
-                                                        'type' => 'link',
-                                                        'url' => route('class-rooms.destroy', $class_room->id),
-                                                        'text' => trans('general.delete'),
-                                                        'icon' => 'ti-trash',
-                                                        'onclick' => 'confirmation(event)',
-                                                        'can' => 'class_rooms-delete',
-                                                    ],
-                                                    [
-                                                        'type' => 'link',
-                                                        'url' => route('class-rooms.show', $class_room->id),
-                                                        'text' => trans('general.info'),
-                                                        'icon' => 'ti-info-alt',
-                                                        'target' => '_blank',
-                                                        'can' => 'class_rooms-info',
-                                                    ],
-                                                    [
-                                                        'type' => 'link',
-                                                        'url' => route('class-rooms.tammen', $class_room->id),
-                                                        'text' => trans('general.tammen'),
-                                                        'icon' => '',
-                                                        'can' => 'class_rooms-tammen',
-                                                    ],
-                                                ]" />
-                                            </td>
-                                        </tr>
-                                        @include('backend.class_rooms.edit')
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        @endcan
-                    </div>
-                </div>
-            </div>
-            @include('backend.class_rooms.create')
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+            <h4 class="text-lg font-semibold text-gray-800">{{ trans('class_rooms.title') }}</h4>
+            @can('class_rooms-create')
+                <button type="" data-toggle="modal" data-target="#CreateClassRoom" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    {{ trans('class_rooms.new') }}
+                </button>
+            @endcan
         </div>
 
+        @can('class_rooms-list')
+            <div class="overflow-x-auto">
+                <table class="min-w-full" >
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">#</th>
+                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('class_rooms.Name') }}</th>
+                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('class_rooms.grades') }}</th>
+                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('class_rooms.Added_By') }}</th>
+                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('general.created_at') }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">{{ trans('class_rooms.Student_Count') }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">{{ trans('general.actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @foreach($data['class_rooms'] as $class_room)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->iteration }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800">
+                                <a target="_blank" href="{{ route('class_rooms.show', $class_room->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    {{ $class_room->name }}
+                                </a>
+                                <span class="text-gray-500">{{ $class_room->tammen() }}</span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $class_room->grade->name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $class_room->user->name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $class_room->created_at->format('Y/m/d') }}</td>
+                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $class_room->students_count }}</td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex items-center justify-center gap-1">
+                                    @can('class_rooms-info')
+                                    <a href="{{ route('class_rooms.show', $class_room->id) }}" target="_blank" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="{{ trans('general.info') }}">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </a>
+                                    @endcan
+                                    @can('class_rooms-edit')
+                                        <button type="button" x-on:click="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'EditClassRoom-{{ $class_room->id }}' }))" class="p-2 text-green-600 hover:bg-green-50 rounded-lg" title="{{ trans('general.edit') }}">
+                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </button>
+
+                                    @endcan
+                                    @can('class_rooms-delete')
+                                    <form action="{{ route('class_rooms.destroy', $class_room->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" x-on:click="window.dispatchEvent(new CustomEvent('show-alert', { detail: {
+                                                        title: 'هل تريد حذف هذا المقال؟',
+                                                        message: 'لن تتمكن من استعادة هذا المقال بعد الحذف!',
+                                                        type: 'danger',
+                                                        confirmButtonText: 'نعم، احذفه',
+                                                        onConfirm: () => $el.closest('form').submit()
+                                                    } }))" title="{{ trans('general.delete') }}">
+                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                    @endcan
+                                    @can('class_rooms-tammen')
+                                    <a href="{{ route('class_rooms.tammen', $class_room->id) }}" class="p-2 text-purple-600 hover:bg-purple-50 rounded-lg" title="{{ trans('general.tammen') }}">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </a>
+                                    @endcan
+                                </div>
+                            </td>
+                        </tr>
+                        @include('backend.class_rooms.edit')
+
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endcan
     </div>
-    @push('scripts')
-    @endpush
+
+    @include('backend.class_rooms.create')
 @endsection

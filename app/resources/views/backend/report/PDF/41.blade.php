@@ -130,14 +130,14 @@
                     <tr class="">
                         <th rowspan="2"><strong>#</strong></th>
                         <th rowspan="2"><strong>{{ trans('student.name') }}</strong></th>
-                        <th rowspan="2"><strong>{{ trans('General.std_status') }}</strong></th>
+                        <th rowspan="2"><strong>{{ trans('general.std_status') }}</strong></th>
                         <th rowspan="2"><strong>{{ trans('general.religion') }}</strong></th>
                         <th rowspan="2"><strong>{{ trans('student.national_id') }}</strong></th>
                         <th rowspan="2"><strong>{{ trans('student.birth_date') }}</strong></th>
                         <th colspan="3"><strong>{{ trans('student.october') }}</strong></th>
                         <th rowspan="2"><strong>{{ trans('Parents.Father_Name') }}</strong></th>
                         <th rowspan="2"><strong>{{ trans('Parents.Address') }}</strong></th>
-                        <th rowspan="2">{{ trans('General.note') }}</th>
+                        <th rowspan="2">{{ trans('general.note') }}</th>
                     </tr>
                     <tr class="">
                         <th><strong>{{ trans('student.year') }}</strong></th>
@@ -186,14 +186,14 @@
                     <tr class="">
                         <th rowspan="2"><strong>#</strong></th>
                         <th rowspan="2"><strong>{{ trans('student.name') }}</strong></th>
-                        <th rowspan="2"><strong>{{ trans('General.std_status') }}</strong></th>
+                        <th rowspan="2"><strong>{{ trans('general.std_status') }}</strong></th>
                         <th rowspan="2"><strong>{{ trans('general.religion') }}</strong></th>
                         <th rowspan="2"><strong>{{ trans('student.national_id') }}</strong></th>
                         <th rowspan="2"><strong>{{ trans('student.birth_date') }}</strong></th>
                         <th colspan="3"><strong>{{ trans('student.october') }}</strong></th>
                         <th rowspan="2"><strong>{{ trans('Parents.Father_Name') }}</strong></th>
                         <th rowspan="2"><strong>{{ trans('Parents.Address') }}</strong></th>
-                        <th rowspan="2">{{ trans('General.note') }}</th>
+                        <th rowspan="2">{{ trans('general.note') }}</th>
                     </tr>
                     <tr class="">
                         <th><strong>{{ trans('student.year') }}</strong></th>

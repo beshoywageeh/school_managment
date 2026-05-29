@@ -6,7 +6,6 @@
 
 @push('css')
     <style>
-        /* General Dashboard Styles */
         .main-content {
             background-color: #f4f7f6;
         }
@@ -17,8 +16,6 @@
             margin-bottom: 1.5rem;
         }
 
-
-        /* Stat Cards */
         .dashboard-stat-card {
             border: none;
             border-radius: 1rem;
@@ -38,31 +35,6 @@
             padding: 1.5rem;
         }
 
-        .dashboard-stat-card .stat-icon {
-            font-size: 2.5rem;
-            padding: 1rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .dashboard-stat-card .stat-count {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0;
-            color: #333;
-        }
-
-        .dashboard-stat-card .stat-label {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #6c757d;
-            margin: 0;
-        }
-
-        /* Quick Actions */
         .quick-action-tile {
             display: flex;
             flex-direction: column;
@@ -94,245 +66,183 @@
             font-weight: 600;
             margin: 0;
         }
-
-        /* Chart Cards */
-        .chart-card {
-            border: none;
-            border-radius: 1rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
-            padding: 1.5rem;
-        }
-
-        /* Activity Log */
-        .activity-item {
-            border-left: 2px solid #e9ecef;
-            padding-left: 1.5rem;
-            padding-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .activity-item:last-child {
-            border-left: none;
-            padding-bottom: 0;
-        }
-
-        .activity-item::before {
-            content: '';
-            position: absolute;
-            left: -6px;
-            top: 0;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #007bff;
-        }
-
-        .activity-time {
-            font-size: 0.8rem;
-            color: #6c757d;
-        }
-
-        .activity-user {
-            font-weight: 600;
-            color: #333;
-        }
-
-        /* Tables */
-        .dashboard-table thead th {
-            border-top: none;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            color: #6c757d;
-        }
     </style>
 @endpush
 
 @section('content')
-    @php
-        $stat_icons = [
-            'Students' => ['icon' => 'fa-graduation-cap', 'color' => 'bg-primary'],
-            'parents' => ['icon' => 'fa-users', 'color' => 'bg-success'],
-            'employees' => ['icon' => 'fa-black-tie', 'color' => 'bg-info'],
-            'totalInvoiced' => ['icon' => 'fa-money', 'color' => 'bg-warning'],
-            'totalPaid' => ['icon' => 'fa-check-circle', 'color' => 'bg-success'],
-            'pending' => ['icon' => 'fa-exclamation-triangle', 'color' => 'bg-danger'],
-        ];
-
-        $action_icons = [
-            'Students' => 'fa-user-plus',
-            'parents' => 'fa-users',
-            'Grade' => 'fa-list-alt',
-            'Class_Rooms' => 'fa-list-ol',
-            'schoolfees' => 'fa-money',
-            'jobs' => 'fa-black-tie',
-            'backup' => 'fa-database',
-        ];
-    @endphp
-
     <!-- Stat Cards -->
-    <div class="row mb-4">
+    <div class="flex flex-wrap gap-4 mb-6" style="display: flex !important; flex-wrap: wrap !important;">
         @can('Students-list')
-            <div class="col-xl-4 col-md-6 mb-4">
-                <div class="card dashboard-stat-card h-100">
-                    <div class="card-body">
-                        <div class="stat-icon {{ $stat_icons['Students']['color'] }}">
-                            <i class="fa {{ $stat_icons['Students']['icon'] }}"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="stat-count">{{ $students }}</h3>
-                            <p class="stat-label">{{ trans('Sidebar.Students') }}</p>
-                        </div>
-                        <a href="{{ route('students.index') }}" class="stretched-link"></a>
-                    </div>
+            <x-stat_card class="border-blue-400">
+                <div class="w-16 h-16 rounded-xl bg-blue-500 flex items-center justify-center text-white">
+                    <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                    </svg>
                 </div>
-            </div>
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-800">{{ $students }}</h3>
+                    <p class="text-gray-500">{{ trans('Sidebar.Students') }}</p>
+                </div>
+            </x-stat_card>
         @endcan
+
         @can('parents-list')
-            <div class="col-xl-4 col-md-6 mb-4">
-                <div class="card dashboard-stat-card h-100">
-                    <div class="card-body">
-                        <div class="stat-icon {{ $stat_icons['parents']['color'] }}">
-                            <i class="fa {{ $stat_icons['parents']['icon'] }}"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="stat-count">{{ $parents }}</h3>
-                            <p class="stat-label">{{ trans('Sidebar.parents') }}</p>
-                        </div>
-                        <a href="{{ route('parents.index') }}" class="stretched-link"></a>
-                    </div>
+            <x-stat_card class="border-green-400">
+                <div class="w-16 h-16 rounded-xl bg-green-500 flex items-center justify-center text-white">
+                    <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
                 </div>
-            </div>
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-800">{{ $parents }}</h3>
+                    <p class="text-gray-500">{{ trans('Sidebar.parents') }}</p>
+                </div>
+            </x-stat_card>
         @endcan
+
         @can('employees-list')
-            <div class="col-xl-4 col-md-6 mb-4">
-                <div class="card dashboard-stat-card h-100">
-                    <div class="card-body">
-                        <div class="stat-icon {{ $stat_icons['employees']['color'] }}">
-                            <i class="fa {{ $stat_icons['employees']['icon'] }}"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="stat-count">{{ $employees }}</h3>
-                            <p class="stat-label">{{ trans('Sidebar.employees') }}</p>
-                        </div>
-                        <a href="{{ route('employees.index') }}" class="stretched-link"></a>
-                    </div>
+            <x-stat_card class="border-cyan-400">
+                <div class="w-16 h-16 rounded-xl bg-cyan-500 flex items-center justify-center text-white">
+                    <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
                 </div>
-            </div>
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-800">{{ $employees }}</h3>
+                    <p class="text-gray-500">{{ trans('Sidebar.employees') }}</p>
+                </div>
+            </x-stat_card>
         @endcan
     </div>
 
     <!-- Financial Summary Cards -->
     @if (Auth::user()->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'Recipt_Payment-list']))
-        <div class="row mb-4">
-            <div class="col-xl-4 col-md-6 mb-4">
-                <div class="card dashboard-stat-card h-100 border-left-warning">
-                    <div class="card-body">
-                        <div class="stat-icon {{ $stat_icons['totalInvoiced']['color'] }}">
-                            <i class="fa {{ $stat_icons['totalInvoiced']['icon'] }}"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="stat-count">{{ number_format($totalInvoiced, 2) }}</h3>
-                            <p class="stat-label">{{ trans('Sidebar.fees_invoice') }} (Total)</p>
-                        </div>
-                        <a href="{{ route('fee-invoice.index') }}" class="stretched-link"></a>
-                    </div>
+        <div class="flex flex-wrap gap-4 mb-6" style="display: flex !important; flex-wrap: wrap !important;">
+            <x-stat_card>
+                <div class="w-16 h-16 rounded-xl bg-yellow-500 flex items-center justify-center text-white">
+                    <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                 </div>
-            </div>
-            <div class="col-xl-4 col-md-6 mb-4">
-                <div class="card dashboard-stat-card h-100 border-left-success">
-                    <div class="card-body">
-                        <div class="stat-icon {{ $stat_icons['totalPaid']['color'] }}">
-                            <i class="fa {{ $stat_icons['totalPaid']['icon'] }}"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="stat-count">{{ number_format($totalPaid, 2) }}</h3>
-                            <p class="stat-label">{{ trans('Sidebar.Recipt_Payment') }} (Total)</p>
-                        </div>
-                        <a href="{{ route('receipt-payment.index') }}" class="stretched-link"></a>
-                    </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalInvoiced, 2) }}</h3>
+                    <p class="text-gray-500">{{ trans('Sidebar.fees_invoice') }} (Total)</p>
                 </div>
-            </div>
-            <div class="col-xl-4 col-md-6 mb-4">
-                <div class="card dashboard-stat-card h-100 border-left-danger">
-                    <div class="card-body">
-                        <div class="stat-icon {{ $stat_icons['pending']['color'] }}">
-                            <i class="fa {{ $stat_icons['pending']['icon'] }}"></i>
-                        </div>
-                        <div class="ml-4">
-                            <h3 class="stat-count">{{ number_format($totalInvoiced - $totalPaid, 2) }}</h3>
-                            <p class="stat-label">{{trans('Sidebar.pending_balance')}}</p>
-                        </div>
-                    </div>
+            </x-stat_card>
+            <x-stat_card class="border-green-400">
+                <div class="w-16 h-16 rounded-xl bg-green-500 flex items-center justify-center text-white">
+                    <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                 </div>
-            </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalPaid, 2) }}</h3>
+                    <p class="text-gray-500">{{ trans('Sidebar.Recipt_Payment') }} (Total)</p>
+                </div>
+            </x-stat_card>
+
+            <x-stat_card class="border-red-400">
+
+                    <div class="w-16 h-16 rounded-xl bg-red-500 flex items-center justify-center text-white">
+                        <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.342-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalInvoiced - $totalPaid, 2) }}
+                        </h3>
+                        <p class="text-gray-500">{{ trans('Sidebar.pending_balance') }}</p>
+                    </div>
+
+            </x-stat_card>
+
         </div>
     @endif
 
-
     <!-- Quick Actions -->
-    <div class="row mb-4">
-
+    <div class="flex flex-wrap gap-4 mb-6" style="display: flex !important; flex-wrap: wrap !important;">
         @can('Students-create')
-            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
-                <a href="#" data-toggle="modal" data-target="#fastadd" class="quick-action-tile">
-                    <div class="action-icon"><i class="fa {{ $action_icons['Students'] }} fa-2x"></i></div>
-                    <p class="action-label">{{ trans('general.buttons.create') }} {{ trans('Sidebar.Students') }}</p>
+            <a href="{{ route('students.index') }}" class="quick-action-tile">
+                <div class="action-icon">
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                    </svg>
+                </div>
+                <p class="action-label">{{ trans('general.buttons.create') }} {{ trans('Sidebar.Students') }}</p>
+            </a>
+        @endcan
 
-                </a>
-                @include('backend.Students.fast_add_student')
-            </div>
-        @endcan
         @can('parents-create')
-            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
-                <a href="{{ route('parents.create') }}" class="quick-action-tile">
-                    <div class="action-icon"><i class="fa {{ $action_icons['parents'] }} fa-2x"></i></div>
-                    <p class="action-label">{{ trans('general.buttons.create') }} {{ trans('Sidebar.parents') }}</p>
-                </a>
-            </div>
+            <a href="{{ route('parents.create') }}" class="quick-action-tile">
+                <div class="action-icon">
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </div>
+                <p class="action-label">{{ trans('general.buttons.create') }} {{ trans('Sidebar.parents') }}</p>
+            </a>
         @endcan
+
         @can('grade-list')
-            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
-                <a href="#" data-toggle="modal" data-target="#CreateGrade" class="quick-action-tile">
-                    <div class="action-icon"><i class="fa {{ $action_icons['Grade'] }} fa-2x"></i></div>
-                    <p class="action-label">{{ trans('Sidebar.Grade') }}</p>
-                </a>
-                @include('backend.Grades.create')
-            </div>
+            <a href="#" data-toggle="modal" data-target="#CreateGrade" class="quick-action-tile">
+                <div class="action-icon">
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                    </svg>
+                </div>
+                <p class="action-label">{{ trans('Sidebar.Grade') }}</p>
+            </a>
         @endcan
+
         @can('class_rooms-list')
-            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
-                <a href="#" data-toggle="modal" data-target="#CreateClassRoom" class="quick-action-tile">
-                    <div class="action-icon"><i class="fa {{ $action_icons['Class_Rooms'] }} fa-2x"></i></div>
-                    <p class="action-label">{{ trans('Sidebar.Class_Rooms') }}</p>
-                </a>
-                @include('backend.class_rooms.create')
-            </div>
+            <a href="#" data-toggle="modal" data-target="#CreateClassRoom" class="quick-action-tile">
+                <div class="action-icon">
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                </div>
+                <p class="action-label">{{ trans('Sidebar.Class_Rooms') }}</p>
+            </a>
         @endcan
 
         @can('jobs-list')
-            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
-                <a href="#" data-toggle="modal" data-target="#Create_Job" class="quick-action-tile">
-                    <div class="action-icon"><i class="fa {{ $action_icons['jobs'] }} fa-2x"></i></div>
-                    <p class="action-label">{{ trans('Sidebar.jobs') }}</p>
-                </a>
-                @include('backend.Job.create')
-            </div>
+            <a href="#" data-toggle="modal" data-target="#Create_Job" class="quick-action-tile">
+                <div class="action-icon">
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <p class="action-label">{{ trans('Sidebar.jobs') }}</p>
+            </a>
         @endcan
+
         @can('backup-list')
-            <div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-4">
-                <a href="{{ route('backup.create') }}" class="quick-action-tile">
-                    <div class="action-icon"><i class="fa {{ $action_icons['backup'] }} fa-2x"></i></div>
-                    <p class="action-label">{{ trans('general.buttons.create') . ' ' . trans('backup.title') }}</p>
-                </a>
-            </div>
+            <a href="{{ route('backup.create') }}" class="quick-action-tile">
+                <div class="action-icon">
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                </div>
+                <p class="action-label">{{ trans('general.buttons.create') }} {{ trans('backup.title') }}</p>
+            </a>
         @endcan
+
     </div>
 
-
-
-    <!--Charts-->
-    <div class="row mb-4">
+    <!-- Charts -->
+    <div class="flex flex-wrap gap-6 mb-6" style="display: flex !important; flex-wrap: wrap !important;">
         @if (Auth::user()->hasAnyPermission([
                 'academic_year-list',
                 'schoolfees-list',
@@ -342,64 +252,30 @@
                 'payment_parts-list',
                 'exchange_bonds-list',
             ]))
-            <div class="col-lg-6 mb-4">
-                <div class="card chart-card h-100">
-                    <h5 class="card-title text-center dashboard-heading">{{ trans('Sidebar.accounting') }}</h5>
-                    <div class="chart-wrapper">
-                        <canvas id="canvas3" style="width: 100%; height: 300px;"></canvas>
-                    </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+                style="flex: 1 1 calc(50% - 1rem); min-width: 300px;">
+                <h5 class="text-lg font-semibold text-gray-800 mb-4 text-center">{{ trans('Sidebar.accounting') }}</h5>
+                <div class="chart-wrapper">
+                    <canvas id="canvas3" style="width: 100%; height: 300px;"></canvas>
                 </div>
             </div>
         @endif
+
         @if (Auth::user()->hasAnyPermission(['Students-list', 'grade-list']))
-            <div class="col-lg-6 mb-4">
-                <div class="card chart-card h-100">
-                    <h5 class="card-title text-center dashboard-heading">{{ trans('report.student_numbers') }}</h5>
-                    <div class="chart-wrapper">
-                        <canvas id="canvas4" style="width: 100%; height: 300px;"></canvas>
-                    </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+                style="flex: 1 1 calc(50% - 1rem); min-width: 300px;">
+                <h5 class="text-lg font-semibold text-gray-800 mb-4 text-center">{{ trans('report.student_numbers') }}
+                </h5>
+                <div  id="student_number">
+
+                    {{-- <canvas id="canvas4" style="width: 100%; height: 300px;"></canvas> --}}
                 </div>
             </div>
         @endif
     </div>
-
 @endsection
 
-
-@push('js')
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const birthDateInput = document.querySelector('input[name="birth_date"]');
-            const checkBirthInput = document.querySelector('input[name="check_birth"]');
-
-            if (birthDateInput && checkBirthInput) {
-                birthDateInput.addEventListener('change', () => {
-                    const birthDate = new Date(birthDateInput.value);
-                    const now = new Date();
-
-                    let years = now.getFullYear() - birthDate.getFullYear();
-                    let months = now.getMonth() - birthDate.getMonth();
-                    let days = now.getDate() - birthDate.getDate();
-
-                    if (days < 0) {
-                        months--;
-                        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-                        days += prevMonth.getDate();
-                    }
-
-                    if (months < 0) {
-                        years--;
-                        months += 12;
-                    }
-
-                    checkBirthInput.value = `${years} سنه, ${months} شهر, ${days} يوم`;
-                });
-            } else {
-                // console.error('Input elements not found');
-            }
-        });
-    </script>
+@push('scripts')
     <script>
         $(document).ready(function() {
             $('#grades').on('change', function() {
@@ -416,12 +292,9 @@
                                 '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
                             );
                             $.each(data, function(key, value) {
-                                console.log(key);
-                                console.log(value.name);
                                 $('#classrooms').append(
                                     `<option value="${value.id}">${value.name}</option>`
                                 );
-
                             });
                         },
                     });
@@ -431,48 +304,24 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#fastadd form').on('submit', function(e) {
-                e.preventDefault();
-                let formData = $(this).serialize();
-                $.ajax({
-                    url: "{{ URL::to('/ajax/fast_add') }}",
-                    type: "POST",
-                    data: formData,
-                    success: function(response) {
-                        if (response.success) {
-                            // $('#fastadd').modal('hide');
-                            $('#fastadd form')[0].reset();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success!',
-                                text: response.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: response.message,
-                                showConfirmButton: true
-                            });
-                        }
-                    },
-                    error: function(response) {
-                        let errors = response.responseJSON.errors;
-                        let errorMessage = '';
-                        for (let key in errors) {
-                            errorMessage += errors[key][0] + '\n';
-                        }
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Validation Error!',
-                            text: errorMessage,
-                            showConfirmButton: true
-                        });
-                    }
-                });
-            });
+            const el = document.querySelector('#student_number');
+            if (!el) return;
+            const options = {
+                chart: {
+                    type: 'line',
+                    height: 350,
+                },
+                series: [{
+                    name: '{{ trans('report.student_numbers') }}',
+                    data: @json($chart_data)
+                }],
+                colors: 'Indigo',
+                xaxis: {
+                    categories: @json($chart_labels)
+                },
+            };
+            const chart = new ApexCharts(el, options);
+            chart.render();
         });
-    </script>
+     </script>
 @endpush

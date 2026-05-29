@@ -17,5 +17,8 @@ return [
     'purchase_price' => 'Purchase Price',
     'sale_price' => 'Sale Price',
     'clothes' => 'Clothes',
+    'gard' => 'Inventory',
+    'price' => 'Price',
+    'total_price' => 'Total Price',
 
 ];

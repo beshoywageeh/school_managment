@@ -10,4 +10,6 @@ return [
     'academic_year' => 'العام الدراسي',
     'choose_academic_year' => 'إختر العام الدراسي',
     'no_academic_year' => 'لا توجد اعوام دراسية مضافة',
+    'no_fees_found' => 'لا توجد مصروفات لهذا الصف الدراسي',
+    'total' => 'المجموع',
 ];

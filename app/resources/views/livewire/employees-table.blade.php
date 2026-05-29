@@ -1,109 +1,141 @@
 <div>
-    <div class="card mb-40">
-        <div class="card-body">
-            <div class="row mb-20">
-                <div class="col-md-3">
-                    <label>{{ trans('employees.search') }}</label>
-                    <input type="text" wire:model.live.debounce.300ms="name" class="form-control"
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+                <div class="md:col-span-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('employees.search') }}</label>
+                    <input type="text" wire:model.live.debounce.300ms="name"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                         placeholder="{{ trans('employees.search_placeholder') }}">
                 </div>
-                <div class="col-md-2">
-                    <label>{{ trans('employees.job') }}</label>
-                    <select wire:model.live="job_id" class="custom-select">
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('employees.job') }}</label>
+                    <select wire:model.live="job_id"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
                         <option value="">{{ trans('employees.all_jobs') }}</option>
                         @foreach ($jobs as $job)
                             <option value="{{ $job->id }}">{{ $job->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <label>{{ trans('employees.join_date_from') }}</label>
-                    <input wire:model.live="startDate" type="date" class="form-control">
+                <div class="md:col-span-2">
+                    <label
+                        class="block text-sm font-medium text-gray-700 mb-1">{{ trans('employees.join_date_from') }}</label>
+                    <input wire:model.live="startDate" type="date"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
                 </div>
-                <div class="col-md-2">
-                    <label>{{ trans('employees.join_date_to') }}</label>
-                    <input wire:model.live="endDate" type="date" class="form-control">
+                <div class="md:col-span-2">
+                    <label
+                        class="block text-sm font-medium text-gray-700 mb-1">{{ trans('employees.join_date_to') }}</label>
+                    <input wire:model.live="endDate" type="date"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
+                <div class="md:col-span-3 flex items-end">
                     <button wire:click="resetFilters"
-                        class="btn btn-secondary">{{ trans('employees.reset_filters') }}</button>
+                        class="w-full px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium">{{ trans('employees.reset_filters') }}</button>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col text-md-right">
-                    @can('employees-create')
-                        <a href="{{ route('employees.create') }}" class="btn btn-success">
-                            <i class="ti-plus"></i>
-                            {{ trans('general.new') }}
-                        </a>
-                    @endcan
-                    @can('employees-import_Excel')
-                        <button type="button" class="btn btn-primary" data-target="#Import_Excel" data-toggle="modal"><i
-                                class="ti-upload"></i>
-                            {{ trans('general.Import_Excel') }}</button>
-                        @include('backend.employees.import')
-                    @endcan
-                </div>
+            <div class="flex justify-end gap-2">
+                @can('employees-create')
+                    <a href="{{ route('employees.create') }}"
+                        class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center gap-2">
+                        <i class="ti-plus"></i>
+                        {{ trans('general.new') }}
+                    </a>
+                @endcan
+                @can('employees-import_Excel')
+                    <button type="button"
+                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2"
+                        data-target="#Import_Excel" data-toggle="modal">
+                        <i class="ti-upload"></i>
+                        {{ trans('general.Import_Excel') }}
+                    </button>
+                    @include('backend.employees.import')
+                @endcan
             </div>
-
         </div>
     </div>
-    <div class='card'>
-        <div class="card-body">
-            <div class="table-responsive">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6">
+            <div class="overflow-x-auto">
                 @can('employees-list')
-                    <table class="table table-striped table-bordered table-sm">
-                        <thead>
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th>#</th>
-                                <th wire:click="sortBy('code')" style="cursor: pointer;">{{ trans('employees.code') }}</th>
-                                <th wire:click="sortBy('name')" style="cursor: pointer;">{{ trans('employees.name') }}</th>
-                                <th>{{ trans('employees.learning') }}</th>
-                                <th>{{ trans('employees.grade_year') }}</th>
-                                <th wire:click="sortBy('date_of_hiring')" style="cursor: pointer;">
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">#</th>
+                                <th wire:click="sortBy('code')"
+                                    class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase cursor-pointer hover:text-blue-600">
+                                    {{ trans('employees.code') }}</th>
+                                <th wire:click="sortBy('name')"
+                                    class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase cursor-pointer hover:text-blue-600">
+                                    {{ trans('employees.name') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.learning') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.grade_year') }}</th>
+                                <th wire:click="sortBy('date_of_hiring')"
+                                    class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase cursor-pointer hover:text-blue-600">
                                     {{ trans('employees.join_date') }}</th>
-                                <th wire:click="sortBy('date_of_birth')" style="cursor: pointer;">
+                                <th wire:click="sortBy('date_of_birth')"
+                                    class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase cursor-pointer hover:text-blue-600">
                                     {{ trans('employees.birth_date') }}</th>
-                                <th>{{ trans('employees.job') }}</th>
-                                <th>{{ trans('employees.contract_start_date') }}</th>
-                                <th>{{ trans('employees.ministry_code') }}</th>
-                                <th>{{ trans('employees.sepicality') }}</th>
-                                <th>{{ trans('employees.phone') }}</th>
-                                <th>{{ trans('employees.national_id') }}</th>
-                                <th>{{ trans('employees.national_id_expire_date') }}</th>
-                                <th>{{ trans('employees.retirement_date') }}</th>
-                                <th>{{ trans('employees.date_until_retire') }}</th>
-                                <th>{{ trans('employees.working_years') }}</th>
-                                <th>{{ trans('general.actions') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.job') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.contract_start_date') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.ministry_code') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.sepicality') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.phone') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.national_id') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.national_id_expire_date') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.retirement_date') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.date_until_retire') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('employees.working_years') }}</th>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">
+                                    {{ trans('general.actions') }}</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="divide-y divide-gray-100">
                             @forelse ($employees as $employee)
-                                <tr>
-                                    <td> {{ $loop->iteration }}</td>
-                                    <td>{{ $employee->code }}</td>
-                                    <td><a target='_blank'
-                                            href="{{ route('employees.show', $employee->id) }}">{{ $employee->name }}</a>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center text-gray-600"> {{ $loop->iteration }}</td>
+                                    <td class="px-4 py-2 text-gray-800">{{ $employee->code }}</td>
+                                    <td class="px-4 py-2">
+                                        <a target='_blank' href="{{ route('employees.show', $employee->id) }}"
+                                            class="text-blue-600 hover:text-blue-800 font-medium">
+                                            {{ $employee->name }}
+                                        </a>
                                     </td>
-                                    <td> {{ $employee->learning }}</td>
-                                    <td>{{ $employee->grade_year }}</td>
-                                    <td>{{ $employee->date_of_hiring }}</td>
-                                    <td>{{ $employee->date_of_birth }}</td>
-                                    <td>{{ $employee->job->name ?? 'N/A' }}</td>
-                                    <td>{{ $employee->contract_start_date }}</td>
-                                    <td>{{ $employee->ministry_code }}</td>
-                                    <td>{{ $employee->sepicality }}</td>
-                                    <td>{{ $employee->phone }}</td>
-                                    <td>{{ $employee->national_id }}</td>
-                                    <td>{{ $employee->national_id_expire_date }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($employee->date_of_birth)->addYears(60)->toDateString() }}
+                                    <td class="px-4 py-2 text-gray-600"> {{ $employee->learning }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->grade_year }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->date_of_hiring }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->date_of_birth }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->job->name ?? 'N/A' }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->contract_start_date }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->ministry_code }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->sepicality }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->phone }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->national_id }}</td>
+                                    <td class="px-4 py-2 text-gray-600">{{ $employee->national_id_expire_date }}</td>
+                                    <td class="px-4 py-2 text-gray-600">
+                                        {{ \Carbon\Carbon::parse($employee->date_of_birth)->addYears(60)->toDateString() }}
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($employee->date_of_birth)->addYears(60)->diffInYears(\Carbon\Carbon::now()) }}
+                                    <td class="px-4 py-2 text-gray-600">
+                                        {{ \Carbon\Carbon::parse($employee->date_of_birth)->addYears(60)->diffInYears(\Carbon\Carbon::now()) }}
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($employee->date_of_hiring)->diffInYears(\Carbon\Carbon::now()) }}
+                                    <td class="px-4 py-2 text-gray-600">
+                                        {{ \Carbon\Carbon::parse($employee->date_of_hiring)->diffInYears(\Carbon\Carbon::now()) }}
                                     </td>
-                                    <td>
+                                    <td class="px-4 py-2 text-center">
                                         <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                             [
                                                 'type' => 'link',
@@ -130,12 +162,12 @@
                                                 'can' => 'employees-edit',
                                             ],
                                         ]" />
-
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="18" class="text-center">{{ trans('general.not_found') }}</td>
+                                    <td colspan="18" class="px-4 py-8 text-center text-gray-500">
+                                        {{ trans('general.not_found') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>

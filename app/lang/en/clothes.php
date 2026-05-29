@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'title' => 'Clothes',
+    'amount' => 'Amount',
+    'qty' => 'Quantity',
     'sales_price' => 'Sales Price',
     'purchase_price' => 'Purchase Price',
     'total_qty' => 'Total Quantity',

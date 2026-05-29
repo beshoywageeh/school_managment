@@ -1,12 +1,8 @@
-import './bootstrap';
-import Alpine from "alpinejs";
+import "./bootstrap";
 import flatpickr from "flatpickr";
-import SlimSelect from "slim-select";
-
-import "laravel-datatables-vite";
-
-window.Alpine = Alpine;
+import ApexCharts from "apexcharts";
+window.ApexCharts = ApexCharts;
 window.flatpickr = flatpickr;
-import "./../../node_modules/flatpickr/dist/flatpickr.min.css";
-Alpine.start();
 
+// All components use local x-data + custom events (no Alpine stores).
+// See alert.blade.php, modal.blade.php, toasts.blade.php.

@@ -1,7 +1,29 @@
-@stack('css')
+<link rel="stylesheet" href="{{ URL::asset('assests/css/tomselect.css') }}">
+<style>
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
 
-<link rel="stylesheet" href="{{ URL::asset('assests/css/style.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('assests/css/custom.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('assests/css/select2.min.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('assests/css/plugins/font-awesome.css') }}">
-<link rel="stylesheet" href="{{ URL::asset('assests/css/custom-header.css') }}">
+    ::-webkit-scrollbar-thumb {
+        background-color: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #f1f1f1;
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb{
+        background-color: #cbcbcb;
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover{
+        background-color: #a8a8a8;
+    }
+    *{
+        scrollbar-width: thin;
+        scrollbar-color: #cbcbcb #f1f1f1;
+    }
+</style>
+@stack('css')

@@ -17,6 +17,7 @@ return [
     'purchase_price' => 'سعر الشراء',
     'sale_price' => 'سعر البيع',
     'clothes' => 'زي',
+    'gard' => 'جرد',
     'price' => 'السعر',
     'total_price' => 'السعر الاجمالي',
 

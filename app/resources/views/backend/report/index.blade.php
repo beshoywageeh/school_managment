@@ -3,75 +3,8 @@
     {{ trans('report.title') }}
 @endsection
 
-@push('css')
-    <style>
-        .report-card {
-            transition: all 0.3s ease-in-out;
-            border: none;
-            border-radius: 1rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        }
-
-        .report-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
-        }
-
-        .report-card .card-header {
-            background: linear-gradient(90deg, rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%, rgba(237, 221, 83, 1) 100%);
-            color: #fff;
-            border-bottom: none;
-            border-top-left-radius: 1rem;
-            border-top-right-radius: 1rem;
-            padding: 1.25rem;
-        }
-
-        .report-card .card-header h4 {
-            font-weight: 700;
-            font-size: 1.4rem;
-            /* Increased */
-            margin: 0;
-        }
-
-        .report-item {
-            padding: 1.25rem 1.5rem;
-            /* Increased padding */
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        .report-item:last-child {
-            border-bottom: none;
-        }
-
-        .report-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        .report-item-name {
-            font-weight: 600;
-            /* Bolder */
-            font-size: 1rem;
-            /* Increased */
-            color: #212529;
-        }
-
-        .report-item .btn {
-            font-size: 0.85rem;
-            /* Increased */
-            font-weight: 600;
-            padding: 0.5rem 1.2rem;
-            /* Increased */
-        }
-    </style>
-@endpush
-
 @section('content')
-    <div class="row">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         @php
             $reports_links = [
                 trans('Sidebar.Students') => [
@@ -197,41 +130,44 @@
                 trans('Sidebar.accounting') => 'fa-calculator',
                 trans('Sidebar.employees') => 'fa-graduation-cap',
             ];
-        @endphp
 
+            $category_gradients = [
+                trans('Sidebar.Students') => 'from-blue-500 to-blue-600',
+                trans('Sidebar.stores') => 'from-emerald-500 to-emerald-600',
+                trans('Sidebar.accounting') => 'from-violet-500 to-violet-600',
+                trans('Sidebar.employees') => 'from-blue-500 to-blue-600',
+            ];
+        @endphp
 
         @foreach ($reports_links as $heading => $report_links)
             @if (!empty($report_links))
-                <div class="col-lg-6 col-xl-4 mb-4">
-                    <div class="card report-card h-100">
-                        <div class="text-center card-header">
-                            <h4><i
-                                    class="fa {{ $category_icons[$heading] ?? 'fa-file-alt' }} mr-2"></i><strong>{{ $heading }}</strong>
-                            </h4>
-                        </div>
-                        <div class="p-0 card-body">
-                            @foreach ($report_links as $acc_link)
-                                @can($acc_link['can'])
-                                    <div class="report-item">
-                                        <span class="report-item-name">{{ $acc_link['Name'] }}</span>
-                                        <div>
-                                            @if ($acc_link['type'] == 'link')
-                                                <a class="btn btn-sm btn-outline-primary rounded-pill" target="_blank"
-                                                    href="{{ $acc_link['Url'] }}">
-                                                    <i class="fa fa-external-link-square mr-1"></i> {{ trans('general.open') }}
-                                                </a>
-                                            @endif
-                                            @if ($acc_link['type'] == 'button')
-                                                <button class="btn btn-sm btn-outline-secondary rounded-pill"
-                                                    data-toggle="modal" data-target="{{ $acc_link['Url'] }}">
-                                                    <i class="fa fa-cogs mr-1"></i> {{ trans('general.generate') }}
-                                                </button>
-                                            @endif
-                                        </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300">
+                    <div class="bg-gradient-to-r {{ $category_gradients[$heading] ?? 'from-gray-500 to-gray-600' }} px-5 py-4">
+                        <h4 class="text-white font-bold text-lg m-0">
+                            <i class="fa {{ $category_icons[$heading] ?? 'fa-file-alt' }} ms-2"></i>
+                            <strong>{{ $heading }}</strong>
+                        </h4>
+                    </div>
+                    <div class="divide-y divide-gray-100">
+                        @foreach ($report_links as $acc_link)
+                            @can($acc_link['can'])
+                                <div class="flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-colors duration-200">
+                                    <span class="font-semibold text-gray-800 text-sm">{{ $acc_link['Name'] }}</span>
+                                    <div>
+                                        @if ($acc_link['type'] == 'link')
+                                            <a class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-full hover:bg-blue-100 transition-colors" target="_blank" href="{{ $acc_link['Url'] }}">
+                                                <x-hero-icon name="external-link" class="w-4 h-4" /> {{ trans('general.open') }}
+                                            </a>
+                                        @endif
+                                        @if ($acc_link['type'] == 'button')
+                                            <button class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition-colors" @click="document.getElementById('{{ Str::after($acc_link['Url'], '#') }}-modal').__x.$data.open = true">
+                                                <x-hero-icon name="cog-alt" class="w-4 h-4" /> {{ trans('general.generate') }}
+                                            </button>
+                                        @endif
                                     </div>
-                                @endcan
-                            @endforeach
-                        </div>
+                                </div>
+                            @endcan
+                        @endforeach
                     </div>
                 </div>
             @endif
@@ -277,15 +213,11 @@
                             $('.classrooms').append(
                                 '<option selected disabled>{{ trans('student.choose_classroom') }}</option>',
                                 '<option value="0">{{ trans('general.all') }}</option>'
-
                             );
                             $.each(data, function(key, value) {
-                                console.log(key);
-                                console.log(value.name);
                                 $('.classrooms').append(
                                     `<option value="${value.id}">${value.name}</option>`
                                 );
-
                             });
                         },
                     });

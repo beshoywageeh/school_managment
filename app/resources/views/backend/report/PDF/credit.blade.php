@@ -131,7 +131,7 @@
                     <th>{{ trans('report.date') }}</th>
                     <th>{{ trans('report.student') }}</th>
                     <th>{{ trans('report.classroom') }}</th>
-                    <th>{{ trans('General.grade') }}</th>
+                    <th>{{ trans('general.grade') }}</th>
                     <th>{{ trans('academic_year.view') }}</th>
                     <th>{{ trans('report.fee_title') }}</th>
                     <th>{{ trans('report.amount') }}</th>
@@ -176,7 +176,7 @@
                     <th>{{ trans('report.date') }}</th>
                     <th>{{ trans('report.student') }}</th>
                     <th>{{ trans('report.classroom') }}</th>
-                    <th>{{ trans('General.grade') }}</th>
+                    <th>{{ trans('general.grade') }}</th>
                     <th>{{ trans('academic_year.view') }}</th>
                     <th>{{ trans('report.fee_title') }}</th>
                     <th>{{ trans('report.amount') }}</th>

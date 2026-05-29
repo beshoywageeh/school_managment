@@ -2,6 +2,8 @@
 
 return [
     'title' => 'Payments',
+    'enter_amount' => 'Enter Amount',
+    'sign' => 'Signature',
     'amount' => 'Amount',
     'maual' => 'Manual Number',
     'name' => 'Student Name',

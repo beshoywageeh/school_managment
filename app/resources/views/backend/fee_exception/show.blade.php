@@ -3,46 +3,38 @@
     {{ trans('ExcptionFee.title') }} | {{ trans('general.show') }}
 @endsection
 @section('content')
-    <div class="row">
-        <div class="col-xl-12 mb-30">
-            <div class="card card-statistics h-100">
-                <div class="card-body">
-                    <div class="card-title">
-                        <div class="row">
-                            <div class="col">
-                                <h4>{{ trans('ExcptionFee.title') }}</h4>
-                            </div>
-                            <div class="col text-md-right">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-
-                        <table class="table text-center table-sm table-striped table-bordered">
-
-                            <tr>
-                                <th>#</th>
-                                <th>{{ trans('general.created_at') }}</th>
-                                <th>{{ trans('Recipt_Payments.name') }}</th>
-                                <th>{{ trans('academic_year.title') }}</th>
-                                <th>{{ trans('Grades.name') }}</th>
-                                <th>{{ trans('class_rooms.title') }}</th>
-                                <th>{{ trans('Recipt_Payments.amount') }}</th>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-4 border-b border-gray-100">
+            <h4 class="text-lg font-semibold text-gray-800">{{ trans('ExcptionFee.title') }}</h4>
+        </div>
+        <div class="p-6">
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm text-center">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">#</th>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('general.created_at') }}</th>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('Recipt_Payments.name') }}</th>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('academic_year.title') }}</th>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('Grades.name') }}</th>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('class_rooms.title') }}</th>
+                            <th class="px-4 py-2 text-xs font-medium text-gray-500 uppercase">{{ trans('Recipt_Payments.amount') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @foreach ($excptionFees as $ExcptionFee)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2 text-gray-600">{{ $loop->index + 1 }}</td>
+                                <td class="px-4 py-2 text-gray-600">{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
+                                <td class="px-4 py-2 text-gray-800">{{ $ExcptionFee->students->name }}</td>
+                                <td class="px-4 py-2 text-gray-600">{{ $ExcptionFee->academic_year->view }}</td>
+                                <td class="px-4 py-2 text-gray-600">{{ $ExcptionFee->grade->name }}</td>
+                                <td class="px-4 py-2 text-gray-600">{{ $ExcptionFee->classroom->name }}</td>
+                                <td class="px-4 py-2 text-gray-800 font-medium">{{ Number::currency($ExcptionFee->amount, 'EGP', 'ar') }}</td>
                             </tr>
-                            @foreach ($excptionFees as $ExcptionFee)
-                                <tr>
-                                    <td> {{ $loop->index + 1 }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
-                                    <td>{{ $ExcptionFee->students->name }}</td>
-                                    <td>{{ $ExcptionFee->academic_year->view }}</td>
-                                    <td>{{ Number::currency($ExcptionFee->amount, 'EGP', 'ar') }}</td>
-                                    <td>{{ $ExcptionFee->grade->name }}</td>
-                                    <td>{{ $ExcptionFee->classroom->name }}</td>
-                                </tr>
-                            @endforeach
-                        </table>
-                    </div>
-                </div>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

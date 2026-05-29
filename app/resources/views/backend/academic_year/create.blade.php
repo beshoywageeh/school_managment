@@ -1,48 +1,27 @@
-<div class="modal fade" id="Create_Year" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title" id="exampleModalLabel">
-                    <div class="">
-                        <h6>{{ trans('academic_year.title') }} | {{ trans('general.new') }}</h6>
-                    </div>
+
+<x-modal can="academic_year-create" title="{{ trans('academic_year.title') }}" titleButton="{{trans('general.new')}}" id="academic_year-create">
+    <slot>
+        <form action="{{ route('academic_year.store') }}" method="post" id="academic_year-create">
+            @csrf
+        <div class="px-6 py-5 space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-medium text-gray-500">{{ trans('academic_year.year_start') }}</label>
+                    <input name="year_start" type="date"
+                        class="w-full h-9 rounded-lg border border-gray-200 bg-white text-sm text-gray-900 px-3 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none">
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="space-y-1.5">
+                    <label class="text-xs font-medium text-gray-500">{{ trans('academic_year.year_end') }}</label>
+                    <input name="year_end" type="date"
+                        class="w-full h-9 rounded-lg border border-gray-200 bg-white text-sm text-gray-900 px-3 focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none">
+                </div>
             </div>
-            <form action="{{ route('academic_year.store') }}" method="post">
-                <div class="modal-body">
-                    @csrf
-                    <div class="table">
-                        <table class="table table-sm table-bordered">
-                            <tr>
-                                <th>{{ trans('academic_year.year_start') }}</th>
-                                <th>{{ trans('academic_year.year_end') }}</th>
-                                <th>{{ trans('academic_year.status') }}</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input class="form-control" name="year_start" type="date" value="dd/mm/yyyy">
-                                </td>
-                                <td>
-                                    <input class="form-control" name="year_end" type="date" value="dd/mm/yyyy">
-                                </td>
-                                <td>
-                                    <input type="checkbox" name="status" class="custom-checkbox">
-
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">{{ trans('general.Submit') }}</button>
-                    <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">{{ trans('general.close') }}</button>
-                </div>
-            </form>
+            <div class="flex items-center gap-2">
+                <input type="checkbox" name="status" id="create_status"
+                    class="w-4 h-4 accent-green-600 rounded">
+                <label for="create_status" class="text-sm text-gray-700">{{ trans('academic_year.status') }}</label>
+            </div>
         </div>
-    </div>
-</div>
+        </form>
+    </slot>
+</x-modal>

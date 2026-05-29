@@ -12,4 +12,5 @@ return [
     'total_credit' => 'إجمالي المدين',
     'total_final' => 'إجمالي المطلوب',
     'sign' => 'التوقيع',
+    'enter_amount' => 'أدخل القيمة',
 ];

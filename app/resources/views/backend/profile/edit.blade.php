@@ -3,45 +3,43 @@
     {{ trans('profile.title') }} | {{ trans('general.edit') }}
 @endsection
 @section('content')
-    <div class="card mb-40">
-        <div class="card-header">
-            <h4 class="">{{ trans('profile.title') }} | {{ trans('general.edit') }}</h4>
-        </div>
-        <div class="card-body">
-            <form method="post" action="{{ route('profile.update') }}">
-                @csrf
-                @method('patch')
-                <div class="row">
-                    <div class="col-lg-4"></div>
-                    <div class="col-lg-8">
-                        <div class="form-group">
-                            <label for="name">{{ trans('profile.name') }}</label>
-                            <input type="text" name="name" id="name" value="{{ $user->name }}"
-                                class="form-control @error('name') is-invalid @enderror">
-                            @error('name')
-                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="email">{{ trans('profile.email') }}</label>
-                            <input type="email" name="email" id="email" value="{{ $user->email }}"
-                                class="form-control @error('email') is-invalid @enderror">
-                            @error('email')
-                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="password">{{ trans('profile.password') }}</label>
-                            <input type="password" name="password" id="password" value=""
-                                class="form-control @error('password') is-invalid @enderror">
-                            @error('password')
-                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                            @enderror
-                        </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h4 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('profile.title') }} | {{ trans('general.edit') }}</h4>
+        <form method="post" action="{{ route('profile.update') }}">
+            @csrf
+            @method('patch')
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div></div>
+                <div class="md:col-span-2 space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('profile.name') }}</label>
+                        <input type="text" name="name" id="name" value="{{ $user->name }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 @error('name') border-red-500 @enderror">
+                        @error('name')
+                            <span class="text-sm text-red-600" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('profile.email') }}</label>
+                        <input type="email" name="email" id="email" value="{{ $user->email }}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 @error('email') border-red-500 @enderror">
+                        @error('email')
+                            <span class="text-sm text-red-600" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('profile.password') }}</label>
+                        <input type="password" name="password" id="password" value=""
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 @error('password') border-red-500 @enderror">
+                        @error('password')
+                            <span class="text-sm text-red-600" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">{{ trans('general.Submit') }}</button>
-            </form>
-        </div>
+            </div>
+            <div class="mt-6">
+                <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium">{{ trans('general.Submit') }}</button>
+            </div>
+        </form>
     </div>
 @endSection

@@ -1,12 +1,13 @@
 <?php
 
 return [
-    'Name' => 'Class Name',
+    'title' => 'Class Rooms',
+    'name' => 'Classroom Name',
+    'Name' => 'Classroom Name',
+    'new' => 'Add New Classroom',
+    'grades' => 'School Grade',
+    'select_grade' => '--- Choose Grade First ---',
     'Added_By' => 'Added By',
-    'grades' => 'Grade Name',
     'Student_Count' => 'Student Count',
-    'title' => 'Classrooms',
-    'new' => 'New Class',
-    'select_grade' => 'Select Grade',
-    'cannot_deleted' => 'Cannot delete a class with students',
+    'cannot_deleted' => 'Cannot delete a classroom with students',
 ];

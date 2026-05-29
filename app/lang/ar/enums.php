@@ -75,5 +75,8 @@ return [
         'fee_invoice' => 'فواتير دراسية',
         'payment_recipt' => 'مدفوعات دراسية',
         'fee_exception' => 'معافات',
+        'notpayed' => 'لم يتم الدفع',
+        'payed' => 'تم الدفع',
+        'wating' => 'مؤجل',
     ],
 ];
