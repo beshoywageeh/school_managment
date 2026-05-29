@@ -14,22 +14,22 @@ Route::get('fake', function () {
     ];
 
     foreach ($models as $model) {
-        \Artisan::call('make:factory', [
+        Artisan::call('make:factory', [
             'name' => $model.'Factory',
             '--model' => $model,
         ]);
 
-        \Artisan::call('make:seeder', [
+        Artisan::call('make:seeder', [
             'name' => $model.'TableSeeder',
         ]);
-        dd(\Artisan::output());
+        dd(Artisan::output());
     }
 });
 Route::get('mif', function () {
-    \Artisan::call('migrate:fresh --seed');
-    dd(\Artisan::output());
+    Artisan::call('migrate:fresh --seed');
+    dd(Artisan::output());
 });
 Route::get('route', function () {
-    \Artisan::call('route:list');
-    dd(\Artisan::output());
+    Artisan::call('route:list');
+    dd(Artisan::output());
 });
