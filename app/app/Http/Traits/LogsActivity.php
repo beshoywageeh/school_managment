@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Jobs\LogActivityJob;
+use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -41,7 +42,7 @@ trait LogsActivity
                 $data['model_id']
             )->onQueue('logs');
         } else {
-            \App\Models\ActivityLog::create($data);
+            ActivityLog::create($data);
         }
     }
 

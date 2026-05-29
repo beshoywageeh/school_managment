@@ -2,6 +2,8 @@
 
 namespace App\Http\Traits;
 
+use Illuminate\Database\Eloquent\Builder;
+
 trait EagerLoadingTrait
 {
     protected array $eagerLoadRelations = [];
@@ -72,12 +74,12 @@ trait EagerLoadingTrait
         ];
     }
 
-    protected function applyEagerLoading($query, array $relations): \Illuminate\Database\Eloquent\Builder
+    protected function applyEagerLoading($query, array $relations): Builder
     {
         return $query->with($relations);
     }
 
-    protected function withCountEagerLoading($query, array $counts): \Illuminate\Database\Eloquent\Builder
+    protected function withCountEagerLoading($query, array $counts): Builder
     {
         return $query->withCount($counts);
     }

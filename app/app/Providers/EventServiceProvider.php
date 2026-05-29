@@ -7,6 +7,7 @@ use App\Events\StudentCreated;
 use App\Events\StudentUpdated;
 use App\Listeners\LogStudentActivity;
 use App\Models\Student;
+use App\Observers\GenerateStudentCode;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -30,7 +31,7 @@ class EventServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        Student::observe(\App\Observers\GenerateStudentCode::class);
+        Student::observe(GenerateStudentCode::class);
     }
 
     public function shouldDiscoverEvents(): bool

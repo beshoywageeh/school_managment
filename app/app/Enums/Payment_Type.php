@@ -2,12 +2,12 @@
 
 namespace App\Enums;
 
-enum Payment_Type: int
+enum Payment_Type: string
 {
-    case FEE_INVOICE = 1;
-    case PAYMENT = 2;
-    case EXCEPTION = 3;
-    case Exchange_Bond = 4;
+    case FEE_INVOICE = 'invoice';
+    case PAYMENT = 'payment';
+    case EXCEPTION = 'exciption';
+    case Exchange_Bond = 'exchange';
 
     public function lang(): string
     {
