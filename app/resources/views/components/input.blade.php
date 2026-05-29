@@ -1,9 +1,9 @@
 @props(['name', 'type', 'value' => ''])
-<div @class(['form-group'])>
-    <label for="{{ $name }}"><strong>{{ $slot }}</strong></label>
+<div class="mb-4">
+    <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 mb-1">{{ $slot }}</label>
     <input
-        {{ $attributes->class(['form-control', 'is-invalid' => $errors->has($name)])->merge(['name' => $name, 'id' => $name, 'type' => $type, 'value' => $value]) }}>
+        {{ $attributes->class(['w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all', 'border-red-500 focus:border-red-500 focus:ring-red-200' => $errors->has($name)])->merge(['name' => $name, 'id' => $name, 'type' => $type, 'value' => $value]) }}>
     @error($name)
-        <div @class(['mt-1', 'alert', 'alert-danger'])>{{ $message }}</div>
+        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
     @enderror
 </div>

@@ -1,18 +1,17 @@
-<div class="col-xl-4 mb-30">
-    <div class="card card-statistics h-100 dash-card">
-        <div class="card-body">
-            <div class="clearfix">
-                <div class="float-left icon-box-fixed img-state">
-                    <img class="img img-responsive" width="50"
-                        src="{{ URL::asset('assests/images/Sidebar/' . $icon) }}">
-                </div>
-                <div class="float-right text-right ">
-                    <h4 class="text-black">{{ $count }}</h4>
-                    <a href="{{ route($route) }}" class="text-black card-text">
-                        <strong>{{ $label }}</strong>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+@props(['color' => 'blue'])
+
+@php
+$borderColors = [
+    'blue' => 'border-s-blue-500',
+    'green' => 'border-s-green-500',
+    'amber' => 'border-s-amber-500',
+    'red' => 'border-s-red-500',
+    'purple' => 'border-s-purple-500',
+    'cyan' => 'border-s-cyan-500',
+];
+$borderColor = $borderColors[$color] ?? 'border-s-blue-500';
+@endphp
+
+<div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 border-s-4 {{ $borderColor }} max-w-sm w-full">
+    {{ $slot }}
 </div>
