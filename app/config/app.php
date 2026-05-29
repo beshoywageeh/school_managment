@@ -1,7 +1,16 @@
 <?php
 
+use Alkoumi\LaravelArabicNumbers\LaravelArabicNumbersServiceProvider;
+use App\Providers\AppServiceProvider;
+use App\Providers\AuthServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Providers\RouteServiceProvider;
+use App\Providers\ViewServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf;
+use Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider;
+use Spatie\Permission\PermissionServiceProvider;
 
 return [
 
@@ -163,16 +172,15 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\ViewServiceProvider::class,
+        AppServiceProvider::class,
+        AuthServiceProvider::class,
+        ViewServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider::class,
-        Mckenziearts\Notify\LaravelNotifyServiceProvider::class,
-        Alkoumi\LaravelArabicNumbers\LaravelArabicNumbersServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class,
+        EventServiceProvider::class,
+        RouteServiceProvider::class,
+        LaravelMpdfServiceProvider::class,
+        LaravelArabicNumbersServiceProvider::class,
+        PermissionServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -188,7 +196,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
-        'PDF' => Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::class,
+        'PDF' => LaravelMpdf::class,
     ])->toArray(),
 
 ];

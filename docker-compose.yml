@@ -21,31 +21,27 @@ services:
     depends_on:
       - web
   db:
-    image: mariadb:latest
+    image: postgres:latest
     environment:
-      MARIADB_USER: school_user
-      MARIADB_PASSWORD: secret
-      MARIADB_ROOT_PASSWORD: secret
-      MARIADB_DATABASE: school_management
+      POSTGRES_USER: school_user
+      POSTGRES_PASSWORD: secret
+      POSTGRES_ROOT_PASSWORD: secret
+      POSTGRES_DB: school_management
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - dbdata:/var/lib/mysql
-      - mysql_backups:/backups
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+      - dbdata:/var/lib/postgresql/data
+      - postgres_backups:/backups
+  pgadmin:
+    image: dpage/pgadmin4:latest
     environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_USER: root
-      PMA_PASSWORD: secret
-
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: secret
     ports:
       - "8081:80"
     depends_on:
       - db
-
 volumes:
   dbdata:
-  mysql_backups:
+  postgres_backups:
 

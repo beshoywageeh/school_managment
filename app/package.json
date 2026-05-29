@@ -6,23 +6,17 @@
         "build": "vite build"
     },
     "devDependencies": {
-        "@tailwindcss/forms": "^0.5.2",
-        "alpinejs": "^3.13.8",
-        "autoprefixer": "^10.4.19",
+        "@tailwindcss/forms": "^0.5.11",
+        "alpinejs": "^3.15.12",
         "axios": "^1.6.4",
-        "laravel-datatables-vite": "^0.5.2",
-        "laravel-vite-plugin": "^1.0.0",
-        "postcss": "^8.4.38",
-        "tailwindcss": "^4.2.1",
-        "vite": "^5.0.0"
+        "laravel-vite-plugin": "^3.1.0",
+        "tailwindcss": "^4.2.4",
+        "vite": "^8.0.13"
     },
     "dependencies": {
         "@tailwindcss/vite": "^4.2.1",
+        "apexcharts": "^5.11.0",
         "flatpickr": "^4.6.13",
-        "print-js": "^1.6.0",
-        "puppeteer": "^23.4.0",
-        "slim-select": "^2.8.2",
-        "sweetalert2": "^11.6.13",
-        "tom-select": "^2.3.1"
+        "tom-select": "^2.6.1"
     }
 }

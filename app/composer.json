@@ -14,14 +14,11 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "livewire/livewire": "^3.0",
+        "livewire/livewire": "^4.3",
         "maatwebsite/excel": "^3.1",
         "mcamara/laravel-localization": "^1.8",
-        "mckenziearts/laravel-notify": "^2.4",
-        "nwidart/laravel-modules": "10",
         "opcodesio/log-viewer": "^3.24",
         "openspout/openspout": "^4.23",
-        "php-flasher/flasher-laravel": "^1.15",
         "spatie/laravel-backup": "^8.6",
         "spatie/laravel-permission": "^6.7"
     },
@@ -30,9 +27,11 @@
         "laravel/boost": "^1.8",
         "laravel/pint": "^1.18",
         "laravel/sail": "^1.18",
+        "laravel/telescope": "^5.20",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.1",
+        "rector/rector": "^2.4",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
