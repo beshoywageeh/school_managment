@@ -5,10 +5,11 @@ namespace Database\Factories;
 use App\Models\ExcptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Recipt_Payment;
+use App\Models\StudentAccount;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\StudentAccount>
+ * @extends Factory<StudentAccount>
  */
 class StudentAccountFactory extends Factory
 {

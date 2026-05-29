@@ -25,6 +25,7 @@ return new class extends Migration
 
             $table->enum('status', ['payed', 'notpayed'])->default('notpayed');
             $table->enum('type', ['inventory', 'sales', 'gard']);
+            $table->decimal('total_price', 10, 2)->default(0);
 
             $table->timestamps();
             $table->softDeletes();

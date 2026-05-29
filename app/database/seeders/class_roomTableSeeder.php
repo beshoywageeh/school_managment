@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\class_room;
 use App\Models\Grade;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\str;
 
 class class_roomTableSeeder extends Seeder
 {
@@ -22,7 +23,7 @@ class class_roomTableSeeder extends Seeder
                     'name' => $name,
                     'grade_id' => $grade_id->id,
                     'user_id' => '1',
-                    'slug' => \Illuminate\Support\str::slug($name),
+                    'slug' => str::slug($name),
                     'school_id' => '1',
                 ]);
             }

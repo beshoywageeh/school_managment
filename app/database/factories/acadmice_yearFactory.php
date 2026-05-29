@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\acadmice_year;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\acadmice_year>
+ * @extends Factory<acadmice_year>
  */
 class acadmice_yearFactory extends Factory
 {

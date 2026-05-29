@@ -4,10 +4,11 @@ namespace Database\Factories;
 
 use App\Models\class_room;
 use App\Models\Grade;
+use App\Models\School_Fee;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\School_Fee>
+ * @extends Factory<School_Fee>
  */
 class School_FeeFactory extends Factory
 {

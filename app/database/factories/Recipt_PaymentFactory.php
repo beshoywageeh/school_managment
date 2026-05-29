@@ -6,7 +6,7 @@ use App\Models\Recipt_Payment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Recipt_Payment>
+ * @extends Factory<Recipt_Payment>
  */
 class Recipt_PaymentFactory extends Factory
 {

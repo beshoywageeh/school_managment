@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\ExcptionFees;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ExcptionFees>
+ * @extends Factory<ExcptionFees>
  */
 class ExcptionFeesFactory extends Factory
 {

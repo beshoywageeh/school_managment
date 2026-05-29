@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\My_parents;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\My_parents>
+ * @extends Factory<My_parents>
  */
 class My_parentsFactory extends Factory
 {

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('manual_date')->nullable();
             $table->enum('status', ['payed', 'notpayed'])->default('notpayed');
             $table->enum('type', ['inventory', 'sales', 'gard']);
-
+            $table->decimal('total_price', 8, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('isset', ['yes', 'no'])->default('no');
             $table->decimal('sales_price', 10, 2)->default(0);
             $table->decimal('sales_price_set', 10, 2)->default(0);
-            $table->string('purchase_price', 10, 2)->default(0);
+            $table->decimal('purchase_price', 10, 2)->default(0);
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('classroom_id');
             $table->unsignedBigInteger('user_id');

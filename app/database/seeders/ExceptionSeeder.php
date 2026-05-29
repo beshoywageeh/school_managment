@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ExcptionFees;
 use Illuminate\Database\Seeder;
 
 class ExceptionSeeder extends Seeder
@@ -11,6 +12,6 @@ class ExceptionSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\ExcptionFees::factory(100)->create();
+        ExcptionFees::factory(100)->create();
     }
 }

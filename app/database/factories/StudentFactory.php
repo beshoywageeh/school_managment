@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\nationality;
+use App\Models\Students;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Students>
+ * @extends Factory<Students>
  */
 class StudentFactory extends Factory
 {
@@ -34,7 +36,7 @@ class StudentFactory extends Factory
             'religion' => $this->faker->numberBetween(0, 1),
             'acadmiecyear_id' => $this->faker->numberBetween(1, 2),
             'tameen' => $this->faker->numberBetween(0, 1),
-            'nationality_id' => \App\Models\nationality::pluck('id')->random(),
+            'nationality_id' => nationality::pluck('id')->random(),
             'school_id' => '1',
 
         ];

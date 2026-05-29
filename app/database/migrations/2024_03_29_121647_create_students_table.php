@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
+            $table->string('code')->unique()->index();
             $table->string('name')->index();
             $table->date('birth_date');
             $table->string('address')->nullable();
@@ -24,13 +24,13 @@ return new class extends Migration
             $table->string('birth_at_begin', 50)->nullable();
             $table->tinyInteger('religion')->nullable();
             $table->tinyInteger('tameen')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('school_id');
-            $table->unsignedBigInteger('grade_id');
-            $table->unsignedBigInteger('classroom_id');
+            $table->unsignedBigInteger('user_id')->index();
+            $table->unsignedBigInteger('school_id')->index();
+            $table->unsignedBigInteger('grade_id')->index();
+            $table->unsignedBigInteger('classroom_id')->index();
             $table->unsignedBigInteger('class_id')->nullable();
-            $table->unsignedBigInteger('acadmiecyear_id')->nullable;
-            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('acadmiecyear_id')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable()->index();
             $table->unsignedBigInteger('nationality_id')->nullable();
             $table->string('slug')->nullable();
             $table->timestamps();

@@ -14,8 +14,8 @@ class NationalitySeeder extends Seeder
     {
         \DB::table('nationalities')->delete();
 
-        $nationals = ['مصري'
-           ];
+        $nationals = ['مصري',
+        ];
 
         foreach ($nationals as $name) {
             nationality::create(['name' => $name]);
