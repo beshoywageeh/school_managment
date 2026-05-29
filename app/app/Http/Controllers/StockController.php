@@ -80,7 +80,7 @@ class StockController extends Controller
     public function new_tawreed_order($id)
     {
         $school = $this->getSchool();
-        $order = Order::findorFail($id);
+        $order = order::findorFail($id);
         $stocks = stock::get(['id', 'name']);
         $type = 1;
 

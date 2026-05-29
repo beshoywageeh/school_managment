@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Row;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHeadingRow
 {
@@ -160,7 +161,7 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
 
             if (is_numeric($birthDateRaw)) {
                 $birthDate = Carbon::instance(
-                    \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((float) $birthDateRaw)
+                    Date::excelToDateTimeObject((float) $birthDateRaw)
                 );
             } else {
                 $birthDate = Carbon::parse($birthDateRaw);
@@ -168,7 +169,7 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
 
             if (is_numeric($joinDateRaw)) {
                 $joinDate = Carbon::instance(
-                    \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject((float) $joinDateRaw)
+                    Date::excelToDateTimeObject((float) $joinDateRaw)
                 );
             } else {
                 $joinDate = Carbon::parse($joinDateRaw);

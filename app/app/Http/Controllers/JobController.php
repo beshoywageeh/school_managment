@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Jobs_types;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\Job;
@@ -17,14 +18,14 @@ class JobController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $jobs_main = \App\Enums\Jobs_types::cases();
+        $jobs_main = Jobs_types::cases();
 
         return view('backend.Job.index', get_defined_vars());
     }
 
     public function create()
     {
-        $jobs_main = \App\Enums\Jobs_types::cases();
+        $jobs_main = Jobs_types::cases();
 
         return view('backend.Job.create', get_defined_vars());
     }
@@ -32,7 +33,7 @@ class JobController extends Controller
     public function edit($id)
     {
         $job = Job::findOrFail($id);
-        $jobs_main = \App\Enums\Jobs_types::cases();
+        $jobs_main = Jobs_types::cases();
 
         return view('backend.Job.edit', get_defined_vars());
     }

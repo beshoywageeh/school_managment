@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class ClassesController extends Controller
 {
-    use logsActivity,SchoolTrait;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
@@ -104,7 +104,7 @@ class ClassesController extends Controller
 
     public function tammen(classes $class)
     {
-        $students = student::where('class_id', $class->id)->update(['tameen' => 1]);
+        $students = Student::where('class_id', $class->id)->update(['tameen' => 1]);
         // $class->update(['tameen'=>1]);
         $c = classes::findorfail($class->id)->first();
         $c->update(['tameen' => 1]);

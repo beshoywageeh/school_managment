@@ -16,10 +16,11 @@ class StudentAccount extends Model
 
     protected $table = 'student_accounts';
 
-    // protected $casts = [
-    //     'type' => Payment_Type::class,
+    protected $casts = [
+        'type' => Payment_Type::class,
 
-    // ];
+    ];
+
     public function student()
     {
         return $this->belongsTo(Student::class);
@@ -43,11 +44,6 @@ class StudentAccount extends Model
     public function fee()
     {
         return $this->belongsTo(Fee_invoice::class, 'fee_invoices_id', 'id');
-    }
-
-    public function payment()
-    {
-        return $this->belongsTo(Payment::class);
     }
 
     public function recipt_payment()

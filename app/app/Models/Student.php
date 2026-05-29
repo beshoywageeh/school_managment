@@ -41,41 +41,51 @@ class Student extends Model
 
     public function user()
     {
-        return $this->belongsTo("App\Models\User");
+        return $this->belongsTo(User::class);
     }
 
     public function grade()
     {
-        return $this->belongsTo("App\Models\Grade", 'grade_id', 'id');
+        return $this->belongsTo(Grade::class);
     }
 
     public function classroom()
     {
-        return $this->belongsTo("App\Models\class_room");
+        return $this->belongsTo(class_room::class);
     }
 
     public function parent()
     {
-        return $this->belongsTo("App\Models\My_parents");
+        return $this->belongsTo(My_parents::class);
     }
 
     public function StudentAccount()
     {
-        return $this->hasMany("App\Models\StudentAccount");
+        return $this->hasMany(StudentAccount::class);
     }
 
     public function Acadmice_year()
     {
-        return $this->hasMany("App\Models\acadmice_year");
+        return $this->belongsTo(acadmice_year::class);
     }
 
     public function nationality()
     {
-        return $this->belongsTo('App\Models\nationality');
+        return $this->belongsTo(nationality::class);
     }
 
     public function fee_invoice()
     {
         return $this->hasMany(Fee_invoice::class);
+    }
+
+    public function parts()
+    {
+        return $this->hasMany(PaymentParts::class);
+    }
+
+    public function excption()
+    {
+        return $this->hasMany(ExcptionFees::class);
     }
 }

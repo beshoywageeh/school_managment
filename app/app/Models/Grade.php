@@ -39,6 +39,6 @@ class Grade extends Model
 
     public function fees()
     {
-        return $this->hasMany('App\Models\school_fee', 'grade_id');
+        return $this->hasMany('App\Models\School_Fee', 'grade_id');
     }
 }

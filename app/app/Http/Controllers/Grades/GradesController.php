@@ -91,7 +91,6 @@ class GradesController extends Controller
             ]);
 
             return $pdf->stream($data['report_data']->name.'.pdf');
-
         } catch (\Exception $e) {
             \Log::error('PDF Generation failed: '.$e->getMessage());
 
@@ -142,6 +141,6 @@ class GradesController extends Controller
             return redirect()->back()->with('success', trans('general.success'));
         }
 
-        return redirect()->back()->with('error', trans('Grades.cannot_deleted'));
+        return redirect()->back()->with('error', trans('grade.cannot_deleted'));
     }
 }

@@ -6,6 +6,7 @@ use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\nationality;
 use App\Models\school_fee;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class CacheService
@@ -21,7 +22,7 @@ class CacheService
         return $this;
     }
 
-    public function getGradesWithCache(): \Illuminate\Database\Eloquent\Collection
+    public function getGradesWithCache(): Collection
     {
         $cacheKey = "grades_list_{$this->schoolId}";
 
@@ -32,7 +33,7 @@ class CacheService
         });
     }
 
-    public function getClassRoomsWithCache(?int $gradeId = null): \Illuminate\Database\Eloquent\Collection
+    public function getClassRoomsWithCache(?int $gradeId = null): Collection
     {
         $cacheKey = $gradeId
             ? "classrooms_grade_{$gradeId}"
@@ -51,7 +52,7 @@ class CacheService
         });
     }
 
-    public function getSchoolFeesWithCache(?int $gradeId = null, ?int $classroomId = null): \Illuminate\Database\Eloquent\Collection
+    public function getSchoolFeesWithCache(?int $gradeId = null, ?int $classroomId = null): Collection
     {
         $cacheKey = "fees_{$this->schoolId}_{$gradeId}_{$classroomId}";
 
@@ -70,7 +71,7 @@ class CacheService
         });
     }
 
-    public function getNationalitiesWithCache(): \Illuminate\Database\Eloquent\Collection
+    public function getNationalitiesWithCache(): Collection
     {
         $cacheKey = "nationalities_{$this->schoolId}";
 

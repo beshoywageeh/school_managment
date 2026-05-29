@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -25,7 +26,7 @@ class ImportStudentsJob implements ShouldQueue
     {
         try {
             DB::table('students')->insert($this->students);
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             Log::error('Error inserting students batch: '.$e->getMessage());
             throw new \Exception('Failed to insert students: '.$e->getMessage());
         }

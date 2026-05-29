@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FeeInvoiceResource;
 use App\Models\Fee_invoice;
+use App\Models\school_fee;
 use App\Models\Student;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -47,7 +48,7 @@ class FeeInvoiceApiController extends Controller
         ]);
 
         $student = Student::findOrFail($validated['student_id']);
-        $schoolFee = \App\Models\school_fee::findOrFail($validated['school_fee_id']);
+        $schoolFee = school_fee::findOrFail($validated['school_fee_id']);
 
         $invoice = Fee_invoice::create([
             'student_id' => $validated['student_id'],

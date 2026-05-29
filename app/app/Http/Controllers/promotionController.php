@@ -16,15 +16,28 @@ class promotionController extends Controller
     use LogsActivity, SchoolTrait;
 
     /*
-    *
+     *
      * Display a listing of the resource.
      */
     public function index()
     {
         $school = $this->getSchool();
-        $promotions = promotion::where('school_id', $school->id)->with('students:id,name', 'f_grade:id,name', 'f_class:id,name', 't_grade:id,name', 't_class:id,name', 't_acc:id,view', 'f_acc:id,view')->get();
+        $promotions = promotion::where('school_id', $school->id)
+            ->with(
+                'students:id,name',
+                'f_grade:id,name',
+                'f_class:id,name',
+                't_grade:id,name',
+                't_class:id,name',
+                't_acc:id,view',
+                'f_acc:id,view',
+            )
+            ->get();
 
-        return view('backend.promotion.Index', compact('promotions', 'school'));
+        return view(
+            'backend.promotion.Index',
+            compact('promotions', 'school'),
+        );
     }
 
     /**
@@ -33,8 +46,10 @@ class promotionController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $grades = Grade::where('school_id', $school)->get();
-        $acc_year = acadmice_year::where('school_id', $school)->where('status', 0)->get();
+        $grades = Grade::where('school_id', $school->id)->get();
+        $acc_year = acadmice_year::where('school_id', $school->id)
+            ->where('status', 0)
+            ->get();
 
         return view('backend.promotion.create', get_defined_vars());
     }
@@ -46,16 +61,21 @@ class promotionController extends Controller
     {
         DB::beginTransaction();
         try {
-            $Students = Student::where('grade_id', $request->old_grade)->where('classroom_id', $request->old_class)->get();
+            $Students = Student::where('grade_id', $request->old_grade)
+                ->where('classroom_id', $request->old_class)
+                ->get();
 
             if ($Students->count() < 1) {
-                return redirect()->back()->with('error', trans('promotions.no_data'));
+                return redirect()
+                    ->back()
+                    ->with('error', trans('promotions.no_data'));
             }
             $Students->toQuery()->update([
                 'classroom_id' => $request->new_class,
                 'grade_id' => $request->new_grade,
                 'acadmiecyear_id' => $request->acc_to,
             ]);
+
             foreach ($Students as $student) {
                 promotion::updateOrCreate([
                     'student_id' => $student->id,
@@ -68,11 +88,20 @@ class promotionController extends Controller
                     'school_id' => $this->getSchool()->id,
                     'user_id' => auth()->user()->id,
                 ]);
-                $this->logActivity(trans('log.actions.promoted'), trans('log.models.promotion.promoted', ['name' => $Students->where('id', $student->id)->first()->name]));
+                $this->logActivity(
+                    trans('log.actions.promoted'),
+                    trans('log.models.promotion.promoted', [
+                        'name' => $Students
+                            ->where('id', $student->id)
+                            ->first()->name,
+                    ]),
+                );
             }
             DB::commit();
 
-            return redirect()->route('promotion.index')->with('success', trans('general.success'));
+            return redirect()
+                ->route('promotion.index')
+                ->with('success', trans('general.success'));
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -112,16 +141,22 @@ class promotionController extends Controller
         DB::beginTransaction();
         try {
             $promotions = promotion::findorfail($id);
-            Student::where('id', $promotions->student_id)
-                ->update([
-                    'classroom_id' => $promotions->from_class,
-                    'grade_id' => $promotions->from_grade,
-                ]);
+            Student::where('id', $promotions->student_id)->update([
+                'classroom_id' => $promotions->from_class,
+                'grade_id' => $promotions->from_grade,
+            ]);
             $promotions->delete();
-            $this->logActivity(trans('log.actions.canceled'), trans('log.models.promotion.canceled', ['name' => $promotions->student->name]));
+            $this->logActivity(
+                trans('log.actions.canceled'),
+                trans('log.models.promotion.canceled', [
+                    'name' => $promotions->student->name,
+                ]),
+            );
             DB::commit();
 
-            return redirect()->route('promotion.index')->with('success', trans('general.success'));
+            return redirect()
+                ->route('promotion.index')
+                ->with('success', trans('general.success'));
         } catch (\Exception $e) {
             DB::rollBack();
 

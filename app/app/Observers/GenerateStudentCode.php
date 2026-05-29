@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Listeners\LogStudentActivity;
 use App\Models\Student;
 
 class GenerateStudentCode
@@ -14,6 +15,11 @@ class GenerateStudentCode
         $latestStudent = Student::latest('id')->first();
         $nextId = $latestStudent ? $latestStudent->id + 1 : 1;
         $student->code = str_pad($nextId, 6, '0', STR_PAD_LEFT);
+    }
+
+    public function created(Student $student): void
+    {
+        Dispatch(new LogStudentActivity($student, 'created'));
     }
 
     /**

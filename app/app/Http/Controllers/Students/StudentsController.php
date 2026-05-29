@@ -8,18 +8,19 @@ use App\Http\Requests\StudentRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\class_room;
-use App\Models\Fee_invoice;
 use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\Student;
-use App\Services\AgeCalculationService;
 use App\Services\FinancialService;
-use App\Services\StudentImportService;
-use App\Services\StudentRegeister;
+use App\Services\Student\AgeCalculationService;
+use App\Services\Student\StudentImportService;
+use App\Services\Student\StudentRegeister;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Exceptions\NoTypeDetectedException;
 
 class StudentsController extends Controller
 {
@@ -85,7 +86,7 @@ class StudentsController extends Controller
 
             return redirect()->route('students.index');
         } catch (\Exception $e) {
-            log::error($e->getMessage());
+            Log::error($e->getMessage());
 
             return redirect()->back()->withInput();
         }
@@ -209,7 +210,7 @@ class StudentsController extends Controller
 
         return redirect()
             ->route('Students.index')
-            ->with('success', trans('General.success'));
+            ->with('success', trans('general.success'));
     }
 
     /**
@@ -301,12 +302,12 @@ class StudentsController extends Controller
             }
 
             return redirect()->route('students.index');
-        } catch (\Maatwebsite\Excel\Exceptions\NoTypeDetectedException $e) {
+        } catch (NoTypeDetectedException $e) {
             session()->flash('error', '⚠️ Could not read the file. Please ensure it\'s a valid Excel file.');
             Log::error('Excel import error: '.$e->getMessage());
 
             return redirect()->back()->withInput();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             session()->flash('error', '⚠️ Database error occurred. Please check your data and try again.');
             Log::error('Student import DB error: '.$e->getMessage());
 
@@ -316,67 +317,6 @@ class StudentsController extends Controller
             Log::error($e->getMessage());
 
             return redirect()->back()->withInput();
-        }
-    }
-
-    public function fast_add_student(
-        Request $request,
-        FinancialService $StudentAccount,
-        StudentRegeister $StudentRegeister,
-    ) {
-        try {
-            DB::beginTransaction();
-            $data = $StudentRegeister->StudentRegeister($request);
-
-            $school_fee = DB::table('school__fees')
-                ->where('academic_year_id', $data['student']->acadmiecyear_id)
-                ->where('grade_id', $data['student']->grade_id)
-                ->where('classroom_id', $data['student']->classroom_id)
-                ->get();
-
-            // dd($school_fee);
-            foreach ($school_fee as $fee) {
-                $fees = new Fee_invoice;
-                $fees->invoice_date = \Carbon\Carbon::parse()->format(
-                    'Y-m-d',
-                );
-                $fees->student_id = $data['student']->id;
-                $fees->grade_id = $data['student']->grade_id;
-                $fees->classroom_id = $data['student']->classroom_id;
-                $fees->school_fee_id = $fee->id;
-                $fees->academic_year_id = $data['student']->acadmiecyear_id;
-                $fees->user_id = Auth::user()->id;
-                $fees->school_id = Auth::user()->school_id;
-                $fees->save();
-                $StudentAccount->CreateStudentAccount(
-                    $data['student'],
-                    $fees->id,
-                    $request->academic_year,
-                    '1',
-                    $fee->amount,
-                );
-
-                $this->logActivity(
-                    trans('log.actions.added'),
-                    trans('log.models.school_fee.invoice_added', [
-                        'name' => $data['student']->name,
-                        'amount' => $fee->amount,
-                    ]),
-                );
-            }
-            $StudentAccount->AddStudentBookInvoice($data['student']);
-            $StudentAccount->AddStudentClotheInvoice($data['student']);
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'message' => trans('general.success'),
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ]);
         }
     }
 }

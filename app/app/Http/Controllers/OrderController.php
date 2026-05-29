@@ -73,9 +73,9 @@ class OrderController extends Controller
     {
 
         try {
-            $order = Order::findOrFail($request->order_id);
+            $order = order::findOrFail($request->order_id);
             foreach ($request->product as $key => $productName) {
-                $product = Stock::where('name', $productName)->first()->id;
+                $product = stock::where('name', $productName)->first()->id;
 
                 $stocks = [
                     'manual' => $request->manual[$key], // updated line

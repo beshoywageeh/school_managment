@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\acadmice_year;
-use App\Models\ActivityLog;
+use App\Http\Traits\SchoolTrait;
 use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\PaymentParts;
@@ -14,7 +13,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Http\Traits\SchoolTrait;
+
 class HomeController extends Controller
 {
     use SchoolTrait;
@@ -32,7 +31,6 @@ class HomeController extends Controller
             $schoolId,
             $isAdmin,
         );
-        $academic_years = acadmice_year::where('school_id', $schoolId)->get();
 
         // Get financial data
         $financialData = $this->getFinancialData($schoolId);
@@ -59,19 +57,6 @@ class HomeController extends Controller
         $chartData = $this->generateChartData($grades);
         $revenueTrend = $this->getMonthlyRevenueTrend($schoolId);
 
-        // Additional data for advanced dashboard
-        $latestStudents = Student::where('school_id', $schoolId)
-            ->with(['grade', 'classroom'])
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $recentActivities = ActivityLog::where('setting_id', $schoolId)
-            ->with('user')
-            ->latest()
-            ->take(10)
-            ->get();
-
         return view(
             'dashboard',
             array_merge(
@@ -82,9 +67,6 @@ class HomeController extends Controller
                     'grades',
                     'school',
                     'data',
-                    'academic_years',
-                    'latestStudents',
-                    'recentActivities'
                 ),
                 $financialData,
                 $chartData,
@@ -171,36 +153,20 @@ class HomeController extends Controller
      */
     private function generateChartData($grades): array
     {
-        $baseColors = [
-            [255, 99, 132], // Red
-            [54, 162, 235], // Blue
-            [255, 206, 86], // Yellow
-            [75, 192, 192], // Green
-            [153, 102, 255], // Purple
-            [255, 159, 64], // Orange
-        ];
-
         $chart_labels = [];
         $chart_data = [];
-        $chart_bg_colors = [];
-        $chart_border_colors = [];
 
         foreach ($grades as $index => $grade) {
-            $color = $baseColors[$index % count($baseColors)];
 
             foreach ($grade->class_rooms as $classroom) {
                 $chart_labels[] = "{$grade->name} - {$classroom->name}";
                 $chart_data[] = $classroom->students_count;
-                $chart_bg_colors[] = "rgba({$color[0]}, {$color[1]}, {$color[2]}, 0.6)";
-                $chart_border_colors[] = "rgba({$color[0]}, {$color[1]}, {$color[2]}, 1)";
             }
         }
 
         return compact(
             'chart_labels',
             'chart_data',
-            'chart_bg_colors',
-            'chart_border_colors',
         );
     }
 }

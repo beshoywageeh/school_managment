@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class BookSheetController extends Controller
 {
-    use LogsActivity,SchoolTrait;
+    use LogsActivity, SchoolTrait;
 
     /**
      * Display a listing of the resource.
@@ -19,6 +19,7 @@ class BookSheetController extends Controller
     {
         $school = $this->getSchool();
         $books_sheets = book_sheet::where('school_id', $school->id)->with('grade', 'classroom', 'orders')->get();
+        // return $books_sheets;
         $grades = Grade::where('school_id', $school->id)->get();
 
         return view('backend.book_sheet.index', get_defined_vars());
@@ -32,22 +33,24 @@ class BookSheetController extends Controller
      */
     public function store(Request $request)
     {
-
         try {
-            foreach ($request->list_Books as $book) {
-
+            $books = $request->input('books', []);
+            if (empty($books)) {
+                return redirect()->back()->with('error', trans('general.noDataToShow'));
+            }
+            foreach ($books as $book) {
                 book_sheet::create([
                     'grade_id' => $request->grade_id,
                     'classroom_id' => $request->classroom_id,
                     'name' => $book['name'],
-                    'opening_qty' => $book['opening_qty'],
+                    'opening_qty' => $book['opening_qty'] ?? 0,
                     'sales_price' => $request->sales_price,
-                    'is_book' => isset($book['is_book']) ? true : false,
+                    'type' => ($book['is_book'] ?? '0') === '1' ? 'book' : 'sheet',
                     'school_id' => $this->getSchool()->id,
                     'user_id' => auth()->user()->id,
                 ]);
-                $this->logActivity(trans('log.parents.added_action'), trans('log.book_sheet.added', ['name' => $book['name']]));
             }
+            $this->logActivity(trans('log.parents.added_action'), trans('log.book_sheet.added', ['name' => trans('book_sheet.title')]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
@@ -83,7 +86,7 @@ class BookSheetController extends Controller
                 'name' => $request->name,
                 'opening_qty' => $request->opening_qty,
                 'sales_price' => $request->sales_price,
-                'is_book' => isset($book['is_book']) ? true : false,
+                'type' => $request->is_book ? 'book' : 'sheet',
             ]);
             $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheet.updated', ['name' => $request->name]));
 

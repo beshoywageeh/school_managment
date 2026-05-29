@@ -104,7 +104,6 @@ class BookSheetsOrderController extends Controller
                     $bookSheet->update([
                         'sales_price' => $request->sales[$key],
                     ]);
-
                 }
                 $this->logActivity(trans('log.parents.updated_action'), trans('log.book_sheets_order.tawreed_updated', ['number' => $order->auto_number]));
             }
@@ -300,7 +299,6 @@ class BookSheetsOrderController extends Controller
             }
 
             return redirect()->route('bookSheetsOrder.index', 3)->with('success', trans('general.success'));
-
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

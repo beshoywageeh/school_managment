@@ -86,7 +86,6 @@ class SettingsController extends Controller
 
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
-
     }
 
     public function update_password(Request $request)

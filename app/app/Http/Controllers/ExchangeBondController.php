@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class ExchangeBondController extends Controller
 {
-    use LogsActivity,SchoolTrait;
+    use LogsActivity, SchoolTrait;
 
     public function index()
     {
@@ -41,8 +41,8 @@ class ExchangeBondController extends Controller
             DB::beginTransaction();
             $school = $this->GetSchool();
             $exchange = $StudentAccount->Exchange_bond($school->id, $request, $acc_year->id);
-            $StudentAccount->CreateStudentAccount($student, $exchange, $acc_year, 'exchange', $request->amount, 0.00, null, null, $exchange->id);
-            $StudentAccount->Fund_Account($request, $school->id);
+            $StudentAccount->CreateStudentAccount($student, null, $acc_year, 'exchange', $request->amount, 0.00, null, null, $exchange);
+            $StudentAccount->Fund_Account($school, $exchange->id, 0.0, $request->amount);
             DB::commit();
             $this->LogActivity(trans('log.actions.added'), trans('log.models.exchange_bond.created'));
 
@@ -53,7 +53,6 @@ class ExchangeBondController extends Controller
 
             return redirect()->back();
         }
-
     }
 
     public function edit($id)
@@ -78,7 +77,7 @@ class ExchangeBondController extends Controller
             $exchange->user_id = auth()->user()->id;
             $exchange->save();
 
-            $StudentAccount->CreateStudentAccount($exchange->student, $exchange, acadmice_year::find($exchange->academic_year_id), 4, $request->amount - $student_account->debit, 0.00, null, null, $exchange->id);
+            $StudentAccount->CreateStudentAccount($exchange->student, $exchange, acadmice_year::find($exchange->academic_year_id), 'exchange', $request->amount - $student_account->debit, 0.00, null, null, $exchange->id);
             $fund_account->Credit = $request->amount;
             $fund_account->save();
             DB::commit();

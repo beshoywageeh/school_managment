@@ -40,7 +40,7 @@ class ExcptionFeesController extends Controller
 
             $school = $this->getSchool();
             if ($fees->isEmpty() || $balance <= 0) {
-                session()->flash('info', trans('General.noInvoiceToExcept'));
+                session()->flash('info', trans('general.noInvoiceToExcept'));
 
                 return redirect()->route('students.index');
             }

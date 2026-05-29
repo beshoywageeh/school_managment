@@ -8,6 +8,7 @@ use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Grade;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,8 +34,14 @@ class ClassRoomsController extends Controller
         }
 
         $data['class_rooms'] = $query
-            ->when(Auth::user()->hasRole('Admin'), fn ($q) => $q->orderBy('grade_id', 'asc'))
-            ->when(! Auth::user()->hasRole('Admin'), fn ($q) => $q->paginate(10))
+            ->when(
+                Auth::user()->hasRole('Admin'),
+                fn ($q) => $q->orderBy('grade_id', 'asc'),
+            )
+            ->when(
+                ! Auth::user()->hasRole('Admin'),
+                fn ($q) => $q->paginate(10),
+            )
             ->when(Auth::user()->hasRole('Admin'), fn ($q) => $q->get());
 
         $data['grades'] = Grade::get();
@@ -64,10 +71,16 @@ class ClassRoomsController extends Controller
                     'school_id' => $this->getSchool()->id,
                 ]);
             }
-            session()->flash('success', trans('general.success'));
-            $this->logActivity(trans('log.actions.added'), trans('log.models.classroom.created', ['class_name' => $request->class_name]));
+            $this->logActivity(
+                trans('log.actions.added'),
+                trans('log.models.classroom.created', [
+                    'class_name' => $request->class_name,
+                ]),
+            );
 
-            return redirect()->back();
+            return redirect()
+                ->back()
+                ->with('success', trans('general.success'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -82,25 +95,39 @@ class ClassRoomsController extends Controller
     public function show(string $id)
     {
         try {
-            $data['class_room'] = class_room::where('id', $id)->with(['grade:id,name', 'students'])->first();
-            $current_year = \Carbon\Carbon::parse()->format('Y');
+            $data['class_room'] = class_room::where('id', $id)
+                ->with(['grade:id,name', 'students'])
+                ->first();
+            $current_year = Carbon::parse()->format('Y');
             $data['school'] = $this->getSchool();
 
-            $data['acc_year'] = acadmice_year::whereYear('year_start', $current_year)->first();
-            $pdf = PDF::loadView('backend.class_rooms.show', ['data' => $data], [], [
-                'format' => 'A4',
-                'default_font_size' => 10,
-                'margin_left' => 2,
-                'margin_right' => 2,
-                'margin_top' => 25,
-                'margin_bottom' => 10,
-                'margin_header' => 2,
-                'margin_footer' => 2,
-                'orientation' => 'P',
-            ]);
+            $data['acc_year'] = acadmice_year::whereYear(
+                'year_start',
+                $current_year,
+            )->first();
+            $pdf = PDF::loadView(
+                'backend.class_rooms.show',
+                ['data' => $data],
+                [],
+                [
+                    'format' => 'A4',
+                    'default_font_size' => 10,
+                    'margin_left' => 2,
+                    'margin_right' => 2,
+                    'margin_top' => 25,
+                    'margin_bottom' => 10,
+                    'margin_header' => 2,
+                    'margin_footer' => 2,
+                    'orientation' => 'P',
+                ],
+            );
 
-            return $pdf->stream($data['class_room']->grade->name.' - '.$data['class_room']->name.'.pdf');
-
+            return $pdf->stream(
+                $data['class_room']->grade->name.
+                    ' - '.
+                    $data['class_room']->name.
+                    '.pdf',
+            );
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -119,7 +146,12 @@ class ClassRoomsController extends Controller
             $class_room->grade_id = $request->grade_name;
             $class_room->save();
             session()->flash('success', trans('general.success'));
-            $this->logActivity(trans('log.actions.updated'), trans('log.models.classroom.updated', ['class_name' => $request->class_name]));
+            $this->logActivity(
+                trans('log.actions.updated'),
+                trans('log.models.classroom.updated', [
+                    'class_name' => $request->class_name,
+                ]),
+            );
 
             return redirect()->route('class-rooms.index');
         } catch (\Exception $e) {
@@ -133,21 +165,31 @@ class ClassRoomsController extends Controller
     {
         try {
             \DB::beginTransaction();
-            $class = class_room::where('id', $id)->with('students')->first();
+            $class = class_room::where('id', $id)
+                ->with('students')
+                ->first();
             if ($class->students->isEmpty()) {
-                return redirect()->back()->with('info', trans('General.no_students'));
+                return redirect()
+                    ->back()
+                    ->with('info', trans('general.no_students'));
             }
             $class->students->toQuery()->update(['tameen' => 1]);
             $class->update(['tameen' => 1]);
-            $this->logActivity(trans('log.actions.updated'), trans('log.models.classroom.tameen_on_class', ['class' => $class->name]));
+            $this->logActivity(
+                trans('log.actions.updated'),
+                trans('log.models.classroom.tameen_on_class', [
+                    'class' => $class->name,
+                ]),
+            );
             \DB::commit();
 
-            return redirect()->back()->with('success', trans('General.success'));
+            return redirect()
+                ->back()
+                ->with('success', trans('general.success'));
         } catch (\Exception $e) {
             \DB::rollback();
 
             return redirect()->back()->with('error', $e->getMessage());
-
         }
     }
 
@@ -157,15 +199,26 @@ class ClassRoomsController extends Controller
     public function destroy(string $id, Request $request)
     {
         try {
-            $class_room = class_room::where('id', $id)->withcount('students')->first();
+            $class_room = class_room::where('id', $id)
+                ->withcount('students')
+                ->first();
             if ($class_room->students_count == 0) {
                 $class_room->delete();
 
-                return redirect()->back()->with('success', trans('general.success'));
+                return redirect()
+                    ->back()
+                    ->with('success', trans('general.success'));
             }
-            $this->logActivity(trans('log.actions.deleted'), trans('log.models.classroom.deleted', ['class_name' => $class_room->name]));
+            $this->logActivity(
+                trans('log.actions.deleted'),
+                trans('log.models.classroom.deleted', [
+                    'class_name' => $class_room->name,
+                ]),
+            );
 
-            return redirect()->back()->with('error', trans('class_rooms.cannot_deleted'));
+            return redirect()
+                ->back()
+                ->with('error', trans('class_rooms.cannot_deleted'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

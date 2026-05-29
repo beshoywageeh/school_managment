@@ -48,7 +48,7 @@ class RoleController extends Controller
             $role = Role::create(['name' => $request->input('name')]);
             $role->syncPermissions($request->input('permission'));
 
-            return redirect()->route('roles.index')->with('success', trans('General.success'));
+            return redirect()->route('roles.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -85,19 +85,17 @@ class RoleController extends Controller
             $role->save();
             $role->syncPermissions($request->input('permission'));
 
-            return redirect()->route('roles.index')->with('success', trans('General.success'));
+            return redirect()->route('roles.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
-
         }
-
     }
 
     /*** Remove the specified resource from storage.** @param  int  $id* @return \Illuminate\Http\Response*/
     public function destroy($id)
     {
-        \DB::table('roles')->where('id', $id)->delete();
+        DB::table('roles')->where('id', $id)->delete();
 
-        return redirect()->route('roles.index')->with('success', trans('General.success'));
+        return redirect()->route('roles.index')->with('success', trans('general.success'));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\ActivityLog;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class ActivityLogService
@@ -41,14 +42,14 @@ class ActivityLogService
         return $this->log('added', trans('log.models.school_fee.invoice_added', ['name' => $studentName, 'amount' => $amount]));
     }
 
-    public function getRecentLogs(int $limit = 50): \Illuminate\Database\Eloquent\Collection
+    public function getRecentLogs(int $limit = 50): Collection
     {
         return ActivityLog::latest()
             ->limit($limit)
             ->get();
     }
 
-    public function getLogsByUser(int $userId, int $limit = 50): \Illuminate\Database\Eloquent\Collection
+    public function getLogsByUser(int $userId, int $limit = 50): Collection
     {
         return ActivityLog::where('user_id', $userId)
             ->latest()

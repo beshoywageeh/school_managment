@@ -13,7 +13,7 @@ class PaymentParts extends Model
 
     protected $guarded = [];
 
-    protected $casts = ['payment_status' => Payment_Status::class];
+    protected $casts = ['status' => Payment_Status::class];
 
     public function students()
     {
@@ -38,8 +38,8 @@ class PaymentParts extends Model
         return $this->belongsTo(acadmice_year::class, 'acadmic_id');
     }
 
-    public function getStatusAttribute()
-    {
-        return $this->payment_status->value == 0 ? trans('report.unpaid') : trans('report.paid');
-    }
+    // public function getStatusAttribute()
+    // {
+    //     return $this->value == 'notpayed' ? trans('enums.payment_status.payed') : trans('enums.payment_status.notpayed');
+    // }
 }

@@ -14,8 +14,8 @@ class LaboratoryController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $labs = Laboratory::where('school_id', $school->id)->where('is_main', 1)->with('sub_locations')->get();
-        $labs_main = Laboratory::where('is_main', 1)->get();
+        $labs = laboratory::where('school_id', $school->id)->where('is_main', 1)->with('sub_locations')->get();
+        $labs_main = laboratory::where('is_main', 1)->get();
 
         return view('backend.labs.index', get_defined_vars());
     }
@@ -26,9 +26,9 @@ class LaboratoryController extends Controller
         try {
             $main_location = $request->location;
             $labs = $request->list_labs;
-            $location = Laboratory::firstOrCreate(['location' => $main_location], ['location' => $main_location, 'is_main' => 1, 'school_id' => $this->getSchool()->id, 'user_id' => auth()->user()->id]);
+            $location = laboratory::firstOrCreate(['location' => $main_location], ['location' => $main_location, 'is_main' => 1, 'school_id' => $this->getSchool()->id, 'user_id' => auth()->user()->id]);
             foreach ($labs as $lab) {
-                Laboratory::firstOrCreate(['sub_location' => $lab['name']], [
+                laboratory::firstOrCreate(['sub_location' => $lab['name']], [
                     'location' => null,
                     'is_main' => 0,
                     'sub_location' => $lab['name'],
@@ -39,7 +39,7 @@ class LaboratoryController extends Controller
                 $this->logActivity(trans('log.parents.added_action'), trans('log.laboratory.added', ['name' => $lab['name'], 'location' => $main_location]));
             }
 
-            return redirect()->back()->with('success', trans('General.success'));
+            return redirect()->back()->with('success', trans('general.success'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -48,7 +48,7 @@ class LaboratoryController extends Controller
     public function edit($id)
     {
         $school = $this->getSchool();
-        $laboratory = Laboratory::where('school_id', $school->id)->with('sub_locations:id,sub_location,location_id')->findOrFail($id);
+        $laboratory = laboratory::where('school_id', $school->id)->with('sub_locations:id,sub_location,location_id')->findOrFail($id);
 
         return view('backend.labs.edit', get_defined_vars());
     }
@@ -57,14 +57,14 @@ class LaboratoryController extends Controller
     {
         // return $request;
         try {
-            $laboratory = Laboratory::findOrFail($request->id);
+            $laboratory = laboratory::findOrFail($request->id);
             $laboratory->update(['location' => $request->location]);
             foreach ($request->sub_location_id as $index => $sub_location_id) {
-                Laboratory::where('id', $sub_location_id)->update(['sub_location' => $request->sub_locations[$index]]);
+                laboratory::where('id', $sub_location_id)->update(['sub_location' => $request->sub_locations[$index]]);
                 $this->logActivity(trans('log.parents.updated_action'), trans('log.laboratory.updated', ['name' => $request->sub_locations[$index], 'location' => $laboratory->location]));
             }
 
-            return redirect()->route('labs.index')->with('success', trans('General.success'));
+            return redirect()->route('labs.index')->with('success', trans('general.success'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -73,22 +73,21 @@ class LaboratoryController extends Controller
     public function show($id)
     {
         $school = $this->getSchool();
-        $laboratory = Laboratory::where('school_id', $school->id)->with(['orders', 'orders.stocks:id,name', 'main_location:id,location'])->findOrFail($id);
+        $laboratory = laboratory::where('school_id', $school->id)->with(['orders', 'orders.stocks:id,name', 'main_location:id,location'])->findOrFail($id);
 
         return view('backend.labs.show', get_defined_vars());
-
     }
 
     public function destroy($id)
     {
         try {
-            $laboratory = Laboratory::findOrFail($id);
+            $laboratory = laboratory::findOrFail($id);
             if ($laboratory->orders->count() > 0) {
-                return redirect()->back()->with('info', trans('General.cant_delete'));
+                return redirect()->back()->with('info', trans('general.cant_delete'));
             }
             $laboratory->delete();
 
-            return redirect()->back()->with('success', trans('General.success'));
+            return redirect()->back()->with('success', trans('general.success'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

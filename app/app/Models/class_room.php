@@ -8,39 +8,46 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class class_room extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name',
-        'grade_id',
-        'user_id',
-        'tameen',
-        'school_id',
+        "name",
+        "grade_id",
+        "user_id",
+        "tameen",
+        "school_id",
     ];
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo("App\Models\User");
     }
 
     public function grade()
     {
-        return $this->belongsTo('App\Models\Grade', 'grade_id');
+        return $this->belongsTo("App\Models\Grade", "grade_id");
     }
 
     public function students()
     {
-        return $this->hasMany('App\Models\Student', 'classroom_id');
+        return $this->hasMany("App\Models\Student", "classroom_id");
     }
 
     public function tammen()
     {
         $value = $this->tameen;
         if ($value == 0) {
-            print_r('<span class="badge badge-danger">'.trans('general.no_tammen').'</span>');
+            print_r(
+                '<span class="p-1 bg-red-400 rounded font-sm">' .
+                    trans("general.no_tammen") .
+                    "</span>",
+            );
         } else {
-            print_r('<span class="badge badge-success">'.trans('general.ok_tammen').'</span>');
+            print_r(
+                '<span class="p-1 bg-green-400 rounded font-sm">' .
+                    trans("general.ok_tammen") .
+                    "</span>",
+            );
         }
-
     }
 }

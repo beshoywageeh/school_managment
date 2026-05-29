@@ -21,6 +21,6 @@ class Student_Table_Action extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.student_-table_-action');
+        return view('components.student-table-action');
     }
 }

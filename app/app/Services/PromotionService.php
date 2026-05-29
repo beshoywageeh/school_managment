@@ -6,6 +6,7 @@ use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\promotion;
 use App\Models\Student;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class PromotionService
@@ -49,14 +50,14 @@ class PromotionService
         ];
     }
 
-    public function getPromotionsHistory(int $schoolId): \Illuminate\Database\Eloquent\Collection
+    public function getPromotionsHistory(int $schoolId): Collection
     {
         return promotion::where('school_id', $schoolId)
             ->with(['students:id,name', 'f_grade:id,name', 'f_class:id,name', 't_grade:id,name', 't_class:id,name'])
             ->get();
     }
 
-    public function getAvailableStudentsForPromotion(int $gradeId, int $classId): \Illuminate\Database\Eloquent\Collection
+    public function getAvailableStudentsForPromotion(int $gradeId, int $classId): Collection
     {
         return Student::where('grade_id', $gradeId)
             ->where('classroom_id', $classId)

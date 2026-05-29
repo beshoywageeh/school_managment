@@ -2,18 +2,21 @@
 
 namespace App\Livewire\Students;
 
+use App\Enums\Status;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
+use App\Models\book_sheet;
 use App\Models\class_room;
+use App\Models\clothes;
 use App\Models\Grade;
 use App\Models\My_parents;
-use App\Models\school_fee;
+use App\Models\School_Fee;
 use App\Models\Student;
 use App\Services\FinancialService;
+use App\Services\Student\StudentRegeister;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -63,9 +66,19 @@ class Students extends Component
 
     public $parent_name_input = '';
 
-    public $check_birth = '';
-
     public $check_birth_store = '';
+
+    public $day = '';
+
+    public $month = '';
+
+    public $year = '';
+
+    public $fees = [];
+
+    public $clothes = [];
+
+    public $books = [];
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -88,7 +101,7 @@ class Students extends Component
     // When grade is updated, reset the classroom (Filters)
     public function updatedGradeId()
     {
-        $this->reset('classroom_id');
+        $this->reset('classroom_id', 'fees', 'clothes', 'books');
     }
 
     // When grade is updated in create form, reset the classroom
@@ -97,30 +110,38 @@ class Students extends Component
         $this->reset('classroom');
     }
 
+    public function updatedClassroom()
+    {
+        $this->fees = School_Fee::where('grade_id', $this->grade)
+            ->where('classroom_id', $this->classroom)
+            ->where('school_id', Auth::user()->school_id)
+            ->get();
+        $this->clothes = clothes::where('grade_id', $this->grade)
+            ->where('classroom_id', $this->classroom)
+            ->where('school_id', Auth::user()->school_id)
+            ->get();
+        $this->books = book_sheet::where('grade_id', $this->grade)
+            ->where('classroom_id', $this->classroom)
+            ->where('school_id', Auth::user()->school_id)
+            ->get();
+    }
+
     public function updatedBirthDate($value)
     {
-        if (! $value) {
-            $this->check_birth = '';
 
-            return;
-        }
+        $birthDate = Carbon::parse($value);
+        $targetDate = Carbon::create(now()->year, 10, 1);
 
-        try {
-            $birthDate = Carbon::parse($value);
-            $currentYear = now()->year;
-            $targetDate = Carbon::create($currentYear, 10, 1);
+        $years = $birthDate->diffInYears($targetDate);
+        $months = $birthDate->diffInMonths($targetDate) % 12;
+        $days = $birthDate->diffInDays(
+            $targetDate->copy()->subYears($years)->subMonths($months)
+        );
 
-            $diff = $birthDate->diff($targetDate);
-
-            $this->check_birth = $diff->y.' '.trans('student.year').', '.
-                $diff->m.' '.trans('student.month').', '.
-                $diff->d.' '.trans('student.day');
-            $this->check_birth_store = $diff->y.' - '.
-                $diff->m.' - '.
-                $diff->d;
-        } catch (\Exception $e) {
-            $this->check_birth = '';
-        }
+        $this->year = $years;
+        $this->month = $months;
+        $this->day = $days;
+        $this->check_birth_store = "{$years} - {$months} - {$days}";
     }
 
     // When perPage is updated, reset the page
@@ -172,7 +193,7 @@ class Students extends Component
             ->get();
     }
 
-    public function store()
+    public function store(StudentRegeister $studentRegeister)
     {
         $this->validate([
             'student_name' => 'required|string|max:255',
@@ -193,7 +214,7 @@ class Students extends Component
 
             $school = $this->getSchool();
             $academicYear = acadmice_year::where('school_id', $school->id)
-                ->where('status', \App\Enums\Status::OPEN)
+                ->where('status', Status::OPEN)
                 ->first();
 
             if (! $academicYear) {
@@ -201,45 +222,28 @@ class Students extends Component
             }
 
             // Find or create parent
-            $parent = My_parents::where('school_id', $school->id)
-                ->where('Father_Name', $this->parent_name_input)
-                ->first();
-
-            if (! $parent) {
-                $parent = My_parents::create([
-                    'Father_Name' => $this->parent_name_input,
-                    'user_id' => Auth::id(),
-                    'school_id' => $school->id,
-                    'slug' => Str::slug($this->parent_name_input).'-'.mt_rand(1000, 9999),
-                ]);
-            }
-
-            $student = Student::create([
-                'name' => $this->student_name,
+            $registrationResult = $studentRegeister->StudentRegeister([
+                'student_name' => $this->student_name,
                 'birth_date' => $this->birth_date,
                 'national_id' => $this->national_id,
-                'nationality_id' => $this->nationality,
+                'nationality' => $this->nationality,
                 'religion' => $this->religion,
-                'student_status' => $this->std_status,
+                'std_status' => $this->std_status,
                 'gender' => $this->gender,
                 'address' => $this->address,
-                'grade_id' => $this->grade,
-                'classroom_id' => $this->classroom,
-                'parent_id' => $parent->id,
-                'school_id' => $school->id,
-                'user_id' => Auth::id(),
-                'code' => mt_rand(1000000000, 9999999999),
-                'join_date' => now(),
-                'acadmiecyear_id' => $academicYear->id,
-                'slug' => Str::slug($this->student_name).'-'.mt_rand(1000, 9999),
-                'birth_at_begin' => $this->check_birth_store,
+                'grade' => $this->grade,
+                'classroom' => $this->classroom,
+                'parents' => $this->parent_name_input,
+                'academic_year' => $academicYear->id,
             ]);
+
+            $student = $registrationResult['student'];
 
             // Financial Services Integration
             $financialService = new FinancialService;
 
             // 1. Generate Fee Invoices for the student based on grade/classroom
-            $school_fees = school_fee::where('school_id', $school->id)
+            $school_fees = School_Fee::where('school_id', $school->id)
                 ->where('academic_year_id', $academicYear->id)
                 ->where('grade_id', $this->grade)
                 ->where('classroom_id', $this->classroom)
@@ -265,13 +269,13 @@ class Students extends Component
             }
 
             // 2. Automatically generate Book and Clothes Invoices
-            $financialService->AddStudentBookInvoice($student);
-            $financialService->AddStudentClotheInvoice($student);
+            // $financialService->AddStudentBookInvoice($student);
+            // $financialService->AddStudentClotheInvoice($student);
 
             DB::commit();
 
             $this->resetForm();
-            $this->dispatch('close-modal', id: 'Create_Student');
+            $this->dispatch('closeCreateStudentModal');
             session()->flash('success', trans('general.Message.Success'));
         } catch (\Exception $e) {
             DB::rollBack();
@@ -293,7 +297,10 @@ class Students extends Component
             'grade',
             'classroom',
             'parent_name_input',
-            'check_birth',
+            'check_birth_store',
+            'year',
+            'month',
+            'day',
         ]);
     }
 
@@ -302,6 +309,7 @@ class Students extends Component
         $school = $this->getSchool();
 
         $query = Student::query()
+
             ->join('parents', 'students.parent_id', '=', 'parents.id')
             ->join('grades', 'students.grade_id', '=', 'grades.id')
             ->join('class_rooms', 'students.classroom_id', '=', 'class_rooms.id')
@@ -341,7 +349,7 @@ class Students extends Component
 
         $students = $query->paginate($this->perPage);
 
-        return view('livewire.students.students', [
+        return view('livewire.students.studentsTable', [
             'students' => $students,
             'grades' => $this->grades,
         ]);

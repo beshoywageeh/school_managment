@@ -28,7 +28,7 @@ class OutOrderController extends Controller
         try {
             $generate_code = order::where('type', '2')->orderBy('auto_number', 'desc')->first();
             $auto_number = isset($generate_code) ? str_pad($generate_code->auto_number + 1, 6) : '000001';
-            $labs = Laboratory::where('is_main', 1)->with('sub_locations')->get();
+            $labs = laboratory::where('is_main', 1)->with('sub_locations')->get();
             $stocks = stock::all();
             $school = $this->getSchool();
 

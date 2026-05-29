@@ -15,25 +15,43 @@ use App\Models\PaymentParts;
 use App\Models\Recipt_Payment;
 use App\Models\StudentAccount;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class FinancialService
 {
-    use logsActivity;
+    use LogsActivity;
 
-    public function FeeInvoice($student, $fee_id, $acc_year, $school)
+    private function generateAutoNumber(string $modelClass, string $column = 'auto_number', int $pad = 6): string
     {
-        $fee = new Fee_invoice;
-        $fee->invoice_date = date('Y-m-d');
-        $fee->student_id = $student->id;
-        $fee->grade_id = $student->grade_id;
-        $fee->classroom_id = $student->classroom_id;
-        $fee->school_fee_id = $fee_id;
-        $fee->academic_year_id = $acc_year;
-        $fee->user_id = Auth::user()->id;
-        $fee->school_id = $school;
-        $fee->save();
+        $last = $modelClass::orderBy($column, 'desc')->first();
+
+        return $last
+            ? str_pad($last->$column + 1, $pad, '0', STR_PAD_LEFT)
+            : str_pad(1, $pad, '0', STR_PAD_LEFT);
+    }
+
+    public function FeeInvoice($student, $fee_id, $acc_year, $school): Fee_invoice
+    {
+        $invoice = Fee_invoice::create([
+            'invoice_date' => date('Y-m-d'),
+            'student_id' => $student->id,
+            'grade_id' => $student->grade_id,
+            'classroom_id' => $student->classroom_id,
+            'school_fee_id' => $fee_id,
+            'academic_year_id' => $acc_year,
+            'user_id' => auth()->id(),
+            'school_id' => $school,
+        ]);
+
+        $this->logActivity(
+            trans('log.actions.added'),
+            trans('log.models.receipt_payment.created', [
+                'name' => $student->name,
+                'date' => date('Y-m-d'),
+            ])
+        );
+
+        return $invoice;
     }
 
     public function PaymentParts(
@@ -43,18 +61,21 @@ class FinancialService
         $school,
         $pay_at,
         $amount,
-    ) {
-        $fee = new PaymentParts;
-        $fee->date = $pay_at;
-        $fee->student_id = $student->id;
-        $fee->grade_id = $student->grade_id;
-        $fee->class_id = $student->class_id;
-        $fee->school_fees_id = $fee_id;
-        $fee->amount = $amount;
-        $fee->academic_year_id = $acc_year;
-        $fee->school_id = $school;
-        $fee->user_id = auth()->user()->id;
-        $fee->save();
+        $status
+    ): void {
+        PaymentParts::create([
+            'date' => $pay_at,
+            'student_id' => $student->id,
+            'grade_id' => $student->grade_id,
+            'class_id' => $student->classroom_id,
+            'school_fees_id' => $fee_id,
+            'amount' => $amount,
+            'academic_year_id' => $acc_year,
+            'school_id' => $school,
+            'user_id' => auth()->id(),
+            'status' => $status,
+        ]);
+
         $this->logActivity(
             trans('log.actions.added'),
             trans('log.models.payment_part.created', [
@@ -73,95 +94,97 @@ class FinancialService
         $recipt_id = null,
         $excpetion_id = null,
         $exchange_bond_id = null,
-    ) {
-        $StudentAccount = new StudentAccount;
-        $StudentAccount->student_id = $student->id;
-        $StudentAccount->grade_id = $student->grade_id;
-        $StudentAccount->classroom_id = $student->classroom_id;
-        $StudentAccount->recipt__payments_id = $recipt_id;
-        $StudentAccount->fee_invoices_id = $fees;
-        $StudentAccount->excpetion_id = $excpetion_id;
-        $StudentAccount->exchange_bond_id = $exchange_bond_id;
-        $StudentAccount->date = date('Y-m-d');
-        $StudentAccount->type = $type;
-        $StudentAccount->classroom_id = $student->classroom_id;
-        $StudentAccount->academic_year_id = $acc_year;
-        $StudentAccount->debit = $debit;
-        $StudentAccount->credit = $credit;
-        $StudentAccount->save();
+    ): void {
+        StudentAccount::create([
+            'student_id' => $student->id,
+            'grade_id' => $student->grade_id,
+            'classroom_id' => $student->classroom_id,
+            'recipt__payments_id' => $recipt_id,
+            'fee_invoices_id' => $fees,
+            'excpetion_id' => $excpetion_id,
+            'exchange_bond_id' => $exchange_bond_id,
+            'date' => date('Y-m-d'),
+            'type' => $type,
+            'academic_year_id' => $acc_year,
+            'debit' => $debit,
+            'credit' => $credit,
+        ]);
     }
 
-    public function AddStudentBookInvoice($student)
+    public function AddStudentBookInvoice($student, ?Request $request = null): bookSheets_order
     {
-        $generate_code = bookSheets_order::where('type', '2')
-            ->orderBy('auto_number', 'desc')
-            ->first();
-        $books = book_sheet::where('school_id', auth()->user()->school_id)
-            ->where('grade_id', $student->grade_id)
-            ->get();
+        $total = 0;
+        $requestBookIds = $request?->book_id ?? [];
+
+        foreach ($requestBookIds as $key => $bookId) {
+            $book = book_sheet::find($bookId);
+            if ($book) {
+                $total += ($book->sales_price * 1) * (($request->quantity[$key] ?? 0) * 1);
+            }
+        }
+
         $order = bookSheets_order::create([
-            'auto_number' => isset($generate_code)
-                ? str_pad(
-                    $generate_code->auto_number + 1,
-                    6,
-                    '0',
-                    STR_PAD_LEFT,
-                )
-                : '000001',
+            'auto_number' => $this->generateAutoNumber(bookSheets_order::class),
             'type' => 'sales',
             'date' => date('Y-m-d'),
             'student_id' => $student->id,
             'school_id' => auth()->user()->school_id,
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->id(),
         ]);
-        foreach ($books as $book_sheet) {
-            DB::table('books_sheets_stocks')->insert([
-                'books_sheets_id' => $book_sheet->id,
-                'quantity_out' => '1',
-                'quantity_in' => '0',
-                'order_id' => $order->id,
+
+        $order->total_price = $total;
+
+        foreach ($requestBookIds as $key => $bookId) {
+            $order->stocks()->attach($bookId, [
+                'quantity_out' => $request->quantity[$key] ?? 0,
+                'quantity_in' => 0,
             ]);
         }
+
         $this->logActivity(
             trans('log.parents.added_action'),
             trans('log.book_sheets_order.sarf_added', [
                 'number' => $order->auto_number,
             ]),
         );
+
+        return $order;
     }
 
-    public function AddStudentClotheInvoice($student)
+    public function AddStudentClotheInvoice($student, ?Request $request = null): clothes_order
     {
-        $generate_code = clothes_order::where('type', '2')
-            ->orderBy('auto_number', 'desc')
-            ->first();
+        $total = 0;
+        $requestClotheIds = $request?->clothe_id ?? [];
+        $useSetPrice = $request?->boolean('isset') ?? false;
+
+        $clothes = clothes::whereIn('id', $requestClotheIds)->get()->keyBy('id');
+
+        foreach ($requestClotheIds as $key => $clotheId) {
+            $clothe = $clothes->get($clotheId);
+            if ($clothe) {
+                $price = $useSetPrice ? $clothe->sales_price_set : $clothe->sales_price;
+                $total += ($price * 1) * (($request->quantity[$key] ?? 0) * 1);
+            }
+        }
+
         $order = clothes_order::create([
-            'auto_number' => isset($generate_code)
-                ? str_pad(
-                    $generate_code->auto_number + 1,
-                    6,
-                    '0',
-                    STR_PAD_LEFT,
-                )
-                : '000001',
+            'auto_number' => $this->generateAutoNumber(clothes_order::class),
             'type' => 'sales',
             'date' => date('Y-m-d'),
+            'total_price' => $total,
             'student_id' => $student->id,
-            'isset' => 1,
+            'isset' => $useSetPrice ? 'yes' : 'no',
             'school_id' => auth()->user()->school_id,
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->id(),
         ]);
-        $clothe_id = clothes::where('school_id', auth()->user()->school_id)
-            ->where('grade_id', $student->grade_id)
-            ->get();
-        foreach ($clothe_id as $clothe) {
-            \DB::table('clothes_stocks')->insert([
-                'clothes_id' => $clothe->id,
-                'quantity_out' => '1',
-                'quantity_in' => '0',
-                'order_id' => $order->id,
+
+        foreach ($requestClotheIds as $key => $clotheId) {
+            $order->stocks()->attach($clotheId, [
+                'quantity_out' => $request->quantity[$key] ?? 0,
+                'quantity_in' => 0,
             ]);
         }
+
         $this->logActivity(
             trans('log.clothes_order.out_order_added_action'),
             trans('log.clothes_order.out_order_added', [
@@ -169,28 +192,8 @@ class FinancialService
                 'student_name' => $student->name,
             ]),
         );
-    }
 
-    public function submit_pay_less(
-        $student,
-        $part,
-        $req_amount,
-        $currentYear,
-        $school,
-    ) {
-        $new_part = new PaymentParts([
-            'date' => date('Y-m-d'),
-            'student_id' => $student->id,
-            'grade_id' => $student->grade_id,
-            'class_id' => $student->classroom_id,
-            'amount' => $part->amount - $req_amount,
-            'school_fees_id' => $part->school_fees_id,
-            'academic_year_id' => $currentYear,
-            'school_id' => $school,
-            'user_id' => auth()->user()->id,
-        ]);
-
-        return $new_part;
+        return $order;
     }
 
     public function createReceipt(
@@ -198,27 +201,24 @@ class FinancialService
         $student,
         $academicYearId,
         $school_id,
-    ) {
-        $lastPayment = Recipt_Payment::orderBy('manual', 'desc')->first();
-        $manual = $lastPayment
-            ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT)
-            : '00001';
-
-        $receipt = new Recipt_Payment([
-            'manual' => $manual,
+    ): Recipt_Payment {
+        $receipt = Recipt_Payment::create([
+            'manual' => $this->generateAutoNumber(Recipt_Payment::class, 'manual', 5),
             'date' => Carbon::today(),
             'student_id' => $student->id,
             'Debit' => $amount,
             'academic_year_id' => $academicYearId,
             'school_id' => $school_id,
-            'user_id' => auth()->user()->id,
+            'user_id' => auth()->id(),
         ]);
+
         $this->logActivity(
             trans('log.actions.added'),
             trans('log.models.payment_part.receipt_added', [
                 'name' => $student->name,
             ]),
         );
+
         $receipt->save();
 
         return $receipt;
@@ -226,37 +226,37 @@ class FinancialService
 
     public function exciption_fee(
         $student,
-        $request,
+        Request $request,
         $acc_year,
         $school_id,
-    ) {
-        $pay = new ExcptionFees;
-        $pay->date = date('Y-m-d');
-        $pay->student_id = $student->id;
-        $pay->amount = $request->amount;
-        $pay->academic_year_id = $acc_year;
-        $pay->grade_id = $student->grade_id;
-        $pay->class_id = $student->classroom_id;
-        $pay->fee_id = $request->fee_id;
-        $pay->school_id = $school_id;
-        $pay->user_id = auth()->id();
-        $pay->save();
+    ): ExcptionFees {
+        $pay = ExcptionFees::create([
+            'date' => date('Y-m-d'),
+            'student_id' => $student->id,
+            'amount' => $request->amount,
+            'academic_year_id' => $acc_year,
+            'grade_id' => $student->grade_id,
+            'class_id' => $student->classroom_id,
+            'fee_id' => $request->fee_id,
+            'school_id' => $school_id,
+            'user_id' => auth()->id(),
+        ]);
 
         return $pay;
     }
 
-    public function Exchange_bond($school, $request, $acc_year)
+    public function Exchange_bond($school, Request $request, $acc_year): Exchange_bond
     {
-        $exchange = new Exchange_bond;
-        $exchange->school_id = $school->id;
-        $exchange->manual = $request->manual;
-        $exchange->student_id = $request->student_id;
-        $exchange->academic_year_id = $acc_year->id;
-        $exchange->amount = $request->amount;
-        $exchange->date = date('Y-m-d');
-        $exchange->description = $request->note;
-        $exchange->user_id = auth()->user()->id;
-        $exchange->save();
+        $exchange = Exchange_bond::create([
+            'school_id' => $school->id,
+            'manual' => $request->manual,
+            'student_id' => $request->student_id,
+            'academic_year_id' => $acc_year->id,
+            'amount' => $request->amount,
+            'date' => date('Y-m-d'),
+            'description' => $request->note,
+            'user_id' => auth()->id(),
+        ]);
 
         return $exchange;
     }
@@ -267,15 +267,15 @@ class FinancialService
         $Credit = 0.0,
         $Debit = 0.0,
         $receipt = null,
-    ) {
-        $fund_account = new fund_account;
-        $fund_account->date = date('Y-m-d');
-        $fund_account->user_id = auth()->user()->id;
-        $fund_account->school_id = $school->id;
-        $fund_account->exchange_bond_id = $exchange;
-        $fund_account->receipt_id = is_object($receipt) ? $receipt->id : $receipt;
-        $fund_account->Credit = $Credit;
-        $fund_account->Debit = $Debit;
-        $fund_account->save();
+    ): void {
+        fund_account::create([
+            'date' => date('Y-m-d'),
+            'user_id' => auth()->id(),
+            'school_id' => $school->id,
+            'exchange_bond_id' => $exchange,
+            'receipt_id' => is_object($receipt) ? $receipt->id : $receipt,
+            'Credit' => $Credit,
+            'Debit' => $Debit,
+        ]);
     }
 }

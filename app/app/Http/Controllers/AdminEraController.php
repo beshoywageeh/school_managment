@@ -35,7 +35,6 @@ class AdminEraController extends Controller
         $employee->assignRole([$request->role]);
         $this->logActivity(trans('log.actions.status_changed'), trans('log.models.user.status_changed', ['name' => $employee->name]));
 
-        return redirect()->back()->with('success', trans('General.success'));
-
+        return redirect()->back()->with('success', trans('general.success'));
     }
 }

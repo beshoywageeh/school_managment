@@ -39,7 +39,7 @@ class ReportController extends Controller
         $books_sheets = book_sheet::whereIn('grade_id', $user_grade)
             ->with('grade:id,name', 'classroom:id,name')
             ->get();
-        $grades = grade::whereIn('id', $user_grade)
+        $grades = Grade::whereIn('id', $user_grade)
             ->with('class_rooms:id,name,grade_id')
             ->get(['id', 'name']);
         $class_rooms = class_room::whereIn('grade_id', $user_grade)->get();
@@ -219,7 +219,7 @@ class ReportController extends Controller
         if (is_null($data['acc'])) {
             return redirect()
                 ->back()
-                ->with('info', trans('General.noDataToShow'));
+                ->with('info', trans('general.noDataToShow'));
         }
         if ($type == 41) {
             $data['students'] = Student::where(
@@ -419,7 +419,7 @@ class ReportController extends Controller
             'year_start',
             $date,
         )->first();
-        $data['students'] = student::where(
+        $data['students'] = Student::where(
             'classroom_id',
             $request->classroom_id,
         )
@@ -502,13 +502,13 @@ class ReportController extends Controller
         $school = $this->GetSchool();
 
         // return $request;
-        $data['Students_query'] = student::query();
+        $data['Students_query'] = Student::query();
         if ($request->grade && $request->grade != 0) {
             $data['Students_query']->whereIn(
                 'grade_id',
                 (array) $request->grade,
             );
-            $data['grade'] = grade::whereIn(
+            $data['grade'] = Grade::whereIn(
                 'id',
                 (array) $request->grade,
             )->get();
@@ -527,7 +527,7 @@ class ReportController extends Controller
             $data['Students_query']
                 ->where('classroom_id', '!=', null)
                 ->where('grade_id', '!=', null);
-            $data['grade'] = grade::where('id', '!=', null)->get();
+            $data['grade'] = Grade::where('id', '!=', null)->get();
             $data['classroom'] = class_room::where(
                 'id',
                 '!=',

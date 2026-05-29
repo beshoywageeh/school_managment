@@ -17,6 +17,12 @@ class ClothesController extends Controller
     {
         $school = $this->getSchool();
         $clothes = clothes::where('school_id', $school->id)->with('orders', 'grade', 'classroom')->get();
+        $clothes->map(function ($item) {
+            $item->current_qty = $item->opening_qty + $item->orders->sum('quantity_in') - $item->orders->sum('quantity_out');
+
+            return number_format($item->current_qty, 2);
+        });
+
         $grades = Grade::all();
 
         return view('backend.clothes.index', compact('clothes', 'grades', 'school'));
@@ -32,7 +38,7 @@ class ClothesController extends Controller
                 'purchase_price' => $request->purchase_price,
                 'name' => $request->name,
                 'opening_qty' => $request->quantity,
-                'isset' => ($request->isset == 'on') ? 1 : 0,
+                'isset' => ($request->isset == 'on') ? 'yes' : 'no',
                 'opening_date' => date('Y-m-d'),
                 'sales_price_set' => $request->sales_price_isset,
                 'school_id' => $this->getSchool()->id,
@@ -41,7 +47,7 @@ class ClothesController extends Controller
             $this->logActivity(trans('log.parents.added_action'), trans('log.clothes.added', ['name' => $request->name]));
 
             return redirect()->back()->with('success', trans('general.success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
@@ -57,7 +63,7 @@ class ClothesController extends Controller
                 'purchase_price' => $request->purchase_price,
                 'opening_qty' => $request->quantity,
                 'name' => $request->name,
-                'isset' => ($request->isset == 'on') ? 1 : 0,
+                'isset' => ($request->isset == 'on') ? 'yes' : 'no',
                 'sales_price_set' => $request->sales_price_isset,
 
             ]);
@@ -77,7 +83,7 @@ class ClothesController extends Controller
             $clothes->delete();
 
             return redirect()->back()->with('success', trans('general.success'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
