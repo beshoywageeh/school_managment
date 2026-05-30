@@ -107,7 +107,7 @@
       "scanner": "rules-scanner",
       "file": "Models/classes.php",
       "line": 48,
-      "code_snippet": "print_r('\u003cspan class=\"badge badge-danger\"\u003e'.trans('General.no_tammen').'\u003c/span\u003e');",
+      "code_snippet": "print_r('\u003cspan class=\"badge badge-danger\"\u003e'.trans('general.no_tammen').'\u003c/span\u003e');",
       "remediation": "Replace with structured logging:\n  Log::debug('variable state', ['data' =\u003e $data]);\n"
     },
     {
@@ -119,7 +119,7 @@
       "scanner": "rules-scanner",
       "file": "Models/classes.php",
       "line": 50,
-      "code_snippet": "print_r('\u003cspan class=\"badge badge-success\"\u003e'.trans('General.ok_tammen').'\u003c/span\u003e');",
+      "code_snippet": "print_r('\u003cspan class=\"badge badge-success\"\u003e'.trans('general.ok_tammen').'\u003c/span\u003e');",
       "remediation": "Replace with structured logging:\n  Log::debug('variable state', ['data' =\u003e $data]);\n"
     },
     {

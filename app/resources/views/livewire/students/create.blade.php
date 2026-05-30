@@ -8,7 +8,7 @@
             </svg>
             {{ trans('general.buttons.create') }}
         </button>
-    
+
 
     {{-- Overlay + Modal --}}
     <div
@@ -170,7 +170,7 @@
                                 {{-- Gender / Status / Religion --}}
                                 <div class="grid grid-cols-3 gap-3">
                                     <x-input.gender-select wire:model="gender" class="ignore" />
-                                    <x-input.Student_Status wire:model="std_status" class="ignore" />
+                                    {{-- <x-input.Student_Status wire:model="std_status" class="ignore" /> --}}
                                     <x-input.religion-select wire:model="religion" class="ignore" />
                                 </div>
 
@@ -234,7 +234,7 @@
                                     @enderror
                                 </div>
 
-                                
+
 
                             </div>
                         </div>
@@ -257,7 +257,7 @@
                                         <th class="px-4 py-2 font-medium text-gray">{{ trans('fees.amount') }}</th>
                                     </tr>
                                 </thead>
-                                <tbody>                              
+                                <tbody>
                                     @forelse ($fees as $fee)
                                         <tr>
                                             <td class="px-4 py-2">{{ $fee->title }}</td>
@@ -270,11 +270,11 @@
                                             </td>
                                         </tr>
                                     @endforelse
-                         
+
                                 </tbody>
                             </table>
 
-                                
+
 
                             </div>
                              <div class="p-4 space-y-4">
@@ -286,7 +286,7 @@
                                         <th class="px-4 py-2 font-medium text-gray">{{ trans('clothes.amount') }}</th>
                                     </tr>
                                 </thead>
-                                <tbody>                              
+                                <tbody>
                                     @forelse ($clothes as $clothe)
                                         <tr>
                                             <td class="px-4 py-2">{{ $clothe->title }}</td>
@@ -299,11 +299,11 @@
                                             </td>
                                         </tr>
                                     @endforelse
-                         
+
                                 </tbody>
                             </table>
 
-                                
+
 
                             </div>
                         </div>

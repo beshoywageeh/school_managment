@@ -80,11 +80,11 @@
             <div class="flex-1">
                 @if ($school->image == null)
                     <img class="w-1/4 rounded-lg" style="width: 104px" src="{{ asset('assests/images/loop_labs.png') }}"
-                        alt="{{ $school->name }}"/>
+                        alt="{{ $school->name }}" />
                 @else
                     <img class="w-1/4 rounded-lg"
                         src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                        alt="{{ $school->name }}"/>
+                        alt="{{ $school->name }}" />
                 @endif
             </div>
         </div>

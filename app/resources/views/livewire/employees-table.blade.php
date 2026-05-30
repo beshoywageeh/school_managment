@@ -44,15 +44,9 @@
                         {{ trans('general.new') }}
                     </a>
                 @endcan
-                @can('employees-import_Excel')
-                    <button type="button"
-                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2"
-                        data-target="#Import_Excel" data-toggle="modal">
-                        <i class="ti-upload"></i>
-                        {{ trans('general.Import_Excel') }}
-                    </button>
+
                     @include('backend.employees.import')
-                @endcan
+
             </div>
         </div>
     </div>

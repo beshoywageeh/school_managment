@@ -1,11 +1,24 @@
-[2026-03-23 15:09:03] local.ERROR: SQLSTATE[HY000]: General error: 1366 Incorrect integer value: '{"id":1,"code":"000001","name":"Jerry Emerson","birth_date":"1986-12-20","address":null,"join_date":"2026-03-19","national_id":n' for column 'student_id' at row 1 (Connection: mysql, SQL: insert into `recipt__payments` (`manual`, `date`, `student_id`, `Debit`, `academic_year_id`, `school_id`, `user_id`, `updated_at`, `created_at`) values (00001, 2026-03-23 00:00:00, {"id":1,"code":"000001","name":"Jerry Emerson","birth_date":"1986-12-20","address":null,"join_date":"2026-03-19","national_id":null,"gender":null,"student_status":1,"birth_at_begin":"39-9-12","religion":null,"tameen":null,"user_id":1,"school_id":1,"grade_id":1,"classroom_id":1,"class_id":null,"acadmiecyear_id":1,"parent_id":3,"nationality_id":null,"slug":null,"created_at":"2026-03-19T03:40:22.000000Z","updated_at":"2026-03-19T03:40:22.000000Z","deleted_at":null}, 17.00, 1, 1, 1, 2026-03-23 15:09:03, 2026-03-23 15:09:03))  
-[2026-03-23 15:10:25] local.ERROR: Attempt to read property "name" on int  
-[2026-03-23 15:12:49] local.ERROR: Attempt to read property "name" on int  
-[2026-03-23 15:21:33] local.ERROR: Attempt to read property "name" on string  
-[2026-03-23 15:23:40] local.ERROR: Attempt to read property "name" on string  
-[2026-03-23 15:25:44] local.ERROR: Attempt to read property "name" on string  
-[2026-03-23 15:29:14] local.ERROR: Attempt to read property "name" on string  
-[2026-03-23 15:31:01] local.ERROR: Attempt to read property "name" on string  
-[2026-03-25 20:33:26] local.ERROR: SQLSTATE[HY000]: General error: 1366 Incorrect integer value: '{"id":1,"year_start":"2026-10-01","year_end":"2027-11-01","status":0,"view":"2026 - 2027","created_by":1,"updated_by":1,"school_' for column 'academic_year_id' at row 1 (Connection: mysql, SQL: insert into `student_accounts` (`student_id`, `grade_id`, `classroom_id`, `recipt__payments_id`, `fee_invoices_id`, `excpetion_id`, `exchange_bond_id`, `date`, `type`, `academic_year_id`, `debit`, `credit`, `updated_at`, `created_at`) values (10, 1, 1, 6, 5, ?, ?, 2026-03-25, payment, {"id":1,"year_start":"2026-10-01","year_end":"2027-11-01","status":0,"view":"2026 - 2027","created_by":1,"updated_by":1,"school_id":1,"created_at":"2026-03-19T03:07:08.000000Z","updated_at":"2026-03-19T03:40:10.000000Z","deleted_at":null}, 0, 17.00, 2026-03-25 20:33:26, 2026-03-25 20:33:26))  
-[2026-03-25 20:34:46] local.ERROR: Attempt to read property "id" on int  
-[2026-03-25 20:42:24] local.ERROR: Attempt to read property "id" on int  
+[2026-05-19 17:51:39] local.ERROR: Invalid payment type  
+[2026-05-19 17:54:49] local.ERROR: Invalid payment type  
+[2026-05-19 18:10:32] local.ERROR: Call to undefined method Illuminate\Http\RedirectResponse::compact()  
+[2026-05-19 18:13:41] local.ERROR: Missing required parameter for [Route: receipt_payment.create] [URI: ar/receipt-payment/{id}/create] [Missing parameter: id].  
+[2026-05-19 18:15:37] local.ERROR: Route [backend.reciptpayment.create] not defined.  
+[2026-05-22 21:55:02] local.ERROR: Undefined variable $pay  
+[2026-05-22 21:55:39] local.ERROR: Undefined variable $report_data  
+[2026-05-24 21:14:53] local.ERROR: Method App\Http\Controllers\ReciptPaymentController::AddStudentClotheInvoice does not exist.  
+[2026-05-24 21:15:37] local.ERROR: Attempt to read property "amount" on null  
+[2026-05-24 21:19:43] local.ERROR: Attempt to read property "total" on string  
+[2026-05-24 21:20:15] local.ERROR: Attempt to read property "total" on string  
+[2026-05-24 21:27:36] local.ERROR: Attempt to read property "total" on string  
+[2026-05-24 21:32:08] local.ERROR: SQLSTATE[42703]: Undefined column: 7 ERROR:  column "sales_price_set" does not exist
+LINE 1: select sum("sales_price_set") as aggregate from "clothes_ord...
+                   ^ (Connection: pgsql, SQL: select sum("sales_price_set") as aggregate from "clothes_orders" where "clothes_orders"."deleted_at" is null)  
+[2026-05-24 21:32:36] local.ERROR: SQLSTATE[42P01]: Undefined table: 7 ERROR:  missing FROM-clause entry for table "clothes"
+LINE 1: select sum("clothes"."sales_price_set") as aggregate from "c...
+                   ^ (Connection: pgsql, SQL: select sum("clothes"."sales_price_set") as aggregate from "clothes_orders" where "clothes_orders"."deleted_at" is null)  
+[2026-05-24 21:33:29] local.ERROR: SQLSTATE[42P01]: Undefined table: 7 ERROR:  missing FROM-clause entry for table "clothes"
+LINE 1: select sum("clothes"."sales_price_set") as aggregate from "c...
+                   ^ (Connection: pgsql, SQL: select sum("clothes"."sales_price_set") as aggregate from "clothes_orders" where "clothes_orders"."deleted_at" is null)  
+[2026-05-26 16:32:07] local.ERROR: Attempt to read property "total_price" on null  
+[2026-05-26 17:26:08] local.ERROR: Attempt to read property "total_price" on null  
+[2026-05-26 17:31:45] local.ERROR: Attempt to read property "total_price" on null  

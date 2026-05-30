@@ -1,6 +1,6 @@
 @props([
     'name' => 'heroicons',
-    'type' => $type ??'outline', // outline | solid
+    'type' => $type ?? 'outline', // outline | solid
     'class' => $class ?? 'w-6 h-6 text-gray-500',
 ])
 

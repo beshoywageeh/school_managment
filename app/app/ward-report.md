@@ -1,18 +1,18 @@
 # Ward Security Report
 
-**Project:**   
-**Laravel:**   
-**PHP:**   
+**Project:**  
+**Laravel:**  
+**PHP:**  
 **Duration:** 1.677s  
-**Scanners:** env-scanner, config-scanner, dependency-scanner, rules-scanner  
+**Scanners:** env-scanner, config-scanner, dependency-scanner, rules-scanner
 
 ## Summary
 
-| Total | 16 |
-|-------|---|
-| 🟠 High | 11 |
-| 🟡 Medium | 4 |
-| 🔵 Info | 1 |
+| Total     | 16  |
+| --------- | --- |
+| 🟠 High   | 11  |
+| 🟡 Medium | 4   |
+| 🔵 Info   | 1   |
 
 ## Findings
 
@@ -26,7 +26,6 @@
 
 dd() (dump and die) stops execution and dumps variable contents to the browser. Left in production code, it breaks functionality and can expose sensitive data structures, database contents, or environment variables.
 
-
 ```
 //  dd($request->file('file'));
 ```
@@ -34,11 +33,11 @@ dd() (dump and die) stops execution and dumps variable contents to the browser. 
 **Remediation:**
 
 Remove dd() calls before deploying:
-  Use Laravel Telescope or logging for debugging in non-local environments.
-  Log::debug('message', $context);
-
+Use Laravel Telescope or logging for debugging in non-local environments.
+Log::debug('message', $context);
 
 **References:**
+
 - https://cwe.mitre.org/data/definitions/215.html
 
 ---
@@ -51,7 +50,6 @@ Remove dd() calls before deploying:
 
 dd() (dump and die) stops execution and dumps variable contents to the browser. Left in production code, it breaks functionality and can expose sensitive data structures, database contents, or environment variables.
 
-
 ```
 // dd($school_fee);
 ```
@@ -59,11 +57,11 @@ dd() (dump and die) stops execution and dumps variable contents to the browser. 
 **Remediation:**
 
 Remove dd() calls before deploying:
-  Use Laravel Telescope or logging for debugging in non-local environments.
-  Log::debug('message', $context);
-
+Use Laravel Telescope or logging for debugging in non-local environments.
+Log::debug('message', $context);
 
 **References:**
+
 - https://cwe.mitre.org/data/definitions/215.html
 
 ---
@@ -76,7 +74,6 @@ Remove dd() calls before deploying:
 
 dd() (dump and die) stops execution and dumps variable contents to the browser. Left in production code, it breaks functionality and can expose sensitive data structures, database contents, or environment variables.
 
-
 ```
 // dd($school_fee);
 ```
@@ -84,11 +81,11 @@ dd() (dump and die) stops execution and dumps variable contents to the browser. 
 **Remediation:**
 
 Remove dd() calls before deploying:
-  Use Laravel Telescope or logging for debugging in non-local environments.
-  Log::debug('message', $context);
-
+Use Laravel Telescope or logging for debugging in non-local environments.
+Log::debug('message', $context);
 
 **References:**
+
 - https://cwe.mitre.org/data/definitions/215.html
 
 ---
@@ -101,7 +98,6 @@ Remove dd() calls before deploying:
 
 Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().
 
-
 ```
 protected $guarded = [];
 ```
@@ -109,12 +105,12 @@ protected $guarded = [];
 **Remediation:**
 
 Use $fillable to explicitly list allowed fields:
-  protected $fillable = ['name', 'email', 'password'];
+protected $fillable = ['name', 'email', 'password'];
 Or set $guarded to protect sensitive fields:
-  protected $guarded = ['id', 'is_admin', 'role'];
-
+protected $guarded = ['id', 'is_admin', 'role'];
 
 **References:**
+
 - https://owasp.org/Top10/A04_2021-Insecure_Design/
 - https://cwe.mitre.org/data/definitions/915.html
 
@@ -128,7 +124,6 @@ Or set $guarded to protect sensitive fields:
 
 Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().
 
-
 ```
 protected $guarded = [];
 ```
@@ -136,12 +131,12 @@ protected $guarded = [];
 **Remediation:**
 
 Use $fillable to explicitly list allowed fields:
-  protected $fillable = ['name', 'email', 'password'];
+protected $fillable = ['name', 'email', 'password'];
 Or set $guarded to protect sensitive fields:
-  protected $guarded = ['id', 'is_admin', 'role'];
-
+protected $guarded = ['id', 'is_admin', 'role'];
 
 **References:**
+
 - https://owasp.org/Top10/A04_2021-Insecure_Design/
 - https://cwe.mitre.org/data/definitions/915.html
 
@@ -155,7 +150,6 @@ Or set $guarded to protect sensitive fields:
 
 Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().
 
-
 ```
 protected $guarded = [];
 ```
@@ -163,12 +157,12 @@ protected $guarded = [];
 **Remediation:**
 
 Use $fillable to explicitly list allowed fields:
-  protected $fillable = ['name', 'email', 'password'];
+protected $fillable = ['name', 'email', 'password'];
 Or set $guarded to protect sensitive fields:
-  protected $guarded = ['id', 'is_admin', 'role'];
-
+protected $guarded = ['id', 'is_admin', 'role'];
 
 **References:**
+
 - https://owasp.org/Top10/A04_2021-Insecure_Design/
 - https://cwe.mitre.org/data/definitions/915.html
 
@@ -182,7 +176,6 @@ Or set $guarded to protect sensitive fields:
 
 Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().
 
-
 ```
 protected $guarded = [];
 ```
@@ -190,12 +183,12 @@ protected $guarded = [];
 **Remediation:**
 
 Use $fillable to explicitly list allowed fields:
-  protected $fillable = ['name', 'email', 'password'];
+protected $fillable = ['name', 'email', 'password'];
 Or set $guarded to protect sensitive fields:
-  protected $guarded = ['id', 'is_admin', 'role'];
-
+protected $guarded = ['id', 'is_admin', 'role'];
 
 **References:**
+
 - https://owasp.org/Top10/A04_2021-Insecure_Design/
 - https://cwe.mitre.org/data/definitions/915.html
 
@@ -209,7 +202,6 @@ Or set $guarded to protect sensitive fields:
 
 Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().
 
-
 ```
 protected $guarded = [];
 ```
@@ -217,12 +209,12 @@ protected $guarded = [];
 **Remediation:**
 
 Use $fillable to explicitly list allowed fields:
-  protected $fillable = ['name', 'email', 'password'];
+protected $fillable = ['name', 'email', 'password'];
 Or set $guarded to protect sensitive fields:
-  protected $guarded = ['id', 'is_admin', 'role'];
-
+protected $guarded = ['id', 'is_admin', 'role'];
 
 **References:**
+
 - https://owasp.org/Top10/A04_2021-Insecure_Design/
 - https://cwe.mitre.org/data/definitions/915.html
 
@@ -236,7 +228,6 @@ Or set $guarded to protect sensitive fields:
 
 Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().
 
-
 ```
 protected $guarded = [];
 ```
@@ -244,12 +235,12 @@ protected $guarded = [];
 **Remediation:**
 
 Use $fillable to explicitly list allowed fields:
-  protected $fillable = ['name', 'email', 'password'];
+protected $fillable = ['name', 'email', 'password'];
 Or set $guarded to protect sensitive fields:
-  protected $guarded = ['id', 'is_admin', 'role'];
-
+protected $guarded = ['id', 'is_admin', 'role'];
 
 **References:**
+
 - https://owasp.org/Top10/A04_2021-Insecure_Design/
 - https://cwe.mitre.org/data/definitions/915.html
 
@@ -263,7 +254,6 @@ Or set $guarded to protect sensitive fields:
 
 Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().
 
-
 ```
 protected $guarded = [];
 ```
@@ -271,12 +261,12 @@ protected $guarded = [];
 **Remediation:**
 
 Use $fillable to explicitly list allowed fields:
-  protected $fillable = ['name', 'email', 'password'];
+protected $fillable = ['name', 'email', 'password'];
 Or set $guarded to protect sensitive fields:
-  protected $guarded = ['id', 'is_admin', 'role'];
-
+protected $guarded = ['id', 'is_admin', 'role'];
 
 **References:**
+
 - https://owasp.org/Top10/A04_2021-Insecure_Design/
 - https://cwe.mitre.org/data/definitions/915.html
 
@@ -290,7 +280,6 @@ Or set $guarded to protect sensitive fields:
 
 Setting $guarded = [] makes every attribute mass-assignable. An attacker can inject unexpected fields (is_admin, role, email_verified_at) through mass assignment via create() or update().
 
-
 ```
 protected $guarded = [];
 ```
@@ -298,12 +287,12 @@ protected $guarded = [];
 **Remediation:**
 
 Use $fillable to explicitly list allowed fields:
-  protected $fillable = ['name', 'email', 'password'];
+protected $fillable = ['name', 'email', 'password'];
 Or set $guarded to protect sensitive fields:
-  protected $guarded = ['id', 'is_admin', 'role'];
-
+protected $guarded = ['id', 'is_admin', 'role'];
 
 **References:**
+
 - https://owasp.org/Top10/A04_2021-Insecure_Design/
 - https://cwe.mitre.org/data/definitions/915.html
 
@@ -319,7 +308,6 @@ Or set $guarded to protect sensitive fields:
 
 Native PHP debug functions output raw data to the browser. In production these expose internal variable contents and data structures.
 
-
 ```
 print_r('<span class="badge badge-danger">'.trans('general.no_tammen').'</span>');
 ```
@@ -327,8 +315,7 @@ print_r('<span class="badge badge-danger">'.trans('general.no_tammen').'</span>'
 **Remediation:**
 
 Replace with structured logging:
-  Log::debug('variable state', ['data' => $data]);
-
+Log::debug('variable state', ['data' => $data]);
 
 ---
 
@@ -340,7 +327,6 @@ Replace with structured logging:
 
 Native PHP debug functions output raw data to the browser. In production these expose internal variable contents and data structures.
 
-
 ```
 print_r('<span class="badge badge-success">'.trans('general.ok_tammen').'</span>');
 ```
@@ -348,8 +334,7 @@ print_r('<span class="badge badge-success">'.trans('general.ok_tammen').'</span>
 **Remediation:**
 
 Replace with structured logging:
-  Log::debug('variable state', ['data' => $data]);
-
+Log::debug('variable state', ['data' => $data]);
 
 ---
 
@@ -361,16 +346,14 @@ Replace with structured logging:
 
 Native PHP debug functions output raw data to the browser. In production these expose internal variable contents and data structures.
 
-
 ```
-print_r('<span class="badge badge-danger">'.trans('General.no_tammen').'</span>');
+print_r('<span class="badge badge-danger">'.trans('general.no_tammen').'</span>');
 ```
 
 **Remediation:**
 
 Replace with structured logging:
-  Log::debug('variable state', ['data' => $data]);
-
+Log::debug('variable state', ['data' => $data]);
 
 ---
 
@@ -382,16 +365,14 @@ Replace with structured logging:
 
 Native PHP debug functions output raw data to the browser. In production these expose internal variable contents and data structures.
 
-
 ```
-print_r('<span class="badge badge-success">'.trans('General.ok_tammen').'</span>');
+print_r('<span class="badge badge-success">'.trans('general.ok_tammen').'</span>');
 ```
 
 **Remediation:**
 
 Replace with structured logging:
-  Log::debug('variable state', ['data' => $data]);
-
+Log::debug('variable state', ['data' => $data]);
 
 ---
 
@@ -411,4 +392,4 @@ Copy .env.example to .env and configure your environment variables.
 
 ---
 
-*Generated by [Ward](https://github.com/Eljakani/ward) v0.4.0*
+_Generated by [Ward](https://github.com/Eljakani/ward) v0.4.0_

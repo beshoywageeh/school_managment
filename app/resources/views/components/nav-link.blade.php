@@ -1,9 +1,7 @@
 @props(['route', 'icon', 'label', 'active' => null])
 
 @php
-$isActive = $active
-    ? request()->is($active)
-    : request()->routeIs($route);
+    $isActive = $active ? request()->is($active) : request()->routeIs($route);
 @endphp
 
 <a href="{{ $route === '#' ? '#' : route($route) }}"

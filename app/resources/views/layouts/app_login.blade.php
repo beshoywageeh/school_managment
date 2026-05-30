@@ -18,7 +18,7 @@
 
     <div class="min-h-screen flex items-center justify-center bg-cover bg-center"
         style="background-image: url('{{ asset('assests/images/login-bg.jpg') }}')">
-        <div class="absolute inset-0 bg-black bg-opacity/50"></div>
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
 
         <div class="relative z-10 w-full max-w-md">
             @yield('login')

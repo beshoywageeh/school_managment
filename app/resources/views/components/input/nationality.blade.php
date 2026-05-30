@@ -3,7 +3,7 @@
     <select id="nationality" name="nationality" {{ $attributes->class(['w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white']) }}>
         <option value="" selected disabled>{{ trans('general.nationality') }}</option>
         @foreach (Cache::remember('nationalities', now()->addDay(), function () {
-            return \App\Models\Nationality::all();
+            return \App\Models\nationality::all();
         }) as $nationality)
             <option value="{{ $nationality->id }}" @selected($nationality->id === 247)>{{ $nationality->name }}</option>
         @endforeach

@@ -10,7 +10,7 @@
                 trans('Sidebar.Students') => [
                     [
                         'Name' => trans('report.student_info'),
-                        'Url' => '#students',
+                        'Url' => 'backend.report.popup.students_popup',
                         'type' => 'button',
                         'can' => 'Students-list',
                     ],
@@ -22,13 +22,13 @@
                     ],
                     [
                         'Name' => trans('report.report_type', ['type' => 41]),
-                        'Url' => '#incoming_students',
+                        'Url' => 'backend.report.popup.incoming_students_popup',
                         'type' => 'button',
                         'can' => 'Students-list',
                     ],
                     [
                         'Name' => trans('report.student_tammen'),
-                        'Url' => '#tammen_1',
+                        'Url' => 'backend.report.popup.tammen_1_popup',
                         'type' => 'button',
                         'can' => 'Students-list',
                     ],
@@ -42,7 +42,7 @@
                     ],
                     [
                         'Name' => trans('report.stock'),
-                        'Url' => '#stock',
+                        'Url' => 'backend.report.popup.stock_popup',
                         'type' => 'button',
                         'can' => 'stocks-index',
                     ],
@@ -54,7 +54,7 @@
                     ],
                     [
                         'Name' => trans('report.clothe_stock'),
-                        'Url' => '#clothes_stock',
+                        'Url' => 'backend.report.popup.clothes_popup',
                         'type' => 'button',
                         'can' => 'clothes-index',
                     ],
@@ -66,7 +66,7 @@
                     ],
                     [
                         'Name' => trans('report.book_sheet_stock'),
-                        'Url' => '#book_sheet_stock',
+                        'Url' => 'backend.report.popup.book_sheet_popup',
                         'type' => 'button',
                         'can' => 'books_sheets-index',
                     ],
@@ -80,43 +80,43 @@
                     ],
                     [
                         'Name' => trans('Sidebar.fees_invoice'),
-                        'Url' => '#fees_invoices',
+                        'Url' => 'backend.report.popup.fees_invoices_popup',
                         'type' => 'button',
                         'can' => 'fee_invoice-list',
                     ],
                     [
                         'Name' => trans('Sidebar.Recipt_Payment'),
-                        'Url' => '#payments',
+                        'Url' => 'backend.report.popup.payments_popup',
                         'type' => 'button',
                         'can' => 'Recipt_Payment-list',
                     ],
                     [
                         'Name' => trans('Sidebar.payment_parts'),
-                        'Url' => '#payment_parts',
+                        'Url' => 'backend.report.popup.payment_part_popup',
                         'type' => 'button',
                         'can' => 'payment_parts-list',
                     ],
                     [
                         'Name' => trans('Sidebar.credit'),
-                        'Url' => '#credit',
+                        'Url' => 'backend.report.popup.credit_popup',
                         'type' => 'button',
                         'can' => 'Recipt_Payment-list',
                     ],
                     [
                         'Name' => trans('Sidebar.except_fee'),
-                        'Url' => '#exception_fee',
+                        'Url' => 'backend.report.popup.exception_popup',
                         'type' => 'button',
                         'can' => 'except_fee-list',
                     ],
                     [
                         'Name' => trans('general.payment_status'),
-                        'Url' => '#payment_status',
+                        'Url' => 'backend.report.popup.payment_status_popup',
                         'type' => 'button',
                         'can' => 'fee_invoice-list',
                     ],
                     [
                         'Name' => trans('report.finalize_year'),
-                        'Url' => '#final_year',
+                        'Url' => 'backend.report.popup.final_year_popup',
                         'type' => 'button',
                         'can' => 'fee_invoice-list',
                     ],
@@ -150,7 +150,7 @@
                     </div>
                     <div class="divide-y divide-gray-100">
                         @foreach ($report_links as $acc_link)
-                            @can($acc_link['can'])
+                            @can($acc_link['can'] ?? null)
                                 <div class="flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-colors duration-200">
                                     <span class="font-semibold text-gray-800 text-sm">{{ $acc_link['Name'] }}</span>
                                     <div>
@@ -160,10 +160,9 @@
                                             </a>
                                         @endif
                                         @if ($acc_link['type'] == 'button')
-                                            <button class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition-colors" @click="document.getElementById('{{ Str::after($acc_link['Url'], '#') }}-modal').__x.$data.open = true">
-                                                <x-hero-icon name="cog-alt" class="w-4 h-4" /> {{ trans('general.generate') }}
-                                            </button>
+                                            @include($acc_link['Url'])
                                         @endif
+
                                     </div>
                                 </div>
                             @endcan
@@ -174,55 +173,5 @@
         @endforeach
     </div>
 
-    @php
-        $popups = [
-            'exception_popup',
-            'stock_popup',
-            'clothes_popup',
-            'book_sheet_popup',
-            'payment_status_popup',
-            'fees_invoices_popup',
-            'incoming_students_popup',
-            'tammen_1_popup',
-            'payments_popup',
-            'payment_part_popup',
-            'credit_popup',
-            'students_popup',
-            'final_year_popup',
-        ];
-    @endphp
-
-    @foreach ($popups as $popup)
-        @include('backend.report.popup.' . $popup)
-    @endforeach
 @endsection
 
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('.grades').on('change', function() {
-                $('.classrooms').innerHTML = '<option>{{ trans('general.loading') }}</option>';
-                let grade = $(this).val();
-                if (grade) {
-                    $.ajax({
-                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-                            $('.classrooms').empty();
-                            $('.classrooms').append(
-                                '<option selected disabled>{{ trans('student.choose_classroom') }}</option>',
-                                '<option value="0">{{ trans('general.all') }}</option>'
-                            );
-                            $.each(data, function(key, value) {
-                                $('.classrooms').append(
-                                    `<option value="${value.id}">${value.name}</option>`
-                                );
-                            });
-                        },
-                    });
-                };
-            });
-        });
-    </script>
-@endpush

@@ -1,59 +1,87 @@
-<div class="modal fade" id="CreateClassRoom" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-blue-500 text-white">
-                <div class="modal-title">
-                    <h6 class="font-medium">{{ trans('general.new') }}</h6>
-                </div>
-                <button type="button" class="text-white hover:text-gray-200" data-dismiss="modal" aria-label="Close">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+<x-modal title="{{ trans('class_rooms.new') }}" icon="plus" class="text-green-600" id="CreateClassRoomForm" can="class_rooms-create" titleButton="{{ trans('class_rooms.new') }}" size="max">
+
+    {{-- لاحظ هنا: الـ ID بتاع المودال لازم يطابق الـ ID بتاع الـ Form عشان زرار الـ Submit يشتغل تلقائي --}}
+    <form action="{{ route('class_rooms.store') }}" method="POST" id="CreateClassRoomForm">
+        @csrf
+
+        <div x-data="{
+            class_rooms: [{ id: Date.now(), grade_id: '', class_name: '' }],
+
+            addRow() {
+                this.class_rooms.push({
+                    id: Date.now() + Math.random(), {{-- لتوليد Key فريد ومميز لكل صف --}}
+                    grade_id: '',
+                    class_name: ''
+                });
+            },
+
+            removeRow(index) {
+                if (this.class_rooms.length > 1) {
+                    this.class_rooms.splice(index, 1);
+                }
+            }
+        }">
+
+            {{-- حاوية الصفوف المكررة --}}
+            <div class="space-y-4 mb-6">
+                <template x-for="(class_room, index) in class_rooms" :key="class_room.id">
+
+                    {{-- جعلنا الـ Grid لكل صف على حدة عشان التصميم يفضل مظبوط مهما كررت --}}
+                    <div x-transition class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end bg-gray-50/50 p-3 rounded-xl border border-gray-100">
+
+                        {{-- 1. حقل المرحلة الدراسية --}}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Grades.title') }}</label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200"
+                                    x-model="class_room.grade_id"
+                                    :name="`classroom[${index}][grade_id]`"
+                                    required>
+                                <option value="" disabled selected>{{ trans('class_rooms.select_grade') }}</option>
+                                @foreach ($data['grades'] as $grade)
+                                    <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- 2. حقل اسم الفصل --}}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('class_rooms.Name') }}</label>
+                            <input type="text"
+                                   x-model="class_room.class_name"
+                                   :name="`classroom[${index}][class_name]`"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200"
+                                   placeholder="مثال: فصل 1/1"
+                                   required />
+                        </div>
+
+                        {{-- 3. زرار حذف الصف --}}
+                        <div class="flex items-center justify-between md:justify-start gap-2 h-10">
+                            <button type="button" x-on:click="removeRow(index)"
+                                class="h-10 px-3 flex items-center justify-center gap-1 rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
+                                :disabled="class_rooms.length <= 1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                <span class="text-xs md:hidden">حذف الصف</span> {{-- يظهر فقط في الشاشات الصغيرة --}}
+                            </button>
+                        </div>
+
+                    </div>
+                </template>
+            </div>
+
+            {{-- زرار إضافة صف جديد (الآن أصبح داخل نطاق الـ x-data) --}}
+            <div class="mt-4 border-t border-dashed border-gray-200 pt-4">
+                <button class="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 flex items-center gap-2 transition-colors"
+                        x-on:click="addRow()"
+                        type="button">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
+                    {{ trans('class_rooms.new') }}
                 </button>
             </div>
-            <form action="{{ route('class_rooms.store') }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div class="repeater">
-                        <div data-repeater-list="list_classes">
-                            <div data-repeater-item>
-                                <div class="grid grid-cols-3 gap-4 mb-6">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Grades.title') }}</label>
-                                        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="grade_name">
-                                            <option value="" disabled>{{ trans('class_rooms.select_grade') }}</option>
-                                            @foreach ($data['grades'] as $grade)
-                                                <option value="{{ $grade->id }}">{{ $grade->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('class_rooms.Name') }}</label>
-                                        <input type="text" name="class_name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
-                                    </div>
-                                    <div class="flex items-end">
-                                        <button class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600" data-repeater-delete type="button">
-                                            {{ trans('general.delete') }}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <input class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600" data-repeater-create type="button" value="{{ trans('class_rooms.new') }}" />
-                        </div>
-                    </div>
-                </div>
 
-                <div class="modal-footer bg-gray-50">
-                    <button class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium" type="submit">
-                        {{ trans('general.Submit') }}
-                    </button>
-                    <button class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400" type="button" data-dismiss="modal">
-                        {{ trans('general.Cancel') }}
-                    </button>
-                </div>
-            </form>
         </div>
-    </div>
-</div>
+    </form>
+</x-modal>

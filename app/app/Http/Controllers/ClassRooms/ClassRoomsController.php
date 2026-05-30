@@ -62,21 +62,22 @@ class ClassRoomsController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request->classroom;
         try {
-            foreach ($request->list_classes as $class) {
+            foreach ($request->classroom as $class) {
                 class_room::create([
                     'name' => $class['class_name'],
-                    'grade_id' => $class['grade_name'],
+                    'grade_id' => $class['grade_id'],
                     'user_id' => \Auth::Id(),
                     'school_id' => $this->getSchool()->id,
                 ]);
+                $this->logActivity(
+                    trans('log.actions.added'),
+                    trans('log.models.classroom.created', [
+                        'class_name' => $class['class_name'],
+                    ]),
+                );
             }
-            $this->logActivity(
-                trans('log.actions.added'),
-                trans('log.models.classroom.created', [
-                    'class_name' => $request->class_name,
-                ]),
-            );
 
             return redirect()
                 ->back()
@@ -153,7 +154,7 @@ class ClassRoomsController extends Controller
                 ]),
             );
 
-            return redirect()->route('class-rooms.index');
+            return redirect()->route('class_rooms.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

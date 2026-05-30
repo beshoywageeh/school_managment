@@ -193,7 +193,7 @@
         @endcan
 
         @can('grade-list')
-            <a href="#" data-toggle="modal" data-target="#CreateGrade" class="quick-action-tile">
+            <a href="{{ route('grade.index') }}" class="quick-action-tile">
                 <div class="action-icon">
                     <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -204,7 +204,7 @@
         @endcan
 
         @can('class_rooms-list')
-            <a href="#" data-toggle="modal" data-target="#CreateClassRoom" class="quick-action-tile">
+            <a href="{{ route('class_rooms.index') }}" class="quick-action-tile">
                 <div class="action-icon">
                     <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -216,7 +216,7 @@
         @endcan
 
         @can('jobs-list')
-            <a href="#" data-toggle="modal" data-target="#Create_Job" class="quick-action-tile">
+            <a href="{{ route('jobs.index') }}" class="quick-action-tile">
                 <div class="action-icon">
                     <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -276,34 +276,9 @@
 @endsection
 
 @push('scripts')
+
     <script>
-        $(document).ready(function() {
-            $('#grades').on('change', function() {
-                classrooms.innerHTML = '<option>{{ trans('general.loading') }}</option>';
-                let grade = $(this).val();
-                if (grade) {
-                    $.ajax({
-                        url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
-                        type: "GET",
-                        dataType: "json",
-                        success: function(data) {
-                            $('#classrooms').empty();
-                            $('#classrooms').append(
-                                '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
-                            );
-                            $.each(data, function(key, value) {
-                                $('#classrooms').append(
-                                    `<option value="${value.id}">${value.name}</option>`
-                                );
-                            });
-                        },
-                    });
-                };
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const el = document.querySelector('#student_number');
             if (!el) return;
             const options = {
@@ -323,5 +298,6 @@
             const chart = new ApexCharts(el, options);
             chart.render();
         });
+
      </script>
 @endpush

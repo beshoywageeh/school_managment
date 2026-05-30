@@ -24,16 +24,19 @@ class ReportController extends Controller
 {
     use SchoolTrait;
 
+    public function __construct(private PDFExportService $PDFExport) {}
+
     public function index()
     {
         $school = $this->GetSchool();
         $user = \Auth::user()->value('id');
         $user_grade = \DB::Table('teacher_grade')
             ->where('teacher_id', $user)
-            ->pluck('id');
+            ->pluck('grade_id');
         $acadmeic_years = acadmice_year::where('status', 0)->get();
         $stocks = stock::get();
         $clothes = clothes::whereIn('grade_id', $user_grade)
+
             ->with('grade:id,name', 'classroom:id,name')
             ->get();
         $books_sheets = book_sheet::whereIn('grade_id', $user_grade)
@@ -58,10 +61,8 @@ class ReportController extends Controller
         );
     }
 
-    public function ExportStudents(
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
+    public function ExportStudents(Request $request)
+    {
         $query = Student::select(
             'id',
             'name',

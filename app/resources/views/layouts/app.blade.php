@@ -52,76 +52,7 @@
         <img src="{{ asset('assests/images/logo-dark.png') }}" alt="Loading" class="w-32">
     </div>
     <script>
-        setTimeout(function() {
-            var loader = document.getElementById('pre-loader');
-            if (loader) loader.style.display = 'none';
-        }, 2000);
-        window.addEventListener('load', function() {
-            document.getElementById('pre-loader').style.display = 'none';
-        });
 
-        // Modal handling with persistence across Livewire re-renders
-        (function() {
-            function showModal(id) {
-                var el = document.getElementById(id.replace('#', ''));
-                if (el) {
-                    el.style.display = 'flex';
-                    el.setAttribute('data-open', 'true');
-                }
-            }
-
-            function hideModal(id) {
-                var el = document.getElementById(id.replace('#', ''));
-                if (el) {
-                    el.style.display = 'none';
-                    el.setAttribute('data-open', 'false');
-                }
-            }
-
-            function restoreModals() {
-                document.querySelectorAll('.modal[data-open="true"]').forEach(function(el) {
-                    el.style.display = 'flex';
-                });
-            }
-
-            // Open modals
-            document.addEventListener('click', function(e) {
-                var btn = e.target.closest('[data-toggle="modal"]');
-                if (btn) {
-                    showModal(btn.getAttribute('data-target'));
-                    e.preventDefault();
-                }
-
-                var closeBtn = e.target.closest('[data-dismiss="modal"]');
-                if (closeBtn) {
-                    var modal = closeBtn.closest('.modal');
-                    if (modal) hideModal('#' + modal.id);
-                }
-            });
-
-            // Close on backdrop click
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('modal') && e.target.style.display === 'flex') {
-                    hideModal('#' + e.target.id);
-                }
-            });
-
-            // Restore modals after Livewire re-renders - run on every lifecycle hook
-            if (window.Livewire) {
-                Livewire.hook('message.processed', function(message, component) {
-                    restoreModals();
-                });
-
-                Livewire.hook('element.initialized', function(el) {
-                    restoreModals();
-                });
-            }
-
-            // Also run on any Livewire event
-            document.addEventListener('livewire:update', function() {
-                setTimeout(restoreModals, 10);
-            });
-        })();
     </script>
 
     <!-- Sidebar - Fixed -->

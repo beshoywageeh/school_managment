@@ -16,14 +16,9 @@
                             {{ trans('general.buttons.create') }}
                         </a>
                     @endcan
-                    @can('Parents-import_Excel')
-                        <button type="button" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2" data-target="#Import_Excel" data-toggle="modal">
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                            </svg>
-                            {{ trans('general.buttons.import_excel') }}</button>
+
                         @include('backend.Parents.import')
-                    @endcan
+
                 </div>
             </div>
         </div>
