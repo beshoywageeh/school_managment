@@ -13,7 +13,7 @@
 
             <div class="p-4 flex items-start gap-3">
 
-                <div class="flex-shrink-0">
+                <div class="shrink-0">
                     <template x-if="toast.type === 'success'">
                         <svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
@@ -48,7 +48,7 @@
                     <p class="text-sm font-medium text-gray-900" x-text="toast.message"></p>
                 </div>
 
-                <div class="flex-shrink-0 flex">
+                <div class="shrink-0 flex">
                     <button @click="toasts = toasts.filter(to => to.id !== toast.id)"
                         class="inline-flex rounded-md text-gray-400 hover:text-gray-500 focus:outline-none">
                         <span class="sr-only">{{ trans('general.close') }}</span>

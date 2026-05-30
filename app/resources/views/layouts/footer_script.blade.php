@@ -45,12 +45,8 @@
 
         setInterval(updateDateTime, 1000);
         updateDateTime();
-        setTimeout(function() {
-            var loader = document.getElementById('pre-loader');
-            if (loader) loader.style.display = 'none';
-        }, 2000);
         window.addEventListener('load', function() {
-            document.getElementById('pre-loader').style.display = 'none';
+            document.getElementById('pre-loader')?.remove();
         });
 
     });

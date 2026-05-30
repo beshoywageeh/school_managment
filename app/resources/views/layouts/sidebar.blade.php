@@ -1,8 +1,11 @@
-<aside class="w-64 bg-gray-900 text-white shrink-0 h-screen overflow-hidden fixed top-0 start-0" dir="rtl"
-    style="overflow-y: auto !important; overflow-x: hidden !important;">
+<aside x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+    x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0"
+    x-transition:leave-end="-translate-x-full"
+    class="w-64 bg-gray-900 text-white shrink-0 h-screen overflow-y-auto overflow-x-hidden fixed top-0 start-0 z-40" dir="rtl">
     <div class="h-full flex flex-col">
         <!-- Logo -->
-        <div class="p-4 border-b border-gray-700 flex-shrink-0">
+        <div class="p-4 border-b border-gray-700 shrink-0">
             <div class="text-center">
                 <span class="text-lg font-bold">{{ $school->name }}</span>
             </div>

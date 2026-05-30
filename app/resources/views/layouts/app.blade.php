@@ -46,15 +46,11 @@
     </style>
 </head>
 
-<body class="bg-gray-100 font-sans">
+<body x-data="{ sidebarOpen: true }" class="bg-gray-100 font-sans">
     <!-- Pre-loader - hidden after 2 seconds as fallback -->
     <div id="pre-loader" class="fixed inset-0 bg-white flex items-center justify-center z-[9999]">
         <img src="{{ asset('assests/images/logo-dark.png') }}" alt="Loading" class="w-32">
     </div>
-    <script>
-
-    </script>
-
     <!-- Sidebar - Fixed -->
     @include('layouts.sidebar')
 
