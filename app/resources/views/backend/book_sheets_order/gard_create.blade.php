@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="flex flex-wrap mb-30" x-data="{
+    <div class="flex flex-wrap mb-8" x-data="{
         rows: @json($stocks->map(fn($s) => ['id' => $s->id, 'name' => $s->name, 'grade' => $s->grade->name, 'classroom' => $s->classroom->name, 'inv' => (float)($s->orders()->sum('quantity_in') + $s->opening_qty - $s->orders()->sum('quantity_out')), 'actual' => null])),
         diff(row) { return (parseFloat(row.actual) || 0) - row.inv; }
     }">
@@ -26,19 +26,19 @@
                         </div>
                     </div>
                 </div>
-                <form action="{{ route('bookSheetsOrder.submit_gard') }}"method="post" autocomplete="off">
+                <form action="{{ route('bookSheetsOrder.submit_gard') }}" method="post" autocomplete="off">
                     <div class="p-6">
                         @csrf
                         <table class="w-full border border-gray-200">
                             <thead>
                                 <tr class="my-1">
-                                    <th><strong>#</strong></th>
-                                    <th><strong>{{ trans('Grades.name') }}</strong></th>
-                                    <th><strong>{{ trans('class_rooms.Name') }}</strong></th>
-                                    <th><strong>{{ trans('stock.name') }}</strong></th>
-                                    <th><strong>{{ trans('gard.inv_stock') }}</strong></th>
-                                    <th><strong>{{ trans('gard.actual_stock') }}</strong></th>
-                                    <th><strong>{{ trans('gard.different') }}</strong></th>
+                                    <th class="text-center font-medium text-gray-500">#</th>
+                                    <th class="text-start font-medium text-gray-500">{{ trans('Grades.name') }}</th>
+                                    <th class="text-start font-medium text-gray-500">{{ trans('class_rooms.Name') }}</th>
+                                    <th class="text-start font-medium text-gray-500">{{ trans('stock.name') }}</th>
+                                    <th class="text-start font-medium text-gray-500">{{ trans('gard.inv_stock') }}</th>
+                                    <th class="text-start font-medium text-gray-500">{{ trans('gard.actual_stock') }}</th>
+                                    <th class="text-start font-medium text-gray-500">{{ trans('gard.different') }}</th>
                                 </tr>
                             </thead>
                             <tbody>

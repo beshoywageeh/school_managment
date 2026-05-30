@@ -6,7 +6,7 @@
     @include('backend.msg')
     <form id="form-with-multiple-column" action="{{ route('employees.store') }}" method="post" enctype="multipart/form-data">
         @csrf
-        <div class="mb-4 flex flex-wrap">
+        <div class="mb-4 flex flex-wrap gap-4">
             <div class="flex-1">
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                     <div class="p-6">

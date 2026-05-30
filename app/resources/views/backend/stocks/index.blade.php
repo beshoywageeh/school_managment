@@ -26,7 +26,7 @@
                 @endcan
             </div>
             @can('stocks-create')
-                <button data-toggle="modal" data-target="#newItem" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium">
+                <button onclick="window.dispatchEvent(new Event('open-modal-create-stock'))" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium">
                     {{ trans('general.new') }}
                 </button>
             @endcan
@@ -35,16 +35,16 @@
         @can('stocks-index')
             <div class="overflow-x-auto">
                 <table class="min-w-full">
-                    <thead class="bg-blue-50">
+                    <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-blue-700 uppercase">#</th>
-                            <th class="px-6 py-3 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('stock.name') }}</th>
-                            <th class="px-6 py-3 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('stock.opening_balance') }}</th>
-                            <th class="px-6 py-3 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('stock.opening_date') }}</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-blue-700 uppercase">{{ trans('stock.current_stock') }}</th>
-                            <th class="px-6 py-3 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('stock.price') }}</th>
-                            <th class="px-6 py-3 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('stock.total_price') }}</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-blue-700 uppercase">{{ trans('general.actions') }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">#</th>
+                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.name') }}</th>
+                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.opening_balance') }}</th>
+                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.opening_date') }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">{{ trans('stock.current_stock') }}</th>
+                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.price') }}</th>
+                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.total_price') }}</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">{{ trans('general.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -64,7 +64,7 @@
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-1">
                                     @can('stocks-update')
-                                    <button type="button" data-toggle="modal" data-target="#editItem-{{ $stock->id }}" class="p-2 text-green-600 hover:bg-green-50 rounded-lg" title="{{ trans('general.edit') }}">
+                                    <button type="button" onclick="window.dispatchEvent(new Event('open-modal-edit-stock-{{ $stock->id }}'))" class="p-2 text-green-600 hover:bg-green-50 rounded-lg" title="{{ trans('general.edit') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>

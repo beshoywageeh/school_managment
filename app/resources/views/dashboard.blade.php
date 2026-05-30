@@ -71,7 +71,7 @@
 
 @section('content')
     <!-- Stat Cards -->
-    <div class="flex flex-wrap gap-4 mb-6" style="display: flex !important; flex-wrap: wrap !important;">
+    <div class="flex flex-wrap gap-4 mb-6" >
         @can('Students-list')
             <x-stat_card class="border-blue-400">
                 <div class="w-16 h-16 rounded-xl bg-blue-500 flex items-center justify-center text-white">
@@ -117,54 +117,53 @@
                 </div>
             </x-stat_card>
         @endcan
-    </div>
 
-    <!-- Financial Summary Cards -->
-    @if (Auth::user()->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'Recipt_Payment-list']))
-        <div class="flex flex-wrap gap-4 mb-6" style="display: flex !important; flex-wrap: wrap !important;">
-            <x-stat_card>
-                <div class="w-16 h-16 rounded-xl bg-yellow-500 flex items-center justify-center text-white">
-                    <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalInvoiced, 2) }}</h3>
-                    <p class="text-gray-500">{{ trans('Sidebar.fees_invoice') }} (Total)</p>
-                </div>
-            </x-stat_card>
-            <x-stat_card class="border-green-400">
-                <div class="w-16 h-16 rounded-xl bg-green-500 flex items-center justify-center text-white">
-                    <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalPaid, 2) }}</h3>
-                    <p class="text-gray-500">{{ trans('Sidebar.Recipt_Payment') }} (Total)</p>
-                </div>
-            </x-stat_card>
-
-            <x-stat_card class="border-red-400">
-
-                    <div class="w-16 h-16 rounded-xl bg-red-500 flex items-center justify-center text-white">
+        <!-- Financial Summary Cards -->
+        @if (Auth::user()->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'Recipt_Payment-list']))
+                <x-stat_card>
+                    <div class="w-16 h-16 rounded-xl bg-yellow-500 flex items-center justify-center text-white">
                         <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.342-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalInvoiced - $totalPaid, 2) }}
-                        </h3>
-                        <p class="text-gray-500">{{ trans('Sidebar.pending_balance') }}</p>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalInvoiced, 2) }}</h3>
+                        <p class="text-gray-500">{{ trans('Sidebar.fees_invoice') }} (Total)</p>
                     </div>
+                </x-stat_card>
+                <x-stat_card class="border-green-400">
+                    <div class="w-16 h-16 rounded-xl bg-green-500 flex items-center justify-center text-white">
+                        <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalPaid, 2) }}</h3>
+                        <p class="text-gray-500">{{ trans('Sidebar.Recipt_Payment') }} (Total)</p>
+                    </div>
+                </x-stat_card>
 
-            </x-stat_card>
+                <x-stat_card class="border-red-400">
 
-        </div>
-    @endif
+                        <div class="w-16 h-16 rounded-xl bg-red-500 flex items-center justify-center text-white">
+                            <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.342-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalInvoiced - $totalPaid, 2) }}
+                            </h3>
+                            <p class="text-gray-500">{{ trans('Sidebar.pending_balance') }}</p>
+                        </div>
+
+                </x-stat_card>
+
+        @endif
+    </div>
+
 
     <!-- Quick Actions -->
     <div class="flex flex-wrap gap-4 mb-6" style="display: flex !important; flex-wrap: wrap !important;">

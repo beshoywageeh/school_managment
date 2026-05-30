@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>
-        <form action="{{ route('bookSheetsOrder.update_tawreed') }}"method="post" autocomplete="off">
+        <form action="{{ route('bookSheetsOrder.update_tawreed') }}" method="post" autocomplete="off">
             <input type="hidden" name="order_id" value="{{ $order->id }}">
             <div class="p-6">
                 @csrf

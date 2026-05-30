@@ -4,10 +4,10 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="flex flex-wrap mb-30">
+    <div class="flex flex-wrap mb-8">
         <div class="flex-1">
             <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                <form action="{{ route('bookSheetsOrder.update_sarf') }}"method="post" autocomplete="off">
+                <form action="{{ route('bookSheetsOrder.update_sarf') }}" method="post" autocomplete="off">
                     @csrf
                     <input type="hidden" name="order_id" value="{{ $order->id }}">
                     <div class="px-6 py-4 border-b border-gray-200">
@@ -56,7 +56,7 @@
                                         <td><input type="hidden"
                                                 name="id[]"value="{{ $stock->id }}" />{{ $stock->name }}
                                         </td>
-                                        <td><input class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" name="quantity[]" value="1" type="number"
+                                        <td><input class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" name="quantity[]" type="number"
                                                 value="{{ $stock->pivot->quantity_out }}" /></td>
                                         <td>{{ $stock->sales_price }}</td>
                                     </tr>
@@ -91,7 +91,7 @@
                         table.innerHTML = '';
                         if (data.length === 0) {
                             table.innerHTML =
-                                '<tr><td colspan="4" class="alert alert-danger">{{ trans('general.noDataToShow') }}</td></tr>';
+                                '<tr><td colspan="4" class="bg-red-50 text-red-600 px-4 py-3 rounded-lg">{{ trans('general.noDataToShow') }}</td></tr>';
                         } else {
                             $.each(data, (index, item) => {
                                 var row = `<tr>

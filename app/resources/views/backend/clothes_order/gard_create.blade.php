@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <form action="{{ route('clothes_gard.submit') }}"method="post" autocomplete="off">
+        <form action="{{ route('clothes_gard.submit') }}" method="post" autocomplete="off">
             <div class="p-6">
                 @csrf
                 <input type="hidden" name="id" value="{{ $order->id }}">
@@ -32,13 +32,13 @@
                     <table class="min-w-full text-sm">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase"><strong>#</strong></th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('Grades.name') }}</strong></th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('class_rooms.Name') }}</strong></th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('stock.name') }}</strong></th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('gard.inv_stock') }}</strong></th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('gard.actual_stock') }}</strong></th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase"><strong>{{ trans('gard.different') }}</strong></th>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">#</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('Grades.name') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('class_rooms.Name') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.name') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('gard.inv_stock') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('gard.actual_stock') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('gard.different') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">

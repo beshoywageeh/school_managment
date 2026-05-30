@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="bg-white h-[100vh] rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="bg-white h-screen rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-4 border-b border-gray-100 flex justify-between items-center">
             <div></div>
             <div class="flex gap-2">
@@ -27,20 +27,20 @@
         <div class="p-6">
             @can('clothes-index')
                 <div class="overflow-x-auto">
-                    <table class="min-w-full text-sm" id=''>
-                        <thead class="bg-blue-50">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-4 py-2 text-center text-xs font-medium text-blue-700 uppercase">#</th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('Grades.title') }}</th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('class_rooms.title') }}</th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('stock.name') }}</th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('stock.opening_balance') }}</th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('stock.opening_date') }}</th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('stock.current_stock') }}</th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('clothes.purchase_price') }}</th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('clothes.sales_price') }}</th>
-                                <th class="px-4 py-2 text-start text-xs font-medium text-blue-700 uppercase">{{ trans('clothes.sales_isset') }}</th>
-                                <th class="px-4 py-2 text-center text-xs font-medium text-blue-700 uppercase">{{ trans('general.actions') }}</th>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">#</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('Grades.title') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('class_rooms.title') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.name') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.opening_balance') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.opening_date') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.current_stock') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('clothes.purchase_price') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('clothes.sales_price') }}</th>
+                                <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('clothes.sales_isset') }}</th>
+                                <th class="px-4 py-2 text-center text-xs font-medium text-gray-500 uppercase">{{ trans('general.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
@@ -53,7 +53,6 @@
                                     <td class="px-4 py-2 text-gray-600">{{ number_format($stock->opening_qty, 2) }}</td>
                                     <td class="px-4 py-2 text-gray-600">{{ $stock->opening_stock_date }}</td>
                                     <td class="px-4 py-2 text-gray-800 font-medium">{{$stock->current_qty}}</td>
-                                    </td>
                                     <td class="px-4 py-2 text-gray-600">{{ Number::currency($stock->purchase_price, 'EGP', 'ar') }}</td>
                                     <td class="px-4 py-2 text-gray-600">{{ Number::currency($stock->sales_price, 'EGP', 'ar') }}</td>
                                     <td class="px-4 py-2 text-gray-600">{{ Number::currency($stock->sales_price_set, 'EGP', 'ar') }}</td>

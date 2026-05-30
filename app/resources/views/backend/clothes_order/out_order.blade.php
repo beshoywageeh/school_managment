@@ -42,14 +42,14 @@
                         </div>
                     </div>
                 </div>
-                <form class="overflow-x-auto" id="print">
+                <div class="overflow-x-auto" id="print">
                     <table class="min-w-full text-sm">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-4 py-2 text-center font-semibold text-gray-700"><strong>#</strong></th>
-                                <th class="px-4 py-2 text-start font-semibold text-gray-700"><strong>{{ trans('stock.name') }}</strong></th>
-                                <th class="px-4 py-2 text-start font-semibold text-gray-700"><strong>{{ trans('clothes.sales_price') }}</strong></th>
-                                <th class="px-4 py-2 text-start font-semibold text-gray-700"><strong>{{ trans('stock.quantity') }}</strong></th>
+                                <th class="px-4 py-2 text-center font-semibold text-gray-700">#</th>
+                                <th class="px-4 py-2 text-start font-semibold text-gray-700">{{ trans('stock.name') }}</th>
+                                <th class="px-4 py-2 text-start font-semibold text-gray-700">{{ trans('clothes.sales_price') }}</th>
+                                <th class="px-4 py-2 text-start font-semibold text-gray-700">{{ trans('stock.quantity') }}</th>
                             </tr>
                         </thead>
                         <tbody id="invoice_data">
@@ -65,7 +65,7 @@
                             </tr>
                         </tfoot>
                     </table>
-                </form>
+                </div>
             </div>
             <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-end">
                 <button onclick="document.getElementById('invo_submit').submit();" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium">

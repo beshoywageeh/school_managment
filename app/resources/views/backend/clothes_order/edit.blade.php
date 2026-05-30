@@ -28,7 +28,7 @@
                 </table>
             </div>
         </div>
-        <form action="{{ route('clothes_stock_submit.update') }}"method="post" autocomplete="off">
+        <form action="{{ route('clothes_stock_submit.update') }}" method="post" autocomplete="off">
             <div class="p-6">
                 @csrf
                 <input type="hidden" name="order_id" value="{{ $order->id }}">

@@ -1,9 +1,14 @@
-<div class="modal" id="CreateSchoolFee" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="relative flex flex-col w-full bg-white rounded-lg shadow-xl border-0">
+<div x-data="{ open: false }" x-on:open-modal-create-fee.window="open = true">
+    <div x-show="open" x-transition
+         class="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 pt-8"
+         x-on:click.self="open = false"
+         style="display: none;">
+        <div x-show="open" x-transition
+             class="bg-white rounded-xl shadow-xl w-full max-w-2xl overflow-hidden"
+             style="display: none;">
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                 <h3 class="text-lg font-semibold text-gray-800">{{ trans('general.new') }}</h3>
-                <button type="button" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100" data-dismiss="modal">
+                <button type="button" x-on:click="open = false" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>

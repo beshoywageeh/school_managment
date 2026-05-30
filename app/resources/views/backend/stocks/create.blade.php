@@ -1,9 +1,18 @@
-<div class="modal" id="newItem" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="relative flex flex-col w-full bg-white rounded-lg shadow-xl border-0">
+<div x-data="{ open: false }" x-on:open-modal-create-stock.window="open = true">
+    {{-- Backdrop --}}
+    <div x-show="open" x-transition
+         class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+         x-on:click.self="open = false"
+         style="display: none;">
+        {{-- Panel --}}
+        <div x-show="open" x-transition
+             class="bg-white rounded-xl shadow-xl w-full max-w-2xl overflow-hidden"
+             style="display: none;">
+            {{-- Header --}}
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                 <h3 class="text-lg font-semibold text-gray-800">{{ trans('general.new') }}</h3>
-                <button type="button" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100" data-dismiss="modal">
+                <button x-on:click="open = false" type="button"
+                    class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -16,9 +25,9 @@
                         <table class="list_stocks w-full">
                             <thead>
                                 <tr>
-                                    <th class="py-2 px-4 text-right text-sm font-medium text-gray-700"><strong>{{ trans('stock.name') }}</strong></th>
-                                    <th class="py-2 px-4 text-right text-sm font-medium text-gray-700"><strong>{{ trans('stock.opening_balance') }}</strong></th>
-                                    <th class="py-2 px-4 text-right text-sm font-medium text-gray-700"><strong>{{ trans('stock.price') }}</strong></th>
+                                    <th class="py-2 px-4 text-right text-sm font-medium text-gray-700">{{ trans('stock.name') }}</th>
+                                    <th class="py-2 px-4 text-right text-sm font-medium text-gray-700">{{ trans('stock.opening_balance') }}</th>
+                                    <th class="py-2 px-4 text-right text-sm font-medium text-gray-700">{{ trans('stock.price') }}</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -60,7 +69,7 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-xl">
-                    <button class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 font-medium" data-dismiss="modal">{{ trans('general.Cancel') }}</button>
+                    <button x-on:click="open = false" type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 font-medium">{{ trans('general.Cancel') }}</button>
                     <button class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium" type="submit">{{ trans('general.Submit') }}</button>
                 </div>
             </form>

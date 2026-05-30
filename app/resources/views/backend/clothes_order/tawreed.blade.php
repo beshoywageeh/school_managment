@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <form action="{{ route('clothes_stock.store') }}"method="post" autocomplete="off">
+    <form action="{{ route('clothes_stock.store') }}" method="post" autocomplete="off">
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" x-data="{
         rows: @json($clothes->map(fn($c) => ['id' => $c->id, 'name' => $c->name, 'grade' => $c->grade->name, 'classroom' => $c->classroom->name, 'qty' => 0, 'purchase' => 0, 'sales' => 0, 'sales_isset' => 0])),
         get grandQty() { return this.rows.reduce((sum, r) => sum + (parseFloat(r.qty) || 0), 0); },
