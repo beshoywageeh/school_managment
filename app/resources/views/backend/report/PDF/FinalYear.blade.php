@@ -1,83 +1,26 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+@extends('layouts.pdf', ['school' => $school])
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>التقرير الختامي</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        @page {
-            size: A4 landscape;
-            margin: 2mm;
-        }
+@section('page-header')
+@endsection
 
-        body {
-            font-family: 'Arial', sans-serif;
-            /* Use a font that supports Arabic if possible */
-            direction: rtl;
-            text-align: center;
-        }
+@section('page-footer')
+@endsection
 
-        .header-table {
-            width: 100%;
-            margin-bottom: 20px;
-        }
+@push('styles')
+    @page { size: A4 landscape; margin: 2mm; }
+    body { font-family: 'Arial', sans-serif; direction: rtl; text-align: center; }
+    .header-table { width: 100%; margin-bottom: 20px; }
+    .report-title { text-align: center; font-weight: bold; font-size: 18px; color: #000080; }
+    .school-logo { text-align: center; }
+    .table-custom { width: 100%; border-collapse: collapse; margin-bottom: 20px; text-align: center; font-size: 12px; }
+    .table-custom th, .table-custom td { border: 1px solid #000; padding: 5px; text-align: center; }
+    .table-custom th { background-color: #f0f0f0; font-weight: bold; }
+    .gray-row { background-color: #e0e0e0; }
+    .total-number { font-size: 16px; font-weight: bold; margin: 10px 0; text-align: center; }
+    .section-title { text-align: center; font-weight: bold; margin: 10px 0; padding: 10px; }
+@endpush
 
-        .report-title {
-            text-align: center;
-            font-weight: bold;
-            font-size: 18px;
-            color: #000080;
-            /* Dark Blue */
-        }
-
-        .school-logo {
-            text-align: center;
-        }
-
-        .table-custom {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .table-custom th,
-        .table-custom td {
-            border: 1px solid #000;
-            padding: 5px;
-            text-align: center;
-        }
-
-        .table-custom th {
-            background-color: #f0f0f0;
-            font-weight: bold;
-        }
-
-        .gray-row {
-            background-color: #e0e0e0;
-        }
-
-        .total-number {
-            font-size: 16px;
-            font-weight: bold;
-            margin: 10px 0;
-            text-align: center;
-        }
-
-        .section-title {
-            text-align: center;
-            font-weight: bold;
-            margin: 10px 0;
-            padding: 10px;
-        }
-    </style>
-</head>
-
-<body>
-
+@section('content')
     <div class="container">
         <!-- Header -->
         <table class="header-table">
@@ -97,7 +40,7 @@
                 </td>
                 <td width="30%" class="school-logo">
                     @if ($school->image)
-                        <img src="{{ URL::asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
+                        <img src="{{ storage_path('app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
                             style="height: 80px;" alt="Logo">
                     @else
                         <h2>{{ $school->name }}</h2>
@@ -189,6 +132,4 @@
     </div>
 
     <script></script>
-</body>
-
-</html>
+@endsection

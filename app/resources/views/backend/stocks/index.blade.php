@@ -55,11 +55,11 @@
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $stock->opening_stock }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $stock->opening_stock_date }}</td>
                             <td class="px-6 py-4 text-center text-sm text-gray-800 font-medium">
-                                {{ $stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out') }}
+                                {{-- {{ $stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out') }} --}}
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ number_format($stock->price, 2) }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 font-medium">
-                                {{ number_format($stock->price * ($stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out')), 2) }}
+                                {{-- {{ number_format($stock->price * ($stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out')), 2) }} --}}
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-1">
