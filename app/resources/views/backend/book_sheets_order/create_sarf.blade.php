@@ -21,7 +21,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.name') }}</label>
-                    <select name="student_id" id="student" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 select2 student">
+                    <select name="student_id" id="student" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 tom-select student">
                         <option value="" selected disabled>{{ trans('general.select') }}</option>
                         @forelse ($students as $student)
                             <option value="{{ $student->id }}">{{ $student->name }}</option>
@@ -57,11 +57,4 @@
             </div>
         </form>
     </div>
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2();
-        });
-    </script>
-@endpush
 @endsection

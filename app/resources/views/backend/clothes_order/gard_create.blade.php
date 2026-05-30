@@ -4,7 +4,10 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden" x-data="{
+        rows: @json($stocks->map(fn($s) => ['id' => $s->id, 'name' => $s->name, 'grade' => $s->grade->name, 'classroom' => $s->classroom->name, 'inv' => (float)($s->orders()->sum('quantity_in') + $s->opening_qty - $s->orders()->sum('quantity_out')), 'actual' => null])),
+        diff(row) { return (parseFloat(row.actual) || 0) - row.inv; }
+    }">
         <div class="p-4 border-b border-gray-100">
             <div class="grid grid-cols-4 gap-4 text-center">
                 <div>
@@ -39,28 +42,26 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            @foreach ($stocks as $stock)
+                            <template x-for="(row, index) in rows" :key="row.id">
                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 text-center text-gray-600">{{ $loop->index + 1 }}</td>
-                                    <td class="px-4 py-2 text-gray-600">{{ $stock->grade->name }}</td>
-                                    <td class="px-4 py-2 text-gray-600">{{ $stock->classroom->name }}</td>
+                                    <td class="px-4 py-2 text-center text-gray-600" x-text="index + 1"></td>
+                                    <td class="px-4 py-2 text-gray-600" x-text="row.grade"></td>
+                                    <td class="px-4 py-2 text-gray-600" x-text="row.classroom"></td>
                                     <td class="px-4 py-2">
-                                        <label class="text-gray-800 font-medium">{{ $stock->name }}</label>
-                                        <input type="hidden" value="{{ $stock->id }}" name="stock_id[]">
+                                        <label class="text-gray-800 font-medium" x-text="row.name"></label>
+                                        <input type="hidden" x-bind:value="row.id" x-bind:name="`stock_id[${index}]`">
                                     </td>
                                     <td class="px-4 py-2">
-                                        <input type="text" disabled name="inv_stock[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 inv_stock"
-                                            value="{{ $stock->orders()->sum('quantity_in') + $stock->opening_qty - $stock->orders()->sum('quantity_out') }}" />
+                                        <input type="text" disabled x-bind:value="row.inv" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600">
                                     </td>
                                     <td class="px-4 py-2">
-                                        <input type="number" name="actual_stock[]" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 actual_stock" />
+                                        <input type="number" x-model.number="row.actual" x-bind:name="`actual_stock[${index}]`" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
                                     </td>
                                     <td class="px-4 py-2">
-                                        <input type="number" disabled name="different[]"
-                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 font-bold text-gray-800 different" value="0" />
+                                        <input type="number" disabled x-bind:value="diff(row)" x-bind:name="`different[${index}]`" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 font-bold text-gray-800">
                                     </td>
                                 </tr>
-                            @endforeach
+                            </template>
                         </tbody>
                     </table>
                 </div>
@@ -70,23 +71,4 @@
             </div>
         </form>
     </div>
-    @push('scripts')
-        <script>
-            $(document).ready(function() {
-                $('input[type="number"]').on('input', function() {
-                    $(this).val($(this).val().replace(/[^0-9\.]/g, ''));
-                });
-            });
-        </script>
-        <script>
-            $(document).ready(function() {
-                $('.actual_stock').on('input', function() {
-                    var actual_stock = $(this).val();
-                    var inv_stock = $(this).closest('tr').find('.inv_stock').val();
-                    var different = actual_stock - inv_stock;
-                    $(this).closest('tr').find('.different').val(different);
-                });
-            });
-        </script>
-    @endpush
 @endsection

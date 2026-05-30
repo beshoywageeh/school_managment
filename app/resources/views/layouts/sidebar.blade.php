@@ -2,7 +2,8 @@
     x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
     x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0"
     x-transition:leave-end="-translate-x-full"
-    class="w-64 bg-gray-900 text-white shrink-0 h-screen overflow-y-auto overflow-x-hidden fixed top-0 start-0 z-40" dir="rtl">
+    class="w-64 bg-gray-900 text-white shrink-0 h-screen overflow-y-auto overflow-x-hidden fixed top-0 start-0 z-40"
+    dir="rtl">
     <div class="h-full flex flex-col">
         <!-- Logo -->
         <div class="p-4 border-b border-gray-700 shrink-0">

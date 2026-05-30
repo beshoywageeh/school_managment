@@ -18,7 +18,8 @@
                 {{ Auth::user()->name }}
             </span>
         @endauth
-        <span class="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-lg text-sm whitespace-nowrap" id="datetime">{{ now()->format('Y-m-d H:i') }}</span>
+        <span class="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-lg text-sm whitespace-nowrap"
+            id="datetime">{{ now()->format('Y-m-d H:i') }}</span>
 
         <button type="button" id="btnFullscreen"
             class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg" title="Fullscreen">
@@ -60,5 +61,4 @@
             document.exitFullscreen();
         }
     });
-
 </script>

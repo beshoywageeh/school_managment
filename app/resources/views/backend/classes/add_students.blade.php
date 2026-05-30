@@ -34,7 +34,7 @@
                             <div class="flex flex-wrap my-2">
                                 <div class="w-full">
                                     <label for="">{{ trans('classes.choose_student') }}</label>
-                                    <select name="student_id[]" id="" multiple class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all select2">
+                                    <select name="student_id[]" id="" multiple class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all tom-select">
                                         @foreach ($students as $student)
                                             <option value="{{ $student->id }}">{{ $student->name }}</option>
                                         @endforeach

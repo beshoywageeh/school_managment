@@ -32,7 +32,7 @@
                             <div class="flex-1 mb-4">
                                 <label for="" class="">{{ trans('employees.grade_year') }}</label>
 
-                                <select name="grade_year" id="grade_year" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all select2">
+                                <select name="grade_year" id="grade_year" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all tom-select">
 
                                     <option value="" selected>{{ trans('employees.grade_year') }}</option>
                                     @foreach ($years as $year)

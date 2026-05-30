@@ -71,17 +71,4 @@
         </div>
     </div>
 @endsection
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('.labs_list').repeater({
-                show: function() {
-                    $(this).slideDown();
-                },
-                hide: function(deleteElement) {
-                    $(this).slideUp(deleteElement);
-                }
-            });
-        });
-    </script>
-@endpush
+
