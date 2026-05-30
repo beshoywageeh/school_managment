@@ -12,20 +12,20 @@
         font-size: 0.875rem;
     }
 
-    .table {
+    .data-table {
         border: 1px solid black !important;
         width: 100%;
         border-collapse: collapse;
     }
 
-    .table td,
-    .table th {
+    .data-table td,
+    .data-table th {
         border: 1px solid black !important;
         border-collapse: collapse;
         padding: 3px;
     }
 
-    .table th {
+    .data-table th {
         font-weight: 1.2rem !important;
     }
 
@@ -56,7 +56,7 @@
 <body>
 
 
-    <table class="table table-sm" style="text-align: center;">
+    <table class="data-table w-full text-sm" style="text-align: center;">
         <thead>
             <tr>
                 <th rowspan="2"><strong>#</strong></th>

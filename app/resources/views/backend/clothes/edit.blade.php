@@ -7,7 +7,7 @@
                 <div class="modal-title">
                     <h6>{{ trans('general.new') }}</h6>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="text-gray-400 hover:text-gray-600 text-2xl leading-none" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -29,8 +29,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
-                    <button class="btn btn-secondary" data-dismiss="modal">{{ trans('general.Cancel') }}</button>
+                    <x-button class="success" type="submit">{{ trans('general.Submit') }}</x-button>
+                    <x-button class="secondary" type="button" data-dismiss="modal">{{ trans('general.Cancel') }}</x-button>
                 </div>
             </form>
         </div>

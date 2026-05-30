@@ -1,6 +1,6 @@
 <div class="modal" id="CreateSchoolFee" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="relative flex flex-col w-full bg-white rounded-lg shadow-xl border-0">
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                 <h3 class="text-lg font-semibold text-gray-800">{{ trans('general.new') }}</h3>
                 <button type="button" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100" data-dismiss="modal">

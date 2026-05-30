@@ -27,7 +27,7 @@
         </div>
         <div class="mb-3 row">
             <div class="col-12">
-                <table class="table text-center table-bordered">
+                <table class="w-full text-center border border-gray-200">
                     <tbody>
                         <tr>
                             <td>{{ trans('Recipt_Payments.amount') }}</td>

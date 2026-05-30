@@ -3,7 +3,7 @@
     {{ trans('permissions.title') }} | {{ trans('general.new') }}
 @endsection
 @section('content')
-    <div class="container-fluid">
+    <div class="w-full">
         <form action="{{ route('roles.store') }}" method="post">
             @csrf
             <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">

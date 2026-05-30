@@ -3,8 +3,8 @@
     {{ trans('schedules.schedules') }}
 @endsection
 @section('content')
-    <div class="mb-4 row">
-        <div class="col-md-12">
+    <div class="mb-4">
+        <div class="w-full">
             <livewire:Schedules />
         </div>
     </div>

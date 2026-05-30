@@ -46,35 +46,35 @@
 @endpush
 @section('content')
     <div class="receipt" id="print">
-        <div class="pb-3 mb-3 row border-bottom">
-            <div class="col-4">
+        <div class="pb-3 mb-3 flex flex-wrap border-bottom">
+            <div class="w-1/3">
                 <div class="logo">
                     @if ($school->image)
                         <img src="{{ asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                            alt="{{ $school->name }}" class="img-fluid">
+                            alt="{{ $school->name }}" class="max-w-full h-auto">
                     @else
-                        <img src="{{ asset('assests/images/logo-icon-dark.png') }}" alt="Ischool" class="img-fluid">
+                        <img src="{{ asset('assests/images/logo-icon-dark.png') }}" alt="Ischool" class="max-w-full h-auto">
                     @endif
                 </div>
             </div>
-            <div class="text-center col-4">
-                <h1 class="h3">{{ trans('fee_invoice.title') }}</h1>
+            <div class="text-center w-1/3">
+                <h1 class="text-xl font-semibold">{{ trans('fee_invoice.title') }}</h1>
                 <p class="mb-0">{{ trans('general.created_at') }}: {{ $invoice_details->invoice_date }}</p>
             </div>
-            <div class="col-4">
+            <div class="w-1/3">
                 {{ $school->name }}<br>
                 {{ $school->address }}<br>
                 {{ $school->phone }}
             </div>
         </div>
-        <div class="mb-3 row">
-            <div class="col-12">
-                <h2 class="h4">{{ trans('Recipt_Payments.name') }}: {{ $invoice_details->students->name }}</h2>
+        <div class="mb-3 flex flex-wrap">
+            <div class="w-full">
+                <h2 class="text-lg font-semibold">{{ trans('Recipt_Payments.name') }}: {{ $invoice_details->students->name }}</h2>
             </div>
         </div>
-        <div class="mb-3 row">
-            <div class="col-12">
-                <table class="table text-center table-bordered">
+        <div class="mb-3 flex flex-wrap">
+            <div class="w-full">
+                <table class="w-full text-center border-collapse border border-gray-300">
                     <tbody>
                         <tr>
                             <td>{{ trans('Recipt_Payments.amount') }}</td>
@@ -84,9 +84,9 @@
                 </table>
             </div>
         </div>
-        <div class="row">
-            <div class="text-center col-12">
-                <h2 class="h4">{{ $tafqeet }}</h2>
+        <div class="flex flex-wrap">
+            <div class="text-center w-full">
+                <h2 class="text-lg font-semibold">{{ $tafqeet }}</h2>
             </div>
         </div>
     </div>

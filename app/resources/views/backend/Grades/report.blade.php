@@ -10,50 +10,40 @@
             font-family: Arial, sans-serif;
         }
 
-        .container {
-            width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .table {
+        .report-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
 
-        .table th,
-        .table td {
+        .report-table th,
+        .report-table td {
             border: 1px solid #ddd;
             padding: 8px;
         }
 
-        .table th {
+        .report-table th {
             background-color: #f2f2f2;
         }
 
-        .alert-secondary {
+        .report-header {
             background-color: #e9ecef;
             color: #212529;
         }
 
-        .table-striped tbody tr:nth-of-type(odd) {
+        .report-table-striped tbody tr:nth-of-type(odd) {
             background-color: #f9f9f9;
-        }
-
-        .table-bordered {
-            border: 1px solid #ddd;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="table-responsive">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="overflow-x-auto">
             @foreach ($data['report_data']->class_rooms as $classes)
-                <table class="table table-striped table-bordered">
+                <table class="report-table report-table-striped">
                     <thead>
-                        <tr class="alert alert-secondary">
+                        <tr class="report-header">
                             <th colspan="2">
                                 <h5>{{ $data['report_data']->name }}</h5>
                             </th>

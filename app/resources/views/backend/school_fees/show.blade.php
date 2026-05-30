@@ -31,8 +31,8 @@
                 <h2 class="h4">{{ $school_fee->title }}: {{ Number::currency($school_fee->amount, 'EGP', 'ar') }}</h2>
             </div>
         </div>
-        <div class="table-responsive" id="data">
-            <table class="table text-center">
+        <div class="overflow-x-auto" id="data">
+            <table class="w-full text-center">
                 <thead>
                     <tr>
                         <th>#</th>

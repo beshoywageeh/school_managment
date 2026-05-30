@@ -33,7 +33,7 @@
 @stack('css')
 
 <body>
-    <div class="text-center container-fluid text-middle">
+    <div class="text-center w-full text-middle">
         <div class="my-4 flex justify-between items-center no-print">
             <div>
                 <a href="{{ url()->previous() }}"

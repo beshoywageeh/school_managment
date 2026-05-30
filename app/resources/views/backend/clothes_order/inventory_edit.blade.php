@@ -4,30 +4,30 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="row mb-30">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <div class="text-center row">
-                        <div class="col">
+    <div class="flex flex-wrap mb-30">
+        <div class="flex-1">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <div class="text-center flex flex-wrap">
+                        <div class="flex-1">
                             <h6><strong>الرقم : {{ $order->auto_number }}</strong></h6>
                         </div>
-                        <div class="col">
+                        <div class="flex-1">
                             <h6><strong>النوع : {{ trans('stock.inventory_order') }}</strong></h6>
                         </div>
-                        <div class="col">
+                        <div class="flex-1">
                             <h6><strong>التاريخ : {{ $order->created_at->format('Y-M-d') }}</strong></h6>
                         </div>
-                        <div class="col">
+                        <div class="flex-1">
                             <h6><strong>الوقت : {{ $order->created_at->format('s : i : g A') }}</strong></h6>
                         </div>
                     </div>
                 </div>
                 <form action="{{ route('clothes_inventory_order.update') }}" method="post" autocomplete="off">
-                    <div class="card-body">
+                    <div class="p-6">
                         @csrf
                         <input type="hidden" name="id" value="{{ $order->id }}">
-                        <table class="table table-bordered">
+                        <table class="w-full border border-gray-200">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -46,17 +46,17 @@
                                             <input type="hidden" value="{{ $stock->id }}" name="stock_id[]">
                                         </td>
                                         <td>
-                                            <input type="text" disabled name="inv_stock[]" class="form-control inv_stock"
+                                            <input type="text" disabled name="inv_stock[]" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all inv_stock"
                                                 value="{{ $stock->orders()->sum('quantity_in') + $stock->opening_qty }}" />
                                         </td>
                                         <td>
                                             <input type="number"
                                                 value={{ $stock->orders()->sum('quantity_in') + $stock->opening_qty - $stock->orders()->sum('quantity_out') }}
-                                                name="actual_stock[]" class="form-control actual_stock" />
+                                                name="actual_stock[]" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all actual_stock" />
                                         </td>
                                         <td>
                                             <input type="number" disabled name="different[]"
-                                                class="font-extrabold form-control different" value="0" />
+                                                class="font-extrabold w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all different" value="0" />
                                         </td>
                                     </tr>
                                 @endforeach
@@ -64,9 +64,9 @@
 
                         </table>
                     </div>
-                    <div class="card-footer">
-                        <div class="text-md-right">
-                            <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
+                    <div class="px-6 py-4 border-t border-gray-200">
+                        <div class="text-right">
+                            <x-button class="success" type="submit">{{ trans('general.Submit') }}</x-button>
                         </div>
                     </div>
                 </form>

@@ -8,41 +8,41 @@
             font-size: 0.875rem;
         }
 
-        .table {
+        .data-table {
             border: 1px solid black !important;
 
             border-collapse: collapse;
         }
 
-        .table td,
-        .table th {
+        .data-table td,
+        .data-table th {
             border: 1px solid black !important;
             border-collapse: collapse;
         }
     </style>
 @endpush
 @section('content')
-    <div class="row">
-        <div class="col">
-            <div class="mb-4 card">
-                <div class="card-header">
-                    <div class="row">
-                        <div class="col">{{ $class->title }}</div>
-                        <div class="text-right col">
-                            <button class="btn btn-primary" onclick="printDiv()">{{ trans('general.print') }}</button>
+    <div class="flex flex-wrap">
+        <div class="flex-1">
+            <div class="mb-4 bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <div class="flex flex-wrap">
+                        <div class="flex-1">{{ $class->title }}</div>
+                        <div class="text-right flex-1">
+                            <x-button class="primary" type="button" onclick="printDiv()">{{ trans('general.print') }}</x-button>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive" id="print">
-                        <table class="table">
+                <div class="p-6">
+                    <div class="overflow-x-auto" id="print">
+                        <table class="data-table w-full">
                             <tr>
                                 <th>{{ $class->title }}</th>
                                 <th>{{ $class->grade->name }}</th>
                                 <th>{{ $class->class_room->name }}</th>
                             </tr>
                         </table>
-                        <table class="table">
+                        <table class="data-table w-full">
                             <tr>
                                 <th>#</th>
                                 <th>{{ trans('student.name') }}</th>
@@ -67,6 +67,9 @@
         </div>
 
     </div>
+    <style>
+        .data-table th { font-weight: bold; }
+    </style>
     @push('scripts')
     @endpush
 @endsection

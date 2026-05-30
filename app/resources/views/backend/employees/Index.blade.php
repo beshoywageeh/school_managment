@@ -3,8 +3,8 @@
     {{ trans('employees.title') }}
 @endsection
 @section('content')
-    <div class="mb-4 row">
-        <div class="col">
+    <div class="mb-4 flex flex-wrap">
+        <div class="flex-1">
 
             <livewire-employees-table />
 

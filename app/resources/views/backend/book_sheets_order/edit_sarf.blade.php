@@ -4,28 +4,28 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="row mb-30">
-        <div class="col">
-            <div class="card">
+    <div class="flex flex-wrap mb-30">
+        <div class="flex-1">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
                 <form action="{{ route('bookSheetsOrder.update_sarf') }}"method="post" autocomplete="off">
                     @csrf
                     <input type="hidden" name="order_id" value="{{ $order->id }}">
-                    <div class="card-header">
-                        <div class="text-center row">
-                            <div class="col">
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="text-center flex flex-wrap">
+                            <div class="flex-1">
                                 <h6>الرقم : {{ $order->auto_number }}</h6>
                             </div>
-                            <div class="col">
+                            <div class="flex-1">
                                 <h6>النوع : {{ trans('stock.income_order') }}</h6>
                             </div>
-                            <div class="col">
+                            <div class="flex-1">
                                 <h6>التاريخ : {{ $order->date }}</h6>
                             </div>
-                            <div class="col">
+                            <div class="flex-1">
                                 <h6>الوقت : {{ $order->created_at->format('g:i:s') }}</h6>
                             </div>
-                            <div class="col">
-                                <div class="form-group">
+                            <div class="flex-1">
+                                <div class="mb-4">
                                     <label for="">{{ trans('student.name') }}</label>
                                     <select name="student_id" id="student" class="select2 student">
                                         <option value="" selected disabled>{{ trans('general.select') }}</option>
@@ -39,8 +39,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <table class="table text-center table-bordered">
+                    <div class="p-6">
+                        <table class="w-full text-center border border-gray-200">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -56,7 +56,7 @@
                                         <td><input type="hidden"
                                                 name="id[]"value="{{ $stock->id }}" />{{ $stock->name }}
                                         </td>
-                                        <td><input class="form-control" name="quantity[]" value="1" type="number"
+                                        <td><input class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" name="quantity[]" value="1" type="number"
                                                 value="{{ $stock->pivot->quantity_out }}" /></td>
                                         <td>{{ $stock->sales_price }}</td>
                                     </tr>
@@ -65,9 +65,9 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="card-footer">
-                        <div class="text-md-right">
-                            <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
+                    <div class="px-6 py-4 border-t border-gray-200">
+                        <div class="text-right">
+                            <x-button class="success" type="submit">{{ trans('general.Submit') }}</x-button>
                         </div>
                     </div>
                 </form>
@@ -98,7 +98,7 @@
 <td>${index + 1}</td>
 <td><input type="hidden" name="id[]" value="${item.id}">${item.name}</td>
 <td>${item.sales_price}</td>
-<td><input class="form-control" name="quantity[]" value="1" type="number"/></td>
+<td><input class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" name="quantity[]" value="1" type="number"/></td>
 </tr>`;
                                 table.innerHTML += row;
                             });

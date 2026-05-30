@@ -11,12 +11,12 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="row mb-30">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    <div class="table-responsive">
-                        <table class="table table-sm table-borderless">
+    <div class="flex flex-wrap mb-30">
+        <div class="flex-1">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
                             <tr>
                                 <th>الرقم : {{ $order->auto_number }}</th>
                                 <th>النوع : @if ($type == 1)
@@ -42,10 +42,10 @@
                     @elseif($type == 2)
                         <form action="{{ route('orders.submit_transfer') }}"method="post" autocomplete="off">
                 @endif
-                <div class="card-body">
+                <div class="p-6">
                     @csrf
                     <input type="hidden" name="id" value="{{ $order->id }}">
-                    <table class="table table-sm table-bordered">
+                    <table class="w-full text-sm border border-gray-200">
                         <thead>
                             <tr>
                                 <th>{{ trans('stock.name') }}</th>
@@ -60,7 +60,7 @@
                         <tbody data-repeater-list="List_stocks">
                             <tr data-repeater-item>
                                 <td>
-                                    <select name="name" class="custom-select">
+                                    <select name="name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
                                         <option value="" selected disabled>{{ trans('general.select') }}</option>
                                         @forelse ($stocks as $stock)
                                             <option value={{ $stock->id }}>
@@ -73,40 +73,39 @@
                                 </td>
                                 @if ($type == 1)
                                     <td>
-                                        <input type="text" name="manual_num" class="form-control" />
+                                        <input type="text" name="manual_num" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" />
                                     </td>
                                     <td>
                                         <input type="date" name="manual_date" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                                     </td>
                                 @endif
                                 <td>
-                                    <input type="number" name="quantity" class="form-control" />
+                                    <input type="number" name="quantity" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" />
                                 </td>
                                 <td>
-                                    <input class="btn btn-danger btn-block" data-repeater-delete type="button"
-                                        value="{{ trans('general.delete') }}" />
+                                    <button type="button" data-repeater-delete class="w-full px-4 py-2 rounded-lg font-medium bg-red-500 text-white hover:bg-red-600">{{ trans('general.delete') }}</button>
                                 </td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="5">
-                                    <button class="btn btn-primary" data-repeater-create
-                                        type="button">{{ trans('stock.new') }}</button>
+                                    <x-button class="primary" type="button" data-repeater-create>{{ trans('stock.new') }}</x-button>
                                 </td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
-                <div class="card-footer">
-                    <div class="text-md-right">
+                <div class="px-6 py-4 border-t border-gray-200">
+                    <div class="text-right">
 
-                        <button class="btn btn-success" type="submit">{{ trans('general.Submit') }}</button>
+                        <x-button class="success" type="submit">{{ trans('general.Submit') }}</x-button>
                     </div>
                 </div>
                 </form>
             </div>
         </div>
+    </div>
     </div>
     @push('scripts')
         <script>

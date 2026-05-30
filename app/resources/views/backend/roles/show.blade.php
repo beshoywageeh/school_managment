@@ -3,7 +3,7 @@
     {{ trans('permissions.title') }} | {{ trans('general.show') }} | {{ $role->name }}
 @endsection
 @section('content')
-    <div class="container-fluid">
+    <div class="w-full">
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>

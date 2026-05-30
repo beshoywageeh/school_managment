@@ -21,8 +21,8 @@
             </div>
         </div>
     </div>
-    <div class="table-responsive">
-        <table class="table table-bordered">
+    <div class="overflow-x-auto">
+        <table class="w-full border border-gray-200">
             <thead class="">
                 <tr>
                     <th><strong>#</strong></th>

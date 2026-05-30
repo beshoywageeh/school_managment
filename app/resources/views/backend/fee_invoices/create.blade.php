@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="mt-6">
-                    <div class="col-12">
+                    <div class="w-full">
                         <input class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium" data-repeater-create type="button"
                             value="{{ trans('general.new') }}" />
                     </div>
