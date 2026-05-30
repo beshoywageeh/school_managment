@@ -12,7 +12,8 @@
                 </button>
             </div>
         </div>
-        <form action="{{ route('outorder.submit_transfer') }}" method="post">
+        <form action="{{ route('outorder.submit_transfer') }}" method="post"
+            x-data="{ items: [{ stock_id: '', qty: '0' }], addItem() { this.items.push({ stock_id: '', qty: '0' }) }, removeItem(index) { this.items.splice(index, 1) } }">
             @csrf
             <div class="p-6" id="print">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -60,30 +61,32 @@
                                 <th class="px-4 py-2"></th>
                             </tr>
                         </thead>
-                        <tbody data-repeater-list="list_outorder">
-                            <tr data-repeater-item>
-                                <td class="px-4 py-2">
-                                    <select name="stock_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" id="">
-                                        <option value="" selected disabled>
-                                            {{ trans('general.choose', ['value' => trans('stock.name')]) }}
-                                        </option>
-                                        @foreach ($stocks->pluck('name', 'id') as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}
+                        <tbody>
+                            <template x-for="(item, index) in items" :key="index">
+                                <tr>
+                                    <td class="px-4 py-2">
+                                        <select :name="'list_outorder[' + index + '][stock_id]'" x-model="items[index].stock_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                                            <option value="" selected disabled>
+                                                {{ trans('general.choose', ['value' => trans('stock.name')]) }}
                                             </option>
-                                        @endforeach
-                                    </select>
-                                </td>
+                                            @foreach ($stocks->pluck('name', 'id') as $id => $name)
+                                                <option value="{{ $id }}">{{ $name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </td>
 
-                                <td class="px-4 py-2"><input type="number" name="qty" value="0"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"></td>
-                                <td class="px-4 py-2"><button type="button" data-repeater-delete class="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"><x-hero-icon name="trash" class="w-5 h-5" /></button></td>
-                            </tr>
+                                    <td class="px-4 py-2"><input type="number" :name="'list_outorder[' + index + '][qty]'" x-model="items[index].qty"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"></td>
+                                    <td class="px-4 py-2"><button type="button" @click="removeItem(index)" class="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"><x-hero-icon name="trash" class="w-5 h-5" /></button></td>
+                                </tr>
+                            </template>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="3" class="px-4 py-4">
-                                    <input class="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium" data-repeater-create
-                                        type="button" value="{{ trans('general.New') }}" />
+                                    <button class="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium" @click="addItem()"
+                                        type="button">{{ trans('general.New') }}</button>
                                 </td>
                             </tr>
                         </tfoot>
@@ -95,20 +98,4 @@
             </div>
         </form>
     </div>
-
-    @push('scripts')
-        <script>
-            $(document).ready(function() {
-                $('.list_outorder').repeater({
-
-                    show: function() {
-                        $(this).slideDown();
-                    },
-                    hide: function(deleteElement) {
-                        $(this).slideUp(deleteElement);
-                    }
-                });
-            });
-        </script>
-    @endpush
 @endsection

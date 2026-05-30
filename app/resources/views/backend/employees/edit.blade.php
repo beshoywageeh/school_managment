@@ -225,27 +225,25 @@
     </form>
     @push('scripts')
         <script>
-            $(document).ready(function() {
-                $('#worker_type').on('change', function() {
-                    const workerTypeId = $(this).val();
-                    $('#jobs').html('<option>{{ trans('general.loading') }}</option>');
-                    $.ajax({
-                        url: "{{ URL::to('/ajax/get_jobs') }}/" + workerTypeId,
-                        method: 'GET',
-                        success: function(data) {
-                            $('#jobs').html(
-                                '<option>{{ trans('employees.select_worker_type') }}</option>');
-                            $.each(data, function(index, job) {
-                                $('#jobs').append($('<option>', {
-                                    value: job.id,
-                                    text: job.name
-                                }));
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('#worker_type').addEventListener('change', function() {
+                    const workerTypeId = this.value;
+                    const jobsSelect = document.querySelector('#jobs');
+                    if (!workerTypeId) return;
+                    jobsSelect.innerHTML = '<option>{{ trans('general.loading') }}</option>';
+                    fetch("{{ URL::to('/ajax/get_jobs') }}/" + workerTypeId)
+                        .then(response => response.json())
+                        .then(data => {
+                            jobsSelect.innerHTML =
+                                '<option>{{ trans('employees.select_worker_type') }}</option>';
+                            data.forEach(function(job) {
+                                const opt = document.createElement('option');
+                                opt.value = job.id;
+                                opt.textContent = job.name;
+                                jobsSelect.appendChild(opt);
                             });
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error fetching jobs:', error);
-                        }
-                    });
+                        })
+                        .catch(error => console.error('Error fetching jobs:', error));
                 });
             });
         </script>

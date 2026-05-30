@@ -106,32 +106,27 @@
     </form>
 
     @push('scripts')
-      
         <script>
-            $(document).ready(function() {
-                $('#grades').on('change', function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('#grades').addEventListener('change', function() {
+                    const classrooms = document.querySelector('#classrooms');
                     classrooms.innerHTML = '<option>{{ trans('general.loading') }}</option>';
-                    let grade = $(this).val();
+                    const grade = this.value;
                     if (grade) {
-                        $.ajax({
-                            url: "{{ URL::to('/ajax/get_classRooms') }}" + grade,
-                            type: "GET",
-                            dataType: "json",
-                            success: function(data) {
-                                $('#classrooms').empty();
-                                $('#classrooms').append(
-                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
-                                );
-                                $.each(data, function(key, value) {
-                                    console.log(key);
-                                    console.log(value.name);
-                                    $('#classrooms').append(
-                                        `<option value="${value.id}">${value.name}</option>`
-                                    );
+                        fetch("{{ URL::to('/ajax/get_classRooms') }}" + grade)
+                            .then(response => response.json())
+                            .then(data => {
+                                classrooms.innerHTML =
+                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>';
+                                data.forEach(function(value) {
+                                    const opt = document.createElement('option');
+                                    opt.value = value.id;
+                                    opt.textContent = value.name;
+                                    classrooms.appendChild(opt);
                                 });
-                            },
-                        });
-                    };
+                            })
+                            .catch(error => console.error('Error fetching classrooms:', error));
+                    }
                 });
             });
         </script>

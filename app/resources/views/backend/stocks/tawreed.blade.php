@@ -36,9 +36,11 @@
             </div>
         </div>
         @if ($type == 1)
-            <form action="{{ route('stocks.stock_submit.store') }}"method="post" autocomplete="off">
+            <form action="{{ route('stocks.stock_submit.store') }}"method="post" autocomplete="off"
+            x-data="{ items: [{ name: '', manual_num: '', manual_date: '', quantity: '' }], addItem() { this.items.push({ name: '', manual_num: '', manual_date: '', quantity: '' }) }, removeItem(index) { this.items.splice(index, 1) } }">
             @elseif($type == 2)
-                <form action="{{ route('orders.submit_transfer') }}"method="post" autocomplete="off">
+                <form action="{{ route('orders.submit_transfer') }}"method="post" autocomplete="off"
+                x-data="{ items: [{ name: '', quantity: '' }], addItem() { this.items.push({ name: '', quantity: '' }) }, removeItem(index) { this.items.splice(index, 1) } }">
         @endif
             <div class="p-6">
                 @csrf
@@ -56,41 +58,43 @@
                                 <th class="px-4 py-2 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('general.delete') }}</th>
                             </tr>
                         </thead>
-                        <tbody data-repeater-list="List_stocks">
-                            <tr data-repeater-item>
-                                <td class="px-4 py-2">
-                                    <select name="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
-                                        <option value="" selected disabled>{{ trans('general.select') }}</option>
-                                        @forelse ($stocks as $stock)
-                                            <option value={{ $stock->id }}>
-                                                {{ $stock->name }}
-                                            </option>
-                                        @empty
-                                            <option value="">{{ trans('general.noDataToShow') }}</option>
-                                        @endforelse
-                                    </select>
-                                </td>
-                                @if ($type == 1)
+                        <tbody>
+                            <template x-for="(item, index) in items" :key="index">
+                                <tr>
                                     <td class="px-4 py-2">
-                                        <input type="text" name="manual_num" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                                        <select :name="'List_stocks[' + index + '][name]'" x-model="items[index].name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                                            <option value="" selected disabled>{{ trans('general.select') }}</option>
+                                            @forelse ($stocks as $stock)
+                                                <option value={{ $stock->id }}>
+                                                    {{ $stock->name }}
+                                                </option>
+                                            @empty
+                                                <option value="">{{ trans('general.noDataToShow') }}</option>
+                                            @endforelse
+                                        </select>
+                                    </td>
+                                    @if ($type == 1)
+                                        <td class="px-4 py-2">
+                                            <input type="text" :name="'List_stocks[' + index + '][manual_num]'" x-model="items[index].manual_num" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                                        </td>
+                                        <td class="px-4 py-2">
+                                            <input type="date" :name="'List_stocks[' + index + '][manual_date]'" x-model="items[index].manual_date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                                        </td>
+                                    @endif
+                                    <td class="px-4 py-2">
+                                        <input type="number" :name="'List_stocks[' + index + '][quantity]'" x-model="items[index].quantity" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                                     </td>
                                     <td class="px-4 py-2">
-                                        <input type="date" name="manual_date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                                        <button class="w-full px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium" @click="removeItem(index)"
+                                            type="button">{{ trans('general.delete') }}</button>
                                     </td>
-                                @endif
-                                <td class="px-4 py-2">
-                                    <input type="number" name="quantity" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
-                                </td>
-                                <td class="px-4 py-2">
-                                    <input class="w-full px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium" data-repeater-delete type="button"
-                                        value="{{ trans('general.delete') }}" />
-                                </td>
-                            </tr>
+                                </tr>
+                            </template>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td colspan="5" class="px-4 py-4">
-                                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium" data-repeater-create
+                                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium" @click="addItem()"
                                         type="button">{{ trans('stock.new') }}</button>
                                 </td>
                             </tr>
@@ -103,19 +107,4 @@
             </div>
             </form>
     </div>
-    @push('scripts')
-        <script>
-            $(document).ready(function() {
-                $('.table').repeater({
-
-                    show: function() {
-                        $(this).slideDown();
-                    },
-                    hide: function(deleteElement) {
-                        $(this).slideUp(deleteElement);
-                    }
-                });
-            });
-        </script>
-    @endpush
 @endsection

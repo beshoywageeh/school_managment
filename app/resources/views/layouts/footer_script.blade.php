@@ -1,14 +1,14 @@
-<!-- jquery -->
-<script src="{{ URL::asset('assests\js\jquery-3.3.1.min.js') }}"></script>
-
-
-<!-- plugins-jquery (includes Bootstrap) -->
-<script src="{{ URL::asset('assests/js/plugins-jquery.js') }}"></script>
-<script src="{{ URL::asset('assests/js/custom.js') }}"></script>
-
 <script src="{{ URL::asset('assests/js/tomselect.js') }}"></script>
 
 <script>
+    function confirmation(event) {
+        if (!confirm('هل أنت متأكد من عملية الحذف؟')) {
+            event.preventDefault();
+            return false;
+        }
+        return true;
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         function printDiv() {
             var printContents = document.getElementById('print').innerHTML;

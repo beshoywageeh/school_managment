@@ -166,7 +166,7 @@
 
 
     <!-- Quick Actions -->
-    <div class="flex flex-wrap gap-4 mb-6" style="display: flex !important; flex-wrap: wrap !important;">
+    <div class="flex flex-wrap gap-4 mb-6">
         @can('Students-create')
             <a href="{{ route('students.index') }}" class="quick-action-tile">
                 <div class="action-icon">
@@ -241,7 +241,7 @@
     </div>
 
     <!-- Charts -->
-    <div class="flex flex-wrap gap-6 mb-6" style="display: flex !important; flex-wrap: wrap !important;">
+    <div class="flex flex-wrap gap-6 mb-6">
         @if (Auth::user()->hasAnyPermission([
                 'academic_year-list',
                 'schoolfees-list',

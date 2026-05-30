@@ -1,9 +1,21 @@
-<div class="modal fade" id="Import_Excel" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="relative flex flex-col w-full bg-white rounded-lg shadow-xl border-0">
+<div x-data="{ showImportModal: false }">
+    <button type="button" x-on:click="showImportModal = true"
+        class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+        </svg>
+        {{ trans('general.Import_Excel') }}
+    </button>
+
+    <div x-show="showImportModal" x-transition
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+        x-on:click.self="showImportModal = false"
+        style="display: none;">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                 <h3 class="text-lg font-semibold text-gray-800">{{ trans('general.Import_Excel') }}</h3>
-                <button type="button" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100" data-dismiss="modal">
+                <button type="button" @click="showImportModal = false"
+                    class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -26,7 +38,8 @@
                         class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium">{{ trans('general.download_form') }}</a>
                     <div class="flex gap-2">
                         <button class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium" type="submit">{{ trans('general.Submit') }}</button>
-                        <button class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium" data-dismiss="modal">{{ trans('general.Cancel') }}</button>
+                        <button type="button" @click="showImportModal = false"
+                            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium">{{ trans('general.Cancel') }}</button>
                     </div>
                 </div>
             </form>

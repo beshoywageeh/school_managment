@@ -81,63 +81,46 @@
 
     @push('scripts')
         <script>
-            $(document).ready(function() {
-                $('#old_grade').on('change', function() {
-                    $('#old_class').empty();
-
-                    $('#old_class').append('<option>{{ trans('general.loading') }}</option>');
-                    let grade = $(this).val();
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('#old_grade').addEventListener('change', function() {
+                    const oldClass = document.querySelector('#old_class');
+                    oldClass.innerHTML = '<option>{{ trans('general.loading') }}</option>';
+                    const grade = this.value;
                     if (grade) {
-                        $.ajax({
-                            url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
-                            type: "GET",
-                            dataType: "json",
-                            success: function(data) {
-                                $('#old_class').empty();
-
-                                $('#old_class').append(
-                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
-                                );
-                                $.each(data, function(key, value) {
-
-                                    $('#old_class').append(
-                                        `<option value="${value.id}">${value.name}</option>`
-                                    );
-
+                        fetch("{{ URL::to('/ajax/get_classRooms') }}/" + grade)
+                            .then(response => response.json())
+                            .then(data => {
+                                oldClass.innerHTML =
+                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>';
+                                data.forEach(function(value) {
+                                    const opt = document.createElement('option');
+                                    opt.value = value.id;
+                                    opt.textContent = value.name;
+                                    oldClass.appendChild(opt);
                                 });
-                            },
-                        });
-                    };
+                            })
+                            .catch(error => console.error('Error fetching classrooms:', error));
+                    }
                 });
-            });
-        </script>
-        <script>
-            $(document).ready(function() {
-                $('#new_grade').on('change', function() {
-                    $('#new_class').empty();
-                    $('#new_class').append('<option>{{ trans('general.loading') }}</option>');
-                    let grade = $(this).val();
+                document.querySelector('#new_grade').addEventListener('change', function() {
+                    const newClass = document.querySelector('#new_class');
+                    newClass.innerHTML = '<option>{{ trans('general.loading') }}</option>';
+                    const grade = this.value;
                     if (grade) {
-                        $.ajax({
-                            url: "{{ URL::to('/ajax/get_classRooms') }}/" + grade,
-                            type: "GET",
-                            dataType: "json",
-                            success: function(data) {
-                                $('#new_class').empty();
-
-                                $('#new_class').append(
-                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>'
-                                );
-                                $.each(data, function(key, value) {
-
-                                    $('#new_class').append(
-                                        `<option value="${value.id}">${value.name}</option>`
-                                    );
-
+                        fetch("{{ URL::to('/ajax/get_classRooms') }}/" + grade)
+                            .then(response => response.json())
+                            .then(data => {
+                                newClass.innerHTML =
+                                    '<option selected disabled>{{ trans('student.choose_classroom') }}</option>';
+                                data.forEach(function(value) {
+                                    const opt = document.createElement('option');
+                                    opt.value = value.id;
+                                    opt.textContent = value.name;
+                                    newClass.appendChild(opt);
                                 });
-                            },
-                        });
-                    };
+                            })
+                            .catch(error => console.error('Error fetching classrooms:', error));
+                    }
                 });
             });
         </script>

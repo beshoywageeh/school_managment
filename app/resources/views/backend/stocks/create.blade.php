@@ -18,11 +18,12 @@
                     </svg>
                 </button>
             </div>
-            <form action="{{ route('stocks.store') }}" method="POST">
+            <form action="{{ route('stocks.store') }}" method="POST"
+                x-data="{ items: [{ name: '', opening_qty: '', price: '' }], addItem() { this.items.push({ name: '', opening_qty: '', price: '' }) }, removeItem(index) { this.items.splice(index, 1) } }">
                 @csrf
                 <div class="p-6">
                     <div class="overflow-x-auto">
-                        <table class="list_stocks w-full">
+                        <table class="w-full">
                             <thead>
                                 <tr>
                                     <th class="py-2 px-4 text-right text-sm font-medium text-gray-700">{{ trans('stock.name') }}</th>
@@ -31,37 +32,38 @@
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody data-repeater-list="list_stocks">
-                                <tr data-repeater-item>
-                                    <td class="py-2 px-2">
-                                        <input type="text" name="name" list="stocks" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"/>
-                                        <datalist id="stocks">
-                                            @foreach ($stocks as $stock)
-                                                <option value="{{ $stock->name }}">
-                                            @endforeach
-                                        </datalist>
-                                    </td>
-                                    <td class="py-2 px-2">
-                                        <input type="number" name="opening_qty" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
-                                    </td>
-                                    <td class="py-2 px-2">
-                                        <input type="number" name="price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
-                                    </td>
-                                    <td class="py-2 px-2">
-                                        <button type="button" class="w-full px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                                            data-repeater-delete>
-                                            <svg class="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                        </button>
-                                    </td>
-                                </tr>
+                            <tbody>
+                                <template x-for="(item, index) in items" :key="index">
+                                    <tr>
+                                        <td class="py-2 px-2">
+                                            <input type="text" :name="'list_stocks[' + index + '][name]'" x-model="items[index].name" list="stocks" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"/>
+                                            <datalist id="stocks">
+                                                @foreach ($stocks as $stock)
+                                                    <option value="{{ $stock->name }}">
+                                                @endforeach
+                                            </datalist>
+                                        </td>
+                                        <td class="py-2 px-2">
+                                            <input type="number" :name="'list_stocks[' + index + '][opening_qty]'" x-model="items[index].opening_qty" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                                        </td>
+                                        <td class="py-2 px-2">
+                                            <input type="number" :name="'list_stocks[' + index + '][price]'" x-model="items[index].price" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                                        </td>
+                                        <td class="py-2 px-2">
+                                            <button type="button" @click="removeItem(index)" class="w-full px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                                                <svg class="w-5 h-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <td colspan="4" class="py-2">
-                                        <input class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium" data-repeater-create
-                                            type="button" value="{{ trans('general.new') }}" />
+                                        <button class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium" @click="addItem()"
+                                            type="button">{{ trans('general.new') }}</button>
                                     </td>
                                 </tr>
                             </tfoot>

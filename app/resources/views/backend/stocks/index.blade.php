@@ -99,18 +99,5 @@
     </div>
     @include('backend.stocks.create')
 
-    @push('scripts')
-        <script>
-            $(document).ready(function() {
-                $('.list_stocks').repeater({
-                    show: function() {
-                        $(this).slideDown();
-                    },
-                    hide: function(deleteElement) {
-                        $(this).slideUp(deleteElement);
-                    }
-                });
-            });
-        </script>
-    @endpush
+
 @endsection
