@@ -5,9 +5,7 @@ namespace App\Livewire\Students;
 use App\Enums\Status;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
-use App\Models\book_sheet;
 use App\Models\class_room;
-use App\Models\clothes;
 use App\Models\Grade;
 use App\Models\My_parents;
 use App\Models\School_Fee;
@@ -93,7 +91,16 @@ class Students extends Component
 
     public function updating($name)
     {
-        if (in_array($name, ['search', 'grade_id', 'classroom_id', 'birth_date_filter', 'joinDateTo', 'perPage'])) {
+        if (
+            in_array($name, [
+                'search',
+                'grade_id',
+                'classroom_id',
+                'birth_date_filter',
+                'joinDateTo',
+                'perPage',
+            ])
+        ) {
             $this->resetPage();
         }
     }
@@ -116,11 +123,13 @@ class Students extends Component
             ->where('classroom_id', $this->classroom)
             ->where('school_id', Auth::user()->school_id)
             ->get();
-        $this->clothes = clothes::where('grade_id', $this->grade)
+        $this->clothes = InventoryItem::ByType('clothes')
+            ->where('grade_id', $this->grade)
             ->where('classroom_id', $this->classroom)
             ->where('school_id', Auth::user()->school_id)
             ->get();
-        $this->books = book_sheet::where('grade_id', $this->grade)
+        $this->books = InventoryItem::ByType('books')
+            ->where('grade_id', $this->grade)
             ->where('classroom_id', $this->classroom)
             ->where('school_id', Auth::user()->school_id)
             ->get();
@@ -128,14 +137,13 @@ class Students extends Component
 
     public function updatedBirthDate($value)
     {
-
         $birthDate = Carbon::parse($value);
         $targetDate = Carbon::create(now()->year, 10, 1);
 
         $years = $birthDate->diffInYears($targetDate);
         $months = $birthDate->diffInMonths($targetDate) % 12;
         $days = $birthDate->diffInDays(
-            $targetDate->copy()->subYears($years)->subMonths($months)
+            $targetDate->copy()->subYears($years)->subMonths($months),
         );
 
         $this->year = $years;
@@ -153,7 +161,8 @@ class Students extends Component
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+            $this->sortDirection =
+                $this->sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
             $this->sortDirection = 'asc';
         }
@@ -187,7 +196,11 @@ class Students extends Component
     {
         return My_parents::where('school_id', Auth::user()->school_id)
             ->when($this->parent_name_input, function ($query) {
-                $query->where('Father_Name', 'like', '%'.$this->parent_name_input.'%');
+                $query->where(
+                    'Father_Name',
+                    'like',
+                    '%'.$this->parent_name_input.'%',
+                );
             })
             ->limit(10)
             ->get();
@@ -218,7 +231,9 @@ class Students extends Component
                 ->first();
 
             if (! $academicYear) {
-                throw new \Exception(trans('general.Message.NoOpenAcademicYear'));
+                throw new \Exception(
+                    trans('general.Message.NoOpenAcademicYear'),
+                );
             }
 
             // Find or create parent
@@ -254,7 +269,7 @@ class Students extends Component
                     $student,
                     $fee->id,
                     $academicYear->id,
-                    $school->id
+                    $school->id,
                 );
 
                 // Create Student Account entry (Recorded as Credit in this system's convention for invoices)
@@ -264,7 +279,7 @@ class Students extends Component
                     $academicYear->id,
                     'invoice',
                     0.0,
-                    $fee->amount
+                    $fee->amount,
                 );
             }
 
@@ -312,27 +327,55 @@ class Students extends Component
 
             ->join('parents', 'students.parent_id', '=', 'parents.id')
             ->join('grades', 'students.grade_id', '=', 'grades.id')
-            ->join('class_rooms', 'students.classroom_id', '=', 'class_rooms.id')
+            ->join(
+                'class_rooms',
+                'students.classroom_id',
+                '=',
+                'class_rooms.id',
+            )
             ->where('students.school_id', $school->id)
             ->whereNull('students.deleted_at')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('students.name', 'like', '%'.$this->search.'%')
-                        ->orWhere('parents.Father_Name', 'like', '%'.$this->search.'%')
-                        ->orWhere('students.address', 'like', '%'.$this->search.'%');
+                    $q->where(
+                        'students.name',
+                        'like',
+                        '%'.$this->search.'%',
+                    )
+                        ->orWhere(
+                            'parents.Father_Name',
+                            'like',
+                            '%'.$this->search.'%',
+                        )
+                        ->orWhere(
+                            'students.address',
+                            'like',
+                            '%'.$this->search.'%',
+                        );
                 });
             })
             ->when($this->grade_id, function ($query) {
                 $query->where('students.grade_id', $this->grade_id);
             })
             ->when($this->classroom_id, function ($query) {
-                $query->where('students.classroom_id', $this->classroom_id);
+                $query->where(
+                    'students.classroom_id',
+                    $this->classroom_id,
+                );
             })
             ->when($this->birth_date_filter, function ($query) {
-                $query->whereDate('students.birth_date', '>=', Carbon::parse($this->birth_date_filter));
+                $query->whereDate(
+                    'students.birth_date',
+                    '>=',
+                    Carbon::parse($this->birth_date_filter),
+                );
             })
             ->when($this->joinDateTo, function ($query) {
-                $query->whereDate('students.join_date', '<=', Carbon::parse($this->joinDateTo));
+                $query->whereDate(
+                    'students.join_date',
+                    '<=',
+                    Carbon::parse($this->joinDateTo),
+                );
             })
             ->select([
                 'students.*',
@@ -343,7 +386,9 @@ class Students extends Component
             ->orderBy($this->sortField, $this->sortDirection);
 
         if (! Auth::user()->hasRole('Admin')) {
-            $gradeIds = DB::table('teacher_grade')->where('teacher_id', Auth::id())->pluck('grade_id');
+            $gradeIds = DB::table('teacher_grade')
+                ->where('teacher_id', Auth::id())
+                ->pluck('grade_id');
             $query->whereIn('students.grade_id', $gradeIds);
         }
 

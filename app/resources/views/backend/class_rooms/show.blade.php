@@ -1,133 +1,44 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $data['class_room']->grade->name . ' - ' . $data['class_room']->name }}</title>
-</head>
-<style>
-    body {
-        font-size: 0.875rem;
-    }
-
-    .data-table {
-        border: 1px solid black !important;
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .data-table td,
-    .data-table th {
-        border: 1px solid black !important;
-        border-collapse: collapse;
-        padding: 3px;
-    }
-
-    .data-table th {
-        font-weight: 1.2rem !important;
-    }
-
-    p {
-        margin: 0;
-        padding: 0;
-    }
-
-    #heading {
-        padding-top: 15px;
-        padding-bottom: 15px;
-    }
-
-    .text-right {
-        text-align: right;
-    }
-
-    .text-left {
-        text-align: left;
-    }
-
-    @page {
-        header: page-header;
-        footer: page-footer;
-    }
-</style>
-
-<body>
-
-
-    <table class="data-table w-full text-sm" style="text-align: center;">
-        <thead>
-            <tr>
-                <th rowspan="2"><strong>#</strong></th>
-                <th rowspan="2"><strong>{{ trans('student.name') }}</strong></th>
-                <th colspan="3"><strong>{{ trans('student.birth_date') }}</strong></th>
-                <th colspan="3"><strong>{{ trans('student.october') }}</strong></th>
-                <th rowspan="2"><strong>{{ trans('student.national_id') }}</strong></th>
-            </tr>
-            <tr>
-                <th><strong>{{ trans('student.day') }}</strong></th>
-                <th><strong>{{ trans('student.month') }}</strong></th>
-                <th><strong>{{ trans('student.year') }}</strong></th>
-                <th><strong>{{ trans('student.day') }}</strong></th>
-                <th><strong>{{ trans('student.month') }}</strong></th>
-                <th><strong>{{ trans('student.year') }}</strong></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($data['class_room']->students as $student)
-                @php
-                    $age = explode('-', $student->birth_at_begin);
-                @endphp
-                <tr>
-                    <td> {{ $loop->iteration }}</td>
-                    <td>{{ $student->name }}</td>
-                    <td>{{ \Carbon\Carbon::parse($student->birth_date)->format('d') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($student->birth_date)->format('m') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($student->birth_date)->format('Y') }}</td>
-                    <td>{{ $age[2] ?? '-' }}</td>
-                    <td>{{ $age[1] ?? '-' }}</td>
-                    <td>{{ $age[0] ?? '-' }}</td>
-                    <td>{{ $student->national_id }}
-                    </td>
+@section('content')
+    <div class="px-2">
+        <table class="w-full border border-black border-collapse text-center text-xs">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th rowspan="2" class="border border-black px-2 py-1.5 font-bold">#</th>
+                    <th rowspan="2" class="border border-black px-2 py-1.5 font-bold">{{ trans('student.name') }}</th>
+                    <th colspan="3" class="border border-black px-2 py-1.5 font-bold">{{ trans('student.birth_date') }}</th>
+                    <th colspan="3" class="border border-black px-2 py-1.5 font-bold">{{ trans('student.october') }}</th>
+                    <th rowspan="2" class="border border-black px-2 py-1.5 font-bold">{{ trans('student.national_id') }}</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-    <htmlpageheader name="page-header">
-        <div style="height: 5px; width: 95%; margin: auto;">
-            <div style="font-size: 15px; font-weight:bold; margin-top:50px;border-bottom:2px solid black">
-                <table class="data-table" style="width:100%">
-                    <tr>
-                        <td class="text-right">
-                            {!! $school->heading_right !!}
-                        </td>
-                        <td>
-                            <h6 style="text-align: center; align-items:bottom">
-                                {{ trans('report.choose_grade_head', ['grade' => $data['class_room']->grade->name, 'class_room' => $data['class_room']->name, 'acc' => $data['acc_year']->view]) }}
-                            </h6>
-                        </td>
-                        <td class="text-left">
-                            @if ($school->image == null)
-                                <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('assests/images/loop_labs.png') }}" alt="{{ $school->name }}">
-                            @else
-                                <img class="img-fluid" style="max-width:10%"
-                                    src="{{ asset('storage/app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
-                                    alt="{{ $school->name }}">
-                            @endif
-                        </td>
+                <tr class="bg-gray-50">
+                    <th class="border border-black px-2 py-1 font-bold">{{ trans('student.day') }}</th>
+                    <th class="border border-black px-2 py-1 font-bold">{{ trans('student.month') }}</th>
+                    <th class="border border-black px-2 py-1 font-bold">{{ trans('student.year') }}</th>
+                    <th class="border border-black px-2 py-1 font-bold">{{ trans('student.day') }}</th>
+                    <th class="border border-black px-2 py-1 font-bold">{{ trans('student.month') }}</th>
+                    <th class="border border-black px-2 py-1 font-bold">{{ trans('student.year') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($data['class_room']->students as $student)
+                    @php
+                        $age = explode('-', $student->birth_at_begin);
+                    @endphp
+                    <tr class="even:bg-gray-50 hover:bg-gray-100">
+                        <td class="border border-black px-2 py-1">{{ $loop->iteration }}</td>
+                        <td class="border border-black px-2 py-1 text-right">{{ $student->name }}</td>
+                        <td class="border border-black px-2 py-1">{{ \Carbon\Carbon::parse($student->birth_date)->format('d') }}</td>
+                        <td class="border border-black px-2 py-1">{{ \Carbon\Carbon::parse($student->birth_date)->format('m') }}</td>
+                        <td class="border border-black px-2 py-1">{{ \Carbon\Carbon::parse($student->birth_date)->format('Y') }}</td>
+                        <td class="border border-black px-2 py-1">{{ $age[2] ?? '-' }}</td>
+                        <td class="border border-black px-2 py-1">{{ $age[1] ?? '-' }}</td>
+                        <td class="border border-black px-2 py-1">{{ $age[0] ?? '-' }}</td>
+                        <td class="border border-black px-2 py-1">{{ $student->national_id }}</td>
                     </tr>
-                </table>
-            </div>
-        </div>
-    </htmlpageheader>
-    <htmlpagefooter name="page-footer">
-        <div style="border-top:1px solid black;">
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
-            <p style="text-align: center;">{PAGENO}</p>
-        </div>
-    </htmlpagefooter>
-</body>
-
-</html>
+@endsection

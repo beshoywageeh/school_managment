@@ -75,8 +75,13 @@ return [
         'fee_invoice' => 'فواتير دراسية',
         'payment_recipt' => 'مدفوعات دراسية',
         'fee_exception' => 'معافات',
-        'notpayed' => 'لم يتم الدفع',
-        'payed' => 'تم الدفع',
+        'unpaid' => 'لم يتم الدفع',
+        'paid' => 'تم الدفع',
         'wating' => 'مؤجل',
+    ],
+    'inventory_item_type' => [
+        'stock' => 'مخزون',
+        'clothing' => 'ملابس',
+        'book' => 'كتب',
     ],
 ];

@@ -32,15 +32,17 @@
                 plugins: ['remove_button'],
                 persist: false,
                 create: true,
-                maxItems: 1,
+                maxItems: null,
             });
         });
         // Update date and time
         function updateDateTime() {
+            const el = document.getElementById('datetime');
+            if (!el) return;
             const now = new Date();
             const date = now.toLocaleDateString();
             const time = now.toLocaleTimeString();
-            document.getElementById('datetime').textContent = `${date} ${time}`;
+            el.textContent = `${date} ${time}`;
         }
 
         setInterval(updateDateTime, 1000);

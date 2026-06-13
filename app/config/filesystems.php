@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Filesystem Disk
@@ -29,7 +28,6 @@ return [
     */
 
     'disks' => [
-
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
@@ -54,14 +52,14 @@ return [
             'root' => storage_path('app/backup'),
             'url' => env('APP_URL').'/backup',
             'visibility' => 'public',
-            'trow' => false,
+            'throw' => false,
         ],
         'logs' => [
             'driver' => 'local',
             'root' => storage_path('logs'),
             'url' => env('APP_URL').'/logs',
             'visibility' => 'public',
-            'trow' => false,
+            'throw' => false,
         ],
         's3' => [
             'driver' => 's3',
@@ -71,10 +69,12 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
-            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'use_path_style_endpoint' => env(
+                'AWS_USE_PATH_STYLE_ENDPOINT',
+                false,
+            ),
             'throw' => false,
         ],
-
     ],
 
     /*
@@ -91,5 +91,4 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/'),
     ],
-
 ];

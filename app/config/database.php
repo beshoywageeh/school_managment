@@ -67,7 +67,7 @@ return [
                 : [],
             'dump' => [
                 'dump_binary_path' => '/usr/bin', // only the path, so without `mysqldump` or `pg_dump`
-                'use_single_transaction',
+                'use_single_transaction' => true,
                 'timeout' => 60 * 5,
             ],
         ],

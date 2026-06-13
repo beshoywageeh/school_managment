@@ -70,7 +70,7 @@ class HomeController extends Controller
                 ),
                 $financialData,
                 $chartData,
-                $revenueTrend
+                $revenueTrend,
             ),
         );
     }
@@ -109,18 +109,31 @@ class HomeController extends Controller
     private function getFinancialData(int $schoolId): array
     {
         return [
-            'credit' => StudentAccount::where('type', 'invoice')->sum('debit'),
+            'credit' => StudentAccount::where('type', 'invoice')->sum(
+                'debit',
+            ),
             'payment_parts' => PaymentParts::where('school_id', $schoolId)
-                ->where('status', 'payed')
+                ->where('status', 'paid')
                 ->sum('amount'),
-            'payments' => Recipt_Payment::where('school_id', $schoolId)->sum('Debit'),
+            'payments' => Recipt_Payment::where(
+                'school_id',
+                $schoolId,
+            )->sum('Debit'),
             // Detailed totals
             'totalInvoiced' => DB::table('fee_invoices')
-                ->join('school__fees', 'fee_invoices.school_fee_id', '=', 'school__fees.id')
+                ->join(
+                    'school__fees',
+                    'fee_invoices.school_fee_id',
+                    '=',
+                    'school__fees.id',
+                )
                 ->where('fee_invoices.school_id', $schoolId)
                 ->whereNull('fee_invoices.deleted_at')
                 ->sum('school__fees.amount'),
-            'totalPaid' => Recipt_Payment::where('school_id', $schoolId)->sum('Debit'),
+            'totalPaid' => Recipt_Payment::where(
+                'school_id',
+                $schoolId,
+            )->sum('Debit'),
         ];
     }
 
@@ -157,16 +170,12 @@ class HomeController extends Controller
         $chart_data = [];
 
         foreach ($grades as $index => $grade) {
-
             foreach ($grade->class_rooms as $classroom) {
                 $chart_labels[] = "{$grade->name} - {$classroom->name}";
                 $chart_data[] = $classroom->students_count;
             }
         }
 
-        return compact(
-            'chart_labels',
-            'chart_data',
-        );
+        return compact('chart_labels', 'chart_data');
     }
 }

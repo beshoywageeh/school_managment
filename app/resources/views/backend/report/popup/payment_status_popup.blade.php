@@ -37,9 +37,9 @@
                     <option value="" selected disabled>
                         {{ trans('general.choose', ['value' => trans('report.payment_status')]) }}
                     </option>
-                    <option value="0">{{ trans('general.all') }}</option>
-                    <option value="1">{{ trans('clothes.not_payed') }}</option>
-                    <option value="2">{{ trans('clothes.payed') }}</option>
+                    <option value="all">{{ trans('general.all') }}</option>
+                    <option value="unpaid">{{ trans('clothes.unpaid') }}</option>
+                    <option value="paid">{{ trans('clothes.paid') }}</option>
                 </select>
             </div>
         </div>

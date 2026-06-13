@@ -33,7 +33,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Grades.title') }}</label>
                             <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 tom-select"
-                                    x-model="class_room.class_id"
+                                    x-model="classname.class_id"
                                     :name="`classroom[${index}][class_id]`"
                                     required>
                                 <option value="" @disabled(true)>
@@ -53,7 +53,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('class_rooms.Name') }}</label>
                             <input type="text"
-                                   x-model="class_room.class_name"
+                                   x-model="classname.class_name"
                                    :name="`classroom[${index}][class_name]`"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200"
                                    placeholder="مثال: فصل 1/1"
@@ -64,7 +64,7 @@
                         <div class="flex items-center justify-between md:justify-start gap-2 h-10">
                             <button type="button" x-on:click="removeRow(index)"
                                 class="h-10 px-3 flex items-center justify-center gap-1 rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
-                                :disabled="class_rooms.length <= 1">
+                                :disabled="classes.length <= 1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>

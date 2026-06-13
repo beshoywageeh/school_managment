@@ -27,9 +27,12 @@ class GradesController extends Controller
         if (Auth::user()->hasRole('Admin')) {
             $gradesQuery->withSum('fees', 'amount');
         } else {
-            $gradesQuery->whereIn('id', DB::table('teacher_grade')
-                ->where('teacher_id', Auth::id())
-                ->pluck('grade_id'));
+            $gradesQuery->whereIn(
+                'id',
+                DB::table('teacher_grade')
+                    ->where('teacher_id', Auth::id())
+                    ->pluck('grade_id'),
+            );
         }
 
         $data = [
@@ -54,8 +57,15 @@ class GradesController extends Controller
                 'user_id' => Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
-            $grade->users()->attach($request->user_id, ['school_id' => $this->getSchool()->id]);
-            $this->logActivity(trans('log.actions.added'), trans('log.models.grade.created', ['value' => $request->Grade_Name]));
+            $grade->users()->attach($request->user_id, [
+                'school_id' => $this->getSchool()->id,
+            ]);
+            $this->logActivity(
+                trans('log.actions.added'),
+                trans('log.models.grade.created', [
+                    'value' => $request->Grade_Name,
+                ]),
+            );
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -73,28 +83,38 @@ class GradesController extends Controller
      */
     public function show(string $id)
     {
-
         try {
             $data['school'] = $this->getSchool();
-            $data['report_data'] = Grade::where('id', $id)->with(['class_rooms', 'class_rooms.students'])->withCount(['class_rooms', 'students'])->first();
+            $data['report_data'] = Grade::where('id', $id)
+                ->with(['class_rooms', 'class_rooms.students'])
+                ->withCount(['class_rooms', 'students'])
+                ->first();
 
-            $pdf = PDF::loadView('backend.Grades.report', ['data' => $data], [], [
-                'format' => 'A4',
-                'default_font_size' => 10,
-                'margin_left' => 2,
-                'margin_right' => 2,
-                'margin_top' => 2,
-                'margin_bottom' => 2,
-                'margin_header' => 2,
-                'margin_footer' => 2,
-                'orientation' => 'P',
-            ]);
+            $pdf = PDF::loadView(
+                'backend.Grades.report',
+                ['data' => $data],
+                [],
+                [
+                    'format' => 'A4',
+                    'default_font_size' => 10,
+                    'margin_left' => 2,
+                    'margin_right' => 2,
+                    'margin_top' => 2,
+                    'margin_bottom' => 2,
+                    'margin_header' => 2,
+                    'margin_footer' => 2,
+                    'orientation' => 'P',
+                ],
+            );
 
             return $pdf->stream($data['report_data']->name.'.pdf');
         } catch (\Exception $e) {
             \Log::error('PDF Generation failed: '.$e->getMessage());
 
-            return back()->with('error', 'Failed to generate PDF. Please try again later.');
+            return back()->with(
+                'error',
+                'Failed to generate PDF. Please try again later.',
+            );
         }
     }
 
@@ -102,19 +122,27 @@ class GradesController extends Controller
 
     public function update(GradeStoreRequest $request)
     {
-        DB::beginTransaction();
         try {
+            DB::beginTransaction();
 
             $grade = Grade::where('id', $request->id)->first();
             $grade->update([
-                'name' => $request->Grade_Name,
+                'name' => $request->name,
             ]);
-            if (isset($request->user_id)) {
-                $grade->users()->sync($request->user_id);
-            } else {
-                $grade->users()->sync([]);
+            $syncData = [];
+            foreach ($request->user_id as $userId) {
+                $syncData[$userId] = [
+                    'school_id' => $this->getSchool()->id,
+                ];
             }
-            $this->logActivity(trans('log.actions.updated'), trans('log.models.grade.updated', ['value' => $request->Grade_Name]));
+
+            $grade->users()->sync($syncData);
+            $this->logActivity(
+                trans('log.actions.updated'),
+                trans('log.models.grade.updated', [
+                    'value' => $request->name,
+                ]),
+            );
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -132,15 +160,23 @@ class GradesController extends Controller
      */
     public function destroy(string $id, Request $request)
     {
-
         $grade = Grade::where('id', $id)->withcount('class_room')->first();
         if ($grade->class_room_count == 0) {
             $grade->delete();
-            $this->logActivity(trans('log.actions.deleted'), trans('log.models.grade.deleted', ['value' => $grade->name]));
+            $this->logActivity(
+                trans('log.actions.deleted'),
+                trans('log.models.grade.deleted', [
+                    'value' => $grade->name,
+                ]),
+            );
 
-            return redirect()->back()->with('success', trans('general.success'));
+            return redirect()
+                ->back()
+                ->with('success', trans('general.success'));
         }
 
-        return redirect()->back()->with('error', trans('grade.cannot_deleted'));
+        return redirect()
+            ->back()
+            ->with('error', trans('grade.cannot_deleted'));
     }
 }

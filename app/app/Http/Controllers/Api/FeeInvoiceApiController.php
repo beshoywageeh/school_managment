@@ -32,7 +32,13 @@ class FeeInvoiceApiController extends Controller
 
     public function show(Fee_invoice $fee_invoice): JsonResponse
     {
-        $fee_invoice->load(['students', 'fees', 'grades', 'classes', 'acd_year']);
+        $fee_invoice->load([
+            'students',
+            'fees',
+            'grades',
+            'classes',
+            'acd_year',
+        ]);
 
         return response()->json([
             'data' => new FeeInvoiceResource($fee_invoice),
@@ -58,15 +64,18 @@ class FeeInvoiceApiController extends Controller
             'academic_year_id' => $validated['academic_year_id'],
             'invoice_date' => now()->toDateString(),
             'amount' => $schoolFee->amount,
-            'status' => 'notpayed',
+            'status' => 'unpaid',
             'school_id' => $request->user()->school_id,
             'user_id' => $request->user()->id,
         ]);
 
-        return response()->json([
-            'data' => new FeeInvoiceResource($invoice),
-            'message' => 'Fee invoice created successfully',
-        ], 201);
+        return response()->json(
+            [
+                'data' => new FeeInvoiceResource($invoice),
+                'message' => 'Fee invoice created successfully',
+            ],
+            201,
+        );
     }
 
     public function destroy(Fee_invoice $fee_invoice): JsonResponse

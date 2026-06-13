@@ -17,17 +17,21 @@ class classes extends Model
         'title',
         'grade_id',
         'class_room_id',
-        'created_at',
-        'updated_at',
-        'deleted_at',
         'tameen',
         'school_id',
         'user_id',
     ];
 
+    protected $casts = [
+        'tameen' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
+
     public function grade()
     {
-        return $this->belongsTo(grade::class);
+        return $this->belongsTo(Grade::class, 'grade_id');
     }
 
     public function class_room()
@@ -37,7 +41,7 @@ class classes extends Model
 
     public function students()
     {
-        return $this->hasMany("App\Models\Student", 'class_id');
+        return $this->hasMany(Student::class, 'class_id');
     }
 
     public function tammen()

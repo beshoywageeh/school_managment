@@ -4,16 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
-use App\Models\book_sheet;
 use App\Models\class_room;
-use App\Models\clothes;
 use App\Models\ExcptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Grade;
+use App\Models\InventoryItem;
 use App\Models\PaymentParts;
 use App\Models\Recipt_Payment;
 use App\Models\School_Fee;
-use App\Models\stock;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use App\Services\PDFExportService;
@@ -34,8 +32,9 @@ class ReportController extends Controller
             ->where('teacher_id', $user)
             ->pluck('grade_id');
         $acadmeic_years = acadmice_year::where('status', 0)->get();
-        $stocks = stock::get();
-        $clothes = clothes::whereIn('grade_id', $user_grade)
+        $stocks = InventoryItem::where('category', 'stock')->get();
+        $clothes = InventoryItem::where('category', 'clothes')
+            ->whereIn('grade_id', $user_grade)
 
             ->with('grade:id,name', 'classroom:id,name')
             ->get();
@@ -115,7 +114,7 @@ class ReportController extends Controller
 
     public function StockProducts(PDFExportService $PDFExport)
     {
-        $data['stocks'] = stock::with('orders')->get();
+        $data['stocks'] = InventoryItem::with('orders')->get();
         $school = $this->GetSchool();
         $PDFExport->PrintPDF(
             'stock_product',
@@ -128,7 +127,9 @@ class ReportController extends Controller
 
     public function clothes_stocks(PDFExportService $PDFExport)
     {
-        $data = clothes::with('orders', 'classroom', 'grade')->get();
+        $data = InventoryItem::where('category', 'clothes')
+            ->with('orders', 'classroom', 'grade')
+            ->get();
         $school = $this->GetSchool();
         $PDFExport->PrintPDF(
             'clothes_stocks',
@@ -141,7 +142,9 @@ class ReportController extends Controller
 
     public function books_sheets(PDFExportService $PDFExport)
     {
-        $data = book_sheet::with('orders', 'classroom', 'grade')->get();
+        $data = InventoryItem::where('category', 'book_sheet')
+            ->with('orders', 'classroom', 'grade')
+            ->get();
         $school = $this->GetSchool();
         $PDFExport->PrintPDF(
             'books_sheets_stocks',
@@ -156,7 +159,7 @@ class ReportController extends Controller
         Request $request,
         PDFExportService $PDFExport,
     ) {
-        $data['stock'] = clothes::where('id', $request->stock)
+        $data['stock'] = InventoryItem::where('id', $request->stock)
             ->with('orders')
             ->first();
         $data['total'] = $this->calculateTotals($data['stock']);
@@ -174,7 +177,7 @@ class ReportController extends Controller
         Request $request,
         PDFExportService $PDFExport,
     ) {
-        $data['stock'] = book_sheet::where('id', $request->stock)
+        $data['stock'] = InventoryItem::where('id', $request->stock)
             ->with('orders')
             ->first();
         $data['total'] = $this->calculateTotals($data['stock']);
@@ -192,7 +195,7 @@ class ReportController extends Controller
         Request $request,
         PDFExportService $PDFExport,
     ) {
-        $data['stock'] = stock::where('id', $request->stock)
+        $data['stock'] = InventoryItem::where('id', $request->stock)
             ->with('orders')
             ->first();
         $data['stocks'] = $this->calculateTotals($data['stock']);
@@ -577,10 +580,10 @@ class ReportController extends Controller
             )
                 ->whereIn('grade_id', (array) $request->grade)
                 ->whereIn('classroom_id', (array) $request->classroom)
-                ->where('status', 'payed')
+                ->where('status', 'paid')
                 ->withSum('fees', 'amount')
                 ->get();
-            $data['payed'] = $invoices->sum('fees_sum_amount');
+            $data['paid'] = $invoices->sum('fees_sum_amount');
             /* Detailed Paymeny for each class room */
             /* Total Student Accounts */
             $data['students_accounts_query'] = StudentAccount::where(

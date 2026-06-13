@@ -11,50 +11,71 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ReportService
 {
-    public function getStudentReportByGrade(int $gradeId, int $academicYearId): Collection
-    {
+    public function getStudentReportByGrade(
+        int $gradeId,
+        int $academicYearId,
+    ): Collection {
         return Student::where('grade_id', $gradeId)
             ->where('acadmiecyear_id', $academicYearId)
             ->with(['parent:id,Father_Name', 'class_room:id,name'])
             ->get(['id', 'name', 'gender', 'classroom_id', 'parent_id']);
     }
 
-    public function getStudentReportByClass(int $classId, int $academicYearId): Collection
-    {
+    public function getStudentReportByClass(
+        int $classId,
+        int $academicYearId,
+    ): Collection {
         return Student::where('classroom_id', $classId)
             ->where('acadmiecyear_id', $academicYearId)
             ->with(['parent:id,Father_Name'])
             ->get(['id', 'name', 'gender']);
     }
 
-    public function getPaymentStatusReport(int $schoolId, int $academicYearId): array
-    {
+    public function getPaymentStatusReport(
+        int $schoolId,
+        int $academicYearId,
+    ): array {
         $students = Student::where('school_id', $schoolId)
             ->where('acadmiecyear_id', $academicYearId)
-            ->with(['fee_invoices' => function ($query) {
-                $query->select('id', 'student_id', 'status', 'amount');
-            }])
+            ->with([
+                'fee_invoices' => function ($query) {
+                    $query->select('id', 'student_id', 'status', 'amount');
+                },
+            ])
             ->get(['id', 'name', 'grade_id']);
 
-        return $students->map(function ($student) {
-            $totalInvoice = $student->fee_invoices->sum('amount');
-            $paidAmount = $student->fee_invoices->where('status', 'payed')->sum('amount');
-            $remaining = $totalInvoice - $paidAmount;
+        return $students
+            ->map(function ($student) {
+                $totalInvoice = $student->fee_invoices->sum('amount');
+                $paidAmount = $student->fee_invoices
+                    ->where('status', 'paid')
+                    ->sum('amount');
+                $remaining = $totalInvoice - $paidAmount;
 
-            return [
-                'student' => $student->name,
-                'total' => $totalInvoice,
-                'paid' => $paidAmount,
-                'remaining' => $remaining,
-                'status' => $remaining <= 0 ? 'paid' : ($paidAmount > 0 ? 'partial' : 'unpaid'),
-            ];
-        })->toArray();
+                return [
+                    'student' => $student->name,
+                    'total' => $totalInvoice,
+                    'paid' => $paidAmount,
+                    'remaining' => $remaining,
+                    'status' => $remaining <= 0
+                            ? 'paid'
+                            : ($paidAmount > 0
+                                ? 'partial'
+                                : 'unpaid'),
+                ];
+            })
+            ->toArray();
     }
 
-    public function getFeesInvoicesReport(int $schoolId, ?int $gradeId = null, ?int $academicYearId = null): Collection
-    {
-        $query = Fee_invoice::where('school_id', $schoolId)
-            ->with(['students:id,name', 'fees:id,title,amount']);
+    public function getFeesInvoicesReport(
+        int $schoolId,
+        ?int $gradeId = null,
+        ?int $academicYearId = null,
+    ): Collection {
+        $query = Fee_invoice::where('school_id', $schoolId)->with([
+            'students:id,name',
+            'fees:id,title,amount',
+        ]);
 
         if ($gradeId) {
             $query->where('grade_id', $gradeId);
@@ -83,6 +104,11 @@ class ReportService
 
     public function getAcademicYearsList(): Collection
     {
-        return Acadmice_year::orderBy('year', 'desc')->get(['id', 'year', 'view', 'status']);
+        return Acadmice_year::orderBy('year', 'desc')->get([
+            'id',
+            'year',
+            'view',
+            'status',
+        ]);
     }
 }

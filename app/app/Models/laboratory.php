@@ -11,7 +11,23 @@ class laboratory extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public $fillable = ['location', 'location_id', 'sub_location', 'is_main', 'school_id', 'user_id'];
+    protected $fillable = [
+        'location',
+        'location_id',
+        'sub_location',
+        'is_main',
+        'school_id',
+        'user_id',
+    ];
+
+    protected $casts = [
+        'is_main' => 'boolean',
+        'school_id' => 'integer',
+        'user_id' => 'integer',
+        'location_id' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 
     public function sub_locations()
     {

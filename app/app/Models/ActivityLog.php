@@ -9,22 +9,22 @@ class ActivityLog extends Model
 {
     use HasFactory;
 
-    protected $table = 'activity_logs';
+    protected $table = "activity_logs";
 
     protected $fillable = [
-        'user_id',
-        'action',
-        'description',
-        'ip',
-        'user_agent',
-        'setting_id',
-        'model_type',
-        'model_id',
+        "user_id",
+        "action",
+        "description",
+        "ip",
+        "user_agent",
+        "school_id",
+        "model_type",
+        "model_id",
     ];
 
     protected $casts = [
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        "created_at" => "datetime",
+        "updated_at" => "datetime",
     ];
 
     public function user()
@@ -34,6 +34,10 @@ class ActivityLog extends Model
 
     public function subject()
     {
-        return $this->morphTo('model_type', 'model_id');
+        return $this->morphTo("model_type", "model_id");
+    }
+    public function scopeBySchool($query, $school_id)
+    {
+        return $query->where("school_id", $school_id);
     }
 }

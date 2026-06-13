@@ -12,7 +12,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use PDF;
 
 class ClassRoomsController extends Controller
 {
@@ -106,29 +105,11 @@ class ClassRoomsController extends Controller
                 'year_start',
                 $current_year,
             )->first();
-            $pdf = PDF::loadView(
-                'backend.class_rooms.show',
-                ['data' => $data],
-                [],
-                [
-                    'format' => 'A4',
-                    'default_font_size' => 10,
-                    'margin_left' => 2,
-                    'margin_right' => 2,
-                    'margin_top' => 25,
-                    'margin_bottom' => 10,
-                    'margin_header' => 2,
-                    'margin_footer' => 2,
-                    'orientation' => 'P',
-                ],
-            );
 
-            return $pdf->stream(
-                $data['class_room']->grade->name.
-                    ' - '.
-                    $data['class_room']->name.
-                    '.pdf',
-            );
+            return view('backend.class_rooms.show', [
+                'data' => $data,
+                'school' => $data['school'],
+            ]);
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

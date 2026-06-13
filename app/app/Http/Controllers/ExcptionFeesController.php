@@ -34,18 +34,31 @@ class ExcptionFeesController extends Controller
     public function create($id)
     {
         try {
-            $Excpetion = Student::where('id', $id)->with('StudentAccount')->first();
-            $fees = Fee_invoice::where('student_id', $id)->where('status', 'notpayed')->with('fees')->get();
-            $balance = $Excpetion->StudentAccount->sum('debit') - $Excpetion->StudentAccount->sum('credit');
+            $Excpetion = Student::where('id', $id)
+                ->with('StudentAccount')
+                ->first();
+            $fees = Fee_invoice::where('student_id', $id)
+                ->where('status', 'unpaid')
+                ->with('fees')
+                ->get();
+            $balance =
+                $Excpetion->StudentAccount->sum('debit') -
+                $Excpetion->StudentAccount->sum('credit');
 
             $school = $this->getSchool();
             if ($fees->isEmpty() || $balance <= 0) {
-                session()->flash('info', trans('general.noInvoiceToExcept'));
+                session()->flash(
+                    'info',
+                    trans('general.noInvoiceToExcept'),
+                );
 
                 return redirect()->route('students.index');
             }
 
-            return view('backend.fee_exception.create', get_defined_vars());
+            return view(
+                'backend.fee_exception.create',
+                get_defined_vars(),
+            );
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -56,21 +69,46 @@ class ExcptionFeesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, FinancialService $studentFinanc)
-    {
+    public function store(
+        Request $request,
+        FinancialService $studentFinanc,
+    ) {
         //        return $request;
         try {
             DB::beginTransaction();
             $student = Student::findorfail($request->student_id);
-            $academic_year = acadmice_year::findorfail($student->acadmiecyear_id);
-            $fee = Fee_invoice::findorfail($request->fee_id)->with('fees')->first();
+            $academic_year = acadmice_year::findorfail(
+                $student->acadmiecyear_id,
+            );
+            $fee = Fee_invoice::findorfail($request->fee_id)
+                ->with('fees')
+                ->first();
             if ($request->amount == $fee->fees->amount) {
                 $fee->delete();
             }
-            $pay = $studentFinanc->exciption_fee($student, $request, $academic_year->id, $this->GetSchool()->id);
-            $studentFinanc->CreateStudentAccount($student, null, $academic_year, 'exciption', 0.00, $request->amount, null, $pay->id);
+            $pay = $studentFinanc->exciption_fee(
+                $student,
+                $request,
+                $academic_year->id,
+                $this->GetSchool()->id,
+            );
+            $studentFinanc->CreateStudentAccount(
+                $student,
+                null,
+                $academic_year,
+                'exciption',
+                0.0,
+                $request->amount,
+                null,
+                $pay->id,
+            );
 
-            $this->logActivity(trans('log.actions.added'), trans('log.models.exception_fee.created', ['student_name' => $student->name]));
+            $this->logActivity(
+                trans('log.actions.added'),
+                trans('log.models.exception_fee.created', [
+                    'student_name' => $student->name,
+                ]),
+            );
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -89,7 +127,9 @@ class ExcptionFeesController extends Controller
     public function show($id)
     {
         try {
-            $excptionFees = ExcptionFees::where('student_id', $id)->with('students', 'academic_year', 'grade', 'classroom')->get();
+            $excptionFees = ExcptionFees::where('student_id', $id)
+                ->with('students', 'academic_year', 'grade', 'classroom')
+                ->get();
             $school = $this->getSchool();
 
             return view('backend.fee_exception.show', get_defined_vars());
@@ -106,7 +146,9 @@ class ExcptionFeesController extends Controller
     public function edit($id)
     {
         try {
-            $excptionFees = ExcptionFees::where('id', $id)->with('students')->first();
+            $excptionFees = ExcptionFees::where('id', $id)
+                ->with('students')
+                ->first();
             $school = $this->getSchool();
 
             return view('backend.fee_exception.edit', get_defined_vars());
@@ -129,21 +171,40 @@ class ExcptionFeesController extends Controller
             $pay->date = date('Y-m-d');
             $pay->academic_year_id = $request->acadmic_id;
             $pay->amount = $request->amount;
-            $pay->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
-            $pay->class_id = Student::where('id', $request->student_id)->first()->classroom_id;
+            $pay->grade_id = Student::where(
+                'id',
+                $request->student_id,
+            )->first()->grade_id;
+            $pay->class_id = Student::where(
+                'id',
+                $request->student_id,
+            )->first()->classroom_id;
             $pay->save();
 
             // Fetch the existing StudentAccount record
-            $std = StudentAccount::where('excpetion_id', $request->id)
-                ->first();
+            $std = StudentAccount::where(
+                'excpetion_id',
+                $request->id,
+            )->first();
             $std->credit = $request->amount;
             $std->academic_year_id = $request->acadmic_id;
 
-            $std->grade_id = Student::where('id', $request->student_id)->first()->grade_id;
-            $std->classroom_id = Student::where('id', $request->student_id)->first()->classroom_id;
-            $std->debit = 0.00;
+            $std->grade_id = Student::where(
+                'id',
+                $request->student_id,
+            )->first()->grade_id;
+            $std->classroom_id = Student::where(
+                'id',
+                $request->student_id,
+            )->first()->classroom_id;
+            $std->debit = 0.0;
             $std->save();
-            $this->logActivity(trans('log.actions.updated'), trans('log.models.exception_fee.updated', ['student_name' => $pay->students->name]));
+            $this->logActivity(
+                trans('log.actions.updated'),
+                trans('log.models.exception_fee.updated', [
+                    'student_name' => $pay->students->name,
+                ]),
+            );
             DB::commit();
             session()->flash('success', trans('general.success'));
 
@@ -165,7 +226,12 @@ class ExcptionFeesController extends Controller
             $pay = ExcptionFees::findorfail($id);
 
             $pay->delete();
-            $this->logActivity(trans('log.actions.deleted'), trans('log.models.exception_fee.deleted', ['student_name' => $pay->students->name]));
+            $this->logActivity(
+                trans('log.actions.deleted'),
+                trans('log.models.exception_fee.deleted', [
+                    'student_name' => $pay->students->name,
+                ]),
+            );
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('except-fee.index');

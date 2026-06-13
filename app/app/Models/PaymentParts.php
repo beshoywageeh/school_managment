@@ -17,29 +17,28 @@ class PaymentParts extends Model
 
     public function students()
     {
-        return $this->belongsTo('App\Models\Student', 'student_id');
+        return $this->belongsTo("App\Models\Student", 'student_id');
     }
 
     public function grades()
     {
-
         return $this->belongsTo(Grade::class, 'grade_id');
     }
 
     public function classes()
     {
-
         return $this->belongsTo(class_room::class, 'class_id');
     }
 
     public function year()
     {
-
         return $this->belongsTo(acadmice_year::class, 'acadmic_id');
     }
 
-    // public function getStatusAttribute()
-    // {
-    //     return $this->value == 'notpayed' ? trans('enums.payment_status.payed') : trans('enums.payment_status.notpayed');
-    // }
+    public function getStatusAttribute()
+    {
+        return $this->value == 'unpaid'
+            ? trans('enums.payment_status.unpaid')
+            : trans('enums.payment_status.paid');
+    }
 }

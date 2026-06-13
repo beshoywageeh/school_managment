@@ -58,7 +58,7 @@ Route::prefix('classes')
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::post('/update', 'update')->name('update');
-        Route::get('/add_students/{class}', 'add_students')->name(
+        Route::get('/add_students/{id}', 'add_students')->name(
             'add_students',
         );
         Route::get('/tammen/{class}', 'tammen')->name('tammen');

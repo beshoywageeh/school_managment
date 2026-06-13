@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |---------------------------------------------------------------------------
     | Component Locations
@@ -69,7 +68,6 @@ return [
     */
 
     'make_command' => [
-        'type' => 'sfc', // Options: 'sfc', 'mfc', 'class'
         'emoji' => false, // Options: true, false
         'type' => 'class',
         'with' => [
@@ -131,10 +129,11 @@ return [
 
     'temporary_file_upload' => [
         'disk' => env('LIVEWIRE_TEMPORARY_FILE_UPLOAD_DISK'), // Example: 'local', 's3'             | Default: 'default'
-        'rules' => null,                                      // Example: ['file', 'mimes:png,jpg'] | Default: ['required', 'file', 'max:12288'] (12MB)
-        'directory' => null,                                  // Example: 'tmp'                     | Default: 'livewire-tmp'
-        'middleware' => null,                                 // Example: 'throttle:5,1'            | Default: 'throttle:60,1'
-        'preview_mimes' => [                                  // Supported file types for temporary pre-signed file URLs...
+        'rules' => null, // Example: ['file', 'mimes:png,jpg'] | Default: ['required', 'file', 'max:12288'] (12MB)
+        'directory' => null, // Example: 'tmp'                     | Default: 'livewire-tmp'
+        'middleware' => null, // Example: 'throttle:5,1'            | Default: 'throttle:60,1'
+        'preview_mimes' => [
+            // Supported file types for temporary pre-signed file URLs...
             'png',
             'gif',
             'bmp',
@@ -288,9 +287,9 @@ return [
     */
 
     'payload' => [
-        'max_size' => 1024 * 1024,   // 1MB - maximum request payload size in bytes
-        'max_nesting_depth' => 10,   // Maximum depth of dot-notation property paths
-        'max_calls' => 50,           // Maximum method calls per request
-        'max_components' => 200,     // Maximum components per batch request
+        'max_size' => 1024 * 1024, // 1MB - maximum request payload size in bytes
+        'max_nesting_depth' => 10, // Maximum depth of dot-notation property paths
+        'max_calls' => 50, // Maximum method calls per request
+        'max_components' => 200, // Maximum components per batch request
     ],
 ];

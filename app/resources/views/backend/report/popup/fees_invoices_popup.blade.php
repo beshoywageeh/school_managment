@@ -41,9 +41,9 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ trans('general.payment_status') }}</label>
                 <select name="payment_status" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all">
                     <option value="" selected disabled>{{ trans('general.choose', ['value' => trans('report.payment_status')]) }}</option>
-                    <option value="0">{{ trans('general.all') }}</option>
-                    <option value="1">{{ trans('clothes.not_payed') }}</option>
-                    <option value="2">{{ trans('clothes.payed') }}</option>
+                    <option value="all">{{ trans('general.all') }}</option>
+                    <option value="unpaid">{{ trans('clothes.unpaid') }}</option>
+                    <option value="paid">{{ trans('clothes.paid') }}</option>
                 </select>
             </div>
         </div>

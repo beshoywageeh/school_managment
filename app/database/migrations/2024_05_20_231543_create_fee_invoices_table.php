@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('school_fee_id');
             $table->unsignedBigInteger('school_id');
             $table->unsignedBigInteger('user_id');
-            $table->enum('status', ['payed', 'notpayed'])->default('notpayed');
+            $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
             $table->timestamps();
             $table->softDeletes();
         });

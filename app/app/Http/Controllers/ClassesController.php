@@ -8,6 +8,7 @@ use App\Models\class_room;
 use App\Models\classes;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ClassesController extends Controller
 {
@@ -24,46 +25,62 @@ class ClassesController extends Controller
             ->withCount('students')
             ->get(['id', 'title', 'class_room_id', 'grade_id', 'tameen']);
 
+        // return $classes;
         return view('backend.classes.index', get_defined_vars());
     }
 
     public function store(Request $request)
     {
         try {
-            $school = $this->getSchool();
+            DB::beginTransaction();
             foreach ($request->classroom as $class) {
                 classes::create([
                     'title' => $class['class_name'],
                     'class_room_id' => $class['class_id'],
                     'grade_id' => class_room::find($class['class_id'])
                         ->grade_id,
-                    'school_id' => $school->id,
+                    'school_id' => auth()->user()->school_id,
                     'user_id' => auth()->user()->id,
                 ]);
 
                 $this->logActivity(
                     trans('log.actions.added'),
                     trans('log.models.class.created', [
-                        'class_name' => $request->class_name,
+                        'class_name' => $class['class_name'],
                     ]),
                 );
             }
+
+            DB::commit();
 
             return redirect()
                 ->route('classes.index')
                 ->with('success', trans('general.success'));
         } catch (\Exception $e) {
+            DB::rollBack();
+
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
-    public function add_students(classes $c)
+    public function add_students(Request $request)
     {
-        $class = $c->with('grade', 'class_room')->first();
-        $students = Student::where('grade_id', $class->grade->id)
-            ->where('classroom_id', $class->class_room->id)
-            ->get(['id', 'name']);
+        // return $request->id;
+        $school = $this->getSchool();
+        $class = classes::with([
+            'grade' => function ($q) {
+                $q->select('id', 'name');
+            },
+            'class_room' => function ($q) {
+                $q->select('id', 'name');
+            },
+        ])->findOrFail($request->id, ['id', 'title', 'grade_id', 'class_room_id']);
+        $students = Student::where('school_id', $school->id)
+            ->where('grade_id', $class->grade_id)
+            ->where('classroom_id', $class->class_room_id)
+            ->get();
 
+        // return $class;
         return view('backend.classes.add_students', get_defined_vars());
     }
 

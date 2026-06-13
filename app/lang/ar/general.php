@@ -41,7 +41,7 @@ return [
     'except_fee' => 'معافات',
     'payment_status' => 'حالة الدفع',
     'pay' => 'دفع',
-    'not_payed' => 'غير مدفوع',
+    'unpaid' => 'غير مدفوع',
     'noInvoiceToPart' => 'لا توجد فواتير للتقسيط',
     'noDataToShow' => 'لا توجد بيانات للعرض',
     'full_pay' => 'دفع كامل',

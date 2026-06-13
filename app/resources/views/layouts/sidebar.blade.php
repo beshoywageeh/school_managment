@@ -228,24 +228,24 @@
                         </button>
                         <div x-show="stocksOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden"
                             style="display: none;">
-                            @can('labortories-index')
+                            {{-- @can('labortories-index')
                                 <a href="{{ route('labs.index') }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.lab_index') }}</a>
-                            @endcan
+                            @endcan --}}
                             @can('stocks-index')
-                                <a href="{{ route('stocks.index') }}"
+                                <a href="{{ route('inventory.items.index', ['type' => 'stock']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.stocks_show') }}</a>
                             @endcan
                             @can('orders-index')
-                                <a href="{{ route('order.index') }}"
+                                <a href="{{ route('inventory.orders.index', ['type' => 'purchases']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
                             @endcan
                             @can('order_out-index')
-                                <a href="{{ route('outorder.index') }}"
+                                <a href="{{ route('inventory.orders.index', ['type' => 'sales']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
                             @endcan
                             @can('stocks-inventory_order-index')
-                                <a href="{{ route('gard.index') }}"
+                                <a href="{{ route('inventory.orders.index', ['type' => 'inventory']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
                             @endcan
                         </div>
@@ -273,19 +273,19 @@
                         <div x-show="clothesOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden"
                             style="display: none;">
                             @can('clothes-index')
-                                <a href="{{ route('clothes.index') }}"
+                                <a href="{{ route('inventory.items.index', ['type' => 'clothe']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.clothes_show') }}</a>
                             @endcan
                             @can('clothes-income_order')
-                                <a href="{{ route('clothes-order.index', ['type' => 'inventory']) }}"
+                                <a href="{{ route('inventory.orders.index', ['type' => 'purchases']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
                             @endcan
                             @can('clothes-outcome_order')
-                                <a href="{{ route('clothes-order.index', ['type' => 'sales']) }}"
+                                <a href="{{ route('inventory.orders.index', ['type' => 'sales']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
                             @endcan
                             @can('clothes-inventory_order')
-                                <a href="{{ route('clothes-order.index', ['type' => 'inventory']) }}"
+                                <a href="{{ route('inventory.orders.index', ['type' => 'inventory']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
                             @endcan
                         </div>
@@ -313,19 +313,19 @@
                         <div x-show="booksOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden"
                             style="display: none;">
                             @can('books_sheets-index')
-                                <a href="{{ route('books_sheets.index') }}"
+                                <a href="{{ route('inventory.items.index', ['type' => 'book']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.books_sheets_show') }}</a>
                             @endcan
                             @can('books_sheets-income_order')
-                                <a href="{{ route('bookSheetsOrder.index', ['type' => '1']) }}"
+                                <a href="{{ route('inventory.orders.index', ['type' => 'purchases']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
                             @endcan
                             @can('books_sheets-outcome_order')
-                                <a href="{{ route('bookSheetsOrder.index', ['type' => '2']) }}"
+                                <a href="{{ route('inventory.orders.index', ['type' => 'sales']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
                             @endcan
                             @can('books_sheets-inventory_order')
-                                <a href="{{ route('bookSheetsOrder.index', ['type' => '3']) }}"
+                                <a href="{{ route('inventory.orders.index', ['type' => 'inventory']) }}"
                                     class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
                             @endcan
                         </div>

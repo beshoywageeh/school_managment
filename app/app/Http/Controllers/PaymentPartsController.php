@@ -38,7 +38,7 @@ class PaymentPartsController extends Controller
             $student = Student::where('id', $id)
                 ->with([
                     'fee_invoice' => function ($q) {
-                        $q->where('status', 'notpayed')->with(
+                        $q->where('status', 'unpaid')->with(
                             'fees:id,title,amount',
                         );
                     },
@@ -70,7 +70,7 @@ class PaymentPartsController extends Controller
             $student = Student::findorfail($request->student_id);
             $parts = $request->parts;
             $academic_year = Fee_invoice::where('student_id', $student->id)
-                ->where('status', 'notpayed')
+                ->where('status', 'unpaid')
                 ->first('academic_year_id');
 
             foreach ($parts as $part) {

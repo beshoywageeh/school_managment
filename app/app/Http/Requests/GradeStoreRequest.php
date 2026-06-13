@@ -23,7 +23,14 @@ class GradeStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'Grade_Name' => ['required', 'string', 'max:255', 'unique:grades,name'],
+            'id' => ['required', 'exists:grades,id'],
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:grades,name',
+            ],
+            'user_id' => ['nullable', 'array', 'exists:users,id'],
         ];
     }
 }
