@@ -10,7 +10,17 @@ class Recipt_Payment extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'manual',
+        'date',
+        'academic_year_id',
+        'student_id',
+        'user_id',
+        'school_id',
+        'Debit',
+    ];
+
+    protected $casts = ['date' => 'date', 'Debit' => 'decimal:2'];
 
     protected $table = 'recipt__payments';
 

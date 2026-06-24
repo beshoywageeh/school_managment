@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
-enum UserGender: int
+enum UserGender: string
 {
-    case MALE = 0;
-    case FEMALE = 1;
+    case MALE = 'male';
+    case FEMALE = 'female';
 
     public function lang(): string
     {

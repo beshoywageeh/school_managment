@@ -42,18 +42,18 @@ class HomeController extends Controller
             ->count();
 
         // Get grades with classrooms and student counts
-        $grades = Grade::with([
-            'class_rooms' => function ($query) {
-                $query->withCount('students');
-            },
-        ])
+        $grades = Grade::where('school_id', $school->id)
+            ->with([
+                'class_rooms' => function ($query) {
+                    $query->withCount('students');
+                },
+            ])
             ->where('school_id', $schoolId)
             ->get();
 
         $data['users'] = User::where('school_id', $schoolId)->get();
         $data['grades'] = $grades;
 
-        // Generate chart data
         $chartData = $this->generateChartData($grades);
         $revenueTrend = $this->getMonthlyRevenueTrend($schoolId);
 

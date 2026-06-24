@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
-enum Status: int
+enum Status: string
 {
-    case OPEN = 0;
-    case CLOSE = 1;
+    case OPEN = 'active';
+    case CLOSE = 'inactive';
 
     public function color(): string
     {

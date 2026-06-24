@@ -4,29 +4,30 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
-        Schema::create("inventory_transactions", function (
+        Schema::create('inventory_transactions', function (
             Blueprint $table,
         ) {
             $table->id();
             $table
-                ->foreignId("item_id")
-                ->constrained("inventory_items")
+                ->foreignId('item_id')
+                ->constrained('inventory_items')
                 ->cascadeOnDelete();
-            $table->enum("type", ["in", "out", "adjust"]);
-            $table->decimal("quantity", 10, 2);
-            $table->decimal("balance", 10, 2);
-            $table->string("reference_type");
-            $table->integer("reference_id")->nullable();
-            $table->text("notes")->nullable();
+            $table->enum('type', ['in', 'out', 'adjust']);
+            $table->decimal('quantity', 10, 2);
+            $table->decimal('balance', 10, 2);
+            $table->string('reference_type');
+            $table->integer('reference_id')->nullable();
+            $table->text('notes')->nullable();
             $table
-                ->foreignId("user_id")
+                ->foreignId('user_id')
                 ->nullable()
-                ->constrained("users")
+                ->constrained('users')
                 ->nullOnDelete();
-            $table->foreignId("school_id")->constrained("schools");
+            $table->foreignId('school_id')->constrained('schools');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -34,6 +35,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists("inventory_transactions");
+        Schema::dropIfExists('inventory_transactions');
     }
 };

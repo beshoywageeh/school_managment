@@ -72,12 +72,16 @@ return [
     ],
     'payment_status' => [
         'waiting' => 'مدفوعة جزء',
-        'fee_invoice' => 'فواتير دراسية',
-        'payment_recipt' => 'مدفوعات دراسية',
-        'fee_exception' => 'معافات',
+
         'unpaid' => 'لم يتم الدفع',
         'paid' => 'تم الدفع',
         'wating' => 'مؤجل',
+    ],
+    'payment_type' => [
+        'fee_invoice' => 'فواتير دراسية',
+        'payment_recipt' => 'مدفوعات دراسية',
+        'fee_exception' => 'معافات',
+        'exchange_bond' => 'سندات صرف',
     ],
     'inventory_item_type' => [
         'stock' => 'مخزون',

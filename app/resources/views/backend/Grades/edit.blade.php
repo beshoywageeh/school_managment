@@ -1,4 +1,4 @@
-<x-modal id="grade-edit-{{ $grade->id }}" title="{{ trans('Grades.title') }}" icon="pencil" class="text-yellow-900 w-4 h-4" can="grade-edit" variant="warning">
+<x-modal id="grade-edit-{{ $grade->id }}" title="{{ trans('Grades.title') }}" icon="pencil" variant="warning" can="grade-edit">
     <slot>
         <form action="{{ route('grade.update') }}" method="POST" id="grade-edit-{{ $grade->id }}">
             @csrf

@@ -2,19 +2,19 @@
 
 namespace App\Enums;
 
-enum Student_Status: int
+enum Student_Status: string
 {
-    case NEW = 0;
-    case TRASPORT_FROM = 1;
-    case TRASPORT_TO = 2;
-    case TOTAL_ABSENT = 3;
-    case CHANGE_PATH = 4;
-    case MERGE = 5;
-    case SECOND_TRY = 6;
-    case PASS_ON_LOW = 7;
-    case REJECTED = 8;
-    case FREEZED = 9;
-    case STILL = 10;
+    case NEW = 'new';
+    case TRASPORT_FROM = 'transport_from';
+    case TRASPORT_TO = 'transport_to';
+    case TOTAL_ABSENT = 'total_absent';
+    case CHANGE_PATH = 'change_path';
+    case MERGE = 'merge';
+    case SECOND_TRY = 'second_try';
+    case PASS_ON_LOW = 'pass_on_low';
+    case REJECTED = 'rejected';
+    case FREEZED = 'freezed';
+    case STILL = 'still';
 
     public function lang()
     {
@@ -29,7 +29,7 @@ enum Student_Status: int
             self::REJECTED => trans('enums.REJECTED'),
             self::FREEZED => trans('enums.FREEZED'),
             self::TOTAL_ABSENT => trans('enums.TOTAL_ABSENT'),
-            self::STILL => trans('enums.STILL')
+            self::STILL => trans('enums.STILL'),
         };
     }
 

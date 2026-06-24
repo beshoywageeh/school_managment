@@ -24,7 +24,7 @@
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse ($Employees as $employee)
-                        <form method="post" action="{{ route('employee.update', $employee->id) }}"
+                        <form method="post" action="{{ route('employees.update', $employee->id) }}"
                             id="form-{{ $employee->id }}">
                             @csrf
                             <tr class="hover:bg-gray-50">

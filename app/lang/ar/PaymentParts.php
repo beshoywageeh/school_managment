@@ -7,5 +7,5 @@ return [
     'amount' => 'القيمة',
     'pay_total' => 'دفع إجمالي',
     'pay_part' => 'دفع قيمة',
-
+    'total_required' => 'إجمالي المطلوب سداده',
 ];

@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enums\Status;
 use App\Models\Model;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 /**
  * @extends Factory<Model>
@@ -19,11 +21,10 @@ class JobFactory extends Factory
     {
         return [
             'name' => $this->faker->sentence(2),
-            'type' => $this->faker->numberBetween(1, 4),
-            'status' => $this->faker->numberBetween(0, 1),
+            'type' => Arr::Random(Job_type::cases()),
+            'status' => Arr::Random(Status::cases()),
             'created_by' => '1',
             'created_at' => now(),
-
         ];
     }
 }

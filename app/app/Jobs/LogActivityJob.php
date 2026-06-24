@@ -52,21 +52,21 @@ class LogActivityJob implements ShouldQueue
     public function handle(): void
     {
         ActivityLog::create([
-            "user_id" => $this->userId,
-            "action" => $this->action,
-            "description" => $this->description,
-            "ip" => $this->ip,
-            "user_agent" => $this->userAgent,
-            "school_id" => $this->schoolId,
-            "model_type" => $this->modelType,
-            "model_id" => $this->modelId,
+            'user_id' => $this->userId,
+            'action' => $this->action,
+            'description' => $this->description,
+            'ip' => $this->ip,
+            'user_agent' => $this->userAgent,
+            'school_id' => $this->schoolId,
+            'model_type' => $this->modelType,
+            'model_id' => $this->modelId,
         ]);
     }
 
     public function failed(\Throwable $exception): void
     {
         \Log::error(
-            "Activity logging failed: " . $exception->getMessage(),
+            'Activity logging failed: '.$exception->getMessage(),
         );
     }
 }

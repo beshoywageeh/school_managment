@@ -33,7 +33,7 @@
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $parent->Father_Job }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">
                                 @foreach ($parent->Students as $student)
-                                    {{ $student->name }}<br>
+                                    {{ $student->name }}<br />
                                 @endforeach
                             </td>
                             <td class="px-6 py-4 text-center">
@@ -43,10 +43,10 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="mx-4 my-4">
+                {{ $students_parents->links('vendor.livewire.tailwind') }}
+            </div>
         </div>
     </div>
 
-    <div class="mt-4">
-        {{ $students_parents->links() }}
-    </div>
 </div>

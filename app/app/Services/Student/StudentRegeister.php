@@ -15,28 +15,31 @@ class StudentRegeister
 
     public function StudentRegeister($request)
     {
-        $parent = My_parents::firstOrCreate(
-            ['Father_Name' => $request['parents']],
-            [
-                'Father_Name' => $request['parents'],
+        $parent = My_parents::find($request['parent_id']);
+        if (is_null($parent)) {
+            $parent = My_parents::Create([
+                'Father_Name' => $request['parent_id'],
                 'Religion' => $request['religion'],
                 'user_id' => Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
+        }
 
         $student = Student::create([
-            'name' => $request['student_name'],
+            'name' => $request['name'],
             'birth_date' => $request['birth_date'],
-            'join_date' => Carbon::parse($request['birth_date'])->format('Y-m-d'),
+            'join_date' => Carbon::parse($request['birth_date'])->format(
+                'Y-m-d',
+            ),
             'gender' => $request['gender'],
-            'grade_id' => $request['grade'],
+            'grade_id' => $request['grade_id'],
             'parent_id' => $parent->id,
-            'classroom_id' => $request['classroom'],
+            'classroom_id' => $request['classroom_id'],
             'address' => $request['address'],
             'national_id' => $request['national_id'],
-            'student_status' => $request['std_status'],
+            'student_status' => $request['student_status'],
             'religion' => $parent->Religion ?? $request['religion'],
-            'birth_at_begin' => (new AgeCalculationService)->calculateAgeAsOfOctoberFirst(
+            'birth_at_begin' => new AgeCalculationService()->calculateAgeAsOfOctoberFirst(
                 $request['birth_date'],
             ),
             'acadmiecyear_id' => $request['academic_year'],

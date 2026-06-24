@@ -11,22 +11,28 @@ class schedules extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['user_id', 'job_id', 'class_id', 'day', 'period'];
+    protected $fillable = [
+        'user_id',
+        'job_id',
+        'class_id',
+        'day',
+        'period',
+    ];
 
     protected $table = 'schedules';
 
     public function teacher()
     {
-        return $this->belongsTo('App\Models\users', 'user_id', 'id');
+        return $this->belongsTo(User::class);
     }
 
     public function job()
     {
-        return $this->belongsTo('App\Models\jobs', 'job_id', 'id');
+        return $this->belongsTo(Job::class);
     }
 
     public function class()
     {
-        return $this->belongsTo('App\Models\classes', 'class_id', 'id');
+        return $this->belongsTo(classes::class);
     }
 }

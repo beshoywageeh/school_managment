@@ -12,7 +12,7 @@
         <x-input-error :messages="$errors->get('type')" />
     </div>
     <div x-show="formType === 'book'" x-cloak>
-        <x-input-label>{{ trans('enums.inventory_item_category.book') }}</x-input-label>
+        <x-input-label>{{ trans('book_sheet.type') }}</x-input-label>
         <select name="category" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all">
             <option value="">{{ trans('general.choose') }}</option>
             <option value="book" {{ old('category', $item->category->value ?? '') == 'book' ? 'selected' : '' }}>{{ trans('enums.inventory_item_type.book') }}</option>
@@ -31,18 +31,23 @@
     </div>
 
     <div x-show="formType === 'clothe' || formType === 'book'" x-cloak>
-        <x-input-label>{{ trans('fees.classroom') }}</x-input-label>
-        <select name="classroom_id" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all tom-select">
-            <option value="">{{ trans('general.choose',['value'=>'']) }}</option>
-            @foreach($classrooms ?? [] as $key => $classroom)
-                <optgroup label="{{ $key }}">
-                    @foreach ($classroom as $class )
+        <div>
+            <x-input-label>{{ trans('fees.classroom') }}</x-input-label>
+            <select name="classroom_id" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all tom-select">
+                <option value="">{{ trans('general.choose',['value'=>'']) }}</option>
+                @foreach($classrooms ?? [] as $key => $classroom)
+                    <optgroup label="{{ $key }}">
+                        @foreach ($classroom as $class )
 
-                    <option value="{{ $class->id }}" {{ old('classroom_id', $item->id ?? '') == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
-                    @endforeach
-                </optgroup>
-            @endforeach
-        </select>
-        <x-input-error :messages="$errors->get('classroom_id')" />
+                        <option value="{{ $class->id }}" {{ old('classroom_id', $item->id ?? '') == $class->id ? 'selected' : '' }}>{{ $class->name }}</option>
+                        @endforeach
+                    </optgroup>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('classroom_id')" />
+        </div>
+        <div>
+            <x-input name="sales_price_set" type="number" step="0.01" :value="old('sales_price_set', $item->sales_price_set ?? '')">{{ trans('inventory.sales_price_set') }}</x-input>
+    </div>
     </div>
 </div>

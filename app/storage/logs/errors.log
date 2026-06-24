@@ -22,3 +22,5 @@ LINE 1: select sum("clothes"."sales_price_set") as aggregate from "c...
 [2026-05-26 16:32:07] local.ERROR: Attempt to read property "total_price" on null  
 [2026-05-26 17:26:08] local.ERROR: Attempt to read property "total_price" on null  
 [2026-05-26 17:31:45] local.ERROR: Attempt to read property "total_price" on null  
+[2026-06-18 05:39:36] local.ERROR: SQLSTATE[23502]: Not null violation: 7 ERROR:  null value in column "unit_price" of relation "inventory_order_items" violates not-null constraint
+DETAIL:  Failing row contains (1, 1, App\Models\Inventory\InventoryItem, 3, 0.00, 1.00, null, 0.00, 2026-06-18 05:39:36, 2026-06-18 05:39:36, null). (Connection: pgsql, SQL: insert into "inventory_order_items" ("itemable_id", "itemable_type", "quantity_out", "quantity_in", "unit_price", "total", "inventory_order_id", "updated_at", "created_at") values (3, App\Models\Inventory\InventoryItem, 1, 0, ?, 0, 1, 2026-06-18 05:39:36, 2026-06-18 05:39:36) returning "id")  

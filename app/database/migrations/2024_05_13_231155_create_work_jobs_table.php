@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('work_jobs', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->smallInteger('type');
+            $table->string('type');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('school_id')->nullable();

@@ -2,9 +2,17 @@
 
 namespace Database\Factories;
 
+use App\Enums\Student_Status;
+use App\Enums\user_religion;
+use App\Enums\UserGender;
+use App\Models\acadmice_year;
+use App\Models\class_room;
+use App\Models\Grade;
+use App\Models\My_parents;
 use App\Models\nationality;
 use App\Models\Students;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 /**
  * @extends Factory<Students>
@@ -24,21 +32,28 @@ class StudentFactory extends Factory
             'birth_date' => $this->faker->date(),
             'address' => $this->faker->address(),
             'join_date' => $this->faker->date(),
-            'gender' => $this->faker->numberBetween(0, 1),
+            'gender' => Arr::random(UserGender::cases()),
             'national_id' => $this->faker->numerify('##############'),
             'user_id' => '1',
-            'grade_id' => $this->faker->numberBetween(1, 4),
-            'classroom_id' => $this->faker->numberBetween(1, 6),
-            'parent_id' => $this->faker->numberBetween(1, 200),
+            'grade_id' => Grade::inRandomOrder()->first()?->id,
+            'classroom_id' => function (array $attributes) {
+                return class_room::where(
+                    'grade_id',
+                    $attributes['grade_id'],
+                )
+                    ->inRandomOrder()
+                    ->first()?->id;
+            },
+            'parent_id' => My_parents::inRandomOrder()->first()?->id,
             'slug' => $this->faker->slug(),
-            'student_status' => $this->faker->numberBetween(0, 3),
+            'student_status' => Arr::random(Student_Status::cases()),
             'birth_at_begin' => $this->faker->date(),
-            'religion' => $this->faker->numberBetween(0, 1),
-            'acadmiecyear_id' => $this->faker->numberBetween(1, 2),
+            'religion' => Arr::random(user_religion::cases()),
+            'acadmiecyear_id' => acadmice_year::inRandomOrder()->first()
+                ?->id,
             'tameen' => $this->faker->numberBetween(0, 1),
-            'nationality_id' => nationality::pluck('id')->random(),
+            'nationality_id' => nationality::inRandomOrder()->first()?->id,
             'school_id' => '1',
-
         ];
     }
 }

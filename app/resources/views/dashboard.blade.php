@@ -186,7 +186,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex-1 basis-1/2 min-w-[300px]">
                 <h5 class="text-lg font-semibold text-gray-800 mb-4 text-center">{{ trans('Sidebar.accounting') }}</h5>
                 <div class="chart-wrapper">
-                    <canvas id="canvas3" class="w-full h-[300px]"></canvas>
+                    {{-- <canvas id="canvas3" class="w-full h-[300px]"></canvas> --}}
                 </div>
             </div>
         @endif

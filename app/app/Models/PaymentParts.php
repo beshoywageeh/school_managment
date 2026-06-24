@@ -11,13 +11,27 @@ class PaymentParts extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'student_id',
+        'grade_id',
+        'class_id',
+        'academic_year_id',
+        'school_id',
+        'date',
+        'amount',
+        'status',
+        'school_fees_id',
+    ];
 
-    protected $casts = ['status' => Payment_Status::class];
+    protected $casts = [
+        'status' => Payment_Status::class,
+        'date' => 'date',
+        'amount' => 'decimal:2',
+    ];
 
     public function students()
     {
-        return $this->belongsTo("App\Models\Student", 'student_id');
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
     public function grades()
@@ -33,12 +47,5 @@ class PaymentParts extends Model
     public function year()
     {
         return $this->belongsTo(acadmice_year::class, 'acadmic_id');
-    }
-
-    public function getStatusAttribute()
-    {
-        return $this->value == 'unpaid'
-            ? trans('enums.payment_status.unpaid')
-            : trans('enums.payment_status.paid');
     }
 }

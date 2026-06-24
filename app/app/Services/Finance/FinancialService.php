@@ -33,7 +33,7 @@ class FinancialService
 
     public function FeeInvoice(
         $student,
-        $fee_id,
+        $fee,
         $acc_year,
         $school,
     ): Fee_invoice {
@@ -42,7 +42,7 @@ class FinancialService
             'student_id' => $student->id,
             'grade_id' => $student->grade_id,
             'classroom_id' => $student->classroom_id,
-            'school_fee_id' => $fee_id,
+            'school_fee_id' => $fee->id,
             'academic_year_id' => $acc_year,
             'user_id' => auth()->id(),
             'school_id' => $school,
@@ -54,6 +54,14 @@ class FinancialService
                 'name' => $student->name,
                 'date' => date('Y-m-d'),
             ]),
+        );
+        $this->CreateStudentAccount(
+            $student,
+            $invoice->id,
+            $acc_year,
+            'invoice',
+            $fee->amount,
+            0.0,
         );
 
         return $invoice;
@@ -91,7 +99,7 @@ class FinancialService
 
     public function CreateStudentAccount(
         $student,
-        $fees,
+        $fee_invoices_id,
         $acc_year,
         $type,
         $debit = 0.0,
@@ -105,7 +113,7 @@ class FinancialService
             'grade_id' => $student->grade_id,
             'classroom_id' => $student->classroom_id,
             'recipt__payments_id' => $recipt_id,
-            'fee_invoices_id' => $fees,
+            'fee_invoices_id' => $fee_invoices_id,
             'excpetion_id' => $excpetion_id,
             'exchange_bond_id' => $exchange_bond_id,
             'date' => date('Y-m-d'),

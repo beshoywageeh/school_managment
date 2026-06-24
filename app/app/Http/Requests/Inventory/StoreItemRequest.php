@@ -32,6 +32,7 @@ class StoreItemRequest extends FormRequest
             'cost_price' => 'nullable|numeric|min:0',
             'grade_id' => 'nullable|exists:grades,id',
             'classroom_id' => 'nullable|exists:class_rooms,id',
+            'sales_price_set' => 'nullable|numeric|min:0',
         ];
     }
 }

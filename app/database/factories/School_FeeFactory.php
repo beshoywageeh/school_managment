@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\School_Fee;
@@ -25,10 +26,14 @@ class School_FeeFactory extends Factory
             'user_id' => '1',
             'description' => $this->faker->words(1, true),
             'amount' => $this->faker->numberBetween('1000', '8000'),
-            'title' => $this->faker->randomElement(['قسط اول', 'قسط ثاني', 'قسط ثالث']),
-            'academic_year_id' => '1',
+            'title' => $this->faker->randomElement([
+                'قسط اول',
+                'قسط ثاني',
+                'قسط ثالث',
+            ]),
+            'academic_year_id' => acadmice_year::inRandomOrder()->first()
+                ?->id,
             'school_id' => '1',
-
         ];
     }
 }

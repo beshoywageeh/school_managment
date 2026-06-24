@@ -10,33 +10,48 @@ class ExcptionFees extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'student_id',
+        'grade_id',
+        'class_id',
+        'fee_id',
+        'academic_year_id',
+        'user_id',
+        'school_id',
+        'date',
+        'amount',
+    ];
+
+    protected $casts = [
+        'date' => 'date',
+        'amount' => 'decimal:2',
+    ];
 
     public function students()
     {
-        return $this->belongsTo('App\Models\Student', 'student_id');
+        return $this->belongsTo(Student::class);
     }
 
     public function academic_year()
     {
-
-        return $this->belongsTo('App\Models\Acadmice_year', 'academic_year_id');
+        return $this->belongsTo(Acadmice_year::class, 'academic_year_id');
     }
 
     public function grade()
     {
-
-        return $this->belongsTo('App\Models\Grade', 'grade_id');
+        return $this->belongsTo("App\Models\Grade", 'grade_id');
     }
 
     public function classroom()
     {
-
-        return $this->belongsTo('App\Models\class_room', 'class_id');
+        return $this->belongsTo("App\Models\class_room", 'class_id');
     }
 
     public function school_fee()
     {
-        return $this->belongsTo('App\Models\School_fee', 'school_fee_id')->withTrashed();
+        return $this->belongsTo(
+            "App\Models\School_fee",
+            'school_fee_id',
+        )->withTrashed();
     }
 }

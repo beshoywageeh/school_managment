@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('year_start');
             $table->date('year_end');
-            $table->boolean('status')->default(1);
+            $table->string('status')->default('active');
             $table->string('view');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

@@ -24,33 +24,33 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        "name",
-        "email",
-        "password",
-        "code",
-        "phone",
-        "address",
-        "date_of_birth",
-        "date_of_hiring",
-        "learning",
-        "reiligon",
-        "gender",
-        "type",
-        "job_id",
-        "isAdmin",
-        "login_allow",
-        "insurance",
-        "insurance_date",
-        "national_id",
-        "grade_year",
-        "school_id",
-        "user_id",
-        "lesson_count",
-        "sepicality",
-        "national_id_expire_date",
-        "contract_start_date",
-        "notes",
-        "ministry_code",
+        'name',
+        'email',
+        'password',
+        'code',
+        'phone',
+        'address',
+        'date_of_birth',
+        'date_of_hiring',
+        'learning',
+        'reiligon',
+        'gender',
+        'type',
+        'job_id',
+        'isAdmin',
+        'login_allow',
+        'insurance',
+        'insurance_date',
+        'national_id',
+        'grade_year',
+        'school_id',
+        'user_id',
+        'lesson_count',
+        'sepicality',
+        'national_id_expire_date',
+        'contract_start_date',
+        'notes',
+        'ministry_code',
     ];
 
     /**
@@ -58,7 +58,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = ["password", "remember_token"];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * The attributes that should be cast.
@@ -66,16 +66,16 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        "email_verified_at" => "datetime",
-        "password" => "hashed",
-        "gender" => UserGender::class,
-        "religion" => user_religion::class,
-        "type" => Jobs_types::class,
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'gender' => UserGender::class,
+        'religion' => user_religion::class,
+        'type' => Jobs_types::class,
     ];
 
     public function image()
     {
-        return $this->morphMany(Image::class, "imageable");
+        return $this->morphMany(Image::class, 'imageable');
     }
 
     public function settings()
@@ -92,9 +92,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(
             Grade::class,
-            "teacher_grade",
-            "teacher_id",
-            "grade_id",
+            'teacher_grade',
+            'teacher_id',
+            'grade_id',
         );
     }
 }

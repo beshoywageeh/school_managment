@@ -11,9 +11,21 @@ class acadmice_year extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['year_start', 'status', 'year_end', 'created_by', 'updated_by', 'view', 'school_id'];
+    protected $fillable = [
+        'year_start',
+        'status',
+        'year_end',
+        'created_by',
+        'updated_by',
+        'view',
+        'school_id',
+    ];
 
-    protected $casts = ['status' => Status::class];
+    protected $casts = [
+        'status' => Status::class,
+        'year_start' => 'date',
+        'year_end' => 'date',
+    ];
 
     public function creator()
     {

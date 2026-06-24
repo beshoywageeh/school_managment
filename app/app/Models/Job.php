@@ -12,11 +12,20 @@ class Job extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $casts = ['status' => Status::class, 'type' => Jobs_types::class];
-
     protected $table = 'work_jobs';
 
-    protected $fillable = ['type', 'name', 'created_by', 'updated_by', 'school_id'];
+    protected $fillable = [
+        'type',
+        'name',
+        'created_by',
+        'updated_by',
+        'school_id',
+    ];
+
+    protected $casts = [
+        'status' => Status::class,
+        'type' => Jobs_types::class,
+    ];
 
     public function creator()
     {

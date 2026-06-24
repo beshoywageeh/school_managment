@@ -62,4 +62,5 @@ return [
 
     // Unit placeholder
     'unit_placeholder' => 'قطعة، كجم، مجموعة، صندوق',
+    'sales_price_set' => 'سعر الطقم',
 ];

@@ -11,8 +11,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-
-        $this->call([settingsTableSeeder::class,
+        $this->call([
+            settingsTableSeeder::class,
             PermissionTableSeeder::class,
             NationalitySeeder::class,
             UserTableSeeder::class,
@@ -28,6 +28,5 @@ class DatabaseSeeder extends Seeder
             RecipetPaymentSeeder::class,
             StudentAccountSeeder::class,
         ]);
-
     }
 }

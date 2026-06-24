@@ -11,38 +11,7 @@
     @include('layouts.header_css')
     @livewireStyles
     <style>
-        [x-cloak] {
-            display: none !important;
-        }
 
-        body {
-            overflow-x: hidden;
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: rgba(0, 0, 0, 0.5);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-dialog {
-            max-width: 500px;
-            margin: auto;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
     </style>
 </head>
 

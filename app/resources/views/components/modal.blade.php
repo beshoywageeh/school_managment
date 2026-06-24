@@ -52,7 +52,7 @@
     @if (empty($can) || auth()->user()?->can($can))
         @if ($titleButton)
             <button x-on:click="open = true" type="button"
-                class="px-4 py-2 rounded-lg flex items-center gap-2 transition-colors {{ $colors['btn'] }}">
+                class="flex items-center gap-2 px-4 py-2 text-white text-sm font-medium rounded-xl transition-colors {{ $colors['btn'] }}">
                 @if ($icon)
                     <x-hero-icon name="{{ $icon }}" class="w-4 h-4 text-current" />
                 @endif

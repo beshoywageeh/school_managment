@@ -4,6 +4,7 @@
 @endsection
 @section('content')
   <form id="form-with-multiple-column" class="max-w-full" action="{{ route('payment_parts.store') }}" x-data="{
+
         parts: [{ fee_id: '', pay_at: '', amount: '' }],
     addRow() {
         this.parts.push({ fee_id: '', pay_at: '', amount: '' });
@@ -16,11 +17,13 @@
             @csrf
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         @include('backend.msg')
-        <div class="mb-6">
+        <div class="flex align-center gap-4 mb-6">
             <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly value="{{ $student->name .' '.$student->parent->Father_Name }}">
-            
+            <div class="shrink-0 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 font-semibold">
+                   {{ trans('PaymentParts.total_required') }}: {{ number_format($student->fee_invoice->flatMap->fees->sum('amount'), 2) }}
+               </div>
         </div>
-      
+
 
             <input type="hidden" hidden name="student_id" value="{{ $student->id }}">
             <input type="hidden" name="acd_year" value="{{ $student->acadmiecyear_id }}">
@@ -35,17 +38,17 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                               <template x-for="(part,index) in parts" :key="index" >
+                               <template x-for="(part,index) in parts" :key="index">
                             <tr  class="hover:bg-gray-50 transition-colors">
                                 <td class="px-4 py-2">
                                 <select class=" px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" :name="`parts[${index}][fee_id]`">
                                     <option value="" selected>{{ trans('general.choose',['value'=>trans('Sidebar.fees_invoice')]) }}
                                     </option>
                                     @foreach ($student->fee_invoice as $fee_invoice)
- 
+
                                     <option value="{{ $fee_invoice->fees->id }}">{{ $fee_invoice->fees->title }}
                                         - {{ $fee_invoice->fees->amount }}</option>
-                                  
+
                                     @endforeach
                                 </select>
                             </td>
@@ -80,12 +83,10 @@
                     </div>
 
                            <div class="flex items-center justify-end gap-2 px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-xl">
-
-                 <button type="submit"
-                        class="h-9 px-4 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                    <x-button class="primary" type="submit">
                         {{ trans('general.Submit') }}
-                    </button>
-            </div>
+                    </x-button>
+                    </div>
         </div>
     </form>
 

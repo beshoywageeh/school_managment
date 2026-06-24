@@ -12,6 +12,6 @@ class My_parentsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        My_parents::factory(1000)->create();
+        My_parents::factory(500)->create();
     }
 }

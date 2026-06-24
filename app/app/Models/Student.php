@@ -61,7 +61,7 @@ class Student extends Model
 
     public function StudentAccount()
     {
-        return $this->hasMany(StudentAccount::class);
+        return $this->hasMany(StudentAccount::class, 'student_id', 'id');
     }
 
     public function Acadmice_year()

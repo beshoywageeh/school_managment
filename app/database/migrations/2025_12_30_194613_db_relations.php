@@ -4,612 +4,613 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table("users", function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table
-                ->foreign("job_id")
-                ->references("id")
-                ->on("work_jobs")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('job_id')
+                ->references('id')
+                ->on('work_jobs')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
         /* Grades Relation */
-        Schema::table("grades", function (Blueprint $table) {
+        Schema::table('grades', function (Blueprint $table) {
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
         /* Parents Relation */
-        Schema::table("parents", function (Blueprint $table) {
+        Schema::table('parents', function (Blueprint $table) {
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
         /* Class Rooms Relations */
-        Schema::table("class_rooms", function (Blueprint $table) {
+        Schema::table('class_rooms', function (Blueprint $table) {
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("grade_id")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('grade_id')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
         /* students Relation */
-        Schema::table("students", function (Blueprint $table) {
+        Schema::table('students', function (Blueprint $table) {
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("grade_id")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('grade_id')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("classroom_id")
-                ->references("id")
-                ->on("class_rooms")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('classroom_id')
+                ->references('id')
+                ->on('class_rooms')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("parent_id")
-                ->references("id")
-                ->on("parents")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('parent_id')
+                ->references('id')
+                ->on('parents')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("acadmiecyear_id")
-                ->references("id")
-                ->on("acadmice_years")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('acadmiecyear_id')
+                ->references('id')
+                ->on('acadmice_years')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("nationality_id")
-                ->references("id")
-                ->on("nationalities")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('nationality_id')
+                ->references('id')
+                ->on('nationalities')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("class_id")
-                ->references("id")
-                ->on("classes")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('class_id')
+                ->references('id')
+                ->on('classes')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
         /* school fees */
-        Schema::table("school__fees", function (Blueprint $table) {
+        Schema::table('school__fees', function (Blueprint $table) {
             $table
-                ->foreign("grade_id")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('grade_id')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("classroom_id")
-                ->references("id")
-                ->on("class_rooms")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('classroom_id')
+                ->references('id')
+                ->on('class_rooms')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("academic_year_id")
-                ->references("id")
-                ->on("acadmice_years")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('academic_year_id')
+                ->references('id')
+                ->on('acadmice_years')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
         /* acadmice_years */
-        Schema::table("acadmice_years", function (Blueprint $table) {
+        Schema::table('acadmice_years', function (Blueprint $table) {
             $table
-                ->foreign("created_by")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('created_by')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("updated_by")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('updated_by')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
-        Schema::table("teacher_grade", function (Blueprint $table) {
+        Schema::table('teacher_grade', function (Blueprint $table) {
             $table
-                ->foreign("teacher_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('teacher_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("grade_id")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('grade_id')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
-        Schema::table("work_jobs", function (Blueprint $table) {
+        Schema::table('work_jobs', function (Blueprint $table) {
             $table
-                ->foreign("created_by")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('created_by')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("updated_by")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('updated_by')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
-        Schema::table("promotions", function (Blueprint $table) {
+        Schema::table('promotions', function (Blueprint $table) {
             $table
-                ->foreign("student_id")
-                ->references("id")
-                ->on("students")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('student_id')
+                ->references('id')
+                ->on('students')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("from_grade")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('from_grade')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("to_grade")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('to_grade')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("from_class")
-                ->references("id")
-                ->on("class_rooms")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('from_class')
+                ->references('id')
+                ->on('class_rooms')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("to_class")
-                ->references("id")
-                ->on("class_rooms")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('to_class')
+                ->references('id')
+                ->on('class_rooms')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("to_acc")
-                ->references("id")
-                ->on("acadmice_years")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('to_acc')
+                ->references('id')
+                ->on('acadmice_years')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("from_acc")
-                ->references("id")
-                ->on("acadmice_years")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('from_acc')
+                ->references('id')
+                ->on('acadmice_years')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
-        Schema::table("fee_invoices", function (Blueprint $table) {
+        Schema::table('fee_invoices', function (Blueprint $table) {
             $table
-                ->foreign("student_id")
-                ->references("id")
-                ->on("students")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('student_id')
+                ->references('id')
+                ->on('students')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("grade_id")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('grade_id')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("classroom_id")
-                ->references("id")
-                ->on("class_rooms")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('classroom_id')
+                ->references('id')
+                ->on('class_rooms')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("academic_year_id")
-                ->references("id")
-                ->on("acadmice_years")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('academic_year_id')
+                ->references('id')
+                ->on('acadmice_years')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_fee_id")
-                ->references("id")
-                ->on("school__fees")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_fee_id')
+                ->references('id')
+                ->on('school__fees')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
-        Schema::table("student_accounts", function (Blueprint $table) {
+        Schema::table('student_accounts', function (Blueprint $table) {
             $table
-                ->foreign("student_id")
-                ->references("id")
-                ->on("students")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('student_id')
+                ->references('id')
+                ->on('students')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("grade_id")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('grade_id')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("classroom_id")
-                ->references("id")
-                ->on("class_rooms")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('classroom_id')
+                ->references('id')
+                ->on('class_rooms')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("recipt__payments_id")
-                ->references("id")
-                ->on("recipt__payments")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('recipt__payments_id')
+                ->references('id')
+                ->on('recipt__payments')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("excpetion_id")
-                ->references("id")
-                ->on("excption_fees")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('excpetion_id')
+                ->references('id')
+                ->on('excption_fees')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("fee_invoices_id")
-                ->references("id")
-                ->on("fee_invoices")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('fee_invoices_id')
+                ->references('id')
+                ->on('fee_invoices')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("academic_year_id")
-                ->references("id")
-                ->on("acadmice_years")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('academic_year_id')
+                ->references('id')
+                ->on('acadmice_years')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("exchange_bond_id")
-                ->references("id")
-                ->on("exchange_bonds")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('exchange_bond_id')
+                ->references('id')
+                ->on('exchange_bonds')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
-        Schema::table("recipt__payments", function (Blueprint $table) {
+        Schema::table('recipt__payments', function (Blueprint $table) {
             $table
-                ->foreign("student_id")
-                ->references("id")
-                ->on("students")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('student_id')
+                ->references('id')
+                ->on('students')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("academic_year_id")
-                ->references("id")
-                ->on("acadmice_years")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('academic_year_id')
+                ->references('id')
+                ->on('acadmice_years')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
-        Schema::table("exchange_bonds", function (Blueprint $table) {
+        Schema::table('exchange_bonds', function (Blueprint $table) {
             $table
-                ->foreign("student_id")
-                ->references("id")
-                ->on("students")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('student_id')
+                ->references('id')
+                ->on('students')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("academic_year_id")
-                ->references("id")
-                ->on("acadmice_years")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('academic_year_id')
+                ->references('id')
+                ->on('acadmice_years')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-        });
-
-        Schema::table("excption_fees", function (Blueprint $table) {
-            $table
-                ->foreign("student_id")
-                ->references("id")
-                ->on("students")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("class_id")
-                ->references("id")
-                ->on("class_rooms")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("grade_id")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("fee_id")
-                ->references("id")
-                ->on("fee_invoices")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("academic_year_id")
-                ->references("id")
-                ->on("acadmice_years")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-        });
-        Schema::table("payment_parts", function (Blueprint $table) {
-            $table
-                ->foreign("student_id")
-                ->references("id")
-                ->on("students")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("class_id")
-                ->references("id")
-                ->on("class_rooms")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("grade_id")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("academic_year_id")
-                ->references("id")
-                ->on("fee_invoices")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("school_fees_id")
-                ->references("id")
-                ->on("school__fees")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
 
-        Schema::table("laboratories", function (Blueprint $table) {
+        Schema::table('excption_fees', function (Blueprint $table) {
             $table
-                ->foreign("location_id")
-                ->references("id")
-                ->on("laboratories")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('student_id')
+                ->references('id')
+                ->on('students')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('class_id')
+                ->references('id')
+                ->on('class_rooms')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('grade_id')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('fee_id')
+                ->references('id')
+                ->on('fee_invoices')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('academic_year_id')
+                ->references('id')
+                ->on('acadmice_years')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+        });
+        Schema::table('payment_parts', function (Blueprint $table) {
+            $table
+                ->foreign('student_id')
+                ->references('id')
+                ->on('students')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('class_id')
+                ->references('id')
+                ->on('class_rooms')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('grade_id')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('academic_year_id')
+                ->references('id')
+                ->on('fee_invoices')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('school_fees_id')
+                ->references('id')
+                ->on('school__fees')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
 
-        Schema::table("classes", function (Blueprint $table) {
+        Schema::table('laboratories', function (Blueprint $table) {
             $table
-                ->foreign("grade_id")
-                ->references("id")
-                ->on("grades")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('location_id')
+                ->references('id')
+                ->on('laboratories')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("class_room_id")
-                ->references("id")
-                ->on("class_rooms")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
-            $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
-        Schema::table("fund_accounts", function (Blueprint $table) {
+
+        Schema::table('classes', function (Blueprint $table) {
             $table
-                ->foreign("receipt_id")
-                ->references("id")
-                ->on("recipt__payments")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('grade_id')
+                ->references('id')
+                ->on('grades')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("school_id")
-                ->references("id")
-                ->on("schools")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('class_room_id')
+                ->references('id')
+                ->on('class_rooms')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("exchange_bond_id")
-                ->references("id")
-                ->on("exchange_bonds")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
-        Schema::table("schedules", function (Blueprint $table) {
+        Schema::table('fund_accounts', function (Blueprint $table) {
             $table
-                ->foreign("user_id")
-                ->references("id")
-                ->on("users")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('receipt_id')
+                ->references('id')
+                ->on('recipt__payments')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("class_id")
-                ->references("id")
-                ->on("classes")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
             $table
-                ->foreign("job_id")
-                ->references("id")
-                ->on("work_jobs")
-                ->onDelete("Cascade")
-                ->onUpdate("Cascade");
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('exchange_bond_id')
+                ->references('id')
+                ->on('exchange_bonds')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+        });
+        Schema::table('schedules', function (Blueprint $table) {
+            $table
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('class_id')
+                ->references('id')
+                ->on('classes')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
+            $table
+                ->foreign('job_id')
+                ->references('id')
+                ->on('work_jobs')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
     }
 
@@ -618,145 +619,145 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table("students", function (Blueprint $table) {
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
-            $table->dropforeign("grade_id");
-            $table->dropforeign("classroom_id");
-            $table->dropforeign("parent_id");
-            $table->dropforeign("acadmiecyear_id");
-            $table->dropforeign("nationality_id");
-            $table->dropforeign("class_id");
+        Schema::table('students', function (Blueprint $table) {
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
+            $table->dropforeign('grade_id');
+            $table->dropforeign('classroom_id');
+            $table->dropforeign('parent_id');
+            $table->dropforeign('acadmiecyear_id');
+            $table->dropforeign('nationality_id');
+            $table->dropforeign('class_id');
         });
-        Schema::table("orders", function (Blueprint $table) {
-            $table->dropforeign("laboratory_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropforeign('laboratory_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("laboratories", function (Blueprint $table) {
-            $table->dropforeign("location_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('laboratories', function (Blueprint $table) {
+            $table->dropforeign('location_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("grades", function (Blueprint $table) {
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('grades', function (Blueprint $table) {
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("class_rooms", function (Blueprint $table) {
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
-            $table->dropForeign("grade_id");
+        Schema::table('class_rooms', function (Blueprint $table) {
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
+            $table->dropForeign('grade_id');
         });
-        Schema::table("parents", function (Blueprint $table) {
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('parents', function (Blueprint $table) {
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("school__fees", function (Blueprint $table) {
-            $table->dropForeign("grade_id");
-            $table->dropForeign("classroom_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
-            $table->dropForeign("academic_year_id");
+        Schema::table('school__fees', function (Blueprint $table) {
+            $table->dropForeign('grade_id');
+            $table->dropForeign('classroom_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
+            $table->dropForeign('academic_year_id');
         });
-        Schema::table("acadmice_years", function (Blueprint $table) {
-            $table->dropForeign("updated_by");
-            $table->dropForeign("created_by");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('acadmice_years', function (Blueprint $table) {
+            $table->dropForeign('updated_by');
+            $table->dropForeign('created_by');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("teacher_grade", function (Blueprint $table) {
-            $table->dropForeign("teacher_id");
-            $table->dropForeign("grade_id");
-            $table->dropforeign("school_id");
+        Schema::table('teacher_grade', function (Blueprint $table) {
+            $table->dropForeign('teacher_id');
+            $table->dropForeign('grade_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("work_jobs", function (Blueprint $table) {
-            $table->dropForeign("created_by");
-            $table->dropForeign("updated_by");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('work_jobs', function (Blueprint $table) {
+            $table->dropForeign('created_by');
+            $table->dropForeign('updated_by');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("users", function (Blueprint $table) {
-            $table->dropForeign("job_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign('job_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("promotions", function (Blueprint $table) {
-            $table->dropForeign("student_id");
-            $table->dropForeign("from_grade");
-            $table->dropForeign("to_grade");
-            $table->dropForeign("from_class");
-            $table->dropForeign("to_class");
-            $table->dropForeign("to_acc");
-            $table->dropForeign("from_acc");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('promotions', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('from_grade');
+            $table->dropForeign('to_grade');
+            $table->dropForeign('from_class');
+            $table->dropForeign('to_class');
+            $table->dropForeign('to_acc');
+            $table->dropForeign('from_acc');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("fee_invoices", function (Blueprint $table) {
-            $table->dropForeign("student_id");
-            $table->dropForeign("grade_id");
-            $table->dropForeign("classroom_id");
-            $table->dropForeign("academic_year_id");
-            $table->dropForeign("school_fee_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('fee_invoices', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('grade_id');
+            $table->dropForeign('classroom_id');
+            $table->dropForeign('academic_year_id');
+            $table->dropForeign('school_fee_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("student_accounts", function (Blueprint $table) {
-            $table->dropForeign("student_id");
-            $table->dropForeign("grade_id");
-            $table->dropForeign("classroom_id");
-            $table->dropForeign("recipt__payments_id");
-            $table->dropForeign("fee_invoices_id");
-            $table->dropForeign("excpetion_id");
-            $table->dropForeign("exchange_bond_id");
-            $table->dropForeign("academic_year_id");
+        Schema::table('student_accounts', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('grade_id');
+            $table->dropForeign('classroom_id');
+            $table->dropForeign('recipt__payments_id');
+            $table->dropForeign('fee_invoices_id');
+            $table->dropForeign('excpetion_id');
+            $table->dropForeign('exchange_bond_id');
+            $table->dropForeign('academic_year_id');
         });
-        Schema::table("recipt__payments", function (Blueprint $table) {
-            $table->dropForeign("student_id");
-            $table->dropForeign("academic_year_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
-        });
-
-        Schema::table("exchange_bonds", function (Blueprint $table) {
-            $table->dropForeign("student_id");
-            $table->dropForeign("academic_year_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
-        });
-        Schema::table("excption_fees", function (Blueprint $table) {
-            $table->dropForeign("student_id");
-            $table->dropForeign("class_id");
-            $table->dropForeign("fee_id");
-            $table->dropForeign("grade_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
-        });
-        Schema::table("payment_parts", function (Blueprint $table) {
-            $table->dropForeign("student_id");
-            $table->dropForeign("class_id");
-            $table->dropForeign("grade_id");
-            $table->dropForeign("academic_year_id");
-            $table->dropForeign("school_fees_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('recipt__payments', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('academic_year_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
 
-        Schema::table("classes", function (Blueprint $table) {
-            $table->dropForeign("grade_id");
-            $table->dropForeign("class_room_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
+        Schema::table('exchange_bonds', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('academic_year_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("fund_accounts", function (Blueprint $table) {
-            $table->dropForeign("receipt_id");
-            $table->dropforeign("user_id");
-            $table->dropforeign("school_id");
-            $table->dropforeign("exchange_bond_id");
+        Schema::table('excption_fees', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('class_id');
+            $table->dropForeign('fee_id');
+            $table->dropForeign('grade_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
         });
-        Schema::table("schedules", function (Blueprint $table) {
-            $table->dropForeign("user_id");
-            $table->dropForeign("classes_id");
-            $table->dropForeign("job_id");
+        Schema::table('payment_parts', function (Blueprint $table) {
+            $table->dropForeign('student_id');
+            $table->dropForeign('class_id');
+            $table->dropForeign('grade_id');
+            $table->dropForeign('academic_year_id');
+            $table->dropForeign('school_fees_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
+        });
+
+        Schema::table('classes', function (Blueprint $table) {
+            $table->dropForeign('grade_id');
+            $table->dropForeign('class_room_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
+        });
+        Schema::table('fund_accounts', function (Blueprint $table) {
+            $table->dropForeign('receipt_id');
+            $table->dropforeign('user_id');
+            $table->dropforeign('school_id');
+            $table->dropforeign('exchange_bond_id');
+        });
+        Schema::table('schedules', function (Blueprint $table) {
+            $table->dropForeign('user_id');
+            $table->dropForeign('classes_id');
+            $table->dropForeign('job_id');
         });
     }
 };

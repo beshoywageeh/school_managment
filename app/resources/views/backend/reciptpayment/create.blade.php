@@ -6,7 +6,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" x-data="payment({
         clothes: {{ json_encode($clothes->map(fn($c) => ['sales_price' => $c->sales_price, 'sales_price_set' => $c->sales_price_set])->values()->toArray()) }},
-        books: {{ json_encode($books->map(fn($b) => ['sales_price' => $b->sales_price])->values()->toArray()) }}
+        books: {{ json_encode($books->map(fn($b) => ['sales_price' => $b->sales_price, 'sales_price_set' => $b->sales_price_set])->values()->toArray()) }}
     })">
         @include('backend.msg')
         <form id="form-with-multiple-column" autocomplete="off" class="max-w-full" action="{{ route('receipt_payment.store') }}"
@@ -369,6 +369,7 @@
                     })),
                     books: data.books.map(b => ({
                         sales_price: Number(b.sales_price) || 0,
+                        sales_price_set: Number(b.sales_price_set) || 0,
                         quantity: 1,
                         checked: false
                     })),
@@ -393,7 +394,8 @@
                     booksActivePrice(index) {
                         const item = this.books[index];
                         if (!item) return 0;
-                        return item.sales_price;
+                        return item.checked && item.sales_price_set ? item.sales_price_set : item
+                            .sales_price;
                     },
                     clothesRowTotal(index) {
                         const qty = Number(this.clothes[index]?.quantity) || 0;
@@ -426,7 +428,9 @@
                     get booksTotalPrice() {
                         const total = this.books.reduce((sum, item) => {
                             const qty = Number(item.quantity) || 0;
-                            return sum + (qty * item.sales_price);
+                            const price = item.checked && item.sales_price_set ? item
+                                .sales_price_set : item.sales_price;
+                            return sum + (qty * price);
                         }, 0);
                         return total.toLocaleString('en-EG', {
                             style: 'currency',

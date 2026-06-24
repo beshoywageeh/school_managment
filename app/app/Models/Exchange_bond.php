@@ -11,7 +11,21 @@ class Exchange_bond extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['student_id', 'academic_year_id', 'date', 'amount', 'manual', 'description', 'school_id', 'user_id'];
+    protected $fillable = [
+        'student_id',
+        'academic_year_id',
+        'date',
+        'amount',
+        'manual',
+        'description',
+        'school_id',
+        'user_id',
+    ];
+
+    protected $casts = [
+        'date' => 'date',
+        'amount' => 'decimal:2',
+    ];
 
     public function student()
     {

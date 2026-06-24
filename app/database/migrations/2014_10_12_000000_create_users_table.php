@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('grade_year')->nullable();
             $table->date('date_of_hiring')->nullable();
             $table->string('learning')->nullable();
-            $table->tinyInteger('reiligon')->nullable();
-            $table->tinyInteger('gender')->nullable();
-            $table->tinyInteger('type')->nullable();
+            $table->string('reiligon')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('type')->nullable();
             $table->unsignedBigInteger('job_id')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('email')->unique()->nullable();

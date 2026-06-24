@@ -14,10 +14,7 @@ Route::prefix('school-fees')
     ->controller(SchoolFeeController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/{id}/edit', 'edit')->name('edit');
-        Route::get('/{id}/destroy', 'destroy')->name(
-            'destroy',
-        );
+        Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         Route::get('/{id}/show', 'show')->name('show');
         Route::post('/store', 'store')->name('store');
         Route::post('/update', 'update')->name('update');
@@ -27,15 +24,11 @@ Route::prefix('fee-invoice')
     ->controller(fee_invoiceController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/{student_id}/create', 'create')->name(
-            'create',
-        );
+        Route::get('/{student_id}/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::post('/update', 'update')->name('update');
-        Route::get('/{id}/destroy', 'destroy')->name(
-            'destroy',
-        );
+        Route::get('/{id}/destroy', 'destroy')->name('destroy');
         Route::get('/{id?}/show', 'show')->name('show');
     });
 Route::prefix('receipt-payment')
@@ -47,9 +40,7 @@ Route::prefix('receipt-payment')
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::post('/update', 'update')->name('update');
-        Route::get('/{id}/destroy', 'destroy')->name(
-            'destroy',
-        );
+        Route::get('/{id}/destroy', 'destroy')->name('destroy');
         Route::get('/{id?}/show', 'show')->name('show');
     });
 Route::prefix('except-fee')
@@ -61,9 +52,7 @@ Route::prefix('except-fee')
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::post('/update', 'update')->name('update');
-        Route::get('/{id}/destroy', 'destroy')->name(
-            'destroy',
-        );
+        Route::get('/{id}/destroy', 'destroy')->name('destroy');
         Route::get('/{id?}/show', 'show')->name('show');
     });
 Route::prefix('payment-parts')
@@ -75,14 +64,9 @@ Route::prefix('payment-parts')
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::post('/update', 'update')->name('update');
-        Route::get('/{id}/destroy', 'destroy')->name(
-            'destroy',
-        );
-        Route::get('/{id?}/show', 'show')->name('show');
+        Route::get('/{id}/destroy', 'destroy')->name('destroy');
         Route::get('/{id?}/pay', 'pay')->name('pay');
-        Route::post('/submit_pay', 'submit_pay')->name(
-            'submit_pay',
-        );
+        Route::post('/submit_pay', 'submit_pay')->name('submit_pay');
     });
 Route::prefix('fund-account')
     ->name('fund_account.')
@@ -100,7 +84,5 @@ Route::name('exchange-bonds.')
         Route::get('/edit/{id}', 'edit')->name('edit');
         Route::post('/update', 'update')->name('update');
         Route::get('/print/{id}', 'print')->name('print');
-        Route::get('/destroy/{id}', 'destroy')->name(
-            'destroy',
-        );
+        Route::get('/destroy/{id}', 'destroy')->name('destroy');
     });

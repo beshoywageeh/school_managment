@@ -11,7 +11,20 @@ class fund_account extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['date', 'receipt_id', 'Debit', 'Credit', 'school_id', 'user_id'];
+    protected $fillable = [
+        'date',
+        'receipt_id',
+        'Debit',
+        'Credit',
+        'school_id',
+        'user_id',
+    ];
+
+    protected $casts = [
+        'date' => 'date',
+        'Debit' => 'decimal:2',
+        'Credit' => 'decimal:2',
+    ];
 
     public function receipts()
     {

@@ -4,22 +4,23 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create("schools", function (Blueprint $table) {
+        Schema::create('schools', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
-            $table->string("phone");
-            $table->string("address");
-            $table->string("heading_right")->nullable();
-            $table->string("heading_left")->nullable();
-            $table->string("footer_right")->nullable();
-            $table->string("footer_left")->nullable();
-            $table->string("slug")->nullable();
+            $table->string('name');
+            $table->string('phone');
+            $table->string('address');
+            $table->string('heading_right')->nullable();
+            $table->string('heading_left')->nullable();
+            $table->string('footer_right')->nullable();
+            $table->string('footer_left')->nullable();
+            $table->string('slug')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +31,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists("settings");
+        Schema::dropIfExists('settings');
     }
 };

@@ -11,7 +11,7 @@ use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\School_Fee;
 use App\Models\Student;
-use App\Services\FinancialService;
+use App\Services\Finance\FinancialService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,9 +31,16 @@ class SchoolFeeController extends Controller
     {
         $school = $this->getSchool();
         $grades = Grade::where('school_id', $school->id)->get();
-        $years = acadmice_year::where('school_id', $school->id)
-            ->where('status', 0)
-            ->get();
+
+        $years = acadmice_year::where('status', 'active')->get();
+        $academic_years = $years->map(function ($year) {
+            return [
+                'id' => $year->id,
+                'academic_year' => Carbon::parse($year->year_start)->format('Y').
+                    '-'.
+                    Carbon::parse($year->year_end)->format('Y'),
+            ];
+        });
         $School_Fees = School_Fee::where('school_id', $school->id)
             ->with(
                 'grade:id,name',
@@ -51,56 +58,49 @@ class SchoolFeeController extends Controller
      */
     public function store(StoreSchool_FeeRequest $request)
     {
-        DB::beginTransaction();
         try {
-            $School_Fee = new School_Fee;
-            $School_Fee->grade_id = $request->grade_id;
-            $School_Fee->classroom_id = $request->classroom_id;
-            $School_Fee->user_id = Auth::user()->id;
-            $School_Fee->school_id = $this->getSchool()->id;
-            $School_Fee->academic_year_id = $request->academic_year_id;
-            $School_Fee->description = $request->description;
-            $School_Fee->amount = $request->amount;
-            $School_Fee->title = $request->title;
-            $School_Fee->save();
-            $this->logActivity(
-                trans('log.actions.added'),
-                trans('log.models.School_Fee.created', [
-                    'amount' => $request->amount,
-                ]),
-            );
-            $students = Student::where('grade_id', $request->grade_id)
-                ->where('classroom_id', $request->classroom_id)
-                ->get();
-            $ac_year = acadmice_year::where('status', '0')->first();
-            $students->map(function (
-                $student,
-                $ac_year,
-                $request,
-                $School_Fee,
-            ) {
-                $fee = $this->financialService->FeeInvoice(
-                    $student,
-                    $School_Fee->id,
-                    $ac_year->id,
-                    $this->getSchool()->id,
-                );
-                $this->financialService->CreateStudentAccount(
-                    $student,
-                    $fee->id,
-                    $ac_year,
-                    $request->amount,
-                );
+            DB::Transaction(function () use ($request) {
+                $schoolFee = new School_Fee;
+                $schoolFee->grade_id = $request->grade_id;
+                $schoolFee->classroom_id = $request->classroom_id;
+                $schoolFee->user_id = Auth::user()->id;
+                $schoolFee->school_id = $this->getSchool()->id;
+                $schoolFee->academic_year_id = $request->academic_year_id;
+                $schoolFee->description = $request->description;
+                $schoolFee->amount = $request->amount;
+                $schoolFee->title = $request->title;
+                $schoolFee->save();
                 $this->logActivity(
                     trans('log.actions.added'),
-                    trans('log.models.School_Fee.invoice_added', [
-                        'name' => $student->name,
+                    trans('log.models.School_Fee.created', [
                         'amount' => $request->amount,
                     ]),
                 );
+                $students = Student::where('grade_id', $request->grade_id)
+                    ->where('classroom_id', $request->classroom_id)
+                    ->get();
+
+                $students->each(function ($student) use (
+                    $schoolFee,
+                    $request,
+                ) {
+                    $this->financialService->FeeInvoice(
+                        $student,
+                        $schoolFee,
+                        $request->academic_year_id,
+                        $this->getSchool()->id,
+                    );
+
+                    $this->logActivity(
+                        trans('log.actions.added'),
+                        trans('log.models.School_Fee.invoice_added', [
+                            'name' => $student->name,
+                            'amount' => $request->amount,
+                        ]),
+                    );
+                });
             });
             session()->flash('success', trans('general.success'));
-            DB::commit();
 
             return redirect()->route('school_fees.index');
         } catch (\Exception $e) {
@@ -109,7 +109,6 @@ class SchoolFeeController extends Controller
                 'Error creating school fee: '.$e->getMessage(),
                 ['stack' => $e->getTraceAsString()],
             );
-            DB::rollBack();
 
             return redirect()->back()->withInput();
         }
@@ -135,33 +134,6 @@ class SchoolFeeController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        try {
-            $school = $this->getSchool();
-            $School_Fee = School_Fee::findorFail($id);
-            $grades = Grade::where('school_id', $school->id)->get();
-            $years = acadmice_year::where('status', 1)->get();
-            $academic_years = $years->map(function ($year) {
-                return [
-                    'id' => $year->id,
-                    'academic_year' => Carbon::parse($year->year_start)->format('Y').
-                        '-'.
-                        Carbon::parse($year->year_end)->format('Y'),
-                ];
-            });
-
-            return view('backend.School_Fees.edit', get_defined_vars());
-        } catch (\Exception $e) {
-            session()->flash('error', $e->getMessage());
-
-            return redirect()->back();
-        }
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateSchool_FeeRequest $request)
@@ -169,6 +141,7 @@ class SchoolFeeController extends Controller
         try {
             $School_Fee = School_Fee::findorFail($request->id);
             $School_Fee->update([
+                'title' => $request->name,
                 'grade_id' => $request->grade_id,
                 'classroom_id' => $request->classroom_id,
                 'academic_year_id' => $request->academic_year_id,

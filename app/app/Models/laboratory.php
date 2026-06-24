@@ -25,8 +25,6 @@ class laboratory extends Model
         'school_id' => 'integer',
         'user_id' => 'integer',
         'location_id' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
     ];
 
     public function sub_locations()

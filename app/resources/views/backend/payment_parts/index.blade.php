@@ -29,7 +29,7 @@
                             <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->index + 1 }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($PaymentPart->date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
-                                <a target="_blank" href="{{ route('payment_parts.show', $PaymentPart->students->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                <a target="_blank" href="{{ route('payment_parts.edit', $PaymentPart->students->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                     {{ $PaymentPart->students->name }}
                                 </a>
                             </td>
@@ -44,14 +44,7 @@
                             <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ number_format($PaymentPart->amount, 2) }}&nbsp;ج.م</td>
                             <td class="px-6 py-4 text-center">
                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
-                                    [
-                                        'type' => 'link',
-                                        'url' => route('payment_parts.show', $PaymentPart->id),
-                                        'text' => trans('general.info'),
-                                        'icon' => 'ti-info-alt',
-                                        'target' => '_blank',
-                                        'can' => 'payment_parts-info',
-                                    ],
+
                                     [
                                         'type' => 'link',
                                         'url' => route('payment_parts.destroy', $PaymentPart->id),

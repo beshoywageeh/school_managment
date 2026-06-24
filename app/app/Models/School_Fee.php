@@ -11,25 +11,39 @@ class School_Fee extends Model
 {
     use HasFactory, LogsActivity, SoftDeletes;
 
-    protected $fillable = ['grade_id', 'classroom_id', 'user_id', 'academic_year_id', 'description', 'amount', 'school_id'];
+    protected $fillable = [
+        'grade_id',
+        'classroom_id',
+        'user_id',
+        'academic_year_id',
+        'description',
+        'amount',
+        'school_id',
+    ];
+
+    protected $casts = ['amount' => 'decimal:2'];
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     public function grade()
     {
-        return $this->belongsTo('App\Models\Grade', 'grade_id', 'id');
+        return $this->belongsTo(Grade::class);
     }
 
     public function classroom()
     {
-        return $this->belongsTo('App\Models\class_room');
+        return $this->belongsTo(class_room::class);
     }
 
     public function year()
     {
-        return $this->belongsTo('App\Models\acadmice_year', 'academic_year_id', 'id');
+        return $this->belongsTo(
+            acadmice_year::class,
+            'academic_year_id',
+            'id',
+        );
     }
 }

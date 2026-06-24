@@ -2,19 +2,19 @@
 
 namespace App\Enums;
 
-enum Jobs_types: int
+enum Jobs_types: string
 {
-    case TEACHER = 1;
-    case WORKER = 2;
-    case SPECIALIST = 3;
-    case MANEGMENT = 4;
-    case DEALER = 5;
-    case DIRECTOR = 6;
-    case MENTOR = 7;
-    case SECURITY = 8;
-    case CLEANER_SUPERVISIOR = 9;
-    case VISITOR = 10;
-    case OTHER = 11;
+    case TEACHER = 'teacher';
+    case WORKER = 'worker';
+    case SPECIALIST = 'specialist';
+    case MANEGMENT = 'manwgment';
+    case DEALER = 'dealer';
+    case DIRECTOR = 'director';
+    case MENTOR = 'mentor';
+    case SECURITY = 'security';
+    case CLEANER_SUPERVISIOR = 'cleaner_supervisior';
+    case VISITOR = 'visitor';
+    case OTHER = 'other';
 
     public function lang(): string
     {
@@ -27,7 +27,9 @@ enum Jobs_types: int
             self::DIRECTOR => trans('enums.director'),
             self::MENTOR => trans('enums.mentor'),
             self::SECURITY => trans('enums.security'),
-            self::CLEANER_SUPERVISIOR => trans('enums.cleaner_supervisior'),
+            self::CLEANER_SUPERVISIOR => trans(
+                'enums.cleaner_supervisior',
+            ),
             self::VISITOR => trans('enums.visitor'),
             self::OTHER => trans('enums.other'),
         };

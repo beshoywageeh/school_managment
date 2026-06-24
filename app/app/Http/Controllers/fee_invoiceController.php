@@ -9,6 +9,7 @@ use App\Models\acadmice_year;
 use App\Models\Fee_invoice;
 use App\Models\School_Fee as school_fee;
 use App\Models\Student;
+use App\Models\Grade;
 use App\Services\FinancialService;
 use Exception;
 use Illuminate\Http\Request;
@@ -21,18 +22,96 @@ class fee_invoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $school = $this->getSchool();
-        $fee_invoices = Fee_invoice::where("school_id", $school->id)
+        $gradeOptions = Grade::pluck("name", "id")->toArray();
+
+        $columns = [
+            [
+                "key" => "invoice_date",
+                "label" => trans("fee_invoice.date"),
+                "sortable" => true,
+            ],
+            [
+                "key" => "students.name",
+                "label" => trans("fee_invoice.name"),
+                "filter_type" => "text",
+                "filter_key" => "students", // الحقل الذي سيرسله Axios
+                "sortable" => false,
+            ],
+            [
+                "key" => "fees_sum_amount",
+                "label" => trans("fee_invoice.debit"),
+                "sortable" => false, // حقول الـ Sum يفضل تعطيل الترتيب عليها مؤقتاً
+            ],
+            [
+                "key" => "grades.name",
+                "label" => trans("fee_invoice.grade"),
+                "filter_type" => "select_relation",
+                "filter_key" => "grade_id",
+                "options" => $gradeOptions, // تم تعديل الاسم إلى options بالجمع ✅
+                "sortable" => true,
+            ],
+            [
+                "key" => "classes.name",
+                "label" => trans("fee_invoice.class"),
+                "sortable" => false,
+            ],
+            [
+                "key" => "acd_year.view",
+                "label" => trans("fee_invoice.acadmic"),
+                "sortable" => false,
+            ],
+        ];
+
+        // 1. نبدأ ببناء الاستعلام دون تنفيذ (بدون paginate أو get)
+        $query = Fee_invoice::query()
+            ->where("school_id", $school->id)
             ->with([
                 "students:id,name",
                 "grades:id,name",
                 "classes:id,name",
                 "acd_year:id,view",
             ])
-            ->withSum("fees", "amount")
-            ->paginate(20);
+            ->withSum("fees", "amount");
+
+        // 2. تطبيق فلاتر البحث الآن (بناءً على الـ filter_key المرسل من المكون)
+        if ($request->filled("students")) {
+            // تم تغييرها من name إلى students لتوحيد المفتاح ✅
+            $query->whereHas("students", function ($q) use ($request) {
+                $q->where("name", "like", "%" . $request->students . "%");
+            });
+        }
+
+        if ($request->filled("grade_id")) {
+            // تأكد أن اسم الحقل في جدول فواتير الرسوم هو grade_id أو قم بتعديله للاسم الفعلي بدقة
+            $query->where("grade_id", $request->grade_id);
+        }
+
+        // 3. الترتيب الديناميكي (Sorting)
+        $sortBy = $request->get("sort_by", "id");
+        $sortOrder = $request->get("sort_order", "desc");
+
+        if (str_contains($sortBy, ".")) {
+            // ترتيب بحسب حقل في جدول مرتبط (اختياري)
+        } else {
+            $query->orderBy($sortBy, $sortOrder);
+        }
+
+        // 4. تنفيذ الـ Pagination في النهاية تماماً بعد دمج الفلاتر والترتيب 🚀
+        $fee_invoices = $query->paginate(10);
+
+        // 5. الاستجابة لـ Axios
+        if ($request->expectsJson()) {
+            return response()->json([
+                "items" => $fee_invoices->items(),
+                "pagination" => [
+                    "current_page" => $fee_invoices->currentPage(),
+                    "last_page" => $fee_invoices->lastPage(),
+                ],
+            ]);
+        }
 
         return view("backend.fee_invoices.index", get_defined_vars());
     }

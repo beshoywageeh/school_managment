@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
-enum user_religion: int
+enum user_religion: string
 {
-    case CHRISTIAN = 0;
-    case MUSLIM = 1;
+    case CHRISTIAN = 'christian';
+    case MUSLIM = 'muslim';
 
     public function lang()
     {

@@ -9,7 +9,17 @@ class promotion extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fiillable = [
+        'student_id',
+        'from_grade',
+        'to_grade',
+        'from_class',
+        'to_class',
+        'to_acc',
+        'from_acc',
+        'user_id',
+        'school_id',
+    ];
 
     public function f_grade()
     {

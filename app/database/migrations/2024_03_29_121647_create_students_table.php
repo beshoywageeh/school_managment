@@ -19,11 +19,11 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->date('join_date')->nullable();
             $table->string('national_id')->nullable();
-            $table->tinyInteger('gender')->nullable();
-            $table->tinyInteger('student_status')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('student_status')->nullable();
             $table->string('birth_at_begin', 50)->nullable();
-            $table->tinyInteger('religion')->nullable();
-            $table->tinyInteger('tameen')->nullable();
+            $table->string('religion')->nullable();
+            $table->string('tameen')->default('inactive');
             $table->unsignedBigInteger('user_id')->index();
             $table->unsignedBigInteger('school_id')->index();
             $table->unsignedBigInteger('grade_id')->index();

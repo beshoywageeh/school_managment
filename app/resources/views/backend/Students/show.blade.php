@@ -153,7 +153,7 @@
                             @forelse ($student->StudentAccount as $account)
                                 <tr class="border-b border-gray-50 hover:bg-gray-50/70 transition-colors">
                                     <td class="py-3 px-5 text-gray-500 text-sm">{{ $account->created_at->format('Y-m-d') }}</td>
-                                    <td class="py-3 px-5 text-gray-700">{{ trans('Sidebar.'.$account->type) }}</td>
+                                    <td class="py-3 px-5 text-gray-700">{{ $account->type->lang() }}</td>
                                     <td class="py-3 px-5 text-green-700 font-semibold">{{ number_format($account->credit, 2) }} ج.م</td>
                                     <td class="py-3 px-5 text-red-600 font-semibold">{{ number_format($account->debit, 2) }} ج.م</td>
                                 </tr>

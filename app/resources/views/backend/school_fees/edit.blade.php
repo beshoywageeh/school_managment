@@ -1,3 +1,54 @@
+<x-modal can="schoolfees-edit" title="{{ trans('fees.title') }}" icon="pencil" id="school_fee_edit" size="xl" variant="warning">
+    <slot>
+        <form id="school_fee_edit" class="max-w-full" action="{{ route('school_fees.update', $fee->id) }}" method="post">
+            @csrf
+            <input type="hidden" name="id" value="{{ $fee->id }}">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('fees.title') }}</label>
+                    <input type="text" name="name" value="{{ $fee->title }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('fees.amount') }}</label>
+                    <input type="number" name="amount" value="{{ $fee->amount }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.choose_grade') }}</label>
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="grade_id" id="grades">
+                        <option>{{ trans('student.choose_grade') }}</option>
+                        @foreach ($grades as $grade)
+                            <option value="{{ $grade->id }}" @selected($fee->grade_id == $grade->id)>{{ $grade->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.choose_classroom') }}</label>
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="classroom_id" id="classrooms">
+                        <option value="{{ $fee->classroom_id }}" selected>{{ $fee->classroom->name }}</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('fees.academic_year') }}</label>
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="academic_year_id">
+                        <option value="{{ $fee->academic_year_id }}" selected>{{ $fee->year->view }}</option>
+                        @forelse ($academic_years as $year)
+                            <option value="{{ $year['id'] }}">{{ $year['academic_year'] }}</option>
+                        @empty
+                            <option>{{ trans('fees.no_academic_year') }}</option>
+                        @endforelse
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('fees.desc') }}</label>
+                <textarea type="text" name="description" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" >{{ $fee->description }}</textarea>
+            </div>
+        </form>
+    </slot>
+</x-modal>
+{{--
 @extends('layouts.app')
 @section('title')
     {{ trans('fees.title') }} | {{ trans('general.edit') }}
@@ -72,4 +123,4 @@
             });
         </script>
     @endpush
-@endsection
+@endsection --}}

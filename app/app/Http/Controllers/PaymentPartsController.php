@@ -7,7 +7,7 @@ use App\Http\Traits\SchoolTrait;
 use App\Models\Fee_invoice;
 use App\Models\PaymentParts;
 use App\Models\Student;
-use App\Services\FinancialService;
+use App\Services\Finance\FinancialService;
 use Illuminate\Http\Request;
 
 class PaymentPartsController extends Controller
@@ -28,35 +28,33 @@ class PaymentPartsController extends Controller
         ])->paginate(10);
         $school = $this->getSchool();
 
-        // return $PaymentParts;
         return view('backend.payment_parts.index', get_defined_vars());
     }
 
     public function create($id)
     {
         try {
-            $student = Student::where('id', $id)
+            $school = $this->getSchool();
+            $student = Student::where('school_id', $school->id)
+                ->where('id', $id)
                 ->with([
                     'fee_invoice' => function ($q) {
-                        $q->where('status', 'unpaid')->with(
-                            'fees:id,title,amount',
-                        );
+                        $q->where('status', 'unpaid')->with(['fees']);
                     },
                     'parent:id,Father_Name',
                 ])
-                ->first(['id', 'name', 'acadmiecyear_id', 'parent_id']);
+                ->first();
 
-            $school = $this->getSchool();
-            if ($student->count() == 0) {
+            if ($student->fee_invoice->count() == 0) {
                 session()->flash('info', trans('general.noInvoiceToPart'));
 
                 return redirect()->back();
-            } else {
-                return view(
-                    'backend.payment_parts.create',
-                    get_defined_vars(),
-                );
             }
+
+            return view(
+                'backend.payment_parts.create',
+                compact('school', 'student'),
+            );
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -72,7 +70,6 @@ class PaymentPartsController extends Controller
             $academic_year = Fee_invoice::where('student_id', $student->id)
                 ->where('status', 'unpaid')
                 ->first('academic_year_id');
-
             foreach ($parts as $part) {
                 $this->financial_service->PaymentParts(
                     $student,
@@ -81,6 +78,7 @@ class PaymentPartsController extends Controller
                     $this->GetSchool()->id,
                     $part['pay_at'],
                     $part['amount'],
+                    'unpaid',
                 );
             }
 
@@ -91,28 +89,6 @@ class PaymentPartsController extends Controller
             session()->flash('error', $e->getMessage());
 
             return redirect()->back()->withInput();
-        }
-    }
-
-    public function show($id)
-    {
-        try {
-            $paymentParts = PaymentParts::where('id', $id)
-                ->with([
-                    'students:id,name',
-                    'grades:id,name',
-                    'classes:id,name',
-                    'acd_year',
-                ])
-                ->first();
-            $school = $this->getSchool();
-            session()->flash('success', trans('general.success'));
-
-            return view('backend.payment_parts.edit', get_defined_vars());
-        } catch (\Exception $e) {
-            session()->flash('error', $e->getMessage());
-
-            return redirect()->back();
         }
     }
 

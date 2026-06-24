@@ -19,6 +19,7 @@
     table td {
         align-content: center;
         border: 1px solid black;
+        border-collapse: collapse;
     }
 
     @media print {
@@ -27,6 +28,10 @@
         .no-print * {
             display: none !important;
         }
+    }
+
+    img {
+        width: 10%
     }
 </style>
 
