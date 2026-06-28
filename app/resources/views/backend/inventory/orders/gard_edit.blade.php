@@ -11,7 +11,7 @@
 
         <form action="{{ route('inventory.gard.update') }}" method="POST">
             @csrf
-            <input type="hidden" name="gard_id" value="{{ $gard->id ?? '' }}">
+            <input type="hidden" name="order_id" value="{{ $gard->id ?? '' }}">
             <div class="p-6">
                 <div class="mb-6">
                     <x-input name="date" type="date" :value="old('date', $gard->date ?? date('Y-m-d'))">{{ trans('general.date') }}</x-input>
@@ -33,16 +33,16 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100" x-data="{
-                            items: {{ json_encode($allItems ?? []) }},
+                            items: {{ json_encode($items ?? []) }},
                             diff(index) {
                                 const actual = parseFloat($refs['actual_' + index]?.value) || 0;
                                 const inv = parseFloat(this.items[index]?.current_stock) || 0;
                                 return (actual - inv).toFixed(2);
                             }
                         }">
-                            @forelse($allItems ?? [] as $invItem)
+                            @forelse($items ?? [] as $invItem)
                             @php
-                                $gardItem = $gard?->items?->where('item_id', $invItem->id)->first();
+                                $gardItem = $gard?->items?->where('itemable_id', $invItem->id)->first();
                             @endphp
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->index + 1 }}</td>
@@ -50,10 +50,10 @@
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $invItem->current_stock }}</td>
                                 <td class="px-6 py-4 text-sm">
                                     <input type="hidden" name="items[{{ $loop->index }}][item_id]" value="{{ $invItem->id }}">
-                                    <input type="number" step="0.01" x-ref="actual_{{ $loop->index }}" x-on:input="$el.closest('tr').querySelector('.diff-cell').textContent = $data.diff({{ $loop->index }})" name="items[{{ $loop->index }}][actual_stock]" value="{{ old('items.' . $loop->index . '.actual_stock', $gardItem->actual_stock ?? $invItem->current_stock) }}" class="w-32 px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-center">
+                                    <input type="number" step="0.01" x-ref="actual_{{ $loop->index }}" x-on:input="$el.closest('tr').querySelector('.diff-cell').textContent = $data.diff({{ $loop->index }})" name="items[{{ $loop->index }}][actual_stock]" value="{{ old('items.' . $loop->index . '.actual_stock', $invItem->current_stock) }}" class="w-32 px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-center">
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium diff-cell text-center">
-                                    <span class="text-gray-600">{{ number_format(($gardItem->actual_stock ?? $invItem->current_stock) - $invItem->current_stock, 2) }}</span>
+                                    <span class="text-gray-600">{{ number_format(0, 2) }}</span>
                                 </td>
                             </tr>
                             @empty

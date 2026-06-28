@@ -30,16 +30,51 @@ class InventoryOrderController extends Controller
         );
         $school = $this->getSchool();
 
-        $orders = InventoryOrder::where('school_id', $school->id)
+        $query = InventoryOrder::where('school_id', $school->id)
             ->where('type', $type)
             ->with('items.itemable')
-            ->withCount('items')
-            ->latest()
-            ->paginate();
+            ->withCount('items');
+
+        if ($search = request('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('auto_number', 'like', "%{$search}%")
+                    ->orWhere('notes', 'like', "%{$search}%");
+            });
+        }
+
+        if ($status = request('status')) {
+            $query->where('status', $status);
+        }
+
+        if ($studentId = request('student_id')) {
+            $query->where('student_id', $studentId);
+        }
+
+        if ($fromDate = request('from_date')) {
+            $query->whereDate('date', '>=', $fromDate);
+        }
+
+        if ($toDate = request('to_date')) {
+            $query->whereDate('date', '<=', $toDate);
+        }
+
+        $sortBy = request('sort_by', 'created_at');
+        $sortOrder = request('sort_order', 'desc');
+        $allowedSorts = ['auto_number', 'date', 'total_amount', 'items_count', 'created_at'];
+        if (in_array($sortBy, $allowedSorts)) {
+            $query->orderBy($sortBy, $sortOrder === 'desc' ? 'desc' : 'asc');
+        } else {
+            $query->latest();
+        }
+
+        $perPage = min((int) request('per_page', 10), 100);
+        $orders = $query->paginate($perPage);
+
+        $students = Student::where('school_id', $school->id)->get();
 
         return view(
             'backend.inventory.orders.index',
-            compact('orders', 'type', 'school'),
+            compact('orders', 'type', 'school', 'students'),
         );
     }
 
@@ -56,8 +91,13 @@ class InventoryOrderController extends Controller
             ->get();
         $students = Student::where('school_id', $school->id)->get();
 
+        $viewName = match ($type) {
+            'inventory' => 'backend.inventory.orders.create_tawreed',
+            'sales', 'purchases' => 'backend.inventory.orders.create_sarf',
+        };
+
         return view(
-            'backend.inventory.orders.form',
+            $viewName,
             compact('type', 'items', 'students', 'school'),
         );
     }
@@ -99,8 +139,13 @@ class InventoryOrderController extends Controller
             ->get();
         $students = Student::where('school_id', $school->id)->get();
 
+        $viewName = match ($order->type->value) {
+            'inventory' => 'backend.inventory.orders.edit_tawreed',
+            'sales', 'purchases' => 'backend.inventory.orders.edit_sarf',
+        };
+
         return view(
-            'backend.inventory.orders.form',
+            $viewName,
             compact('order', 'items', 'students', 'school'),
         );
     }

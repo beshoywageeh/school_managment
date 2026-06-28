@@ -1,14 +1,14 @@
 @extends('layouts.report_view')
 @section('title')
-    {{ trans('orders.num') }}: {{ $order->order_number }}
+    {{ trans('orders.num') }}: {{ $order->auto_number }}
 @endsection
 
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 max-w-4xl mx-auto my-4">
         <div class="flex justify-between items-start border-b border-gray-200 pb-4 mb-4">
             <div>
-                <h2 class="text-xl font-bold text-gray-800">{{ trans('orders.num') }}: {{ $order->order_number }}</h2>
-                <p class="text-sm text-gray-500 mt-1">{{ trans('general.date') }}: {{ $order->order_date?->format('Y-m-d') ?? $order->date?->format('Y-m-d') }}</p>
+                <h2 class="text-xl font-bold text-gray-800">{{ trans('orders.num') }}: {{ $order->auto_number }}</h2>
+                <p class="text-sm text-gray-500 mt-1">{{ trans('general.date') }}: {{ $order->date?->format('Y-m-d') }}</p>
             </div>
             <div class="text-start">
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $order->type?->color() ?? 'bg-gray-100 text-gray-700' }}">

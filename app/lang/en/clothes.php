@@ -11,7 +11,7 @@ return [
     'total_product' => 'Total Products',
     'sales_isset' => 'Price per Set',
     'isset_order' => 'Full Set',
-    'not_payed' => 'Not Paid',
-    'payed' => 'Paid',
+    'not_paid' => 'Not Paid',
+    'paid' => 'Paid',
     'pay' => 'Pay',
 ];

@@ -6,7 +6,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-4 border-b border-gray-100">
-            <h4 class="text-lg font-semibold text-gray-800">{{ trans('stock.income_order') }}: {{ $order->order_number }}</h4>
+            <h4 class="text-lg font-semibold text-gray-800">{{ trans('stock.income_order') }}: {{ $order->auto_number }}</h4>
         </div>
 
         <form action="{{ route('inventory.orders.update') }}" method="POST">
@@ -15,7 +15,7 @@
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div>
-                        <x-input name="date" type="date" :value="old('date', $order->order_date?->format('Y-m-d') ?? $order->date?->format('Y-m-d'))">{{ trans('general.date') }}</x-input>
+                        <x-input name="date" type="date" :value="old('date', $order->date?->format('Y-m-d'))">{{ trans('general.date') }}</x-input>
                     </div>
                     <div>
                         <x-input name="manual_number" type="text" :value="old('manual_number', $order->manual_number)">{{ trans('stock.manual_num') }}</x-input>

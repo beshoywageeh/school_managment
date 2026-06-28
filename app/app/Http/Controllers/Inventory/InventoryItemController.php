@@ -26,14 +26,32 @@ class InventoryItemController extends Controller
         );
 
         $school = $this->getSchool();
-        $items = InventoryItem::where('school_id', $school->id)
+        $query = InventoryItem::where('school_id', $school->id)
             ->ByType($type)
             ->with([
                 'grade' => function ($query) {
                     $query->select(['id', 'name']);
                 },
-            ])
-            ->paginate(10);
+            ]);
+
+        if ($search = request('search')) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        if ($category = request('category')) {
+            $query->where('category', $category);
+        }
+
+        $sortBy = request('sort_by', 'name');
+        $sortOrder = request('sort_order', 'asc');
+        $allowedSorts = ['name', 'type', 'current_stock', 'sell_price', 'category'];
+        if (in_array($sortBy, $allowedSorts)) {
+            $query->orderBy($sortBy, $sortOrder === 'desc' ? 'desc' : 'asc');
+        }
+
+        $perPage = min((int) request('per_page', 10), 100);
+        $items = $query->paginate($perPage);
+
         $classrooms = class_room::where('school_id', $school->id)
             ->with([
                 'grade' => function ($query) {

@@ -33,14 +33,14 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100" x-data="{
-                            items: {{ json_encode($allItems ?? []) }},
+                            items: {{ json_encode($items ?? []) }},
                             diff(index) {
                                 const actual = parseFloat($refs['actual_' + index]?.value) || 0;
                                 const inv = parseFloat(this.items[index]?.current_stock) || 0;
                                 return (actual - inv).toFixed(2);
                             }
                         }">
-                            @forelse($allItems ?? [] as $invItem)
+                            @forelse($items ?? [] as $invItem)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->index + 1 }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $invItem->name }}</td>

@@ -24,7 +24,7 @@ class InventoryGardController extends Controller
             ->get();
 
         return view(
-            'backend.inventory.orders.gard-form',
+            'backend.inventory.orders.gard_create',
             compact('items', 'school'),
         );
     }
@@ -34,7 +34,7 @@ class InventoryGardController extends Controller
         $school = $this->getSchool();
 
         $this->inventoryService->submitGard([
-            ...$request,
+            ...$request->validated(),
             'school_id' => $school->id,
         ]);
 
@@ -52,8 +52,8 @@ class InventoryGardController extends Controller
             ->get();
 
         return view(
-            'backend.inventory.orders.gard-form',
-            compact('order', 'items', 'school'),
+            'backend.inventory.orders.gard_edit',
+            compact('items', 'school') + ['gard' => $order],
         );
     }
 
@@ -74,6 +74,7 @@ class InventoryGardController extends Controller
 
         $this->inventoryService->submitGard([
             'school_id' => $school->id,
+            'order_id' => $validated['order_id'] ?? null,
             'date' => $validated['date'] ?? null,
             'notes' => $validated['notes'] ?? null,
             'items' => $validated['items'],

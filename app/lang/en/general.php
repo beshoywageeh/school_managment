@@ -40,7 +40,7 @@ return [
     'except_fee' => 'Exemptions',
     'payment_status' => 'Payment Status',
     'pay' => 'Pay',
-    'not_payed' => 'Not Paid',
+    'not_paid' => 'Not Paid',
     'noInvoiceToPart' => 'No fee invoices for installment',
     'noDataToShow' => 'No data to show',
     'full_pay' => 'Full Payment',
