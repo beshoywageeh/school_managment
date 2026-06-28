@@ -25,75 +25,75 @@ class fee_invoiceController extends Controller
     public function index(Request $request)
     {
         $school = $this->getSchool();
-        $gradeOptions = Grade::pluck("name", "id")->toArray();
+        $gradeOptions = Grade::pluck('name', 'id')->toArray();
 
         $columns = [
             [
-                "key" => "invoice_date",
-                "label" => trans("fee_invoice.date"),
-                "sortable" => true,
+                'key' => 'invoice_date',
+                'label' => trans('fee_invoice.date'),
+                'sortable' => true,
             ],
             [
-                "key" => "students.name",
-                "label" => trans("fee_invoice.name"),
-                "filter_type" => "text",
-                "filter_key" => "students", // الحقل الذي سيرسله Axios
-                "sortable" => false,
+                'key' => 'students.name',
+                'label' => trans('fee_invoice.name'),
+                'filter_type' => 'text',
+                'filter_key' => 'students', // الحقل الذي سيرسله Axios
+                'sortable' => false,
             ],
             [
-                "key" => "fees_sum_amount",
-                "label" => trans("fee_invoice.debit"),
-                "sortable" => false, // حقول الـ Sum يفضل تعطيل الترتيب عليها مؤقتاً
+                'key' => 'fees_sum_amount',
+                'label' => trans('fee_invoice.debit'),
+                'sortable' => false, // حقول الـ Sum يفضل تعطيل الترتيب عليها مؤقتاً
             ],
             [
-                "key" => "grades.name",
-                "label" => trans("fee_invoice.grade"),
-                "filter_type" => "select_relation",
-                "filter_key" => "grade_id",
-                "options" => $gradeOptions, // تم تعديل الاسم إلى options بالجمع ✅
-                "sortable" => true,
+                'key' => 'grades.name',
+                'label' => trans('fee_invoice.grade'),
+                'filter_type' => 'select_relation',
+                'filter_key' => 'grade_id',
+                'options' => $gradeOptions, // تم تعديل الاسم إلى options بالجمع ✅
+                'sortable' => true,
             ],
             [
-                "key" => "classes.name",
-                "label" => trans("fee_invoice.class"),
-                "sortable" => false,
+                'key' => 'classes.name',
+                'label' => trans('fee_invoice.class'),
+                'sortable' => false,
             ],
             [
-                "key" => "acd_year.view",
-                "label" => trans("fee_invoice.acadmic"),
-                "sortable" => false,
+                'key' => 'acd_year.view',
+                'label' => trans('fee_invoice.acadmic'),
+                'sortable' => false,
             ],
         ];
 
         // 1. نبدأ ببناء الاستعلام دون تنفيذ (بدون paginate أو get)
         $query = Fee_invoice::query()
-            ->where("school_id", $school->id)
+            ->where('school_id', $school->id)
             ->with([
-                "students:id,name",
-                "grades:id,name",
-                "classes:id,name",
-                "acd_year:id,view",
+                'students:id,name',
+                'grades:id,name',
+                'classes:id,name',
+                'acd_year:id,view',
             ])
-            ->withSum("fees", "amount");
+            ->withSum('fees', 'amount');
 
         // 2. تطبيق فلاتر البحث الآن (بناءً على الـ filter_key المرسل من المكون)
-        if ($request->filled("students")) {
+        if ($request->filled('students')) {
             // تم تغييرها من name إلى students لتوحيد المفتاح ✅
-            $query->whereHas("students", function ($q) use ($request) {
-                $q->where("name", "like", "%" . $request->students . "%");
+            $query->whereHas('students', function ($q) use ($request) {
+                $q->where('name', 'like', '%'.$request->students.'%');
             });
         }
 
-        if ($request->filled("grade_id")) {
+        if ($request->filled('grade_id')) {
             // تأكد أن اسم الحقل في جدول فواتير الرسوم هو grade_id أو قم بتعديله للاسم الفعلي بدقة
-            $query->where("grade_id", $request->grade_id);
+            $query->where('grade_id', $request->grade_id);
         }
 
         // 3. الترتيب الديناميكي (Sorting)
-        $sortBy = $request->get("sort_by", "id");
-        $sortOrder = $request->get("sort_order", "desc");
+        $sortBy = $request->get('sort_by', 'id');
+        $sortOrder = $request->get('sort_order', 'desc');
 
-        if (str_contains($sortBy, ".")) {
+        if (str_contains($sortBy, '.')) {
             // ترتيب بحسب حقل في جدول مرتبط (اختياري)
         } else {
             $query->orderBy($sortBy, $sortOrder);
@@ -105,15 +105,15 @@ class fee_invoiceController extends Controller
         // 5. الاستجابة لـ Axios
         if ($request->expectsJson()) {
             return response()->json([
-                "items" => $fee_invoices->items(),
-                "pagination" => [
-                    "current_page" => $fee_invoices->currentPage(),
-                    "last_page" => $fee_invoices->lastPage(),
+                'items' => $fee_invoices->items(),
+                'pagination' => [
+                    'current_page' => $fee_invoices->currentPage(),
+                    'last_page' => $fee_invoices->lastPage(),
                 ],
             ]);
         }
 
-        return view("backend.fee_invoices.index", get_defined_vars());
+        return view('backend.fee_invoices.index', get_defined_vars());
     }
 
     /**
@@ -123,23 +123,23 @@ class fee_invoiceController extends Controller
     {
         try {
             $school = $this->getSchool();
-            $student = Student::where("id", $student_id)
-                ->where("school_id", $school->id)
+            $student = Student::where('id', $student_id)
+                ->where('school_id', $school->id)
                 ->first();
-            $school_fees = school_fee::where("school_id", $school->id)
-                ->where("grade_id", $student->grade_id)
-                ->where("classroom_id", $student->classroom_id)
-                ->get(["id", "title", "amount"]);
+            $school_fees = school_fee::where('school_id', $school->id)
+                ->where('grade_id', $student->grade_id)
+                ->where('classroom_id', $student->classroom_id)
+                ->get(['id', 'title', 'amount']);
 
-            if (!$student || $school_fees->count() == 0) {
-                session()->flash("info", trans("general.no_data_found"));
+            if (! $student || $school_fees->count() == 0) {
+                session()->flash('info', trans('general.no_data_found'));
 
                 return redirect()->back();
             }
 
-            return view("backend.fee_invoices.create", get_defined_vars());
+            return view('backend.fee_invoices.create', get_defined_vars());
         } catch (Exception $e) {
-            session()->flash("error", $e->getMessage());
+            session()->flash('error', $e->getMessage());
 
             return redirect()->back();
         }
@@ -153,41 +153,41 @@ class fee_invoiceController extends Controller
         $List_Fees = $request->list_fees;
         DB::beginTransaction();
         try {
-            $ac_year = acadmice_year::where("status", "0")->first();
+            $ac_year = acadmice_year::where('status', '0')->first();
             foreach ($List_Fees as $list_fee) {
-                $amount = school_fee::where("id", $list_fee["fee"])->first()
+                $amount = school_fee::where('id', $list_fee['fee'])->first()
                     ->amount;
-                $student = Student::findorfail($list_fee["student_id"]);
+                $student = Student::findorfail($list_fee['student_id']);
                 $service->FeeInvoice(
                     $student,
-                    $list_fee["fee"],
+                    $list_fee['fee'],
                     $ac_year->id,
                     $this->getSchool()->id,
                 );
                 $service->CreateStudentAccount(
                     $student,
-                    $list_fee["fee"],
+                    $list_fee['fee'],
                     $ac_year->id,
-                    "invoice",
+                    'invoice',
                     0.0,
                     $amount,
                 );
             }
             $this->logActivity(
-                trans("log.actions.added"),
-                trans("log.models.fee_invoice.created", [
-                    "name" => $student->name,
+                trans('log.actions.added'),
+                trans('log.models.fee_invoice.created', [
+                    'name' => $student->name,
                 ]),
             );
             DB::commit();
 
             return redirect()
-                ->route("fee_invoice.index")
-                ->with("success", trans("general.success"));
+                ->route('fee_invoice.index')
+                ->with('success', trans('general.success'));
         } catch (Exception $e) {
             DB::rollback();
 
-            return redirect()->back()->with("error", $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -197,16 +197,16 @@ class fee_invoiceController extends Controller
     public function show(string $id)
     {
         $school = $this->getSchool();
-        $invoice_details = Fee_invoice::where("id", $id)
-            ->with("students", "fees", "grades", "classes")
+        $invoice_details = Fee_invoice::where('id', $id)
+            ->with('students', 'fees', 'grades', 'classes')
             ->first();
         $tafqeet = Numbers::TafqeetMoney(
             $invoice_details->fees->amount,
-            "EGP",
-            "ar",
+            'EGP',
+            'ar',
         );
 
-        return view("backend.fee_invoices.show", get_defined_vars());
+        return view('backend.fee_invoices.show', get_defined_vars());
     }
 
     /**
@@ -215,12 +215,12 @@ class fee_invoiceController extends Controller
     public function edit(string $id)
     {
         $school = $this->getSchool();
-        $fee = Fee_invoice::where("id", $id)->with("students", "fees")->first();
-        $sfees = school_fee::where("grade_id", $fee->grade_id)
-            ->where("classroom_id", $fee->classroom_id)
+        $fee = Fee_invoice::where('id', $id)->with('students', 'fees')->first();
+        $sfees = school_fee::where('grade_id', $fee->grade_id)
+            ->where('classroom_id', $fee->classroom_id)
             ->get();
 
-        return view("backend.fee_invoices.edit", get_defined_vars());
+        return view('backend.fee_invoices.edit', get_defined_vars());
     }
 
     /**
@@ -233,7 +233,7 @@ class fee_invoiceController extends Controller
             // Retrieve the existing fee invoice by its ID
             $fee = Fee_invoice::findOrFail($request->id);
             $student = Student::findorfail($fee->student_id);
-            $ac_year = acadmice_year::where("status", "0")->first();
+            $ac_year = acadmice_year::where('status', '0')->first();
 
             $service->FeeInvoice(
                 $student,
@@ -245,26 +245,26 @@ class fee_invoiceController extends Controller
                 $student,
                 $fee->id,
                 $ac_year->id,
-                "invoice",
+                'invoice',
                 0.0,
                 $fee->amount,
             );
 
             $this->logActivity(
-                trans("log.actions.updated"),
-                trans("log.models.fee_invoice.updated", [
-                    "name" => $fee->students->name,
+                trans('log.actions.updated'),
+                trans('log.models.fee_invoice.updated', [
+                    'name' => $fee->students->name,
                 ]),
             );
             DB::commit();
 
             return redirect()
-                ->route("fee_invoice.index")
-                ->with("success", trans("general.success"));
+                ->route('fee_invoice.index')
+                ->with('success', trans('general.success'));
         } catch (Exception $e) {
             DB::rollback();
 
-            return redirect()->back()->with("error", $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -276,18 +276,18 @@ class fee_invoiceController extends Controller
         try {
             $fee = Fee_invoice::findorFail($id);
             $this->logActivity(
-                trans("log.actions.deleted"),
-                trans("log.models.fee_invoice.deleted", [
-                    "name" => $fee->students->name,
+                trans('log.actions.deleted'),
+                trans('log.models.fee_invoice.deleted', [
+                    'name' => $fee->students->name,
                 ]),
             );
             $fee->delete();
 
             return redirect()
-                ->route("fee_invoice.index")
-                ->with("success", trans("general.success"));
+                ->route('fee_invoice.index')
+                ->with('success', trans('general.success'));
         } catch (Exception $e) {
-            return redirect()->back()->with("error", $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 }

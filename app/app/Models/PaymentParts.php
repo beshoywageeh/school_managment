@@ -13,40 +13,40 @@ class PaymentParts extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        "student_id",
-        "grade_id",
-        "class_id",
-        "academic_year_id",
-        "school_id",
-        "date",
-        "amount",
-        "status",
-        "school_fees_id",
+        'student_id',
+        'grade_id',
+        'class_id',
+        'academic_year_id',
+        'school_id',
+        'date',
+        'amount',
+        'status',
+        'school_fees_id',
     ];
 
     protected $casts = [
-        "status" => Payment_Status::class,
-        "date" => "date",
-        "amount" => "decimal:2",
+        'status' => Payment_Status::class,
+        'date' => 'date',
+        'amount' => 'decimal:2',
     ];
 
     public function students()
     {
-        return $this->belongsTo(Student::class, "student_id");
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
     public function grades()
     {
-        return $this->belongsTo(Grade::class, "grade_id");
+        return $this->belongsTo(Grade::class, 'grade_id');
     }
 
     public function classes()
     {
-        return $this->belongsTo(class_room::class, "class_id");
+        return $this->belongsTo(class_room::class, 'class_id');
     }
 
     public function year(): BelongsTo
     {
-        return $this->belongsTo(acadmice_year::class, "academic_year_id");
+        return $this->belongsTo(acadmice_year::class, 'academic_year_id');
     }
 }
