@@ -23,8 +23,8 @@ class ActivityLog extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'date',
-        'updated_at' => 'date',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     public function user()

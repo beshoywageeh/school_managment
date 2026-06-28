@@ -230,25 +230,22 @@ class fee_invoiceController extends Controller
     {
         DB::beginTransaction();
         try {
-            // Retrieve the existing fee invoice by its ID
             $fee = Fee_invoice::findOrFail($request->id);
             $student = Student::findorfail($fee->student_id);
             $ac_year = acadmice_year::where('status', '0')->first();
 
-            $service->FeeInvoice(
-                $student,
-                $fee->id,
-                $ac_year->id,
-                $this->getSchool()->id,
-            );
-            $service->CreateStudentAccount(
-                $student,
-                $fee->id,
-                $ac_year->id,
-                'invoice',
-                0.0,
-                $fee->amount,
-            );
+            $studentAccount = StudentAccount::firstOrNew([
+                'fee_invoices_id' => $fee->id,
+            ]);
+            $studentAccount->student_id = $student->id;
+            $studentAccount->grade_id = $student->grade_id;
+            $studentAccount->classroom_id = $student->classroom_id;
+            $studentAccount->academic_year_id = $ac_year->id;
+            $studentAccount->date = now()->toDateString();
+            $studentAccount->type = 'invoice';
+            $studentAccount->debit = $fee->amount;
+            $studentAccount->credit = 0.0;
+            $studentAccount->save();
 
             $this->logActivity(
                 trans('log.actions.updated'),
