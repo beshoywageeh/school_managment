@@ -8,7 +8,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement("ALTER TABLE inventory_orders MODIFY COLUMN type ENUM('inventory', 'sales', 'purchases', 'gard') NOT NULL DEFAULT 'purchases'");
+        DB::statement('ALTER TABLE inventory_orders DROP CONSTRAINT IF EXISTS inventory_orders_type_check');
+        DB::statement("ALTER TABLE inventory_orders ADD CONSTRAINT inventory_orders_type_check CHECK (type::text = ANY (ARRAY['inventory', 'sales', 'purchases', 'gard']::text[]))");
 
         Schema::table('inventory_orders', function ($table) {
             $table->dropColumn('gard_items');
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->json('gard_items')->nullable();
         });
 
-        DB::statement("ALTER TABLE inventory_orders MODIFY COLUMN type ENUM('inventory', 'sales', 'purchases') NOT NULL DEFAULT 'purchases'");
+        DB::statement('ALTER TABLE inventory_orders DROP CONSTRAINT IF EXISTS inventory_orders_type_check');
+        DB::statement("ALTER TABLE inventory_orders ADD CONSTRAINT inventory_orders_type_check CHECK (type::text = ANY (ARRAY['inventory', 'sales', 'purchases']::text[]))");
     }
 };
