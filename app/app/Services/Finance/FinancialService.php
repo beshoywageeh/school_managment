@@ -13,6 +13,7 @@ use App\Models\PaymentParts;
 use App\Models\Recipt_Payment; // يفضل مستقبلاً تعديلها إلى ReceiptPayment
 use App\Models\Student;
 use App\Models\StudentAccount;
+use App\Services\Inventory\InventoryService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,10 @@ use Illuminate\Support\Facades\DB;
 class FinancialService
 {
     use LogsActivity;
+
+    public function __construct(
+        protected InventoryService $inventoryService,
+    ) {}
 
     /**
      * توليد رقم تسلسلي تلقائي مبطن بالأصفار
@@ -152,7 +157,7 @@ class FinancialService
             ]);
 
             if (! empty($itemsData)) {
-                $order->items()->createMany($itemsData);
+                $this->inventoryService->createOrderItems($order, $itemsData);
             }
 
             $this->logActivity(
@@ -211,7 +216,7 @@ class FinancialService
             ]);
 
             if (! empty($itemsData)) {
-                $order->items()->createMany($itemsData);
+                $this->inventoryService->createOrderItems($order, $itemsData);
             }
 
             $this->logActivity(

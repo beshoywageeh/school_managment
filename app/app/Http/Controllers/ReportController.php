@@ -32,13 +32,14 @@ class ReportController extends Controller
             ->where('teacher_id', $user)
             ->pluck('grade_id');
         $acadmeic_years = acadmice_year::where('status', 0)->get();
-        $stocks = InventoryItem::where('category', 'stock')->get();
-        $clothes = InventoryItem::where('category', 'clothes')
+        $stocks = InventoryItem::where('type', 'stock')->get();
+        $clothes = InventoryItem::where('type', 'clothe')
             ->whereIn('grade_id', $user_grade)
 
             ->with('grade:id,name', 'classroom:id,name')
             ->get();
-        $books_sheets = InventoryItem::whereIn('grade_id', $user_grade)
+        $books_sheets = InventoryItem::where('type', 'book')
+            ->whereIn('grade_id', $user_grade)
             ->with('grade:id,name', 'classroom:id,name')
             ->get();
         $grades = Grade::whereIn('id', $user_grade)
@@ -129,7 +130,7 @@ class ReportController extends Controller
 
     public function clothes_stocks(PDFExportService $PDFExport)
     {
-        $data = InventoryItem::where('category', 'clothes')
+        $data = InventoryItem::where('type', 'clothe')
             ->with('orders', 'classroom', 'grade')
             ->get();
         $school = $this->GetSchool();
@@ -144,7 +145,7 @@ class ReportController extends Controller
 
     public function books_sheets(PDFExportService $PDFExport)
     {
-        $data = InventoryItem::where('category', 'book_sheet')
+        $data = InventoryItem::where('type', 'book')
             ->with('orders', 'classroom', 'grade')
             ->get();
         $school = $this->GetSchool();
@@ -639,7 +640,7 @@ class ReportController extends Controller
 
         foreach ($stocks->orders->sortBy('created_at') as $stock) {
             $previousstock +=
-                $stock->pivot->quantity_in - $stock->pivot->quantity_out;
+                $stock->quantity_in - $stock->quantity_out;
             $totals[$stock->id] = [
                 'stk' => $stock,
                 'total' => $previousstock,
