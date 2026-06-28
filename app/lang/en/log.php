@@ -157,6 +157,7 @@ return [
     'index' => [
         'title' => 'Activity Log',
         'description' => 'Description',
+        'total' => 'Total Activities',
         'type' => 'Type',
         'user' => 'User',
         'date' => 'Date',

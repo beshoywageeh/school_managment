@@ -12,7 +12,7 @@
             </div>
             <div>
                 <h3 class="text-3xl font-bold text-gray-800">{{ $data['total'] }}</h3>
-                <p class="text-gray-500">{{ trans('Sidebar.Students') }}</p>
+                <p class="text-gray-500">{{ trans('log.index.total') }}</p>
             </div>
         </x-stat_card>
         {{-- today --}}

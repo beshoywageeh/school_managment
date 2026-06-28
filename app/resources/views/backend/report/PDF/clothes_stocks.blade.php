@@ -21,7 +21,7 @@
                 <td>{{ $clothe->name }}</td>
                 <td>{{ $clothe->grade->name }}</td>
                 <td>{{ $clothe->classroom->name }}</td>
-                <td>{{ $clothe->orders->sum('pivot.quantity_in') + $clothe->opening_qty - $clothe->orders->sum('pivot.quantity_out') }}
+                <td>{{ $clothe->orders->sum('quantity_in') + $clothe->opening_qty - $clothe->orders->sum('quantity_out') }}
                 </td>
             </tr>
         @endforeach

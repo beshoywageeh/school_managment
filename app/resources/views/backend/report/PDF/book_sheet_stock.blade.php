@@ -42,8 +42,8 @@
                         {{ trans('report.inventory') }}
                     @endif
                 </td>
-                <td>{{ number_format($order['stk']->pivot->quantity_in, 2) }}</td>
-                <td>{{ number_format($order['stk']->pivot->quantity_out, 2) }}</td>
+                <td>{{ number_format($order['stk']->quantity_in, 2) }}</td>
+                <td>{{ number_format($order['stk']->quantity_out, 2) }}</td>
                 <td>{{ number_format($order['total'] + $data['stock']->opening_qty, 2) }}</td>
             </tr>
         @empty

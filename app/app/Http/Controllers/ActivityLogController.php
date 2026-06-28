@@ -14,7 +14,7 @@ class ActivityLogController extends Controller
     public function index(Request $request)
     {
         $school = $this->getSchool();
-        $query = ActivityLog::with('user');
+        $query = ActivityLog::with('user')->where('school_id', $school->id);
 
         if ($request->filled('user_id')) {
             $query->where('user_id', $request->user_id);
@@ -31,8 +31,10 @@ class ActivityLogController extends Controller
         if ($request->filled('to_date')) {
             $query->whereDate('created_at', '<=', $request->to_date);
         }
-        $data['total'] = $query->count();
-        $data['today'] = $query->whereDate('created_at', Today());
+        $data['total'] = (clone $query)->count();
+        $data['today'] = ActivityLog::where('school_id', $school->id)
+            ->whereDate('created_at', today())
+            ->count();
 
         $activities = $query->paginate(20);
 

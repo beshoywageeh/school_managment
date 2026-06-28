@@ -31,10 +31,10 @@
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>{{ $data['stock']->name }}</td>
-                                <td>{{ $data['stock']->opening_stock_date }}</td>
+                                <td>{{ $data['stock']->opening_qty_date }}</td>
                                 <td colspan="4">
                                     <h6>{{ trans('report.opening_stock') }}
-                                        &nbsp;&nbsp;===========>&nbsp;&nbsp;{{ number_format($data['stock']->opening_stock, 2) }}
+                                        &nbsp;&nbsp;===========>&nbsp;&nbsp;{{ number_format($data['stock']->opening_qty, 2) }}
                                     </h6>
                                 </td>
                             </tr>
@@ -52,9 +52,9 @@
                                     {{ trans('report.inventory') }}
                                 @endif
                             </td>
-                            <td>{{ number_format($order['stk']->pivot->quantity_in, 2) }}</td>
-                            <td>{{ number_format($order['stk']->pivot->quantity_out, 2) }}</td>
-                            <td>{{ number_format($order['total'] + $data['stock']->opening_stock, 2) }}</td>
+                            <td>{{ number_format($order['stk']->quantity_in, 2) }}</td>
+                            <td>{{ number_format($order['stk']->quantity_out, 2) }}</td>
+                            <td>{{ number_format($order['total'] + $data['stock']->opening_qty, 2) }}</td>
                         </tr>
                     @empty
                         <tr class="text-center alert-info">
@@ -64,10 +64,10 @@
                     <tfoot>
                         <tr>
                             <th colspan='4'>{{ trans('report.total') }}</th>
-                            <th>{{ number_format($data['stock']->orders->sum('pivot.quantity_in') + $data['stock']->opening_stock, 2) }}
+                            <th>{{ number_format($data['stock']->orders->sum('pivot.quantity_in') + $data['stock']->opening_qty, 2) }}
                             </th>
                             <th>{{ number_format($data['stock']->orders->sum('pivot.quantity_out'), 2) }}</th>
-                            <th>{{ number_format($order['total'] + $data['stock']->opening_stock, 2) }}</th>
+                            <th>{{ number_format($order['total'] + $data['stock']->opening_qty, 2) }}</th>
                         </tr>
                     </tfoot>
                 </table>

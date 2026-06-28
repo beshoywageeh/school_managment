@@ -24,7 +24,7 @@
                         <tr>
                             <td>{{ $loop->index + 1 }}</td>
                             <td>{{ $stock->name }}</td>
-                            <td>{{ $stock->orders()->sum('quantity_in') + $stock->opening_stock - $stock->orders()->sum('quantity_out') }}
+                            <td>{{ $stock->orders->sum('quantity_in') + $stock->opening_qty - $stock->orders->sum('quantity_out') }}
                             </td>
                             <td>{{ $stock->created_at->format('Y-m-d') }}</td>
                             <td>{{ $stock->updated_at->format('Y-m-d') }}</td>
