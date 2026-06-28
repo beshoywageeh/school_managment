@@ -4,7 +4,10 @@
 @section('title', __('Not Found'))
 @section('code', '404')
 @section('message', __('Not Found'))
-@section('description', __('الصفحة المطلوبة غير موجودة') . ' — ' . __('The page you are looking for could not be
+@section('description',
+    __('الصفحة المطلوبة غير موجودة') .
+    ' — ' .
+    __('The page you are looking for could not be
     found.'))
 @section('action')
     <a href="{{ url('/') }}"

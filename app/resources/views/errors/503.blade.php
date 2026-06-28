@@ -4,7 +4,10 @@
 @section('title', __('Service Unavailable'))
 @section('code', '503')
 @section('message', __('Service Unavailable'))
-@section('description', __('الخدمة غير متاحة حالياً — جاري الصيانة') . ' — ' . __('The service is currently unavailable
+@section('description',
+    __('الخدمة غير متاحة حالياً — جاري الصيانة') .
+    ' — ' .
+    __('The service is currently unavailable
     — maintenance in progress.'))
 
 @section('head')

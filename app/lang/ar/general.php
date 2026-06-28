@@ -37,6 +37,8 @@ return [
     'std_status' => 'حالة الطالب',
     'Recipt_Payment' => 'إيصال دفع',
     'error' => 'خطأ',
+    'previous' => 'السابق',
+    'next' => 'التالي',
     '404' => 'غير موجود',
     'except_fee' => 'معافات',
     'payment_status' => 'حالة الدفع',

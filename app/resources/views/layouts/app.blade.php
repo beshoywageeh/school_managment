@@ -29,12 +29,10 @@
         <x-alert />
         <!-- Header -->
         @include('layouts.header')
-
         <!-- Content Area -->
         <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
-            <div class="mb-6">
-                <h4 class="text-2xl font-bold text-gray-800">@yield('title')</h4>
-            </div>
+            <h4 class="text-2xl font-bold text-gray-800">@yield('title')</h4>
+
             @yield('content')
         </main>
         @if (session('success'))

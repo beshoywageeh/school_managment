@@ -17,10 +17,14 @@ class ExchangeBondController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct(private FinancialService $StudentAccount) {}
+
     public function index()
     {
         $school = $this->GetSchool();
-        $exchanges = Exchange_bond::where('school_id', $school->id)->with(['student', 'acadmic_year'])->get();
+        $exchanges = Exchange_bond::where('school_id', $school->id)
+            ->with(['student', 'acadmic_year'])
+            ->get();
 
         return view('backend.exchange_bond.index', get_defined_vars());
     }
@@ -28,27 +32,35 @@ class ExchangeBondController extends Controller
     public function create($id)
     {
         $school = $this->GetSchool();
-        $student = Student::withSum('StudentAccount', 'debit')->withSum('StudentAccount', 'credit')->findOrFail($id);
+        $student = Student::withSum('StudentAccount', 'debit')
+            ->withSum('StudentAccount', 'credit')
+            ->findOrFail($id);
 
         return view('backend.exchange_bond.create', get_defined_vars());
     }
 
-    public function store(Request $request, FinancialService $StudentAccount)
+    public function store(Request $request)
     {
         try {
-            $acc_year = acadmice_year::whereYear('year_start', date('Y'))->first();
-            $student = Student::where('id', $request->student_id)->first();
-            DB::beginTransaction();
+            $acc_year = acadmice_year::whereYear(
+                'year_start',
+                date('Y'),
+            )->first();
+
             $school = $this->GetSchool();
-            $exchange = $StudentAccount->Exchange_bond($school->id, $request, $acc_year->id);
-            $StudentAccount->CreateStudentAccount($student, null, $acc_year, 'exchange', $request->amount, 0.00, null, null, $exchange);
-            $StudentAccount->Fund_Account($school, $exchange->id, 0.0, $request->amount);
-            DB::commit();
-            $this->LogActivity(trans('log.actions.added'), trans('log.models.exchange_bond.created'));
+            $exchange = $this->StudentAccount->Exchange_bond(
+                $school,
+                $request,
+                $acc_year->id,
+            );
+
+            $this->LogActivity(
+                trans('log.actions.added'),
+                trans('log.models.exchange_bond.created'),
+            );
 
             return redirect()->route('exchange-bonds.print', $exchange->id);
         } catch (\Exception $e) {
-            DB::rollBack();
             session()->flash('error', $e->getMessage());
 
             return redirect()->back();
@@ -63,13 +75,19 @@ class ExchangeBondController extends Controller
         return view('backend.exchange_bond.edit', get_defined_vars());
     }
 
-    public function update(Request $request, FinancialService $StudentAccount)
+    public function update(Request $request)
     {
         try {
             $id = $request->id;
             $exchange = Exchange_bond::find($id);
-            $student_account = StudentAccount::where('exchange_bond_id', $id)->first();
-            $fund_account = fund_account::where('exchange_bond_id', $id)->first();
+            $student_account = StudentAccount::where(
+                'exchange_bond_id',
+                $id,
+            )->first();
+            $fund_account = fund_account::where(
+                'exchange_bond_id',
+                $id,
+            )->first();
             DB::beginTransaction();
             $exchange->manual = $request->manual;
             $exchange->amount = $request->amount;
@@ -77,13 +95,28 @@ class ExchangeBondController extends Controller
             $exchange->user_id = auth()->user()->id;
             $exchange->save();
 
-            $StudentAccount->CreateStudentAccount($exchange->student, $exchange, acadmice_year::find($exchange->academic_year_id), 'exchange', $request->amount - $student_account->debit, 0.00, null, null, $exchange->id);
-            $fund_account->Credit = $request->amount;
+            $this->StudentAccount->CreateStudentAccount(
+                $exchange->student,
+                $exchange,
+                acadmice_year::find($exchange->academic_year_id),
+                'exchange',
+                $request->amount - $student_account->debit,
+                0.0,
+                null,
+                null,
+                $exchange->id,
+            );
+            $fund_account->Debit = $request->amount;
             $fund_account->save();
             DB::commit();
-            $this->LogActivity(trans('log.actions.updated'), trans('log.models.exchange_bond.updated'));
+            $this->LogActivity(
+                trans('log.actions.updated'),
+                trans('log.models.exchange_bond.updated'),
+            );
 
-            return redirect()->route('exchange-bonds.index')->with('success', trans('general.success'));
+            return redirect()
+                ->route('exchange-bonds.index')
+                ->with('success', trans('general.success'));
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
@@ -104,16 +137,27 @@ class ExchangeBondController extends Controller
     {
         try {
             $exchange = Exchange_bond::find($id);
-            $student_account = StudentAccount::where('exchange_bond_id', $id)->first();
-            $fund_account = fund_account::where('exchange_bond_id', $id)->first();
+            $student_account = StudentAccount::where(
+                'exchange_bond_id',
+                $id,
+            )->first();
+            $fund_account = fund_account::where(
+                'exchange_bond_id',
+                $id,
+            )->first();
             DB::beginTransaction();
             $exchange->delete();
             $student_account->delete();
             $fund_account->delete();
             DB::commit();
-            $this->LogActivity(trans('log.actions.deleted'), trans('log.models.exchange_bond.deleted'));
+            $this->LogActivity(
+                trans('log.actions.deleted'),
+                trans('log.models.exchange_bond.deleted'),
+            );
 
-            return redirect()->route('exchange-bonds.index')->with('success', trans('general.success'));
+            return redirect()
+                ->route('exchange-bonds.index')
+                ->with('success', trans('general.success'));
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());

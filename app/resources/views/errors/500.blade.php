@@ -4,7 +4,10 @@
 @section('title', __('Server Error'))
 @section('code', '500')
 @section('message', __('Server Error'))
-@section('description', __('عذراً، حدث خطأ في الخادم — نعمل على حل المشكلة') . ' — ' . __('Sorry, a server error
+@section('description',
+    __('عذراً، حدث خطأ في الخادم — نعمل على حل المشكلة') .
+    ' — ' .
+    __('Sorry, a server error
     occurred — we are working on fixing it.'))
 @section('action')
     <button onclick="location.reload()"

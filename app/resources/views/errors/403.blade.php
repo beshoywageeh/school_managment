@@ -3,8 +3,11 @@
 @section('icon', 'shield')
 @section('title', __('Forbidden'))
 @section('code', '403')
-@section('message', (isset($exception) ? $exception->getMessage() : null) ?: __('Forbidden'))
-@section('description', __('ليس لديك صلاحية الوصول إلى هذه الصفحة') . ' — ' . __('You do not have permission to access
+@section('message', isset($exception) ? $exception->getMessage() : null ?: __('Forbidden'))
+@section('description',
+    __('ليس لديك صلاحية الوصول إلى هذه الصفحة') .
+    ' — ' .
+    __('You do not have permission to access
     this page.'))
 @section('action')
     <a href="{{ url('/') }}"

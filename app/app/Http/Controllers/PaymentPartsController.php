@@ -14,9 +14,7 @@ class PaymentPartsController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
-    public function __construct(
-        private FinancialService $financial_service,
-    ) {}
+    public function __construct(private FinancialService $financial_service) {}
 
     public function index()
     {
@@ -70,7 +68,7 @@ class PaymentPartsController extends Controller
             $academic_year = Fee_invoice::where('student_id', $student->id)
                 ->where('status', 'unpaid')
                 ->first('academic_year_id');
-            foreach ($parts as $part) {
+            $parts->each(function ($part) use ($student, $academic_year) {
                 $this->financial_service->PaymentParts(
                     $student,
                     $part['fee_id'],
@@ -80,7 +78,7 @@ class PaymentPartsController extends Controller
                     $part['amount'],
                     'unpaid',
                 );
-            }
+            });
 
             session()->flash('success', trans('general.success'));
 

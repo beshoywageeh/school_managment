@@ -4,13 +4,22 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <a href="{{ route('students.create') }}" class="px-4 py-2 rounded-lg font-medium cursor-pointer bg-blue-500 text-white hover:bg-blue-600">{{ trans('general.new') }}</a>
-        @can('Students-list')
-            <div class="container mx-auto p-6">
-                <x-smart-table
-                    :columns="$columns"
-                    :initial-items="$students"
-                    api-url="{{ route('students.index') }}"
+    <div class="flex align-items-center justify-end rounded p-4 bg-white gap-2 mb-4 shadow">
+        @can('Students-create')
+        <a href="{{ route('students.create') }}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer bg-blue-500 text-white hover:bg-blue-600">
+            <x-hero-icon name="plus" class="w-4 h-4" />
+            {{ trans('general.new') }}</a>
+        @endcan
+        @can('Students-Import_Excel')
+        @include('backend.Students.import')
+        @endcan
+    </div>
+    @can('Students-list')
+        <div class="container mx-auto p-6">
+            <x-smart-table
+                :columns="$columns"
+                :initial-items="$students"
+                api-url="{{ route('students.index') }}"
                 >
                     <x-slot:actions>
 

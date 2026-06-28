@@ -4,7 +4,10 @@
 @section('title', __('Too Many Requests'))
 @section('code', '429')
 @section('message', __('Too Many Requests'))
-@section('description', __('عدد الطلبات كبير جداً — الرجاء الانتظار ثم المحاولة مرة أخرى') . ' — ' . __('Too many
+@section('description',
+    __('عدد الطلبات كبير جداً — الرجاء الانتظار ثم المحاولة مرة أخرى') .
+    ' — ' .
+    __('Too many
     requests — please wait and try again.'))
 
 @section('head')

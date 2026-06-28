@@ -4,7 +4,10 @@
 @section('title', __('Payment Required'))
 @section('code', '402')
 @section('message', __('Payment Required'))
-@section('description', __('مطلوب الدفع لإتمام هذه العملية') . ' — ' . __('Payment is required to complete this
+@section('description',
+    __('مطلوب الدفع لإتمام هذه العملية') .
+    ' — ' .
+    __('Payment is required to complete this
     process.'))
 @section('action')
     <a href="{{ url('/') }}"

@@ -115,6 +115,7 @@
                                 </template>
                                 <template x-if="!col.sortable">
                                     <span x-text="col.label"></span>
+
                                 </template>
                             </th>
                         </template>
@@ -149,17 +150,18 @@
             x-show="pagination.last > 1">
             <button @click="fetchData(pagination.current - 1)" :disabled="pagination.current === 1"
                 class="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm disabled:opacity-40 disabled:hover:bg-white transition">
-                السابق
+                {{ trans('general.previous') }}
             </button>
 
             <span class="text-xs font-medium text-gray-600">
-                صفحة <span x-text="pagination.current" class="text-indigo-600 font-bold"></span> من <span
-                    x-text="pagination.last" class="font-bold"></span>
+                صفحة <span x-text="pagination.current"
+                    class="text-indigo-600 font-bold"></span>{{ trans('general.of') }} <span x-text="pagination.last"
+                    class="font-bold"></span>
             </span>
 
             <button @click="fetchData(pagination.current + 1)" :disabled="pagination.current === pagination.last"
                 class="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm disabled:opacity-40 disabled:hover:bg-white transition">
-                التالي
+                {{ trans('general.next') }}
             </button>
         </div>
     </div>

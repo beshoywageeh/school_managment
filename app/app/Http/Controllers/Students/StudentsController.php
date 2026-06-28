@@ -53,11 +53,6 @@ class StudentsController extends Controller
                 'sortable' => true,
             ],
             [
-                'key' => 'fees_sum_amount',
-                'label' => trans('fee_invoice.debit'),
-                'sortable' => false,
-            ],
-            [
                 'key' => 'grade_name',
                 'label' => trans('fee_invoice.grade'),
                 'filter_type' => 'select_relation',

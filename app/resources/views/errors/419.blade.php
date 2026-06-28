@@ -4,7 +4,10 @@
 @section('title', __('Page Expired'))
 @section('code', '419')
 @section('message', __('Page Expired'))
-@section('description', __('انتهت صلاحية الجلسة — الرجاء إعادة تحميل الصفحة') . ' — ' . __('Your session has expired —
+@section('description',
+    __('انتهت صلاحية الجلسة — الرجاء إعادة تحميل الصفحة') .
+    ' — ' .
+    __('Your session has expired —
     please refresh the page.'))
 @section('action')
     <button onclick="location.reload()"
