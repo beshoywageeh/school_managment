@@ -6,7 +6,7 @@
 @section('content')
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         {{-- total --}}
-        <x-stat_card class="border-blue-400">
+        <x-stat_card color="blue">
             <div class="w-16 h-16 rounded-xl bg-blue-500 flex items-center justify-center text-white">
 
             </div>

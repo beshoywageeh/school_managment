@@ -109,6 +109,11 @@ class InventoryItem extends Model
         return $this->morphMany(InventoryOrderItem::class, 'itemable');
     }
 
+    public function orders()
+    {
+        return $this->orderItems();
+    }
+
     public function transactions()
     {
         return $this->hasMany(InventoryTransaction::class, 'item_id');

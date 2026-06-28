@@ -1,24 +1,24 @@
-<x-dropdown-table :buttonText="trans('general.buttons.action')" :items="[
-    [
-        'type' => 'link',
-        'url' => route('parents.destroy', $id),
-        'text' => trans('general.buttons.delete'),
-        'icon' => 'trash',
-        'onclick' => 'confirmation(event)',
-        'can' => 'parents-delete',
-    ],
-    [
-        'type' => 'link',
-        'url' => route('parents.show', $id),
-        'text' => trans('general.buttons.view'),
-        'icon' => 'information-circle',
-        'can' => 'parents-info',
-    ],
-    [
-        'type' => 'link',
-        'url' => route('parents.edit', $id),
-        'text' => trans('general.buttons.edit'),
-        'icon' => 'pencil',
-        'can' => 'parents-edit',
-    ],
-]" />
+@props(['parent'])
+<x-dropdown-table :buttonText="trans('general.buttons.action')">
+    @can('parents-info')
+        <a href="{{ route('parents.show', $parent) }}" x-on:click="open = false"
+            class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-gray-700 hover:bg-gray-50">
+            <x-hero-icon name="information-circle" class="w-5 h-5 text-gray-400" />
+            {{ trans('general.buttons.view') }}
+        </a>
+    @endcan
+    @can('parents-edit')
+        <a href="{{ route('parents.edit', $parent) }}" x-on:click="open = false"
+            class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-gray-700 hover:bg-gray-50">
+            <x-hero-icon name="pencil" class="w-5 h-5 text-gray-400" />
+            {{ trans('general.buttons.edit') }}
+        </a>
+    @endcan
+    @can('parents-delete')
+        <a href="{{ route('parents.destroy', $parent) }}" x-on:click="open = false" onclick="confirmation(event)"
+            class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-red-600 hover:bg-red-50">
+            <x-hero-icon name="trash" class="w-5 h-5 text-red-500" />
+            {{ trans('general.buttons.delete') }}
+        </a>
+    @endcan
+</x-dropdown-table>

@@ -1,6 +1,17 @@
-@import url('https://fonts.bunny.net/css?family=Nunito');
+@import url("https://fonts.bunny.net/css?family=Nunito");
 
-
-@import './variables.css';
+@import "./variables.css";
 
 @import "tailwindcss";
+
+@keyframes shrink {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+.animate-shrink {
+    animation: shrink linear forwards;
+}

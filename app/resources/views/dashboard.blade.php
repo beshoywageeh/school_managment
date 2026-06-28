@@ -8,7 +8,7 @@
     <!-- Stat Cards -->
     <div class="flex flex-wrap gap-4 mb-6" >
         @can('Students-list')
-            <x-stat_card class="border-blue-400">
+            <x-stat_card color="blue">
                 <div class="w-16 h-16 rounded-xl bg-blue-500 flex items-center justify-center text-white">
                     <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
@@ -24,7 +24,7 @@
         @endcan
 
         @can('parents-list')
-            <x-stat_card class="border-green-400">
+            <x-stat_card color="green">
                 <div class="w-16 h-16 rounded-xl bg-green-500 flex items-center justify-center text-white">
                     <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -39,7 +39,7 @@
         @endcan
 
         @can('employees-list')
-            <x-stat_card class="border-cyan-400">
+            <x-stat_card color="cyan">
                 <div class="w-16 h-16 rounded-xl bg-cyan-500 flex items-center justify-center text-white">
                     <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -67,7 +67,7 @@
                         <p class="text-gray-500">{{ trans('Sidebar.fees_invoice') }} (Total)</p>
                     </div>
                 </x-stat_card>
-                <x-stat_card class="border-green-400">
+                <x-stat_card color="green">
                     <div class="w-16 h-16 rounded-xl bg-green-500 flex items-center justify-center text-white">
                         <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -79,14 +79,14 @@
                         <p class="text-gray-500">{{ trans('Sidebar.Recipt_Payment') }} (Total)</p>
                     </div>
                 </x-stat_card>
-                <x-stat_card class="border-red-400">
-                        <div class="w-16 h-16 rounded-xl bg-red-500 flex items-center justify-center text-white">
-                            <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.342-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-                        </div>
-                        <div>
+                <x-stat_card color="red">
+                    <div class="w-16 h-16 rounded-xl bg-red-500 flex items-center justify-center text-white">
+                        <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.342-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div>
                             <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalInvoiced - $totalPaid, 2) }}
                             </h3>
                             <p class="text-gray-500">{{ trans('Sidebar.pending_balance') }}</p>

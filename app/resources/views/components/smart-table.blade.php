@@ -1,7 +1,7 @@
 @props([
     'columns' => [],
     'initialItems' => [],
-    'apiUrl' => ''
+    'apiUrl' => '',
 ])
 
 <div x-data="{
@@ -70,26 +70,23 @@
     }
 }" class="space-y-4 font-sans text-right" dir="rtl">
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-        @foreach($columns as $col)
-            @if(isset($col['filter_type']))
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+        @foreach ($columns as $col)
+            @if (isset($col['filter_type']))
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-1">{{ $col['label'] }}</label>
 
-                    @if($col['filter_type'] === 'text')
-                        <input type="text"
-                               x-model="filters['{{ $col['filter_key'] }}']"
-                               @input.debounce.300ms="fetchData(1)"
-                               placeholder="ابحث هنا..."
-                               class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    @if ($col['filter_type'] === 'text')
+                        <input type="text" x-model="filters['{{ $col['filter_key'] }}']"
+                            @input.debounce.300ms="fetchData(1)" placeholder="ابحث هنا..."
+                            class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
                     @endif
 
-                    @if($col['filter_type'] === 'select_relation' && isset($col['options']))
-                        <select x-model="filters['{{ $col['filter_key'] }}']"
-                                @change="fetchData(1)"
-                                class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    @if ($col['filter_type'] === 'select_relation' && isset($col['options']))
+                        <select x-model="filters['{{ $col['filter_key'] }}']" @change="fetchData(1)"
+                            class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
                             <option value="">كل الخيارات</option>
-                            @foreach($col['options'] as $id => $label)
+                            @foreach ($col['options'] as $id => $label)
                                 <option value="{{ $id }}">{{ $label }}</option>
                             @endforeach
                         </select>
@@ -102,12 +99,14 @@
     <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-right text-sm text-gray-500 border-collapse">
-                <thead class="bg-gray-100 text-xs text-gray-700 font-bold border-b border-gray-200 uppercase tracking-wider">
+                <thead
+                    class="bg-gray-100 text-xs text-gray-700 font-bold border-b border-gray-200 uppercase tracking-wider">
                     <tr>
                         <template x-for="col in columns" :key="col.key">
                             <th class="px-6 py-4 border-b border-gray-200">
                                 <template x-if="col.sortable">
-                                    <button @click="sortBy(col.key)" class="flex items-center gap-1 font-bold focus:outline-none hover:text-indigo-600 transition">
+                                    <button @click="sortBy(col.key)"
+                                        class="flex items-center gap-1 font-bold focus:outline-none hover:text-indigo-600 transition">
                                         <span x-text="col.label"></span>
                                         <span x-show="sort.by === col.key && sort.order === 'asc'">↑</span>
                                         <span x-show="sort.by === col.key && sort.order === 'desc'">↓</span>
@@ -146,20 +145,20 @@
             </table>
         </div>
 
-        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-between items-center" x-show="pagination.last > 1">
-            <button @click="fetchData(pagination.current - 1)"
-                    :disabled="pagination.current === 1"
-                    class="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm disabled:opacity-40 disabled:hover:bg-white transition">
+        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-between items-center"
+            x-show="pagination.last > 1">
+            <button @click="fetchData(pagination.current - 1)" :disabled="pagination.current === 1"
+                class="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm disabled:opacity-40 disabled:hover:bg-white transition">
                 السابق
             </button>
 
             <span class="text-xs font-medium text-gray-600">
-                صفحة <span x-text="pagination.current" class="text-indigo-600 font-bold"></span> من <span x-text="pagination.last" class="font-bold"></span>
+                صفحة <span x-text="pagination.current" class="text-indigo-600 font-bold"></span> من <span
+                    x-text="pagination.last" class="font-bold"></span>
             </span>
 
-            <button @click="fetchData(pagination.current + 1)"
-                    :disabled="pagination.current === pagination.last"
-                    class="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm disabled:opacity-40 disabled:hover:bg-white transition">
+            <button @click="fetchData(pagination.current + 1)" :disabled="pagination.current === pagination.last"
+                class="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm disabled:opacity-40 disabled:hover:bg-white transition">
                 التالي
             </button>
         </div>

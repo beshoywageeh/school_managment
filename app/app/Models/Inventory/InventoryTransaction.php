@@ -3,11 +3,14 @@
 namespace App\Models\Inventory;
 
 use App\Enums\TransactionType;
-use App\Models\settings;
-use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\{User, settings};
+use Illuminate\Database\Eloquent\{
+    Factories\HasFactory,
+    BelongsTo,
+    MorphTo,
+    Model,
+    SoftDeletes,
+};
 
 class InventoryTransaction extends Model
 {
@@ -15,40 +18,45 @@ class InventoryTransaction extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'item_id',
-        'type',
-        'quantity',
-        'balance',
-        'reference_type',
-        'reference_id',
-        'notes',
-        'school_id',
-        'user_id',
+        "item_id",
+        "type",
+        "quantity",
+        "balance",
+        "reference_type",
+        "reference_id",
+        "notes",
+        "school_id",
+        "user_id",
     ];
 
     protected $casts = [
-        'type' => TransactionType::class,
-        'quantity' => 'decimal:2',
-        'balance' => 'decimal:2',
+        "type" => TransactionType::class,
+        "quantity" => "decimal:2",
+        "balance" => "decimal:2",
     ];
 
-    public function item()
+    public function item(): BelongsTo
     {
-        return $this->belongsTo(InventoryItem::class, 'item_id');
+        return $this->belongsTo(InventoryItem::class, "item_id");
     }
 
-    public function school()
+    public function school(): BelongsTo
     {
         return $this->belongsTo(settings::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     public function scopeBySchool($query, $schoolId)
     {
-        return $query->where('school_id', $schoolId);
+        return $query->where("school_id", $schoolId);
+    }
+
+    public function reference(): MorphTo
+    {
+        return $this->morphTo();
     }
 }

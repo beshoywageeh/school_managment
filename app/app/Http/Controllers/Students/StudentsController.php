@@ -16,6 +16,7 @@ use App\Models\Student;
 use App\Services\Finance\FinancialService;
 use App\Services\Student\StudentImportService;
 use App\Services\Student\StudentRegeister;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -125,7 +126,7 @@ class StudentsController extends Controller
             $query->whereDate(
                 "students.birth_date",
                 ">=",
-                \Carbon\Carbon::parse($request->birth_date_filter),
+                Carbon::parse($request->birth_date_filter),
             );
         }
 
@@ -133,7 +134,7 @@ class StudentsController extends Controller
             $query->whereDate(
                 "students.join_date",
                 "<=",
-                \Carbon\Carbon::parse($request->joinDateTo),
+                Carbon::parse($request->joinDateTo),
             );
         }
 
@@ -183,16 +184,14 @@ class StudentsController extends Controller
 
         return view("backend.Students.Index", get_defined_vars());
     }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         $school = $this->getSchool();
-        $grades = Grade::where("school_id", $school->id)->get([
-            "id",
-            "name",
-        ]);
+        $grades = Grade::where("school_id", $school->id)->get(["id", "name"]);
         $parents = My_parents::where("school_id", $school->id)->get([
             "id",
             "Father_Name",
@@ -346,9 +345,7 @@ class StudentsController extends Controller
 
     public function graduated()
     {
-        $students = Student::onlyTrashed()
-            ->with("grade", "classroom")
-            ->get();
+        $students = Student::onlyTrashed()->with("grade", "classroom")->get();
         $school = $this->getSchool();
 
         return view("backend.Students.graduated", get_defined_vars());
@@ -420,10 +417,7 @@ class StudentsController extends Controller
 
     public function getclasses($id)
     {
-        $class_rooms = class_room::where(
-            "school_id",
-            $this->getSchool()->id,
-        )
+        $class_rooms = class_room::where("school_id", $this->getSchool()->id)
             ->where("grade_id", $id)
             ->get(["id", "name"]);
 
@@ -437,12 +431,10 @@ class StudentsController extends Controller
         try {
             $request->validate(
                 [
-                    "excel" =>
-                        "required|file|mimes:xlsx,xls,csv|max:10240",
+                    "excel" => "required|file|mimes:xlsx,xls,csv|max:10240",
                 ],
                 [
-                    "excel.required" =>
-                        "⚠️ Please select a file to upload",
+                    "excel.required" => "⚠️ Please select a file to upload",
                     "excel.file" => "⚠️ Invalid file format",
                     "excel.mimes" =>
                         "⚠️ Only Excel files (.xlsx, .xls) are allowed",
@@ -471,7 +463,7 @@ class StudentsController extends Controller
             }
 
             return redirect()->route("students.index");
-        } catch (NoTypeDetectedException $e) {
+        } catch (\NoTypeDetectedException $e) {
             session()->flash(
                 "error",
                 '⚠️ Could not read the file. Please ensure it\'s a valid Excel file.',

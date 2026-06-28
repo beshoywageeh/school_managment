@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Image extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
+    protected $fillable = [
+        "filename",
+        "path",
+        "imageable_id",
+        "imageable_type",
+    ];
 
     public function imageable()
     {

@@ -50,7 +50,7 @@
     ],
 ]" /> --}}
 <div class="flex items-center gap-2">
-    <a :href="`{{ route('students.edit', '') }}/${ {{$student}} }`" class="text-sm text-gray-600">
+    <a :href="`{{ route('students.edit', '') }}/${ {{ $student }} }`" class="text-sm text-gray-600">
         تعديل
     </a>
 </div>

@@ -1,5 +1,5 @@
 <div x-data="{ toasts: [] }"
-    @add-toast.window="toasts.push($event.detail); if (!$event.detail.sticky) { let t = $event.detail; let interval = 50; let step = (interval / (t.duration || 4000)) * 100; let timer = setInterval(() => { let found = toasts.find(to => to.id === t.id); if (!found) { clearInterval(timer); return; } found.progress -= step; if (found.progress <= 0) { clearInterval(timer); toasts = toasts.filter(to => to.id !== t.id); } }, interval); }"
+    @add-toast.window="toasts.push($event.detail); if (!$event.detail.sticky) { let t = $event.detail; setTimeout(() => { toasts = toasts.filter(to => to.id !== t.id); }, t.duration || 4000); }"
     @remove-toast.window="toasts = toasts.filter(to => to.id !== $event.detail)"
     class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 w-96 max-w-full pointer-events-none">
 
@@ -62,14 +62,14 @@
 
             <template x-if="!toast.sticky">
                 <div class="h-1 w-full bg-gray-100">
-                    <div class="h-full transition-all ease-linear duration-50"
+                    <div class="h-full animate-shrink" :style="`animation-duration: ${toast.duration || 4000}ms`"
                         :class="{
                             'bg-green-500': toast.type === 'success',
                             'bg-red-500': toast.type === 'danger',
                             'bg-amber-500': toast.type === 'warning',
                             'bg-blue-500': toast.type === 'info'
-                        }"
-                        :style="`width: ${toast.progress}%`"></div>
+                        }">
+                    </div>
                 </div>
             </template>
         </div>

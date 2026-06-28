@@ -35,9 +35,9 @@
             <a href="{{ route('login') }}" class="text-sm text-gray-600 hover:text-gray-900">
                 {{ __('Already registered?') }}
             </a>
-            <x-primary-button>
+            <x-button class="primary">
                 {{ __('Register') }}
-            </x-primary-button>
+            </x-button>
         </div>
     </form>
 </x-guest-layout>

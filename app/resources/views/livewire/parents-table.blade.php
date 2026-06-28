@@ -37,7 +37,7 @@
                                 @endforeach
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <x-parent_table_action :id="$parent->id" />
+                                <x-parent_table_action :parent="$parent" />
                             </td>
                         </tr>
                     @endforeach

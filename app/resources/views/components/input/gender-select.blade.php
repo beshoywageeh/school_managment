@@ -1,12 +1,15 @@
-<div class="mb-4">
-    <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('general.gender') }}</label>
-    <select id="gender" name="gender" {{ $attributes->class(['w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white']) }}>
-        <option value="" selected>{{ trans('general.gender') }}</option>
+@props(['selected' => null])
+@php
+    $id = $attributes->get('id', 'gender-' . \Illuminate\Support\Str::random(6));
+@endphp
+
+<div>
+    <x-input-label for="{{ $id }}">{{ trans('general.gender') }}</x-input-label>
+    <select id="{{ $id }}" name="gender" {{ $attributes->merge(['class' => 'w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all']) }}>
+        <option value="">{{ trans('general.choose', ['value' => '']) }}</option>
         @foreach (\App\Enums\UserGender::cases() as $gender)
-            <option value="{{ $gender->value }}">{{ $gender->lang() }}</option>
+            <option value="{{ $gender->value }}" {{ old('gender', $selected) == $gender->value ? 'selected' : '' }}>{{ $gender->lang() }}</option>
         @endforeach
     </select>
-    @error('gender')
-        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-    @enderror
+    <x-input-error :messages="$errors->get('gender')" />
 </div>

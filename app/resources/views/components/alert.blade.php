@@ -1,5 +1,5 @@
-<div x-data="{ isOpen: false, title: '', message: '', type: 'warning', confirmButtonText: 'تأكيد', cancelButtonText: 'إلغاء', onConfirm: null }" x-show="isOpen" x-cloak
-    x-on:show-alert.window="isOpen = true; title = $event.detail.title || 'هل أنت متأكد؟'; message = $event.detail.message || ''; type = $event.detail.type || 'warning'; confirmButtonText = $event.detail.confirmButtonText || 'تأكيد'; cancelButtonText = $event.detail.cancelButtonText || 'إلغاء'; onConfirm = $event.detail.onConfirm || null"
+<div x-data="{ isOpen: false, title: '', message: '', type: 'warning', confirmButtonText: '{{ trans('general.ok') }}', cancelButtonText: '{{ trans('general.cancel') }}', onConfirm: null }" x-show="isOpen" x-cloak
+    x-on:show-alert.window="isOpen = true; title = $event.detail.title || '{{ trans('general.confirm') }} '; message = $event.detail.message || ''; type = $event.detail.type || 'warning'; confirmButtonText = $event.detail.confirmButtonText || '{{ trans('general.ok') }}'; cancelButtonText = $event.detail.cancelButtonText || '{{ trans('general.cancel') }}'; onConfirm = $event.detail.onConfirm || null"
     class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4">
 
     <div x-show="isOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"

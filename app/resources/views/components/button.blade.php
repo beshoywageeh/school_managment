@@ -14,6 +14,7 @@
         default => 'bg-blue-500 text-white hover:bg-blue-600',
     };
 @endphp
-<button class="px-4 py-2 rounded-lg font-medium {{ $classes }}" {{ $attributes }} type="{{ $type }}">
+<button class="px-4 py-2 rounded-lg font-medium cursor-pointer {{ $classes }}" {{ $attributes }}
+    type="{{ $type }}">
     {{ $slot }}
 </button>

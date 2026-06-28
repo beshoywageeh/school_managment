@@ -7,9 +7,9 @@ use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Fee_invoice;
+use App\Models\Grade;
 use App\Models\School_Fee as school_fee;
 use App\Models\Student;
-use App\Models\Grade;
 use App\Services\FinancialService;
 use Exception;
 use Illuminate\Http\Request;
@@ -148,17 +148,15 @@ class fee_invoiceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, FinancialService $service)
+    public function store(FeeInvoiceRequest $request, FinancialService $service)
     {
         $List_Fees = $request->list_fees;
         DB::beginTransaction();
         try {
             $ac_year = acadmice_year::where("status", "0")->first();
             foreach ($List_Fees as $list_fee) {
-                $amount = school_fee::where(
-                    "id",
-                    $list_fee["fee"],
-                )->first()->amount;
+                $amount = school_fee::where("id", $list_fee["fee"])->first()
+                    ->amount;
                 $student = Student::findorfail($list_fee["student_id"]);
                 $service->FeeInvoice(
                     $student,
@@ -217,9 +215,7 @@ class fee_invoiceController extends Controller
     public function edit(string $id)
     {
         $school = $this->getSchool();
-        $fee = Fee_invoice::where("id", $id)
-            ->with("students", "fees")
-            ->first();
+        $fee = Fee_invoice::where("id", $id)->with("students", "fees")->first();
         $sfees = school_fee::where("grade_id", $fee->grade_id)
             ->where("classroom_id", $fee->classroom_id)
             ->get();

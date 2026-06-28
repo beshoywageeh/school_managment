@@ -33,7 +33,7 @@ Route::name('report.')
             'student_tameen',
         );
         Route::get('/clothes_stock', 'clothes_stocks')->name(
-            'clothes_stock',
+            'clothes_stocks',
         );
         Route::post('/clothe_stock', 'clothe_stock')->name(
             'clothes_stock',

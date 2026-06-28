@@ -6,3 +6,29 @@ app.zip
 /files/
 /Modules/Inventory/node_modules/
 /app/ward-report.*
+
+# Laravel standard
+/vendor/
+node_modules/
+.env
+.env.*
+.storage/
+storage/logs/*.log
+app/storage/logs/*.log
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+public/storage
+
+# IDE
+.phpactor.json
+.php_cs
+.php_cs.cache
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
