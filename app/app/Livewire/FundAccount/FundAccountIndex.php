@@ -2,7 +2,7 @@
 
 namespace App\Livewire\FundAccount;
 
-use App\Models\fund_account;
+use App\Models\FundAccount;
 use Livewire\Component;
 
 class FundAccountIndex extends Component
@@ -17,7 +17,7 @@ class FundAccountIndex extends Component
     public function render()
     {
         return view('livewire.fund-account.fund-account-index', [
-            'accounts' => fund_account::where('date', $this->date)->get(),
+            'accounts' => FundAccount::where('date', $this->date)->get(),
         ]);
     }
 }

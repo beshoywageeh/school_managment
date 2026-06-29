@@ -156,7 +156,7 @@
                 <a href="{{ route('fund_account.index') }}"
                     class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/fund-account*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                     <x-hero-icon name="university" class="w-5 h-5" />
-                    <span class="text-sm font-medium">{{ trans('Sidebar.fund_account') }}</span>
+                    <span class="text-sm font-medium">{{ trans('Sidebar.FundAccount') }}</span>
                 </a>
             @endif
 

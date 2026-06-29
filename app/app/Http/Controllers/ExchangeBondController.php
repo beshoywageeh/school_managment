@@ -6,7 +6,7 @@ use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Exchange_bond;
-use App\Models\fund_account;
+use App\Models\FundAccount;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use App\Services\FinancialService;
@@ -84,7 +84,7 @@ class ExchangeBondController extends Controller
                 'exchange_bond_id',
                 $id,
             )->first();
-            $fund_account = fund_account::where(
+            $FundAccount = FundAccount::where(
                 'exchange_bond_id',
                 $id,
             )->first();
@@ -106,8 +106,8 @@ class ExchangeBondController extends Controller
                 null,
                 $exchange->id,
             );
-            $fund_account->Debit = $request->amount;
-            $fund_account->save();
+            $FundAccount->Debit = $request->amount;
+            $FundAccount->save();
             DB::commit();
             $this->LogActivity(
                 trans('log.actions.updated'),
@@ -141,14 +141,14 @@ class ExchangeBondController extends Controller
                 'exchange_bond_id',
                 $id,
             )->first();
-            $fund_account = fund_account::where(
+            $FundAccount = FundAccount::where(
                 'exchange_bond_id',
                 $id,
             )->first();
             DB::beginTransaction();
             $exchange->delete();
             $student_account->delete();
-            $fund_account->delete();
+            $FundAccount->delete();
             DB::commit();
             $this->LogActivity(
                 trans('log.actions.deleted'),

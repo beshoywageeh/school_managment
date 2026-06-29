@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class fund_account extends Model
+class FundAccount extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+
+    protected $table = 'fund_accounts';
 
     protected $fillable = [
         'date',

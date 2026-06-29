@@ -6,7 +6,7 @@ use App\Http\Traits\LogsActivity;
 use App\Models\Exchange_bond; // يفضل مستقبلاً تعديلها إلى ExchangeBond
 use App\Models\ExcptionFees;  // يفضل مستقبلاً تعديلها إلى ExceptionFee
 use App\Models\Fee_invoice;   // يفضل مستقبلاً تعديلها إلى FeeInvoice
-use App\Models\fund_account;  // يفضل مستقبلاً تعديلها إلى FundAccount
+use App\Models\FundAccount;  // يفضل مستقبلاً تعديلها إلى FundAccount
 use App\Models\Inventory\InventoryItem;
 use App\Models\Inventory\InventoryOrder;
 use App\Models\PaymentParts;
@@ -325,7 +325,7 @@ class FinancialService
         $Debit = 0.0,
         $receipt = null
     ): void {
-        fund_account::create([
+        FundAccount::create([
             'date' => Carbon::today()->toDateString(),
             'user_id' => auth()->id(),
             'school_id' => $school->id,

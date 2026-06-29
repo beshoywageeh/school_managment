@@ -41,8 +41,8 @@ class ReceiptPaymentRequest extends FormRequest
             'amount.min' => trans('validation.min.numeric', ['attribute' => trans('receipt.amount'), 'min' => 0]),
             'date.required' => trans('validation.required', ['attribute' => trans('receipt.date')]),
             'date.date' => trans('validation.date', ['attribute' => trans('receipt.date')]),
-            'fund_account_id.required' => trans('validation.required', ['attribute' => trans('receipt.fund_account')]),
-            'fund_account_id.exists' => trans('validation.exists', ['attribute' => trans('receipt.fund_account')]),
+            'fund_account_id.required' => trans('validation.required', ['attribute' => trans('receipt.FundAccount')]),
+            'fund_account_id.exists' => trans('validation.exists', ['attribute' => trans('receipt.FundAccount')]),
             'notes.max' => trans('validation.max.string', ['attribute' => trans('receipt.notes'), 'max' => 1000]),
             'payment_parts.required_if' => trans('validation.required_if', ['attribute' => trans('receipt.parts')]),
         ];

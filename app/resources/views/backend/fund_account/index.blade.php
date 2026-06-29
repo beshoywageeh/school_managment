@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('Sidebar.fund_account') }}
+    {{ trans('Sidebar.FundAccount') }}
 @endsection
 @section('content')
     <livewire:fund-account.fund-account-index />

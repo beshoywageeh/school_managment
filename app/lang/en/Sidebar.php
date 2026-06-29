@@ -21,7 +21,7 @@ return [
     'except_fee' => 'Exceptions',
     'exchange_bonds' => 'Exchange Bonds',
     'fees_invoice' => 'Fees Invoice',
-    'fund_account' => 'Fund Account',
+    'FundAccount' => 'Fund Account',
     'grades_setting' => 'Grades Settings',
     'graduated' => 'Graduated',
     'jobs' => 'Jobs',
