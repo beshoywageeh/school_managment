@@ -14,7 +14,7 @@
                     <div>
                         <p class="text-blue-200 text-sm mb-1">{{ trans('student.show') }}</p>
                         <h1 class="text-2xl font-bold text-white tracking-wide">
-                            {{ $student->name . ' ' . $student->parent->Father_Name }}
+                            {{ $student->name . ' ' . $student->parent->father_name }}
                         </h1>
                         <span class="inline-block mt-2 text-xs bg-blue-500/40 text-blue-100 px-3 py-1 rounded-full">
                             {{ $student->grade->name }}
@@ -79,19 +79,19 @@
                 <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
                     <div class="flex flex-col gap-1 bg-gray-50 rounded-xl p-4">
                         <span class="text-xs text-gray-400 font-medium">{{ trans('Parents.Father_Name') }}</span>
-                        <span class="text-gray-800 font-semibold">{{ $student->parent->Father_Name }}</span>
+                        <span class="text-gray-800 font-semibold">{{ $student->parent->father_name }}</span>
                     </div>
                     <div class="flex flex-col gap-1 bg-gray-50 rounded-xl p-4">
                         <span class="text-xs text-gray-400 font-medium">{{ trans('Parents.Father_Phone') }}</span>
-                        <span class="text-gray-800 font-semibold tracking-wide">{{ $student->parent->Father_Phone }}</span>
+                        <span class="text-gray-800 font-semibold tracking-wide">{{ $student->parent->father_phone }}</span>
                     </div>
                     <div class="flex flex-col gap-1 bg-gray-50 rounded-xl p-4">
                         <span class="text-xs text-gray-400 font-medium">{{ trans('Parents.Mother_Name') }}</span>
-                        <span class="text-gray-800 font-semibold">{{ $student->parent->Mother_Name }}</span>
+                        <span class="text-gray-800 font-semibold">{{ $student->parent->mother_name }}</span>
                     </div>
                     <div class="flex flex-col gap-1 bg-gray-50 rounded-xl p-4">
                         <span class="text-xs text-gray-400 font-medium">{{ trans('Parents.Mother_Phone') }}</span>
-                        <span class="text-gray-800 font-semibold tracking-wide">{{ $student->parent->Mother_Phone }}</span>
+                        <span class="text-gray-800 font-semibold tracking-wide">{{ $student->parent->mother_phone }}</span>
                     </div>
                 </div>
             </div>
@@ -210,7 +210,7 @@
                 <table class="w-full text-sm">
                     @php
                         $rows = [
-                            [trans('student.name'),        $student->name . ' ' . $student->parent->Father_Name,   trans('student.national_id'),  $student->national_id],
+                            [trans('student.name'),        $student->name . ' ' . $student->parent->father_name,   trans('student.national_id'),  $student->national_id],
                             [trans('student.nationality'), $student->nationality->name,                             trans('student.religion'),     $student->religion->lang()],
                         ];
                     @endphp
@@ -279,8 +279,8 @@
 
                     <tr class="border-b border-gray-100">
                         <th class="py-3 px-4 text-right font-semibold text-gray-600 bg-gray-50">{{ trans('student.parent_name_job') }}</th>
-                        <td class="py-3 px-4 text-right text-gray-800">{{ $student->parent->Father_Name }}</td>
-                        <td class="py-3 px-4 text-right text-gray-800" colspan="2">{{ $student->parent->Father_Job }}</td>
+                        <td class="py-3 px-4 text-right text-gray-800">{{ $student->parent->father_name }}</td>
+                        <td class="py-3 px-4 text-right text-gray-800" colspan="2">{{ $student->parent->father_job }}</td>
                     </tr>
                 </table>
 
@@ -295,7 +295,7 @@
                         <p class="font-semibold text-gray-700">{{ trans('student.parent_sign') }}</p>
                         <p>
                             <span class="font-semibold text-gray-600">{{ trans('student.parent_name') }}</span>
-                            {{ $student->parent->Father_Name }}
+                            {{ $student->parent->father_name }}
                         </p>
                         <p class="font-semibold text-gray-700">{{ trans('student.sign') }}</p>
                     </div>

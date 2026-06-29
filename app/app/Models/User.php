@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use App\Enums\Jobs_types;
 use App\Enums\user_religion;
 use App\Enums\UserGender;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -73,22 +76,22 @@ class User extends Authenticatable
         'type' => Jobs_types::class,
     ];
 
-    public function image()
+    public function image(): MorphMany
     {
         return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function settings()
+    public function settings(): BelongsToMany
     {
         return $this->belongsToMany(Settings::class);
     }
 
-    public function job()
+    public function job(): BelongsTo
     {
         return $this->belongsTo(Job::class);
     }
 
-    public function grades()
+    public function grades(): BelongsToMany
     {
         return $this->belongsToMany(
             Grade::class,

@@ -23,7 +23,7 @@ return new class extends Migration
                 ->nullable()
                 ->constrained()
                 ->onDelete('set null');
-            $table->string('action');
+            $table->string('action')->index();
             $table->string('description');
             $table->string('ip');
             $table->string('user_agent')->nullable();

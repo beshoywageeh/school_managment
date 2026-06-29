@@ -26,7 +26,7 @@
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $student->name }}</td>
                         <td>{{ $student->national_id }}</td>
-                        <td>{{ $student->parent->Father_Phone }}</td>
+                        <td>{{ $student->parent->father_phone }}</td>
                         <td></td>
                         <td></td>
                         <td></td>

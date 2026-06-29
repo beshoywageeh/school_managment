@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Exchange_bond extends Model
@@ -27,17 +29,17 @@ class Exchange_bond extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function student()
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
     }
 
-    public function acadmic_year()
+    public function acadmic_year(): BelongsTo
     {
         return $this->belongsTo(acadmice_year::class, 'academic_year_id');
     }
 
-    public function studentaccount()
+    public function studentaccount(): HasMany
     {
         return $this->hasMany(StudentAccount::class);
     }

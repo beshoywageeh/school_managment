@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class promotion extends Model
@@ -22,37 +23,37 @@ class promotion extends Model
         'school_id',
     ];
 
-    public function f_grade()
+    public function f_grade(): BelongsTo
     {
         return $this->belongsTo(Grade::class, 'from_grade', 'id');
     }
 
-    public function t_grade()
+    public function t_grade(): BelongsTo
     {
         return $this->belongsTo(Grade::class, 'to_grade', 'id');
     }
 
-    public function f_class()
+    public function f_class(): BelongsTo
     {
         return $this->belongsTo(class_room::class, 'from_class', 'id');
     }
 
-    public function t_class()
+    public function t_class(): BelongsTo
     {
         return $this->belongsTo(class_room::class, 'to_class', 'id');
     }
 
-    public function t_acc()
+    public function t_acc(): BelongsTo
     {
         return $this->belongsTo(acadmice_year::class, 'to_acc', 'id');
     }
 
-    public function f_acc()
+    public function f_acc(): BelongsTo
     {
         return $this->belongsTo(acadmice_year::class, 'from_acc', 'id');
     }
 
-    public function students()
+    public function students(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id', 'id');
     }

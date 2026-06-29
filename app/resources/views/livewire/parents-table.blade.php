@@ -28,9 +28,9 @@
                     @foreach ($students_parents as $parent)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->index + 1 }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $parent->Father_Name }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $parent->Father_Phone }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $parent->Father_Job }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $parent->father_name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $parent->father_phone }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $parent->father_job }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">
                                 @foreach ($parent->Students as $student)
                                     {{ $student->name }}<br />

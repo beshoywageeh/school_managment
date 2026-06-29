@@ -30,7 +30,7 @@ class StudentResource extends JsonResource
             ]),
             'parent' => $this->whenLoaded('parent', fn () => [
                 'id' => $this->parent->id,
-                'father_name' => $this->parent->Father_Name,
+                'father_name' => $this->parent->father_name,
             ]),
             'nationality' => $this->whenLoaded('nationality', fn () => [
                 'id' => $this->nationality->id,

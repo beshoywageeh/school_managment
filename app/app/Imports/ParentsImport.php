@@ -17,20 +17,20 @@ class ParentsImport implements ToCollection
     {
         foreach ($rows as $row) {
             My_parents::create([
-                'Father_Name' => $row[0],
-                'Father_National_Id' => $row[1],
-                'Father_Phone' => $row[2],
-                'Father_Job' => $row[3],
-                'Father_Birth_Date' => $row[4],
-                'Father_Learning' => $row[5],
+                'father_name' => $row[0],
+                'father_national_id' => $row[1],
+                'father_phone' => $row[2],
+                'father_job' => $row[3],
+                'father_birth_date' => $row[4],
+                'father_learning' => $row[5],
                 'Father_Birth_Location' => $row[6],
-                'Mother_Name' => $row[7],
-                'Mother_National_Id' => $row[8],
-                'Mother_Phone' => $row[9],
-                'Mother_Job' => $row[10],
-                'Religion' => user_religion::fromString($row[13]),
-                'Address' => $row[12],
-                'Mother_Birth_Date' => $row[11],
+                'mother_name' => $row[7],
+                'mother_national_id' => $row[8],
+                'mother_phone' => $row[9],
+                'mother_job' => $row[10],
+                'religion' => user_religion::fromString($row[13]),
+                'address' => $row[12],
+                'mother_birth_date' => $row[11],
                 'user_id' => Auth::id(),
             ]);
         }

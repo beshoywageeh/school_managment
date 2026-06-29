@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class acadmice_year extends Model
@@ -27,12 +28,12 @@ class acadmice_year extends Model
         'year_end' => 'date',
     ];
 
-    public function creator()
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function updator()
+    public function updator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
     }

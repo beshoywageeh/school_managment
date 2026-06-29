@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Grade extends Model
@@ -17,27 +20,27 @@ class Grade extends Model
     ];
 
     // protected $primaryKey = 'id';
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo('App\Models\User');
     }
 
-    public function users()
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany('App\Models\User', 'teacher_grade', 'grade_id', 'teacher_id');
     }
 
-    public function class_rooms()
+    public function class_rooms(): HasMany
     {
         return $this->hasMany(class_room::class, 'grade_id');
     }
 
-    public function students()
+    public function students(): HasMany
     {
         return $this->hasMany('App\Models\Student', 'grade_id');
     }
 
-    public function fees()
+    public function fees(): HasMany
     {
         return $this->hasMany('App\Models\School_Fee', 'grade_id');
     }

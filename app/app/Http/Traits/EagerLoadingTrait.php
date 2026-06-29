@@ -13,7 +13,7 @@ trait EagerLoadingTrait
         return [
             'grade:id,name,school_id',
             'class_room:id,name,grade_id',
-            'parent:id,Father_Name',
+            'parent:id,father_name',
             'nationality:id,name',
             'user:id,name',
         ];

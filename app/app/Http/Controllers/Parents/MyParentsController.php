@@ -34,35 +34,35 @@ class MyParentsController extends Controller
     public function store(ParentsRequest $request)
     {
         try {
-            if ($request->Father_Birth_Date == '') {
+            if ($request->father_birth_date == '') {
                 $Father_Birth_Date = null;
             } else {
-                $Father_Birth_Date = Carbon::parse($request->Father_Birth_Date);
+                $Father_Birth_Date = Carbon::parse($request->father_birth_date);
             }
-            if ($request->Mother_Birth_Date == '') {
+            if ($request->mother_birth_date == '') {
                 $Mother_Birth_Date = null;
             } else {
-                $Mother_Birth_Date = Carbon::parse($request->Mother_Birth_Date);
+                $Mother_Birth_Date = Carbon::parse($request->mother_birth_date);
             }
             My_parents::create([
-                'Father_Name' => $request->Father_Name,
-                'Father_Phone' => $request->Father_Phone,
-                'Father_Job' => $request->Father_Job,
-                'Father_National_Id' => $request->Father_National_Id,
-                'Father_Birth_Date' => $Father_Birth_Date,
-                'Mother_Name' => $request->Mother_Name,
-                'Mother_Phone' => $request->Mother_Phone,
-                'Mother_Job' => $request->Mother_Job,
-                'Mother_National_Id' => $request->Mother_National_Id,
-                'Mother_Birth_Date' => $Mother_Birth_Date,
-                'Address' => $request->Address,
-                'Religion' => $request->religion,
+                'father_name' => $request->father_name,
+                'father_phone' => $request->father_phone,
+                'father_job' => $request->father_job,
+                'father_national_id' => $request->father_national_id,
+                'father_birth_date' => $Father_Birth_Date,
+                'mother_name' => $request->mother_name,
+                'mother_phone' => $request->mother_phone,
+                'mother_job' => $request->mother_job,
+                'mother_national_id' => $request->mother_national_id,
+                'mother_birth_date' => $Mother_Birth_Date,
+                'address' => $request->address,
+                'religion' => $request->religion,
                 'user_id' => \Auth::Id(),
-                'Father_Learning' => $request->Father_Learning,
+                'father_learning' => $request->father_learning,
                 'school_id' => \Auth::user()->school_id,
                 'mother_status' => $request->Mother_Status,
             ]);
-            $this->logActivity(trans('log.actions.added'), trans('log.models.parent.created', ['name' => $request->Father_Name]));
+            $this->logActivity(trans('log.actions.added'), trans('log.models.parent.created', ['name' => $request->father_name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -93,33 +93,33 @@ class MyParentsController extends Controller
     public function update(ParentsRequest $request)
     {
         try {
-            if ($request->Father_Birth_Date == '') {
+            if ($request->father_birth_date == '') {
                 $Father_Birth_Date = null;
             } else {
-                $Father_Birth_Date = Carbon::parse($request->Father_Birth_Date);
+                $Father_Birth_Date = Carbon::parse($request->father_birth_date);
             }
-            if ($request->Mother_Birth_Date == '') {
+            if ($request->mother_birth_date == '') {
                 $Mother_Birth_Date = null;
             } else {
-                $Mother_Birth_Date = Carbon::parse($request->Mother_Birth_Date);
+                $Mother_Birth_Date = Carbon::parse($request->mother_birth_date);
             }
             My_parents::find($request->id)->update([
-                'Father_Name' => $request->Father_Name,
-                'Father_Phone' => $request->Father_Phone,
-                'Father_Job' => $request->Father_Job,
-                'Father_National_Id' => $request->Father_National_Id,
-                'Father_Birth_Date' => $Father_Birth_Date,
-                'Mother_Name' => $request->Mother_Name,
-                'Mother_Phone' => $request->Mother_Phone,
-                'Mother_Job' => $request->Mother_Job,
-                'Mother_National_Id' => $request->Mother_National_Id,
-                'Mother_Birth_Date' => $Mother_Birth_Date,
-                'Address' => $request->Address,
-                'Religion' => $request->religion,
-                'Father_Learning' => $request->Father_Learning,
+                'father_name' => $request->father_name,
+                'father_phone' => $request->father_phone,
+                'father_job' => $request->father_job,
+                'father_national_id' => $request->father_national_id,
+                'father_birth_date' => $Father_Birth_Date,
+                'mother_name' => $request->mother_name,
+                'mother_phone' => $request->mother_phone,
+                'mother_job' => $request->mother_job,
+                'mother_national_id' => $request->mother_national_id,
+                'mother_birth_date' => $Mother_Birth_Date,
+                'address' => $request->address,
+                'religion' => $request->religion,
+                'father_learning' => $request->father_learning,
                 'mother_status' => $request->Mother_Status,
             ]);
-            $this->logActivity(trans('log.actions.updated'), trans('log.models.parent.updated', ['name' => $request->Father_Name]));
+            $this->logActivity(trans('log.actions.updated'), trans('log.models.parent.updated', ['name' => $request->father_name]));
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -136,7 +136,7 @@ class MyParentsController extends Controller
             $d = My_parents::withCount('Students')->findorfail($id);
             if ($d->Students_count == 0) {
                 $d->delete();
-                $this->logActivity(trans('log.actions.deleted'), trans('log.models.parent.deleted', ['name' => $d->Father_Name]));
+                $this->logActivity(trans('log.actions.deleted'), trans('log.models.parent.deleted', ['name' => $d->father_name]));
                 session()->flash('success', trans('general.deleted'));
 
                 return redirect()->route('parents.index');

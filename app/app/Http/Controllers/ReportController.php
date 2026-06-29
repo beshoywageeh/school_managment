@@ -14,7 +14,8 @@ use App\Models\Recipt_Payment;
 use App\Models\School_Fee;
 use App\Models\Student;
 use App\Models\StudentAccount;
-use App\Services\PDFExportService;
+use App\Services\Report\PDFExportService;
+use App\Services\Report\ReportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,10 @@ class ReportController extends Controller
 {
     use SchoolTrait;
 
-    public function __construct(private PDFExportService $PDFExport) {}
+    public function __construct(
+        private PDFExportService $PDFExport,
+        private ReportService $reportService,
+    ) {}
 
     public function index()
     {
@@ -91,10 +95,8 @@ class ReportController extends Controller
         $PDFExport->PrintPDF('students', 'stream', $data, 'L', $school);
     }
 
-    public function payment_parts(
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
+    public function payment_parts(Request $request, PDFExportService $PDFExport)
+    {
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
         $query = PaymentParts::whereBetween('date', [
@@ -106,26 +108,14 @@ class ReportController extends Controller
         }
         $data['parts'] = $query->get();
         $school = $this->GetSchool();
-        $PDFExport->PrintPDF(
-            'payment_parts',
-            'stream',
-            $data,
-            'P',
-            $school,
-        );
+        $PDFExport->PrintPDF('payment_parts', 'stream', $data, 'P', $school);
     }
 
     public function StockProducts(PDFExportService $PDFExport)
     {
         $data['stocks'] = InventoryItem::with('orders')->get();
         $school = $this->GetSchool();
-        $PDFExport->PrintPDF(
-            'stock_product',
-            'stream',
-            $data,
-            'P',
-            $school,
-        );
+        $PDFExport->PrintPDF('stock_product', 'stream', $data, 'P', $school);
     }
 
     public function clothes_stocks(PDFExportService $PDFExport)
@@ -134,13 +124,7 @@ class ReportController extends Controller
             ->with('orders', 'classroom', 'grade')
             ->get();
         $school = $this->GetSchool();
-        $PDFExport->PrintPDF(
-            'clothes_stocks',
-            'stream',
-            $data,
-            'P',
-            $school,
-        );
+        $PDFExport->PrintPDF('clothes_stocks', 'stream', $data, 'P', $school);
     }
 
     public function books_sheets(PDFExportService $PDFExport)
@@ -158,22 +142,14 @@ class ReportController extends Controller
         );
     }
 
-    public function clothe_stock(
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
+    public function clothe_stock(Request $request, PDFExportService $PDFExport)
+    {
         $data['stock'] = InventoryItem::where('id', $request->stock)
             ->with('orders')
             ->first();
         $data['total'] = $this->calculateTotals($data['stock']);
         $school = $this->GetSchool();
-        $PDFExport->PrintPDF(
-            'clothe_stock',
-            'stream',
-            $data,
-            'P',
-            $school,
-        );
+        $PDFExport->PrintPDF('clothe_stock', 'stream', $data, 'P', $school);
     }
 
     public function book_sheet_stock(
@@ -185,19 +161,11 @@ class ReportController extends Controller
             ->first();
         $data['total'] = $this->calculateTotals($data['stock']);
         $school = $this->GetSchool();
-        $PDFExport->PrintPDF(
-            'book_sheet_stock',
-            'stream',
-            $data,
-            'P',
-            $school,
-        );
+        $PDFExport->PrintPDF('book_sheet_stock', 'stream', $data, 'P', $school);
     }
 
-    public function stock_product(
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
+    public function stock_product(Request $request, PDFExportService $PDFExport)
+    {
         $data['stock'] = InventoryItem::where('id', $request->stock)
             ->with('orders')
             ->first();
@@ -236,7 +204,7 @@ class ReportController extends Controller
                 ->where('student_status', 0)
                 ->where('acadmiecyear_id', $data['acc']->id)
                 ->with([
-                    'parent:id,Father_Name,address',
+                    'parent:id,father_name,address',
                     'grade:id,name',
                     'classroom:id,name',
                 ])
@@ -257,23 +225,16 @@ class ReportController extends Controller
                 ])
                 ->chunk(100);
 
-            $data['classroom'] = class_room::where(
-                'id',
-                $request->classroom_id,
-            )
+            $data['classroom'] = class_room::where('id', $request->classroom_id)
                 ->with('grade')
                 ->first();
             $PDFExport->PrintPDF('41', 'stream', $data, 'L', $school);
         }
     }
 
-    public function exception_fee(
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
-        $data['begin'] = Carbon::parse($request->start_date)->format(
-            'Y-m-d',
-        );
+    public function exception_fee(Request $request, PDFExportService $PDFExport)
+    {
+        $data['begin'] = Carbon::parse($request->start_date)->format('Y-m-d');
         $data['end'] = Carbon::parse($request->end_date)->format('Y-m-d');
         $data['exception_list'] = ExcptionFees::whereBetween('date', [
             $data['begin'],
@@ -283,13 +244,7 @@ class ReportController extends Controller
             ->get();
         $school = $this->GetSchool();
 
-        $PDFExport->PrintPDF(
-            'exception_fee',
-            'stream',
-            $data,
-            'P',
-            $school,
-        );
+        $PDFExport->PrintPDF('exception_fee', 'stream', $data, 'P', $school);
     }
 
     public function payment_status(
@@ -302,10 +257,7 @@ class ReportController extends Controller
             $year,
         )->first(['id', 'view']);
 
-        $query = Fee_invoice::where(
-            'academic_year_id',
-            $data['acc_year']->id,
-        )
+        $query = Fee_invoice::where('academic_year_id', $data['acc_year']->id)
             ->where('status', $request->payment_status)
             ->with('grades:id,name', 'students:id,name')
             ->select(['student_id', 'grade_id']);
@@ -346,10 +298,8 @@ class ReportController extends Controller
         $PDFExport->PrintPDF('payments', 'stream', $data, 'P', $school);
     }
 
-    public function fees_invoices(
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
+    public function fees_invoices(Request $request, PDFExportService $PDFExport)
+    {
         $year = Carbon::now()->format('Y');
         $data['acc_year'] = acadmice_year::whereYear(
             'year_start',
@@ -404,13 +354,7 @@ class ReportController extends Controller
             ->get()
             ->groupBy(['acd_year.view', 'grades.name', 'classes.name']);
         $school = $this->GetSchool();
-        $PDFExport->PrintPDF(
-            'fee_invoices',
-            'stream',
-            $data,
-            'P',
-            $school,
-        );
+        $PDFExport->PrintPDF('fee_invoices', 'stream', $data, 'P', $school);
     }
 
     public function student_tameen(
@@ -418,27 +362,16 @@ class ReportController extends Controller
         PDFExportService $PDFExport,
     ) {
         $data['type'] = $request->type;
-        $data['classroom'] = class_room::findorfail(
-            $request->classroom_id,
-        );
+        $data['classroom'] = class_room::findorfail($request->classroom_id);
         $date = Carbon::now()->format('Y');
-        $data['aa'] = acadmice_year::whereyear(
-            'year_start',
-            $date,
-        )->first();
+        $data['aa'] = acadmice_year::whereyear('year_start', $date)->first();
         $data['students'] = Student::where(
             'classroom_id',
             $request->classroom_id,
         )
             ->where('tameen', 1)
-            ->with('parent:id,Father_Phone,address')
-            ->get([
-                'name',
-                'national_id',
-                'parent_id',
-                'birth_date',
-                'gender',
-            ]);
+            ->with('parent:id,father_phone,address')
+            ->get(['name', 'national_id', 'parent_id', 'birth_date', 'gender']);
         $school = $this->GetSchool();
         if (is_null($data['students'])) {
             return redirect()
@@ -504,10 +437,8 @@ class ReportController extends Controller
         $PDFExport->PrintPDF('school_fees', 'stream', $data, 'P', $school);
     }
 
-    public function final_year(
-        PDFExportService $PDFExport,
-        Request $request,
-    ) {
+    public function final_year(PDFExportService $PDFExport, Request $request)
+    {
         $school = $this->GetSchool();
 
         // return $request;
@@ -537,11 +468,7 @@ class ReportController extends Controller
                 ->where('classroom_id', '!=', null)
                 ->where('grade_id', '!=', null);
             $data['grade'] = Grade::where('id', '!=', null)->get();
-            $data['classroom'] = class_room::where(
-                'id',
-                '!=',
-                null,
-            )->get();
+            $data['classroom'] = class_room::where('id', '!=', null)->get();
         }
 
         $data['Students_by_grade'] = (clone $data['Students_query'])
@@ -569,9 +496,10 @@ class ReportController extends Controller
         );
         $date = date('Y');
 
-        $data['acadmic_year'] = acadmice_year::where('status', '0')->first(
-            ['id', 'view'],
-        );
+        $data['acadmic_year'] = acadmice_year::where('status', '0')->first([
+            'id',
+            'view',
+        ]);
         if (
             $request->grade &&
             $request->grade != 0 &&
@@ -639,8 +567,7 @@ class ReportController extends Controller
         $totals = [];
 
         foreach ($stocks->orders->sortBy('created_at') as $stock) {
-            $previousstock +=
-                $stock->quantity_in - $stock->quantity_out;
+            $previousstock += $stock->quantity_in - $stock->quantity_out;
             $totals[$stock->id] = [
                 'stk' => $stock,
                 'total' => $previousstock,

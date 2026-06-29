@@ -30,17 +30,17 @@ class PaymentParts extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function students()
+    public function students(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
 
-    public function grades()
+    public function grades(): BelongsTo
     {
         return $this->belongsTo(Grade::class, 'grade_id');
     }
 
-    public function classes()
+    public function classes(): BelongsTo
     {
         return $this->belongsTo(class_room::class, 'class_id');
     }

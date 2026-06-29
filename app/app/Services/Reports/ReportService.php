@@ -17,7 +17,7 @@ class ReportService
     ): Collection {
         return Student::where('grade_id', $gradeId)
             ->where('acadmiecyear_id', $academicYearId)
-            ->with(['parent:id,Father_Name', 'class_room:id,name'])
+            ->with(['parent:id,father_name', 'class_room:id,name'])
             ->get(['id', 'name', 'gender', 'classroom_id', 'parent_id']);
     }
 
@@ -27,7 +27,7 @@ class ReportService
     ): Collection {
         return Student::where('classroom_id', $classId)
             ->where('acadmiecyear_id', $academicYearId)
-            ->with(['parent:id,Father_Name'])
+            ->with(['parent:id,father_name'])
             ->get(['id', 'name', 'gender']);
     }
 

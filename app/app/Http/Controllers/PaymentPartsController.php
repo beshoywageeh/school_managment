@@ -39,7 +39,7 @@ class PaymentPartsController extends Controller
                     'fee_invoice' => function ($q) {
                         $q->where('status', 'unpaid')->with(['fees']);
                     },
-                    'parent:id,Father_Name',
+                    'parent:id,father_name',
                 ])
                 ->first();
 

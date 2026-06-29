@@ -18,8 +18,8 @@ class StudentRegeister
         $parent = My_parents::find($request['parent_id']);
         if (is_null($parent)) {
             $parent = My_parents::Create([
-                'Father_Name' => $request['parent_id'],
-                'Religion' => $request['religion'],
+                'father_name' => $request['parent_id'],
+                'religion' => $request['religion'],
                 'user_id' => Auth::id(),
                 'school_id' => $this->getSchool()->id,
             ]);
@@ -38,7 +38,7 @@ class StudentRegeister
             'address' => $request['address'],
             'national_id' => $request['national_id'],
             'student_status' => $request['student_status'],
-            'religion' => $parent->Religion ?? $request['religion'],
+            'religion' => $parent->religion ?? $request['religion'],
             'birth_at_begin' => new AgeCalculationService()->calculateAgeAsOfOctoberFirst(
                 $request['birth_date'],
             ),

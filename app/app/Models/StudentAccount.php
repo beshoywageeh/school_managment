@@ -19,9 +19,9 @@ class StudentAccount extends Model
         'student_id',
         'grade_id',
         'classroom_id',
-        'recipt__payments_id',
+        'receipt_payment_id',
         'fee_invoices_id',
-        'excpetion_id',
+        'exception_id',
         'academic_year_id',
         'date',
         'type',
@@ -58,11 +58,7 @@ class StudentAccount extends Model
 
     public function fee(): BelongsTo
     {
-        return $this->belongsTo(
-            Fee_invoice::class,
-            'fee_invoices_id',
-            'id',
-        );
+        return $this->belongsTo(Fee_invoice::class, 'fee_invoices_id', 'id');
     }
 
     public function recipt_payment(): BelongsTo

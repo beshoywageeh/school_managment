@@ -10,6 +10,9 @@ use App\Models\settings;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InventoryItem extends Model
@@ -79,22 +82,22 @@ class InventoryItem extends Model
         return $query->where('category', $category);
     }
 
-    public function grade()
+    public function grade(): BelongsTo
     {
         return $this->belongsTo(Grade::class);
     }
 
-    public function classroom()
+    public function classroom(): BelongsTo
     {
         return $this->belongsTo(class_room::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function school()
+    public function school(): BelongsTo
     {
         return $this->belongsTo(settings::class);
     }
@@ -104,7 +107,7 @@ class InventoryItem extends Model
         return $this->sell_price;
     }
 
-    public function orderItems()
+    public function orderItems(): MorphMany
     {
         return $this->morphMany(InventoryOrderItem::class, 'itemable');
     }
@@ -114,7 +117,7 @@ class InventoryItem extends Model
         return $this->orderItems();
     }
 
-    public function transactions()
+    public function transactions(): HasMany
     {
         return $this->hasMany(InventoryTransaction::class, 'item_id');
     }

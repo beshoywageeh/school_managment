@@ -56,14 +56,14 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
         $this->defaultGradeId = config('defaults.grade_id', 1);
 
         $defaultParent = My_parents::firstOrCreate(
-            ['Father_Name' => 'Default Parent', 'school_id' => $this->schoolId],
+            ['father_name' => 'Default Parent', 'school_id' => $this->schoolId],
             ['user_id' => $this->userId, 'school_id' => $this->schoolId]
         );
         $this->defaultParentId = $defaultParent->id;
 
         $this->grades = Grade::pluck('id', 'name')->toArray();
         $this->parents = My_parents::where('school_id', $this->schoolId)
-            ->pluck('id', 'Father_Name')
+            ->pluck('id', 'father_name')
             ->toArray();
         $this->classes = class_room::pluck('id', 'name')->toArray();
 
@@ -117,12 +117,12 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
                 $parentId = $this->parents[$parentName];
             } else {
                 $newParent = My_parents::updateOrCreate(
-                    ['Father_Name' => $parentName, 'school_id' => $this->schoolId],
+                    ['father_name' => $parentName, 'school_id' => $this->schoolId],
                     [
                         'user_id' => $this->userId,
                         'school_id' => $this->schoolId,
                         'address' => $address,
-                        'Father_Phone' => $parentPhone,
+                        'father_phone' => $parentPhone,
                     ]
                 );
                 $parentId = $newParent->id;

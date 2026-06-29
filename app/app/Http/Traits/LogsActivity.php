@@ -3,9 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Jobs\LogActivityJob;
-use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
 trait LogsActivity
 {
@@ -35,20 +33,16 @@ trait LogsActivity
             'model_id' => $modelId,
         ];
 
-        if ($this->logActivityAsync && app()->bound('queue')) {
-            LogActivityJob::dispatch(
-                $data['user_id'],
-                $data['action'],
-                $data['description'],
-                $data['ip'],
-                $data['user_agent'],
-                $data['school_id'],
-                $data['model_type'],
-                $data['model_id'],
-            )->onQueue('logs');
-        } else {
-            ActivityLog::create($data);
-        }
+        LogActivityJob::dispatch(
+            $data['user_id'],
+            $data['action'],
+            $data['description'],
+            $data['ip'],
+            $data['user_agent'],
+            $data['school_id'],
+            $data['model_type'],
+            $data['model_id'],
+        )->onQueue('logs');
     }
 
     public function logActivitySync(
@@ -61,82 +55,6 @@ trait LogsActivity
         $this->logActivityAsync = false;
         $this->logActivity($action, $description, $modelType, $modelId);
         $this->logActivityAsync = $previousMode;
-    }
-
-    public function logCreated($model, ?string $description = null): void
-    {
-        $action = trans('log.actions.added');
-        $modelClass = is_object($model) ? get_class($model) : $model;
-        $basename = Str::afterLast($modelClass, '\\');
-        $description =
-            $description ??
-            trans('log.models.'.Str::snake($basename).'.created', [
-                'name' => $this->getModelName($model),
-            ]);
-
-        $this->logActivity(
-            $action,
-            $description,
-            $modelClass,
-            is_object($model) ? $model->id ?? null : null,
-        );
-    }
-
-    public function logUpdated($model, ?string $description = null): void
-    {
-        $action = trans('log.actions.updated');
-        $modelClass = is_object($model) ? get_class($model) : $model;
-        $basename = Str::afterLast($modelClass, '\\');
-        $description =
-            $description ??
-            trans('log.models.'.Str::snake($basename).'.updated', [
-                'name' => $this->getModelName($model),
-            ]);
-
-        $this->logActivity(
-            $action,
-            $description,
-            $modelClass,
-            is_object($model) ? $model->id ?? null : null,
-        );
-    }
-
-    public function logDeleted($model, ?string $description = null): void
-    {
-        $action = trans('log.actions.deleted');
-        $modelClass = is_object($model) ? get_class($model) : $model;
-        $basename = Str::afterLast($modelClass, '\\');
-        $description =
-            $description ??
-            trans('log.models.'.Str::snake($basename).'.deleted', [
-                'name' => $this->getModelName($model),
-            ]);
-
-        $this->logActivity(
-            $action,
-            $description,
-            $modelClass,
-            is_object($model) ? $model->id ?? null : null,
-        );
-    }
-
-    public function logRestored($model, ?string $description = null): void
-    {
-        $action = trans('log.actions.restored');
-        $modelClass = is_object($model) ? get_class($model) : $model;
-        $basename = Str::afterLast($modelClass, '\\');
-        $description =
-            $description ??
-            trans('log.models.'.Str::snake($basename).'.restored', [
-                'name' => $this->getModelName($model),
-            ]);
-
-        $this->logActivity(
-            $action,
-            $description,
-            $modelClass,
-            is_object($model) ? $model->id ?? null : null,
-        );
     }
 
     protected function getModelName($model): string

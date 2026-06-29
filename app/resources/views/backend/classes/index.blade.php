@@ -32,7 +32,7 @@
                                 <a href="{{ route('classes.show', $class) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                     {{ $class->title }}
                                 </a>
-                                <span class="text-gray-500">{!! $class->tammen() !!}</span>
+                                <span class="text-gray-500"><x-tammen-badge :value="$class->tameen"/></span>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $class->grade->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $class->class_room->name }}</td>

@@ -65,7 +65,7 @@ class GenerateReportJob implements ShouldQueue
             $query->where('classroom_id', $this->filters['classroom_id']);
         }
 
-        return $query->with(['grade:id,name', 'class_room:id,name', 'parent:id,Father_Name'])
+        return $query->with(['grade:id,name', 'class_room:id,name', 'parent:id,father_name'])
             ->get()
             ->toArray();
     }

@@ -13,7 +13,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('unit')->default('piece');
             $table->enum('type', ['stock', 'clothe', 'book']);
-            $table->enum('category', ['book', 'sheet'])->nullable();
+            $table
+                ->enum('category', ['book', 'sheet'])
+                ->nullable()
+                ->index();
             $table->decimal('opening_qty', 10, 2)->nullable();
             $table->date('opening_date')->nullable();
             $table->decimal('current_stock', 10, 2)->default(0);

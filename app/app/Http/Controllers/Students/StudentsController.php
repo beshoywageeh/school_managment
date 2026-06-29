@@ -96,7 +96,7 @@ class StudentsController extends Controller
                     '%'.$request->students.'%',
                 )
                     ->orWhere(
-                        'parents.Father_Name',
+                        'parents.father_name',
                         'like',
                         '%'.$request->students.'%',
                     )
@@ -158,7 +158,7 @@ class StudentsController extends Controller
         // اختيار الحقول وتحديد أسماء مستعارة (Aliases) مطابقة لحقول الـ Component تماماً
         $query->select([
             'students.*',
-            'parents.Father_Name as parent_name',
+            'parents.father_name as parent_name',
             'grades.name as grade_name',
             'class_rooms.name as classroom_name',
         ]);
@@ -189,7 +189,7 @@ class StudentsController extends Controller
         $grades = Grade::where('school_id', $school->id)->get(['id', 'name']);
         $parents = My_parents::where('school_id', $school->id)->get([
             'id',
-            'Father_Name',
+            'father_name',
         ]);
         $acadmice_years = acadmice_year::where('school_id', $school->id)
             ->where('status', 'false')
@@ -256,7 +256,7 @@ class StudentsController extends Controller
                     'user:id,name',
                     'grade:id,name',
                     'classroom:id,name',
-                    'parent:id,Father_Name,Mother_Name,Father_Phone,Mother_Phone,Father_Job',
+                    'parent:id,father_name,mother_name,father_phone,mother_phone,father_job',
                     'nationality',
                     'StudentAccount',
                     'fee_invoice',
@@ -281,7 +281,7 @@ class StudentsController extends Controller
     {
         try {
             $grades = Grade::all(['id', 'name']);
-            $parents = My_parents::all(['id', 'Father_Name']);
+            $parents = My_parents::all(['id', 'father_name']);
             $student = Student::findorfail($id);
             $school = $this->getSchool();
 
@@ -314,7 +314,7 @@ class StudentsController extends Controller
                 ),
                 'national_id' => $request->national_id,
                 'religion' => My_parents::findorfail($request->parents)
-                    ->Religion,
+                    ->religion,
                 'birth_at_begin' => $this->calculateAgeAsOfOctoberFirst(
                     $request->birth_date,
                 ),

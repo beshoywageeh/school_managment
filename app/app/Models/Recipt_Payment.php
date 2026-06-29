@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Recipt_Payment extends Model
@@ -24,12 +25,12 @@ class Recipt_Payment extends Model
 
     protected $table = 'recipt__payments';
 
-    public function student()
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
 
-    public function acc_year()
+    public function acc_year(): BelongsTo
     {
         return $this->belongsTo(Acadmice_year::class, 'academic_year_id');
     }

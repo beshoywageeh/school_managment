@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ExcptionFees extends Model
@@ -27,27 +28,27 @@ class ExcptionFees extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function students()
+    public function students(): BelongsTo
     {
         return $this->belongsTo(Student::class);
     }
 
-    public function academic_year()
+    public function academic_year(): BelongsTo
     {
         return $this->belongsTo(Acadmice_year::class, 'academic_year_id');
     }
 
-    public function grade()
+    public function grade(): BelongsTo
     {
         return $this->belongsTo("App\Models\Grade", 'grade_id');
     }
 
-    public function classroom()
+    public function classroom(): BelongsTo
     {
         return $this->belongsTo("App\Models\class_room", 'class_id');
     }
 
-    public function school_fee()
+    public function school_fee(): BelongsTo
     {
         return $this->belongsTo(
             "App\Models\School_fee",

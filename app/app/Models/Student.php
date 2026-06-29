@@ -7,6 +7,8 @@ use App\Enums\user_religion;
 use App\Enums\UserGender;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
@@ -39,52 +41,52 @@ class Student extends Model
         'student_status' => Student_Status::class,
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function grade()
+    public function grade(): BelongsTo
     {
         return $this->belongsTo(Grade::class);
     }
 
-    public function classroom()
+    public function classroom(): BelongsTo
     {
         return $this->belongsTo(class_room::class);
     }
 
-    public function parent()
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(My_parents::class);
     }
 
-    public function StudentAccount()
+    public function StudentAccount(): HasMany
     {
         return $this->hasMany(StudentAccount::class, 'student_id', 'id');
     }
 
-    public function Acadmice_year()
+    public function Acadmice_year(): BelongsTo
     {
         return $this->belongsTo(acadmice_year::class);
     }
 
-    public function nationality()
+    public function nationality(): BelongsTo
     {
         return $this->belongsTo(nationality::class);
     }
 
-    public function fee_invoice()
+    public function fee_invoice(): HasMany
     {
         return $this->hasMany(Fee_invoice::class);
     }
 
-    public function parts()
+    public function parts(): HasMany
     {
         return $this->hasMany(PaymentParts::class);
     }
 
-    public function excption()
+    public function excption(): HasMany
     {
         return $this->hasMany(ExcptionFees::class);
     }

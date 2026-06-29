@@ -13,28 +13,28 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Father_Name') }}</label>
-                        <input type="text" name="Father_Name" value="{{ old('Father_Name', $parent->Father_Name) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                        <input type="text" name="father_name" value="{{ old('father_name', $parent->father_name) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Father_Phone') }}</label>
-                        <input type="text" name="Father_Phone" value="{{ old('Father_Phone', $parent->Father_Phone) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                        <input type="text" name="father_phone" value="{{ old('father_phone', $parent->father_phone) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Father_Job') }}</label>
-                        <input type="text" name="Father_Job" value="{{ old('Father_Job', $parent->Father_Job) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                        <input type="text" name="father_job" value="{{ old('father_job', $parent->father_job) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Father_National_Id') }}</label>
-                        <input type="text" name="Father_National_Id" value="{{ old('Father_National_Id', $parent->Father_National_Id) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                        <input type="text" name="father_national_id" value="{{ old('father_national_id', $parent->father_national_id) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Father_Birth_Date') }}</label>
                         <div class="relative">
-                            <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="Father_Birth_Date" type="text" value="{{ old('Father_Birth_Date', $parent->Father_Birth_Date) }}">
+                            <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="father_birth_date" type="text" value="{{ old('father_birth_date', $parent->father_birth_date) }}">
                             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                                 <x-hero-icon name="calendar-alt" class="w-5 h-5" />
                             </span>
@@ -42,7 +42,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Father_Learning') }}</label>
-                        <input type="text" name="Father_Learning" value="{{ old('Father_Learning', $parent->Father_Learning) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                        <input type="text" name="father_learning" value="{{ old('father_learning', $parent->father_learning) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     </div>
                 </div>
             </div>
@@ -52,27 +52,27 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Mother_Name') }}</label>
-                        <input type="text" name="Mother_Name" value="{{ old('Mother_Name', $parent->Mother_Name) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                        <input type="text" name="mother_name" value="{{ old('mother_name', $parent->mother_name) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Mother_Phone') }}</label>
-                        <input type="text" name="Mother_Phone" value="{{ old('Mother_Phone', $parent->Mother_Phone) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                        <input type="text" name="mother_phone" value="{{ old('mother_phone', $parent->mother_phone) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Mother_Job') }}</label>
-                        <input type="text" name="Mother_Job" value="{{ old('Mother_Job', $parent->Mother_Job) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                        <input type="text" name="mother_job" value="{{ old('mother_job', $parent->mother_job) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Mother_National_Id') }}</label>
-                        <input type="text" name="Mother_National_Id" value="{{ old('Mother_National_Id', $parent->Mother_National_Id) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                        <input type="text" name="mother_national_id" value="{{ old('mother_national_id', $parent->mother_national_id) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Mother_Birth_Date') }}</label>
-                        <input type="date" name="Mother_Birth_Date" value="{{ old('Mother_Birth_Date', $parent->Mother_Birth_Date) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                        <input type="date" name="mother_birth_date" value="{{ old('mother_birth_date', $parent->mother_birth_date) }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Mother_Status') }}</label>
@@ -92,10 +92,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Address') }}</label>
-                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="Address" rows="3" placeholder="{{ trans('Parents.Address') }}">{{ old('Address', $parent->Address) }}</textarea>
+                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="address" rows="3" placeholder="{{ trans('Parents.Address') }}">{{ old('address', $parent->address) }}</textarea>
                 </div>
                 <div>
-                    <x-input.religion-select name="Religion" :selected="old('Religion', $parent->Religion)"></x-input.religion-select>
+                    <x-input.religion-select name="religion" :selected="old('religion', $parent->religion)"></x-input.religion-select>
                 </div>
             </div>
             <div class="flex justify-end mt-6">

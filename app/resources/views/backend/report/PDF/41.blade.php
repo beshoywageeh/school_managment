@@ -49,7 +49,7 @@
                         <td>{{ $age[0] ?? '-' }}</td>
                         <td>{{ $age[1] ?? '-' }}</td>
                         <td>{{ $age[2] ?? '-' }}</td>
-                        <td>{{ $stud->parent->Father_Name }}</td>
+                        <td>{{ $stud->parent->father_name }}</td>
                         <td>{{ $stud->parent->address }}</td>
                         <td></td>
                     </tr>

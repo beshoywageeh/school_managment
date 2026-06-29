@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('general.buttons.view') }} | {{ $parent->Father_Name }}
+    {{ trans('general.buttons.view') }} | {{ $parent->father_name }}
 @endsection
 @push('css')
     <style>
@@ -14,7 +14,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" id="print">
         <div class="flex justify-between items-center mb-6">
-            <h4 class="text-lg font-semibold text-gray-800">{{ $parent->Father_Name }}</h4>
+            <h4 class="text-lg font-semibold text-gray-800">{{ $parent->father_name }}</h4>
             <div class="text-left">
                 <x-button id="print_Button" class="primary" type="" onclick="printDiv()">
                     <svg class="w-5 h-5 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -28,15 +28,15 @@
             <table class="w-full text-sm">
                 <tr class="border-b border-gray-100">
                     <th class="py-3 px-4 text-right font-medium text-gray-600">{{ trans('Parents.Father_Name') }}</th>
-                    <td class="py-3 px-4 text-gray-800">{{ $parent->Father_Name }}</td>
+                    <td class="py-3 px-4 text-gray-800">{{ $parent->father_name }}</td>
                     <th class="py-3 px-4 text-right font-medium text-gray-600">{{ trans('Parents.Father_Phone') }}</th>
-                    <td class="py-3 px-4 text-gray-800">{{ $parent->Father_Phone }}</td>
+                    <td class="py-3 px-4 text-gray-800">{{ $parent->father_phone }}</td>
                 </tr>
                 <tr class="border-b border-gray-100">
                     <th class="py-3 px-4 text-right font-medium text-gray-600">{{ trans('Parents.Mother_Name') }}</th>
-                    <td class="py-3 px-4 text-gray-800">{{ $parent->Mother_Name }}</td>
+                    <td class="py-3 px-4 text-gray-800">{{ $parent->mother_name }}</td>
                     <th class="py-3 px-4 text-right font-medium text-gray-600">{{ trans('Parents.Mother_Phone') }}</th>
-                    <td class="py-3 px-4 text-gray-800">{{ $parent->Mother_Phone }}</td>
+                    <td class="py-3 px-4 text-gray-800">{{ $parent->mother_phone }}</td>
                 </tr>
             </table>
         </div>

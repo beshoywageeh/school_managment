@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class classes extends Model
@@ -29,33 +31,18 @@ class classes extends Model
         'deleted_at' => 'datetime',
     ];
 
-    public function grade()
+    public function grade(): BelongsTo
     {
         return $this->belongsTo(Grade::class, 'grade_id');
     }
 
-    public function class_room()
+    public function class_room(): BelongsTo
     {
         return $this->belongsTo(class_room::class, 'class_room_id');
     }
 
-    public function students()
+    public function students(): HasMany
     {
         return $this->hasMany(Student::class, 'class_id');
-    }
-
-    public function tammen()
-    {
-        $value = $this->tameen;
-
-        if ($value == 0) {
-            return '<span class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-red-100 text-red-800">'.
-                trans('general.no_tammen').
-                '</span>';
-        }
-
-        return '<span class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-green-100 text-green-800">'.
-            trans('general.ok_tammen').
-            '</span>';
     }
 }

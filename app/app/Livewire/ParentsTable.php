@@ -31,7 +31,7 @@ class ParentsTable extends Component
                         'like',
                         '%'.$this->search.'%',
                     )->orWhere(
-                        'parents.Father_Name',
+                        'parents.father_name',
                         'like',
                         '%'.$this->search.'%',
                     );

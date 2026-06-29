@@ -16,14 +16,14 @@ return new class extends Migration
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('classroom_id');
-            $table->unsignedBigInteger('recipt__payments_id')->nullable();
+            $table->unsignedBigInteger('receipt_payment_id')->nullable();
             $table->unsignedBigInteger('fee_invoices_id')->nullable();
-            $table->unsignedBigInteger('excpetion_id')->nullable();
+            $table->unsignedBigInteger('exception_id')->nullable();
             $table->unsignedBigInteger('exchange_bond_id')->nullable();
             $table->unsignedBigInteger('academic_year_id');
             $table->date('date');
-            $table->string('type');
-            $table->decimal('debit', 10, 2);
+            $table->string('type')->index();
+            -$table->decimal('debit', 10, 2);
             $table->decimal('credit', 10, 2);
             $table->timestamps();
             $table->softDeletes();

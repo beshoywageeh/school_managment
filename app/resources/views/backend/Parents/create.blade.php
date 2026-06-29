@@ -10,22 +10,22 @@
                 <h4 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('Parents.Father_Info') }}</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <x-input name='Father_Name' value="{{ old('Father_Name') }}"
+                        <x-input name='father_name' value="{{ old('father_name') }}"
                             type='text'>{{ trans('Parents.Father_Name') }}</x-input>
                     </div>
                     <div>
-                        <x-input name='Father_Phone' value="{{ old('Father_Phone') }}"
+                        <x-input name='father_phone' value="{{ old('father_phone') }}"
                             type='text'>{{ trans('Parents.Father_Phone') }}</x-input>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div>
-                        <x-input name='Father_Job' value="{{ old('Father_Job') }}"
+                        <x-input name='father_job' value="{{ old('father_job') }}"
                             type='text'>{{ trans('Parents.Father_Job') }}</x-input>
                     </div>
                     <div>
-                        <x-input name='Father_National_Id' value="{{ old('Father_National_Id') }}"
-                            data="Father_National_Id" type='text'>{{ trans('Parents.Father_National_Id') }}
+                        <x-input name='father_national_id' value="{{ old('father_national_id') }}"
+                            data="father_national_id" type='text'>{{ trans('Parents.Father_National_Id') }}
                         </x-input>
                     </div>
                 </div>
@@ -33,14 +33,14 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Father_Birth_Date') }}</label>
                         <div class="relative">
-                            <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="Father_Birth_Date" type="text" value="{{ old('Father_Birth_Date') }}">
+                            <input class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="father_birth_date" type="text" value="{{ old('father_birth_date') }}">
                             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                                 <x-hero-icon name="calendar-alt" class="w-5 h-5" />
                             </span>
                         </div>
                     </div>
                     <div>
-                        <x-input name='Father_Learning' value="{{ old('Father_learning') }}"
+                        <x-input name='father_learning' value="{{ old('Father_learning') }}"
                             type='text'>{{ trans('Parents.Father_Learning') }}</x-input>
                     </div>
                 </div>
@@ -49,28 +49,28 @@
                 <h4 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('Parents.Mother_Info') }}</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <x-input name='Mother_Name' value="{{ old('Mother_Name') }}"
+                        <x-input name='mother_name' value="{{ old('mother_name') }}"
                             type='text'>{{ trans('Parents.Mother_Name') }}</x-input>
                     </div>
                     <div>
-                        <x-input name='Mother_Phone' value="{{ old('Mother_Phone') }}"
+                        <x-input name='mother_phone' value="{{ old('mother_phone') }}"
                             type='text'>{{ trans('Parents.Mother_Phone') }}</x-input>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div>
-                        <x-input name='Mother_Job' value="{{ old('Mother_Job') }}"
+                        <x-input name='mother_job' value="{{ old('mother_job') }}"
                             type='text'>{{ trans('Parents.Mother_Job') }}</x-input>
                     </div>
                     <div>
-                        <x-input name='Mother_National_Id' value="{{ old('Mother_National_Id') }}"
+                        <x-input name='mother_national_id' value="{{ old('mother_national_id') }}"
                             type='text'>{{ trans('Parents.Mother_National_Id') }}</x-input>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div>
-                        <x-input name='Mother_Birth_Date' type="date"
-                            value="{{ old('Mother_Birth_Date') }}">{{ trans('Parents.Mother_Birth_Date') }}</x-input>
+                        <x-input name='mother_birth_date' type="date"
+                            value="{{ old('mother_birth_date') }}">{{ trans('Parents.Mother_Birth_Date') }}</x-input>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Mother_Status') }}</label>
@@ -91,10 +91,10 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Address') }}</label>
-                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="Address" rows="3" placeholder="{{ trans('Parents.Address') }}">{{ old('Address') }}</textarea>
+                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="address" rows="3" placeholder="{{ trans('Parents.Address') }}">{{ old('address') }}</textarea>
                 </div>
                 <div>
-                    <x-input.religion-select name="Religion"></x-input.religion-select>
+                    <x-input.religion-select name="religion"></x-input.religion-select>
                 </div>
             </div>
             <div class="mt-6 flex justify-end">

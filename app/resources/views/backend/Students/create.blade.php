@@ -65,7 +65,7 @@
 
                             @foreach ($parents as $parent)
                                 <option value="{{ $parent->id }}">
-                                    {{ $parent->Father_Name }}</option>
+                                    {{ $parent->father_name }}</option>
                             @endforeach
                         </select>
                     </div>

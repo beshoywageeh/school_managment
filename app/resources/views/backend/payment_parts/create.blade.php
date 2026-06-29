@@ -18,7 +18,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         @include('backend.msg')
         <div class="flex align-center gap-4 mb-6">
-            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly value="{{ $student->name .' '.$student->parent->Father_Name }}">
+            <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly value="{{ $student->name .' '.$student->parent->father_name }}">
             <div class="shrink-0 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 font-semibold">
                    {{ trans('PaymentParts.total_required') }}: {{ number_format($student->fee_invoice->flatMap->fees->sum('amount'), 2) }}
                </div>

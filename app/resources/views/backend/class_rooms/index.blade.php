@@ -33,7 +33,7 @@
                                 <a target="_blank" href="{{ route('class_rooms.show', $class_room->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                     {{ $class_room->name }}
                                 </a>
-                                <span class="text-gray-500">{!! $class_room->tammen() !!}</span>
+                                <span class="text-gray-500"><x-tammen-badge :value="$class_room->tameen"/></span>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $class_room->grade->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $class_room->user->name }}</td>
