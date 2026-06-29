@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\ExceptionFeesController;
 use App\Http\Controllers\ExchangeBondController;
-use App\Http\Controllers\ExcptionFeesController;
 use App\Http\Controllers\fee_invoiceController;
 use App\Http\Controllers\fund_accountsController;
 use App\Http\Controllers\PaymentPartsController;
@@ -45,7 +45,7 @@ Route::prefix('receipt-payment')
     });
 Route::prefix('except-fee')
     ->name('except_fee.')
-    ->controller(ExcptionFeesController::class)
+    ->controller(ExceptionFeesController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('{id}/create', 'create')->name('create');

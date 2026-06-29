@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\ExcptionFees;
+use App\Models\ExceptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<ExcptionFees>
+ * @extends Factory<ExceptionFees>
  */
-class ExcptionFeesFactory extends Factory
+class ExceptionFeesFactory extends Factory
 {
     /**
      * Define the model's default state.

@@ -22,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @foreach($ExcptionFees as $ExcptionFee)
+                        @foreach($ExceptionFees as $ExcptionFee)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
@@ -67,13 +67,13 @@
                 </table>
             </div>
 
-            @if($ExcptionFees->hasPages())
+            @if($ExceptionFees->hasPages())
             <div class="p-4 border-t border-gray-100 flex justify-between items-center">
                 <div class="text-sm text-gray-500">
-                    Showing {{ $ExcptionFees->firstItem() ?? 0 }} to {{ $ExcptionFees->lastItem() ?? 0 }} of {{ $ExcptionFees->total() }} results
+                    Showing {{ $ExceptionFees->firstItem() ?? 0 }} to {{ $ExceptionFees->lastItem() ?? 0 }} of {{ $ExceptionFees->total() }} results
                 </div>
                 <div class="flex gap-1">
-                    {{ $ExcptionFees->links() }}
+                    {{ $ExceptionFees->links() }}
                 </div>
             </div>
             @endif

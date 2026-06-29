@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\ExcptionFees;
+use App\Models\ExceptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Recipt_Payment;
 use App\Models\StudentAccount;
@@ -27,7 +27,7 @@ class StudentAccountFactory extends Factory
             'date' => $this->faker->date('Y-m-d'),
             'fee_invoices_id' => Fee_invoice::inRandomOrder()->first()
                 ?->id,
-            'excpetion_id' => ExcptionFees::inRandomOrder()->first()?->id,
+            'excpetion_id' => ExceptionFees::inRandomOrder()->first()?->id,
             'academic_year_id' => '1',
             'recipt__payments_id' => Recipt_Payment::inRandomOrder()->first()
                 ?->id,

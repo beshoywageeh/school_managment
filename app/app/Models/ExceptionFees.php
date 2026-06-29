@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ExcptionFees extends Model
+class ExceptionFees extends Model
 {
     use HasFactory, SoftDeletes;
 

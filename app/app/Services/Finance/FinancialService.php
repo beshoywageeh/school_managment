@@ -3,8 +3,8 @@
 namespace App\Services\Finance;
 
 use App\Http\Traits\LogsActivity;
-use App\Models\Exchange_bond; // يفضل مستقبلاً تعديلها إلى ExchangeBond
-use App\Models\ExcptionFees;  // يفضل مستقبلاً تعديلها إلى ExceptionFee
+use App\Models\ExceptionFees; // يفضل مستقبلاً تعديلها إلى ExchangeBond
+use App\Models\Exchange_bond;  // يفضل مستقبلاً تعديلها إلى ExceptionFee
 use App\Models\Fee_invoice;   // يفضل مستقبلاً تعديلها إلى FeeInvoice
 use App\Models\FundAccount;  // يفضل مستقبلاً تعديلها إلى FundAccount
 use App\Models\Inventory\InventoryItem;
@@ -261,9 +261,9 @@ class FinancialService
     /**
      * إضافة إعفاء أو استثناء من الرسوم
      */
-    public function exciption_fee($student, Request $request, $acc_year, $school_id): ExcptionFees
+    public function exciption_fee($student, Request $request, $acc_year, $school_id): ExceptionFees
     {
-        return ExcptionFees::create([
+        return ExceptionFees::create([
             'date' => Carbon::today()->toDateString(),
             'student_id' => $student->id,
             'amount' => $request->amount,

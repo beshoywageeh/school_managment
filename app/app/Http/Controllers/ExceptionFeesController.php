@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
-use App\Models\ExcptionFees;
+use App\Models\ExceptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Student;
 use App\Models\StudentAccount;
@@ -13,7 +13,7 @@ use App\Services\FinancialService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ExcptionFeesController extends Controller
+class ExceptionFeesController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
@@ -22,7 +22,7 @@ class ExcptionFeesController extends Controller
      */
     public function index()
     {
-        $ExcptionFees = ExcptionFees::with('students')->paginate(10);
+        $ExceptionFees = ExceptionFees::with('students')->paginate(10);
         $school = $this->getSchool();
 
         return view('backend.fee_exception.index', get_defined_vars());
@@ -127,7 +127,7 @@ class ExcptionFeesController extends Controller
     public function show($id)
     {
         try {
-            $excptionFees = ExcptionFees::where('student_id', $id)
+            $excptionFees = ExceptionFees::where('student_id', $id)
                 ->with('students', 'academic_year', 'grade', 'classroom')
                 ->get();
             $school = $this->getSchool();
@@ -146,7 +146,7 @@ class ExcptionFeesController extends Controller
     public function edit($id)
     {
         try {
-            $excptionFees = ExcptionFees::where('id', $id)
+            $excptionFees = ExceptionFees::where('id', $id)
                 ->with('students')
                 ->first();
             $school = $this->getSchool();
@@ -167,7 +167,7 @@ class ExcptionFeesController extends Controller
         DB::beginTransaction();
         try {
             // Fetch the existing ExceptionFees record
-            $pay = ExcptionFees::where('id', $request->id)->first();
+            $pay = ExceptionFees::where('id', $request->id)->first();
             $pay->date = date('Y-m-d');
             $pay->academic_year_id = $request->acadmic_id;
             $pay->amount = $request->amount;
@@ -223,7 +223,7 @@ class ExcptionFeesController extends Controller
     public function destroy($id)
     {
         try {
-            $pay = ExcptionFees::findorfail($id);
+            $pay = ExceptionFees::findorfail($id);
 
             $pay->delete();
             $this->logActivity(

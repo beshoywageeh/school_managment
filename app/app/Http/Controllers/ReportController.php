@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\class_room;
-use App\Models\ExcptionFees;
+use App\Models\ExceptionFees;
 use App\Models\Fee_invoice;
 use App\Models\Grade;
 use App\Models\Inventory\InventoryItem;
@@ -236,7 +236,7 @@ class ReportController extends Controller
     {
         $data['begin'] = Carbon::parse($request->start_date)->format('Y-m-d');
         $data['end'] = Carbon::parse($request->end_date)->format('Y-m-d');
-        $data['exception_list'] = ExcptionFees::whereBetween('date', [
+        $data['exception_list'] = ExceptionFees::whereBetween('date', [
             $data['begin'],
             $data['end'],
         ])
@@ -544,7 +544,7 @@ class ReportController extends Controller
                 'academic_year_id',
                 $data['acadmic_year']->id,
             )->get();
-            $data['excpetion'] = ExcptionFees::where(
+            $data['excpetion'] = ExceptionFees::where(
                 'academic_year_id',
                 $data['acadmic_year']->id,
             )

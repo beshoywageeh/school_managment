@@ -88,6 +88,6 @@ class Student extends Model
 
     public function excption(): HasMany
     {
-        return $this->hasMany(ExcptionFees::class);
+        return $this->hasMany(ExceptionFees::class);
     }
 }

@@ -68,6 +68,6 @@ class StudentAccount extends Model
 
     public function excpetion(): BelongsTo
     {
-        return $this->belongsTo(ExcptionFees::class);
+        return $this->belongsTo(ExceptionFees::class);
     }
 }
