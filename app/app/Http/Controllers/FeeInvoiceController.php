@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\SchoolFee as school_fee;
@@ -153,7 +153,7 @@ class FeeInvoiceController extends Controller
         $List_Fees = $request->list_fees;
         DB::beginTransaction();
         try {
-            $ac_year = acadmice_year::where('status', '0')->first();
+            $ac_year = AcademicYear::where('status', '0')->first();
             foreach ($List_Fees as $list_fee) {
                 $amount = school_fee::where('id', $list_fee['fee'])->first()
                     ->amount;
@@ -232,7 +232,7 @@ class FeeInvoiceController extends Controller
         try {
             $fee = FeeInvoice::findOrFail($request->id);
             $student = Student::findorfail($fee->student_id);
-            $ac_year = acadmice_year::where('status', '0')->first();
+            $ac_year = AcademicYear::where('status', '0')->first();
 
             $studentAccount = StudentAccount::firstOrNew([
                 'fee_invoices_id' => $fee->id,

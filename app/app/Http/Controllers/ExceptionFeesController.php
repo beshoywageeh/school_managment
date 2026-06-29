@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\ExceptionFees;
 use App\Models\FeeInvoice;
 use App\Models\Student;
@@ -77,7 +77,7 @@ class ExceptionFeesController extends Controller
         try {
             DB::beginTransaction();
             $student = Student::findorfail($request->student_id);
-            $academic_year = acadmice_year::findorfail(
+            $academic_year = AcademicYear::findorfail(
                 $student->acadmiecyear_id,
             );
             $fee = FeeInvoice::findorfail($request->fee_id)

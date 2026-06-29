@@ -32,6 +32,6 @@ class ReceiptPayment extends Model
 
     public function acc_year(): BelongsTo
     {
-        return $this->belongsTo(Acadmice_year::class, 'academic_year_id');
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
     }
 }

@@ -36,7 +36,7 @@ class Exchange_bond extends Model
 
     public function acadmic_year(): BelongsTo
     {
-        return $this->belongsTo(acadmice_year::class, 'academic_year_id');
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
     }
 
     public function studentaccount(): HasMany

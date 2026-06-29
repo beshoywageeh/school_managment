@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\FeeInvoice;
 use App\Models\Inventory\InventoryItem;
 use App\Models\PaymentParts;
@@ -176,7 +176,7 @@ class ReceiptPaymentController extends Controller
             $pay->date = date('Y-m-d');
             $pay->student_id = $request->student_id;
             $pay->Debit = $request->amount;
-            $pay->academic_year_id = acadmice_year::where(
+            $pay->academic_year_id = AcademicYear::where(
                 'status',
                 '0',
             )->first()->id;
@@ -190,7 +190,7 @@ class ReceiptPaymentController extends Controller
             )->firstOrFail();
             $std->student_id = $request->student_id;
             $std->credit = $request->amount;
-            $std->academic_year_id = acadmice_year::where(
+            $std->academic_year_id = AcademicYear::where(
                 'status',
                 '0',
             )->first()->id;
@@ -255,7 +255,7 @@ class ReceiptPaymentController extends Controller
     {
         $student = Student::findorfail($request->student_id);
 
-        $academic_year = acadmice_year::where('status', '0')->first();
+        $academic_year = AcademicYear::where('status', '0')->first();
         DB::beginTransaction();
         $invoice = FeeInvoice::where('id', $request->feeInvoice)
             ->with('fees:id,title,amount')
@@ -312,7 +312,7 @@ class ReceiptPaymentController extends Controller
     {
         $student = Student::findorfail($request->student_id);
         $report_data = [];
-        $academic_year = acadmice_year::where('status', '0')->first();
+        $academic_year = AcademicYear::where('status', '0')->first();
         DB::beginTransaction();
         $parts = PaymentParts::where('student_id', $student->id)
             ->orderBy('date')
@@ -373,7 +373,7 @@ class ReceiptPaymentController extends Controller
     {
         $student = Student::findorfail($request->student_id);
 
-        $academic_year = acadmice_year::where('status', '0')->first();
+        $academic_year = AcademicYear::where('status', '0')->first();
         $report_data = [];
         DB::beginTransaction();
         $clothes_order = $FinancialService->AddStudentClotheInvoice(
@@ -438,7 +438,7 @@ class ReceiptPaymentController extends Controller
     {
         $student = Student::findorfail($request->student_id);
 
-        $academic_year = acadmice_year::where('status', '0')->first();
+        $academic_year = AcademicYear::where('status', '0')->first();
         $report_data = [];
         DB::beginTransaction();
         $books_order = $FinancialService->AddStudentBookInvoice(

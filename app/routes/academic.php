@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AcadmiceYearController;
+use App\Http\Controllers\AcademicYearController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassRooms\ClassRoomsController;
 use App\Http\Controllers\Grades\GradesController;
@@ -32,7 +32,7 @@ Route::prefix('class-rooms')
     });
 Route::prefix('academic-year')
     ->name('academic_year.')
-    ->controller(AcadmiceYearController::class)
+    ->controller(AcademicYearController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}/destroy', 'destroy')->name('destroy');

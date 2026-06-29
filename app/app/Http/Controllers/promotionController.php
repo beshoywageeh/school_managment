@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\Grade;
 use App\Models\promotion;
 use App\Models\Student;
@@ -47,7 +47,7 @@ class promotionController extends Controller
     {
         $school = $this->getSchool();
         $grades = Grade::where('school_id', $school->id)->get();
-        $acc_year = acadmice_year::where('school_id', $school->id)
+        $acc_year = AcademicYear::where('school_id', $school->id)
             ->where('status', 0)
             ->get();
 

@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\class_room;
 use App\Models\FeeInvoice;
 use App\Models\Grade;
@@ -104,7 +104,7 @@ class ReportService
 
     public function getAcademicYearsList(): Collection
     {
-        return Acadmice_year::orderBy('year', 'desc')->get([
+        return AcademicYear::orderBy('year', 'desc')->get([
             'id',
             'year',
             'view',

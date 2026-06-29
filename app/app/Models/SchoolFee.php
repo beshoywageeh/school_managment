@@ -45,7 +45,7 @@ class SchoolFee extends Model
     public function year(): BelongsTo
     {
         return $this->belongsTo(
-            acadmice_year::class,
+            AcademicYear::class,
             'academic_year_id',
             'id',
         );

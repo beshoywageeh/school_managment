@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StudentResource;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\Student;
@@ -112,7 +112,7 @@ class StudentApiController extends Controller
 
     public function academicYears(Request $request): JsonResponse
     {
-        $years = acadmice_year::where('school_id', $request->user()->school_id)
+        $years = AcademicYear::where('school_id', $request->user()->school_id)
             ->get(['id', 'year', 'view', 'status']);
 
         return response()->json(['data' => $years]);

@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StudentStoreRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\MyParent;
@@ -191,7 +191,7 @@ class StudentsController extends Controller
             'id',
             'father_name',
         ]);
-        $acadmice_years = acadmice_year::where('school_id', $school->id)
+        $acadmice_years = AcademicYear::where('school_id', $school->id)
             ->where('status', 'false')
             ->get(['id', 'view']);
         $nationalitys = nationality::get(['id', 'name']);

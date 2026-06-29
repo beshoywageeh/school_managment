@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\ReceiptPayment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -30,7 +30,7 @@ class ReceiptPaymentFactory extends Factory
                 : '00001',
             'date' => $this->faker->date('Y-m-d'),
             'student_id' => $this->faker->numberBetween(1, 300),
-            'academic_year_id' => acadmice_year::inRandomOrder()->first()
+            'academic_year_id' => AcademicYear::inRandomOrder()->first()
                 ?->id,
             'Debit' => $this->faker->numberBetween(500, 5000),
             'user_id' => '1',

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\NewSchoolRequest;
 use App\Http\Traits\ImageTrait;
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\Grade;
 use App\Models\School;
 use App\Models\Student;
@@ -27,7 +27,7 @@ class SettingsController extends Controller
         $grd_count = Grade::where('school_id', $school->id)->count();
         $teach_count = User::where('school_id', $school->id)->count();
         $user = Auth::user();
-        $academic_years = acadmice_year::where('school_id', $school->id)->get();
+        $academic_years = AcademicYear::where('school_id', $school->id)->get();
 
         return view('backend.setting.index', get_defined_vars());
     }

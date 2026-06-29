@@ -6,7 +6,7 @@ use App\Http\Requests\StoreSchoolFeeRequest;
 use App\Http\Requests\UpdateSchoolFeeRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\SchoolFee;
@@ -32,7 +32,7 @@ class SchoolFeeController extends Controller
         $school = $this->getSchool();
         $grades = Grade::where('school_id', $school->id)->get();
 
-        $years = acadmice_year::where('status', 'active')->get();
+        $years = AcademicYear::where('status', 'active')->get();
         $academic_years = $years->map(function ($year) {
             return [
                 'id' => $year->id,

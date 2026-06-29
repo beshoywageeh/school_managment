@@ -37,7 +37,7 @@ class ExceptionFees extends Model
 
     public function academic_year(): BelongsTo
     {
-        return $this->belongsTo(Acadmice_year::class, 'academic_year_id');
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
     }
 
     public function grade(): BelongsTo

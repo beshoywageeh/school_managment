@@ -47,6 +47,6 @@ class PaymentParts extends Model
 
     public function year(): BelongsTo
     {
-        return $this->belongsTo(acadmice_year::class, 'academic_year_id');
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id');
     }
 }

@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Enums\Student_Status;
 use App\Enums\user_religion;
 use App\Enums\UserGender;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\MyParent;
@@ -49,7 +49,7 @@ class StudentFactory extends Factory
             'student_status' => Arr::random(Student_Status::cases()),
             'birth_at_begin' => $this->faker->date(),
             'religion' => Arr::random(user_religion::cases()),
-            'acadmiecyear_id' => acadmice_year::inRandomOrder()->first()
+            'acadmiecyear_id' => AcademicYear::inRandomOrder()->first()
                 ?->id,
             'tameen' => $this->faker->numberBetween(0, 1),
             'nationality_id' => nationality::inRandomOrder()->first()?->id,

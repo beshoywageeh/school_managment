@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\Exchange_bond;
 use App\Models\FundAccount;
 use App\Models\Student;
@@ -42,7 +42,7 @@ class ExchangeBondController extends Controller
     public function store(Request $request)
     {
         try {
-            $acc_year = acadmice_year::whereYear(
+            $acc_year = AcademicYear::whereYear(
                 'year_start',
                 date('Y'),
             )->first();
@@ -98,7 +98,7 @@ class ExchangeBondController extends Controller
             $this->StudentAccount->CreateStudentAccount(
                 $exchange->student,
                 $exchange,
-                acadmice_year::find($exchange->academic_year_id),
+                AcademicYear::find($exchange->academic_year_id),
                 'exchange',
                 $request->amount - $student_account->debit,
                 0.0,

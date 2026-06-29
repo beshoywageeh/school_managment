@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AcadmiceYearStoreRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\MyParent;
 use App\Models\Student;
 use App\Models\User;
@@ -13,7 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AcadmiceYearController extends Controller
+class AcademicYearController extends Controller
 {
     use LogsActivity;
     use SchoolTrait;
@@ -21,7 +21,7 @@ class AcadmiceYearController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $acadmice_years = acadmice_year::where('school_id', $school->id)->paginate(10);
+        $acadmice_years = AcademicYear::where('school_id', $school->id)->paginate(10);
 
         return view('backend.academic_year.index', get_defined_vars());
     }
@@ -36,7 +36,7 @@ class AcadmiceYearController extends Controller
             $year_start = date('Y-m-d', strtotime($request->year_start));
             $year_end = date('Y-m-d', strtotime($request->year_end));
             $view = Carbon::parse($year_start)->format('Y').' - '.Carbon::parse($year_end)->format('Y');
-            acadmice_year::create([
+            AcademicYear::create([
                 'year_start' => $year_start,
                 'year_end' => $year_end,
                 'view' => $view,
@@ -61,7 +61,7 @@ class AcadmiceYearController extends Controller
      */
     public function show($id)
     {
-        $acc_year = acadmice_year::findorFail($id);
+        $acc_year = AcademicYear::findorFail($id);
         $date_range = [
             Carbon::parse($acc_year->year_start),
             Carbon::parse($acc_year->year_end),
@@ -82,7 +82,7 @@ class AcadmiceYearController extends Controller
     {
         //   return $request;
         try {
-            $acadmice_year = acadmice_year::findorFail($request->id);
+            $acadmice_year = AcademicYear::findorFail($request->id);
             $year_start = date('Y-m-d', strtotime($acadmice_year->year_start));
             $year_end = date('Y-m-d', strtotime($request->year_end));
             $view = Carbon::parse($year_start)->format('Y').' - '.Carbon::parse($year_end)->format('Y');
@@ -109,7 +109,7 @@ class AcadmiceYearController extends Controller
     {
         try {
 
-            $acadmice_year = acadmice_year::findorFail($id);
+            $acadmice_year = AcademicYear::findorFail($id);
             $acadmice_year->delete();
             session()->flash('success', trans('general.success'));
             $this->logActivity(trans('log.actions.deleted'), trans('log.models.academic_year.deleted', ['view' => $acadmice_year->view]));

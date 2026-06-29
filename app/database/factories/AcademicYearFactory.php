@@ -3,15 +3,15 @@
 namespace Database\Factories;
 
 use App\Enums\Status;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
 
 /**
- * @extends Factory<acadmice_year>
+ * @extends Factory<AcademicYear>
  */
-class acadmice_yearFactory extends Factory
+class AcademicYearFactory extends Factory
 {
     /**
      * Define the model's default state.

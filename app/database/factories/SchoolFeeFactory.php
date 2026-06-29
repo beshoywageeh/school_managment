@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\class_room;
 use App\Models\Grade;
 use App\Models\SchoolFee;
@@ -31,7 +31,7 @@ class SchoolFeeFactory extends Factory
                 'قسط ثاني',
                 'قسط ثالث',
             ]),
-            'academic_year_id' => acadmice_year::inRandomOrder()->first()
+            'academic_year_id' => AcademicYear::inRandomOrder()->first()
                 ?->id,
             'school_id' => '1',
         ];

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\ClassRooms;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\class_room;
 use App\Models\Grade;
 use Carbon\Carbon;
@@ -101,7 +101,7 @@ class ClassRoomsController extends Controller
             $current_year = Carbon::parse()->format('Y');
             $data['school'] = $this->getSchool();
 
-            $data['acc_year'] = acadmice_year::whereYear(
+            $data['acc_year'] = AcademicYear::whereYear(
                 'year_start',
                 $current_year,
             )->first();

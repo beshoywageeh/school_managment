@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\SchoolTrait;
-use App\Models\acadmice_year;
+use App\Models\AcademicYear;
 use App\Models\class_room;
 use App\Models\ExceptionFees;
 use App\Models\FeeInvoice;
@@ -35,7 +35,7 @@ class ReportController extends Controller
         $user_grade = \DB::Table('teacher_grade')
             ->where('teacher_id', $user)
             ->pluck('grade_id');
-        $acadmeic_years = acadmice_year::where('status', 0)->get();
+        $acadmeic_years = AcademicYear::where('status', 0)->get();
         $stocks = InventoryItem::where('type', 'stock')->get();
         $clothes = InventoryItem::where('type', 'clothe')
             ->whereIn('grade_id', $user_grade)
@@ -186,7 +186,7 @@ class ReportController extends Controller
         PDFExportService $PDFExport,
     ) {
         $year_start = Carbon::now()->format('Y');
-        $data['acc'] = acadmice_year::whereYear(
+        $data['acc'] = AcademicYear::whereYear(
             'year_start',
             $year_start,
         )->first();
@@ -252,7 +252,7 @@ class ReportController extends Controller
         PDFExportService $PDFExport,
     ) {
         $year = Carbon::now()->format('Y');
-        $data['acc_year'] = acadmice_year::whereYear(
+        $data['acc_year'] = AcademicYear::whereYear(
             'year_start',
             $year,
         )->first(['id', 'view']);
@@ -301,7 +301,7 @@ class ReportController extends Controller
     public function fees_invoices(Request $request, PDFExportService $PDFExport)
     {
         $year = Carbon::now()->format('Y');
-        $data['acc_year'] = acadmice_year::whereYear(
+        $data['acc_year'] = AcademicYear::whereYear(
             'year_start',
             $year,
         )->first(['id', 'view']);
@@ -364,7 +364,7 @@ class ReportController extends Controller
         $data['type'] = $request->type;
         $data['classroom'] = class_room::findorfail($request->classroom_id);
         $date = Carbon::now()->format('Y');
-        $data['aa'] = acadmice_year::whereyear('year_start', $date)->first();
+        $data['aa'] = AcademicYear::whereyear('year_start', $date)->first();
         $data['students'] = Student::where(
             'classroom_id',
             $request->classroom_id,
@@ -422,7 +422,7 @@ class ReportController extends Controller
     public function school_fees(PDFExportService $PDFExport)
     {
         $date = date('Y');
-        $data['acc_year'] = acadmice_year::whereYear(
+        $data['acc_year'] = AcademicYear::whereYear(
             'year_start',
             $date,
         )->first(['id', 'view']);
@@ -496,7 +496,7 @@ class ReportController extends Controller
         );
         $date = date('Y');
 
-        $data['acadmic_year'] = acadmice_year::where('status', '0')->first([
+        $data['acadmic_year'] = AcademicYear::where('status', '0')->first([
             'id',
             'view',
         ]);

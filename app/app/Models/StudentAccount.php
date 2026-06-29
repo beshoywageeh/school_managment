@@ -53,7 +53,7 @@ class StudentAccount extends Model
 
     public function academic_year(): BelongsTo
     {
-        return $this->belongsTo(Acadmice_year::class);
+        return $this->belongsTo(AcademicYear::class);
     }
 
     public function fee(): BelongsTo
