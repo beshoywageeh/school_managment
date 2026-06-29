@@ -53,7 +53,7 @@ class ExceptionFees extends Model
     public function school_fee(): BelongsTo
     {
         return $this->belongsTo(
-            "App\Models\School_fee",
+            "App\Models\SchoolFee",
             'school_fee_id',
         )->withTrashed();
     }

@@ -31,7 +31,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @forelse($School_Fees as $fee)
+                        @forelse($SchoolFees as $fee)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->index + 1 }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $fee->title }}</td>
@@ -86,10 +86,10 @@
                 </table>
             </div>
 
-            @if($School_Fees->hasPages())
+            @if($SchoolFees->hasPages())
 
                 <div class="mx-4 my-4">
-                    {{ $School_Fees->links('vendor.pagination.tailwind') }}
+                    {{ $SchoolFees->links('vendor.pagination.tailwind') }}
                 </div>
             @endif
         @endcan

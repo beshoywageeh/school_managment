@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\School_Fee;
+use App\Models\SchoolFee;
 use Illuminate\Database\Seeder;
 
 class SchoolFeeSeeder extends Seeder
@@ -12,6 +12,6 @@ class SchoolFeeSeeder extends Seeder
      */
     public function run(): void
     {
-        School_Fee::factory(50)->create();
+        SchoolFee::factory(50)->create();
     }
 }

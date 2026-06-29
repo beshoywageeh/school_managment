@@ -11,7 +11,7 @@ use App\Models\Grade;
 use App\Models\Inventory\InventoryItem;
 use App\Models\PaymentParts;
 use App\Models\Recipt_Payment;
-use App\Models\School_Fee;
+use App\Models\SchoolFee;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use App\Services\Report\PDFExportService;
@@ -426,7 +426,7 @@ class ReportController extends Controller
             'year_start',
             $date,
         )->first(['id', 'view']);
-        $data['school_fees'] = School_Fee::where(
+        $data['school_fees'] = SchoolFee::where(
             'academic_year_id',
             $data['acc_year']->id,
         )
@@ -540,7 +540,7 @@ class ReportController extends Controller
                     'credit',
                 ])
                 ->groupBy('classroom.name');
-            $data['school_fees'] = School_Fee::where(
+            $data['school_fees'] = SchoolFee::where(
                 'academic_year_id',
                 $data['acadmic_year']->id,
             )->get();

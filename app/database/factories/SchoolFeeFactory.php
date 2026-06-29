@@ -5,13 +5,13 @@ namespace Database\Factories;
 use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Grade;
-use App\Models\School_Fee;
+use App\Models\SchoolFee;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<School_Fee>
+ * @extends Factory<SchoolFee>
  */
-class School_FeeFactory extends Factory
+class SchoolFeeFactory extends Factory
 {
     /**
      * Define the model's default state.

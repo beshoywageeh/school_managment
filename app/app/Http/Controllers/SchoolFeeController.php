@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSchool_FeeRequest;
-use App\Http\Requests\UpdateSchool_FeeRequest;
+use App\Http\Requests\StoreSchoolFeeRequest;
+use App\Http\Requests\UpdateSchoolFeeRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Grade;
-use App\Models\School_Fee;
+use App\Models\SchoolFee;
 use App\Models\Student;
 use App\Services\Finance\FinancialService;
 use Carbon\Carbon;
@@ -41,7 +41,7 @@ class SchoolFeeController extends Controller
                     Carbon::parse($year->year_end)->format('Y'),
             ];
         });
-        $School_Fees = School_Fee::where('school_id', $school->id)
+        $SchoolFees = SchoolFee::where('school_id', $school->id)
             ->with(
                 'grade:id,name',
                 'classroom:id,name',
@@ -56,11 +56,11 @@ class SchoolFeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSchool_FeeRequest $request)
+    public function store(StoreSchoolFeeRequest $request)
     {
         try {
             DB::Transaction(function () use ($request) {
-                $schoolFee = new School_Fee;
+                $schoolFee = new SchoolFee;
                 $schoolFee->grade_id = $request->grade_id;
                 $schoolFee->classroom_id = $request->classroom_id;
                 $schoolFee->user_id = Auth::user()->id;
@@ -72,7 +72,7 @@ class SchoolFeeController extends Controller
                 $schoolFee->save();
                 $this->logActivity(
                     trans('log.actions.added'),
-                    trans('log.models.School_Fee.created', [
+                    trans('log.models.SchoolFee.created', [
                         'amount' => $request->amount,
                     ]),
                 );
@@ -93,7 +93,7 @@ class SchoolFeeController extends Controller
 
                     $this->logActivity(
                         trans('log.actions.added'),
-                        trans('log.models.School_Fee.invoice_added', [
+                        trans('log.models.SchoolFee.invoice_added', [
                             'name' => $student->name,
                             'amount' => $request->amount,
                         ]),
@@ -121,7 +121,7 @@ class SchoolFeeController extends Controller
     {
         $school = $this->getSchool();
 
-        $school_fee = School_Fee::findorFail($id);
+        $school_fee = SchoolFee::findorFail($id);
         $students = Student::where(
             'classroom_id',
             $school_fee->classroom_id,
@@ -136,11 +136,11 @@ class SchoolFeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSchool_FeeRequest $request)
+    public function update(UpdateSchoolFeeRequest $request)
     {
         try {
-            $School_Fee = School_Fee::findorFail($request->id);
-            $School_Fee->update([
+            $SchoolFee = SchoolFee::findorFail($request->id);
+            $SchoolFee->update([
                 'title' => $request->name,
                 'grade_id' => $request->grade_id,
                 'classroom_id' => $request->classroom_id,
@@ -150,7 +150,7 @@ class SchoolFeeController extends Controller
             ]);
             $this->logActivity(
                 trans('log.actions.updated'),
-                trans('log.models.School_Fee.updated', [
+                trans('log.models.SchoolFee.updated', [
                     'amount' => \Number::currency(
                         $request->amount,
                         'EGP',
@@ -174,10 +174,10 @@ class SchoolFeeController extends Controller
     public function destroy($id)
     {
         try {
-            $fee = School_Fee::findorFail($id);
+            $fee = SchoolFee::findorFail($id);
             $this->logActivity(
                 trans('log.actions.deleted'),
-                trans('log.models.School_Fee.deleted', [
+                trans('log.models.SchoolFee.deleted', [
                     'amount' => \Number::currency(
                         $fee->amount,
                         'EGP',

@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Fee_invoice;
-use App\Models\School_Fee;
+use App\Models\SchoolFee;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -33,7 +33,7 @@ class Fee_invoiceFactory extends Factory
                     ->acadmiecyear_id;
             },
             'school_fee_id' => function (array $attributes) {
-                return School_Fee::where(
+                return SchoolFee::where(
                     'academic_year_id',
                     $attributes['academic_year_id'],
                 )

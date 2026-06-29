@@ -8,7 +8,7 @@ use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Fee_invoice;
 use App\Models\Grade;
-use App\Models\School_Fee as school_fee;
+use App\Models\SchoolFee as school_fee;
 use App\Models\Student;
 use App\Services\FinancialService;
 use Exception;
