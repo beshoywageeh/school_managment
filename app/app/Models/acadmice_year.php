@@ -12,6 +12,8 @@ class acadmice_year extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'acadmice_years';
+
     protected $fillable = [
         'year_start',
         'status',

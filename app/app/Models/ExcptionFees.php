@@ -11,6 +11,8 @@ class ExcptionFees extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'excption_fees';
+
     protected $fillable = [
         'student_id',
         'grade_id',

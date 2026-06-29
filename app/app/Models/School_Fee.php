@@ -13,6 +13,8 @@ class School_Fee extends Model
 {
     use HasFactory, LogsActivity, SoftDeletes;
 
+    protected $table = 'school__fees';
+
     protected $fillable = [
         'grade_id',
         'classroom_id',
