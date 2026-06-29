@@ -7,7 +7,7 @@ use App\Enums\user_religion;
 use App\Enums\UserGender;
 use App\Models\class_room;
 use App\Models\Grade;
-use App\Models\My_parents;
+use App\Models\MyParent;
 use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -55,14 +55,14 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
 
         $this->defaultGradeId = config('defaults.grade_id', 1);
 
-        $defaultParent = My_parents::firstOrCreate(
+        $defaultParent = MyParent::firstOrCreate(
             ['father_name' => 'Default Parent', 'school_id' => $this->schoolId],
             ['user_id' => $this->userId, 'school_id' => $this->schoolId]
         );
         $this->defaultParentId = $defaultParent->id;
 
         $this->grades = Grade::pluck('id', 'name')->toArray();
-        $this->parents = My_parents::where('school_id', $this->schoolId)
+        $this->parents = MyParent::where('school_id', $this->schoolId)
             ->pluck('id', 'father_name')
             ->toArray();
         $this->classes = class_room::pluck('id', 'name')->toArray();
@@ -116,7 +116,7 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
             if (isset($this->parents[$parentName])) {
                 $parentId = $this->parents[$parentName];
             } else {
-                $newParent = My_parents::updateOrCreate(
+                $newParent = MyParent::updateOrCreate(
                     ['father_name' => $parentName, 'school_id' => $this->schoolId],
                     [
                         'user_id' => $this->userId,

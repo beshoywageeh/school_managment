@@ -4,7 +4,7 @@ namespace App\Services\Student;
 
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\My_parents;
+use App\Models\MyParent;
 use App\Models\Student;
 use Auth;
 use Carbon\Carbon;
@@ -15,9 +15,9 @@ class StudentRegeister
 
     public function StudentRegeister($request)
     {
-        $parent = My_parents::find($request['parent_id']);
+        $parent = MyParent::find($request['parent_id']);
         if (is_null($parent)) {
-            $parent = My_parents::Create([
+            $parent = MyParent::Create([
                 'father_name' => $request['parent_id'],
                 'religion' => $request['religion'],
                 'user_id' => Auth::id(),

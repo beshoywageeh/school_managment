@@ -10,7 +10,7 @@ use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Grade;
-use App\Models\My_parents;
+use App\Models\MyParent;
 use App\Models\nationality;
 use App\Models\Student;
 use App\Services\Finance\FinancialService;
@@ -187,7 +187,7 @@ class StudentsController extends Controller
     {
         $school = $this->getSchool();
         $grades = Grade::where('school_id', $school->id)->get(['id', 'name']);
-        $parents = My_parents::where('school_id', $school->id)->get([
+        $parents = MyParent::where('school_id', $school->id)->get([
             'id',
             'father_name',
         ]);
@@ -281,7 +281,7 @@ class StudentsController extends Controller
     {
         try {
             $grades = Grade::all(['id', 'name']);
-            $parents = My_parents::all(['id', 'father_name']);
+            $parents = MyParent::all(['id', 'father_name']);
             $student = Student::findorfail($id);
             $school = $this->getSchool();
 
@@ -313,7 +313,7 @@ class StudentsController extends Controller
                     $request->std_status,
                 ),
                 'national_id' => $request->national_id,
-                'religion' => My_parents::findorfail($request->parents)
+                'religion' => MyParent::findorfail($request->parents)
                     ->religion,
                 'birth_at_begin' => $this->calculateAgeAsOfOctoberFirst(
                     $request->birth_date,

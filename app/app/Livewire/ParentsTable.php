@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\My_parents;
+use App\Models\MyParent;
 use Illuminate\Support\Facades\Redirect;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -22,7 +22,7 @@ class ParentsTable extends Component
 
     public function render()
     {
-        $stdParents = My_parents::with('Students')
+        $stdParents = MyParent::with('Students')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->whererelation(

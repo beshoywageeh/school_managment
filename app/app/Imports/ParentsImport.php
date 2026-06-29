@@ -3,7 +3,7 @@
 namespace App\Imports;
 
 use App\Enums\user_religion;
-use App\Models\My_parents;
+use App\Models\MyParent;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -16,7 +16,7 @@ class ParentsImport implements ToCollection
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            My_parents::create([
+            MyParent::create([
                 'father_name' => $row[0],
                 'father_national_id' => $row[1],
                 'father_phone' => $row[2],

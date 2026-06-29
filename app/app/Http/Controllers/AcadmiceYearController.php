@@ -6,7 +6,7 @@ use App\Http\Requests\AcadmiceYearStoreRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
-use App\Models\My_parents;
+use App\Models\MyParent;
 use App\Models\Student;
 use App\Models\User;
 use Carbon\Carbon;
@@ -69,7 +69,7 @@ class AcadmiceYearController extends Controller
         $school = $this->getSchool();
         $users = collect([])
             ->merge(Student::where('acadmiecyear_id', $acc_year->id)->get())
-            ->merge(My_parents::whereBetween('created_at', $date_range)->get())
+            ->merge(MyParent::whereBetween('created_at', $date_range)->get())
             ->merge(User::whereBetween('created_at', $date_range)->get());
 
         return $users;

@@ -58,7 +58,7 @@ class Student extends Model
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(My_parents::class);
+        return $this->belongsTo(MyParent::class);
     }
 
     public function StudentAccount(): HasMany

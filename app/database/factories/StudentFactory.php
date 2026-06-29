@@ -8,7 +8,7 @@ use App\Enums\UserGender;
 use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\Grade;
-use App\Models\My_parents;
+use App\Models\MyParent;
 use App\Models\nationality;
 use App\Models\Students;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -44,7 +44,7 @@ class StudentFactory extends Factory
                     ->inRandomOrder()
                     ->first()?->id;
             },
-            'parent_id' => My_parents::inRandomOrder()->first()?->id,
+            'parent_id' => MyParent::inRandomOrder()->first()?->id,
             'slug' => $this->faker->slug(),
             'student_status' => Arr::random(Student_Status::cases()),
             'birth_at_begin' => $this->faker->date(),

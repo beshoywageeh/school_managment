@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\My_parents;
+use App\Models\MyParent;
 use Illuminate\Database\Seeder;
 
-class My_parentsTableSeeder extends Seeder
+class MyParentTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        My_parents::factory(500)->create();
+        MyParent::factory(500)->create();
     }
 }

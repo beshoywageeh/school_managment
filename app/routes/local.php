@@ -6,7 +6,7 @@ Route::get('fake', function () {
     $models = [
         'class_room',
         'Grade',
-        'My_parents',
+        'MyParent',
         'User',
         'settings',
         'Students',

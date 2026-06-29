@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
             NationalitySeeder::class,
             UserTableSeeder::class,
             AcadmiceYearSeeder::class,
-            My_parentsTableSeeder::class,
+            MyParentTableSeeder::class,
             GradeTableSeeder::class,
             class_roomTableSeeder::class,
             StudentsTableSeeder::class,

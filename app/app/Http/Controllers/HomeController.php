@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\SchoolTrait;
 use App\Models\Grade;
-use App\Models\My_parents;
+use App\Models\MyParent;
 use App\Models\PaymentParts;
 use App\Models\Recipt_Payment;
 use App\Models\Student;
@@ -85,7 +85,7 @@ class HomeController extends Controller
     ): array {
         if ($isAdmin) {
             $students = Student::where('school_id', $schoolId)->count();
-            $parents = My_parents::where('school_id', $schoolId)->count();
+            $parents = MyParent::where('school_id', $schoolId)->count();
         } else {
             $gradeIds = DB::table('teacher_grade')
                 ->where('teacher_id', $userId)
@@ -95,7 +95,7 @@ class HomeController extends Controller
                 ->whereIn('grade_id', $gradeIds)
                 ->count();
 
-            $parents = My_parents::where('school_id', $schoolId)
+            $parents = MyParent::where('school_id', $schoolId)
                 ->whereIn('student_id', $gradeIds)
                 ->count();
         }

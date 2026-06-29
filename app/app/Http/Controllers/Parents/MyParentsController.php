@@ -7,7 +7,7 @@ use App\Http\Requests\ParentsRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Imports\ParentsImport;
-use App\Models\My_parents;
+use App\Models\MyParent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -26,7 +26,7 @@ class MyParentsController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $Mother_Status = My_parents::get('mother_status');
+        $Mother_Status = MyParent::get('mother_status');
 
         return view('backend.Parents.create', get_defined_vars());
     }
@@ -44,7 +44,7 @@ class MyParentsController extends Controller
             } else {
                 $Mother_Birth_Date = Carbon::parse($request->mother_birth_date);
             }
-            My_parents::create([
+            MyParent::create([
                 'father_name' => $request->father_name,
                 'father_phone' => $request->father_phone,
                 'father_job' => $request->father_job,
@@ -75,7 +75,7 @@ class MyParentsController extends Controller
 
     public function show(string $id)
     {
-        $parent = My_parents::where('id', $id)->with(['students'])->first();
+        $parent = MyParent::where('id', $id)->with(['students'])->first();
         $school = $this->getSchool();
 
         return view('backend.Parents.show', get_defined_vars());
@@ -83,9 +83,9 @@ class MyParentsController extends Controller
 
     public function edit($id)
     {
-        $parent = My_parents::findorfail($id);
+        $parent = MyParent::findorfail($id);
         $school = $this->getSchool();
-        $Mother_Status = My_parents::get('mother_status');
+        $Mother_Status = MyParent::get('mother_status');
 
         return view('backend.Parents.edit', get_defined_vars());
     }
@@ -103,7 +103,7 @@ class MyParentsController extends Controller
             } else {
                 $Mother_Birth_Date = Carbon::parse($request->mother_birth_date);
             }
-            My_parents::find($request->id)->update([
+            MyParent::find($request->id)->update([
                 'father_name' => $request->father_name,
                 'father_phone' => $request->father_phone,
                 'father_job' => $request->father_job,
@@ -133,7 +133,7 @@ class MyParentsController extends Controller
     public function destroy(string $id, Request $request)
     {
         try {
-            $d = My_parents::withCount('Students')->findorfail($id);
+            $d = MyParent::withCount('Students')->findorfail($id);
             if ($d->Students_count == 0) {
                 $d->delete();
                 $this->logActivity(trans('log.actions.deleted'), trans('log.models.parent.deleted', ['name' => $d->father_name]));
