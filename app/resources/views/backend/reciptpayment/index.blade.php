@@ -9,7 +9,7 @@
             <h4 class="text-lg font-semibold text-gray-800">{{ trans('Recipt_Payments.title') }}</h4>
         </div>
 
-        @can('Recipt_Payment-list')
+        @can('ReceiptPayment-list')
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead class="bg-gray-50">
@@ -23,37 +23,37 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @foreach($Recipt_Payments as $Recipt_Payment)
+                        @foreach($Recipt_Payments as $ReceiptPayment)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->iteration }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $Recipt_Payment->manual }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($Recipt_Payment->date)->format('Y-m-d') }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $ReceiptPayment->manual }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($ReceiptPayment->date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
-                                @can('Recipt_Payment-info')
-                                <a target="_blank" href="{{ route('receipt_payment.show', $Recipt_Payment->student->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
-                                    {{ $Recipt_Payment->student->name }}
+                                @can('ReceiptPayment-info')
+                                <a target="_blank" href="{{ route('receipt_payment.show', $ReceiptPayment->student->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    {{ $ReceiptPayment->student->name }}
                                 </a>
                                 @endcan
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ Number::currency($Recipt_Payment->Debit, 'EGP', 'ar') }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ Number::currency($ReceiptPayment->Debit, 'EGP', 'ar') }}</td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-1">
-                                    @can('Recipt_Payment-info')
-                                    <a href="{{ route('receipt_payment.show', $Recipt_Payment->id) }}" target="_blank" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="{{ trans('general.info') }}">
+                                    @can('ReceiptPayment-info')
+                                    <a href="{{ route('receipt_payment.show', $ReceiptPayment->id) }}" target="_blank" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="{{ trans('general.info') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </a>
                                     @endcan
-                                    @can('Recipt_Payment-edit')
-                                    <a href="{{ route('receipt_payment.edit', $Recipt_Payment->id) }}" class="p-2 text-green-600 hover:bg-green-50 rounded-lg" title="{{ trans('general.edit') }}">
+                                    @can('ReceiptPayment-edit')
+                                    <a href="{{ route('receipt_payment.edit', $ReceiptPayment->id) }}" class="p-2 text-green-600 hover:bg-green-50 rounded-lg" title="{{ trans('general.edit') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                     </a>
                                     @endcan
-                                    @can('Recipt_Payment-delete')
-                                    <form action="{{ route('receipt_payment.destroy', $Recipt_Payment->id) }}" method="POST" class="inline">
+                                    @can('ReceiptPayment-delete')
+                                    <form action="{{ route('receipt_payment.destroy', $ReceiptPayment->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" onclick="confirmation(event)" title="{{ trans('general.delete') }}">

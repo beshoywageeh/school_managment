@@ -9,14 +9,14 @@ use App\Models\acadmice_year;
 use App\Models\FeeInvoice;
 use App\Models\Inventory\InventoryItem;
 use App\Models\PaymentParts;
-use App\Models\Recipt_Payment;
+use App\Models\ReceiptPayment;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use App\Services\Finance\FinancialService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class ReciptPaymentController extends Controller
+class ReceiptPaymentController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
@@ -30,7 +30,7 @@ class ReciptPaymentController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $Recipt_Payments = Recipt_Payment::where('school_id', $school->id)
+        $Recipt_Payments = ReceiptPayment::where('school_id', $school->id)
             ->with(['student:id,name'])
             ->orderBy('date', 'desc')
             ->paginate(10);
@@ -62,7 +62,7 @@ class ReciptPaymentController extends Controller
                     'excption',
                 ])
                 ->first();
-            $lastPayment = Recipt_Payment::orderBy(
+            $lastPayment = ReceiptPayment::orderBy(
                 'manual',
                 'desc',
             )->first();
@@ -132,7 +132,7 @@ class ReciptPaymentController extends Controller
     public function show($id)
     {
         $school = $this->getSchool();
-        $report_data['recipt'] = Recipt_Payment::where('id', $id)
+        $report_data['recipt'] = ReceiptPayment::where('id', $id)
             ->with(['student:id,name'])
             ->first();
         $report_data['tafqeet'] = Numbers::TafqeetMoney(
@@ -149,7 +149,7 @@ class ReciptPaymentController extends Controller
     public function edit($id)
     {
         try {
-            $recipt_Payment = Recipt_Payment::where('id', $id)
+            $recipt_Payment = ReceiptPayment::where('id', $id)
                 ->with('student')
                 ->first();
             $school = $this->getSchool();
@@ -170,8 +170,8 @@ class ReciptPaymentController extends Controller
         try {
             DB::beginTransaction();
 
-            // Retrieve the existing Recipt_Payment record using the id from the request
-            $pay = Recipt_Payment::findOrFail($request->id);
+            // Retrieve the existing ReceiptPayment record using the id from the request
+            $pay = ReceiptPayment::findOrFail($request->id);
 
             $pay->date = date('Y-m-d');
             $pay->student_id = $request->student_id;
@@ -231,12 +231,12 @@ class ReciptPaymentController extends Controller
     public function destroy($id)
     {
         try {
-            $Recipt_Payment = Recipt_Payment::findorFail($id);
-            $Recipt_Payment->delete();
+            $ReceiptPayment = ReceiptPayment::findorFail($id);
+            $ReceiptPayment->delete();
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.receipt_payment.deleted', [
-                    'name' => $Recipt_Payment->student->name,
+                    'name' => $ReceiptPayment->student->name,
                     'date' => date('Y-m-d'),
                 ]),
             );
@@ -297,7 +297,7 @@ class ReciptPaymentController extends Controller
                 'amount' => $invoice->fees->amount,
             ],
         ];
-        $report_data['recipt'] = Recipt_Payment::where('id', $pay->id)
+        $report_data['recipt'] = ReceiptPayment::where('id', $pay->id)
             ->with(['student:id,name'])
             ->first();
         $report_data['tafqeet'] = Numbers::TafqeetMoney(
@@ -345,7 +345,7 @@ class ReciptPaymentController extends Controller
                     $pay->id,
                 );
                 $current_amount = $current_amount - $part->amount;
-                $report_data['recipt'] = Recipt_Payment::where(
+                $report_data['recipt'] = ReceiptPayment::where(
                     'id',
                     $pay->id,
                 )->first('Debit');
@@ -402,7 +402,7 @@ class ReciptPaymentController extends Controller
             $clothes_order->total_amount * 1,
             $pay->id,
         );
-        $report_data['recipt'] = Recipt_Payment::where('id', $pay->id)
+        $report_data['recipt'] = ReceiptPayment::where('id', $pay->id)
             ->with(['student:id,name'])
             ->first();
         $report_data['tafqeet'] = Numbers::TafqeetMoney(
@@ -467,7 +467,7 @@ class ReciptPaymentController extends Controller
             $books_order->total_amount * 1,
             $pay->id,
         );
-        $report_data['recipt'] = Recipt_Payment::where('id', $pay->id)
+        $report_data['recipt'] = ReceiptPayment::where('id', $pay->id)
             ->with(['student:id,name'])
             ->first();
         $report_data['tafqeet'] = Numbers::TafqeetMoney(

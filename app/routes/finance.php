@@ -5,7 +5,7 @@ use App\Http\Controllers\ExchangeBondController;
 use App\Http\Controllers\FeeInvoiceController;
 use App\Http\Controllers\fund_accountsController;
 use App\Http\Controllers\PaymentPartsController;
-use App\Http\Controllers\ReciptPaymentController;
+use App\Http\Controllers\ReceiptPaymentController;
 use App\Http\Controllers\SchoolFeeController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,7 +33,7 @@ Route::prefix('fee-invoice')
     });
 Route::prefix('receipt-payment')
     ->name('receipt_payment.')
-    ->controller(ReciptPaymentController::class)
+    ->controller(ReceiptPaymentController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}/create', 'create')->name('create');

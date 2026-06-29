@@ -63,7 +63,7 @@ class StudentAccount extends Model
 
     public function recipt_payment(): BelongsTo
     {
-        return $this->belongsTo(Recipt_Payment::class);
+        return $this->belongsTo(ReceiptPayment::class);
     }
 
     public function excpetion(): BelongsTo

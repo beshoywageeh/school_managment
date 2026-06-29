@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Recipt_Payment;
+use App\Models\ReceiptPayment;
 use Illuminate\Database\Seeder;
 
 class RecipetPaymentSeeder extends Seeder
@@ -12,6 +12,6 @@ class RecipetPaymentSeeder extends Seeder
      */
     public function run(): void
     {
-        Recipt_Payment::factory(400)->create();
+        ReceiptPayment::factory(400)->create();
     }
 }

@@ -85,10 +85,10 @@
                         'can' => 'fee_invoice-list',
                     ],
                     [
-                        'Name' => trans('Sidebar.Recipt_Payment'),
+                        'Name' => trans('Sidebar.ReceiptPayment'),
                         'Url' => 'backend.report.popup.payments_popup',
                         'type' => 'button',
-                        'can' => 'Recipt_Payment-list',
+                        'can' => 'ReceiptPayment-list',
                     ],
                     [
                         'Name' => trans('Sidebar.payment_parts'),
@@ -100,7 +100,7 @@
                         'Name' => trans('Sidebar.credit'),
                         'Url' => 'backend.report.popup.credit_popup',
                         'type' => 'button',
-                        'can' => 'Recipt_Payment-list',
+                        'can' => 'ReceiptPayment-list',
                     ],
                     [
                         'Name' => trans('Sidebar.except_fee'),

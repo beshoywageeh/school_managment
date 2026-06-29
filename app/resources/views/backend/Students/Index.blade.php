@@ -64,10 +64,10 @@
 
                                     ],
                                     [
-                                        'can' => 'Recipt_Payment-create',
+                                        'can' => 'ReceiptPayment-create',
                                         'url' => route('receipt_payment.create',  'ID_PLACEHOLDER'),
                                         'icon' => 'credit-card',
-                                        'text' => trans('general.Recipt_Payment'),
+                                        'text' => trans('general.ReceiptPayment'),
                                         'className' => 'text-yellow-600 hover:bg-yellow-50',
 
                                     ],

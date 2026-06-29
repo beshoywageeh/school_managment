@@ -10,7 +10,7 @@ use App\Models\FundAccount;  // يفضل مستقبلاً تعديلها إلى 
 use App\Models\Inventory\InventoryItem;
 use App\Models\Inventory\InventoryOrder;
 use App\Models\PaymentParts;
-use App\Models\Recipt_Payment; // يفضل مستقبلاً تعديلها إلى ReceiptPayment
+use App\Models\ReceiptPayment; // يفضل مستقبلاً تعديلها إلى ReceiptPayment
 use App\Models\Student;
 use App\Models\StudentAccount;
 use App\Services\Inventory\InventoryService;
@@ -234,11 +234,11 @@ class FinancialService
     /**
      * إنشاء سند قبض (إيصال استلام نقدية)
      */
-    public function createReceipt($amount, $student, $academicYearId, $school_id): Recipt_Payment
+    public function createReceipt($amount, $student, $academicYearId, $school_id): ReceiptPayment
     {
         return DB::transaction(function () use ($amount, $student, $academicYearId, $school_id) {
-            $receipt = Recipt_Payment::create([
-                'manual' => $this->generateAutoNumber(Recipt_Payment::class, 'manual', 5),
+            $receipt = ReceiptPayment::create([
+                'manual' => $this->generateAutoNumber(ReceiptPayment::class, 'manual', 5),
                 'date' => Carbon::today()->toDateString(),
                 'student_id' => $student->id,
                 'Debit' => $amount,

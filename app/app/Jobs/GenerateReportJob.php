@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\FeeInvoice;
-use App\Models\Recipt_Payment;
+use App\Models\ReceiptPayment;
 use App\Models\Student;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -86,7 +86,7 @@ class GenerateReportJob implements ShouldQueue
 
     protected function generatePaymentsReport(): array
     {
-        $query = Recipt_Payment::where('school_id', $this->schoolId)
+        $query = ReceiptPayment::where('school_id', $this->schoolId)
             ->where('academic_year_id', $this->academicYearId);
 
         return $query->with(['student:id,name'])

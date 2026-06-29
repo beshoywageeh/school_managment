@@ -1,4 +1,4 @@
-<x-modal id="payments" title="{{ trans('Sidebar.Recipt_Payment') }}" titleButton="{{ trans('general.open') }}" can="Recipt_Payment-list" size="lg">
+<x-modal id="payments" title="{{ trans('Sidebar.ReceiptPayment') }}" titleButton="{{ trans('general.open') }}" can="ReceiptPayment-list" size="lg">
     <form action="{{ route('report.payments') }}" method="post" id="payments">
         @csrf
         <div class="space-y-4">

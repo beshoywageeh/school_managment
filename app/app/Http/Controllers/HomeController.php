@@ -6,7 +6,7 @@ use App\Http\Traits\SchoolTrait;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\PaymentParts;
-use App\Models\Recipt_Payment;
+use App\Models\ReceiptPayment;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use App\Models\User;
@@ -115,7 +115,7 @@ class HomeController extends Controller
             'payment_parts' => PaymentParts::where('school_id', $schoolId)
                 ->where('status', 'paid')
                 ->sum('amount'),
-            'payments' => Recipt_Payment::where(
+            'payments' => ReceiptPayment::where(
                 'school_id',
                 $schoolId,
             )->sum('Debit'),
@@ -130,7 +130,7 @@ class HomeController extends Controller
                 ->where('fee_invoices.school_id', $schoolId)
                 ->whereNull('fee_invoices.deleted_at')
                 ->sum('school__fees.amount'),
-            'totalPaid' => Recipt_Payment::where(
+            'totalPaid' => ReceiptPayment::where(
                 'school_id',
                 $schoolId,
             )->sum('Debit'),
@@ -149,7 +149,7 @@ class HomeController extends Controller
             $date = Carbon::now()->subMonths($i);
             $months[] = $date->format('M Y');
 
-            $revenue[] = Recipt_Payment::where('school_id', $schoolId)
+            $revenue[] = ReceiptPayment::where('school_id', $schoolId)
                 ->whereYear('date', $date->year)
                 ->whereMonth('date', $date->month)
                 ->sum('Debit');

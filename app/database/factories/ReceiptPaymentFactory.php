@@ -3,13 +3,13 @@
 namespace Database\Factories;
 
 use App\Models\acadmice_year;
-use App\Models\Recipt_Payment;
+use App\Models\ReceiptPayment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Recipt_Payment>
+ * @extends Factory<ReceiptPayment>
  */
-class Recipt_PaymentFactory extends Factory
+class ReceiptPaymentFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,9 +19,9 @@ class Recipt_PaymentFactory extends Factory
     public function definition(): array
     {
         return [
-            'manual' => Recipt_Payment::orderBy('manual', 'desc')->first()
+            'manual' => ReceiptPayment::orderBy('manual', 'desc')->first()
                 ? str_pad(
-                    Recipt_Payment::orderBy('manual', 'desc')->first()
+                    ReceiptPayment::orderBy('manual', 'desc')->first()
                         ->manual + 1,
                     5,
                     '0',

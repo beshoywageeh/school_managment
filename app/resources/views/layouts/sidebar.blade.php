@@ -96,7 +96,7 @@
                     'academic_year-list',
                     'schoolfees-list',
                     'fee_invoice-list',
-                    'Recipt_Payment-list',
+                    'ReceiptPayment-list',
                     'except_fee-list',
                     'payment_parts-list',
                     'exchange_bonds-list',
@@ -125,11 +125,11 @@
                         <span class="text-sm font-medium">{{ trans('Sidebar.fees_invoice') }}</span>
                     </a>
                 @endcan
-                @can('Recipt_Payment-list')
+                @can('ReceiptPayment-list')
                     <a href="{{ route('receipt_payment.index') }}"
                         class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/receipt-payment*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                         <x-hero-icon name="credit-card" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.Recipt_Payment') }}</span>
+                        <span class="text-sm font-medium">{{ trans('Sidebar.ReceiptPayment') }}</span>
                     </a>
                 @endcan
                 @can('except_fee-list')

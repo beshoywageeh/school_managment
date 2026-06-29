@@ -29,7 +29,7 @@ class FundAccount extends Model
 
     public function receipts(): BelongsTo
     {
-        return $this->belongsTo(Recipt_Payment::class, 'receipt_id');
+        return $this->belongsTo(ReceiptPayment::class, 'receipt_id');
     }
 
     public function exchange_bond(): BelongsTo

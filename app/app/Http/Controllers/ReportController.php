@@ -10,7 +10,7 @@ use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\Inventory\InventoryItem;
 use App\Models\PaymentParts;
-use App\Models\Recipt_Payment;
+use App\Models\ReceiptPayment;
 use App\Models\SchoolFee;
 use App\Models\Student;
 use App\Models\StudentAccount;
@@ -281,7 +281,7 @@ class ReportController extends Controller
     {
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
-        $data['payment'] = Recipt_Payment::whereBetween('date', [
+        $data['payment'] = ReceiptPayment::whereBetween('date', [
             $data['from'],
             $data['to'],
         ])

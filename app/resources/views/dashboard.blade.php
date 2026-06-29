@@ -54,7 +54,7 @@
         @endcan
 
         <!-- Financial Summary Cards -->
-        @if (Auth::user()->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'Recipt_Payment-list']))
+        @if (Auth::user()->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'ReceiptPayment-list']))
                 <x-stat_card>
                     <div class="w-16 h-16 rounded-xl bg-yellow-500 flex items-center justify-center text-white">
                         <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -76,7 +76,7 @@
                     </div>
                     <div>
                         <h3 class="text-2xl font-bold text-gray-800">{{ number_format($totalPaid, 2) }}</h3>
-                        <p class="text-gray-500">{{ trans('Sidebar.Recipt_Payment') }} (Total)</p>
+                        <p class="text-gray-500">{{ trans('Sidebar.ReceiptPayment') }} (Total)</p>
                     </div>
                 </x-stat_card>
                 <x-stat_card color="red">
@@ -178,7 +178,7 @@
                 'academic_year-list',
                 'schoolfees-list',
                 'fee_invoice-list',
-                'Recipt_Payment-list',
+                'ReceiptPayment-list',
                 'except_fee-list',
                 'payment_parts-list',
                 'exchange_bonds-list',

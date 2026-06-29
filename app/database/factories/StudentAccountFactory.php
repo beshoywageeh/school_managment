@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Models\ExceptionFees;
 use App\Models\FeeInvoice;
-use App\Models\Recipt_Payment;
+use App\Models\ReceiptPayment;
 use App\Models\StudentAccount;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -29,7 +29,7 @@ class StudentAccountFactory extends Factory
                 ?->id,
             'excpetion_id' => ExceptionFees::inRandomOrder()->first()?->id,
             'academic_year_id' => '1',
-            'recipt__payments_id' => Recipt_Payment::inRandomOrder()->first()
+            'recipt__payments_id' => ReceiptPayment::inRandomOrder()->first()
                 ?->id,
             'debit' => $this->faker->numberBetween(1, 400),
             'credit' => $this->faker->numberBetween(1, 500),
