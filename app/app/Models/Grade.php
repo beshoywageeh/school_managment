@@ -32,7 +32,7 @@ class Grade extends Model
 
     public function class_rooms(): HasMany
     {
-        return $this->hasMany(class_room::class, 'grade_id');
+        return $this->hasMany(ClassRoom::class, 'grade_id');
     }
 
     public function students(): HasMany

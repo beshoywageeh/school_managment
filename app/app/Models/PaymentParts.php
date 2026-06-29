@@ -42,7 +42,7 @@ class PaymentParts extends Model
 
     public function classes(): BelongsTo
     {
-        return $this->belongsTo(class_room::class, 'class_id');
+        return $this->belongsTo(ClassRoom::class, 'class_id');
     }
 
     public function year(): BelongsTo

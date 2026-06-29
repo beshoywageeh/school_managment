@@ -7,7 +7,7 @@ use App\Http\Requests\UpdateSchoolFeeRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\AcademicYear;
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\SchoolFee;
 use App\Models\Student;
@@ -198,7 +198,7 @@ class SchoolFeeController extends Controller
 
     public function getclasses($id)
     {
-        $class_rooms = class_room::where('grade_id', $id)->get([
+        $class_rooms = ClassRoom::where('grade_id', $id)->get([
             'id',
             'name',
         ]);

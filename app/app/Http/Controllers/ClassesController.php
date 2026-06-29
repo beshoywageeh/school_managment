@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\class_room;
 use App\Models\classes;
+use App\Models\ClassRoom;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +17,7 @@ class ClassesController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $class_rooms = class_room::where('school_id', $school->id)
+        $class_rooms = ClassRoom::where('school_id', $school->id)
             ->with(['grade:id,name'])
             ->get(['id', 'name', 'grade_id'])
             ->groupBy('grade.name');
@@ -37,7 +37,7 @@ class ClassesController extends Controller
                 classes::create([
                     'title' => $class['class_name'],
                     'class_room_id' => $class['class_id'],
-                    'grade_id' => class_room::find($class['class_id'])
+                    'grade_id' => ClassRoom::find($class['class_id'])
                         ->grade_id,
                     'school_id' => auth()->user()->school_id,
                     'user_id' => auth()->user()->id,
@@ -115,7 +115,7 @@ class ClassesController extends Controller
             $class->update([
                 'title' => $request->class_name,
                 'class_room_id' => $request->grade_name,
-                'grade_id' => class_room::find($request->grade_name)
+                'grade_id' => ClassRoom::find($request->grade_name)
                     ->grade_id,
                 'tameen' => $class->tameen,
             ]);

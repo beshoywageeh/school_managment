@@ -38,7 +38,7 @@ class classes extends Model
 
     public function class_room(): BelongsTo
     {
-        return $this->belongsTo(class_room::class, 'class_room_id');
+        return $this->belongsTo(ClassRoom::class, 'class_room_id');
     }
 
     public function students(): HasMany

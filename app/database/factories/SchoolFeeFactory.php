@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\AcademicYear;
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\SchoolFee;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,7 +22,7 @@ class SchoolFeeFactory extends Factory
     {
         return [
             'grade_id' => Grade::all('id')->random(),
-            'classroom_id' => class_room::all('id')->random(),
+            'classroom_id' => ClassRoom::all('id')->random(),
             'user_id' => '1',
             'description' => $this->faker->words(1, true),
             'amount' => $this->faker->numberBetween('1000', '8000'),

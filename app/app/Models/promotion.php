@@ -35,12 +35,12 @@ class promotion extends Model
 
     public function f_class(): BelongsTo
     {
-        return $this->belongsTo(class_room::class, 'from_class', 'id');
+        return $this->belongsTo(ClassRoom::class, 'from_class', 'id');
     }
 
     public function t_class(): BelongsTo
     {
-        return $this->belongsTo(class_room::class, 'to_class', 'id');
+        return $this->belongsTo(ClassRoom::class, 'to_class', 'id');
     }
 
     public function t_acc(): BelongsTo

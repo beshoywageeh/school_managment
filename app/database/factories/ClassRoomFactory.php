@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<class_room>
+ * @extends Factory<ClassRoom>
  */
-class class_roomFactory extends Factory
+class ClassRoomFactory extends Factory
 {
     /**
      * Define the model's default state.

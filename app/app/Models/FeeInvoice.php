@@ -42,7 +42,7 @@ class FeeInvoice extends Model
 
     public function classes(): BelongsTo
     {
-        return $this->belongsTo(class_room::class, 'classroom_id');
+        return $this->belongsTo(ClassRoom::class, 'classroom_id');
     }
 
     public function fees(): BelongsTo

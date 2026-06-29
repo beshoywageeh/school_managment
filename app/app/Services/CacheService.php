@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\nationality;
 use App\Models\school_fee;
@@ -40,7 +40,7 @@ class CacheService
             : "classrooms_all_{$this->schoolId}";
 
         return Cache::remember($cacheKey, $this->cacheTtl, function () use ($gradeId) {
-            $query = class_room::query();
+            $query = ClassRoom::query();
 
             if ($gradeId) {
                 $query->where('grade_id', $gradeId);

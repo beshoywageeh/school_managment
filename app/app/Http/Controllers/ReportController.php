@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\SchoolTrait;
 use App\Models\AcademicYear;
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\ExceptionFees;
 use App\Models\FeeInvoice;
 use App\Models\Grade;
@@ -49,7 +49,7 @@ class ReportController extends Controller
         $grades = Grade::whereIn('id', $user_grade)
             ->with('class_rooms:id,name,grade_id')
             ->get(['id', 'name']);
-        $class_rooms = class_room::whereIn('grade_id', $user_grade)->get();
+        $class_rooms = ClassRoom::whereIn('grade_id', $user_grade)->get();
 
         return view(
             'backend.report.index',
@@ -225,7 +225,7 @@ class ReportController extends Controller
                 ])
                 ->chunk(100);
 
-            $data['classroom'] = class_room::where('id', $request->classroom_id)
+            $data['classroom'] = ClassRoom::where('id', $request->classroom_id)
                 ->with('grade')
                 ->first();
             $PDFExport->PrintPDF('41', 'stream', $data, 'L', $school);
@@ -362,7 +362,7 @@ class ReportController extends Controller
         PDFExportService $PDFExport,
     ) {
         $data['type'] = $request->type;
-        $data['classroom'] = class_room::findorfail($request->classroom_id);
+        $data['classroom'] = ClassRoom::findorfail($request->classroom_id);
         $date = Carbon::now()->format('Y');
         $data['aa'] = AcademicYear::whereyear('year_start', $date)->first();
         $data['students'] = Student::where(
@@ -458,7 +458,7 @@ class ReportController extends Controller
                 'classroom_id',
                 (array) $request->classroom,
             );
-            $data['classroom'] = class_room::whereIn(
+            $data['classroom'] = ClassRoom::whereIn(
                 'id',
                 (array) $request->classroom,
             )->get();
@@ -468,7 +468,7 @@ class ReportController extends Controller
                 ->where('classroom_id', '!=', null)
                 ->where('grade_id', '!=', null);
             $data['grade'] = Grade::where('id', '!=', null)->get();
-            $data['classroom'] = class_room::where('id', '!=', null)->get();
+            $data['classroom'] = ClassRoom::where('id', '!=', null)->get();
         }
 
         $data['Students_by_grade'] = (clone $data['Students_query'])

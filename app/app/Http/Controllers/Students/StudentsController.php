@@ -8,7 +8,7 @@ use App\Http\Requests\Student\StudentStoreRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\AcademicYear;
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\nationality;
@@ -412,7 +412,7 @@ class StudentsController extends Controller
 
     public function getclasses($id)
     {
-        $class_rooms = class_room::where('school_id', $this->getSchool()->id)
+        $class_rooms = ClassRoom::where('school_id', $this->getSchool()->id)
             ->where('grade_id', $id)
             ->get(['id', 'name']);
 

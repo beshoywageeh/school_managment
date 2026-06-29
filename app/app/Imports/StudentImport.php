@@ -5,7 +5,7 @@ namespace App\Imports;
 use App\Enums\Student_Status;
 use App\Enums\user_religion;
 use App\Enums\UserGender;
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\Student;
@@ -65,7 +65,7 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
         $this->parents = MyParent::where('school_id', $this->schoolId)
             ->pluck('id', 'father_name')
             ->toArray();
-        $this->classes = class_room::pluck('id', 'name')->toArray();
+        $this->classes = ClassRoom::pluck('id', 'name')->toArray();
 
         $lastStudent = Student::orderBy('code', 'desc')->first();
         $this->nextCode = $lastStudent ? (int) $lastStudent->code + 1 : 1;

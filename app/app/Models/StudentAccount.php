@@ -43,7 +43,7 @@ class StudentAccount extends Model
 
     public function classroom(): BelongsTo
     {
-        return $this->belongsTo(class_room::class);
+        return $this->belongsTo(ClassRoom::class);
     }
 
     public function grade(): BelongsTo

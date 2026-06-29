@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Inventory\StoreItemRequest;
 use App\Http\Requests\Inventory\UpdateItemRequest;
 use App\Http\Traits\SchoolTrait;
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\Inventory\InventoryItem;
 use App\Services\Inventory\InventoryService;
 
@@ -52,7 +52,7 @@ class InventoryItemController extends Controller
         $perPage = min((int) request('per_page', 10), 100);
         $items = $query->paginate($perPage);
 
-        $classrooms = class_room::where('school_id', $school->id)
+        $classrooms = ClassRoom::where('school_id', $school->id)
             ->with([
                 'grade' => function ($query) {
                     $query->select(['id', 'name']);
@@ -88,7 +88,7 @@ class InventoryItemController extends Controller
     {
         $school = $this->getSchool();
         if ($request->classroom_id) {
-            $gradeId = class_room::findOrFail($request->classroom_id)
+            $gradeId = ClassRoom::findOrFail($request->classroom_id)
                 ->grade_id;
         }
         $this->inventoryService->addItem([

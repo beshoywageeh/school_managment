@@ -6,7 +6,7 @@ use App\Enums\Student_Status;
 use App\Enums\user_religion;
 use App\Enums\UserGender;
 use App\Models\AcademicYear;
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\nationality;
@@ -37,7 +37,7 @@ class StudentFactory extends Factory
             'user_id' => '1',
             'grade_id' => Grade::inRandomOrder()->first()?->id,
             'classroom_id' => function (array $attributes) {
-                return class_room::where(
+                return ClassRoom::where(
                     'grade_id',
                     $attributes['grade_id'],
                 )

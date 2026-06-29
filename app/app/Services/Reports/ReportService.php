@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\AcademicYear;
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\Student;
@@ -97,7 +97,7 @@ class ReportService
 
     public function getClassRoomsWithCounts(int $gradeId): Collection
     {
-        return class_room::where('grade_id', $gradeId)
+        return ClassRoom::where('grade_id', $gradeId)
             ->withCount('students')
             ->get(['id', 'name', 'grade_id']);
     }

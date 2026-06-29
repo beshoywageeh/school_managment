@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             AcademicYearSeeder::class,
             MyParentTableSeeder::class,
             GradeTableSeeder::class,
-            class_roomTableSeeder::class,
+            ClassRoomTableSeeder::class,
             StudentsTableSeeder::class,
             AcademicYearSeeder::class,
             SchoolFeeSeeder::class,

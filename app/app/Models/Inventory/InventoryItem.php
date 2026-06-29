@@ -4,7 +4,7 @@ namespace App\Models\Inventory;
 
 use App\Enums\InventoryItemCategory;
 use App\Enums\InventoryItemType;
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\School;
 use App\Models\User;
@@ -89,7 +89,7 @@ class InventoryItem extends Model
 
     public function classroom(): BelongsTo
     {
-        return $this->belongsTo(class_room::class);
+        return $this->belongsTo(ClassRoom::class);
     }
 
     public function user(): BelongsTo

@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\Grade;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\str;
 
-class class_roomTableSeeder extends Seeder
+class ClassRoomTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -19,7 +19,7 @@ class class_roomTableSeeder extends Seeder
 
         foreach ($grades as $grade_id) {
             foreach ($class_rooms as $name) {
-                class_room::create([
+                ClassRoom::create([
                     'name' => $name,
                     'grade_id' => $grade_id->id,
                     'user_id' => '1',

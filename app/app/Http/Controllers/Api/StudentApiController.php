@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StudentResource;
 use App\Models\AcademicYear;
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\Student;
 use Illuminate\Http\JsonResponse;
@@ -104,7 +104,7 @@ class StudentApiController extends Controller
 
     public function classes(Request $request): JsonResponse
     {
-        $classes = class_room::where('school_id', $request->user()->school_id)
+        $classes = ClassRoom::where('school_id', $request->user()->school_id)
             ->get(['id', 'name', 'grade_id']);
 
         return response()->json(['data' => $classes]);
