@@ -20,7 +20,7 @@ class ImageFactory extends Factory
         return [
             'filename' => $this->faker->randomElement(['heather-allison.png', 'teegan-horne.png']),
             'imageable_id' => $this->faker->numberBetween(1, 5),
-            'imageable_type' => 'App\Models\settings',
+            'imageable_type' => 'App\Models\School',
         ];
     }
 }

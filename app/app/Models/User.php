@@ -83,7 +83,7 @@ class User extends Authenticatable
 
     public function settings(): BelongsToMany
     {
-        return $this->belongsToMany(Settings::class);
+        return $this->belongsToMany(School::class);
     }
 
     public function job(): BelongsTo

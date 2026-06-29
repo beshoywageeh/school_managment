@@ -3,7 +3,7 @@
 namespace App\Models\Inventory;
 
 use App\Enums\TransactionType;
-use App\Models\settings;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Database\Eloquent\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,7 +41,7 @@ class InventoryTransaction extends Model
 
     public function school(): BelongsTo
     {
-        return $this->belongsTo(settings::class);
+        return $this->belongsTo(School::class);
     }
 
     public function user(): BelongsTo

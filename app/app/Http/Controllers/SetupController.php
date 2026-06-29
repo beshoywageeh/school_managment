@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\ImageTrait;
-use App\Models\settings;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -23,13 +23,13 @@ class SetupController extends Controller
         try {
 
             $slug = \Str::slug($request->schoolname);
-            $school = new settings;
+            $school = new School;
             $school->name = $request->schoolname;
             $school->phone = $request->phone;
             $school->address = $request->address;
             $school->slug = $slug;
             $school->save();
-            $this->verifyAndStoreImage($request, 'logo', $slug, 'upload_attachments', $school->id, 'App\Models\settings', $request->schoolname);
+            $this->verifyAndStoreImage($request, 'logo', $slug, 'upload_attachments', $school->id, 'App\Models\School', $request->schoolname);
             $lastemp = User::latest()->first();
             $user = new User;
             $user->code = $lastemp ? str_pad($lastemp->code + 1, 5, '0', STR_PAD_LEFT) : '00001';

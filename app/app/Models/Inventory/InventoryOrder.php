@@ -4,7 +4,7 @@ namespace App\Models\Inventory;
 
 use App\Enums\InventoryOrderStatus;
 use App\Enums\InventoryOrderType;
-use App\Models\settings;
+use App\Models\School;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -48,7 +48,7 @@ class InventoryOrder extends Model
 
     public function school(): BelongsTo
     {
-        return $this->belongsTo(settings::class);
+        return $this->belongsTo(School::class);
     }
 
     public function user(): BelongsTo

@@ -18,7 +18,7 @@ class ClassRoomRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'grade_id' => ['required', 'integer', 'exists:grades,id'],
-            'school_id' => ['sometimes', 'integer', 'exists:settings,id'],
+            'school_id' => ['sometimes', 'integer', 'exists:schools,id'],
         ];
     }
 

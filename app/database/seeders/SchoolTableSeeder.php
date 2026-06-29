@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\settings;
+use App\Models\School;
 use Illuminate\Database\Seeder;
 
-class settingsTableSeeder extends Seeder
+class SchoolTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        settings::factory(1)->create();
+        School::factory(1)->create();
     }
 }

@@ -8,7 +8,7 @@ Route::get('fake', function () {
         'Grade',
         'MyParent',
         'User',
-        'settings',
+        'School',
         'Students',
         'Image',
     ];

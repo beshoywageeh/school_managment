@@ -7,7 +7,7 @@ use App\Http\Traits\ImageTrait;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\Grade;
-use App\Models\settings;
+use App\Models\School;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -21,7 +21,7 @@ class SettingsController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $school_info = settings::where('id', $school->id)->with('image')->first();
+        $school_info = School::where('id', $school->id)->with('image')->first();
         $grades = Grade::where('school_id', $school->id)->withCount('students')->get();
         $std_count = Student::where('school_id', $school->id)->count();
         $grd_count = Grade::where('school_id', $school->id)->count();
@@ -37,12 +37,12 @@ class SettingsController extends Controller
 
         \Illuminate\Support\Facades\DB::beginTransaction();
         try {
-            $school = new settings;
+            $school = new School;
             $school->name = $request->schoolname;
             $school->phone = $request->phone;
             $school->address = $request->address;
             $school->save();
-            $this->verifyAndStoreImage($request, 'logo', $request->schoolname, 'upload_attachments', $school->id, 'App\Models\settings', $request->schoolname);
+            $this->verifyAndStoreImage($request, 'logo', $request->schoolname, 'upload_attachments', $school->id, 'App\Models\School', $request->schoolname);
 
             $user = new User;
             $user->first_name = $request->first_name;
@@ -67,7 +67,7 @@ class SettingsController extends Controller
     {
         try {
             \DB::beginTransaction();
-            $school = settings::findorfail($request->id);
+            $school = School::findorfail($request->id);
             $school->name = $request->school_name;
             $school->phone = $request->school_phone;
             $school->address = $request->address;
@@ -76,7 +76,7 @@ class SettingsController extends Controller
             $school->footer_left = $request->footer_left;
             $school->slug = \Str::slug($school->name);
             $school->save();
-            $this->verifyAndStoreImage($request, 'logo', $request->school_name, 'upload_attachments', $request->id, 'App\Models\settings', $request->school_name);
+            $this->verifyAndStoreImage($request, 'logo', $request->school_name, 'upload_attachments', $request->id, 'App\Models\School', $request->school_name);
             \DB::commit();
             session()->flash('success', trans('general.success'));
 
