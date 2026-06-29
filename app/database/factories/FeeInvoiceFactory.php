@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use App\Models\SchoolFee;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Fee_invoice>
+ * @extends Factory<FeeInvoice>
  */
-class Fee_invoiceFactory extends Factory
+class FeeInvoiceFactory extends Factory
 {
     /**
      * Define the model's default state.

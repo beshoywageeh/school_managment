@@ -78,7 +78,7 @@ class Student extends Model
 
     public function fee_invoice(): HasMany
     {
-        return $this->hasMany(Fee_invoice::class);
+        return $this->hasMany(FeeInvoice::class);
     }
 
     public function parts(): HasMany

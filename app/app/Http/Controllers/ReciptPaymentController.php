@@ -6,7 +6,7 @@ use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use App\Models\Inventory\InventoryItem;
 use App\Models\PaymentParts;
 use App\Models\Recipt_Payment;
@@ -257,7 +257,7 @@ class ReciptPaymentController extends Controller
 
         $academic_year = acadmice_year::where('status', '0')->first();
         DB::beginTransaction();
-        $invoice = Fee_invoice::where('id', $request->feeInvoice)
+        $invoice = FeeInvoice::where('id', $request->feeInvoice)
             ->with('fees:id,title,amount')
             ->first();
         $pay = $FinancialService->createReceipt(

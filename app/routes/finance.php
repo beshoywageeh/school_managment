@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ExceptionFeesController;
 use App\Http\Controllers\ExchangeBondController;
-use App\Http\Controllers\fee_invoiceController;
+use App\Http\Controllers\FeeInvoiceController;
 use App\Http\Controllers\fund_accountsController;
 use App\Http\Controllers\PaymentPartsController;
 use App\Http\Controllers\ReciptPaymentController;
@@ -21,7 +21,7 @@ Route::prefix('school-fees')
     });
 Route::prefix('fee-invoice')
     ->name('fee_invoice.')
-    ->controller(fee_invoiceController::class)
+    ->controller(FeeInvoiceController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{student_id}/create', 'create')->name('create');

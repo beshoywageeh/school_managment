@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\ExceptionFees;
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -29,7 +29,7 @@ class ExceptionFeesFactory extends Factory
                     ->classroom_id;
             },
             'fee_id' => function (array $attributes) {
-                return Fee_invoice::where(
+                return FeeInvoice::where(
                     'grade_id',
                     $attributes['grade_id'],
                 )

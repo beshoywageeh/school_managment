@@ -6,7 +6,7 @@ use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\SchoolFee as school_fee;
 use App\Models\Student;
@@ -15,7 +15,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class fee_invoiceController extends Controller
+class FeeInvoiceController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
@@ -66,7 +66,7 @@ class fee_invoiceController extends Controller
         ];
 
         // 1. نبدأ ببناء الاستعلام دون تنفيذ (بدون paginate أو get)
-        $query = Fee_invoice::query()
+        $query = FeeInvoice::query()
             ->where('school_id', $school->id)
             ->with([
                 'students:id,name',
@@ -197,7 +197,7 @@ class fee_invoiceController extends Controller
     public function show(string $id)
     {
         $school = $this->getSchool();
-        $invoice_details = Fee_invoice::where('id', $id)
+        $invoice_details = FeeInvoice::where('id', $id)
             ->with('students', 'fees', 'grades', 'classes')
             ->first();
         $tafqeet = Numbers::TafqeetMoney(
@@ -215,7 +215,7 @@ class fee_invoiceController extends Controller
     public function edit(string $id)
     {
         $school = $this->getSchool();
-        $fee = Fee_invoice::where('id', $id)->with('students', 'fees')->first();
+        $fee = FeeInvoice::where('id', $id)->with('students', 'fees')->first();
         $sfees = school_fee::where('grade_id', $fee->grade_id)
             ->where('classroom_id', $fee->classroom_id)
             ->get();
@@ -230,7 +230,7 @@ class fee_invoiceController extends Controller
     {
         DB::beginTransaction();
         try {
-            $fee = Fee_invoice::findOrFail($request->id);
+            $fee = FeeInvoice::findOrFail($request->id);
             $student = Student::findorfail($fee->student_id);
             $ac_year = acadmice_year::where('status', '0')->first();
 
@@ -271,7 +271,7 @@ class fee_invoiceController extends Controller
     public function destroy(string $id)
     {
         try {
-            $fee = Fee_invoice::findorFail($id);
+            $fee = FeeInvoice::findorFail($id);
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.fee_invoice.deleted', [

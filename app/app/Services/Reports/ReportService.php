@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Acadmice_year;
 use App\Models\class_room;
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
@@ -72,7 +72,7 @@ class ReportService
         ?int $gradeId = null,
         ?int $academicYearId = null,
     ): Collection {
-        $query = Fee_invoice::where('school_id', $schoolId)->with([
+        $query = FeeInvoice::where('school_id', $schoolId)->with([
             'students:id,name',
             'fees:id,title,amount',
         ]);

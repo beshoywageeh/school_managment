@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use App\Models\PaymentParts;
 use App\Models\Student;
 use App\Services\Finance\FinancialService;
@@ -65,7 +65,7 @@ class PaymentPartsController extends Controller
         try {
             $student = Student::findorfail($request->student_id);
             $parts = $request->parts;
-            $academic_year = Fee_invoice::where('student_id', $student->id)
+            $academic_year = FeeInvoice::where('student_id', $student->id)
                 ->where('status', 'unpaid')
                 ->first('academic_year_id');
             $parts->each(function ($part) use ($student, $academic_year) {

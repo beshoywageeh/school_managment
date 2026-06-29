@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use Illuminate\Database\Seeder;
 
 class FeeinvSeeder extends Seeder
@@ -12,6 +12,6 @@ class FeeinvSeeder extends Seeder
      */
     public function run(): void
     {
-        Fee_invoice::factory(100)->create();
+        FeeInvoice::factory(100)->create();
     }
 }

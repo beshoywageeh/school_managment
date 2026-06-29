@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use App\Models\Recipt_Payment;
 use App\Models\Student;
 use Illuminate\Bus\Queueable;
@@ -72,7 +72,7 @@ class GenerateReportJob implements ShouldQueue
 
     protected function generateFeesReport(): array
     {
-        $query = Fee_invoice::where('school_id', $this->schoolId)
+        $query = FeeInvoice::where('school_id', $this->schoolId)
             ->where('academic_year_id', $this->academicYearId);
 
         if (! empty($this->filters['grade_id'])) {

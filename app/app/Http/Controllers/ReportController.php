@@ -6,7 +6,7 @@ use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\class_room;
 use App\Models\ExceptionFees;
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\Inventory\InventoryItem;
 use App\Models\PaymentParts;
@@ -257,7 +257,7 @@ class ReportController extends Controller
             $year,
         )->first(['id', 'view']);
 
-        $query = Fee_invoice::where('academic_year_id', $data['acc_year']->id)
+        $query = FeeInvoice::where('academic_year_id', $data['acc_year']->id)
             ->where('status', $request->payment_status)
             ->with('grades:id,name', 'students:id,name')
             ->select(['student_id', 'grade_id']);
@@ -307,7 +307,7 @@ class ReportController extends Controller
         )->first(['id', 'view']);
 
         // Prepare base query
-        $query = Fee_invoice::with([
+        $query = FeeInvoice::with([
             'grades:id,name',
             'classes:id,name',
             'students:id,name',
@@ -403,7 +403,7 @@ class ReportController extends Controller
 
     public function credit(Request $request, PDFExportService $PDFExport)
     {
-        $query = Fee_invoice::where('status', 0)->with(
+        $query = FeeInvoice::where('status', 0)->with(
             'students',
             'grades',
             'classes',
@@ -507,7 +507,7 @@ class ReportController extends Controller
             $request->classroom != 0
         ) {
             /* Total Payment */
-            $invoices = Fee_invoice::where(
+            $invoices = FeeInvoice::where(
                 'academic_year_id',
                 $data['acadmic_year']->id,
             )

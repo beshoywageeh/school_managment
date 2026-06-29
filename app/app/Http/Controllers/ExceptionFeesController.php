@@ -6,7 +6,7 @@ use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\acadmice_year;
 use App\Models\ExceptionFees;
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use App\Services\FinancialService;
@@ -37,7 +37,7 @@ class ExceptionFeesController extends Controller
             $Excpetion = Student::where('id', $id)
                 ->with('StudentAccount')
                 ->first();
-            $fees = Fee_invoice::where('student_id', $id)
+            $fees = FeeInvoice::where('student_id', $id)
                 ->where('status', 'unpaid')
                 ->with('fees')
                 ->get();
@@ -80,7 +80,7 @@ class ExceptionFeesController extends Controller
             $academic_year = acadmice_year::findorfail(
                 $student->acadmiecyear_id,
             );
-            $fee = Fee_invoice::findorfail($request->fee_id)
+            $fee = FeeInvoice::findorfail($request->fee_id)
                 ->with('fees')
                 ->first();
             if ($request->amount == $fee->fees->amount) {

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FeeInvoiceResource;
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use App\Models\school_fee;
 use App\Models\Student;
 use Illuminate\Http\JsonResponse;
@@ -16,7 +16,7 @@ class FeeInvoiceApiController extends Controller
     {
         $schoolId = $request->user()->school_id;
 
-        $invoices = Fee_invoice::where('school_id', $schoolId)
+        $invoices = FeeInvoice::where('school_id', $schoolId)
             ->with(['students', 'fees', 'grades', 'classes'])
             ->paginate(15);
 
@@ -30,7 +30,7 @@ class FeeInvoiceApiController extends Controller
         ]);
     }
 
-    public function show(Fee_invoice $fee_invoice): JsonResponse
+    public function show(FeeInvoice $fee_invoice): JsonResponse
     {
         $fee_invoice->load([
             'students',
@@ -56,7 +56,7 @@ class FeeInvoiceApiController extends Controller
         $student = Student::findOrFail($validated['student_id']);
         $schoolFee = school_fee::findOrFail($validated['school_fee_id']);
 
-        $invoice = Fee_invoice::create([
+        $invoice = FeeInvoice::create([
             'student_id' => $validated['student_id'],
             'grade_id' => $student->grade_id,
             'classroom_id' => $student->classroom_id,
@@ -78,7 +78,7 @@ class FeeInvoiceApiController extends Controller
         );
     }
 
-    public function destroy(Fee_invoice $fee_invoice): JsonResponse
+    public function destroy(FeeInvoice $fee_invoice): JsonResponse
     {
         $fee_invoice->delete();
 

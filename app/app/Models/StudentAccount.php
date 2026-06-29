@@ -58,7 +58,7 @@ class StudentAccount extends Model
 
     public function fee(): BelongsTo
     {
-        return $this->belongsTo(Fee_invoice::class, 'fee_invoices_id', 'id');
+        return $this->belongsTo(FeeInvoice::class, 'fee_invoices_id', 'id');
     }
 
     public function recipt_payment(): BelongsTo

@@ -5,7 +5,7 @@ namespace App\Services\Finance;
 use App\Http\Traits\LogsActivity;
 use App\Models\ExceptionFees; // يفضل مستقبلاً تعديلها إلى ExchangeBond
 use App\Models\Exchange_bond;  // يفضل مستقبلاً تعديلها إلى ExceptionFee
-use App\Models\Fee_invoice;   // يفضل مستقبلاً تعديلها إلى FeeInvoice
+use App\Models\FeeInvoice;   // يفضل مستقبلاً تعديلها إلى FeeInvoice
 use App\Models\FundAccount;  // يفضل مستقبلاً تعديلها إلى FundAccount
 use App\Models\Inventory\InventoryItem;
 use App\Models\Inventory\InventoryOrder;
@@ -44,10 +44,10 @@ class FinancialService
     /**
      * إنشاء فاتورة رسوم دراسية
      */
-    public function FeeInvoice($student, $fee, $acc_year, $school): Fee_invoice
+    public function FeeInvoice($student, $fee, $acc_year, $school): FeeInvoice
     {
         return DB::transaction(function () use ($student, $fee, $acc_year, $school) {
-            $invoice = Fee_invoice::create([
+            $invoice = FeeInvoice::create([
                 'invoice_date' => Carbon::today()->toDateString(),
                 'student_id' => $student->id,
                 'grade_id' => $student->grade_id,

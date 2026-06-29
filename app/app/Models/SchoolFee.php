@@ -53,7 +53,7 @@ class SchoolFee extends Model
 
     public function fee_invoices(): HasMany
     {
-        return $this->hasMany(Fee_invoice::class, 'fee_invoice_id');
+        return $this->hasMany(FeeInvoice::class, 'fee_invoice_id');
     }
 
     public function students(): HasMany
