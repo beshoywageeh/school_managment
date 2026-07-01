@@ -2,29 +2,29 @@
     <div class="p-4 border-b border-gray-100">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-                <h3 class="text-lg font-semibold text-gray-800">جدول المدرسين اليومي</h3>
+                <h3 class="text-lg font-semibold text-gray-800">{{ trans('schedules.title') }}</h3>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">اليوم</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('schedules.day') }}</label>
                 <select wire:model.live="selectedDay" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
-                    <option value="">اختر اليوم</option>
-                    <option value="saturday">السبت</option>
-                    <option value="sunday">الأحد</option>
-                    <option value="monday">الاثنين</option>
-                    <option value="tuesday">الثلاثاء</option>
-                    <option value="wednesday">الأربعاء</option>
-                    <option value="thursday">الخميس</option>
+                    <option value="">{{ trans('schedules.select_day') }}</option>
+                    <option value="saturday">{{ trans('schedules.saturday') }}</option>
+                    <option value="sunday">{{ trans('schedules.sunday') }}</option>
+                    <option value="monday">{{ trans('schedules.monday') }}</option>
+                    <option value="tuesday">{{ trans('schedules.tuesday') }}</option>
+                    <option value="wednesday">{{ trans('schedules.wednesday') }}</option>
+                    <option value="thursday">{{ trans('schedules.thursday') }}</option>
                 </select>
             </div>
             <div class="flex flex-wrap gap-2 items-start">
                 <button class="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm" wire:click="$emit('print')">
-                    <i class="ti ti-print"></i> طباعة
+                    <i class="ti ti-print"></i> {{ trans('schedules.print') }}
                 </button>
                 <button class="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm" wire:click="autoGenerate">
-                    <i class="ti ti-settings"></i> توليد تلقائي
+                    <i class="ti ti-settings"></i> {{ trans('schedules.auto_generate') }}
                 </button>
-                <button class="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm" wire:click="clearSchedule" onclick="confirm('هل أنت متأكد من مسح الجدول؟') || event.stopImmediatePropagation()">
-                    <i class="ti ti-trash"></i> مسح الجدول
+                <button class="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm" wire:click="clearSchedule" onclick="confirm('{{ trans('schedules.clear_confirm') }}') || event.stopImmediatePropagation()">
+                    <i class="ti ti-trash"></i> {{ trans('schedules.clear_schedule') }}
                 </button>
             </div>
         </div>
@@ -44,15 +44,15 @@
                         </td>
                     </tr>
                     <tr class="bg-blue-50 font-semibold">
-                        <th class="px-4 py-2 text-center text-gray-700">اسم المدرس</th>
-                        <th class="px-4 py-2 text-center text-gray-700">الحصة الأولى</th>
-                        <th class="px-4 py-2 text-center text-gray-700">الحصة الثانية</th>
-                        <th class="px-4 py-2 text-center text-gray-700">الحصة الثالثة</th>
-                        <th class="px-4 py-2 text-center text-gray-700">الحصة الرابعة</th>
-                        <th class="px-4 py-2 text-center text-gray-700">الحصة الخامسة</th>
-                        <th class="px-4 py-2 text-center text-gray-700">الحصة السادسة</th>
-                        <th class="px-4 py-2 text-center text-gray-700">الحصة السابعة</th>
-                        <th class="px-4 py-2 text-center text-gray-700">الحصة الثامنة</th>
+                        <th class="px-4 py-2 text-center text-gray-700">{{ trans('schedules.teacher_name') }}</th>
+                        <th class="px-4 py-2 text-center text-gray-700">{{ trans('schedules.period_1') }}</th>
+                        <th class="px-4 py-2 text-center text-gray-700">{{ trans('schedules.period_2') }}</th>
+                        <th class="px-4 py-2 text-center text-gray-700">{{ trans('schedules.period_3') }}</th>
+                        <th class="px-4 py-2 text-center text-gray-700">{{ trans('schedules.period_4') }}</th>
+                        <th class="px-4 py-2 text-center text-gray-700">{{ trans('schedules.period_5') }}</th>
+                        <th class="px-4 py-2 text-center text-gray-700">{{ trans('schedules.period_6') }}</th>
+                        <th class="px-4 py-2 text-center text-gray-700">{{ trans('schedules.period_7') }}</th>
+                        <th class="px-4 py-2 text-center text-gray-700">{{ trans('schedules.period_8') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -81,7 +81,7 @@
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-4">
                 <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                    <h3 class="text-lg font-semibold text-gray-800">إضافة حصة</h3>
+                    <h3 class="text-lg font-semibold text-gray-800">{{ trans('schedules.add_period') }}</h3>
                     <button wire:click="closeScheduleModal" class="p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100">
                         <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -95,9 +95,9 @@
                         </div>
                     @enderror
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">الفصل</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('schedules.classroom') }}</label>
                         <select wire:model="class_id" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
-                            <option value="">اختر الفصل</option>
+                            <option value="">{{ trans('schedules.select_classroom') }}</option>
                             @foreach ($classes as $classroom)
                                 <option value="{{ $classroom->id }}">{{ $classroom->title }}</option>
                             @endforeach
@@ -114,8 +114,8 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-xl">
-                    <button wire:click="closeScheduleModal" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium">إلغاء</button>
-                    <button wire:click="saveSchedule" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium">حفظ</button>
+                    <button wire:click="closeScheduleModal" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium">{{ trans('schedules.cancel') }}</button>
+                    <button wire:click="saveSchedule" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium">{{ trans('schedules.save') }}</button>
                 </div>
             </div>
         </div>

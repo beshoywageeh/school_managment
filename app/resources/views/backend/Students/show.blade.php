@@ -103,7 +103,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                         </svg>
-                        {{ trans('student.info') ?? 'بيانات الطالب' }}
+                        {{ trans('student.info') }}
                     </h3>
                 </div>
                 <div class="p-6 grid grid-cols-2 md:grid-cols-4 gap-4" dir="rtl">
@@ -133,10 +133,10 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
                         </svg>
-                        {{ trans('payment.history') ?? 'سجل المدفوعات' }}
+                        {{ trans('payment.history') }}
                     </h3>
                     <span class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
-                        {{ $student->StudentAccount->count() }} {{ trans('payment.record') ?? 'عملية' }}
+                        {{ $student->StudentAccount->count() }} {{ trans('payment.record') }}
                     </span>
                 </div>
                 <div class="overflow-x-auto">
@@ -154,8 +154,8 @@
                                 <tr class="border-b border-gray-50 hover:bg-gray-50/70 transition-colors">
                                     <td class="py-3 px-5 text-gray-500 text-sm">{{ $account->created_at->format('Y-m-d') }}</td>
                                     <td class="py-3 px-5 text-gray-700">{{ $account->type->lang() }}</td>
-                                    <td class="py-3 px-5 text-green-700 font-semibold">{{ number_format($account->credit, 2) }} ج.م</td>
-                                    <td class="py-3 px-5 text-red-600 font-semibold">{{ number_format($account->debit, 2) }} ج.م</td>
+                                    <td class="py-3 px-5 text-green-700 font-semibold">{{ number_format($account->credit, 2) }} {{ trans('general.currency') }}</td>
+                                    <td class="py-3 px-5 text-red-600 font-semibold">{{ number_format($account->debit, 2) }} {{ trans('general.currency') }}</td>
                                 </tr>
                             @empty
                                 <tr>
@@ -163,7 +163,7 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mx-auto mb-2 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 2.5 2 2.5-2 3.5 2z"/>
                                         </svg>
-                                        {{ trans('payment.no_records') ?? 'لا توجد مدفوعات' }}
+                                        {{ trans('payment.no_records') }}
                                     </td>
                                 </tr>
                             @endforelse
@@ -171,8 +171,8 @@
                         <tfoot>
                             <tr class="bg-blue-50 border-t-2 border-blue-100">
                                 <td colspan="2" class="py-3 px-5 font-bold text-blue-700 text-right">{{ trans('payment.total') }}</td>
-                                <td class="py-3 px-5 font-bold text-green-700">{{ number_format($student->StudentAccount->sum('credit'), 2) }} ج.م</td>
-                                <td class="py-3 px-5 font-bold text-red-600">{{ number_format($student->StudentAccount->sum('debit'), 2) }} ج.م</td>
+                                <td class="py-3 px-5 font-bold text-green-700">{{ number_format($student->StudentAccount->sum('credit'), 2) }} {{ trans('general.currency') }}</td>
+                                <td class="py-3 px-5 font-bold text-red-600">{{ number_format($student->StudentAccount->sum('debit'), 2) }} {{ trans('general.currency') }}</td>
                             </tr>
                         </tfoot>
                     </table>

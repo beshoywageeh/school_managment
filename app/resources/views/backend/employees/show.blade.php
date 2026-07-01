@@ -43,7 +43,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-gray-800">{{ $user->insurance == 0 ? 'غير مؤمن' : ' مؤمن' }}</td>
+                                <td class="px-4 py-2 text-gray-800">{{ $user->insurance == 0 ? trans('general.no_tammen') : trans('general.ok_tammen') }}</td>
                                 <td class="px-4 py-2 text-gray-600">{{ $user->insurance_number }}</td>
                                 <td class="px-4 py-2 text-gray-600" colspan="2">{{ $user->insurance_date }}</td>
                             </tr>

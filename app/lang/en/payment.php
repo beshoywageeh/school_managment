@@ -8,5 +8,6 @@ return [
     'total' => 'Total',
     'history' => 'Transaction History',
     'no_records' => 'No records found',
+    'no_history' => 'No transaction history.',
     'record' => 'Transaction Record',
 ];

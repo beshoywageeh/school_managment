@@ -24,6 +24,7 @@ return [
     'max_stock' => 'الحد الأقصى',
     'cost_price' => 'سعر التكلفة',
     'sell_price' => 'سعر البيع',
+    'is_active' => 'نشط',
     'status' => 'الحالة',
     'description' => 'الوصف',
 

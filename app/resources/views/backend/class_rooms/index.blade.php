@@ -54,10 +54,10 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" x-on:click="window.dispatchEvent(new CustomEvent('show-alert', { detail: {
-                                                        title: 'هل تريد حذف هذا المقال؟',
-                                                        message: 'لن تتمكن من استعادة هذا المقال بعد الحذف!',
+                                                        title: '{{ trans('general.confirm') }}',
+                                                        message: '{{ trans('general.confirmation') }}',
                                                         type: 'danger',
-                                                        confirmButtonText: 'نعم، احذفه',
+                                                        confirmButtonText: '{{ trans('general.delete') }}',
                                                         onConfirm: () => $el.closest('form').submit()
                                                     } }))" title="{{ trans('general.delete') }}">
                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">

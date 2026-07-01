@@ -36,10 +36,13 @@ return [
     'std_status' => 'Student Status',
     'Recipt_Payment' => 'Receipt Payment',
     'error' => 'Error',
+    'previous' => 'Previous',
+    'next' => 'Next',
     '404' => 'Not Found',
     'except_fee' => 'Exemptions',
     'payment_status' => 'Payment Status',
     'pay' => 'Pay',
+    'unpaid' => 'Unpaid',
     'not_paid' => 'Not Paid',
     'noInvoiceToPart' => 'No fee invoices for installment',
     'noDataToShow' => 'No data to show',
@@ -117,6 +120,7 @@ return [
     'search' => 'Search',
     'loop_labs' => 'Laboratories',
     'upload_image' => 'Upload Image',
+    'currency' => 'EGP',
 
     // Nested keys for buttons (used in views)
     'buttons' => [
@@ -150,6 +154,8 @@ return [
         'confirmation' => 'Click OK to delete',
         '404' => 'Page not found',
         'error' => 'Error',
+        'previous' => 'Previous',
+        'next' => 'Next',
         'loading' => 'Loading...',
         'view' => 'View',
     ],
