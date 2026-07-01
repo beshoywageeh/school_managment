@@ -12,11 +12,7 @@
 
 @section('head')
     @parent
-    <style>
-        [x-cloak] {
-            display: none !important;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/errors.css') }}">
 @endsection
 
 @section('action')

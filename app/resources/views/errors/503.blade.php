@@ -12,21 +12,7 @@
 
 @section('head')
     @parent
-    <style>
-        [x-cloak] {
-            display: none !important;
-        }
-
-        @keyframes spin-slow {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .animate-spin-slow {
-            animation: spin-slow 3s linear infinite;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/errors.css') }}">
 @endsection
 
 @section('action')
