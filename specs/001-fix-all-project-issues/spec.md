@@ -22,6 +22,8 @@ The remaining work spans 7 dependency-ordered phases: Foundation (infrastructure
 - Q: Expected data volume and scale → A: Multi-school moderate scale — 2-20 schools, 500-5K students, 20-100 staff, <50K inventory items, <500 orders/month.
 - Q: N+1 query optimization approach → A: Fix N+1 as part of Phase 4 controller refactoring. Add eager loading (`with()`) to StudentQueryService, InvoiceQueryService, and ReportService methods. No separate phase needed.
 - Q: Backup and disaster recovery approach → A: Add a DB backup task to the cron schedule (alongside existing `schedule:run` verification). Verify backup files are created successfully.
+- Q: Transaction rollback semantics for `executeInTransaction()` in multi-part payments → A: All-or-nothing. Any failure in any payment part rolls back ALL parts within the same transaction. Nested savepoints are not used.
+- Q: Dead code removal verification method for F8.2 → A: Test suite + targeted smoke test. Run `php artisan test` after removal, then manually smoke-test each removed item's dependent paths to confirm no runtime breakage.
 
 ---
 
@@ -112,7 +114,7 @@ The system uses an existing permission model with 30+ granular permissions. Four
 | F4.3 | Extract StudentQueryService from StudentsController::index() | Filter/sort/join logic (~100 lines) is in a dedicated service. |
 | F4.4 | Extract InvoiceQueryService from fee_invoiceController::index() | Dynamic query building (~90 lines) is in a dedicated service. |
 | F4.5 | Extract UserService from UserController::store()/update() | Field assignment logic (~80 lines) is in a dedicated service. |
-| F4.6 | Add `executeInTransaction()` to Base Controller | All controllers use this method instead of raw `DB::beginTransaction/commit/rollback`. |
+| F4.6 | Add `executeInTransaction()` to Base Controller | All controllers use this method instead of raw `DB::beginTransaction/commit/rollback`. Rollback is all-or-nothing — any failure rolls back all operations in the transaction. |
 | F4.7 | Unify constructor injection across all controllers | All dependencies are injected via constructor, not individual methods. |
 | F4.8 | Fix N+1 queries in extracted services | StudentQueryService, InvoiceQueryService, and ReportService methods use eager loading (`with()`) for related models. Query count per page does not exceed (1 + number of relations) + 1. |
 
@@ -156,7 +158,7 @@ Policies map to the existing 30+ permission keys already defined in the system (
 | ID | Requirement | Acceptance Criteria |
 |----|-------------|-------------------|
 | F8.1 | Replace all instances of `payed`/`notpayed` with `paid`/`not_paid` | No occurrence of `payed` or `notpayed` exists anywhere in the codebase. Lang files, database columns, migrations, and blade views are all updated. |
-| F8.2 | Remove all dead code identified in the plan | ~800 lines of dead code (3 Events, Listener, Service, 4 trait methods, Laboratory, ReportService, 2 Providers, 4 pagination templates, DTOs/, Reports/, views) are removed without breaking any functionality. |
+| F8.2 | Remove all dead code identified in the plan | ~800 lines of dead code (3 Events, Listener, Service, 4 trait methods, Laboratory, ReportService, 2 Providers, 4 pagination templates, DTOs/, Reports/, views) are removed without breaking any functionality. Verification: run `php artisan test` then manually smoke-test each removed item's dependent paths. |
 
 ---
 
