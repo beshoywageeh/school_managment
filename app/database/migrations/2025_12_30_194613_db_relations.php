@@ -347,13 +347,13 @@ return new class extends Migration
                 ->onDelete('Cascade')
                 ->onUpdate('Cascade');
             $table
-                ->foreign('recipt__payments_id')
+                ->foreign('receipt_payment_id')
                 ->references('id')
                 ->on('recipt__payments')
                 ->onDelete('Cascade')
                 ->onUpdate('Cascade');
             $table
-                ->foreign('excpetion_id')
+                ->foreign('exception_id')
                 ->references('id')
                 ->on('excption_fees')
                 ->onDelete('Cascade')
@@ -519,27 +519,6 @@ return new class extends Migration
                 ->onUpdate('Cascade');
         });
 
-        Schema::table('laboratories', function (Blueprint $table) {
-            $table
-                ->foreign('location_id')
-                ->references('id')
-                ->on('laboratories')
-                ->onDelete('Cascade')
-                ->onUpdate('Cascade');
-            $table
-                ->foreign('school_id')
-                ->references('id')
-                ->on('schools')
-                ->onDelete('Cascade')
-                ->onUpdate('Cascade');
-            $table
-                ->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('Cascade')
-                ->onUpdate('Cascade');
-        });
-
         Schema::table('classes', function (Blueprint $table) {
             $table
                 ->foreign('grade_id')
@@ -629,16 +608,7 @@ return new class extends Migration
             $table->dropforeign('nationality_id');
             $table->dropforeign('class_id');
         });
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropforeign('laboratory_id');
-            $table->dropforeign('user_id');
-            $table->dropforeign('school_id');
-        });
-        Schema::table('laboratories', function (Blueprint $table) {
-            $table->dropforeign('location_id');
-            $table->dropforeign('user_id');
-            $table->dropforeign('school_id');
-        });
+
         Schema::table('grades', function (Blueprint $table) {
             $table->dropforeign('user_id');
             $table->dropforeign('school_id');
@@ -707,7 +677,7 @@ return new class extends Migration
             $table->dropForeign('classroom_id');
             $table->dropForeign('recipt__payments_id');
             $table->dropForeign('fee_invoices_id');
-            $table->dropForeign('excpetion_id');
+            $table->dropForeign('exception_id');
             $table->dropForeign('exchange_bond_id');
             $table->dropForeign('academic_year_id');
         });

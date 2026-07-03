@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\AcademicYear;
 use Illuminate\Database\Seeder;
 
-class AcadmiceYearSeeder extends Seeder
+class AcademicYearSeeder extends Seeder
 {
     /**
      * Run the database seeds.

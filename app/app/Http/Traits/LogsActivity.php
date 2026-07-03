@@ -45,18 +45,6 @@ trait LogsActivity
         )->onQueue('logs');
     }
 
-    public function logActivitySync(
-        $action,
-        $description = null,
-        ?string $modelType = null,
-        ?int $modelId = null,
-    ): void {
-        $previousMode = $this->logActivityAsync;
-        $this->logActivityAsync = false;
-        $this->logActivity($action, $description, $modelType, $modelId);
-        $this->logActivityAsync = $previousMode;
-    }
-
     protected function getModelName($model): string
     {
         if (is_array($model)) {

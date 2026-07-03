@@ -186,7 +186,10 @@ class StudentsController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $grades = Grade::where('school_id', $school->id)->get(['id', 'name']);
+        $grades = Grade::where('school_id', $school->id)->get([
+            'id',
+            'name',
+        ]);
         $parents = MyParent::where('school_id', $school->id)->get([
             'id',
             'father_name',
@@ -340,7 +343,9 @@ class StudentsController extends Controller
 
     public function graduated()
     {
-        $students = Student::onlyTrashed()->with('grade', 'classroom')->get();
+        $students = Student::onlyTrashed()
+            ->with('grade', 'classroom')
+            ->get();
         $school = $this->getSchool();
 
         return view('backend.Students.graduated', get_defined_vars());
@@ -412,7 +417,10 @@ class StudentsController extends Controller
 
     public function getclasses($id)
     {
-        $class_rooms = ClassRoom::where('school_id', $this->getSchool()->id)
+        $class_rooms = ClassRoom::where(
+            'school_id',
+            $this->getSchool()->id,
+        )
             ->where('grade_id', $id)
             ->get(['id', 'name']);
 

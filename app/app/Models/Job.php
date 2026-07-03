@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\Jobs_types;
-use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,11 +21,9 @@ class Job extends Model
         'created_by',
         'updated_by',
         'school_id',
-        'status',
     ];
 
     protected $casts = [
-        'status' => Status::class,
         'type' => Jobs_types::class,
     ];
 

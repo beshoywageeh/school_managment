@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('academic_year_id');
             $table->date('date');
             $table->string('type')->index();
-            -$table->decimal('debit', 10, 2);
+            $table->decimal('debit', 10, 2);
             $table->decimal('credit', 10, 2);
             $table->timestamps();
             $table->softDeletes();

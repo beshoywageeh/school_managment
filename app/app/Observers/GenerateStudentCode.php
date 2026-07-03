@@ -19,7 +19,7 @@ class GenerateStudentCode
 
     public function created(Student $student): void
     {
-        Dispatch(new LogStudentActivity($student, 'created'));
+        LogStudentActivity::dispatch($student, 'created');
     }
 
     /**

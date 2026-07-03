@@ -21,12 +21,14 @@ class DatabaseSeeder extends Seeder
             GradeTableSeeder::class,
             ClassRoomTableSeeder::class,
             StudentsTableSeeder::class,
-            AcademicYearSeeder::class,
             SchoolFeeSeeder::class,
             FeeinvSeeder::class,
             ExceptionSeeder::class,
             RecipetPaymentSeeder::class,
             StudentAccountSeeder::class,
+            JobsSeeder::class,
+            ImageTableSeeder::class,
+            promotionSeeder::class,
         ]);
     }
 }

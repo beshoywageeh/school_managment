@@ -25,11 +25,10 @@ class StudentAccountFactory extends Factory
             'classroom_id' => $this->faker->numberBetween(1, 6),
             'student_id' => $this->faker->numberBetween(1, 100),
             'date' => $this->faker->date('Y-m-d'),
-            'fee_invoices_id' => FeeInvoice::inRandomOrder()->first()
-                ?->id,
-            'excpetion_id' => ExceptionFees::inRandomOrder()->first()?->id,
+            'fee_invoices_id' => FeeInvoice::inRandomOrder()->first()?->id,
+            'exception_id' => ExceptionFees::inRandomOrder()->first()?->id,
             'academic_year_id' => '1',
-            'recipt__payments_id' => ReceiptPayment::inRandomOrder()->first()
+            'receipt_payment_id' => ReceiptPayment::inRandomOrder()->first()
                 ?->id,
             'debit' => $this->faker->numberBetween(1, 400),
             'credit' => $this->faker->numberBetween(1, 500),

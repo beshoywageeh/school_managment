@@ -12,6 +12,7 @@
         "doctrine/dbal": "^3.10",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
+        "laravel/mcp": "^0.5.3",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^4.3",

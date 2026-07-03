@@ -14,29 +14,28 @@ return new class extends Migration
         Schema::create('parents', function (Blueprint $table) {
             $table->id();
             // Fatherinformation
-            $table->string('Father_Name');
-            $table->string('Father_National_Id')->nullable();
-            $table->string('Father_Phone')->nullable();
-            $table->string('Father_Job')->nullable();
-            $table->date('Father_Birth_Date')->nullable();
-            $table->string('Father_Learning')->nullable();
-            $table->string('Father_Birth_Location')->nullable();
+            $table->string('father_name');
+            $table->string('father_national_id')->nullable();
+            $table->string('father_phone')->nullable();
+            $table->string('father_job')->nullable();
+            $table->date('father_birth_date')->nullable();
+            $table->string('father_learning')->nullable();
+            $table->string('father_birth_location')->nullable();
 
             // Mother information
-            $table->string('Mother_Name')->nullable();
-            $table->string('Mother_National_Id')->nullable();
-            $table->string('Mother_Phone')->nullable();
-            $table->string('Mother_Job')->nullable();
-            $table->string('Religion')->nullable();
-            $table->string('Address')->nullable();
-            $table->date('Mother_Birth_Date')->nullable();
+            $table->string('mother_name')->nullable();
+            $table->string('mother_national_id')->nullable();
+            $table->string('mother_phone')->nullable();
+            $table->string('mother_job')->nullable();
+            $table->string('religion')->nullable();
+            $table->string('address')->nullable();
+            $table->date('mother_birth_date')->nullable();
             $table->string('slug')->nullable();
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('school_id')->unsigned();
             $table->tinyInteger('mother_status')->nullable();
             $table->softDeletes();
             $table->timestamps();
-
         });
     }
 

@@ -10,12 +10,12 @@ use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\nationality;
-use App\Models\Students;
+use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
 
 /**
- * @extends Factory<Students>
+ * @extends Factory<Student>
  */
 class StudentFactory extends Factory
 {
@@ -35,24 +35,22 @@ class StudentFactory extends Factory
             'gender' => Arr::random(UserGender::cases()),
             'national_id' => $this->faker->numerify('##############'),
             'user_id' => '1',
-            'grade_id' => Grade::inRandomOrder()->first()?->id,
+            'grade_id' => Grade::inRandomOrder()->first()?->id ?? 1,
             'classroom_id' => function (array $attributes) {
                 return ClassRoom::where(
                     'grade_id',
                     $attributes['grade_id'],
                 )
                     ->inRandomOrder()
-                    ->first()?->id;
+                    ->first()?->id ?? 1;
             },
-            'parent_id' => MyParent::inRandomOrder()->first()?->id,
-            'slug' => $this->faker->slug(),
+            'parent_id' => MyParent::inRandomOrder()->first()?->id ?? 1,
             'student_status' => Arr::random(Student_Status::cases()),
             'birth_at_begin' => $this->faker->date(),
             'religion' => Arr::random(user_religion::cases()),
             'acadmiecyear_id' => AcademicYear::inRandomOrder()->first()
-                ?->id,
-            'tameen' => $this->faker->numberBetween(0, 1),
-            'nationality_id' => nationality::inRandomOrder()->first()?->id,
+                ?->id ?? 1,
+            'nationality_id' => nationality::inRandomOrder()->first()?->id ?? 1,
             'school_id' => '1',
         ];
     }
