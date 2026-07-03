@@ -24,6 +24,9 @@ The remaining work spans 7 dependency-ordered phases: Foundation (infrastructure
 - Q: Backup and disaster recovery approach → A: Add a DB backup task to the cron schedule (alongside existing `schedule:run` verification). Verify backup files are created successfully.
 - Q: Transaction rollback semantics for `executeInTransaction()` in multi-part payments → A: All-or-nothing. Any failure in any payment part rolls back ALL parts within the same transaction. Nested savepoints are not used.
 - Q: Dead code removal verification method for F8.2 → A: Test suite + targeted smoke test. Run `php artisan test` after removal, then manually smoke-test each removed item's dependent paths to confirm no runtime breakage.
+- Q: Inventory entity rebuild status (AGENTS.md vs spec) → A: The inventory rebuild was already completed in the first ~98 tasks. InventoryItem, InventoryOrder, InventoryTransaction are fully built and require no changes. Phase 1 (Models) is truly 100% complete. Write F7.2/F7.3 tests against current schema.
+- Q: Logging strategy for refactored Phase 4 services → A: Include activity log entries for mutation operations (create/update/delete) inside each service method. Logger injected via constructor.
+- Q: Negative test coverage scope for F7.2-F7.6 → A: Full negative coverage — missing required fields, invalid type constraints, duplicate entries (unique violations), boundary/edge values, plus authorization-based negatives (unauthenticated requests, role-based 403s for delete/protected operations).
 
 ---
 
@@ -75,10 +78,10 @@ The system uses an existing permission model with 30+ granular permissions. Four
 ### Edge Cases
 
 - **EC1**: Legacy route ordering — `/{type}` catch-all incorrectly matches `/create/{type}`. Fixed by placing catch-all last in `routes/inventory.php`
-- **EC2**: Spelling `payed`/`notpayed` appears in lang files and database columns. Fixed by renaming to `paid`/`not_paid` across all files and creating a migration
-- **EC3**: Missing `$fillable` in models causes MassAssignmentException on create/update
+- **EC2**: Spelling `payed`/`notpayed` may appear in lang files and database columns (research.md indicates this has already been resolved in source). Verify zero occurrences remain; if any found, fix to `paid`/`not_paid` and create a migration for DB columns.
+- **EC3**: Missing `$fillable` in models causes MassAssignmentException on create/update. Audit all models in `app/Models/` for `$fillable`/`$guarded` properties.
 - **EC4**: `QUEUE_CONNECTION=sync` causes async activity logs to be lost. Fixed by changing to `database` in `.env`
-- **EC5**: `POST /update` and `GET /destroy` violate REST conventions. Fixed by converting to `PUT /{id}` and `DELETE /{id}`
+- **EC5**: `POST /update` and `GET /destroy` violate REST conventions. Fixed by converting to `PUT /{id}` and `DELETE /{id}` (use `rg` to discover all occurrences first)
 
 ---
 
@@ -110,10 +113,10 @@ The system uses an existing permission model with 30+ granular permissions. Four
 | ID | Requirement | Acceptance Criteria |
 |----|-------------|-------------------|
 | F4.1 | Extract DashboardService from HomeController | `getUserRoleCounts`, `getFinancialData`, `generateChartData`, `getMonthlyRevenueTrend` are in a dedicated service. HomeController delegates to it. |
-| F4.2 | Extract PaymentService from ReciptPaymentController | 4 payment handlers (~260 lines) are in a dedicated service. Controller methods are thin wrappers. |
+| F4.2 | Extract PaymentService from ReciptPaymentController | 4 payment handlers (~260 lines) are in a dedicated service. Controller methods are thin wrappers. Logger injected via constructor; mutation operations (create, update, delete) write activity log entries. |
 | F4.3 | Extract StudentQueryService from StudentsController::index() | Filter/sort/join logic (~100 lines) is in a dedicated service. |
 | F4.4 | Extract InvoiceQueryService from fee_invoiceController::index() | Dynamic query building (~90 lines) is in a dedicated service. |
-| F4.5 | Extract UserService from UserController::store()/update() | Field assignment logic (~80 lines) is in a dedicated service. |
+| F4.5 | Extract UserService from UserController::store()/update() | Field assignment logic (~80 lines) is in a dedicated service. Logger injected via constructor; mutation operations (store, update, delete) write activity log entries. |
 | F4.6 | Add `executeInTransaction()` to Base Controller | All controllers use this method instead of raw `DB::beginTransaction/commit/rollback`. Rollback is all-or-nothing — any failure rolls back all operations in the transaction. |
 | F4.7 | Unify constructor injection across all controllers | All dependencies are injected via constructor, not individual methods. |
 | F4.8 | Fix N+1 queries in extracted services | StudentQueryService, InvoiceQueryService, and ReportService methods use eager loading (`with()`) for related models. Query count per page does not exceed (1 + number of relations) + 1. |
@@ -126,8 +129,8 @@ Policies map to the existing 30+ permission keys already defined in the system (
 |----|-------------|-------------------|
 | F5.1 | Create 8 Policy classes mapped to existing permissions | StudentPolicy, FeeInvoicePolicy, UserPolicy, InventoryItemPolicy, InventoryOrderPolicy, GradePolicy, ClassPolicy, EmployeePolicy exist. Each gates via `$user->can('permission_key')` against existing permissions. |
 | F5.2 | Register policies in AuthServiceProvider | All 8 policies are listed in `$policies` array. |
-| F5.3 | Add `$this->authorize()` to all 42 controllers | Each controller action calls the appropriate policy method. Unauthorized requests return 403. |
-| F5.4 | Fix Form Request `authorize()` methods | 20 Form Requests check `$this->user()->can(...)` instead of `return true`. |
+| F5.3 | Add `$this->authorize()` to all 40 controllers (excluding base Controller.php and Auth guest-only controllers) | Each controller action calls the appropriate policy method. Unauthorized requests return 403. |
+| F5.4 | Fix Form Request `authorize()` methods | ~20 Form Requests check `$this->user()->can(...)` instead of `return true`. |
 | F5.5 | Add `can:` middleware to reports routes | Routes in `routes/reports.php` have `can:` middleware referencing existing permission keys. |
 | F5.6 | Add middleware to `/monitor` route | Route `routes/security.php` has proper authentication/authorization middleware. |
 
@@ -146,11 +149,11 @@ Policies map to the existing 30+ permission keys already defined in the system (
 | ID | Requirement | Acceptance Criteria |
 |----|-------------|-------------------|
 | F7.1 | Configure test database in phpunit.xml | `DB_CONNECTION=sqlite` and `DB_DATABASE=:memory:` are set. Tests run without affecting the main database. |
-| F7.2 | Create InventoryItem CRUD tests | Tests cover create, read, update, delete operations with valid and invalid data. |
+| F7.2 | Create InventoryItem CRUD tests | Tests cover create, read, update, delete operations with valid and invalid data (missing required fields, invalid types, duplicates, boundary values) plus authorization negatives (unauthenticated, role-based 403). |
 | F7.3 | Create InventoryOrder CRUD + status transition tests | Tests cover the full order lifecycle across 5 states: `pending` → `confirmed` → `completed` (forward progression). `cancelled` and `returned` are terminal from any non-terminal state. Invalid transitions (e.g., pending→completed skipping confirmed) are rejected with validation error. |
 | F7.4 | Create auth tests | Tests cover login (valid/invalid credentials), logout, and permission-based access. |
 | F7.5 | Create ActivityLog tests | Tests cover listing, filtering by action/type, and pagination. |
-| F7.6 | Create financial tests | Tests cover FeeInvoice creation, PaymentParts processing, and ExchangeBond creation. |
+| F7.6 | Create financial tests | Tests cover FeeInvoice creation, PaymentParts processing, and ExchangeBond creation with valid and invalid data (missing required fields, invalid amounts, boundary values) plus authorization negatives. |
 | F7.7 | Run full test suite with zero failures | `php artisan test --compact` exits with code 0. |
 
 ### Cross-Cutting Fixes
@@ -158,7 +161,7 @@ Policies map to the existing 30+ permission keys already defined in the system (
 | ID | Requirement | Acceptance Criteria |
 |----|-------------|-------------------|
 | F8.1 | Replace all instances of `payed`/`notpayed` with `paid`/`not_paid` | No occurrence of `payed` or `notpayed` exists anywhere in the codebase. Lang files, database columns, migrations, and blade views are all updated. |
-| F8.2 | Remove all dead code identified in the plan | ~800 lines of dead code (3 Events, Listener, Service, 4 trait methods, Laboratory, ReportService, 2 Providers, 4 pagination templates, DTOs/, Reports/, views) are removed without breaking any functionality. Verification: run `php artisan test` then manually smoke-test each removed item's dependent paths. |
+| F8.2 | Remove all dead code identified in the plan | Remaining dead code (~200 lines): `EagerLoadingTrait` (unused trait, 86 lines), `ViewServiceProvider` (empty provider, 13 lines), `app/Services/Reports/` (wrong namespace, 2 files, 144 lines), 8 unused pagination templates from `resources/views/vendor/pagination/`. Note: Events (3), Listener (1), ReportService, PDFExportService in `app/Services/Reports/`, DTOs/, Reports/, and Laboratory have already been removed in prior work. Verification: run `php artisan test` then manually smoke-test each removed item's dependent paths. |
 
 ---
 
@@ -169,7 +172,7 @@ Policies map to the existing 30+ permission keys already defined in the system (
 | SC1: Infrastructure stability | All 8 N-items (N1–N9 except N5) are green | Manual checklist sign-off per item |
 | SC2: Input validation completeness | All 9+ Form Requests bound and validated | `php artisan route:list` + manual test of each form |
 | SC3: Controller size reduction | ReciptPaymentController < 250 lines; HomeController < 200 lines | `wc -l` on each refactored controller |
-| SC4: Authorization coverage | All 42 controllers have `authorize()` calls; 20 FRs have real auth checks | Code review + grep for `authorize` patterns |
+| SC4: Authorization coverage | All 40 applicable controllers have `authorize()` calls; ~20 FRs have real auth checks | Code review + grep for `authorize` patterns |
 | SC5: Route convention compliance | Zero `GET /destroy`, Zero `POST /update`, Zero snake_case URLs | `rg 'GET.*destroy' routes/` returns empty |
 | SC6: Test suite reliability | `php artisan test --compact` exits 0 with all new tests passing | CI/CD pipeline or manual run |
 | SC7: Zero spelling errors | `rg -i 'payed\|notpayed'` returns empty across all files | Automated grep check |
