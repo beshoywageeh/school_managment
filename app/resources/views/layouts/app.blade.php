@@ -36,7 +36,7 @@ class="bg-gray-100 font-sans">
         <div x-show="sidebarMobileOpen"
             class="fixed inset-0 z-30 bg-black/50 lg:hidden"
             @click="sidebarMobileOpen = false"
-            x-transition.opener>
+            x-transition.opacity>
         </div>
     </template>
 

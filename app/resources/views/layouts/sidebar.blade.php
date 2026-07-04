@@ -247,7 +247,7 @@
 
     <!-- Pin button -->
     <div class="shrink-0 border-t border-gray-800 p-3">
-        <button @click="sidebarPinned = !sidebarPinned; if(sidebarPinned) sidebarHover = false"
+        <button @click="sidebarPinned = !sidebarPinned; if(sidebarPinned) sidebarHover = false; localStorage.setItem('sidebarPinned', sidebarPinned)"
             class="flex items-center gap-3 w-full px-3 py-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-all duration-200 text-sm">
             <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
