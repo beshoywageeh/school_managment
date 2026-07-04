@@ -143,8 +143,16 @@
                 <tbody class="divide-y divide-gray-200 bg-white">
                     <template x-if="loading">
                         <tr>
-                            <td :colspan="columns.length" class="text-center py-8 text-gray-500">
-                                {{ trans('general.loading') }}
+                            <td :colspan="columns.length" class="px-6 py-4">
+                                <div class="space-y-3">
+                                    <template x-for="i in 5" :key="i">
+                                        <div class="flex gap-4 items-center">
+                                            <div class="h-8 bg-gray-200 rounded animate-pulse flex-1"></div>
+                                            <div class="h-8 bg-gray-200 rounded animate-pulse flex-1"></div>
+                                            <div class="h-8 bg-gray-200 rounded animate-pulse w-24"></div>
+                                        </div>
+                                    </template>
+                                </div>
                             </td>
                         </tr>
                     </template>
