@@ -5,6 +5,16 @@
 **Status**: Draft  
 **Input**: User description: "Add permission middleware to all controllers following Spatie Permission pattern"
 
+## Clarifications
+
+### Session 2026-07-04
+
+- Q: What is explicitly out of scope? → A: Strictly add middleware constructors only — no new controllers, no UI changes, no permission audits
+- Q: What should users see on permission denial? → A: Default Laravel 403 error page — no custom styling or redirect
+- Q: Should permission denials be logged? → A: Default framework exception handling — 403 exceptions appear in application logs automatically
+- Q: Should permission strings be verified at runtime? → A: Trust the seeder — assume all permission strings exist; no runtime verification needed
+- Q: What level of testing for permission gates? → A: Targeted smoke tests — one test per controller verifying middleware registers, plus 2-3 end-to-end gate tests across different controllers
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Administrator Assigns Permissions and Sees Enforcement (Priority: P1)
@@ -77,6 +87,7 @@ As an administrator, I want custom actions (import Excel, graduate students, res
 - What happens when a permission suffix (e.g., `-status`, `-pay`, `-print`) has no corresponding method in the controller? The permission middleware is simply not registered for that suffix — no error should occur.
 - What happens when a controller has methods that are not covered by any permission (e.g., `getclasses($id)` in StudentsController)? Those methods should remain accessible — only methods with a matching permission are gated.
 - What happens when multiple controllers share the same permission group (e.g., `InventoryItemController` handles `stocks-*`, `clothes-*`, `books_sheets-*`)? The constructor must register middleware for each permission group that maps to the controller's methods.
+- What does the user see when a permission check denies access? The default Laravel 403 error page is displayed — no custom redirect or flash message is implemented.
 
 ## Requirements *(mandatory)*
 
@@ -97,6 +108,16 @@ As an administrator, I want custom actions (import Excel, graduate students, res
 - **FR-013**: The `schedulesController` (with only an `index()` method) MUST only have middleware for `scheduale-list`; other permission middleware should not be registered until methods exist
 - **FR-014**: The `labortories` permission group has no corresponding controller — no middleware is registered for this group; it is skipped
 - **FR-015**: Existing `$this->authorize()` calls in controller method bodies MUST be removed where the middleware permission coverage is equivalent and confirmed to match
+- **FR-016**: One smoke test MUST be written per controller to verify middleware registers without error
+- **FR-017**: At least 2-3 end-to-end permission gate tests MUST be written across different controllers (e.g., one list gate, one create gate, one delete gate)
+
+### Out of Scope
+
+- Creating new controllers or permission groups for modules that lack them
+- Building or modifying a permission management user interface
+- Auditing existing permission seeds or database records for correctness
+- Modifying controller method behavior beyond adding permission checks
+- Creating controllers for the `labortories` permission group
 
 ### Key Entities
 
@@ -116,12 +137,14 @@ As an administrator, I want custom actions (import Excel, graduate students, res
 - **SC-005**: System can enumerate all routes without errors after middleware constructors are added
 - **SC-006**: Existing test suite passes without regressions after middleware constructors are added
 - **SC-007**: No authorization gap exists — every method that handles data mutation (create, update, delete) is gated by an appropriate permission
+- **SC-008**: At least 25 smoke tests (one per controller) pass, confirming middleware registers without errors
+- **SC-009**: At least 2-3 end-to-end permission gate tests pass, confirming list/create/delete gating works end-to-end
 
 ## Assumptions
 
 - The permission system is already installed and configured with middleware registered in the application kernel
-- Permission names in the seeder match the permission strings used in middleware (e.g., `classes-list`, `classes-create`)
-- All listed controllers exist at their specified file paths, except `labortories` which needs clarification
+- Permission names in the seeder match the permission strings used in middleware (e.g., `classes-list`, `classes-create`) — no runtime verification of permission existence is required
+- All listed controllers exist at their specified file paths; the `labortories` permission group has no controller and is skipped
 - The existing authentication system (login/session) is already in place; this feature only adds authorization (permission-based) on top of authentication
 - Methods that do not map to any existing permission should remain accessible (additional authorization checks already inside method bodies continue to apply)
 - The standard mapping of permission suffix to method names follows: `-list` -> index/show, `-create` -> create/store, `-edit`/-`update` -> edit/update, `-delete` -> destroy, `-info` -> show, custom suffixes map to same-named methods
