@@ -178,4 +178,75 @@ class HomeController extends Controller
 
         return compact('chart_labels', 'chart_data');
     }
+
+    public function widgets()
+    {
+        $user = Auth::user();
+        $school = $this->getSchool();
+        $schoolId = $school->id;
+
+        [$students, $parents] = $this->getUserRoleCounts($user->id, $schoolId, $user->hasRole('Admin'));
+        $employees = DB::table('users')
+            ->where('school_id', $schoolId)
+            ->where('code', '!=', '000001')
+            ->count();
+        $financialData = $this->getFinancialData($schoolId);
+        $grades = Grade::where('school_id', $school->id)
+            ->with(['class_rooms' => function ($q) {
+                $q->withCount('students');
+            }])
+            ->where('school_id', $schoolId)
+            ->get();
+        $chartData = $this->generateChartData($grades);
+        $revenueTrend = $this->getMonthlyRevenueTrend($schoolId);
+
+        $recentActivity = collect();
+        $recentStudents = Student::where('school_id', $schoolId)
+            ->latest()->take(2)->get()->map(fn ($s) => [
+                'icon' => 'graduation-cap',
+                'description' => __('Student created').': '.$s->name,
+                'time' => $s->created_at->diffForHumans(),
+            ]);
+        $recentPayments = ReceiptPayment::where('school_id', $schoolId)
+            ->latest()->take(2)->get()->map(fn ($p) => [
+                'icon' => 'credit-card',
+                'description' => __('Payment received').': '.number_format($p->Debit, 2),
+                'time' => $p->created_at->diffForHumans(),
+            ]);
+        $recentActivity = $recentStudents->concat($recentPayments)->sortByDesc('time')->take(5)->values();
+
+        return response()->json([
+            'statCards' => [
+                ['label' => __('Students'), 'value' => $students, 'icon' => 'graduation-cap', 'color' => 'blue', 'trend' => null, 'trendDirection' => 'up', 'sparklineData' => null],
+                ['label' => __('Parents'), 'value' => $parents, 'icon' => 'users', 'color' => 'green', 'trend' => null, 'trendDirection' => 'up', 'sparklineData' => null],
+                ['label' => __('Employees'), 'value' => $employees, 'icon' => 'id-card', 'color' => 'cyan', 'trend' => null, 'sparklineData' => null],
+                ['label' => __('Pending Balance'), 'value' => number_format($financialData['totalInvoiced'] - $financialData['totalPaid'], 2), 'icon' => 'exclamation-circle', 'color' => 'red', 'trend' => null, 'sparklineData' => null],
+            ],
+            'quickActions' => [
+                ['route' => 'students.create', 'icon' => 'graduation-cap', 'label' => __('Create Student'), 'perm' => 'Students-create'],
+                ['route' => 'parents.create', 'icon' => 'users', 'label' => __('Create Parent'), 'perm' => 'parents-create'],
+                ['route' => 'grade.index', 'icon' => 'line-chart', 'label' => __('Grades'), 'perm' => 'grade-list'],
+                ['route' => 'class_rooms.index', 'icon' => 'building', 'label' => __('Class Rooms'), 'perm' => 'class_rooms-list'],
+                ['route' => 'jobs.create', 'icon' => 'briefcase', 'label' => __('Create Job'), 'perm' => 'jobs-create'],
+                ['route' => 'backup.create', 'icon' => 'database', 'label' => __('Create Backup'), 'perm' => 'backup-create'],
+            ],
+            'charts' => [
+                'studentChart' => [
+                    'labels' => $chartData['chart_labels'],
+                    'data' => $chartData['chart_data'],
+                ],
+                'revenueTrend' => [
+                    'labels' => $revenueTrend['revenue_trend_labels'],
+                    'data' => $revenueTrend['revenue_trend_data'],
+                ],
+            ],
+            'recentActivity' => $recentActivity,
+            'permissions' => [
+                'canViewStudents' => $user->can('Students-list'),
+                'canViewParents' => $user->can('parents-list'),
+                'canViewEmployees' => $user->can('employees-list'),
+                'canViewFinancials' => $user->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'ReceiptPayment-list']),
+            ],
+        ]);
+    }
 }

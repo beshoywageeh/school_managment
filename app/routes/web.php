@@ -27,6 +27,7 @@ Route::prefix(LaravelLocalization::setLocale())
     ])
     ->group(function () {
         Route::middleware('auth')->group(function () {
+            Route::get('/api/dashboard/widgets', [HomeController::class, 'widgets'])->name('dashboard.widgets');
             Route::get('/', [HomeController::class, 'index'])->name(
                 'dashboard',
             );
