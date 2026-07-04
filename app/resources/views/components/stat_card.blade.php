@@ -33,3 +33,31 @@
         <canvas class="w-16 h-8 ml-auto" data-sparkline="{{ json_encode($sparklineData) }}" data-color="{{ $sparklineColor }}"></canvas>
     @endif
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('canvas[data-sparkline]').forEach(function (canvas) {
+            var data = JSON.parse(canvas.dataset.sparkline);
+            var color = canvas.dataset.color || '#16a34a';
+            var ctx = canvas.getContext('2d');
+            var w = canvas.width, h = canvas.height;
+            var max = Math.max(...data, 1);
+            var min = Math.min(...data);
+            var range = max - min || 1;
+            var padding = 2;
+            ctx.clearRect(0, 0, w, h);
+            ctx.beginPath();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1.5;
+            ctx.lineJoin = 'round';
+            data.forEach(function (val, i) {
+                var x = padding + (i / (data.length - 1)) * (w - padding * 2);
+                var y = h - padding - ((val - min) / range) * (h - padding * 2);
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+        });
+    });
+</script>
+@endpush
