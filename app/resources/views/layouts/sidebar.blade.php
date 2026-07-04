@@ -1,406 +1,231 @@
-<aside x-show="sidebarOpen" x-transition:enter="transition ease-out duration-300"
-    x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
-    x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0"
-    x-transition:leave-end="-translate-x-full"
-    class="w-64 bg-gray-900 text-white shrink-0 h-screen overflow-y-auto overflow-x-hidden fixed top-0 start-0 z-40"
+<aside
+    x-data="{ search: '' }"
+    :class="sidebarExpanded ? 'w-64' : 'w-16'"
+    class="fixed top-0 start-0 z-40 h-screen bg-gray-900 text-white overflow-hidden transition-all duration-300 flex flex-col"
+    @mouseenter="if (!sidebarPinned) sidebarHover = true"
+    @mouseleave="if (!sidebarPinned) sidebarHover = false"
     dir="rtl">
-    <div class="h-full flex flex-col">
-        <!-- Logo -->
-        <div class="p-4 border-b border-gray-700 shrink-0">
-            <div class="text-center">
-                <span class="text-lg font-bold">{{ $school->name }}</span>
+    <!-- Logo area -->
+    <div class="shrink-0 flex items-center justify-center h-16 border-b border-gray-800">
+        <template x-if="sidebarExpanded">
+            <span class="text-lg font-bold">{{ $school->name }}</span>
+        </template>
+        <template x-if="!sidebarExpanded">
+            <span class="text-lg font-bold">{{ substr($school->name, 0, 2) }}</span>
+        </template>
+    </div>
+
+    <!-- Search input (visible when expanded) -->
+    <div x-show="sidebarExpanded" class="px-3 pt-3" x-cloak>
+        <input type="text" x-model="search" placeholder="بحث..."
+            class="w-full bg-gray-800 text-white text-sm rounded-lg px-3 py-2 border border-gray-700 placeholder-gray-500 focus:outline-none focus:border-primary">
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 overflow-y-auto p-2 space-y-1 mt-2 sidebar-scroll">
+        @php
+            $navSections = [
+                'dashboard' => [
+                    'label' => '',
+                    'items' => [
+                        ['route' => 'dashboard', 'icon' => 'dashboard', 'perm' => null, 'labelKey' => 'Sidebar.Dashboard'],
+                    ],
+                ],
+                'student_info' => [
+                    'labelKey' => 'Sidebar.student_info',
+                    'perm' => ['Students-list', 'parents-list', 'promotion-list', 'graduated_list'],
+                    'items' => [
+                        ['route' => 'parents.index', 'icon' => 'users', 'perm' => 'parents-list', 'labelKey' => 'Sidebar.parents'],
+                        ['route' => 'students.index', 'icon' => 'graduation-cap', 'perm' => 'Students-list', 'labelKey' => 'Sidebar.Students'],
+                        ['route' => 'promotion.index', 'icon' => 'level-up', 'perm' => 'promotion-list', 'labelKey' => 'Sidebar.promotion'],
+                        ['route' => 'students.graduated', 'icon' => 'graduation-cap', 'perm' => 'graduated-list', 'labelKey' => 'Sidebar.graduated'],
+                    ],
+                ],
+                'employee_info' => [
+                    'labelKey' => 'Sidebar.employee_info',
+                    'perm' => ['jobs-list', 'employees-list'],
+                    'items' => [
+                        ['route' => 'jobs.index', 'icon' => 'briefcase', 'perm' => 'jobs-list', 'labelKey' => 'Sidebar.jobs'],
+                        ['route' => 'employees.index', 'icon' => 'id-card', 'perm' => 'employees-list', 'labelKey' => 'Sidebar.employees'],
+                        ['route' => 'schedule.index', 'icon' => 'calendar-check', 'perm' => 'scheduale-list', 'labelKey' => 'schedules.schedules'],
+                        ['route' => 'employees.return_list', 'icon' => 'user-times', 'perm' => 'employees-list', 'labelKey' => 'general.resign'],
+                    ],
+                ],
+                'accounting' => [
+                    'labelKey' => 'Sidebar.accounting',
+                    'perm' => ['academic_year-list', 'schoolfees-list', 'fee_invoice-list', 'ReceiptPayment-list', 'except_fee-list', 'payment_parts-list', 'exchange_bonds-list'],
+                    'items' => [
+                        ['route' => 'academic_year.index', 'icon' => 'calendar', 'perm' => 'academic_year-list', 'labelKey' => 'academic_year.title'],
+                        ['route' => 'school_fees.index', 'icon' => 'money', 'perm' => 'schoolfees-list', 'labelKey' => 'Sidebar.schoolfees'],
+                        ['route' => 'fee_invoice.index', 'icon' => 'file-text', 'perm' => 'fee_invoice-list', 'labelKey' => 'Sidebar.fees_invoice'],
+                        ['route' => 'receipt_payment.index', 'icon' => 'credit-card', 'perm' => 'ReceiptPayment-list', 'labelKey' => 'Sidebar.ReceiptPayment'],
+                        ['route' => 'except_fee.index', 'icon' => 'minus-circle', 'perm' => 'except_fee-list', 'labelKey' => 'Sidebar.except_fee'],
+                        ['route' => 'payment_parts.index', 'icon' => 'arrow-circle-down', 'perm' => 'payment_parts-list', 'labelKey' => 'Sidebar.payment_parts'],
+                        ['route' => 'exchange-bonds.index', 'icon' => 'credit-card', 'perm' => 'exchange_bonds-list', 'labelKey' => 'Sidebar.exchange_bonds'],
+                        ['route' => 'fund_account.index', 'icon' => 'university', 'perm' => null, 'labelKey' => 'Sidebar.FundAccount'],
+                    ],
+                ],
+                'grades_setting' => [
+                    'labelKey' => 'Sidebar.grades_setting',
+                    'perm' => ['grade-list', 'class_rooms-list', 'classes-list'],
+                    'items' => [
+                        ['route' => 'grade.index', 'icon' => 'line-chart', 'perm' => 'grade-list', 'labelKey' => 'Sidebar.Grade'],
+                        ['route' => 'class_rooms.index', 'icon' => 'building', 'perm' => 'class_rooms-list', 'labelKey' => 'Sidebar.Class_Rooms'],
+                        ['route' => 'classes.index', 'icon' => 'list-alt', 'perm' => 'classes-list', 'labelKey' => 'Sidebar.classes'],
+                    ],
+                ],
+                'stores' => [
+                    'labelKey' => 'Sidebar.stores',
+                    'perm' => ['stocks-index', 'orders-index', 'order_out-index', 'stocks-inventory_order-index', 'clothes-income_order', 'clothes-index', 'clothes-outcome_order', 'books_sheets-index', 'books_sheets-outcome_order', 'books_sheets-income_order', 'books_sheets-inventory_order', 'clothes-inventory_order'],
+                    'items' => [
+                    ],
+                ],
+                'security' => [
+                    'labelKey' => 'Sidebar.security',
+                    'perm' => ['settings-info', 'role-list', 'back-list'],
+                    'items' => [
+                        ['route' => 'create-new-school', 'icon' => 'cog', 'perm' => 'settings-info', 'labelKey' => 'Sidebar.setting'],
+                        ['route' => 'system-lookup', 'icon' => 'shield', 'perm' => null, 'labelKey' => 'Sidebar.look_up'],
+                        ['route' => 'backup.index', 'icon' => 'database', 'perm' => 'backup-list', 'labelKey' => 'Sidebar.backup'],
+                        ['route' => 'roles.index', 'icon' => 'lock', 'perm' => 'role-list', 'labelKey' => 'Sidebar.permission'],
+                    ],
+                ],
+            ];
+        @endphp
+
+        @foreach ($navSections as $sectionKey => $section)
+            @php
+                $visible = true;
+                if (isset($section['perm']) && is_array($section['perm'])) {
+                    $visible = Auth::user()->hasAnyPermission($section['perm']);
+                }
+            @endphp
+            @if ($visible)
+                <!-- Section header -->
+                <div x-show="sidebarExpanded" x-cloak>
+                    @if (!empty($section['labelKey']))
+                        <div class="pt-4 pb-1 px-3">
+                            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ trans($section['labelKey']) }}</span>
+                        </div>
+                    @endif
+                </div>
+                @foreach ($section['items'] as $item)
+                    @php
+                        if (isset($item['perm']) && $item['perm'] && !Auth::user()->can($item['perm'])) continue;
+                        $isActive = request()->is($item['route']) || request()->routeIs($item['route']);
+                    @endphp
+                    <a href="{{ route($item['route']) }}"
+                        x-show="!search || '{{ trans($item['labelKey']) }}'.includes(search)"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 {{ $isActive ? 'bg-primary/10 text-primary border-s-3 border-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        <x-hero-icon name="{{ $item['icon'] }}" class="w-5 h-5 shrink-0" />
+                        <span x-show="sidebarExpanded" class="text-sm font-medium whitespace-nowrap" x-cloak>{{ trans($item['labelKey']) }}</span>
+                    </a>
+                @endforeach
+            @endif
+        @endforeach
+
+        <!-- Stores section with sub-menus (keep existing collapsible logic adapted for mini sidebar) -->
+        @if (Auth::user()->hasAnyPermission(['stocks-index', 'orders-index', 'order_out-index', 'stocks-inventory_order-index', 'clothes-income_order', 'clothes-index', 'clothes-outcome_order', 'books_sheets-index', 'books_sheets-outcome_order', 'books_sheets-income_order', 'books_sheets-inventory_order', 'clothes-inventory_order']))
+            <div x-show="sidebarExpanded" x-cloak>
+                <div class="pt-4 pb-1 px-3">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ trans('Sidebar.stores') }}</span>
+                </div>
+            </div>
+            <!-- Stocks sub-menu -->
+            @if (Auth::user()->hasAnyPermission(['stocks-index', 'orders-index', 'order_out-index', 'stocks-inventory_order-index']))
+                <div x-data="{ stocksOpen: {{ request()->is('*stocks*') || request()->is('*order*') ? 'true' : 'false' }} }">
+                    <button @click="stocksOpen = !stocksOpen"
+                        class="flex items-center gap-3 w-full px-3 py-2.5 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200">
+                        <x-hero-icon name="archive" class="w-5 h-5 shrink-0" />
+                        <span x-show="sidebarExpanded" class="text-sm font-medium flex-1 text-start" x-cloak>{{ trans('Sidebar.stocks') }}</span>
+                        <svg x-show="sidebarExpanded" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': stocksOpen }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="stocksOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden" style="display: none;">
+                        <a href="{{ route('inventory.items.index', ['type' => 'stock']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.stocks_show') }}</a>
+                        <a href="{{ route('inventory.orders.index', ['type' => 'purchases']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
+                        <a href="{{ route('inventory.orders.index', ['type' => 'sales']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
+                        <a href="{{ route('inventory.orders.index', ['type' => 'inventory']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
+                    </div>
+                </div>
+            @endif
+            <!-- Clothes sub-menu -->
+            @if (Auth::user()->hasAnyPermission(['clothes-income_order', 'clothes-index', 'clothes-outcome_order', 'clothes-inventory_order']))
+                <div x-data="{ clothesOpen: {{ request()->is('*clothes*') ? 'true' : 'false' }} }">
+                    <button @click="clothesOpen = !clothesOpen"
+                        class="flex items-center gap-3 w-full px-3 py-2.5 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200">
+                        <x-hero-icon name="shirt" class="w-5 h-5 shrink-0" />
+                        <span x-show="sidebarExpanded" class="text-sm font-medium flex-1 text-start" x-cloak>{{ trans('stock.clothes') }}</span>
+                        <svg x-show="sidebarExpanded" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': clothesOpen }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="clothesOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden" style="display: none;">
+                        <a href="{{ route('inventory.items.index', ['type' => 'clothe']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.clothes_show') }}</a>
+                        <a href="{{ route('inventory.orders.index', ['type' => 'purchases']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
+                        <a href="{{ route('inventory.orders.index', ['type' => 'sales']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
+                        <a href="{{ route('inventory.orders.index', ['type' => 'inventory']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
+                    </div>
+                </div>
+            @endif
+            <!-- Books sub-menu -->
+            @if (Auth::user()->hasAnyPermission(['books_sheets-index', 'books_sheets-outcome_order', 'books_sheets-income_order', 'books_sheets-inventory_order']))
+                <div x-data="{ booksOpen: {{ request()->is('*book*') ? 'true' : 'false' }} }">
+                    <button @click="booksOpen = !booksOpen"
+                        class="flex items-center gap-3 w-full px-3 py-2.5 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200">
+                        <x-hero-icon name="book" class="w-5 h-5 shrink-0" />
+                        <span x-show="sidebarExpanded" class="text-sm font-medium flex-1 text-start" x-cloak>{{ trans('Sidebar.books_sheets') }}</span>
+                        <svg x-show="sidebarExpanded" class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': booksOpen }" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="booksOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden" style="display: none;">
+                        <a href="{{ route('inventory.items.index', ['type' => 'book']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.books_sheets_show') }}</a>
+                        <a href="{{ route('inventory.orders.index', ['type' => 'purchases']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
+                        <a href="{{ route('inventory.orders.index', ['type' => 'sales']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
+                        <a href="{{ route('inventory.orders.index', ['type' => 'inventory']) }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
+                    </div>
+                </div>
+            @endif
+        @endif
+
+        <!-- Report -->
+        <div x-show="sidebarExpanded" x-cloak>
+            <div class="pt-4 pb-1 px-3">
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ trans('Sidebar.report') }}</span>
             </div>
         </div>
+        <a href="{{ route('report.index') }}"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 {{ request()->is('*reports*') ? 'bg-primary/10 text-primary border-s-3 border-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+            <x-hero-icon name="bar-chart" class="w-5 h-5 shrink-0" />
+            <span x-show="sidebarExpanded" class="text-sm font-medium" x-cloak>{{ trans('Sidebar.report') }}</span>
+        </a>
 
-        <!-- Navigation -->
-        <nav class="flex-1 overflow-y-auto p-2 space-y-1" style="overflow-y: auto !important;">
-            <!-- Dashboard -->
-            <a href="{{ route('dashboard') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('/') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                <x-hero-icon name="dashboard" class="w-5 h-5" />
-                <span class="text-sm font-medium">{{ trans('Sidebar.Dashboard') }}</span>
+        <!-- Admin Era -->
+        @if (\Auth::user()->isAdmin)
+            <a href="{{ route('admin_era.index') }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 {{ request()->is('*admin-era*') ? 'bg-primary/10 text-primary border-s-3 border-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                <x-hero-icon name="user-secret" class="w-5 h-5 shrink-0" />
+                <span x-show="sidebarExpanded" class="text-sm font-medium" x-cloak>{{ trans('Sidebar.admin_era') }}</span>
             </a>
+        @endif
+    </nav>
 
-            <!-- Student Section -->
-            @if (Auth::user()->hasAnyPermission(['Students-list', 'parents-list', 'promotion-list', 'graduated_list']))
-                <div class="pt-4 pb-2">
-                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.student_info') }}</span>
-                </div>
-                @can('parents-list')
-                    <a href="{{ route('parents.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/parents*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="users" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.parents') }}</span>
-                    </a>
-                @endcan
-                @can('Students-list')
-                    <a href="{{ route('students.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/students*') && !request()->is('*/students/graduated*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="graduation-cap" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.Students') }}</span>
-                    </a>
-                @endcan
-                @can('promotion-list')
-                    <a href="{{ route('promotion.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/promotion*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="level-up" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.promotion') }}</span>
-                    </a>
-                @endcan
-                @can('graduated-list')
-                    <a href="{{ route('students.graduated') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/students/graduated*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="graduation-cap" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.graduated') }}</span>
-                    </a>
-                @endcan
-            @endif
-
-            <!-- Employee Section -->
-            @if (Auth::user()->hasAnyPermission(['jobs-list', 'employees-list']))
-                <div class="pt-4 pb-2">
-                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.employee_info') }}</span>
-                </div>
-                @can('jobs-list')
-                    <a href="{{ route('jobs.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/jobs*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="briefcase" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.jobs') }}</span>
-                    </a>
-                @endcan
-                @can('employees-list')
-                    <a href="{{ route('employees.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/employees*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="id-card" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.employees') }}</span>
-                    </a>
-                @endcan
-                @can('scheduale-list')
-                    <a href="{{ route('schedule.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/schedule*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="calendar-check" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('schedules.schedules') }}</span>
-                    </a>
-                @endcan
-                @can('employees-list')
-                    <a href="{{ route('employees.return_list') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/employees/return_list*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="user-times" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('general.resign') }}</span>
-                    </a>
-                @endcan
-            @endif
-
-            <!-- Accounting Section -->
-            @if (Auth::user()->hasAnyPermission([
-                    'academic_year-list',
-                    'schoolfees-list',
-                    'fee_invoice-list',
-                    'ReceiptPayment-list',
-                    'except_fee-list',
-                    'payment_parts-list',
-                    'exchange_bonds-list',
-                ]))
-                <div class="pt-4 pb-2">
-                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.accounting') }}</span>
-                </div>
-                @can('academic_year-list')
-                    <a href="{{ route('academic_year.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/academic-year*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="calendar" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('academic_year.title') }}</span>
-                    </a>
-                @endcan
-                @can('schoolfees-list')
-                    <a href="{{ route('school_fees.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/school-fees*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="money" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.schoolfees') }}</span>
-                    </a>
-                @endcan
-                @can('fee_invoice-list')
-                    <a href="{{ route('fee_invoice.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/fee-invoice*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="file-text" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.fees_invoice') }}</span>
-                    </a>
-                @endcan
-                @can('ReceiptPayment-list')
-                    <a href="{{ route('receipt_payment.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/receipt-payment*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="credit-card" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.ReceiptPayment') }}</span>
-                    </a>
-                @endcan
-                @can('except_fee-list')
-                    <a href="{{ route('except_fee.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/except-fee*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="minus-circle" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.except_fee') }}</span>
-                    </a>
-                @endcan
-                @can('payment_parts-list')
-                    <a href="{{ route('payment_parts.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/payment-parts*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="arrow-circle-down" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.payment_parts') }}</span>
-                    </a>
-                @endcan
-                @can('exchange_bonds-list')
-                    <a href="{{ route('exchange-bonds.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/exchange-bonds*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="credit-card" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.exchange_bonds') }}</span>
-                    </a>
-                @endcan
-                <a href="{{ route('fund_account.index') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/fund-account*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                    <x-hero-icon name="university" class="w-5 h-5" />
-                    <span class="text-sm font-medium">{{ trans('Sidebar.FundAccount') }}</span>
-                </a>
-            @endif
-
-            <!-- Grades Setting Section -->
-            @if (Auth::user()->hasAnyPermission(['grade-list', 'class_rooms-list', 'classes-list']))
-                <div class="pt-4 pb-2">
-                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.grades_setting') }}</span>
-                </div>
-                @can('grade-list')
-                    <a href="{{ route('grade.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/grade*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="line-chart" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.Grade') }}</span>
-                    </a>
-                @endcan
-                @can('class_rooms-list')
-                    <a href="{{ route('class_rooms.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/class-rooms*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="building" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.Class_Rooms') }}</span>
-                    </a>
-                @endcan
-                @can('classes-list')
-                    <a href="{{ route('classes.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/classes*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="list-alt" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.classes') }}</span>
-                    </a>
-                @endcan
-            @endif
-
-            <!-- Stores Section -->
-            @if (Auth::user()->hasAnyPermission([
-                    'stocks-index',
-                    'orders-index',
-                    'order_out-index',
-                    'stocks-inventory_order-index',
-                    'clothes-income_order',
-                    'clothes-index',
-                    'clothes-outcome_order',
-                    'books_sheets-index',
-                    'books_sheets-outcome_order',
-                    'books_sheets-income_order',
-                    'books_sheets-inventory_order',
-                    'clothes-inventory_order',
-                ]))
-                <div class="pt-4 pb-2">
-                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.stores') }}</span>
-                </div>
-
-                @if (Auth::user()->hasAnyPermission([
-                        'stocks-index',
-                        'orders-index',
-                        'order_out-index',
-                        'stocks-inventory_order-index',
-                        'labortories-index',
-                    ]))
-                    @php $stocksOpen = request()->is('*stocks*') || request()->is('*labs*') || request()->is('*gard*') || request()->is('*order*') ? 'true' : 'false'; @endphp
-                    <div x-data="{ stocksOpen: {{ $stocksOpen }} }">
-                        <button @click="stocksOpen = !stocksOpen" type="button"
-                            class="flex items-center gap-3 w-full px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200">
-                            <x-hero-icon name="archive" class="w-5 h-5" />
-                            <span class="text-sm font-medium flex-1 text-start">{{ trans('Sidebar.stocks') }}</span>
-                            <svg class="w-4 h-4 transition-transform duration-200"
-                                :class="{ 'rotate-180': stocksOpen }" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <div x-show="stocksOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden"
-                            style="display: none;">
-                            {{-- @can('labortories-index')
-                                <a href="{{ route('labs.index') }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.lab_index') }}</a>
-                            @endcan --}}
-                            @can('stocks-index')
-                                <a href="{{ route('inventory.items.index', ['type' => 'stock']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.stocks_show') }}</a>
-                            @endcan
-                            @can('orders-index')
-                                <a href="{{ route('inventory.orders.index', ['type' => 'purchases']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
-                            @endcan
-                            @can('order_out-index')
-                                <a href="{{ route('inventory.orders.index', ['type' => 'sales']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
-                            @endcan
-                            @can('stocks-inventory_order-index')
-                                <a href="{{ route('inventory.orders.index', ['type' => 'inventory']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
-                            @endcan
-                        </div>
-                    </div>
-                @endif
-
-                @if (Auth::user()->hasAnyPermission([
-                        'clothes-income_order',
-                        'clothes-index',
-                        'clothes-outcome_order',
-                        'clothes-inventory_order',
-                    ]))
-                    @php $clothesOpen = request()->is('*clothes*') ? 'true' : 'false'; @endphp
-                    <div x-data="{ clothesOpen: {{ $clothesOpen }} }">
-                        <button @click="clothesOpen = !clothesOpen" type="button"
-                            class="flex items-center gap-3 w-full px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200">
-                            <x-hero-icon name="shirt" class="w-5 h-5" />
-                            <span class="text-sm font-medium flex-1 text-start">{{ trans('stock.clothes') }}</span>
-                            <svg class="w-4 h-4 transition-transform duration-200"
-                                :class="{ 'rotate-180': clothesOpen }" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <div x-show="clothesOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden"
-                            style="display: none;">
-                            @can('clothes-index')
-                                <a href="{{ route('inventory.items.index', ['type' => 'clothe']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.clothes_show') }}</a>
-                            @endcan
-                            @can('clothes-income_order')
-                                <a href="{{ route('inventory.orders.index', ['type' => 'purchases']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
-                            @endcan
-                            @can('clothes-outcome_order')
-                                <a href="{{ route('inventory.orders.index', ['type' => 'sales']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
-                            @endcan
-                            @can('clothes-inventory_order')
-                                <a href="{{ route('inventory.orders.index', ['type' => 'inventory']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
-                            @endcan
-                        </div>
-                    </div>
-                @endif
-
-                @if (Auth::user()->hasAnyPermission([
-                        'books_sheets-index',
-                        'books_sheets-outcome_order',
-                        'books_sheets-income_order',
-                        'books_sheets-inventory_order',
-                    ]))
-                    @php $booksOpen = request()->is('*book*') ? 'true' : 'false'; @endphp
-                    <div x-data="{ booksOpen: {{ $booksOpen }} }">
-                        <button @click="booksOpen = !booksOpen" type="button"
-                            class="flex items-center gap-3 w-full px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-all duration-200">
-                            <x-hero-icon name="book" class="w-5 h-5" />
-                            <span
-                                class="text-sm font-medium flex-1 text-start">{{ trans('Sidebar.books_sheets') }}</span>
-                            <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': booksOpen }"
-                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </button>
-                        <div x-show="booksOpen" class="mt-1 mx-2 space-y-1 bg-gray-800 rounded-lg overflow-hidden"
-                            style="display: none;">
-                            @can('books_sheets-index')
-                                <a href="{{ route('inventory.items.index', ['type' => 'book']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('Sidebar.books_sheets_show') }}</a>
-                            @endcan
-                            @can('books_sheets-income_order')
-                                <a href="{{ route('inventory.orders.index', ['type' => 'purchases']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('orders.income') }}</a>
-                            @endcan
-                            @can('books_sheets-outcome_order')
-                                <a href="{{ route('inventory.orders.index', ['type' => 'sales']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.outcome_order') }}</a>
-                            @endcan
-                            @can('books_sheets-inventory_order')
-                                <a href="{{ route('inventory.orders.index', ['type' => 'inventory']) }}"
-                                    class="block px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">{{ trans('stock.inventory_order') }}</a>
-                            @endcan
-                        </div>
-                    </div>
-                @endif
-            @endif
-
-            <!-- Security Section -->
-            @if (Auth::user()->hasAnyPermission(['settings-info', 'role-list', 'back-list']))
-                <div class="pt-4 pb-2">
-                    <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.security') }}</span>
-                </div>
-                @can('settings-info')
-                    <a href="{{ route('create-new-school') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/create-new-school*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="cog" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.setting') }}</span>
-                    </a>
-                @endcan
-                <a href="{{ route('system-lookup') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/monitor') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                    <x-hero-icon name="shield" class="w-5 h-5" />
-                    <span class="text-sm font-medium">{{ trans('Sidebar.look_up') }}</span>
-                </a>
-                @can('backup-list')
-                    <a href="{{ route('backup.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/backup*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="database" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.backup') }}</span>
-                    </a>
-                @endcan
-                @can('role-list')
-                    <a href="{{ route('roles.index') }}"
-                        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/permission*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                        <x-hero-icon name="lock" class="w-5 h-5" />
-                        <span class="text-sm font-medium">{{ trans('Sidebar.permission') }}</span>
-                    </a>
-                @endcan
-            @endif
-
-            @if (\Auth::user()->isAdmin)
-                <a href="{{ route('admin_era.index') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/admin-era*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                    <x-hero-icon name="user-secret" class="w-5 h-5" />
-                    <span class="text-sm font-medium">{{ trans('Sidebar.admin_era') }}</span>
-                </a>
-            @endif
-
-            <div class="pt-4 pb-2">
-                <span class="px-4 text-sm font-medium text-gray-400">{{ trans('Sidebar.report') }}</span>
-            </div>
-            <a href="{{ route('report.index') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 {{ request()->is('*/reports*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
-                <x-hero-icon name="bar-chart" class="w-5 h-5" />
-                <span class="text-sm font-medium">{{ trans('Sidebar.report') }}</span>
-            </a>
-        </nav>
+    <!-- Pin button -->
+    <div class="shrink-0 border-t border-gray-800 p-3">
+        <button @click="sidebarPinned = !sidebarPinned; if(sidebarPinned) sidebarHover = false"
+            class="flex items-center gap-3 w-full px-3 py-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-all duration-200 text-sm">
+            <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+            </svg>
+            <span x-show="sidebarExpanded" x-text="sidebarPinned ? '{{ trans('general.unpin') }}' : '{{ trans('general.pin') }}'" x-cloak></span>
+        </button>
     </div>
 </aside>
 
 <style>
-    aside::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    aside::-webkit-scrollbar-track {
-        background: #1f2937;
-    }
-
-    aside::-webkit-scrollbar-thumb {
-        background: #4b5563;
-        border-radius: 3px;
-    }
-
-    aside::-webkit-scrollbar-thumb:hover {
-        background: #6b7280;
-    }
+    .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+    .sidebar-scroll::-webkit-scrollbar-track { background: #1f2937; }
+    .sidebar-scroll::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 2px; }
 </style>
