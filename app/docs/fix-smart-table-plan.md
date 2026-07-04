@@ -248,8 +248,8 @@ getNestedValue(obj, path) {
 
 ## Recommended Execution Order
 
-1. Fix 1 (actions slot) — most critical, breaks existing feature
-2. Fix 2 (null safety) — prevents runtime crashes
+1. Fix 2 (null safety) — prerequisite; restructures props/initialization block
+2. Fix 1 (actions slot) — most critical, breaks existing feature
 3. Fixes 3, 4, 5, 6 (UX improvements) — better UX, no risk
 4. Fix 7 (getNestedValue) — defensive fix
 5. Fix 8 (select debounce) — optional, lowest priority

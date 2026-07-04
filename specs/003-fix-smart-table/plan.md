@@ -1,354 +1,99 @@
 # Implementation Plan: Fix smart-table.blade.php Component
 
-**Feature Branch**: `003-fix-smart-table`
-**Created**: 2026-07-04
-**Source Spec**: `spec.md`
+**Branch**: `003-fix-smart-table` | **Date**: 2026-07-04 | **Spec**: `specs/003-fix-smart-table/spec.md`
+**Input**: Feature specification from `specs/003-fix-smart-table/spec.md`
 
-## Prerequisites
+## Summary
 
-- Working directory: `/data/projects/laravel_projects/school_managment/app`
-- Target file: `resources/views/components/smart-table.blade.php`
-- Lang files: `lang/ar/general.php` and `lang/en/general.php`
-- No backend changes needed
+Fix 8 issues in the shared `smart-table.blade.php` Blade/Alpine component: fragile actions slot rendering, null/type safety for `$initialItems`, hardcoded Arabic strings, missing loading/empty/error states, `getNestedValue` null crash, and missing debounce on select filters. All changes are confined to one Blade component and two lang files.
 
-## Step-by-Step Instructions
+## Technical Context
 
-### Step 1 — Read Current Files
+**Language/Version**: PHP 8.5 / Blade (Laravel 10), Alpine.js 3, Axios
+**Primary Dependencies**: Alpine.js 3 (via CDN or compiled assets), Axios (for AJAX), Tailwind CSS v4
+**Storage**: N/A — frontend-only component; data fetched via Axios from existing JSON API endpoints
+**Testing**: Visual verification (browser-based checklist) — no automated tests per spec clarification
+**Target Platform**: Modern browsers (Chrome, Firefox, Edge)
+**Project Type**: Web application (Laravel Blade)
+**Performance Goals**: No specific targets — debounce (300ms) prevents excessive requests
+**Constraints**: Must remain backward-compatible with both callers (`Students/Index.blade.php`, `fee_invoices/index.blade.php`)
+**Scale/Scope**: 2 callers, 1 component file, ~168 lines
 
-Read these 3 files in parallel:
+## Constitution Check
 
-1. `resources/views/components/smart-table.blade.php` (the component to fix)
-2. `lang/en/general.php` (add `all_options` key)
-3. `lang/ar/general.php` (add `all_options` key)
+*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-### Step 2 — Apply All 8 Fixes to `smart-table.blade.php`
+| Principle | Status | Rationale |
+|-----------|--------|-----------|
+| I. Framework Convention Compliance | ✅ PASS | Blade component uses standard Laravel `@props`, `{{ }}`, Alpine `x-data` patterns |
+| II. Type Safety & Validation | ✅ PASS | N/A — frontend component; `$initialItems` validation added via `@php` instanceof check |
+| III. Service Layer Architecture | ✅ PASS | N/A — no backend logic |
+| IV. Incremental Refactoring | ✅ PASS | No legacy code replaced; component is modified in-place |
+| V. Automated Testing | ⚠️ WAIVED | Spec clarifies visual verification suffices for pure Blade/Alpine component; no backend logic to test |
 
-Make edits in this order using the exact old/new strings shown below.
+**Gate verdict**: ✅ PASS (V waived with documented justification in spec clarification)
 
-#### Fix 2 (do first — it restructures the props/initialization block)
+## Project Structure
 
-**Old** (lines 1-5):
-```
-@props([
-    'columns' => [],
-    'initialItems' => [],
-    'apiUrl' => '',
-])
-```
+### Documentation (this feature)
 
-**New**:
-```
-@props([
-    'columns' => [],
-    'initialItems' => null,
-    'apiUrl' => '',
-])
-
-@php
-    use Illuminate\Pagination\LengthAwarePaginator;
-    $paginator = $initialItems instanceof LengthAwarePaginator
-        ? $initialItems
-        : new LengthAwarePaginator([], 0, 10);
-@endphp
+```text
+specs/003-fix-smart-table/
+├── plan.md              # This file
+├── research.md          # Phase 0 output
+├── data-model.md        # Phase 1 output
+├── quickstart.md        # Phase 1 output (validation guide)
+└── contracts/           # (skipped — internal component, no external interfaces)
 ```
 
-Then replace every `$initialItems` in the x-data block with `$paginator`.
+### Source Code (repository root)
 
-**Old** (line 9):
-```
-items: {{ json_encode($initialItems->items()) }},
-```
+```text
+app/resources/views/components/
+├── smart-table.blade.php    # Target file (modified)
 
-**New**:
-```
-items: {{ json_encode($paginator->items()) }},
-```
+app/lang/en/
+└── general.php              # Add all_options, error_fetching keys
 
-**Old** (lines 20-23):
-```
-    pagination: {
-        current: {{ $initialItems->currentPage() }},
-        last: {{ $initialItems->lastPage() }}
-    },
+app/lang/ar/
+└── general.php              # Add all_options, error_fetching keys
 ```
 
-**New**:
-```
-    pagination: {
-        current: {{ $paginator->currentPage() }},
-        last: {{ $paginator->lastPage() }}
-    },
-```
+**Structure Decision**: Single Laravel project. Changes limited to one Blade component file and two lang files.
 
-#### Fix 7 — Safe `getNestedValue` (add null guard)
+## Complexity Tracking
 
-**Old** (lines 34-36):
-```
-    getNestedValue(obj, path) {
-        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
-    },
-```
+*No constitution violations to justify.*
 
-**New**:
-```
-    getNestedValue(obj, path) {
-        return path.split('.').reduce((acc, part) => {
-            if (acc === null || acc === undefined) return null;
-            return acc[part];
-        }, obj) ?? '-';
-    },
-```
+## Phase 0 — Research
 
-#### Add Alpine reactive properties (`loading`, `error`)
+### Unknowns Identified
 
-Add these after the `sort` object (after the closing `},` on the sort block).
+| Unknown | Status | Resolution |
+|---------|--------|------------|
+| `general.error_fetching` key exists? | Resolved | Does not exist — must be added (spec FR-006b) |
+| `general.loading` includes trailing dots? | Resolved | Yes — use key directly without extra `...` |
+| Translation key for error message | Resolved | New `general.error_fetching` key per spec clarification |
 
-**Old** (after line 18 `order: 'desc'`):
-```
-    pagination: {
-```
+**No further research needed.** All technical details are known. See `research.md`.
 
-**New** (insert between `sort` and `pagination`):
-```
-    loading: false,
-    error: null,
+## Phase 1 — Design Artifacts
 
-    pagination: {
-```
+### Entities
 
-#### Fix 4/6 — Update `fetchData` with loading/error handling
+| Entity | Description |
+|--------|-------------|
+| `smart-table` | Blade/Alpine component at `components/smart-table.blade.php` |
+| `columns` | Prop: array of column definitions with `key`, `label`, `sortable`, `filter_type`, `filter_key`, `options` |
+| `initialItems` / `paginator` | Prop: `LengthAwarePaginator` instance (or empty default) |
+| `apiUrl` | Prop: string URL for AJAX data fetching |
 
-**Old** (lines 49-70):
-```
-    fetchData(page = 1) {
-        this.pagination.current = page;
+See `data-model.md` for full details.
 
-        // تجهيز الـ Parameters الأساسية (الصفحة والترتيب)
-        let params = {
-            page: page,
-            sort_by: this.sort.by,
-            sort_order: this.sort.order
-        };
+### External Contracts
 
-        // دمج الفلاتر النشطة فقط في الطلب
-        Object.keys(this.filters).forEach(key => {
-            params[key] = this.filters[key];
-        });
+None — component is internal to the Laravel application. Callers pass data via Blade props and named slots.
 
-        axios.get('{{ $apiUrl }}', { params: params })
-            .then(response => {
-                this.items = response.data.items;
-                this.pagination.last = response.data.pagination.last_page;
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }
-```
+### Validation / Quickstart
 
-**New**:
-```
-    fetchData(page = 1) {
-        this.pagination.current = page;
-        this.loading = true;
-        this.error = null;
-
-        let params = {
-            page: page,
-            sort_by: this.sort.by,
-            sort_order: this.sort.order
-        };
-
-        Object.keys(this.filters).forEach(key => {
-            params[key] = this.filters[key];
-        });
-
-        axios.get('{{ $apiUrl }}', { params: params })
-            .then(response => {
-                this.items = response.data.items;
-                this.pagination.last = response.data.pagination.last_page;
-            })
-            .catch(error => {
-                this.error = '{{ trans("general.error_fetching") }}';
-                console.error('Error fetching data:', error);
-            })
-            .finally(() => {
-                this.loading = false;
-            });
-    }
-```
-
-NOTE: `general.error_fetching` must be added to both `lang/ar/general.php` and `lang/en/general.php` (see spec FR-006b for exact values).
-
-#### Fix 3 — Replace hardcoded Arabic strings with translations
-
-**Old** (line 81):
-```
-placeholder="ابحث هنا..."
-```
-
-**New**:
-```
-placeholder="{{ trans('general.search') }}"
-```
-
-**Old** (line 88):
-```
-<option value="">كل الخيارات</option>
-```
-
-**New**:
-```
-<option value="">{{ trans('general.all_options') }}</option>
-```
-
-#### Fix 8 — Add debounce to select filter
-
-**Old** (line 86):
-```
-<select x-model="filters['{{ $col['filter_key'] }}']" @change="fetchData(1)"
-```
-
-**New**:
-```
-<select x-model="filters['{{ $col['filter_key'] }}']" @change.debounce.300ms="fetchData(1)"
-```
-
-#### Fix 1 — Replace fragile `${$col['key']}` actions slot
-
-**Old** (lines 130-135):
-```
-                                    <template x-if="col.key === 'actions'">
-                                        <div class="flex items-center gap-2">
-                                            {{-- هنا سيتم حقن الأزرار ديناميكياً من الصفحة الخارجية --}}
-                                            {!! ${$col['key']} ?? '' !!}
-                                        </div>
-                                    </template>
-```
-
-**New**:
-```
-                                    <template x-if="col.key === 'actions'">
-                                        <td class="px-6 py-4 text-gray-900">
-                                            <div class="flex items-center gap-2">
-                                                {{ $actions ?? '' }}
-                                            </div>
-                                        </td>
-                                    </template>
-```
-
-#### Add loading state row in `<tbody>`
-
-Insert after `<tbody class="divide-y divide-gray-200 bg-white">` (line 124).
-
-**New** (insert after line 124):
-```
-                    <template x-if="loading">
-                        <tr>
-                            <td :colspan="columns.length" class="text-center py-8 text-gray-500">
-                                {{ trans('general.loading') }}
-                            </td>
-                        </tr>
-                    </template>
-```
-
-#### Add error state row in `<tbody>`
-
-Insert after the loading row (just added above).
-
-**New**:
-```
-                    <template x-if="error">
-                        <tr>
-                            <td :colspan="columns.length" class="text-center py-8 text-red-500" x-text="error"></td>
-                        </tr>
-                    </template>
-```
-
-#### Add empty state row in `<tbody>`
-
-Insert after the `x-for` template for items and before `</tbody>`.
-
-Insert this right before `</tbody>` (the closing tag of the table body):
-
-**New**:
-```
-                    <template x-if="!loading && items.length === 0">
-                        <tr>
-                            <td :colspan="columns.length" class="text-center py-12 text-gray-400">
-                                {{ trans('general.no_data') }}
-                            </td>
-                        </tr>
-                    </template>
-```
-
-#### Fix — Disable pagination buttons during loading
-
-**Old** (line 151):
-```
-<button @click="fetchData(pagination.current - 1)" :disabled="pagination.current === 1"
-```
-
-**New**:
-```
-<button @click="fetchData(pagination.current - 1)" :disabled="pagination.current === 1 || loading"
-```
-
-**Old** (line 162):
-```
-<button @click="fetchData(pagination.current + 1)" :disabled="pagination.current === pagination.last"
-```
-
-**New**:
-```
-<button @click="fetchData(pagination.current + 1)" :disabled="pagination.current === pagination.last || loading"
-```
-
-### Step 3 — Add `all_options` Translation Key
-
-**Add to `lang/ar/general.php`** (insert in alphabetical order, e.g., after `all`):
-```
-    'all_options' => 'كل الخيارات',
-```
-
-**Add to `lang/en/general.php`** (insert in alphabetical order, e.g., after `all`):
-```
-    'all_options' => 'All Options',
-```
-
-### Step 4 — Run Pint to Fix Code Style
-
-```bash
-vendor/bin/pint --format agent
-```
-
-### Step 5 — Visual Verification
-
-Open the app in a browser and verify:
-
-1. `students.index` — loads all rows with working action dropdowns
-2. Click actions on row 3 — verify link URL contains the correct student ID
-3. `fee_invoices.index` — loads without errors
-4. Type a search filter that matches nothing — see "no data" message
-5. Open browser DevTools → Network → throttle to "Slow 3G" → toggle filter — loading indicator appears
-6. DevTools → Network → check "Offline" → trigger filter — red error message appears
-7. Pagination buttons are disabled during loading
-
-### Step 6 — Verify Final File
-
-Read the modified `smart-table.blade.php` and confirm:
-- No remaining `${$col['key']}` variable variable
-- No remaining hardcoded Arabic strings (`ابحث هنا`, `كل الخيارات`)
-- Alpine has `loading`, `error` properties
-- `fetchData` sets/clears `loading` and `error`
-- Loading, error, and empty-state rows exist in `<tbody>`
-- `getNestedValue` has null guard
-- Select filter has `.debounce.300ms`
-- Pagination buttons have `|| loading`
-
-## Rollback Instructions
-
-If verification fails, restore the original file:
-```bash
-git checkout -- resources/views/components/smart-table.blade.php
-git checkout -- lang/ar/general.php
-git checkout -- lang/en/general.php
-```
+See `quickstart.md` for the verification checklist and browser-based testing steps.

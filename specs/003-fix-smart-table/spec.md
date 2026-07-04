@@ -156,8 +156,8 @@ As an admin using the select/dropdown filter, I want filter changes to trigger d
 
 ### Phase 1 — Fix Critical and Crash-Prevention Issues (P1)
 
-1. **Fix 1 (actions slot)**: Replace `{!! ${$col['key']} ?? '' !!}` with `{{ $actions ?? '' }}` wrapped in proper `<td>` element. Remove dependency on stale `$col` variable.
-2. **Fix 2 (null safety)**: Add `@php` block that validates `$initialItems` and creates a safe `$paginator` variable. Switch all `$initialItems->` usages to `$paginator->`.
+1. **Fix 2 (null safety — prerequisite)**: Add `@php` block that validates `$initialItems` and creates a safe `$paginator` variable. Switch all `$initialItems->` usages to `$paginator->`. Must be done first as it restructures the props/initialization block.
+2. **Fix 1 (actions slot)**: Replace `{!! ${$col['key']} ?? '' !!}` with `{{ $actions ?? '' }}` wrapped in proper `<td>` element. Remove dependency on stale `$col` variable.
 
 ### Phase 2 — Translation Localization (P2)
 
