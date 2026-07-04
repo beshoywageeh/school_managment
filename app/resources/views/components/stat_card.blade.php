@@ -1,4 +1,10 @@
-@props(['color' => 'blue'])
+@props([
+    'color' => 'blue',
+    'trend' => null,
+    'trendDirection' => 'up',
+    'sparklineData' => null,
+    'sparklineColor' => '#16a34a',
+])
 
 @php
     $colorMap = [
@@ -13,6 +19,17 @@
 @endphp
 
 <div
-    {{ $attributes->merge(['class' => "bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 border-s-4 {$borderColor} max-w-sm w-full"]) }}>
+    {{ $attributes->merge(['class' => "bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex items-center gap-4 border-s-4 {$borderColor} w-full"]) }}>
     {{ $slot }}
+    @if ($trend)
+        <div class="flex flex-col items-end mr-auto">
+            <span class="text-xs {{ $trendDirection === 'up' ? 'text-green-600' : 'text-red-600' }} font-medium">
+                @if ($trendDirection === 'up')▲ @else ▼ @endif
+                {{ $trend }}
+            </span>
+        </div>
+    @endif
+    @if ($sparklineData)
+        <canvas class="w-16 h-8 ml-auto" data-sparkline="{{ json_encode($sparklineData) }}" data-color="{{ $sparklineColor }}"></canvas>
+    @endif
 </div>

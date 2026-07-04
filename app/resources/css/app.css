@@ -4,6 +4,20 @@
 
 @import "tailwindcss";
 
+@theme {
+    --color-primary: #2563eb;
+    --color-primary-dark: #1d4ed8;
+    --color-surface: #ffffff;
+    --color-muted: #f8fafc;
+    --color-border: #e2e8f0;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #64748b;
+    --color-success: #16a34a;
+    --color-danger: #dc2626;
+    --color-warning: #d97706;
+    --color-info: #0284c7;
+}
+
 @keyframes shrink {
     from {
         width: 100%;
