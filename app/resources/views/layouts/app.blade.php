@@ -15,16 +15,36 @@
     </style>
 </head>
 
-<body x-data="{ sidebarOpen: true }" class="bg-gray-100 font-sans">
+<body x-data="{
+    sidebarPinned: localStorage.getItem('sidebarPinned') === 'true',
+    sidebarHover: false,
+    sidebarMobileOpen: false,
+    get sidebarExpanded() {
+        return this.sidebarPinned || this.sidebarHover;
+    }
+}"
+@keydown.window.escape="sidebarMobileOpen = false"
+:class="sidebarMobileOpen ? 'overflow-hidden' : ''"
+class="bg-gray-100 font-sans">
     <!-- Pre-loader - hidden after 2 seconds as fallback -->
     <div id="pre-loader" class="fixed inset-0 bg-white flex items-center justify-center z-[9999]">
         <img src="{{ asset('assests/images/logo-dark.png') }}" alt="Loading" class="w-32">
     </div>
+
+    <!-- Mobile backdrop -->
+    <template x-teleport="body">
+        <div x-show="sidebarMobileOpen"
+            class="fixed inset-0 z-30 bg-black/50 lg:hidden"
+            @click="sidebarMobileOpen = false"
+            x-transition.opener>
+        </div>
+    </template>
+
     <!-- Sidebar - Fixed -->
     @include('layouts.sidebar')
 
     <!-- Main Content Wrapper -->
-    <div class="ms-64 flex flex-col min-h-screen">
+    <div :class="sidebarExpanded ? 'lg:ms-64' : 'lg:ms-16'" class="ms-0 flex flex-col min-h-screen transition-all duration-300">
         <x-toasts />
         <x-alert />
         <!-- Header -->
