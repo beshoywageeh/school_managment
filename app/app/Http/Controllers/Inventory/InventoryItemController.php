@@ -16,7 +16,12 @@ class InventoryItemController extends Controller
 
     public function __construct(
         protected InventoryService $inventoryService,
-    ) {}
+    ) {
+        $this->middleware('permission:stocks-index|clothes-index|books_sheets-index', ['only' => ['index', 'show']]);
+        $this->middleware('permission:stocks-create|clothes-create|books_sheets-create', ['only' => ['store']]);
+        $this->middleware('permission:stocks-update|clothes-update|books_sheets-update', ['only' => ['update']]);
+        $this->middleware('permission:stocks-delete|clothes-delete|books_sheets-delete', ['only' => ['destroy']]);
+    }
 
     public function index(string $type)
     {

@@ -18,6 +18,11 @@ class SettingsController extends Controller
 {
     use ImageTrait, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:settings-info', ['only' => ['index']]);
+    }
+
     public function index()
     {
         $school = $this->getSchool();

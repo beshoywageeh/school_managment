@@ -16,6 +16,15 @@ class MyParentsController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:parents-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:parents-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:parents-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:parents-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:Parents-import_Excel', ['only' => ['Excel_Import']]);
+    }
+
     public function index()
     {
         $school = $this->getSchool();

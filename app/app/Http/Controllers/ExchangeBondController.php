@@ -17,7 +17,14 @@ class ExchangeBondController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
-    public function __construct(private FinancialService $StudentAccount) {}
+    public function __construct(private FinancialService $StudentAccount)
+    {
+        $this->middleware('permission:exchange_bonds-list', ['only' => ['index']]);
+        $this->middleware('permission:exchange_bonds-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:exchange_bonds-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:exchange_bonds-info', ['only' => ['print']]);
+        $this->middleware('permission:exchange_bonds-delete', ['only' => ['destroy']]);
+    }
 
     public function index()
     {

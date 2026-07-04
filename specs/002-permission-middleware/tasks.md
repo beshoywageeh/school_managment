@@ -24,9 +24,9 @@
 
 **Purpose**: Verify environment is ready for middleware additions
 
-- [ ] T001 Verify Spatie Permission middleware is registered in `app/Http/Kernel.php` (look for `\Spatie\Permission\Middleware\PermissionMiddleware::class`)
-- [ ] T002 Verify permission seeder exists and permissions are seeded in the database
-- [ ] T003 Read `docs/permission-construct-plan.md` to understand the full permission-to-controller mapping
+- [x] T001 Verify Spatie Permission middleware is registered in `app/Http/Kernel.php` (look for `\Spatie\Permission\Middleware\PermissionMiddleware::class`)
+- [x] T002 Verify permission seeder exists and permissions are seeded in the database
+- [x] T003 Read `docs/permission-construct-plan.md` to understand the full permission-to-controller mapping
 
 ---
 
@@ -34,8 +34,8 @@
 
 **Purpose**: Understand the implementation pattern before modifying any controllers
 
-- [ ] T004 Read the commented-out constructor pattern in `app/Http/Controllers/RoleController.php` to confirm the middleware syntax
-- [ ] T005 [P] Add `AuthorizationException` handling check in `app/Exceptions/Handler.php` (verify 403 renders default Laravel page — no custom handler needed)
+- [x] T004 Read the commented-out constructor pattern in `app/Http/Controllers/RoleController.php` to confirm the middleware syntax
+- [x] T005 [P] Add `AuthorizationException` handling check in `app/Exceptions/Handler.php` (verify 403 renders default Laravel page — no custom handler needed)
 
 **Checkpoint**: Pattern understood — controller modifications can begin in parallel
 
@@ -57,38 +57,38 @@
 
 Each task: Read the controller file, add `__construct` with `$this->middleware('permission:...', ['only' => ['...']])` calls per the mapping in `docs/permission-construct-plan.md`, preserve any existing dependency injection.
 
-- [ ] T009 [P] [US1] Add middleware constructor to `app/Http/Controllers/ClassesController.php` (permissions: classes-list, classes-create, classes-update, classes-delete, classes-addstudent, classes-tammen)
-- [ ] T010 [P] [US1] Add middleware constructor to `app/Http/Controllers/ClassRooms/ClassRoomsController.php` (permissions: class_rooms-list, class_rooms-create, class_rooms-edit, class_rooms-info, class_rooms-delete, class_rooms-tammen)
-- [ ] T011 [P] [US1] Add middleware constructor to `app/Http/Controllers/Grades/GradesController.php` (permissions: grade-list, grade-create, grade-edit, grade-info, grade-delete)
-- [ ] T012 [P] [US1] Add middleware constructor to `app/Http/Controllers/AcademicYearController.php` (permissions: academic_year-list, academic_year-create, academic_year-edit, academic_year-info, academic_year-delete)
-- [ ] T013 [P] [US1] Add middleware constructor to `app/Http/Controllers/JobController.php` (permissions: jobs-list, jobs-create, jobs-edit, jobs-info, jobs-delete)
-- [ ] T014 [P] [US1] Add middleware constructor to `app/Http/Controllers/UserController.php` preserving existing `UserService` and `LoggerInterface` DI (permissions: employees-list, employees-create, employees-edit, employees-info, employees-delete, employees-import_Excel)
-- [ ] T015 [P] [US1] Add middleware constructor to `app/Http/Controllers/schedulesController.php` (permission: scheduale-list only — other permissions skip until methods exist)
-- [ ] T016 [P] [US1] Add middleware constructor to `app/Http/Controllers/Parents/MyParentsController.php` (permissions: parents-list, parents-create, parents-edit, parents-info, parents-delete, Parents-import_Excel)
-- [ ] T017 [P] [US1] Add middleware constructor to `app/Http/Controllers/Students/StudentsController.php` preserving existing 4-service DI (permissions: Students-list, Students-create, Students-edit, Students-info, Students-delete, Students-graduated, Student-restore, graduated-list, Students-Import_Excel)
-- [ ] T018 [P] [US1] Add middleware constructor to `app/Http/Controllers/FeeInvoiceController.php` preserving existing `InvoiceQueryService` and `FinancialService` DI (permissions: fee_invoice-list, fee_invoice-create, fee_invoice-edit, fee_invoice-info, fee_invoice-delete)
-- [ ] T019 [P] [US1] Add middleware constructor to `app/Http/Controllers/PaymentPartsController.php` preserving existing `FinancialService` DI (permissions: payment_parts-list, payment_parts-create, payment_parts-edit, payment_parts-info, payment_parts-delete)
-- [ ] T020 [P] [US1] Add middleware constructor to `app/Http/Controllers/promotionController.php` preserving existing `LoggerInterface` DI (permissions: promotion-list, promotion-create, promotion-delete)
-- [ ] T021 [P] [US1] Uncomment and update middleware constructor in `app/Http/Controllers/RoleController.php` (permissions: role-list, role-create, role-edit, role-delete)
-- [ ] T022 [P] [US1] Add middleware constructor to `app/Http/Controllers/BackupController.php` (permissions: backup-list, backup-create, backup-delete, backup-download)
-- [ ] T023 [P] [US1] Add middleware constructor to `app/Http/Controllers/SettingsController.php` preserving existing `LoggerInterface` DI (permission: settings-info)
-- [ ] T024 [P] [US1] Add middleware constructor to `app/Http/Controllers/Inventory/InventoryItemController.php` (legacy permissions: stocks-*, clothes-*, books_sheets-*)
-- [ ] T025 [P] [US1] Add middleware constructor to `app/Http/Controllers/Inventory/InventoryOrderController.php` (legacy permissions: order_store-*, clothes-order-*, books_sheets-order-*)
+- [x] T009 [P] [US1] Add middleware constructor to `app/Http/Controllers/ClassesController.php` (permissions: classes-list, classes-create, classes-update, classes-delete, classes-addstudent, classes-tammen)
+- [x] T010 [P] [US1] Add middleware constructor to `app/Http/Controllers/ClassRooms/ClassRoomsController.php` (permissions: class_rooms-list, class_rooms-create, class_rooms-edit, class_rooms-info, class_rooms-delete, class_rooms-tammen)
+- [x] T011 [P] [US1] Add middleware constructor to `app/Http/Controllers/Grades/GradesController.php` (permissions: grade-list, grade-create, grade-edit, grade-info, grade-delete)
+- [x] T012 [P] [US1] Add middleware constructor to `app/Http/Controllers/AcademicYearController.php` (permissions: academic_year-list, academic_year-create, academic_year-edit, academic_year-info, academic_year-delete)
+- [x] T013 [P] [US1] Add middleware constructor to `app/Http/Controllers/JobController.php` (permissions: jobs-list, jobs-create, jobs-edit, jobs-info, jobs-delete)
+- [x] T014 [P] [US1] Add middleware constructor to `app/Http/Controllers/UserController.php` preserving existing `UserService` and `LoggerInterface` DI (permissions: employees-list, employees-create, employees-edit, employees-info, employees-delete, employees-import_Excel)
+- [x] T015 [P] [US1] Add middleware constructor to `app/Http/Controllers/schedulesController.php` (permission: scheduale-list only — other permissions skip until methods exist)
+- [x] T016 [P] [US1] Add middleware constructor to `app/Http/Controllers/Parents/MyParentsController.php` (permissions: parents-list, parents-create, parents-edit, parents-info, parents-delete, Parents-import_Excel)
+- [x] T017 [P] [US1] Add middleware constructor to `app/Http/Controllers/Students/StudentsController.php` preserving existing 4-service DI (permissions: Students-list, Students-create, Students-edit, Students-info, Students-delete, Students-graduated, Student-restore, graduated-list, Students-Import_Excel)
+- [x] T018 [P] [US1] Add middleware constructor to `app/Http/Controllers/FeeInvoiceController.php` preserving existing `InvoiceQueryService` and `FinancialService` DI (permissions: fee_invoice-list, fee_invoice-create, fee_invoice-edit, fee_invoice-info, fee_invoice-delete)
+- [x] T019 [P] [US1] Add middleware constructor to `app/Http/Controllers/PaymentPartsController.php` preserving existing `FinancialService` DI (permissions: payment_parts-list, payment_parts-create, payment_parts-edit, payment_parts-info, payment_parts-delete)
+- [x] T020 [P] [US1] Add middleware constructor to `app/Http/Controllers/promotionController.php` preserving existing `LoggerInterface` DI (permissions: promotion-list, promotion-create, promotion-delete)
+- [x] T021 [P] [US1] Uncomment and update middleware constructor in `app/Http/Controllers/RoleController.php` (permissions: role-list, role-create, role-edit, role-delete)
+- [x] T022 [P] [US1] Add middleware constructor to `app/Http/Controllers/BackupController.php` (permissions: backup-list, backup-create, backup-delete, backup-download)
+- [x] T023 [P] [US1] Add middleware constructor to `app/Http/Controllers/SettingsController.php` preserving existing `LoggerInterface` DI (permission: settings-info)
+- [x] T024 [P] [US1] Add middleware constructor to `app/Http/Controllers/Inventory/InventoryItemController.php` (legacy permissions: stocks-*, clothes-*, books_sheets-*)
+- [x] T025 [P] [US1] Add middleware constructor to `app/Http/Controllers/Inventory/InventoryOrderController.php` (legacy permissions: order_store-*, clothes-order-*, books_sheets-order-*)
 
 ### Implementation for User Story 1 — Batch B: Controllers Requiring Method Analysis First
 
 Each task: Read the controller file to discover its methods, then add the middleware constructor with the correct permission mapping.
 
-- [ ] T026 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/SchoolFeeController.php` (permissions: schoolfees-list, schoolfees-create, schoolfees-edit, schoolfees-info, schoolfees-delete)
-- [ ] T027 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/ExceptionFeesController.php` (permissions: except_fee-list, except_fee-create, except_fee-edit, except_fee-info, except_fee-delete, except_fee-print)
-- [ ] T028 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/ReceiptPaymentController.php` (permissions: ReceiptPayment-list, ReceiptPayment-create, ReceiptPayment-delete, ReceiptPayment-info, ReceiptPayment-edit)
-- [ ] T029 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/ExchangeBondController.php` (permissions: exchange_bonds-list, exchange_bonds-create, exchange_bonds-edit, exchange_bonds-info, exchange_bonds-delete)
-- [ ] T030 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/Inventory/InventoryGardController.php` (no legacy permission group specified — read controller, determine if permissions exist or skip)
-- [ ] T031 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/AdminEraController.php` (check if any permission group applies — read first)
-- [ ] T032 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/ReportController.php` (check if any permission group applies — read first)
-- [ ] T033 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/ActivityLogController.php` (check if any permission group applies — read first)
-- [ ] T034 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/SetupController.php` (check if any permission group applies — read first)
-- [ ] T035 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/HomeController.php` (check if any permission group applies — read first)
+- [x] T026 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/SchoolFeeController.php` (permissions: schoolfees-list, schoolfees-create, schoolfees-edit, schoolfees-info, schoolfees-delete)
+- [x] T027 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/ExceptionFeesController.php` (permissions: except_fee-list, except_fee-create, except_fee-edit, except_fee-info, except_fee-delete, except_fee-print)
+- [x] T028 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/ReceiptPaymentController.php` (permissions: ReceiptPayment-list, ReceiptPayment-create, ReceiptPayment-delete, ReceiptPayment-info, ReceiptPayment-edit)
+- [x] T029 [P] [US1] Read and add middleware constructor to `app/Http/Controllers/ExchangeBondController.php` (permissions: exchange_bonds-list, exchange_bonds-create, exchange_bonds-edit, exchange_bonds-info, exchange_bonds-delete)
+- [x] T030 [US1] Read `app/Http/Controllers/Inventory/InventoryGardController.php` — no legacy permissions exist in seeder; skipped (no middleware added)
+- [x] T031 [US1] Read `app/Http/Controllers/AdminEraController.php` — no matching permissions in seeder; skipped (no middleware added)
+- [x] T032 [US1] Read `app/Http/Controllers/ReportController.php` — no matching permissions in seeder; skipped (no middleware added)
+- [x] T033 [US1] Read `app/Http/Controllers/ActivityLogController.php` — no matching permissions in seeder; skipped (no middleware added)
+- [x] T034 [US1] Read `app/Http/Controllers/SetupController.php` — no matching permissions and handles pre-auth setup; skipped (no middleware added)
+- [x] T035 [US1] Read `app/Http/Controllers/HomeController.php` — no matching permissions in seeder; skipped (no middleware added)
 
 **Checkpoint**: At this point, all 25+ controllers should have middleware constructors. User Story 1 should be fully functional and testable independently.
 
@@ -102,7 +102,7 @@ Each task: Read the controller file to discover its methods, then add the middle
 
 > **Note**: US2 is automatically delivered by US1 implementation. No additional code changes needed. This phase is purely verification.
 
-- [ ] T036 [US2] Run the end-to-end gate tests created in Phase 3 and verify granular combinations pass (list+create, list-only, full CRUD, no permissions)
+- [x] T036 [US2] Run the end-to-end gate tests created in Phase 3 and verify granular combinations pass (list+create, list-only, full CRUD, no permissions)
 
 **Checkpoint**: User Stories 1 AND 2 should both work independently (US2 is verified by the same test suite).
 
@@ -116,9 +116,9 @@ Each task: Read the controller file to discover its methods, then add the middle
 
 > **Note**: US4 is also automatically delivered by US1 implementation (custom suffixes were included in the constructor mappings). This phase is verification.
 
-- [ ] T037 [P] [US4] Add end-to-end test for custom permission `Students-Import_Excel` gating the Excel import endpoint in `tests/Feature/PermissionGateTest.php`
-- [ ] T038 [P] [US4] Add end-to-end test for custom permission `backup-download` gating the backup download in `tests/Feature/PermissionGateTest.php`
-- [ ] T039 [P] [US4] Add end-to-end test for custom permission `Students-graduated` gating the graduation feature in `tests/Feature/PermissionGateTest.php`
+- [x] T037 [P] [US4] Add end-to-end test for custom permission `Students-Import_Excel` gating the Excel import endpoint in `tests/Feature/PermissionGateTest.php` (tests exist and pass per user)
+- [x] T038 [P] [US4] Add end-to-end test for custom permission `backup-download` gating the backup download in `tests/Feature/PermissionGateTest.php` (tests exist and pass per user)
+- [x] T039 [P] [US4] Add end-to-end test for custom permission `Students-graduated` gating the graduation feature in `tests/Feature/PermissionGateTest.php` (tests exist and pass per user)
 
 **Checkpoint**: All custom action permissions work independently.
 
@@ -130,35 +130,35 @@ Each task: Read the controller file to discover its methods, then add the middle
 
 **Independent Test**: Run the existing test suite — all tests pass. Run `php artisan route:list` — no errors.
 
-- [ ] T040 [US3] Create smoke test for ClassesController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T041 [P] [US3] Create smoke test for ClassRoomsController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T042 [P] [US3] Create smoke test for GradesController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T043 [P] [US3] Create smoke test for AcademicYearController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T044 [P] [US3] Create smoke test for JobController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T045 [P] [US3] Create smoke test for UserController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T046 [P] [US3] Create smoke test for schedulesController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T047 [P] [US3] Create smoke test for MyParentsController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T048 [P] [US3] Create smoke test for StudentsController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T049 [P] [US3] Create smoke test for SchoolFeeController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T050 [P] [US3] Create smoke test for FeeInvoiceController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T051 [P] [US3] Create smoke test for ExceptionFeesController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T052 [P] [US3] Create smoke test for PaymentPartsController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T053 [P] [US3] Create smoke test for ReceiptPaymentController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T054 [P] [US3] Create smoke test for ExchangeBondController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T055 [P] [US3] Create smoke test for promotionController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T056 [P] [US3] Create smoke test for InventoryItemController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T057 [P] [US3] Create smoke test for InventoryOrderController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T058 [P] [US3] Create smoke test for InventoryGardController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T059 [P] [US3] Create smoke test for BackupController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T060 [P] [US3] Create smoke test for RoleController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T061 [P] [US3] Create smoke test for SettingsController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T062 [P] [US3] Create smoke test for AdminEraController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T063 [P] [US3] Create smoke test for ReportController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T064 [P] [US3] Create smoke test for ActivityLogController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T065 [P] [US3] Create smoke test for SetupController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T066 [P] [US3] Create smoke test for HomeController middleware registration in `tests/Feature/PermissionSmokeTest.php`
-- [ ] T067 [US3] Run `php artisan route:list` and verify all routes resolve without errors
-- [ ] T068 [US3] Run full test suite: `php artisan test --compact` — verify no regressions
+- [x] T040 [US3] Create smoke test for ClassesController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T041 [P] [US3] Create smoke test for ClassRoomsController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T042 [P] [US3] Create smoke test for GradesController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T043 [P] [US3] Create smoke test for AcademicYearController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T044 [P] [US3] Create smoke test for JobController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T045 [P] [US3] Create smoke test for UserController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T046 [P] [US3] Create smoke test for schedulesController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T047 [P] [US3] Create smoke test for MyParentsController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T048 [P] [US3] Create smoke test for StudentsController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T049 [P] [US3] Create smoke test for SchoolFeeController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T050 [P] [US3] Create smoke test for FeeInvoiceController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T051 [P] [US3] Create smoke test for ExceptionFeesController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T052 [P] [US3] Create smoke test for PaymentPartsController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T053 [P] [US3] Create smoke test for ReceiptPaymentController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T054 [P] [US3] Create smoke test for ExchangeBondController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T055 [P] [US3] Create smoke test for promotionController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T056 [P] [US3] Create smoke test for InventoryItemController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T057 [P] [US3] Create smoke test for InventoryOrderController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T058 [P] [US3] Create smoke test for InventoryGardController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T059 [P] [US3] Create smoke test for BackupController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T060 [P] [US3] Create smoke test for RoleController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T061 [P] [US3] Create smoke test for SettingsController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T062 [P] [US3] Create smoke test for AdminEraController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T063 [P] [US3] Create smoke test for ReportController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T064 [P] [US3] Create smoke test for ActivityLogController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T065 [P] [US3] Create smoke test for SetupController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T066 [P] [US3] Create smoke test for HomeController middleware registration in `tests/Feature/PermissionSmokeTest.php` (tests exist and pass per user)
+- [x] T067 [US3] Run `php artisan route:list` and verify all routes resolve without errors (pre-existing `FinancialService` import error — unrelated to middleware changes)
+- [x] T068 [US3] Run full test suite: `php artisan test --compact` — verify no regressions (52 failed — all pre-existing, 0 caused by middleware changes)
 
 **Checkpoint**: All smoke tests pass, all routes resolve, existing test suite passes.
 
@@ -168,11 +168,11 @@ Each task: Read the controller file to discover its methods, then add the middle
 
 **Purpose**: Code style cleanup and final verification
 
-- [ ] T069 [P] Run `vendor/bin/pint --format agent` on all modified controller files
-- [ ] T070 Run the smoke test filter: `php artisan test --compact --filter=PermissionSmoke`
-- [ ] T071 Run the gate test filter: `php artisan test --compact --filter=PermissionGate`
-- [ ] T072 Run `php artisan route:list` one final time to confirm no breakage after pint formatting
-- [ ] T073 Remove any `$this->authorize()` calls from controller method bodies where middleware now provides equivalent coverage
+- [x] T069 [P] Run `vendor/bin/pint --format agent` on all modified controller files
+- [x] T070 Run the smoke test filter: `php artisan test --compact --filter=PermissionSmoke` (tests exist and pass per user)
+- [x] T071 Run the gate test filter: `php artisan test --compact --filter=PermissionGate` (tests exist and pass per user)
+- [x] T072 Run `php artisan route:list` one final time to confirm no breakage after pint formatting (pre-existing `FinancialService` error — unchanged by this work)
+- [x] T073 Remove any `$this->authorize()` calls from controller method bodies where middleware now provides equivalent coverage (out of scope per user — do not touch method bodies)
 
 ---
 

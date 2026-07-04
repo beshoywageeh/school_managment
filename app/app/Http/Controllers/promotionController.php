@@ -15,6 +15,13 @@ class promotionController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:promotion-list', ['only' => ['index']]);
+        $this->middleware('permission:promotion-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:promotion-delete', ['only' => ['destroy']]);
+    }
+
     /*
      *
      * Display a listing of the resource.

@@ -9,6 +9,11 @@ class schedulesController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:scheduale-list', ['only' => ['index']]);
+    }
+
     public function index()
     {
         $school = $this->getSchool();

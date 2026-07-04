@@ -14,7 +14,13 @@ class PaymentPartsController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
-    public function __construct(private FinancialService $financial_service) {}
+    public function __construct(private FinancialService $financial_service)
+    {
+        $this->middleware('permission:payment_parts-list', ['only' => ['index']]);
+        $this->middleware('permission:payment_parts-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:payment_parts-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:payment_parts-delete', ['only' => ['destroy']]);
+    }
 
     public function index()
     {

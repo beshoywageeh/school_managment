@@ -22,7 +22,12 @@ class ReceiptPaymentController extends Controller
 
     public function __construct(
         protected FinancialService $FinancialService,
-    ) {}
+    ) {
+        $this->middleware('permission:ReceiptPayment-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:ReceiptPayment-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:ReceiptPayment-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:ReceiptPayment-delete', ['only' => ['destroy']]);
+    }
 
     /**
      * Display a listing of the resource.

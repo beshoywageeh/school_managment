@@ -17,6 +17,14 @@ class GradesController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:grade-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:grade-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:grade-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:grade-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $school = $this->getSchool();

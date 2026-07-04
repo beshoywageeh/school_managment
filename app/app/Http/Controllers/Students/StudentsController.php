@@ -31,7 +31,16 @@ class StudentsController extends Controller
         private FinancialService $StudentFinance,
         private StudentRegeister $StudentCreation,
         private StudentImportService $StudentImportService,
-    ) {}
+    ) {
+        $this->middleware('permission:Students-list', ['only' => ['index', 'show', 'getclasses']]);
+        $this->middleware('permission:Students-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:Students-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:Students-delete', ['only' => ['softDelete', 'forceDelete']]);
+        $this->middleware('permission:Students-graduated', ['only' => ['softDelete']]);
+        $this->middleware('permission:Student-restore', ['only' => ['restore']]);
+        $this->middleware('permission:graduated-list', ['only' => ['graduated']]);
+        $this->middleware('permission:Students-Import_Excel', ['only' => ['Excel_Import']]);
+    }
 
     public function index(Request $request)
     {

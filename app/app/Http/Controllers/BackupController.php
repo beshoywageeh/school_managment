@@ -17,6 +17,14 @@ class BackupController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:backup-list', ['only' => ['index']]);
+        $this->middleware('permission:backup-create', ['only' => ['create']]);
+        $this->middleware('permission:backup-delete', ['only' => ['delete']]);
+        $this->middleware('permission:backup-download', ['only' => ['download']]);
+    }
+
     public function index()
     {
         $disk = Storage::disk('backup');

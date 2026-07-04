@@ -1,12 +1,19 @@
 @props([
     'columns' => [],
-    'initialItems' => [],
+    'initialItems' => null,
     'apiUrl' => '',
 ])
 
+@php
+    use Illuminate\Pagination\LengthAwarePaginator;
+    $paginator = $initialItems instanceof LengthAwarePaginator
+        ? $initialItems
+        : new LengthAwarePaginator([], 0, 10);
+@endphp
+
 <div x-data="{
     columns: {{ json_encode($columns) }},
-    items: {{ json_encode($initialItems->items()) }},
+    items: {{ json_encode($paginator->items()) }},
 
     // كائن الفلاتر يربط الـ filter_key مباشرة
     filters: {},
@@ -17,9 +24,12 @@
         order: 'desc'
     },
 
+    loading: false,
+    error: null,
+
     pagination: {
-        current: {{ $initialItems->currentPage() }},
-        last: {{ $initialItems->lastPage() }}
+        current: {{ $paginator->currentPage() }},
+        last: {{ $paginator->lastPage() }}
     },
 
     init() {
@@ -32,7 +42,10 @@
     },
 
     getNestedValue(obj, path) {
-        return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+        return path.split('.').reduce((acc, part) => {
+            if (acc === null || acc === undefined) return null;
+            return acc[part];
+        }, obj) ?? '-';
     },
 
     // دالة الترتيب عند الضغط على الهيدر
@@ -48,15 +61,15 @@
 
     fetchData(page = 1) {
         this.pagination.current = page;
+        this.loading = true;
+        this.error = null;
 
-        // تجهيز الـ Parameters الأساسية (الصفحة والترتيب)
         let params = {
             page: page,
             sort_by: this.sort.by,
             sort_order: this.sort.order
         };
 
-        // دمج الفلاتر النشطة فقط في الطلب
         Object.keys(this.filters).forEach(key => {
             params[key] = this.filters[key];
         });
@@ -66,7 +79,13 @@
                 this.items = response.data.items;
                 this.pagination.last = response.data.pagination.last_page;
             })
-            .catch(error => console.error('Error fetching data:', error));
+            .catch(error => {
+                this.error = '{{ trans("general.error_fetching") }}';
+                console.error('Error fetching data:', error);
+            })
+            .finally(() => {
+                this.loading = false;
+            });
     }
 }" class="space-y-4 font-sans text-right" dir="rtl">
 
@@ -78,14 +97,14 @@
 
                     @if ($col['filter_type'] === 'text')
                         <input type="text" x-model="filters['{{ $col['filter_key'] }}']"
-                            @input.debounce.300ms="fetchData(1)" placeholder="ابحث هنا..."
+                            @input.debounce.300ms="fetchData(1)" placeholder="{{ trans('general.search') }}"
                             class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
                     @endif
 
                     @if ($col['filter_type'] === 'select_relation' && isset($col['options']))
-                        <select x-model="filters['{{ $col['filter_key'] }}']" @change="fetchData(1)"
+                        <select x-model="filters['{{ $col['filter_key'] }}']" @change.debounce.300ms="fetchData(1)"
                             class="w-full rounded-lg border-gray-300 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            <option value="">كل الخيارات</option>
+                            <option value="">{{ trans('general.all_options') }}</option>
                             @foreach ($col['options'] as $id => $label)
                                 <option value="{{ $id }}">{{ $label }}</option>
                             @endforeach
@@ -122,16 +141,29 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white">
+                    <template x-if="loading">
+                        <tr>
+                            <td :colspan="columns.length" class="text-center py-8 text-gray-500">
+                                {{ trans('general.loading') }}
+                            </td>
+                        </tr>
+                    </template>
+                    <template x-if="error">
+                        <tr>
+                            <td :colspan="columns.length" class="text-center py-8 text-red-500" x-text="error"></td>
+                        </tr>
+                    </template>
                     <template x-for="item in items" :key="item.id">
                         <tr class="hover:bg-gray-50/80 transition duration-150">
                             <template x-for="col in columns" :key="col.key">
                                 <td class="px-6 py-4 text-gray-900">
 
                                     <template x-if="col.key === 'actions'">
-                                        <div class="flex items-center gap-2">
-                                            {{-- هنا سيتم حقن الأزرار ديناميكياً من الصفحة الخارجية --}}
-                                            {!! ${$col['key']} ?? '' !!}
-                                        </div>
+                                        <td class="px-6 py-4 text-gray-900">
+                                            <div class="flex items-center gap-2">
+                                                {{ $actions ?? '' }}
+                                            </div>
+                                        </td>
                                     </template>
 
                                     <template x-if="col.key !== 'actions'">
@@ -142,13 +174,20 @@
                             </template>
                         </tr>
                     </template>
+                    <template x-if="!loading && items.length === 0">
+                        <tr>
+                            <td :colspan="columns.length" class="text-center py-12 text-gray-400">
+                                {{ trans('general.no_data') }}
+                            </td>
+                        </tr>
+                    </template>
                 </tbody>
             </table>
         </div>
 
         <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-between items-center"
             x-show="pagination.last > 1">
-            <button @click="fetchData(pagination.current - 1)" :disabled="pagination.current === 1"
+            <button @click="fetchData(pagination.current - 1)" :disabled="pagination.current === 1 || loading"
                 class="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm disabled:opacity-40 disabled:hover:bg-white transition">
                 {{ trans('general.previous') }}
             </button>
@@ -159,7 +198,7 @@
                     class="font-bold"></span>
             </span>
 
-            <button @click="fetchData(pagination.current + 1)" :disabled="pagination.current === pagination.last"
+            <button @click="fetchData(pagination.current + 1)" :disabled="pagination.current === pagination.last || loading"
                 class="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-semibold text-gray-700 hover:bg-gray-50 shadow-sm disabled:opacity-40 disabled:hover:bg-white transition">
                 {{ trans('general.next') }}
             </button>

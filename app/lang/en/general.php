@@ -64,6 +64,8 @@ return [
     'note' => 'Notes',
     'choose' => 'Choose :value',
     'all' => 'All',
+    'all_options' => 'All Options',
+    'error_fetching' => 'An error occurred while loading data.',
     'nationality' => 'Nationality',
     'no_tammen' => 'Not Insured',
     'ok_tammen' => 'Insured',

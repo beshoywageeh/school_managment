@@ -19,6 +19,14 @@ class FeeInvoiceController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:fee_invoice-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:fee_invoice-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:fee_invoice-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:fee_invoice-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */

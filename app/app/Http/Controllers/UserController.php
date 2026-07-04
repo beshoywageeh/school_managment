@@ -17,6 +17,15 @@ class UserController extends Controller
 {
     use ImageTrait, LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:employees-list', ['only' => ['index', 'show', 'getjobs']]);
+        $this->middleware('permission:employees-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:employees-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:employees-delete', ['only' => ['destroy', 'return_emp', 'return_list']]);
+        $this->middleware('permission:employees-import_Excel', ['only' => ['Excel_Import']]);
+    }
+
     /**
      * Display a listing of the resource.
      */

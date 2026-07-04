@@ -18,6 +18,14 @@ class AcademicYearController extends Controller
     use LogsActivity;
     use SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:academic_year-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:academic_year-create', ['only' => ['store']]);
+        $this->middleware('permission:academic_year-edit', ['only' => ['update']]);
+        $this->middleware('permission:academic_year-delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $school = $this->getSchool();

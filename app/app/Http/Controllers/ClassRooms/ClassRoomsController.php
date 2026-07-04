@@ -17,6 +17,15 @@ class ClassRoomsController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:class_rooms-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:class_rooms-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:class_rooms-edit', ['only' => ['update']]);
+        $this->middleware('permission:class_rooms-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:class_rooms-tammen', ['only' => ['tammen']]);
+    }
+
     public function index()
     {
         $id = \Auth::id();

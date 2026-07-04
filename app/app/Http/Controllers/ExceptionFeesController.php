@@ -17,6 +17,14 @@ class ExceptionFeesController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:except_fee-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:except_fee-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:except_fee-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:except_fee-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */

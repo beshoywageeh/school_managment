@@ -64,6 +64,8 @@ return [
     'note' => 'ملاحظات',
     'choose' => 'اختر :value',
     'all' => 'الكل',
+    'all_options' => 'كل الخيارات',
+    'error_fetching' => 'حدث خطأ أثناء تحميل البيانات.',
     'nationality' => 'الجنسية',
     'no_tammen' => 'غير مؤمن',
     'ok_tammen' => 'مؤمن',

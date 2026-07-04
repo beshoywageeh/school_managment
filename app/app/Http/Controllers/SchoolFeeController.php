@@ -22,7 +22,12 @@ class SchoolFeeController extends Controller
 
     public function __construct(
         protected FinancialService $financialService,
-    ) {}
+    ) {
+        $this->middleware('permission:schoolfees-list', ['only' => ['index', 'show', 'getclasses']]);
+        $this->middleware('permission:schoolfees-create', ['only' => ['store']]);
+        $this->middleware('permission:schoolfees-edit', ['only' => ['update']]);
+        $this->middleware('permission:schoolfees-delete', ['only' => ['destroy']]);
+    }
 
     /**
      * Display a listing of the resource.

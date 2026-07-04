@@ -20,7 +20,13 @@ class InventoryOrderController extends Controller
 
     public function __construct(
         protected InventoryService $inventoryService,
-    ) {}
+    ) {
+        $this->middleware('permission:stocks-inventory_order-index|clothes-inventory_order|books_sheets-inventory_order', ['only' => ['index', 'show']]);
+        $this->middleware('permission:stocks-income_order|stocks-outcome_order|clothes-income_order|clothes-outcome_order|books_sheets-income_order|books_sheets-outcome_order', ['only' => ['create', 'store']]);
+        $this->middleware('permission:stocks-inventory_edit|clothes-income_order-update|clothes-outcome_order-update|clothes-inventory_order-update|books_sheets-income_order-update|books_sheets-outcome_order-update|books_sheets-inventory_order-update|order-edit|order_out-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:stocks-inventory_delete|clothes-income_order_delete|clothes-outcome_order-delete|clothes-inventory_order-delete|books_sheets-income_order_delete|books_sheets-outcome_order-delete|books_sheets-inventory_order-delete|order-delete|order_out-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:clothes-outcome_order-pay|books_sheets-outcome_order-pay', ['only' => ['pay']]);
+    }
 
     public function index(string $type): View
     {

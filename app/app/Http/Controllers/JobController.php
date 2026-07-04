@@ -12,6 +12,14 @@ class JobController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:jobs-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:jobs-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:jobs-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:jobs-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      */

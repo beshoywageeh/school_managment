@@ -14,6 +14,16 @@ class ClassesController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:classes-list', ['only' => ['index', 'show']]);
+        $this->middleware('permission:classes-create', ['only' => ['store']]);
+        $this->middleware('permission:classes-update', ['only' => ['update']]);
+        $this->middleware('permission:classes-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:classes-addstudent', ['only' => ['add_students', 'add_students_submit']]);
+        $this->middleware('permission:classes-tammen', ['only' => ['tammen']]);
+    }
+
     public function index()
     {
         $school = $this->getSchool();
