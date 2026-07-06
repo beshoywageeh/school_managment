@@ -30,10 +30,10 @@ description: "Task list for UI Redesign & Migration"
 
 **Purpose**: Configure Tailwind design tokens, verify tooling, and establish the base RTL CSS foundation
 
-- [ ] T001 Add ERP-specific brand and status color tokens to `@theme` block in `resources/css/app.css` (brand colors, status-active/excluded/neutral/primary, surface-sidebar, card radius, card shadows)
-- [ ] T002 [P] Configure RTL Arabic font loading (Cairo or Tajawal via Google Fonts or Bunny Fonts) in `resources/css/app.css`
+- [ ] T001 Add any missing theme tokens to `@theme` block in `resources/css/app.css` (check `--shadow-card-hover`; most tokens already exist — see data-model.md)
+- [ ] T002 [P] Configure RTL Arabic font loading (Cairo via Bunny Fonts — already configured in app.css)
 - [ ] T003 [P] Verify `@tailwindcss/vite` plugin in `vite.config.js` processes updated `app.css` with no errors on `npm run build`
-- [ ] T004 [P] Add `rtl:` and `inset-inline-*` Tailwind utility documentation comment in app.css for team reference
+- [ ] T004 [P] Add `rtl:` and `inset-inline-*` Tailwind utility documentation comment in app.css for team reference (already present)
 
 ---
 
@@ -55,9 +55,20 @@ description: "Task list for UI Redesign & Migration"
 
 **Checkpoint**: Foundation ready — layout shell renders with RTL sidebar + topbar; user story implementation can begin
 
+### Role-Based UI Infrastructure
+
+- [ ] T013b [P] Define role/permission schema: audit `spatie/laravel-permission` setup, document available roles (Admin, Teacher, Accountant, etc.) and their module permissions
+- [ ] T013c [P] Create a `PermissionsService` or helper that returns the current user's visible modules, nav groups, and widget permissions — used by Sidebar, Topbar, and Dashboard components
+- [ ] T013d [P] Design sidebar navigation data structure with `permission` keys per item/group (array of `{key, icon, label, items: [{label, url, route, permission?}], permission?}`)
+
+### Accessibility Baseline
+
+- [ ] T013e [P] Document skip-to-content link: add `#main-content` anchor in layout, visible on focus via Tailwind `sr-only focus:not-sr-only`
+- [ ] T013f [P] Verify color contrast ratios for all component variants against WCAG 2.1 AA (4.5:1 for normal text, 3:1 for large text) — document any violations
+
 ### Audit for Livewire Compatibility
 
-- [ ] T013b [P] Audit existing controllers for PoC migration pages (treasuries, bank accounts) — wrap query logic in Service classes where missing, ensure Livewire-compatible data access
+- [ ] T013g [P] Audit existing controllers for PoC migration pages (treasuries, bank accounts) — wrap query logic in Service classes where missing, ensure Livewire-compatible data access
 
 ---
 
@@ -69,50 +80,59 @@ description: "Task list for UI Redesign & Migration"
 
 ### Tests for User Story 1
 
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+> **NOTE: These tests already exist** at `tests/Feature/Ui/ComponentRenderTest.php`, `tests/Feature/Ui/SettingsHubTest.php`, and `tests/Feature/Ui/LayoutShellTest.php`. Verify they pass after component enhancements; add new tests for role-filtered navigation.
 
-- [ ] T014 [P] [US1] Create Sidebar component test in `tests/Feature/Livewire/Components/SidebarTest.php` — test nav group rendering, collapsible toggle, active route highlighting
-- [ ] T015 [P] [US1] Create Card component test in `tests/Feature/Livewire/Components/CardTest.php` — test rendering with icon/label, active state (green border), hover state
-- [ ] T016 [P] [US1] Create Modal component test in `tests/Feature/Livewire/Components/ModalTest.php` — test open/close via event dispatch, outside click close, Escape close
-- [ ] T017 [P] [US1] Create Tabs component test in `tests/Feature/Livewire/Components/TabsTest.php` — test tab switching, active tab highlight, on-demand content loading
+- [ ] T014 [P] [US1] **Already exists** — `ComponentRenderTest.php` covers card, button, status-badge, data-table, modal, tabs rendering. Add ARIA assertion assertions (e.g., `assertSee('role="dialog"')`).
+- [ ] T015 [P] [US1] **Already exists** — `SettingsHubTest.php` covers settings hub card grid, responsive classes, example file existence.
+- [ ] T016 [P] [US1] **Already exists** — `LayoutShellTest.php` covers RTL direction.
+- [ ] T017 [P] [US1] Add Sidebar role-filtering test — create `tests/Feature/Livewire/Components/SidebarRoleTest.php` — verify Admin sees all nav groups, Accountant sees only financial, Teacher sees only teaching
 
 ### Implementation for User Story 1
 
-- [ ] T018 [P] [US1] Create `x-ui.card` Blade component at `resources/views/components/ui/card.blade.php` with icon, label, href, active props (from `contracts/cards.md`)
-- [ ] T019 [P] [US1] Create `x-ui.button` Blade component at `resources/views/components/ui/button.blade.php` with variant (primary/secondary/danger), icon, size props (from `contracts/button.md`)
-- [ ] T020 [P] [US1] Create `x-ui.status-badge` Blade component at `resources/views/components/ui/status-badge.blade.php` with status (active/excluded/neutral/primary) and label props (from `contracts/status-badge.md`)
-- [ ] T021 [P] [US1] Create `x-ui.modal` Blade component at `resources/views/components/ui/modal.blade.php` with id, title, size props, Alpine open/close, backdrop, Escape handling (from `contracts/modals.md`)
-- [ ] T022 [P] [US1] Create the Tabs Livewire component at `app/Http/Livewire/Components/UI/Tabs.php` with tabs prop, activeTab state, switchTab method (from `contracts/tabs.md`)
-- [ ] T023 [P] [US1] Create Tabs view at `resources/views/livewire/ui/tabs.blade.php` with tab bar + on-demand panels
-- [ ] T024 [US1] Create settings hub grid page template — `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4` of `x-ui.card` components, config-driven from controller
-- [ ] T025 [US1] Migrate one existing settings/hub page to use the new layout + card grid as a proof of concept
+- [ ] T018 [P] [US1] **Already exists** — `x-ui.card` at `resources/views/components/ui/card.blade.php`. Verify ARIA props, add `aria-current="page"` for active.
+- [ ] T019 [P] [US1] **Already exists** — `x-ui.button`. Verify `aria-disabled`, `aria-label`, focus ring classes.
+- [ ] T020 [P] [US1] **Already exists** — `x-ui.status-badge`. Verify `role="status"`, `aria-label`.
+- [ ] T021 [P] [US1] **Already exists** — `x-ui.modal`. Verify `x-trap.noscroll`, `aria-modal`, `aria-labelledby`.
+- [ ] T022 [P] [US1] Create the Sidebar Livewire component at `app/Livewire/Components/Navigation/Sidebar.php` with role-filtered nav groups, collapsible state, active route highlighting
+- [ ] T023 [P] [US1] Create sidebar view at `resources/views/livewire/navigation/sidebar.blade.php` with ARIA roles, keyboard nav, role-filtered rendering
+- [ ] T024 [P] [US1] Create the Topbar Livewire component at `app/Livewire/Components/Navigation/Topbar.php` with `moduleTitle`, `brandColor`, user info
+- [ ] T025 [P] [US1] Create topbar view at `resources/views/livewire/navigation/topbar.blade.php`
+- [ ] T026 [US1] Ensure `backend/ui-examples/settings/index.blade.php` exists (test expects it) — settings hub example page
+- [ ] T027 [US1] Migrate one existing settings/hub page to use the new layout + card grid as proof of concept
+- [ ] T028 [US1] Run accessibility audit: verify keyboard navigation through sidebar, tab order, focus indicators, screen reader announcements
 
-**Checkpoint**: At this point, US1 is fully functional — component library renders correctly, settings hub page works with new layout, all tests pass.
+**Checkpoint**: US1 fully functional — existing component tests pass (with a11y assertions), sidebar role-filtering works, settings hub example renders, manual QA visual checklist passes, existing test suite shows zero regressions.
 
 ---
 
 ## Phase 4: User Story 2 — Fast, No-Reload Data Tables for Listing Pages (Priority: P1)
 
-**Goal**: A reusable DataTable Livewire component with server-side sort, filter, paginate — no full page reloads.
+**Goal**: Enhance existing Alpine-driven DataTable with Livewire event-driven data fetching, enabling server-side sort, filter, paginate — no full page reloads.
+
+**Hybrid approach**: Keep existing `x-data="dataTable()"` Alpine presentation layer (`resources/views/components/ui/data-table.blade.php`). Create companion Livewire component for server-side data. See `contracts/data-table.md`.
 
 **Independent Test**: A user can navigate page 1→2, sort a column asc/desc, apply a filter — all without a full-page reload.
 
 ### Tests for User Story 2
 
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+> **NOTE: `ComponentRenderTest.php` already tests DataTable rendering. Add Livewire driver tests.**
 
-- [ ] T026 [P] [US2] Create DataTable component test in `tests/Feature/Livewire/Components/DataTableTest.php` — test sortBy toggles direction, nextPage/prevPage, applyFilters, loading state, empty state, error state
-- [ ] T027 [P] [US2] Create DataTable rendering test — test column headers render, rows render from model data, pagination controls show correct from/to/total
+- [ ] T029 [P] [US2] **Already exists** — `ComponentRenderTest.php::test_data_table_component_renders_with_columns`. Update to test Livewire-driven data flow.
+- [ ] T030 [P] [US2] Create DataTable Livewire driver test in `tests/Feature/Livewire/Components/DataTableDriverTest.php` — test Livewire companion fetches sorted/filtered/paginated data, emits events to Alpine
+- [ ] T031 [P] [US2] Create DataTable accessibility test — test `aria-sort` on sortable columns, `aria-rowindex` on rows, keyboard sort activation (Enter key), pagination ARIA labels
 
 ### Implementation for User Story 2
 
-- [ ] T028 [P] [US2] Create the DataTable Livewire component at `app/Http/Livewire/Components/Table/DataTable.php` with model, columns, filters, rowActions, perPage props; sortKey/sortDir/filterValues/page state; sortBy/applyFilters/nextPage/prevPage/performAction methods (from `contracts/data-table.md`)
-- [ ] T029 [P] [US2] Create DataTable view at `resources/views/livewire/table/data-table.blade.php` with sortable column headers, loading/empty/error states, pagination controls, row action slot
-- [ ] T030 [P] [US2] Create `x-ui.data-table` Blade wrapper component at `resources/views/components/ui/data-table.blade.php` for simplified page inclusion
-- [ ] T031 [P] [US2] Create filter panel partial with search input, select filters, and "بحث" + "اعاده تعين" action buttons
-- [ ] T032 [US2] Migrate one existing list/index page (e.g., treasuries list) to use the new layout + DataTable component as proof of concept
+- [ ] T032 [P] [US2] Create the DataTable Livewire companion at `app/Livewire/Components/Table/DataTable.php` with model, columns, filters, perPage props; sortKey/sortDir/filterValues/page state; fetchData/sortBy/applyFilters/nextPage/prevPage/performAction methods — outputs JSON via `$this->dispatch('table-data', ...)` to Alpine
+- [ ] T033 [P] [US2] Enhance existing `resources/views/components/ui/data-table.blade.php` — add `x-on:table-data-{name}.window` listener to receive Livewire data, update Alpine `dataTable()` state, add `aria-sort` and ARIA row attributes
+- [ ] T034 [P] [US2] Create filter panel partial with search input, select filters, and "بحث" + "إعادة تعيين" action buttons — wires to Livewire event `dispatch('livewire-table-{name}-filter', ...)`
+- [ ] T035 [P] [US2] Create `page-header` and `filter-panel` integration with DataTable — ensure existing components at `resources/views/components/ui/page-header.blade.php` and `filter-panel.blade.php` dispatch Livewire events
+- [ ] T036 [P] [US2] Add role-gated column visibility to DataTable — columns with `permission` prop only render if user has permission
+- [ ] T037 [US2] Ensure `backend/ui-examples/list/index.blade.php` exists (test expects it) — list page example with DataTable, filter panel, page header, modal
+- [ ] T038 [US2] Migrate one existing list/index page (e.g., treasuries list) to use the new layout + DataTable hybrid component as proof of concept
+- [ ] T039 [US2] Verify DataTable accessibility: keyboard sort (Enter on headers), focus management, ARIA live regions for loading/empty/error states
 
-**Checkpoint**: DataTable works independently — sort, filter, paginate all no-reload. Listing pages can be migrated module by module.
+**Checkpoint**: DataTable works with Livewire hybrid — sort, filter, paginate all no-reload via Livewire events. ARIA attributes on sortable headers, pagination, and states. Role-gated columns work. Existing test suite shows zero regressions.
 
 ---
 
@@ -120,23 +140,28 @@ description: "Task list for UI Redesign & Migration"
 
 **Goal**: Record detail pages with header (name, balance, status, actions) + tabbed sections that load on demand.
 
+**Existing components**: `detail-header.blade.php`, `tabs.blade.php`, `status-badge.blade.php`, `button.blade.php` already exist.
+
 **Independent Test**: A user can open a record detail page, see the header + action toolbar, click through 3 tabs, and see each tab's content load without a full page reload.
 
 ### Tests for User Story 3
 
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+> **NOTE: `DetailPageTest.php` already tests detail header rendering and example file existence. Add tab keyboard nav tests.**
 
-- [ ] T033 [P] [US3] Create Tab switching test — verify switchTab() changes active tab, lazy-loads content, preserves other tab state
-- [ ] T034 [P] [US3] Create detail page integration test — record header renders with status badge + action buttons, tabs render with correct Arabic labels
+- [ ] T040 [P] [US3] **Already exists** — `DetailPageTest.php` covers detail-header render, example file existence, component usage assertions.
+- [ ] T041 [P] [US3] Create tab accessibility test — test Arrow Left/Right keyboard navigation between tabs, `aria-selected`, `aria-controls` correctness
+- [ ] T042 [P] [US3] Create role-based detail page test — verify action buttons differ per role (Admin sees delete, Teacher may not)
 
 ### Implementation for User Story 3
 
-- [ ] T035 [P] [US3] Create the detail page layout template — record header section (name, balance/amount, x-ui.status-badge, x-ui.button toolbar for edit/transfer/deactivate/delete)
-- [ ] T036 [P] [US3] Wire up tabs to use the Tabs Livewire component with lazy-loaded content per tab (statement, transfers, activity, system, details)
-- [ ] T037 [US3] Create a statement tab — embed DataTable for transaction listing with filter/date range
-- [ ] T038 [US3] Migrate one existing detail page (e.g., bank account detail) to use new layout + tabs + statement DataTable as proof of concept
+- [ ] T043 [P] [US3] Enhance existing `x-ui.detail-header` — verify ARIA roles, `aria-label` on status badge, action toolbar keyboard accessibility
+- [ ] T044 [P] [US3] Enhance existing `x-ui.tabs` — verify `role="tablist"`, keyboard Arrow Left/Right, `aria-selected`, `aria-controls`, `aria-labelledby` on panels, on-demand loading (`loadedTabs` tracking)
+- [ ] T045 [US3] Ensure `backend/ui-examples/detail/index.blade.php` exists (test expects it) — detail page example with detail-header, tabs, DataTable
+- [ ] T046 [US3] Create a statement tab — embed DataTable hybrid for transaction listing with filter/date range
+- [ ] T047 [US3] Migrate one existing detail page (e.g., bank account detail) to use new layout + tabs + statement DataTable as proof of concept
+- [ ] T048 [US3] Verify tab keyboard navigation end-to-end: focus moves with Arrow keys, tabpanel receives focus on activation, Escape does not close (tabs are navigation, not modals)
 
-**Checkpoint**: Detail pages with tabbed on-demand content work independently. Record header + toolbar + status badge render correctly.
+**Checkpoint**: Detail pages with tabbed on-demand content work independently. Tabs fully keyboard-accessible. Record header + toolbar + status badge render correctly with ARIA. Existing test suite shows zero regressions.
 
 ---
 
@@ -144,22 +169,25 @@ description: "Task list for UI Redesign & Migration"
 
 **Goal**: All pages adapt to mobile viewports — sidebar becomes overlay drawer, tables scroll horizontally, cards stack vertically.
 
+**Existing**: Base layout `app.blade.php` already has `sidebarMobileOpen` state, backdrop overlay (`x-teleport`), and `lg:ms-64`/`lg:ms-16` sidebar transitions.
+
 **Independent Test**: On a 375px-wide viewport, all pages render without horizontal scrolling, all text readable, sidebar toggles as overlay drawer.
 
 ### Tests for User Story 4
 
-- [ ] T039 [P] [US4] Create mobile responsive test — verify sidebar hidden by default on mobile, togglable via hamburger button, backdrop overlay appears
-- [ ] T040 [P] [US4] Create table horizontal scroll test — verify table container has `overflow-x-auto` at mobile breakpoint
+- [ ] T049 [P] [US4] Create mobile sidebar test — verify `sidebarMobileOpen` toggles, backdrop renders, hamburger button has correct `aria-label` (open/closed states)
+- [ ] T050 [P] [US4] Create table horizontal scroll test — verify table container has `overflow-x-auto` at mobile breakpoint
 
 ### Implementation for User Story 4
 
-- [ ] T041 [P] [US4] Add mobile sidebar drawer — overlay with backdrop, hamburger toggle button in topbar, `x-show="sidebarOpen"`, `@click.outside` to close
-- [ ] T042 [P] [US4] Add horizontal scroll wrapper to DataTable for mobile — `overflow-x-auto` container
-- [ ] T043 [P] [US4] Verify all card grids use responsive columns (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
-- [ ] T044 [P] [US4] Verify all modals use responsive max-width (`max-w-full sm:max-w-lg`) at mobile
-- [ ] T045 [US4] Test and fix all migrated pages at 375px breakpoint — sidebar, tables, forms, cards
+- [ ] T051 [P] [US4] Add hamburger toggle `aria-label="فتح القائمة"`/`"إغلاق القائمة"` and `aria-expanded` to topbar — wired to existing `sidebarMobileOpen` Alpine state
+- [ ] T052 [P] [US4] Add horizontal scroll wrapper to DataTable for mobile — verify `overflow-x-auto` on table container
+- [ ] T053 [P] [US4] Verify all card grids use responsive columns (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`)
+- [ ] T054 [P] [US4] Verify all modals use responsive max-width at mobile
+- [ ] T055 [US4] Test and fix all migrated pages at 375px breakpoint — sidebar, tables, forms, cards — verify no content cut off, no horizontal page scroll
+- [ ] T056 [US4] Verify mobile sidebar accessibility: focus moves into sidebar when opened, focus returns to hamburger when closed, Escape closes drawer
 
-**Checkpoint**: Mobile experience is functional — responsive breakpoints work; sidebar toggles; tables scroll.
+**Checkpoint**: Mobile experience is functional — responsive breakpoints work; sidebar toggles with accessible hamburger button; tables scroll horizontally; focus management works. Existing test suite shows zero regressions.
 
 ---
 
@@ -171,40 +199,48 @@ description: "Task list for UI Redesign & Migration"
 
 ### Tests for User Story 5
 
-- [ ] T046 [P] [US5] Create inline action test — verify performAction() calls server, updates row status in UI, handles error response gracefully
+- [ ] T057 [P] [US5] Create inline action test — verify `performAction()` calls Livewire, updates row in UI, handles error gracefully, shows loading state on the specific row
+- [ ] T058 [P] [US5] Create role-gated action test — verify Admin sees all actions, Accountant sees only financial actions, Teacher sees only teaching actions
 
 ### Implementation for User Story 5
 
-- [ ] T047 [P] [US5] Add `performAction($id, $action)` method to DataTable Livewire component — validates action, calls model method, refreshes row data
-- [ ] T048 [P] [US5] Create inline action Blade partial for row action buttons (primary action + kebab menu) in `resources/views/components/table/data-table-actions.blade.php`
-- [ ] T049 [US5] Migrate one reconciliation workflow (e.g., statement matching) to use inline actions
+- [ ] T059 [P] [US5] Add `performAction($id, $action)` method to DataTable Livewire companion — validates action against user roles, calls model method, emits updated row data to Alpine
+- [ ] T060 [P] [US5] Create inline action Blade partial for row action buttons (primary action + kebab menu) — role-gated, with `aria-label` on each action button
+- [ ] T061 [P] [US5] Add row-level loading state: when action is in progress, show spinner on that row only (`wire:target:row-{id}` or Alpine `x-loading`)
+- [ ] T062 [US5] Migrate one reconciliation workflow (e.g., statement matching) to use inline actions with role filtering
+- [ ] T063 [US5] Verify inline action accessibility: buttons have distinct `aria-label`, success/error announced via `aria-live` region, focus stays on the action button after completion
 
-**Checkpoint**: Inline row actions work — one-click status updates without page reload.
+**Checkpoint**: Inline row actions work with role gating — one-click status updates without page reload. Actions are keyboard-accessible and screen-reader-friendly. Existing test suite shows zero regressions.
 
 ---
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
-**Purpose**: QA pass, legacy cleanup, and final verification
+**Purpose**: QA pass, legacy cleanup, final accessibility audit, and verification
 
-- [ ] T050 [P] [US1] Migrate remaining settings hub pages to use the card grid pattern (manufacturing settings, etc.)
-- [ ] T051 [P] [US2] Migrate remaining list/index pages (bank accounts, customers, suppliers, etc.) to use DataTable component
-- [ ] T052 [P] [US3] Migrate remaining detail/record pages to use tabs + record header pattern
-- [ ] T053 [P] [US5] Add inline row actions to remaining applicable tables
-- [ ] T054 [P] Create a KPI stat card variant of `x-ui.card` and a ChartWidget Livewire component for dashboard pages using ApexCharts
-- [ ] T055 [P] Build the dashboard page — KPI row + donut chart + line chart + latest-records DataTable
-- [ ] T056 [P] Add loading skeletons/spinners to all Livewire components during data fetch
-- [ ] T057 [P] Add empty state ("لا توجد بيانات") and error state ("حدث خطأ في التحميل") to all async components
-- [ ] T057b [P] Implement Livewire session expiry handling — catch 401/419 in Livewire lifecycle hooks, show toast "انتهت الجلسة", redirect to /login after 2s
-- [ ] T058 [P] Run manual QA visual checklist against 4 reference screenshots (settings hub, dashboard, treasury list, account statement)
-- [ ] T059 [P] Verify keyboard accessibility — modals trap focus, close on Escape, tab order through forms
-- [ ] T060 [P] Remove Bootstrap CSS/JS references from base layout and `vite.config.js`
-- [ ] T061 [P] Remove jQuery plugin includes replaced by Alpine equivalents
-- [ ] T062 [P] Delete now-unused old Blade partials after confirming all pages migrated
-- [ ] T063 [P] Run `npm run build` and confirm final CSS bundle size
-- [ ] T064 Run `vendor/bin/pint --format agent` across all new files
-- [ ] T065 Run full test suite: `php artisan test --compact`
-- [ ] T066 Run quickstart.md validation scenarios end-to-end
+- [ ] T064 [P] Migrate remaining settings hub pages to use the card grid pattern (manufacturing settings, etc.)
+- [ ] T065 [P] Migrate remaining list/index pages (bank accounts, customers, suppliers, etc.) to use DataTable hybrid component
+- [ ] T066 [P] Migrate remaining detail/record pages to use tabs + record header pattern
+- [ ] T067 [P] Add inline row actions to remaining applicable tables with role gating
+- [ ] T068 [P] Create `x-ui.kpi-tile` (already exists) + ChartWidget Livewire component at `app/Livewire/Components/Dashboard/ChartWidget.php` using ApexCharts
+- [ ] T069 [P] Build the dashboard page — KPI row + donut chart + line chart + latest-records DataTable — with role-aware widgets per DashboardRedesignTest.php
+- [ ] T070 [P] Ensure `backend/ui-examples/dashboard/index.blade.php` exists (test expects it) — dashboard example page
+- [ ] T071 [P] Implement Livewire session expiry handling — catch 401/419 in Livewire lifecycle hooks, show toast "انتهت الجلسة" via existing Alpine toast store, redirect to /login after 2s
+- [ ] T072 [P] Run comprehensive accessibility audit:
+  - Test all pages with keyboard-only navigation (no mouse)
+  - Test with screen reader (NVDA or VoiceOver) on migrated pages
+  - Verify color contrast ratios (WCAG 2.1 AA: 4.5:1 normal text, 3:1 large)
+  - Verify focus order follows visual order (DOM order)
+  - Test zoom to 200% — no content loss or horizontal scroll
+  - Add skip-to-content link verification
+- [ ] T073 [P] Run manual QA visual checklist against 4 reference screenshots (settings hub, dashboard, treasury list, account statement)
+- [ ] T074 [P] Remove Bootstrap CSS/JS references from base layout and `vite.config.js`
+- [ ] T075 [P] Remove jQuery plugin includes replaced by Alpine equivalents
+- [ ] T076 [P] Delete now-unused old Blade partials after confirming all pages migrated
+- [ ] T077 [P] Run `npm run build` and confirm final CSS bundle size is smaller post-Bootstrap removal
+- [ ] T078 Run `vendor/bin/pint --format agent` across all new files
+- [ ] T079 Run full test suite: `php artisan test --compact` — verify zero regressions
+- [ ] T080 Run quickstart.md validation scenarios end-to-end
 
 ---
 

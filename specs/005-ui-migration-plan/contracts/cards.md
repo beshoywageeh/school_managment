@@ -14,9 +14,14 @@
 
 **States**: Default / Active (green border) / Hover (elevated shadow)
 
+**Accessibility**:
+- Link card: `<a role="link" aria-label="{$label}">` with `tabindex="0"`
+- Icon container: `aria-hidden="true"` (decorative)
+- Active card: `aria-current="page"` when linking to current page
+
 ## KpiCard (Livewire Component)
 
-**Class**: `App\Http\Livewire\Components\Dashboard\KpiCard.php`
+**Class**: `App\Livewire\Components\Dashboard\KpiCard.php`
 
 **Props**:
 - `label: string` — metric name
@@ -24,4 +29,13 @@
 - `trend: ?string` — optional trend text/icon
 - `color: string` — accent color class
 
-**States**: Static display (data passed as props, no async fetch)
+**States**: Static display (data passed as props, no async fetch); roles determine which KPIs render
+
+**Role awareness**: Dashboard fetches KPI data per role — Admin sees all 4 stat cards,
+Accountant sees 4 financial cards, Teacher sees 3 teaching cards
+(per DashboardRedesignTest.php expectations).
+
+**Accessibility**:
+- KPI card: `<article>` with `aria-label="{$label}: {$value}"`
+- Trend: `aria-label="اتجاه {$trendDirection} بنسبة {$trend}"`
+- Value: `aria-live="polite"` for live-updating values

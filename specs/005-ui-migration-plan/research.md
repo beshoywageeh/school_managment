@@ -66,3 +66,50 @@
 - **Rationale**: Working infrastructure that doesn't conflict with Livewire.
   The toast system is used for error/session timeout notifications.
 - **Alternatives considered**: Rewriting everything — unnecessary churn.
+
+### Decision 7: DataTable Hybrid Pattern
+
+- **Decision**: Keep the existing Alpine-driven `data-table.blade.php`
+  (`x-data="dataTable()"`) presentation layer. Enhance it to use Livewire
+  event-driven data fetching instead of direct API endpoint calls. New
+  DataTable instances use `wire:model` and Livewire properties for server
+  state, rendered through the same Alpine template.
+- **Rationale**: The existing Alpine DataTable is already built, tested, and
+  works. Wrapping it with Livewire events avoids a full rewrite while
+  aligning with the constitution's Livewire mandate. The contract's `model`
+  prop maps to a Livewire component that handles sorting/filtering/pagination
+  and emits data updates to Alpine via `$wire` or dispatched events.
+- **Alternatives considered**:
+  - Full Livewire rewrite — too much churn; existing Alpine code works.
+  - Keep pure Alpine + Axios — violates constitution mandate for Livewire.
+
+### Decision 8: Role-Based UI Rendering
+
+- **Decision**: Sidebar navigation filters its `navGroups` and `items` based
+  on the authenticated user's roles/permissions at render time via Livewire
+  component state. Dashboard widgets vary by role (Admin sees all, Accountant
+  sees financial, Teacher sees teaching). DataTable can optionally show/hide
+  columns or actions per role.
+- **Rationale**: The DashboardRedesignTest.php already tests role-aware widget
+  responses (Admin/Accountant/Teacher), proving this architecture is expected.
+  Livewire's server-side rendering makes role filtering natural — the sidebar
+  component receives the user's permissions as a prop or reads them via
+  `auth()->user()`.
+- **Alternatives considered**:
+  - Client-side role filtering (Alpine) — exposes unauthorized UI elements
+    before hiding them; worse UX and security.
+  - Separate views per role — maintenance nightmare.
+
+### Decision 9: Accessibility (WCAG 2.1 AA) Baked Into Every Phase
+
+- **Decision**: Every component contract includes ARIA roles, keyboard
+  interaction specs, focus management, and screen reader annotations.
+  Accessibility tasks are embedded in each phase, not deferred to Polish.
+- **Rationale**: Retrofitting accessibility is 3-5x more expensive than
+  building it in. The spec's FR-016 requires WCAG 2.1 AA for all interactive
+  components. Each component has at most ~5 ARIA attributes and a keyboard
+  handler — negligible cost during implementation, very high cost to add
+  later.
+- **Alternatives considered**:
+  - Single Polish pass for all accessibility — rejected by the data.
+  - Third-party a11y audit — can supplement but not replace baked-in approach.

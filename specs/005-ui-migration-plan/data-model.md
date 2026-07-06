@@ -5,8 +5,9 @@
 ```
 Page Layout (app.blade.php)
 ├── Sidebar (Livewire full-stack)
+│   ├── (role-filtered nav groups based on auth()->user())
 │   └── NavigationGroup (collapsible)
-│       └── NavigationItem (active state via route)
+│       └── NavigationItem (active state via route, role-gated visibility)
 ├── Topbar (Livewire full-stack)
 │   ├── PageTitle / Breadcrumbs
 │   ├── PrimaryActionButtons
@@ -71,15 +72,17 @@ Page Layout (app.blade.php)
 @section('content')
   <livewire:dashboard.kpi-row />
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <livewire:dashboard.chart-widget type="donut" endpoint="..." />
-    <livewire:dashboard.chart-widget type="line" endpoint="..." />
+    <livewire:dashboard.chart-widget type="donut" />
+    <livewire:dashboard.chart-widget type="line" />
   </div>
-  <livewire:table.data-table :endpoint="..." :columns="[...]" />
+  {{-- DataTable with Livewire event-driven data --}}
+  <x-ui.data-table :columns="$columns" :livewire-component="'dashboard.latest-records'" />
 @endsection
 ```
-- Data source: Livewire properties + ApexCharts API fetches
+- Data source: Livewire components query models directly; ApexCharts receives data via Livewire properties
 - State: Loading/loaded/error per widget
-- Interactivity: Charts render on init, table supports sort/filter/page
+- Interactivity: Charts render on init, table supports sort/filter/page via Livewire
+- Role awareness: Different roles see different KPIs per DashboardRedesignTest.php expectations
 
 ### Type 3: List / Index
 ```
@@ -93,80 +96,88 @@ Page Layout (app.blade.php)
       </x-ui.button>
     </div>
   </div>
-  <livewire:table.data-table :endpoint="route('api.module.index')"
-    :columns="[['key'=>'name','label'=>'الاسم'], ...]" />
+  {{-- Hybrid DataTable: Alpine presentation + Livewire data --}}
+  <x-ui.data-table :columns="$columns" :livewire-component="'module.list-data'" />
   <x-ui.modal id="create" title="إضافة">
     <livewire:forms.create-{{ $module }} />
   </x-ui.modal>
 @endsection
 ```
-- Data source: Livewire DataTable component fetches via model query
-- State: sort key/dir, page, filters, loading, rows[], pagination meta
-- Interactivity: Sort column, next/prev page, apply filters, row actions
+- Data source: Livewire component queries model directly, emits data to Alpine DataTable
+- State: sort key/dir, page, filters, loading, rows[], pagination meta (in Livewire)
+- Interactivity: Sort column, next/prev page, apply filters, row actions via Livewire events
+- Role awareness: Columns and row actions may differ by user role
 
 ### Type 4: Detail / Record
 ```
 @extends('layouts.app')
 @section('content')
-  <div class="bg-white rounded-card shadow-card p-4 mb-4
-              flex items-center justify-between">
-    <div>
-      <div class="text-2xl font-bold">{{ $record->balance }}</div>
-      <div class="text-sm text-slate-500">{{ $record->name }}</div>
-    </div>
-    <div class="flex items-center gap-2">
-      <x-ui.status-badge :status="$record->status" />
+  <x-ui.detail-header
+    :title="$record->name"
+    :status="$record->status"
+    :status-label="__('statuses.' . $record->status)"
+    :balance="$record->balance">
+    <x-slot:actions>
       <x-ui.button variant="secondary">تعديل</x-ui.button>
       <x-ui.button variant="danger">حذف</x-ui.button>
-    </div>
-  </div>
-  <livewire:ui.tabs :tabs="[
-    'statement' => 'كشف حساب',
-    'transfers' => 'التحويلات',
-    'activity'  => 'سجل النشاطات',
-  ]" :record-id="$record->id" />
+    </x-slot:actions>
+  </x-ui.detail-header>
+
+  <x-ui.tabs :tabs="$tabs">
+    @foreach ($tabs as $tab)
+      <x-slot:{{ $tab['key'] }}>
+        <x-ui.data-table :columns="$tab['columns']" :livewire-component="$tab['livewire']" />
+      </x-slot:{{ $tab['key'] }}>
+    @endforeach
+  </x-ui.tabs>
 @endsection
 ```
-- Data source: Controller passes $record; tabs use Livewire with record-id
-- State: active tab, each tab's table state independent
-- Interactivity: Tab switch triggers on-demand data fetch, inline row actions
+- Data source: Controller passes $record and tab config; tabs use Alpine with Livewire data
+- State: active tab, each tab's table state independent via separate Livewire components
+- Interactivity: Tab switch shows on-demand content (loaded only when tab first activated)
 
 ## Component States
 
 Each Livewire component with async data MUST handle these states:
 
-| State | Visual | Trigger |
-|-------|--------|---------|
-| Loading | Skeleton/spinner or "جاري التحميل..." | Initial mount, refresh, sort/page change |
-| Loaded | Data rendered normally | Successful response |
-| Empty | "لا توجد بيانات" centered message | Zero records returned |
-| Error | "حدث خطأ في التحميل" + retry button | Failed request/exception |
-| Session Expired | Toast notification → redirect to /login | 401/419 from server |
+| State | Visual | Trigger | Accessibility |
+|-------|--------|---------|---------------|
+| Loading | Skeleton/spinner or "جاري التحميل..." | Initial mount, refresh, sort/page change | `aria-busy="true"`, spinner has `role="status"` |
+| Loaded | Data rendered normally | Successful response | `aria-live="polite"` region announces row count |
+| Empty | "لا توجد بيانات" centered message | Zero records returned | `role="status"` on empty message |
+| Error | "حدث خطأ في التحميل" + retry button | Failed request/exception | `role="alert"`, error announced to screen readers |
+| Session Expired | Toast notification → redirect to /login | 401/419 from server | `role="alert"` on toast, focus moved to notification |
 
-## Design Tokens (Tailwind @theme additions)
+## Design Tokens
 
-Add to existing `resources/css/app.css` @theme block:
+Most tokens already exist in `resources/css/app.css` @theme block. See current state below and only add missing tokens:
+
+### Already Present (app.css lines 7-30)
 
 ```css
-@theme {
-    /* Existing tokens already present */
-    --color-primary: #2563eb;
-    /* ... */
+--font-family-sans: "Cairo", "Nunito", sans-serif;
+--color-primary: #2563eb;
+--color-primary-dark: #1d4ed8;
+--color-surface: #ffffff;
+--color-surface-sidebar: #1e293b;     /* dark sidebar */
+--color-muted: #f8fafc;
+--color-border: #e2e8f0;
+--color-text-primary: #0f172a;
+--color-text-secondary: #64748b;
+--color-success: #16a34a;
+--color-danger: #dc2626;
+--color-warning: #d97706;
+--color-info: #0284c7;
+--color-status-active: #16a34a;
+--color-status-excluded: #dc2626;
+--color-status-neutral: #64748b;
+--color-status-primary: #2563eb;
+--radius-card: 0.75rem;
+--shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+```
 
-    /* ERP-specific tokens to add */
-    --color-brand: #0f6db8;
-    --color-brand-pink: #c2185b;
-    --color-brand-50: #eef7fd;
-    --color-brand-100: #d9edf9;
-    --color-brand-500: #0f6db8;
-    --color-brand-600: #0c5a97;
-    --color-status-active: #22c55e;
-    --color-status-excluded: #ef4444;
-    --color-status-neutral: #94a3b8;
-    --color-status-primary: #2563eb;
-    --color-surface-sidebar: #ffffff;
-    --radius-card: 0.75rem;
-    --shadow-card: 0 1px 3px rgba(16,24,40,0.08), 0 1px 2px rgba(16,24,40,0.04);
-    --shadow-card-hover: 0 4px 10px rgba(16,24,40,0.10);
-}
+### To Add (if needed for components)
+
+```css
+--shadow-card-hover: 0 4px 10px rgba(16,24,40,0.10);
 ```
