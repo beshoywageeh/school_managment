@@ -189,7 +189,7 @@ dir="rtl"
         <div>
             <button @click="exportData()"
                 aria-label="{{ trans('general.buttons.export') }}"
-                class="px-4 py-2 bg-primary text-white rounded-full text-xs font-semibold hover:bg-primary-dark transition-all duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-primary/30">
+                class="px-4 py-2 bg-primary text-white rounded-full text-xs font-semibold hover:bg-primary-dark transition-all duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary-dark focus-visible:ring-2 focus-visible:ring-primary/30">
                 {{ trans('general.buttons.export') }}
             </button>
         </div>
@@ -264,8 +264,8 @@ dir="rtl"
                                 @change="toggleSelectAll()"
                                 :checked="selectedItems.length === items.length && items.length > 0"
                                 aria-label="{{ trans('general.select_all') }}"
-                                class="h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary/30 focus:ring-offset-0 cursor-pointer">
-                        </th>
+                                 class="h-4 w-4 rounded border-border accent-primary focus:ring-2 focus:ring-primary/30 focus:ring-offset-0 cursor-pointer">
+                                </th>
                         @endif
                         <template x-for="col in columns" :key="col.key">
                             <th class="px-6 py-4 border-b border-border">
@@ -317,11 +317,11 @@ dir="rtl"
                                     @change="toggleItem(item[primaryKey])"
                                     :aria-label="'Select row ' + item[primaryKey]"
                                     @click.stop
-                                    class="h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary/30 focus:ring-offset-0 cursor-pointer">
+                                    class="h-4 w-4 rounded border-border accent-primary focus:ring-2 focus:ring-primary/30 focus:ring-offset-0 cursor-pointer">
                             </td>
                             @endif
                             <template x-for="col in columns" :key="col.key">
-                                <td class="px-6 py-4 text-gray-900">
+                                <td class="px-6 py-4 text-text-primary">
                                     <template x-if="col.key === 'actions'">
                                         <div class="flex items-center gap-2" @click.stop>
                                             {{ $actions ?? '' }}
