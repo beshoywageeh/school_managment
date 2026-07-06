@@ -182,14 +182,14 @@ dir="rtl"
                 @input.debounce.300ms="fetchData(1)"
                 placeholder="{{ trans('general.search') }}"
                 aria-label="{{ trans('general.search') }}"
-                class="w-full rounded-lg border-border shadow-card text-sm focus:border-primary focus:ring-primary/30">
+                class="w-full rounded-lg border-border shadow-card text-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
         </div>
         @endif
         @if ($exportUrl)
         <div>
             <button @click="exportData()"
                 aria-label="{{ trans('general.buttons.export') }}"
-                class="px-4 py-2 bg-primary text-white rounded-lg text-xs font-semibold hover:bg-primary-dark transition">
+                class="px-4 py-2 bg-primary text-white rounded-full text-xs font-semibold hover:bg-primary-dark transition-all duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-primary/30">
                 {{ trans('general.buttons.export') }}
             </button>
         </div>
@@ -207,11 +207,11 @@ dir="rtl"
                 @input.debounce.300ms="fetchData(1)"
                 placeholder="{{ trans('general.search') }}"
                 aria-label="{{ $filter['label'] }}"
-                class="w-full rounded-lg border-border shadow-card text-sm focus:border-primary focus:ring-primary/30">
+                class="w-full rounded-lg border-border shadow-card text-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
             @elseif ($filter['type'] === 'select' && isset($filter['options']))
             <select x-model="filters['{{ $filter['key'] }}']" @change.debounce.300ms="fetchData(1)"
                 aria-label="{{ $filter['label'] }}"
-                class="w-full rounded-lg border-border shadow-card text-sm focus:border-primary focus:ring-primary/30">
+                class="w-full rounded-lg border-border shadow-card text-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
                 <option value="">{{ trans('general.all_options') }}</option>
                 @foreach ($filter['options'] as $id => $label)
                 <option value="{{ $id }}">{{ $label }}</option>
@@ -234,12 +234,12 @@ dir="rtl"
                         @input.debounce.300ms="fetchData(1)"
                         placeholder="{{ trans('general.search') }}"
                         aria-label="{{ $col['label'] }}"
-                        class="w-full rounded-lg border-border shadow-card text-sm focus:border-primary focus:ring-primary/30">
+                        class="w-full rounded-lg border-border shadow-card text-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
                     @endif
                     @if ($col['filter_type'] === 'select_relation' && isset($col['options']))
                     <select x-model="filters['{{ $col['filter_key'] }}']" @change.debounce.300ms="fetchData(1)"
                         aria-label="{{ $col['label'] }}"
-                        class="w-full rounded-lg border-border shadow-card text-sm focus:border-primary focus:ring-primary/30">
+                        class="w-full rounded-lg border-border shadow-card text-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
                         <option value="">{{ trans('general.all_options') }}</option>
                         @foreach ($col['options'] as $id => $label)
                         <option value="{{ $id }}">{{ $label }}</option>
@@ -263,7 +263,8 @@ dir="rtl"
                             <input type="checkbox"
                                 @change="toggleSelectAll()"
                                 :checked="selectedItems.length === items.length && items.length > 0"
-                                aria-label="{{ trans('general.select_all') }}">
+                                aria-label="{{ trans('general.select_all') }}"
+                                class="h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary/30 focus:ring-offset-0 cursor-pointer">
                         </th>
                         @endif
                         <template x-for="col in columns" :key="col.key">
@@ -271,11 +272,11 @@ dir="rtl"
                                 <template x-if="col.sortable">
                                     <button @click="sortBy(col.key)"
                                         :aria-label="'Sort by ' + col.label + (sort.by === col.key ? ' (' + sort.order + ')' : '')"
-                                        class="flex items-center gap-1 font-bold focus:outline-none hover:text-primary transition">
+                                        class="flex items-center gap-1 font-bold focus:outline-none hover:text-primary hover:bg-primary/10 rounded-md transition-all duration-150 ease-in-out focus-visible:ring-2 focus-visible:ring-primary/30">
                                         <span x-text="col.label"></span>
-                                        <span x-show="sort.by === col.key && sort.order === 'asc'">↑</span>
-                                        <span x-show="sort.by === col.key && sort.order === 'desc'">↓</span>
-                                        <span x-show="sort.by !== col.key" class="text-border">⇅</span>
+                                        <svg x-show="sort.by === col.key && sort.order === 'asc'" class="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 15l7-7 7 7"/></svg>
+                                        <svg x-show="sort.by === col.key && sort.order === 'desc'" class="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
+                                        <svg x-show="sort.by !== col.key" class="w-3.5 h-3.5 text-border" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M8 7l4-4 4 4M8 17l4 4 4-4"/></svg>
                                     </button>
                                 </template>
                                 <template x-if="!col.sortable">
@@ -307,7 +308,7 @@ dir="rtl"
                         </tr>
                     </template>
                     <template x-for="item in items" :key="item[primaryKey]">
-                        <tr class="hover:bg-primary/5 transition duration-150{{ $rowClickUrl ? ' cursor-pointer' : '' }}"
+                        <tr class="hover:bg-primary/5 transition-colors duration-150{{ $rowClickUrl ? ' cursor-pointer' : '' }}"
                             @if ($rowClickUrl) @click="handleRowClick(item)" @endif>
                             @if ($selectable)
                             <td class="px-6 py-4">
@@ -315,7 +316,8 @@ dir="rtl"
                                     :checked="selectedItems.includes(item[primaryKey])"
                                     @change="toggleItem(item[primaryKey])"
                                     :aria-label="'Select row ' + item[primaryKey]"
-                                    @click.stop>
+                                    @click.stop
+                                    class="h-4 w-4 rounded border-border text-primary focus:ring-2 focus:ring-primary/30 focus:ring-offset-0 cursor-pointer">
                             </td>
                             @endif
                             <template x-for="col in columns" :key="col.key">
@@ -364,7 +366,7 @@ dir="rtl"
                 <select x-model="pagination.perPage"
                     @change="pagination.current = 1; fetchData(1)"
                     aria-label="{{ trans('general.per_page') }}"
-                    class="text-xs rounded-lg border-border shadow-card focus:border-primary focus:ring-primary/30">
+                    class="text-xs rounded-lg border-border shadow-card focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
                     @foreach ($perPageOptions as $option)
                     <option value="{{ $option }}">{{ $option }}</option>
                     @endforeach
@@ -374,7 +376,7 @@ dir="rtl"
 
             <div class="flex items-center gap-2">
                 <button @click="fetchData(pagination.current - 1)" :disabled="pagination.current === 1 || loading"
-                    class="px-3 py-1.5 bg-surface border border-border rounded-lg text-xs font-semibold text-text-primary hover:bg-muted shadow-card disabled:opacity-40 disabled:hover:bg-surface transition"
+                    class="px-3 py-1.5 bg-surface border border-border rounded-full text-xs font-semibold text-text-primary hover:bg-muted shadow-card disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-surface transition-all duration-150 ease-in-out focus-visible:ring-2 focus-visible:ring-primary/30"
                     aria-label="{{ trans('general.previous') }}">
                     {{ trans('general.previous') }}
                 </button>
@@ -384,7 +386,7 @@ dir="rtl"
                 </span>
 
                 <button @click="fetchData(pagination.current + 1)" :disabled="pagination.current === pagination.last || loading"
-                    class="px-3 py-1.5 bg-surface border border-border rounded-lg text-xs font-semibold text-text-primary hover:bg-muted shadow-card disabled:opacity-40 disabled:hover:bg-surface transition"
+                    class="px-3 py-1.5 bg-surface border border-border rounded-full text-xs font-semibold text-text-primary hover:bg-muted shadow-card disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-surface transition-all duration-150 ease-in-out focus-visible:ring-2 focus-visible:ring-primary/30"
                     aria-label="{{ trans('general.next') }}">
                     {{ trans('general.next') }}
                 </button>
