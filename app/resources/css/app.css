@@ -1,13 +1,16 @@
-@import url("https://fonts.bunny.net/css?family=Nunito");
+@import url("https://fonts.bunny.net/css?family=Cairo:400,500,600,700,800&display=swap");
 
 @import "./variables.css";
 
 @import "tailwindcss";
 
 @theme {
+    --font-family-sans: "Cairo", "Nunito", sans-serif;
+
     --color-primary: #2563eb;
     --color-primary-dark: #1d4ed8;
     --color-surface: #ffffff;
+    --color-surface-sidebar: #1e293b;
     --color-muted: #f8fafc;
     --color-border: #e2e8f0;
     --color-text-primary: #0f172a;
@@ -16,6 +19,41 @@
     --color-danger: #dc2626;
     --color-warning: #d97706;
     --color-info: #0284c7;
+
+    --color-status-active: #16a34a;
+    --color-status-excluded: #dc2626;
+    --color-status-neutral: #64748b;
+    --color-status-primary: #2563eb;
+
+    --radius-card: 0.75rem;
+    --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    --shadow-card-hover: 0 4px 10px rgba(16, 24, 40, 0.10);
+}
+
+/* RTL utility reference:
+   - Use `rtl:` prefix for RTL-specific overrides (e.g., `rtl:text-right`)
+   - Use `inset-inline-start/end` instead of `left/right`
+   - Use `margin-inline-start/end` instead of `ml-/mr-`
+   - Use `padding-inline-start/end` instead of `pl-/pr-`
+   - Use `border-inline-start/end` instead of `border-l-/border-r-`
+   - Flex: `flex-row` stays the same; use `gap-*` for spacing
+*/
+
+@variant dark {
+    :root {
+        --color-primary: #60a5fa;
+        --color-primary-dark: #3b82f6;
+        --color-surface: #1e293b;
+        --color-surface-sidebar: #0f172a;
+        --color-muted: #0f172a;
+        --color-border: #334155;
+        --color-text-primary: #f1f5f9;
+        --color-text-secondary: #94a3b8;
+        --color-status-active: #4ade80;
+        --color-status-excluded: #f87171;
+        --color-status-neutral: #94a3b8;
+        --color-status-primary: #60a5fa;
+    }
 }
 
 @keyframes shrink {

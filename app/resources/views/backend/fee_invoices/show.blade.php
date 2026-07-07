@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="text-center w-1/3">
-                <h1 class="text-xl font-semibold">{{ trans('fee_invoice.title') }}</h1>
+                <h1 class="text-2xl font-bold">{{ trans('fee_invoice.title') }}</h1>
                 <p class="mb-0">{{ trans('general.created_at') }}: {{ $invoice_details->invoice_date }}</p>
             </div>
             <div class="w-1/3">
@@ -69,7 +69,7 @@
         </div>
         <div class="mb-3 flex flex-wrap">
             <div class="w-full">
-                <h2 class="text-lg font-semibold">{{ trans('Recipt_Payments.name') }}: {{ $invoice_details->students->name }}</h2>
+                <h2 class="text-xl font-bold">{{ trans('Recipt_Payments.name') }}: {{ $invoice_details->students->name }}</h2>
             </div>
         </div>
         <div class="mb-3 flex flex-wrap">
@@ -86,7 +86,7 @@
         </div>
         <div class="flex flex-wrap">
             <div class="text-center w-full">
-                <h2 class="text-lg font-semibold">{{ $tafqeet }}</h2>
+                <h2 class="text-xl font-bold">{{ $tafqeet }}</h2>
             </div>
         </div>
     </div>

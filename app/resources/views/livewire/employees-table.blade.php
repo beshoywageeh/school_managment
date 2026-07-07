@@ -166,7 +166,7 @@
                             @endforelse
                         </tbody>
                     </table>
-                    {{ $employees->links('vendor.livewire.bootstrap') }}
+                    {{ $employees->links('vendor.livewire.tailwind') }}
                 @endcan
             </div>
         </div>

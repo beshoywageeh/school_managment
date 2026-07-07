@@ -8,9 +8,9 @@
         @csrf
         <div class="mb-4 flex flex-wrap gap-4">
             <div class="flex-1 min-w-[320px]">
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
                     <div class="p-6">
-                        <h4 class="text-lg font-semibold mb-4 text-center">{{ trans('employees.personal_info') }}</h4>
+                        <h4 class="text-lg font-bold mb-4 text-center">{{ trans('employees.personal_info') }}</h4>
 
                         <div class="flex flex-wrap gap-4 mb-4">
                             <div class="flex-1 min-w-[200px]">
@@ -24,15 +24,12 @@
                         </div>
 
                         <div class="flex flex-wrap gap-4 mb-4">
-                            <div class="flex-1 min-w-[200px]">
-                                <label for="grade_year" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('employees.grade_year') }}</label>
-                                <select name="grade_year" id="grade_year" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white">
-                                    <option value="" selected>{{ trans('employees.grade_year') }}</option>
-                                    @foreach ($years as $year)
-                                        <option value="{{ $year }}">{{ $year }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <x-select name="grade_year" label="{{ trans('employees.grade_year') }}" id="grade_year">
+                                <option value="" selected>{{ trans('employees.grade_year') }}</option>
+                                @foreach ($years as $year)
+                                    <option value="{{ $year }}">{{ $year }}</option>
+                                @endforeach
+                            </x-select>
                             <div class="flex-1 min-w-[200px]">
                                 <x-input type="date" name="birth_date"
                                     value="{{ old('birth_date') }}">{{ trans('employees.birth_date') }}</x-input>
@@ -70,25 +67,17 @@
                             <x-input.religion-select />
                         </div>
 
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('employees.address') }}</label>
-                            <textarea class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" name="address" placeholder="{{ trans('employees.address') }}">{{ old('address') }}</textarea>
-                            <x-input-error :messages="$errors->get('address')" />
-                        </div>
+                        <x-textarea name="address" label="{{ trans('employees.address') }}" placeholder="{{ trans('employees.address') }}">{{ old('address') }}</x-textarea>
 
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('employees.notes') }}</label>
-                            <textarea class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" name="note" placeholder="{{ trans('employees.notes') }}">{{ old('note') }}</textarea>
-                            <x-input-error :messages="$errors->get('note')" />
-                        </div>
+                        <x-textarea name="note" label="{{ trans('employees.notes') }}" placeholder="{{ trans('employees.notes') }}">{{ old('note') }}</x-textarea>
                     </div>
                 </div>
             </div>
 
             <div class="flex-1 min-w-[320px]">
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-4">
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-4">
                     <div class="p-6">
-                        <h4 class="text-lg font-semibold mb-4 text-center">{{ trans('employees.job_info') }}</h4>
+                        <h4 class="text-lg font-bold mb-4 text-center">{{ trans('employees.job_info') }}</h4>
 
                         <div class="flex flex-wrap gap-4 mb-4">
                             <div class="flex-1 min-w-[200px]">
@@ -103,24 +92,17 @@
 
                         <div class="flex flex-wrap gap-4 mb-4">
                             <x-input.job_type />
-                            <div class="flex-1 min-w-[200px]">
-                                <label for="jobs" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('employees.job_title') }}</label>
-                                <select name="job_id" id="jobs" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white">
-                                    <option selected> ---{{ trans('employees.select_worker_title') }}---</option>
-                                </select>
-                            </div>
+                            <x-select name="job_id" label="{{ trans('employees.job_title') }}" id="jobs">
+                                <option selected> ---{{ trans('employees.select_worker_title') }}---</option>
+                            </x-select>
                         </div>
 
                         <div class="flex flex-wrap gap-4 mb-4">
-                            <div class="flex-1 min-w-[200px]">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('employees.insurance_status') }}</label>
-                                <select class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white" name="status">
-                                    <option value="" selected disabled>{{ trans('employees.insurance_status') }}</option>
-                                    <option value="0">{{ trans('employees.insur') }}</option>
-                                    <option value="1">{{ trans('employees.contracted') }}</option>
-                                </select>
-                                <x-input-error :messages="$errors->get('status')" />
-                            </div>
+                            <x-select name="status" label="{{ trans('employees.insurance_status') }}">
+                                <option value="" selected disabled>{{ trans('employees.insurance_status') }}</option>
+                                <option value="0">{{ trans('employees.insur') }}</option>
+                                <option value="1">{{ trans('employees.contracted') }}</option>
+                            </x-select>
                             <div class="flex-1 min-w-[200px]">
                                 <x-input name="lesson_count" value="{{ old('lesson_count', 24) }}"
                                     type="number">{{ trans('employees.lesson_count') }}</x-input>
@@ -140,9 +122,9 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-4">
+                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-4">
                     <div class="p-6">
-                        <h4 class="text-lg font-semibold mb-4 text-center">{{ trans('employees.attachment') }}</h4>
+                        <h4 class="text-lg font-bold mb-4 text-center">{{ trans('employees.attachment') }}</h4>
 
                         <div class="mb-4">
                             <div class="flex gap-2">

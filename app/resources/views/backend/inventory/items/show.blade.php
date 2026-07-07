@@ -17,7 +17,7 @@
             <div class="lg:col-span-2 space-y-6">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-800">{{ trans('general.basic_info') }}</h3>
+                        <h3 class="text-lg font-bold text-gray-800">{{ trans('general.basic_info') }}</h3>
                     </div>
                     <div class="p-6">
                         <dl class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -79,7 +79,7 @@
 
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-gray-800">{{ trans('inventory.history') }}</h3>
+                        <h3 class="text-lg font-bold text-gray-800">{{ trans('inventory.history') }}</h3>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full">
@@ -127,7 +127,7 @@
             <div class="space-y-6">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100">
-                        <h3 class="text-lg font-semibold text-gray-800">{{ trans('inventory.current_stock') }}</h3>
+                        <h3 class="text-lg font-bold text-gray-800">{{ trans('inventory.current_stock') }}</h3>
                     </div>
                     <div class="p-6 text-center">
                         <div class="text-4xl font-bold {{ $item->current_stock <= $item->min_stock ? 'text-red-500' : ($item->current_stock <= ($item->max_stock / 2) ? 'text-yellow-500' : 'text-green-500') }}">

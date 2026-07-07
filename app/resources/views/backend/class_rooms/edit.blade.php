@@ -13,7 +13,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-1.5">
                         {{ trans('Grades.title') }}
                     </label>
-                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-shadow appearance-none"
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-shadow appearance-none"
                             name="grade_name"
                             required>
                         <option value="" disabled>{{ trans('class_rooms.select_grade') }}</option>
@@ -35,7 +35,7 @@
                         name="class_name"
                         type="text"
                         value="{{ $class_room->name }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                         required />
                 </div>
 

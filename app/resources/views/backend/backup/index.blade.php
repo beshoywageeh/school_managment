@@ -6,9 +6,9 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
         <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-            <h4 class="text-lg font-semibold text-gray-800">{{ trans('backup.title') }}</h4>
+            <h4 class="text-lg font-bold text-gray-800">{{ trans('backup.title') }}</h4>
             @can('backup-list')
-                <a href="{{ route('backup.create') }}" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center gap-2" id="create" role="button">
+                <a href="{{ route('backup.create') }}" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 flex items-center gap-2" id="create" role="button">
                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                     </svg>
@@ -55,7 +55,7 @@
                                             <td class="px-4 py-2">
                                                 <div class="flex items-center gap-2">
                                                     @can('backup-download')
-                                                    <a href="{{ route('backup.download', $file) }}" class="px-3 py-1 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600" title="{{ trans('general.buttons.download') }}">
+                                                    <a href="{{ route('backup.download', $file) }}" class="px-3 py-1 bg-primary text-white rounded-lg text-xs font-medium hover:bg-primary/90" title="{{ trans('general.buttons.download') }}">
                                                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                         </svg>
@@ -65,7 +65,7 @@
                                                     <form action="{{ route('backup.delete', $file) }}" method="POST" class="inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="px-3 py-1 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600" onclick="confirmation(event)" title="{{ trans('general.buttons.delete') }}">
+                                                        <button type="submit" class="px-3 py-1 bg-danger text-white rounded-lg text-xs font-medium hover:bg-danger/90" onclick="confirmation(event)" title="{{ trans('general.buttons.delete') }}">
                                                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                             </svg>
@@ -114,7 +114,7 @@
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-2">
                                     @can('backup-download')
-                                    <a href="{{ route('backup.download', $backup['file_name']) }}" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="{{ trans('general.buttons.download') }}">
+                                    <a href="{{ route('backup.download', $backup['file_name']) }}" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.buttons.download') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                         </svg>
@@ -124,7 +124,7 @@
                                     <form action="{{ route('backup.delete', $backup['file_name']) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" onclick="confirmation(event)" title="{{ trans('general.buttons.delete') }}">
+                                        <button type="submit" class="p-2 text-danger hover:bg-danger/10 rounded-lg" onclick="confirmation(event)" title="{{ trans('general.buttons.delete') }}">
                                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>

@@ -4,7 +4,7 @@
     </div>
     <div>
         <x-input-label>{{ trans('inventory.type') }}</x-input-label>
-        <select name="type" x-model="formType" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all">
+        <select name="type" x-model="formType" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
             <option value="stock" {{ old('type', $item->type->value ?? 'stock') == 'stock' ? 'selected' : '' }}>{{ trans('inventory.stock') }}</option>
             <option value="clothe" {{ old('type', $item->type->value ?? 'stock') == 'clothe' ? 'selected' : '' }}>{{ trans('inventory.clothes') }}</option>
             <option value="book" {{ old('type', $item->type->value ?? 'stock') == 'book' ? 'selected' : '' }}>{{ trans('inventory.books') }}</option>
@@ -13,7 +13,7 @@
     </div>
     <div x-show="formType === 'book'" x-cloak>
         <x-input-label>{{ trans('book_sheet.type') }}</x-input-label>
-        <select name="category" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all">
+        <select name="category" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
             <option value="">{{ trans('general.choose') }}</option>
             <option value="book" {{ old('category', $item->category->value ?? '') == 'book' ? 'selected' : '' }}>{{ trans('enums.inventory_item_type.book') }}</option>
             <option value="sheet" {{ old('category', $item->category->value ?? '') == 'sheet' ? 'selected' : '' }}>{{ trans('book_sheet.sheet') }}</option>
@@ -33,7 +33,7 @@
     <div x-show="formType === 'clothe' || formType === 'book'" x-cloak>
         <div>
             <x-input-label>{{ trans('fees.classroom') }}</x-input-label>
-            <select name="classroom_id" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all tom-select">
+            <select name="classroom_id" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all tom-select">
                 <option value="">{{ trans('general.choose',['value'=>'']) }}</option>
                 @foreach($classrooms ?? [] as $key => $classroom)
                     <optgroup label="{{ $key }}">

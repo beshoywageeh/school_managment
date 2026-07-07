@@ -118,6 +118,7 @@ return [
     'Choose' => 'Choose',
     'New' => 'New',
     'no_data' => 'No data available',
+    'select_all' => 'Select All',
     'not_found' => 'Not found',
     'search' => 'Search',
     'loop_labs' => 'Laboratories',

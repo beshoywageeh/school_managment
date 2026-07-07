@@ -7,12 +7,12 @@
                 @endif
             </td>
             <td class="w-3/5 text-center align-top">
-                <h1 class="text-xl font-bold text-gray-900 m-0">{{ $school_data->name ?? '' }}</h1>
+                <h1 class="text-2xl font-bold text-gray-900 m-0">{{ $school_data->name ?? '' }}</h1>
                 <p class="text-sm text-gray-600 mt-1">{{ $school_data->address ?? '' }}</p>
                 <p class="text-sm text-gray-600">{{ $school_data->phone ?? '' }}</p>
             </td>
             <td class="w-1/5 text-right align-top">
-                <h2 class="text-lg font-bold text-gray-800 m-0">{{ $title ?? 'Report' }}</h2>
+                <h2 class="text-xl font-bold text-gray-800 m-0">{{ $title ?? 'Report' }}</h2>
                 <p class="text-sm text-gray-500 mt-1">{{ trans('report.print_date', ['date' => date('Y-m-d')]) }}</p>
             </td>
         </tr>

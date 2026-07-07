@@ -2,7 +2,7 @@
     <form action="{{ route('parents.import_excel') }}" method="POST" enctype="multipart/form-data" id="Import_Excel">
         @csrf
         <div class="p-6">
-            <input accept=".xlsx, .xls" type="file" name="file" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+            <input accept=".xlsx, .xls" type="file" name="file" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
         </div>
 
     </form>

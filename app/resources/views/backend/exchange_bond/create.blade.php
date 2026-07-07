@@ -11,8 +11,7 @@
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>
-                        <label for="manual" class="block text-sm font-semibold text-gray-700 mb-1">{{ trans('exchange_bonds.manual') }}</label>
-                        <input type="text" name="manual" id="manual" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
+                        <x-input name="manual" type="text">{{ trans('exchange_bonds.manual') }}</x-input>
                     </div>
                     <div>
                         <label for="student_id" class="block text-sm font-semibold text-gray-700 mb-1">{{ trans('exchange_bonds.student') }}</label>
@@ -23,19 +22,15 @@
                             disabled>
                     </div>
                     <div>
-                        <label for="amount" class="block text-sm font-semibold text-gray-700 mb-1">{{ trans('exchange_bonds.amount') }}</label>
-                        <input type="number" name="amount" id="amount" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" step="0.01">
+                        <x-input name="amount" type="number" step="0.01">{{ trans('exchange_bonds.amount') }}</x-input>
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <label for="note" class="block text-sm font-semibold text-gray-700 mb-1">{{ trans('exchange_bonds.note') }}</label>
-                    <textarea name="note" id="note" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" rows="3"></textarea>
-                </div>
+                <x-textarea name="note" label="{{ trans('exchange_bonds.note') }}" id="note" rows="3"></x-textarea>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <button type="submit"
-                            class="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium">{{ trans('general.Submit') }}</button>
+                            class="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium">{{ trans('general.Submit') }}</button>
                     </div>
                 </div>
             </form>

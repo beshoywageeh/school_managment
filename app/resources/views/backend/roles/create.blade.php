@@ -12,7 +12,7 @@
                         <x-input name="name" type="text">{{ trans('permissions.create') }}</x-input>
                     </div>
                     <div>
-                        <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium">{{ trans('general.Submit') }}</button>
+                        <button type="submit" class="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium">{{ trans('general.Submit') }}</button>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                                 </h5>
                                 <div class="flex items-center">
                                     <label class="text-sm font-medium mr-2"><strong>{{ trans('permissions.select_all') }}</strong></label>
-                                    <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500" name=""
+                                    <input type="checkbox" class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-primary" name=""
                                         onchange="checkAll(this, '{{ $table }}')">
                                 </div>
                             </div>
@@ -35,7 +35,7 @@
                                 @forelse ($roles as $role)
                                     <li class="flex items-center">
                                         <input type="checkbox" name="permission[{{ $table }}][]"
-                                            value="{{ $role->name }}" id="" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            value="{{ $role->name }}" id="" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-primary">
                                         <span class="ml-2 text-sm text-gray-700"><strong>{{ trans('permissions.' . $role->name) }}</strong></span>
                                     </li>
                                 @empty

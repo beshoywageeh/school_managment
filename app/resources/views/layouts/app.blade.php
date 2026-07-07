@@ -25,7 +25,15 @@
 }"
 @keydown.window.escape="sidebarMobileOpen = false"
 :class="sidebarMobileOpen ? 'overflow-hidden' : ''"
-class="bg-gray-100 font-sans">
+class="bg-gray-100 font-sans"
+style="--module-primary: {{ $modulePrimary ?? 'var(--color-primary)' }}; --module-bg: {{ $moduleBg ?? 'var(--color-surface)' }};">
+    <!-- Skip-to-content link -->
+    <a href="#main-content"
+       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-[9999] focus:bg-white focus:text-gray-900 focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary"
+       aria-label="{{ trans('general.skip_to_content') ?? 'الانتقال إلى المحتوى' }}">
+        {{ trans('general.skip_to_content') ?? 'الانتقال إلى المحتوى' }}
+    </a>
+
     <!-- Pre-loader - hidden after 2 seconds as fallback -->
     <div id="pre-loader" class="fixed inset-0 bg-white flex items-center justify-center z-[9999]">
         <img src="{{ asset('assests/images/logo-dark.png') }}" alt="Loading" class="w-32">
@@ -50,7 +58,7 @@ class="bg-gray-100 font-sans">
         <!-- Header -->
         @include('layouts.header')
         <!-- Content Area -->
-        <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+        <main id="main-content" class="flex-1 overflow-y-auto p-6 bg-gray-50">
             <h4 class="text-2xl font-bold text-gray-800">@yield('title')</h4>
 
             @yield('content')
@@ -75,6 +83,26 @@ class="bg-gray-100 font-sans">
     </div>
 
     @include('layouts.footer_script')
+
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('session.expired', () => {
+                window.dispatchEvent(new CustomEvent('add-toast', {
+                    detail: {
+                        id: Date.now(),
+                        message: 'انتهت الجلسة',
+                        type: 'warning',
+                        sticky: true,
+                        duration: 5000,
+                        progress: 100
+                    }
+                }));
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 2000);
+            });
+        });
+    </script>
 
     @livewireScripts
 </body>

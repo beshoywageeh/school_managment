@@ -14,7 +14,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6" id="print">
         <div class="flex justify-between items-center mb-6">
-            <h4 class="text-lg font-semibold text-gray-800">{{ $parent->father_name }}</h4>
+            <h4 class="text-lg font-bold text-gray-800">{{ $parent->father_name }}</h4>
             <div class="text-left">
                 <x-button id="print_Button" class="primary" type="" onclick="printDiv()">
                     <svg class="w-5 h-5 inline ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

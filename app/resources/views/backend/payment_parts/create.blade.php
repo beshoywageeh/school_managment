@@ -41,7 +41,7 @@
                                <template x-for="(part,index) in parts" :key="index">
                             <tr  class="hover:bg-gray-50 transition-colors">
                                 <td class="px-4 py-2">
-                                <select class=" px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" :name="`parts[${index}][fee_id]`">
+                                <select class=" px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" :name="`parts[${index}][fee_id]`">
                                     <option value="" selected>{{ trans('general.choose',['value'=>trans('Sidebar.fees_invoice')]) }}
                                     </option>
                                     @foreach ($student->fee_invoice as $fee_invoice)
@@ -53,14 +53,14 @@
                                 </select>
                             </td>
                             <td class="px-4 py-2">
-                                <input type="date" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" :name="`parts[${index}][pay_at]`" id="">
+                                <input type="date" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" :name="`parts[${index}][pay_at]`" id="">
                             </td>
                             <td class="px-4 py-2">
-                                <input type="number" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" :name="`parts[${index}][amount]`" id="">
+                                <input type="number" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" :name="`parts[${index}][amount]`" id="">
                             </td>
                             <td class="px-4 py-2">
                                 <button type="button" x-on:click="removeRow(index)"
-                                                class="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                                class="p-1.5 text-red-400 hover:text-danger hover:bg-danger/10 rounded-lg transition-colors">
                                                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>

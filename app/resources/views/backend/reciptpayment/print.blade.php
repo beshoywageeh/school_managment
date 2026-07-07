@@ -15,14 +15,14 @@
                 </div>
             </div>
             <div class="col-6 text-end">
-                <h1 class="h3">{{ trans('Recipt_Payments.title') }}</h1>
+                <h1 class="text-2xl font-bold">{{ trans('Recipt_Payments.title') }}</h1>
                 <p class="mb-0">{{ trans('general.created_at') }}: {{ $report_data['recipt']->date }}</p>
                 <p class="mb-0">{{ trans('Recipt_Payments.man') }}: {{ $report_data['recipt']->manual }}</p>
             </div>
         </div>
         <div class="mb-3 row">
             <div class="col-12">
-                <h2 class="h4">{{ trans('Recipt_Payments.name') }}: {{ $report_data['recipt']->student->name }}</h2>
+                <h2 class="text-xl font-bold">{{ trans('Recipt_Payments.name') }}: {{ $report_data['recipt']->student->name }}</h2>
             </div>
         </div>
         <div class="mb-3 row">
@@ -39,7 +39,7 @@
         </div>
         <div class="row">
             <div class="text-center col-12">
-                <h2 class="h4">{{ $report_data['tafqeet'] }}</h2>
+                <h2 class="text-xl font-bold">{{ $report_data['tafqeet'] }}</h2>
             </div>
         </div>
         <br>

@@ -50,7 +50,7 @@ props and slots. ✅ No violation.
 (forms, modals, data fetching). Alpine handles client-side toggles, animations,
 chart init, and the existing DataTable presentation layer. RTL Arabic responsive
 layout. All interactive components meet WCAG 2.1 Level AA (ARIA labels, keyboard
-navigation, focus management, color contrast, screen reader support). ✅ Compliant.
+navigation, focus management, color contrast, screen reader support). Note: Dark mode explicitly deferred per spec Q&A 7 (light-only theme); no violation per Constitution II's SHOULD language. ✅ Compliant.
 
 **Principle III — Minimal Dependencies**: No new npm/composer packages required.
 ApexCharts (already installed) used for dashboard charts instead of adding Chart.js.

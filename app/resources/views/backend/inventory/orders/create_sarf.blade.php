@@ -6,7 +6,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-4 border-b border-gray-100">
-            <h4 class="text-lg font-semibold text-gray-800">{{ trans('stock.outcome_order') }}</h4>
+            <h4 class="text-lg font-bold text-gray-800">{{ trans('stock.outcome_order') }}</h4>
         </div>
 
         <form action="{{ route('inventory.orders.store') }}" method="POST">
@@ -19,7 +19,7 @@
                     </div>
                     <div>
                         <x-input-label>{{ trans('student.title') }}</x-input-label>
-                        <select name="student_id" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all tom-select">
+                        <select name="student_id" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all tom-select">
                             <option value="">{{ trans('general.choose') }}</option>
                             @foreach($students ?? [] as $student)
                                 <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>{{ $student->name }}</option>
@@ -43,8 +43,8 @@
 
                 <div x-data="{ items: [] }" class="mb-6">
                     <div class="flex items-center justify-between mb-3">
-                        <h5 class="text-md font-semibold text-gray-700">{{ trans('stock.quantity') }}</h5>
-                        <button type="button" x-on:click="items.push({})" class="px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm flex items-center gap-1">
+                        <h5 class="text-md font-bold text-gray-700">{{ trans('stock.quantity') }}</h5>
+                        <button type="button" x-on:click="items.push({})" class="px-3 py-1.5 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm flex items-center gap-1">
                             <x-hero-icon name="plus" class="w-4 h-4" />
                             {{ trans('general.add') }}
                         </button>
@@ -78,7 +78,7 @@
                 <a href="{{ route('inventory.orders.index', 'sales') }}" class="px-4 py-2 text-gray-600 rounded-lg border border-gray-200 hover:bg-gray-50">
                     {{ trans('general.back') }}
                 </a>
-                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium">
+                <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium">
                     {{ trans('general.Submit') }}
                 </button>
             </div>

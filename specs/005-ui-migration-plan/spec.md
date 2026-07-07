@@ -207,7 +207,8 @@ statement table, and the row's status updates immediately without a page reload.
   record status without a full page or table reload.
 - **FR-013**: Dashboard pages MUST display KPI stat cards, at least one donut and
   one line/area chart, and a latest-records data table — all driven by Livewire
-  server state.
+  server state. KPI definitions and role-aware widget visibility are specified
+  in `tests/Feature/DashboardRedesignTest.php`.
 - **FR-014**: Expired user sessions MUST be detected and handled gracefully with a
   clear message and automatic redirect to the login page.
 - **FR-015**: All pages and components MUST render correctly in right-to-left
@@ -227,8 +228,7 @@ statement table, and the row's status updates immediately without a page reload.
   highlighting.
 - **UI Component**: Reusable interface element (card, button, data table, status
   badge, modal, tabs) defined once and composed into pages.
-- **Data Table**: Sortable, filterable, paginated table that fetches JSON data
-  from an API endpoint and renders rows with optional inline actions.
+- **Data Table**: Sortable, filterable, paginated table driven by Livewire server state (hybrid: Alpine.js presentation layer + Livewire event-driven data fetching) that renders rows with optional inline actions.
 - **Dashboard KPI**: A stat card displaying a metric label, value, and optional
   trend indicator.
 - **Record Header**: Top section of a detail page showing the entity name,

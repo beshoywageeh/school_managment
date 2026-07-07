@@ -5,8 +5,8 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
         <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-            <h4 class="text-lg font-semibold text-gray-800">{{ $user->name }}</h4>
-            <button class="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 font-medium" onclick="printDiv()">{{ trans('general.print') }}</button>
+            <h4 class="text-lg font-bold text-gray-800">{{ $user->name }}</h4>
+            <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium" onclick="printDiv()">{{ trans('general.print') }}</button>
         </div>
         <div id="print" class="p-6">
             @can('employees-list')

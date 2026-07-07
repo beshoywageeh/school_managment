@@ -9,16 +9,16 @@
         <div class="p-4 border-b border-gray-100">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
                 <div>
-                    <h4 class="text-lg font-semibold text-gray-800">{{ $laboratory->main_location->location }}</h4>
+                    <h4 class="text-lg font-bold text-gray-800">{{ $laboratory->main_location->location }}</h4>
                 </div>
                 <div>
-                    <h4 class="text-lg font-semibold text-gray-800">{{ $laboratory->sub_location }}</h4>
+                    <h4 class="text-lg font-bold text-gray-800">{{ $laboratory->sub_location }}</h4>
                 </div>
                 <div>
                     <h4></h4>
                 </div>
                 <div>
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                    <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
                         onclick="printDiv()">{{ trans('general.print') }}</button>
                 </div>
             </div>

@@ -33,6 +33,7 @@
         </div>
         @endif
 
+        <div class="overflow-x-auto">
         <table class="min-w-full border-collapse">
             <thead>
                 <tr class="bg-gray-100">
@@ -62,6 +63,7 @@
             </tfoot>
         </table>
 
+        </div>
         @if($order->notes)
         <div class="mt-4 p-4 bg-gray-50 rounded-lg">
             <strong class="text-sm text-gray-700">{{ trans('general.notes') }}:</strong>

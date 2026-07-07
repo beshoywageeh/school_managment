@@ -6,7 +6,7 @@
     @include('backend.msg')
     <div class="flex align-items-center justify-end rounded p-4 bg-white gap-2 mb-4 shadow">
         @can('Students-create')
-        <a href="{{ route('students.create') }}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer bg-blue-500 text-white hover:bg-blue-600">
+        <a href="{{ route('students.create') }}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer bg-primary text-white hover:bg-primary/90">
             <x-hero-icon name="plus" class="w-4 h-4" />
             {{ trans('general.new') }}</a>
         @endcan
@@ -26,7 +26,7 @@
                         <div class="relative inline-block" x-data="{ open: false }" x-on:click.outside="open = false">
 
                             <button type="button" x-on:click="open = !open" :aria-expanded="open"
-                                class="inline-flex items-center gap-1.5 h-8 px-3 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white text-sm font-medium rounded-lg transition-colors select-none cursor-pointer">
+                                class="inline-flex items-center gap-1.5 h-8 px-3 bg-primary hover:bg-primary/90 active:bg-primary text-white text-sm font-medium rounded-lg transition-colors select-none cursor-pointer">
                                {{trans('general.actions')}}
                                 <svg x-bind:class="open ? 'rotate-180' : ''" class="w-3.5 h-3.5 transition-transform duration-200" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +45,7 @@
                                         'icon' => 'information-circle',
                                         'text' => trans('general.buttons.view'),
 
-                                        'className' => 'text-blue-600 hover:bg-blue-50',
+                                        'className' => 'text-primary hover:bg-primary/10',
                                     ],
                                     [
                                         'can' => 'Students-edit',
@@ -53,14 +53,14 @@
                                         'icon' => 'pencil',
                                         'text' => trans('general.buttons.edit'),
 
-                                        'className' => 'text-green-600 hover:bg-green-50',
+                                        'className' => 'text-primary hover:bg-primary/10',
                                     ],
                                     [
                                         'can' => 'fee_invoice-create',
                                         'url' => route('fee_invoice.create',  'ID_PLACEHOLDER'),
                                         'icon' => 'money',
                                         'text' => trans('general.fee_invoice'),
-                                        'className' => 'text-purple-600 hover:bg-purple-50',
+                                        'className' => 'text-primary hover:bg-primary/10',
 
                                     ],
                                     [
@@ -68,7 +68,7 @@
                                         'url' => route('receipt_payment.create',  'ID_PLACEHOLDER'),
                                         'icon' => 'credit-card',
                                         'text' => trans('general.ReceiptPayment'),
-                                        'className' => 'text-yellow-600 hover:bg-yellow-50',
+                                        'className' => 'text-primary hover:bg-primary/10',
 
                                     ],
                                     [
@@ -76,7 +76,7 @@
                                         'url' => route('payment_parts.create',  'ID_PLACEHOLDER'),
                                         'icon' => 'credit-card',
                                         'text' => trans('Sidebar.payment_parts'),
-                                        'className' => 'text-yellow-600 hover:bg-yellow-50',
+                                        'className' => 'text-primary hover:bg-primary/10',
 
                                     ],
                                     [

@@ -2,6 +2,7 @@
     --primary: #2563eb;
     --primary-dark: #1d4ed8;
     --surface: #ffffff;
+    --surface-sidebar: #1e293b;
     --muted: #f8fafc;
     --border: #e2e8f0;
     --text-primary: #0f172a;
@@ -10,4 +11,8 @@
     --danger: #dc2626;
     --warning: #d97706;
     --info: #0284c7;
+    --status-active: #16a34a;
+    --status-excluded: #dc2626;
+    --status-neutral: #64748b;
+    --status-primary: #2563eb;
 }

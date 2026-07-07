@@ -6,7 +6,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-4 border-b border-gray-100">
-            <h4 class="text-lg font-semibold text-gray-800">{{ trans('stock.inventory_order') }}</h4>
+            <h4 class="text-lg font-bold text-gray-800">{{ trans('stock.inventory_order') }}</h4>
         </div>
 
         <form action="{{ route('inventory.gard.update') }}" method="POST">
@@ -50,7 +50,7 @@
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $invItem->current_stock }}</td>
                                 <td class="px-6 py-4 text-sm">
                                     <input type="hidden" name="items[{{ $loop->index }}][item_id]" value="{{ $invItem->id }}">
-                                    <input type="number" step="0.01" x-ref="actual_{{ $loop->index }}" x-on:input="$el.closest('tr').querySelector('.diff-cell').textContent = $data.diff({{ $loop->index }})" name="items[{{ $loop->index }}][actual_stock]" value="{{ old('items.' . $loop->index . '.actual_stock', $invItem->current_stock) }}" class="w-32 px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none text-center">
+                                    <input type="number" step="0.01" x-ref="actual_{{ $loop->index }}" x-on:input="$el.closest('tr').querySelector('.diff-cell').textContent = $data.diff({{ $loop->index }})" name="items[{{ $loop->index }}][actual_stock]" value="{{ old('items.' . $loop->index . '.actual_stock', $invItem->current_stock) }}" class="w-32 px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none text-center">
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium diff-cell text-center">
                                     <span class="text-gray-600">{{ number_format(0, 2) }}</span>
@@ -74,7 +74,7 @@
                 <a href="{{ route('inventory.orders.index', 'purchases') }}" class="px-4 py-2 text-gray-600 rounded-lg border border-gray-200 hover:bg-gray-50">
                     {{ trans('general.back') }}
                 </a>
-                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium">
+                <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium">
                     {{ trans('general.Submit') }}
                 </button>
             </div>

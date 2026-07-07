@@ -15,7 +15,7 @@
                             <img class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-gray-100" src="{{ URL::asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}" alt="{{ $school_info->name }}" />
                         @endif
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800">{{ $school_info->name }}</h3>
+                    <h3 class="text-lg font-bold text-gray-800">{{ $school_info->name }}</h3>
                     <div class="mt-6 space-y-3">
                         <div class="flex justify-between items-center py-2 border-b border-gray-100">
                             <span class="text-gray-500">{{ trans('setting.total_student') }}</span>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h5 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('Sidebar.Grade') }}</h5>
+                <h5 class="text-lg font-bold text-gray-800 mb-4">{{ trans('Sidebar.Grade') }}</h5>
                 <div class="space-y-3">
                     @foreach($grades as $grade)
                     <div class="flex justify-between items-center py-2 border-b border-dotted border-gray-200">
@@ -50,7 +50,7 @@
             </div>
 
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h5 class="text-lg font-semibold text-gray-800 mb-2">{{ trans('setting.auth_details') }}</h5>
+                <h5 class="text-lg font-bold text-gray-800 mb-2">{{ trans('setting.auth_details') }}</h5>
                 <p class="text-sm text-gray-500 mb-4">{{ trans('setting.auth_details_desc') }}</p>
                 <div class="text-left mb-4">
                     <span class="text-sm text-gray-500">{{ trans('setting.auth_name') }}: </span>
@@ -62,13 +62,13 @@
                     <div class="space-y-3">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('setting.old_password') }}</label>
-                            <input type="password" name="old_password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" id="old_password" />
+                            <input type="password" name="old_password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" id="old_password" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1" for="new-password">{{ trans('setting.new_password') }}</label>
-                            <input type="password" name="new_password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" id="new-password" />
+                            <input type="password" name="new_password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" id="new-password" />
                         </div>
-                        <button type="submit" class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition-colors">
+                        <button type="submit" class="w-full px-4 py-2 bg-danger text-white rounded-lg hover:bg-danger/90 font-medium transition-colors">
                             {{ trans('general.buttons.edit') }}
                         </button>
                     </div>
@@ -86,14 +86,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2" for="school-name">{{ trans('setting.name') }}</label>
-                            <input type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" value="{{ $school_info->name }}" name="school_name" />
+                            <input type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-gray-50" value="{{ $school_info->name }}" name="school_name" />
                             @error('school_name')
                                 <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
                             @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2" for="school-phone">{{ trans('setting.phone') }}</label>
-                            <input type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" value="{{ $school_info->phone }}" name="school_phone" />
+                            <input type="text" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary bg-gray-50" value="{{ $school_info->phone }}" name="school_phone" />
                             @error('school_phone')
                                 <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
                             @enderror
@@ -101,13 +101,7 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('setting.address') }}</label>
-                            <textarea class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" rows="3" name="address">{{ $school_info->address }}</textarea>
-                            @error('address')
-                                <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
-                            @enderror
-                        </div>
+                        <x-textarea name="address" label="{{ trans('setting.address') }}" class="bg-gray-50" rows="3">{{ $school_info->address }}</x-textarea>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('general.logo') }}</label>
                             <div class="relative">
@@ -127,34 +121,16 @@
                     </div>
 
                     <div class="border-t border-gray-200 pt-6 mb-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('setting.print_settings') }}</h3>
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">{{ trans('setting.print_settings') }}</h3>
                         <div class="space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('setting.heading_right') }}</label>
-                                <textarea class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" rows="2" name="head_right">{{ $school_info->heading_right }}</textarea>
-                                @error('head_right')
-                                    <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('setting.footer_right') }}</label>
-                                <textarea class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" rows="2" name="footer_right">{{ $school_info->footer_right }}</textarea>
-                                @error('footer_right')
-                                    <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('setting.footer_left') }}</label>
-                                <textarea class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 bg-gray-50" rows="2" name="footer_left">{{ $school_info->footer_left }}</textarea>
-                                @error('footer_left')
-                                    <div class="mt-1 text-red-500 text-sm">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <x-textarea name="head_right" label="{{ trans('setting.heading_right') }}" class="bg-gray-50" rows="2">{{ $school_info->heading_right }}</x-textarea>
+                            <x-textarea name="footer_right" label="{{ trans('setting.footer_right') }}" class="bg-gray-50" rows="2">{{ $school_info->footer_right }}</x-textarea>
+                            <x-textarea name="footer_left" label="{{ trans('setting.footer_left') }}" class="bg-gray-50" rows="2">{{ $school_info->footer_left }}</x-textarea>
                         </div>
                     </div>
 
                     <div class="flex justify-end">
-                        <button type="submit" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium transition-colors flex items-center gap-2">
+                        <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium transition-colors flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                             </svg>

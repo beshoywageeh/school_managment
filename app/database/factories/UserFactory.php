@@ -34,11 +34,11 @@ class UserFactory extends Factory
             'reiligon' => $this->faker->numberBetween(0, 1),
             'type' => Arr::Random(Jobs_types::cases()),
             'email_verified_at' => $this->faker->optional()->dateTime(),
-            'email' => 'admin@ischool.com',
+            'email' => $this->faker->unique()->safeEmail(),
             'isAdmin' => '1',
             'login_allow' => '1',
             'password' => \Hash::make('hypervision'),
-            'school_id' => '1',
+            'school_id' => 1,
         ];
     }
 }

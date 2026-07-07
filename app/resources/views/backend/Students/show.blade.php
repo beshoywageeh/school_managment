@@ -8,7 +8,7 @@
     <div class="max-w-5xl mx-auto" x-data="{ activeTab: 'basic_info' }">
 
         {{-- Header Card --}}
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 mb-6 overflow-hidden">
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm mb-6 overflow-hidden">
             <div class="bg-gradient-to-l from-blue-600 to-blue-700 px-6 py-5">
                 <div class="flex justify-between items-center">
                     <div>
@@ -67,9 +67,9 @@
              x-transition:enter-end="opacity-100 translate-y-0">
 
             {{-- Parent Info --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 mb-5 overflow-hidden">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm mb-5 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-50 bg-gray-50/70">
-                    <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <h3 class="font-bold text-gray-700 text-sm flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/>
                         </svg>
@@ -97,9 +97,9 @@
             </div>
 
             {{-- Student Info --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 mb-5 overflow-hidden">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm mb-5 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-50 bg-gray-50/70">
-                    <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <h3 class="font-bold text-gray-700 text-sm flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                         </svg>
@@ -127,9 +127,9 @@
             </div>
 
             {{-- Payments Table --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-50 bg-gray-50/70 flex items-center justify-between" dir="rtl">
-                    <h3 class="font-semibold text-gray-700 text-sm flex items-center gap-2">
+                    <h3 class="font-bold text-gray-700 text-sm flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
                         </svg>
@@ -186,7 +186,7 @@
              x-transition:enter-start="opacity-0 translate-y-2"
              x-transition:enter-end="opacity-100 translate-y-0">
 
-            <div id="print" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8" dir="rtl">
+            <div id="print" class="bg-white rounded-xl border border-gray-100 shadow-sm p-6" dir="rtl">
 
                 {{-- Print Header --}}
                 <div class="grid grid-cols-3 gap-6 mb-8 items-start">

@@ -6,7 +6,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-4 border-b border-gray-100">
-            <h4 class="text-lg font-semibold text-gray-800">{{ trans('stock.outcome_order') }}: {{ $order->auto_number }}</h4>
+            <h4 class="text-lg font-bold text-gray-800">{{ trans('stock.outcome_order') }}: {{ $order->auto_number }}</h4>
         </div>
 
         <form action="{{ route('inventory.orders.update') }}" method="POST">
@@ -19,7 +19,7 @@
                     </div>
                     <div>
                         <x-input-label>{{ trans('student.title') }}</x-input-label>
-                        <select name="student_id" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all tom-select">
+                        <select name="student_id" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all tom-select">
                             <option value="">{{ trans('general.choose') }}</option>
                             @foreach($students ?? [] as $student)
                                 <option value="{{ $student->id }}" {{ old('student_id', $order->student_id) == $student->id ? 'selected' : '' }}>{{ $student->name }}</option>
@@ -43,8 +43,8 @@
 
                 <div x-data="{ items: [] }" class="mb-6">
                     <div class="flex items-center justify-between mb-3">
-                        <h5 class="text-md font-semibold text-gray-700">{{ trans('stock.quantity') }}</h5>
-                        <button type="button" x-on:click="items.push({})" class="px-3 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm flex items-center gap-1">
+                        <h5 class="text-md font-bold text-gray-700">{{ trans('stock.quantity') }}</h5>
+                        <button type="button" x-on:click="items.push({})" class="px-3 py-1.5 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm flex items-center gap-1">
                             <x-hero-icon name="plus" class="w-4 h-4" />
                             {{ trans('general.add') }}
                         </button>
@@ -67,22 +67,22 @@
                                 @foreach($order->items as $existingItem)
                                 <tr>
                                     <td class="px-4 py-2">
-                                        <select name="items[{{ $loop->index }}][itemable_type]" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none">
+                                        <select name="items[{{ $loop->index }}][itemable_type]" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none">
                                             <option value="App\Models\Inventory\InventoryItem" selected>{{ trans('inventory.title') }}</option>
                                         </select>
                                     </td>
                                     <td class="px-4 py-2">
-                                        <select name="items[{{ $loop->index }}][itemable_id]" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none tom-select">
+                                        <select name="items[{{ $loop->index }}][itemable_id]" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none tom-select">
                                             @foreach($items ?? [] as $invItem)
                                                 <option value="{{ $invItem->id }}" {{ $existingItem->itemable_id == $invItem->id ? 'selected' : '' }}>{{ $invItem->name }}</option>
                                             @endforeach
                                         </select>
                                     </td>
                                     <td class="px-4 py-2">
-                                        <input type="number" step="0.01" name="items[{{ $loop->index }}][quantity_out]" value="{{ $existingItem->quantity_out }}" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none">
+                                        <input type="number" step="0.01" name="items[{{ $loop->index }}][quantity_out]" value="{{ $existingItem->quantity_out }}" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none">
                                     </td>
                                     <td class="px-4 py-2 text-center">
-                                        <button type="button" x-on:click="$event.target.closest('tr').remove()" class="p-1.5 text-red-600 hover:bg-red-50 rounded-lg">
+                                        <button type="button" x-on:click="$event.target.closest('tr').remove()" class="p-1.5 text-danger hover:bg-danger/10 rounded-lg">
                                             <x-hero-icon name="trash" class="w-5 h-5" />
                                         </button>
                                     </td>
@@ -98,7 +98,7 @@
                 <a href="{{ route('inventory.orders.index', 'sales') }}" class="px-4 py-2 text-gray-600 rounded-lg border border-gray-200 hover:bg-gray-50">
                     {{ trans('general.back') }}
                 </a>
-                <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium">
+                <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium">
                     {{ trans('general.Submit') }}
                 </button>
             </div>

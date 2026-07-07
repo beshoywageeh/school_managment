@@ -12,7 +12,7 @@
         }">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ trans('general.choose', ['value' => trans('Grades.name')]) }}</label>
-                <select name="grade" x-model="gradeId" @change="loadClassrooms()" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all">
+                <select name="grade" x-model="gradeId" @change="loadClassrooms()" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
                     <option value="" selected disabled>{{ trans('general.choose_grade') }}</option>
                     <option value="0">{{ trans('general.all') }}</option>
                     @foreach ($grades as $grade)
@@ -22,7 +22,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ trans('general.choose', ['value' => trans('class_rooms.Name')]) }}</label>
-                <select name="classroom" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all">
+                <select name="classroom" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
                     <option value="0">{{ trans('general.all') }}</option>
                     <template x-for="cls in classrooms" :key="cls.id">
                         <option x-bind:value="cls.id" x-text="cls.name"></option>
@@ -31,15 +31,15 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ trans('academic_year.year_start') }}</label>
-                <input type="date" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" name="from">
+                <input type="date" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" name="from">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ trans('academic_year.year_end') }}</label>
-                <input type="date" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all" name="to">
+                <input type="date" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" name="to">
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ trans('general.payment_status') }}</label>
-                <select name="payment_status" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all">
+                <select name="payment_status" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
                     <option value="" selected disabled>{{ trans('general.choose', ['value' => trans('report.payment_status')]) }}</option>
                     <option value="all">{{ trans('general.all') }}</option>
                     <option value="unpaid">{{ trans('clothes.unpaid') }}</option>
@@ -51,7 +51,7 @@
     <x-slot name="footer">
         <div class="flex items-center justify-end gap-3">
             <button type="button" class="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" @click="open = false">{{ trans('general.close') }}</button>
-            <button type="button" x-on:click="document.getElementById('fees_invoices').submit(); open = false;" class="px-4 py-2.5 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors">{{ trans('general.show') }}</button>
+            <button type="button" x-on:click="document.getElementById('fees_invoices').submit(); open = false;" class="px-4 py-2.5 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors">{{ trans('general.show') }}</button>
         </div>
     </x-slot>
 </x-modal>

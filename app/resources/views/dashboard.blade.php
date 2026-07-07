@@ -5,7 +5,8 @@
 @endsection
 
 @section('content')
-<div x-data="dashboardWidgets()" x-init="init()" class="space-y-6">
+<div x-data="dashboardWidgets()" x-init="init()" class="space-y-6"
+    x-effect="sidebarExpanded !== undefined && $nextTick(() => { studentChart?.resize(); revenueChart?.resize(); })">
     <template x-if="loading">
         <div class="space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -28,9 +29,10 @@
         <div class="space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <template x-for="(card, idx) in data.statCards" :key="idx">
-                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex items-center gap-4 border-s-4"
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex items-center gap-4 border-s-4 w-full"
                         :class="'border-s-' + card.color + '-500'">
-                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white shrink-0 bg-gray-400">
+                        <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white shrink-0"
+                            :class="'bg-' + card.color + '-500'">
                             <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                             </svg>
@@ -47,14 +49,20 @@
                                 </span>
                             </div>
                         </template>
+                        <template x-if="card.sparklineData && card.sparklineData.length > 0">
+                            <svg class="w-16 h-8 ml-auto shrink-0" viewBox="0 0 60 30" preserveAspectRatio="none">
+                                <polyline fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                    :points="sparklinePoints(card.sparklineData)"></polyline>
+                            </svg>
+                        </template>
                     </div>
                 </template>
             </div>
 
-            <div class="flex flex-wrap gap-4">
+            <div class="flex overflow-x-auto gap-4 pb-2 -mx-2 px-2 snap-x snap-mandatory scrollbar-none">
                 <template x-for="(action, idx) in data.quickActions" :key="idx">
-                    <a :href="'{{ url('') }}/' + action.route"
-                        class="flex items-center gap-3 px-5 py-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 no-underline text-gray-700 hover:text-gray-900">
+                    <a :href="action.route"
+                        class="snap-start shrink-0 flex items-center gap-3 px-5 py-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 no-underline text-gray-700 hover:text-gray-900">
                         <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
                             <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -167,6 +175,19 @@
                     this.revenueChart = new ApexCharts(el, options);
                     this.revenueChart.render();
                 });
+            },
+
+            sparklinePoints(data) {
+                if (!data || data.length < 2) return '';
+                const w = 60, h = 30, pad = 2;
+                const max = Math.max(...data, 1);
+                const min = Math.min(...data);
+                const range = max - min || 1;
+                return data.map((val, i) => {
+                    const x = pad + (i / (data.length - 1)) * (w - pad * 2);
+                    const y = h - pad - ((val - min) / range) * (h - pad * 2);
+                    return x.toFixed(1) + ',' + y.toFixed(1);
+                }).join(' ');
             },
         };
     }

@@ -119,6 +119,7 @@ return [
     'Choose' => 'اختر',
     'New' => 'جديد',
     'no_data' => 'لا توجد بيانات',
+    'select_all' => 'تحديد الكل',
     'not_found' => 'غير موجود',
     'search' => 'بحث',
     // Nested keys for views (buttons)

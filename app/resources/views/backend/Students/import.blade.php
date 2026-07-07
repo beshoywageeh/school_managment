@@ -3,7 +3,7 @@
 {{-- زرار فتح الموديل --}}
 <button
     x-on:click="showModal = true"
-    class="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-xl hover:bg-purple-700 transition-colors">
+    class="flex items-center gap-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-xl hover:bg-primary/90 transition-colors">
     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
     </svg>
@@ -32,7 +32,7 @@
 
         {{-- Header --}}
         <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-            <h3 class="text-base font-semibold text-gray-800">{{ trans('general.Import_Excel') }}</h3>
+            <h3 class="text-base font-bold text-gray-800">{{ trans('general.Import_Excel') }}</h3>
             <button
                 @click="showModal = false"
                 class="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
@@ -67,7 +67,7 @@
                 </a>
                 <div class="flex gap-2">
                     <button type="submit"
-                        class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors">
+                        class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary/90 transition-colors">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                         </svg>

@@ -18,7 +18,7 @@
                             value="{{ $laboratory->location }}">
                     </div>
                     <div>
-                        <button class="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium"
+                        <button class="w-full px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium"
                             type="submit">{{ trans('general.Submit') }}</button>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         </div>
                         <div>
                             <input type="hidden" name="sub_location_id[]" value="{{ $location->id }}">
-                            <input type="text" name="sub_locations[]" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                            <input type="text" name="sub_locations[]" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                                 value="{{ $location->sub_location }}">
                         </div>
                     </div>

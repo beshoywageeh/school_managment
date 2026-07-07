@@ -24,7 +24,7 @@
 @section('content')
     <div class="flex flex-wrap">
         <div class="flex-1">
-            <div class="mb-4 bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="mb-4 bg-white rounded-xl border border-gray-100 shadow-sm p-6">
                 <div class="px-6 py-4 border-b border-gray-200">
                     <div class="flex flex-wrap">
                         <div class="flex-1">{{ $class->title }}</div>

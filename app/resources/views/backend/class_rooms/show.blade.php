@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="px-2">
+    <div class="px-2 overflow-x-auto">
         <table class="w-full border border-black border-collapse text-center text-xs">
             <thead>
                 <tr class="bg-gray-100">

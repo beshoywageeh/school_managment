@@ -13,23 +13,16 @@
             <input type="hidden" name="id" value="{{ $excptionFees->id }}">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <x-select name="student_id" label="{{ trans('Recipt_Payments.name') }}" id="tom-select">
+                    <option value="{{ $excptionFees->students->id }}">{{ $excptionFees->students->name }}
+                    </option>
+                </x-select>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Recipt_Payments.name') }}</label>
-                    <select name="student_id" id="tom-select" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200">
-
-                        <option value="{{ $excptionFees->students->id }}">{{ $excptionFees->students->name }}
-                        </option>
-
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('ExcptionFee.amount') }}</label>
-                    <input type="number" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="amount"
-                        value="{{ $excptionFees->amount }}">
+                    <x-input name="amount" type="number" value="{{ $excptionFees->amount }}">{{ trans('ExcptionFee.amount') }}</x-input>
                 </div>
             </div>
             <div class="mt-6 flex justify-end">
-                <button class="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 font-medium" type="submit">{{ trans('general.Submit') }}</button>
+                <button class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium" type="submit">{{ trans('general.Submit') }}</button>
             </div>
         </form>
     </div>

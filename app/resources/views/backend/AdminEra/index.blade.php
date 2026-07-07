@@ -32,26 +32,26 @@
                                 <td class="px-4 py-2 text-gray-800">{{ $employee->code }}</td>
                                 <td class="px-4 py-2 text-gray-800 font-medium">{{ $employee->name }}</td>
                                 <td class="px-4 py-2">
-                                    <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                    <input type="email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                                         value="{{ $employee->email }}"{{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
                                 </td>
                                 <td class="px-4 py-2 text-center">
-                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" name="isAdmin"
+                                    <input type="checkbox" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-primary" name="isAdmin"
                                         @checked($employee->isAdmin == 1)
                                         {{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
                                 </td>
                                 <td class="px-4 py-2 text-center">
-                                    <input type="checkbox" name="login_allow" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                    <input type="checkbox" name="login_allow" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-primary"
                                         @checked($employee->login_allow == 1)
                                         {{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
                                 </td>
                                 <td class="px-4 py-2 text-gray-600">{{ $employee->type->lang() ?? 'N/A' }}</td>
                                 <td class="px-4 py-2">
-                                    <input type="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                    <input type="password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                                         {{ $employee->id == \Auth::id() ? 'disabled' : '' }} />
                                 </td>
                                 <td class="px-4 py-2">
-                                    <select name="role" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                    <select name="role" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
                                         {{ $employee->id == \Auth::id() ? 'disabled' : '' }}>
                                         @forelse ($Permissions as $permission)
                                             <option value="{{ $permission->name }}">
@@ -63,7 +63,7 @@
                                 <td class="px-4 py-2 text-center">
                                     @if (\Auth::user()->isAdmin == 1)
                                         <button type="submit"
-                                            class="px-3 py-1 bg-blue-500 text-white text-sm rounded-lg hover:bg-blue-600">{{ trans('general.Submit') }}</button>
+                                            class="px-3 py-1 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90">{{ trans('general.Submit') }}</button>
                                     @endif
                                 </td>
                             </tr>

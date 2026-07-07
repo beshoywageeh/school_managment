@@ -8,7 +8,7 @@
         @csrf
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h4 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('student.student_info') }}</h4>
+                <h4 class="text-lg font-bold text-gray-800 mb-4">{{ trans('student.student_info') }}</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <x-input type="text" name="name"
@@ -30,26 +30,20 @@
                     <div>
                         <label for="national_id" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.national_id') }}</label>
                         <input type="text" value="{{ old('national_id') }}" name="national_id"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" id="national_id" maxlength="14"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" id="national_id" maxlength="14"
                             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                         @error('national_id')
                             <div class="mt-1 text-sm text-red-600">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div>
-                        <label for="nationality" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('general.nationality') }}</label>
-                        <select id="nationality" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="nationality">
-                            <option value="" selected disabled>{{ trans('general.nationality') }}
-                            </option>
-                            @foreach ($nationalitys as $nationality)
-                                <option value="{{ $nationality->id }}">
-                                    {{ $nationality->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('nationality')
-                            <div class="mt-1 text-sm text-red-600">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    <x-select name="nationality" label="{{ trans('general.nationality') }}" id="nationality">
+                        <option value="" selected disabled>{{ trans('general.nationality') }}
+                        </option>
+                        @foreach ($nationalitys as $nationality)
+                            <option value="{{ $nationality->id }}">
+                                {{ $nationality->name }}</option>
+                        @endforeach
+                    </x-select>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <x-input.gender-select name="gender" />
@@ -58,64 +52,41 @@
 
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <div>
-                        <label for="parent" class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.parent') }}</label>
-                        <select name="parent_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 tom-select">
-
-
-                            @foreach ($parents as $parent)
-                                <option value="{{ $parent->id }}">
-                                    {{ $parent->father_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <x-select name="parent_id" label="{{ trans('student.parent') }}" class="tom-select">
+                        @foreach ($parents as $parent)
+                            <option value="{{ $parent->id }}">
+                                {{ $parent->father_name }}</option>
+                        @endforeach
+                    </x-select>
 
                 </div>
-                <div class="mt-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.address') }}</label>
-                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="address" rows="5">{{ old('address') }}</textarea>
-                </div>
+                <x-textarea name="address" label="{{ trans('student.address') }}" rows="5">{{ old('address') }}</x-textarea>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h4 class="text-lg font-semibold text-gray-800 mb-4">{{ trans('student.study_info') }}</h4>
+                <h4 class="text-lg font-bold text-gray-800 mb-4">{{ trans('student.study_info') }}</h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1" for="form-horizontal-full-name">
-                            {{ trans('student.choose_grade') }}
-                        </label>
-                        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="grade_id" id="grades">
-                            <option> {{ trans('student.choose_grade') }}</option>
-                            @foreach ($grades as $grade)
-                                <option value="{{ $grade->id }}">
-                                    {{ $grade->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1" for="form-horizontal-full-name">
-                            {{ trans('student.choose_classroom') }}
-                        </label>
-                        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="classroom_id" id="classrooms">
-                            <option selected value="">{{ trans('student.choose_classroom') }}</option>
-                        </select>
-                    </div>
+                    <x-select name="grade_id" label="{{ trans('student.choose_grade') }}" id="grades">
+                        <option> {{ trans('student.choose_grade') }}</option>
+                        @foreach ($grades as $grade)
+                            <option value="{{ $grade->id }}">
+                                {{ $grade->name }}</option>
+                        @endforeach
+                    </x-select>
+                    <x-select name="classroom_id" label="{{ trans('student.choose_classroom') }}" id="classrooms">
+                        <option selected value="">{{ trans('student.choose_classroom') }}</option>
+                    </x-select>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                     <div>
                      <x-input.Student_Status />
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1" for="form-horizontal-full-name">
-                            {{ trans('student.choose_acadmice') }}
-                        </label>
-                        <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" name="academic_year">
-                            <option> {{ trans('student.choose_acadmice') }}</option>
-                            @foreach ($acadmice_years as $acadmice_year)
-                                <option value="{{ $acadmice_year->id }}">
-                                    {{ $acadmice_year->view }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <x-select name="academic_year" label="{{ trans('student.choose_acadmice') }}">
+                        <option> {{ trans('student.choose_acadmice') }}</option>
+                        @foreach ($acadmice_years as $acadmice_year)
+                            <option value="{{ $acadmice_year->id }}">
+                                {{ $acadmice_year->view }}</option>
+                        @endforeach
+                    </x-select>
                 </div>
                 <div class="mt-6 flex justify-end">
                     <x-button accesskey="s" class="primary" type="submit">

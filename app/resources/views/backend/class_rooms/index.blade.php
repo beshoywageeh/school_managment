@@ -6,7 +6,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-            <h4 class="text-lg font-semibold text-gray-800">{{ trans('class_rooms.title') }}</h4>
+            <h4 class="text-lg font-bold text-gray-800">{{ trans('class_rooms.title') }}</h4>
             @include('backend.class_rooms.create')
 
         </div>
@@ -42,7 +42,7 @@
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-1">
                                     @can('class_rooms-info')
-                                    <a href="{{ route('class_rooms.show', $class_room->id) }}" target="_blank" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg" title="{{ trans('general.info') }}">
+                                    <a href="{{ route('class_rooms.show', $class_room->id) }}" target="_blank" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.info') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
@@ -53,7 +53,7 @@
                                     <form action="{{ route('class_rooms.destroy', $class_room->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="p-2 text-red-600 hover:bg-red-50 rounded-lg" x-on:click="window.dispatchEvent(new CustomEvent('show-alert', { detail: {
+                                        <button type="button" class="p-2 text-danger hover:bg-danger/10 rounded-lg" x-on:click="window.dispatchEvent(new CustomEvent('show-alert', { detail: {
                                                         title: '{{ trans('general.confirm') }}',
                                                         message: '{{ trans('general.confirmation') }}',
                                                         type: 'danger',
@@ -67,7 +67,7 @@
                                     </form>
                                     @endcan
                                     @can('class_rooms-tammen')
-                                    <a href="{{ route('class_rooms.tammen', $class_room->id) }}" class="p-2 text-purple-600 hover:bg-purple-50 rounded-lg" title="{{ trans('general.tammen') }}">
+                                    <a href="{{ route('class_rooms.tammen', $class_room->id) }}" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.tammen') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>

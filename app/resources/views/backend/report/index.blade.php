@@ -141,7 +141,7 @@
 
         @foreach ($reports_links as $heading => $report_links)
             @if (!empty($report_links))
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300">
                     <div class="bg-gradient-to-r {{ $category_gradients[$heading] ?? 'from-gray-500 to-gray-600' }} px-5 py-4">
                         <h4 class="text-white font-bold text-lg m-0">
                             <i class="fa {{ $category_icons[$heading] ?? 'fa-file-alt' }} ms-2"></i>

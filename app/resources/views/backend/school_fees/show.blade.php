@@ -9,7 +9,7 @@
 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-4">
     <div class="p-4 border-b border-gray-100 flex justify-between items-center">
         <div>
-            <button class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+            <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
                 onClick="printDiv()">{{ trans('report.print') }}</button>
         </div>
         @if ($school->image)
@@ -19,7 +19,7 @@
             <img src="{{ asset('assests/images/logo-icon-dark.png') }}" alt="Ischool" class="w-10 h-10"/>
         @endif
         <div class="text-center col-4">
-            <h1 class="h3">{{ trans('report.fee_invoice') }}</h1>
+            <h1 class="text-2xl font-bold">{{ trans('report.fee_invoice') }}</h1>
             <p class="mb-0">{{ trans('report.print_date') }} | {{ date('Y-m-d') }}</p>
         </div>
         <div class="col-4">
