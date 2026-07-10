@@ -13,4 +13,8 @@ return [
     'new' => 'صف جديد',
     'select_grade' => 'اختر المرحلة',
     'Student_Count' => 'عدد الطلاب',
+    'classrooms' => [
+        'name' => 'اسم الصف',
+        'grade' => 'المرحلة',
+    ],
 ];

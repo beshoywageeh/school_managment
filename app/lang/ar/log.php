@@ -7,6 +7,7 @@ return [
             'updated' => 'تم تعديل المستخدم :name',
             'deleted' => 'تم حذف المستخدم :name',
             'restored' => 'تم استعادة المستخدم :name',
+            'status_changed' => 'تم تغيير حالة المستخدم',
         ],
         'parent' => [
             'created' => 'تم إنشاء ولي الأمر :name',
@@ -153,6 +154,15 @@ return [
             'auto_generated' => 'تم توليد الجدول تلقائياً',
             'cleared' => 'تم مسح الجدول',
         ],
+    ],
+    'parents' => [
+        'added_action' => 'تم إضافة ولي أمر',
+    ],
+    'book_sheets_order' => [
+        'sarf_added' => 'تم إضافة صرف كتب',
+    ],
+    'clothes_order' => [
+        'out_order_added_action' => 'تم إضافة أمر صرف ملابس',
     ],
     'actions' => [
         'added' => 'إضافة',

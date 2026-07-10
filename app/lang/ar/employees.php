@@ -38,6 +38,10 @@ return [
     'join_date_from' => 'تاريخ التعيين من',
     'join_date_to' => 'تاريخ التعيين إلى',
     'reset_filters' => 'إعادة تعيين الفلاتر',
+    'date_of_birth' => 'تاريخ الميلاد',
+    'date_of_hiring' => 'تاريخ التعيين',
+    'email' => 'البريد الإلكتروني',
+    'password' => 'كلمة المرور',
     'emp_info' => [
         'personal' => [
             'personal_info' => 'بيانات شخصية',

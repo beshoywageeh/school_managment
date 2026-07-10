@@ -41,4 +41,16 @@ return [
     'stocks_show' => 'Stocks',
     'stores' => 'Stores',
     'student_info' => 'Student Info',
+
+    // Missing keys from ar
+    'Clothes_Books' => 'Clothes & Books',
+    'daily' => 'Daily',
+    'fast_actions' => 'Quick Actions',
+    'exciption' => 'Exception',
+    'inventory' => 'Inventory',
+    'invoice' => 'Invoice',
+    'payment' => 'Payment',
+    'exchange' => 'Exchange',
+    'ReceiptPayment' => 'Receipt Payments',
+    'main_navigation' => 'Main Navigation',
 ];

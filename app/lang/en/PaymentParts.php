@@ -7,5 +7,6 @@ return [
     'amount' => 'Amount',
     'pay_total' => 'Pay Total',
     'pay_part' => 'Pay Amount',
+    'total_required' => 'Total Required',
 
 ];

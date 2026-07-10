@@ -74,4 +74,5 @@ return [
     'unpaid' => 'Unpaid',
     'credit' => 'Dues',
     'fee_title' => 'Installment',
+    'students' => 'Students',
 ];

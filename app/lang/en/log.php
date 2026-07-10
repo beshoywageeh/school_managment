@@ -7,6 +7,7 @@ return [
             'updated' => 'User :name was updated',
             'deleted' => 'User :name was deleted',
             'restored' => 'User :name was restored',
+            'status_changed' => 'User status changed',
         ],
         'parent' => [
             'created' => 'Parent :name was created',
@@ -153,6 +154,15 @@ return [
             'auto_generated' => 'Schedule was auto-generated',
             'cleared' => 'Schedule was cleared',
         ],
+    ],
+    'parents' => [
+        'added_action' => 'Parent added',
+    ],
+    'book_sheets_order' => [
+        'sarf_added' => 'Book sheet order added',
+    ],
+    'clothes_order' => [
+        'out_order_added_action' => 'Clothes order added',
     ],
     'index' => [
         'title' => 'Activity Log',

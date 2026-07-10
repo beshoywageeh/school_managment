@@ -5,6 +5,7 @@ use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassRooms\ClassRoomsController;
 use App\Http\Controllers\Grades\GradesController;
 use App\Http\Controllers\promotionController;
+use App\Http\Controllers\SchedulePrintController;
 use App\Http\Controllers\schedulesController;
 use Illuminate\Support\Facades\Route;
 
@@ -73,4 +74,13 @@ Route::prefix('schedule')
     ->controller(schedulesController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
+    });
+
+Route::prefix('schedule/print')
+    ->name('schedule.print.')
+    ->controller(SchedulePrintController::class)
+    ->group(function () {
+        Route::get('/teacher/{user}', 'teacher')->name('teacher');
+        Route::get('/classroom/{class}', 'classroom')->name('classroom');
+        Route::get('/grade/{grade}', 'grade')->name('grade');
     });

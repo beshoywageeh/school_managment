@@ -187,6 +187,25 @@ class HomeController extends Controller
         $school = $this->getSchool();
         $schoolId = $school->id;
 
+        if ($user->hasRole('Admin')) {
+            $admin = $this->adminWidgets($user, $schoolId)->getData(true);
+            $accountant = $this->accountantWidgets($schoolId)->getData(true);
+            $teacher = $this->teacherWidgets($user, $schoolId)->getData(true);
+
+            return response()->json([
+                'statCards' => array_merge($admin['statCards'], $accountant['statCards'], $teacher['statCards']),
+                'quickActions' => array_merge($admin['quickActions'], $accountant['quickActions'], $teacher['quickActions']),
+                'charts' => array_merge($admin['charts'], $accountant['charts'], $teacher['charts']),
+                'recentActivity' => collect($admin['recentActivity'])
+                    ->concat($accountant['recentActivity'])
+                    ->concat($teacher['recentActivity'])
+                    ->sortByDesc('time')
+                    ->take(5)
+                    ->values(),
+                'permissions' => array_merge($admin['permissions'], $accountant['permissions'], $teacher['permissions']),
+            ]);
+        }
+
         if ($user->hasRole('Accountant')) {
             return $this->accountantWidgets($schoolId);
         }
@@ -220,18 +239,18 @@ class HomeController extends Controller
 
         return response()->json([
             'statCards' => [
-                ['label' => __('Students'), 'value' => $students, 'icon' => 'graduation-cap', 'color' => 'blue', 'trend' => $trendData['students']['trend'], 'trendDirection' => $trendData['students']['direction'], 'sparklineData' => $trendData['students']['sparkline']],
-                ['label' => __('Parents'), 'value' => $parents, 'icon' => 'users', 'color' => 'green', 'trend' => $trendData['parents']['trend'], 'trendDirection' => $trendData['parents']['direction'], 'sparklineData' => $trendData['parents']['sparkline']],
-                ['label' => __('Employees'), 'value' => $employees, 'icon' => 'id-card', 'color' => 'cyan', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
-                ['label' => __('Pending Balance'), 'value' => number_format($financialData['totalInvoiced'] - $financialData['totalPaid'], 2), 'icon' => 'exclamation-circle', 'color' => 'red', 'trend' => $trendData['pending']['trend'], 'trendDirection' => $trendData['pending']['direction'], 'sparklineData' => $trendData['pending']['sparkline']],
+                ['label' => __('Sidebar.Students'), 'value' => $students, 'icon' => 'graduation-cap', 'color' => 'blue', 'trend' => $trendData['students']['trend'], 'trendDirection' => $trendData['students']['direction'], 'sparklineData' => $trendData['students']['sparkline']],
+                ['label' => __('Sidebar.parents'), 'value' => $parents, 'icon' => 'users', 'color' => 'green', 'trend' => $trendData['parents']['trend'], 'trendDirection' => $trendData['parents']['direction'], 'sparklineData' => $trendData['parents']['sparkline']],
+                ['label' => __('Sidebar.employees'), 'value' => $employees, 'icon' => 'id-card', 'color' => 'cyan', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
+                ['label' => __('general.Pending_Balance'), 'value' => number_format($financialData['totalInvoiced'] - $financialData['totalPaid'], 2), 'icon' => 'exclamation-circle', 'color' => 'red', 'trend' => $trendData['pending']['trend'], 'trendDirection' => $trendData['pending']['direction'], 'sparklineData' => $trendData['pending']['sparkline']],
             ],
             'quickActions' => [
-                ['route' => route('students.create'), 'icon' => 'graduation-cap', 'label' => __('Create Student'), 'perm' => 'Students-create'],
-                ['route' => route('parents.create'), 'icon' => 'users', 'label' => __('Create Parent'), 'perm' => 'parents-create'],
-                ['route' => route('grade.index'), 'icon' => 'line-chart', 'label' => __('Grades'), 'perm' => 'grade-list'],
-                ['route' => route('class_rooms.index'), 'icon' => 'building', 'label' => __('Class Rooms'), 'perm' => 'class_rooms-list'],
-                ['route' => route('jobs.create'), 'icon' => 'briefcase', 'label' => __('Create Job'), 'perm' => 'jobs-create'],
-                ['route' => route('backup.create'), 'icon' => 'database', 'label' => __('Create Backup'), 'perm' => 'backup-create'],
+                ['route' => route('students.create'), 'icon' => 'graduation-cap', 'label' => __('Sidebar.Students'), 'perm' => 'Students-create'],
+                ['route' => route('parents.create'), 'icon' => 'users', 'label' => __('Sidebar.parents'), 'perm' => 'parents-create'],
+                ['route' => route('grade.index'), 'icon' => 'line-chart', 'label' => __('Sidebar.Grade'), 'perm' => 'grade-list'],
+                ['route' => route('class_rooms.index'), 'icon' => 'building', 'label' => __('Sidebar.Class_Rooms'), 'perm' => 'class_rooms-list'],
+                ['route' => route('jobs.create'), 'icon' => 'briefcase', 'label' => __('Sidebar.jobs'), 'perm' => 'jobs-create'],
+                ['route' => route('backup.create'), 'icon' => 'database', 'label' => __('Sidebar.backup'), 'perm' => 'backup-create'],
             ],
             'charts' => [
                 'studentChart' => [
@@ -262,22 +281,22 @@ class HomeController extends Controller
         $recentActivity = ReceiptPayment::where('school_id', $schoolId)
             ->latest()->take(5)->get()->map(fn ($p) => [
                 'icon' => 'credit-card',
-                'description' => __('Payment received').': '.number_format($p->Debit, 2),
+                'description' => __('general.dashboard.payment_received').': '.number_format($p->Debit, 2),
                 'time' => $p->created_at->diffForHumans(),
             ])->values();
 
         return response()->json([
             'statCards' => [
-                ['label' => __('Invoiced'), 'value' => number_format($financialData['totalInvoiced'], 2), 'icon' => 'file-text', 'color' => 'blue', 'trend' => $trendData['invoiced']['trend'], 'trendDirection' => $trendData['invoiced']['direction'], 'sparklineData' => $trendData['invoiced']['sparkline']],
-                ['label' => __('Collected'), 'value' => number_format($financialData['totalPaid'], 2), 'icon' => 'credit-card', 'color' => 'green', 'trend' => $trendData['collected']['trend'], 'trendDirection' => $trendData['collected']['direction'], 'sparklineData' => $trendData['collected']['sparkline']],
-                ['label' => __('Pending'), 'value' => number_format($financialData['totalInvoiced'] - $financialData['totalPaid'], 2), 'icon' => 'clock', 'color' => 'amber', 'trend' => $trendData['pending']['trend'], 'trendDirection' => $trendData['pending']['direction'], 'sparklineData' => $trendData['pending']['sparkline']],
-                ['label' => __('Overdue'), 'value' => '0.00', 'icon' => 'exclamation-circle', 'color' => 'red', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
+                ['label' => __('general.dashboard.invoiced'), 'value' => number_format($financialData['totalInvoiced'], 2), 'icon' => 'file-text', 'color' => 'blue', 'trend' => $trendData['invoiced']['trend'], 'trendDirection' => $trendData['invoiced']['direction'], 'sparklineData' => $trendData['invoiced']['sparkline']],
+                ['label' => __('general.dashboard.collected'), 'value' => number_format($financialData['totalPaid'], 2), 'icon' => 'credit-card', 'color' => 'green', 'trend' => $trendData['collected']['trend'], 'trendDirection' => $trendData['collected']['direction'], 'sparklineData' => $trendData['collected']['sparkline']],
+                ['label' => __('general.dashboard.pending'), 'value' => number_format($financialData['totalInvoiced'] - $financialData['totalPaid'], 2), 'icon' => 'clock', 'color' => 'amber', 'trend' => $trendData['pending']['trend'], 'trendDirection' => $trendData['pending']['direction'], 'sparklineData' => $trendData['pending']['sparkline']],
+                ['label' => __('general.dashboard.overdue'), 'value' => '0.00', 'icon' => 'exclamation-circle', 'color' => 'red', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
             ],
             'quickActions' => [
-                ['route' => route('fee_invoice.index'), 'icon' => 'file-text', 'label' => __('New Invoice'), 'perm' => 'fee_invoice-create'],
-                ['route' => route('receipt_payment.index'), 'icon' => 'credit-card', 'label' => __('Create Receipt'), 'perm' => 'ReceiptPayment-create'],
-                ['route' => route('except_fee.index'), 'icon' => 'minus-circle', 'label' => __('Fee Exceptions'), 'perm' => 'except_fee-list'],
-                ['route' => route('payment_parts.index'), 'icon' => 'arrow-circle-down', 'label' => __('Payment Plans'), 'perm' => 'payment_parts-list'],
+                ['route' => route('fee_invoice.index'), 'icon' => 'file-text', 'label' => __('general.dashboard.new_invoice'), 'perm' => 'fee_invoice-create'],
+                ['route' => route('receipt_payment.index'), 'icon' => 'credit-card', 'label' => __('general.dashboard.create_receipt'), 'perm' => 'ReceiptPayment-create'],
+                ['route' => route('except_fee.index'), 'icon' => 'minus-circle', 'label' => __('general.dashboard.fee_exceptions'), 'perm' => 'except_fee-list'],
+                ['route' => route('payment_parts.index'), 'icon' => 'arrow-circle-down', 'label' => __('general.dashboard.payment_plans'), 'perm' => 'payment_parts-list'],
             ],
             'charts' => [
                 'revenueTrend' => [
@@ -324,14 +343,14 @@ class HomeController extends Controller
 
         return response()->json([
             'statCards' => [
-                ['label' => __('My Students'), 'value' => $students, 'icon' => 'graduation-cap', 'color' => 'blue', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
-                ['label' => __('Today Schedule'), 'value' => $todaySchedule, 'icon' => 'calendar-check', 'color' => 'green', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
-                ['label' => __('Pending Tasks'), 'value' => $pendingTasksCount, 'icon' => 'clipboard-list', 'color' => 'amber', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
+                ['label' => __('general.dashboard.my_students'), 'value' => $students, 'icon' => 'graduation-cap', 'color' => 'blue', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
+                ['label' => __('general.dashboard.today_schedule'), 'value' => $todaySchedule, 'icon' => 'calendar-check', 'color' => 'green', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
+                ['label' => __('general.dashboard.pending_tasks'), 'value' => $pendingTasksCount, 'icon' => 'clipboard-list', 'color' => 'amber', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
             ],
             'quickActions' => [
-                ['route' => route('classes.index'), 'icon' => 'list-alt', 'label' => __('My Classes'), 'perm' => null],
-                ['route' => route('grade.index'), 'icon' => 'check-square', 'label' => __('Take Attendance'), 'perm' => null],
-                ['route' => route('grade.index'), 'icon' => 'edit', 'label' => __('Grade Entry'), 'perm' => null],
+                ['route' => route('classes.index'), 'icon' => 'list-alt', 'label' => __('general.dashboard.my_classes'), 'perm' => null],
+                ['route' => route('grade.index'), 'icon' => 'check-square', 'label' => __('general.dashboard.take_attendance'), 'perm' => null],
+                ['route' => route('grade.index'), 'icon' => 'edit', 'label' => __('general.dashboard.grade_entry'), 'perm' => null],
             ],
             'charts' => [],
             'recentActivity' => $recentActivity,
@@ -459,13 +478,13 @@ class HomeController extends Controller
         $recentStudents = Student::where('school_id', $schoolId)
             ->latest()->take(2)->get()->map(fn ($s) => [
                 'icon' => 'graduation-cap',
-                'description' => __('Student created').': '.$s->name,
+                'description' => __('general.dashboard.student_created').': '.$s->name,
                 'time' => $s->created_at->diffForHumans(),
             ]);
         $recentPayments = ReceiptPayment::where('school_id', $schoolId)
             ->latest()->take(3)->get()->map(fn ($p) => [
                 'icon' => 'credit-card',
-                'description' => __('Payment received').': '.number_format($p->Debit, 2),
+                'description' => __('general.dashboard.payment_received').': '.number_format($p->Debit, 2),
                 'time' => $p->created_at->diffForHumans(),
             ]);
 

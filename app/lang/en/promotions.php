@@ -12,5 +12,8 @@ return [
     'no_data' => 'No students to promote',
     'from_year' => 'From Academic Year',
     'to_year' => 'To Academic Year',
-
+    'old_grade' => 'Old Grade',
+    'old_class' => 'Old Class',
+    'new_grade' => 'New Grade',
+    'new_class' => 'New Class',
 ];

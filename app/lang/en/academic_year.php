@@ -7,5 +7,6 @@ return [
     'status' => 'Status',
     'change_status' => 'Change Status',
     'view' => 'Period',
+    'year' => 'Year',
 
 ];

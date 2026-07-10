@@ -75,6 +75,31 @@ class ComponentRenderTest extends TestCase
         $view->assertSee('x-data="dataTable()"', false);
     }
 
+    public function test_data_table_livewire_mode_renders_wire_attributes(): void
+    {
+        $view = $this->blade(
+            '<x-ui.data-table :livewire="true" name="users-table" :columns="[[\'key\'=>\'id\',\'label\'=>\'#\'],[\'key\'=>\'name\',\'label\'=>\'الاسم\',\'sortable\'=>true]]" />'
+        );
+
+        $view->assertSee('الاسم');
+        $view->assertSee('x-data="dataTable()"', false);
+        $view->assertSee('$wire.fetchData()', false);
+        $view->assertSee('$wire.sortBy(', false);
+        $view->assertSee('$wire.goToPage(', false);
+        $view->assertSee('x-on:table-data-users-table.window', false);
+    }
+
+    public function test_data_table_endpoint_mode_renders_init_call(): void
+    {
+        $view = $this->blade(
+            '<x-ui.data-table endpoint="/api/test" :columns="[[\'key\'=>\'id\',\'label\'=>\'#\']]" />'
+        );
+
+        $view->assertSee('endpoint', false);
+        $view->assertSee('init()', false);
+        $view->assertDontSee('$wire', false);
+    }
+
     public function test_modal_component_renders(): void
     {
         $view = $this->blade(

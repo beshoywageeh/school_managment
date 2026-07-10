@@ -5,6 +5,8 @@ namespace Tests\Feature\Livewire;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class DataTableDriverTest extends TestCase
@@ -168,6 +170,61 @@ class DataTableDriverTest extends TestCase
             ->call('fetchData')
             ->assertDispatched('table-data-users-error', function ($name, $params) {
                 return isset($params[0]['error']);
+            });
+    }
+
+    public function test_perform_action_checks_permissions(): void
+    {
+        $user = User::factory()->create(['isAdmin' => 0]);
+        $this->actingAs($user);
+
+        Livewire::test('components.table.data-table', [
+            'modelClass' => User::class,
+            'columns' => [['key' => 'id', 'label' => '#']],
+            'name' => 'users-action',
+            'perPage' => 10,
+        ])
+            ->call('performAction', 1, 'toggle-status')
+            ->assertDispatched('table-data-users-action', function ($name, $params) {
+                return isset($params[0]['error']);
+            });
+    }
+
+    public function test_perform_action_success_dispatches_event(): void
+    {
+        $user = User::factory()->create(['isAdmin' => 1]);
+        $permission = Permission::findOrCreate('toggle-status-users');
+        $role = Role::findOrCreate('admin-perm-test');
+        $role->givePermissionTo($permission);
+        $user->assignRole($role);
+        $this->actingAs($user);
+
+        Livewire::test('components.table.data-table', [
+            'modelClass' => User::class,
+            'columns' => [['key' => 'id', 'label' => '#']],
+            'name' => 'users-action-ok',
+            'perPage' => 10,
+        ])
+            ->call('performAction', $user->id, 'toggle-status')
+            ->assertDispatched('action-completed-users-action-ok', function ($name, $params) {
+                return $params[0]['success'] === true;
+            });
+    }
+
+    public function test_perform_action_invalid_record_dispatches_error(): void
+    {
+        $user = User::factory()->create(['isAdmin' => 1]);
+        $this->actingAs($user);
+
+        Livewire::test('components.table.data-table', [
+            'modelClass' => User::class,
+            'columns' => [['key' => 'id', 'label' => '#']],
+            'name' => 'users-action-invalid',
+            'perPage' => 10,
+        ])
+            ->call('performAction', 999999, 'toggle-status')
+            ->assertDispatched('action-completed-users-action-invalid', function ($name, $params) {
+                return $params[0]['success'] === false;
             });
     }
 }

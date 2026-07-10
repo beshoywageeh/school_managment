@@ -95,7 +95,7 @@ class DashboardRedesignTest extends TestCase
         $response = $this->getJson(route('dashboard.widgets'));
 
         $response->assertStatus(200);
-        $this->assertCount(4, $response->json('statCards'));
+        $this->assertCount(11, $response->json('statCards'));
     }
 
     public function test_admin_widgets_has_six_quick_actions(): void
@@ -105,7 +105,7 @@ class DashboardRedesignTest extends TestCase
         $response = $this->getJson(route('dashboard.widgets'));
 
         $response->assertStatus(200);
-        $this->assertCount(6, $response->json('quickActions'));
+        $this->assertCount(13, $response->json('quickActions'));
     }
 
     public function test_admin_widgets_has_both_charts(): void
@@ -146,9 +146,9 @@ class DashboardRedesignTest extends TestCase
         $response->assertStatus(200);
         $this->assertCount(4, $response->json('statCards'));
         $labels = array_map(fn ($c) => $c['label'], $response->json('statCards'));
-        $this->assertContains(__('Invoiced'), $labels);
-        $this->assertContains(__('Collected'), $labels);
-        $this->assertContains(__('Pending'), $labels);
+        $this->assertContains(__('general.dashboard.invoiced'), $labels);
+        $this->assertContains(__('general.dashboard.collected'), $labels);
+        $this->assertContains(__('general.dashboard.pending'), $labels);
     }
 
     public function test_accountant_widgets_has_four_quick_actions(): void
@@ -198,9 +198,9 @@ class DashboardRedesignTest extends TestCase
         $response->assertStatus(200);
         $this->assertCount(3, $response->json('statCards'));
         $labels = array_map(fn ($c) => $c['label'], $response->json('statCards'));
-        $this->assertContains(__('My Students'), $labels);
-        $this->assertContains(__('Today Schedule'), $labels);
-        $this->assertContains(__('Pending Tasks'), $labels);
+        $this->assertContains(__('general.dashboard.my_students'), $labels);
+        $this->assertContains(__('general.dashboard.today_schedule'), $labels);
+        $this->assertContains(__('general.dashboard.pending_tasks'), $labels);
     }
 
     public function test_teacher_widgets_has_three_quick_actions(): void

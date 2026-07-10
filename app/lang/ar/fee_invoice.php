@@ -12,4 +12,9 @@ return [
 
     // Missing key
     'selectschool' => 'اختر المدرسة',
+    'fee_invoices' => [
+        'fees' => 'الرسوم',
+        'student' => 'الطالب',
+        'fee' => 'الرسوم',
+    ],
 ];

@@ -34,4 +34,70 @@ return [
     'visitor' => 'Visitor',
     'other' => 'Other',
 
+    // Nested keys
+    'jobs' => [
+        'teacher' => 'Teacher',
+        'worker' => 'Worker',
+        'specialist' => 'Specialist',
+        'manegment' => 'Management',
+        'dealer' => 'Dealer',
+        'director' => 'Director',
+        'mentor' => 'Mentor',
+        'security' => 'Security',
+        'cleaner_supervisior' => 'Cleaner Supervisor',
+        'visitor' => 'Visitor',
+        'other' => 'Other',
+    ],
+    'std_status' => [
+        'CHANGE_PATH' => 'Change Path',
+        'MERGE' => 'Merge',
+        'STILL' => 'Still',
+        'SECOND_TRY' => 'Second Try',
+        'FREEZED' => 'Freezed',
+        'TRASPORT_TO' => 'Transferred To',
+        'TRASPORT_FROM' => 'Transferred From',
+        'PASS_ON_LOW' => 'Pass by Law',
+        'REJECTED' => 'Rejected',
+        'NEW' => 'New',
+        'TOTAL_ABSENT' => 'Total Absent',
+    ],
+    'gender' => [
+        'male' => 'Male',
+        'female' => 'Female',
+    ],
+    'religion' => [
+        'christian' => 'Christian',
+        'muslim' => 'Muslim',
+    ],
+    'payment_status' => [
+        'waiting' => 'Partially Paid',
+        'unpaid' => 'Unpaid',
+        'paid' => 'Paid',
+        'wating' => 'Deferred',
+    ],
+    'payment_type' => [
+        'fee_invoice' => 'Fee Invoice',
+        'payment_recipt' => 'Payment Receipt',
+        'fee_exception' => 'Fee Exception',
+        'exchange_bond' => 'Exchange Bond',
+    ],
+    'inventory_order_status' => [
+        'paid' => 'Paid',
+        'unpaid' => 'Unpaid',
+    ],
+    'inventory_order_type' => [
+        'inventory' => 'Inventory',
+        'sales' => 'Sales',
+        'gard' => 'Gard',
+    ],
+    'transaction_type' => [
+        'in' => 'In',
+        'out' => 'Out',
+        'adjust' => 'Adjust',
+    ],
+    'inventory_item_type' => [
+        'stock' => 'Stock',
+        'clothing' => 'Clothing',
+        'book' => 'Book',
+    ],
 ];

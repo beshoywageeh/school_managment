@@ -12,4 +12,7 @@ return [
     'new_name' => 'New Name',
     'select_res' => 'Select Responsible',
     'cannot_deleted' => 'Cannot delete a grade with classrooms',
+    'grade' => [
+        'cannot_deleted' => 'Cannot delete a grade with classrooms',
+    ],
 ];

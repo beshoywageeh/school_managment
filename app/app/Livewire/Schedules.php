@@ -2,8 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Enums\Jobs_types;
 use App\Http\Traits\LogsActivity;
 use App\Models\classes;
+use App\Models\Grade;
 use App\Models\schedules as schedules_Managment;
 use App\Models\User;
 use Livewire\Component;
@@ -26,6 +28,12 @@ class Schedules extends Component
 
     public $period;
 
+    public $printTeacherId;
+
+    public $printClassId;
+
+    public $printGradeId;
+
     protected $listeners = ['print' => 'printSchedule', 'refresh' => '$refresh'];
 
     public function mount()
@@ -35,10 +43,10 @@ class Schedules extends Component
 
     public function autoGenerate()
     {
-        $teachers = User::where('type', 1)->with('grades')->get();
+        $teachers = User::where('type', Jobs_types::TEACHER)->with('grades')->get();
         $days = ['saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday'];
 
-        // Pre-fetch teacher grades and classes to avoid N+1
+        // Pre-fetch teacher grades and classes
         $teacherGrades = [];
         foreach ($teachers as $teacher) {
             $teacherGrades[$teacher->id] = $teacher->grades->pluck('id')->toArray();
@@ -46,13 +54,21 @@ class Schedules extends Component
 
         $classesByGrade = classes::all()->groupBy('grade_id');
 
-        $currentCounts = schedules_Managment::groupBy('user_id')
-            ->selectRaw('user_id, count(*) as total')
-            ->pluck('total', 'user_id')
-            ->toArray();
+        // Track: teacher_id => ['total' => int, 'daily' => [day => count]]
+        $counts = [];
+        foreach ($teachers as $teacher) {
+            $counts[$teacher->id] = ['total' => 0, 'daily' => []];
+            foreach ($days as $day) {
+                $counts[$teacher->id]['daily'][$day] = 0;
+            }
+        }
 
-        foreach ($days as $day) {
-            for ($period = 1; $period <= 8; $period++) {
+        // Clear existing schedules first
+        schedules_Managment::query()->delete();
+
+        // Iterate: periods -> days -> teachers (ensures even day distribution)
+        for ($period = 1; $period <= 8; $period++) {
+            foreach ($days as $day) {
                 $busyTeachers = schedules_Managment::where('day', $day)
                     ->where('period', $period)
                     ->pluck('user_id')
@@ -68,19 +84,23 @@ class Schedules extends Component
                         continue;
                     }
 
-                    $count = $currentCounts[$teacher->id] ?? 0;
                     $maxLessons = $teacher->lesson_count ?? 24;
-                    if ($count >= $maxLessons) {
+                    $total = $counts[$teacher->id]['total'];
+
+                    if ($total >= $maxLessons) {
                         continue;
                     }
 
+                    // Find available class from teacher's grades
                     $possibleGradeIds = $teacherGrades[$teacher->id] ?? [];
                     $targetClass = null;
 
                     foreach ($possibleGradeIds as $gradeId) {
                         $gradeClasses = $classesByGrade->get($gradeId);
                         if ($gradeClasses) {
-                            $targetClass = $gradeClasses->first(fn ($c) => ! in_array($c->id, $busyClasses));
+                            $targetClass = $gradeClasses->first(
+                                fn ($c) => ! in_array($c->id, $busyClasses)
+                            );
                             if ($targetClass) {
                                 break;
                             }
@@ -97,13 +117,17 @@ class Schedules extends Component
                         ]);
                         $busyClasses[] = $targetClass->id;
                         $busyTeachers[] = $teacher->id;
-                        $currentCounts[$teacher->id] = ($currentCounts[$teacher->id] ?? 0) + 1;
+                        $counts[$teacher->id]['total']++;
+                        $counts[$teacher->id]['daily'][$day]++;
                     }
                 }
             }
         }
 
-        $this->logActivity(trans('log.actions.auto_generated'), trans('log.models.schedules.auto_generated'));
+        $this->logActivity(
+            trans('log.actions.auto_generated'),
+            trans('log.models.schedules.auto_generated')
+        );
         $this->dispatch('alert');
         $this->dispatch('refresh');
         session()->flash('success', trans('general.success'));
@@ -199,9 +223,10 @@ class Schedules extends Component
     {
 
         return view('livewire.Schedules.Schedules', [
-            'Teachers' => User::where('type', 1)->with('job')->get(),
-            'Schedules' => schedules_Managment::where('day', $this->selectedDay)->with('class:id,title')->get(),
+            'Teachers' => User::where('type', Jobs_types::TEACHER)->with('job')->get(),
+            'Schedules' => schedules_Managment::where('day', $this->selectedDay)->with('section:id,title')->get(),
             'classes' => classes::all(),
+            'grades' => Grade::all(),
         ]);
     }
 }

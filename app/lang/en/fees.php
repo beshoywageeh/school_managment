@@ -11,4 +11,5 @@ return [
     'academic_year' => 'Academic Year',
     'choose_academic_year' => 'Choose Academic Year',
     'no_academic_year' => 'No academic years added',
+    'total' => 'Total',
 ];

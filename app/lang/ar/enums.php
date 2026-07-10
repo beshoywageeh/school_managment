@@ -83,6 +83,20 @@ return [
         'fee_exception' => 'معافات',
         'exchange_bond' => 'سندات صرف',
     ],
+    'inventory_order_status' => [
+        'paid' => 'مدفوع',
+        'unpaid' => 'غير مدفوع',
+    ],
+    'inventory_order_type' => [
+        'inventory' => 'مخزون',
+        'sales' => 'مبيعات',
+        'gard' => 'جرد',
+    ],
+    'transaction_type' => [
+        'in' => 'وارد',
+        'out' => 'منصرف',
+        'adjust' => 'تسوية',
+    ],
     'inventory_item_type' => [
         'stock' => 'مخزون',
         'clothing' => 'ملابس',

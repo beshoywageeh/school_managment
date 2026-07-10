@@ -49,4 +49,6 @@ return [
     'payment' => 'المدفوعات',
     'exchange' => 'سندات الصرف',
     'invoice' => 'فاتورة دراسية',
+    'ReceiptPayment' => 'إيصالات الدفع',
+    'main_navigation' => 'القائمة الرئيسية',
 ];

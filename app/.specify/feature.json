@@ -1,3 +1,4 @@
 {
-  "feature_directory": "specs/002-smart-table-enhancements"
+  "feature_directory": "specs/004-schedule-enhancement",
+  "impl_plan": "specs/004-schedule-enhancement/plan.md"
 }

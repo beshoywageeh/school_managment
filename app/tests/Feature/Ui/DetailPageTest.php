@@ -2,10 +2,16 @@
 
 namespace Tests\Feature\Ui;
 
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class DetailPageTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,5 +52,71 @@ class DetailPageTest extends TestCase
         $this->assertStringContainsString('x-ui.status-badge', $content);
         $this->assertStringContainsString('x-ui.data-table', $content);
         $this->assertStringContainsString('x-ui.button', $content);
+    }
+
+    public function test_detail_header_shows_admin_actions(): void
+    {
+        $view = $this->blade(
+            '<x-ui.detail-header
+                title="بنك الرياض"
+                status="active"
+                statusLabel="نشط">
+                <x-slot:actions>
+                    <x-ui.button variant="secondary">تعديل</x-ui.button>
+                    <x-ui.button variant="danger">حذف</x-ui.button>
+                </x-slot:actions>
+            </x-ui.detail-header>'
+        );
+
+        $view->assertSee('تعديل');
+        $view->assertSee('حذف');
+    }
+
+    public function test_detail_header_shows_limited_actions_for_non_admin(): void
+    {
+        $view = $this->blade(
+            '<x-ui.detail-header
+                title="بنك الرياض"
+                status="active"
+                statusLabel="نشط">
+                <x-slot:actions>
+                    <x-ui.button variant="secondary">تعديل</x-ui.button>
+                </x-slot:actions>
+            </x-ui.detail-header>'
+        );
+
+        $view->assertSee('تعديل');
+        $view->assertDontSee('حذف');
+    }
+
+    public function test_inline_actions_respects_permission_gating(): void
+    {
+        $deletePermission = Permission::findOrCreate('delete-users');
+
+        $admin = User::factory()->create(['isAdmin' => true]);
+        $role = Role::create(['name' => 'admin', 'guard_name' => 'web']);
+        $role->givePermissionTo($deletePermission);
+        $admin->assignRole($role);
+
+        $teacher = User::factory()->create(['isAdmin' => false]);
+        $teacherRole = Role::create(['name' => 'teacher', 'guard_name' => 'web']);
+        $teacher->assignRole($teacherRole);
+
+        $actionsHtml = '<x-ui.inline-actions
+            :actions="[
+                [\'action\' => \'edit\', \'label\' => \'تعديل\', \'permission\' => null],
+                [\'action\' => \'delete\', \'label\' => \'حذف\', \'permission\' => \'delete-users\', \'variant\' => \'danger\'],
+            ]"
+            :rowId="1" />';
+
+        $this->actingAs($admin);
+        $viewAdmin = $this->blade($actionsHtml);
+        $viewAdmin->assertSee('تعديل');
+        $viewAdmin->assertSee('حذف');
+
+        $this->actingAs($teacher);
+        $viewTeacher = $this->blade($actionsHtml);
+        $viewTeacher->assertSee('تعديل');
+        $viewTeacher->assertDontSee('حذف');
     }
 }

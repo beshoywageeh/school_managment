@@ -12,4 +12,10 @@ return [
     'admin' => 'System Admin',
     'logo' => 'Logo',
     'phone' => 'Phone',
+    'email' => 'Email',
+    'db_name' => 'Database Name',
+    'db_user' => 'Database Username',
+    'db_password' => 'Database Password',
+    'db_details' => 'Database Details',
+    'first_name' => 'First Name',
 ];

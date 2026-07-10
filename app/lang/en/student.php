@@ -58,4 +58,18 @@ return [
     'view' => 'View',
     'no_students_found' => 'No students found.',
     'per_page' => 'Per Page',
+    'choose_acadmice' => 'Choose Academic Year',
+    'validation' => [
+        'required' => [
+            'name' => 'The name field is required.',
+            'birth_date' => 'The birth date field is required.',
+            'parent_id' => 'The parent field is required.',
+            'national_id' => 'The national ID field is required.',
+            'grade_id' => 'The grade field is required.',
+            'classroom_id' => 'The classroom field is required.',
+        ],
+        'unique' => [
+            'national_id' => 'The national ID has already been taken.',
+        ],
+    ],
 ];

@@ -10,5 +10,10 @@ return [
     'date' => 'Addition Date',
     'grade' => 'Grade',
     'selectschool' => 'Select Fee Item',
+    'fee_invoices' => [
+        'fees' => 'Fees',
+        'student' => 'Student',
+        'fee' => 'Fee',
+    ],
 
 ];

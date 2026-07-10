@@ -60,7 +60,7 @@ return [
     'per_page' => 'لكل صفحة',
     'choose_acadmice' => 'اختر السنة الدراسية',
     'validation' => [
-        'require ' => [
+        'required' => [
             'name' => 'الاسم مطلوب.',
             'birth_date' => 'تاريخ الميلاد مطلوب.',
             'parent_id' => 'ولي الأمر مطلوب.',

@@ -38,5 +38,11 @@ return [
     'join_date_from' => 'Joining Date From',
     'join_date_to' => 'Joining Date To',
     'reset_filters' => 'Reset Filters',
+    'emp_info' => 'Employee Info',
+    'index' => 'Employee Index',
+    'date_of_birth' => 'Date of Birth',
+    'date_of_hiring' => 'Date of Hiring',
+    'email' => 'Email',
+    'password' => 'Password',
 
 ];

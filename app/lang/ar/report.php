@@ -81,4 +81,5 @@ return [
     'fee_title' => 'القسط',
     'of' => 'من',
     'finalize_year' => 'تقرير ختام السنة المالية',
+    'students' => 'الطلاب',
 ];

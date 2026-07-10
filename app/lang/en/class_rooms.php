@@ -10,4 +10,9 @@ return [
     'Added_By' => 'Added By',
     'Student_Count' => 'Student Count',
     'cannot_deleted' => 'Cannot delete a classroom with students',
+    'student_count' => 'Student Count',
+    'classrooms' => [
+        'name' => 'Classroom Name',
+        'grade' => 'Grade',
+    ],
 ];

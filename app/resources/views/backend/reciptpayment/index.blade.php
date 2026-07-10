@@ -15,7 +15,7 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">#</th>
-                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('Recipt_Payments.maual') }}</th>
+                            <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('Recipt_Payments.manual') }}</th>
                             <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('general.created_at') }}</th>
                             <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('Recipt_Payments.name') }}</th>
                             <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('Recipt_Payments.amount') }}</th>

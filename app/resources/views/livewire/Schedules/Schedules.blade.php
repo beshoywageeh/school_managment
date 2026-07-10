@@ -26,6 +26,51 @@
                 <button class="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm" wire:click="clearSchedule" onclick="confirm('{{ trans('schedules.clear_confirm') }}') || event.stopImmediatePropagation()">
                     <i class="ti ti-trash"></i> {{ trans('schedules.clear_schedule') }}
                 </button>
+
+                {{-- Print Teacher --}}
+                <select wire:model="printTeacherId" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    <option value="">{{ trans('schedules.select_teacher') }}</option>
+                    @foreach($Teachers as $teacher)
+                        <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                    @endforeach
+                </select>
+                @if($printTeacherId)
+                    <a href="{{ route('schedule.print.teacher', $printTeacherId) }}"
+                       target="_blank"
+                       class="px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-sm">
+                        {{ trans('schedules.print_teacher') }}
+                    </a>
+                @endif
+
+                {{-- Print Classroom --}}
+                <select wire:model="printClassId" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    <option value="">{{ trans('schedules.select_class') }}</option>
+                    @foreach($classes as $class)
+                        <option value="{{ $class->id }}">{{ $class->title }}</option>
+                    @endforeach
+                </select>
+                @if($printClassId)
+                    <a href="{{ route('schedule.print.classroom', $printClassId) }}"
+                       target="_blank"
+                       class="px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-sm">
+                        {{ trans('schedules.print_classroom') }}
+                    </a>
+                @endif
+
+                {{-- Print Grade --}}
+                <select wire:model="printGradeId" class="px-3 py-2 border border-gray-300 rounded-lg text-sm">
+                    <option value="">{{ trans('schedules.select_grade') }}</option>
+                    @foreach($grades as $grade)
+                        <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                    @endforeach
+                </select>
+                @if($printGradeId)
+                    <a href="{{ route('schedule.print.grade', $printGradeId) }}"
+                       target="_blank"
+                       class="px-3 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 text-sm">
+                        {{ trans('schedules.print_grade') }}
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -68,7 +113,7 @@
                                 @endcan
                             </td>
                             @for ($i = 1; $i <= 8; $i++)
-                                <td class="px-4 py-2 text-center text-gray-600">{{ $Schedules->where('user_id', $Teacher->id)->where('period', $i)->first()->class->title ?? '-' }}</td>
+                                <td class="px-4 py-2 text-center text-gray-600">{{ $Schedules->where('user_id', $Teacher->id)->where('period', $i)->first()->section->title ?? '-' }}</td>
                             @endfor
                         </tr>
                     @endforeach

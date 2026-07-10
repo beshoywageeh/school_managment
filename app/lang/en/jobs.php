@@ -8,4 +8,6 @@ return [
     'is_main' => 'Main Job',
     'title_name' => 'Job Title',
     'employees_count' => 'Employees Count',
+    'name' => 'Job Name',
+    'type' => 'Job Type',
 ];

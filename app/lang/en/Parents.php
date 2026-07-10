@@ -42,4 +42,22 @@ return [
     'Address_string' => 'The Address must be a string.',
     'Address_min' => 'The Address must be at least :min characters.',
     'Address_max' => 'The Address may not be greater than :max characters.',
+
+    // Missing keys from ar
+    'father-birth-date' => 'Father Birth Date',
+    'father-national-id' => 'Father National ID',
+    'father-learning' => 'Father Education',
+    'mother-name' => 'Mother Name',
+    'mother-phone' => 'Mother Phone',
+    'mother-job' => 'Mother Job',
+    'mother-national-id' => 'Mother National ID',
+    'mother-birth-date' => 'Mother Birth Date',
+    'religion' => 'Religion',
+    'muslim' => 'Muslim',
+    'christian' => 'Christian',
+    'father-info' => 'Father Information',
+    'other-info' => 'Other Information',
+    'children_count' => 'Children Count',
+    'Father_phone' => 'Father Phone',
+    'Mother_phone' => 'Mother Phone',
 ];

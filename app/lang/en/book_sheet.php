@@ -13,4 +13,6 @@ return [
     'sheet' => 'Sheet',
     'qty' => 'Quantity',
     'total_price' => 'Total Price',
+    'type' => 'Type',
+    'category' => 'Category',
 ];

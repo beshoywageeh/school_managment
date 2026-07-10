@@ -61,4 +61,9 @@ return [
 
     // Unit placeholder
     'unit_placeholder' => 'piece, kg, set, box',
+
+    // Missing keys from ar
+    'description' => 'Description',
+    'sales_price_set' => 'Sales Price Set',
+    'status' => 'Status',
 ];

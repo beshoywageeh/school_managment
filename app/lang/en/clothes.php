@@ -14,4 +14,5 @@ return [
     'not_paid' => 'Not Paid',
     'paid' => 'Paid',
     'pay' => 'Pay',
+    'unpaid' => 'Unpaid',
 ];

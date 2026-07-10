@@ -59,9 +59,7 @@
         </x-slot:transactions>
 
         <x-slot:statement>
-            <div class="bg-white rounded-xl border border-gray-200 p-6 text-center text-gray-500">
-                <p>بيانات كشف الحساب قيد التحميل...</p>
-            </div>
+            <livewire:components.statement.statement-tab />
         </x-slot:statement>
     </x-ui.tabs>
 </div>

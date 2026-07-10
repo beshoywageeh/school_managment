@@ -6,4 +6,5 @@ return [
     'login' => 'Login',
     'msg' => 'Welcome Back',
     'password' => 'Password',
+    'setup' => 'Setup',
 ];
