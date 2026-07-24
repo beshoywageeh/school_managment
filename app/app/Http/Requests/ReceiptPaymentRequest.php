@@ -8,7 +8,7 @@ class ReceiptPaymentRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('ReceiptPayment-create');
     }
 
     public function rules(): array

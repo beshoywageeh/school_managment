@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'generation_summary' => 'ملخص الإنشاء',
+    'print_type' => 'نوع الطباعة',
+    'select_print_type' => 'اختر نوع الطباعة',
     'Pending_Balance' => 'رصيد غير مدفوع',
     // Flat keys for general translations
     'close' => 'إغلاق',

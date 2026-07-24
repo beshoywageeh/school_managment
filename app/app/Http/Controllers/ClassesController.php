@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClassStoreRequest;
+use App\Http\Requests\ClassUpdateRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\classes;
 use App\Models\ClassRoom;
 use App\Models\Student;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ClassesController extends Controller
 {
@@ -36,39 +37,36 @@ class ClassesController extends Controller
             ->get(['id', 'title', 'class_room_id', 'grade_id', 'tameen']);
 
         // return $classes;
-        return view('backend.classes.index', get_defined_vars());
+        return view('backend.classes.index', compact('school', 'class_rooms', 'classes'));
     }
 
-    public function store(Request $request)
+    public function store(ClassStoreRequest $request)
     {
         try {
-            DB::beginTransaction();
-            foreach ($request->classroom as $class) {
-                classes::create([
-                    'title' => $class['class_name'],
-                    'class_room_id' => $class['class_id'],
-                    'grade_id' => ClassRoom::find($class['class_id'])
-                        ->grade_id,
-                    'school_id' => auth()->user()->school_id,
-                    'user_id' => auth()->user()->id,
-                ]);
+            $this->executeInTransaction(function () use ($request) {
+                foreach ($request->classroom as $class) {
+                    classes::create([
+                        'title' => $class['class_name'],
+                        'class_room_id' => $class['class_id'],
+                        'grade_id' => ClassRoom::find($class['class_id'])
+                            ->grade_id,
+                        'school_id' => auth()->user()->school_id,
+                        'user_id' => auth()->user()->id,
+                    ]);
 
-                $this->logActivity(
-                    trans('log.actions.added'),
-                    trans('log.models.class.created', [
-                        'class_name' => $class['class_name'],
-                    ]),
-                );
-            }
-
-            DB::commit();
+                    $this->logActivity(
+                        trans('log.actions.added'),
+                        trans('log.models.class.created', [
+                            'class_name' => $class['class_name'],
+                        ]),
+                    );
+                }
+            });
 
             return redirect()
                 ->route('classes.index')
                 ->with('success', trans('general.success'));
         } catch (\Exception $e) {
-            DB::rollBack();
-
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
@@ -91,7 +89,7 @@ class ClassesController extends Controller
             ->get();
 
         // return $class;
-        return view('backend.classes.add_students', get_defined_vars());
+        return view('backend.classes.add_students', compact('school', 'class', 'students'));
     }
 
     public function add_students_submit(Request $request)
@@ -117,9 +115,8 @@ class ClassesController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function update(ClassUpdateRequest $request)
     {
-        // return $request;
         try {
             $class = classes::findorfail($request->id);
             $class->update([
@@ -167,7 +164,7 @@ class ClassesController extends Controller
                 ->with('info', trans('general.noDataToShow'));
         }
 
-        return view('backend.classes.show', get_defined_vars());
+        return view('backend.classes.show', compact('class', 'school'));
     }
 
     public function tammen(classes $class)

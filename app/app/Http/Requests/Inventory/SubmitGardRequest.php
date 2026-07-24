@@ -12,7 +12,9 @@ class SubmitGardRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('stocks-income_order')
+            || $this->user()->can('clothes-income_order')
+            || $this->user()->can('books_sheets-income_order');
     }
 
     /**

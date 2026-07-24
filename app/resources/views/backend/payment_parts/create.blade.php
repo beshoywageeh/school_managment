@@ -3,7 +3,7 @@
     {{ trans('general.new') }} | {{ trans('PaymentParts.title') }}
 @endsection
 @section('content')
-  <form id="form-with-multiple-column" class="max-w-full" action="{{ route('payment_parts.store') }}" x-data="{
+  <form id="form-with-multiple-column" class="max-w-full" action="{{ route('payment-parts.store') }}" x-data="{
 
         parts: [{ fee_id: '', pay_at: '', amount: '' }],
     addRow() {

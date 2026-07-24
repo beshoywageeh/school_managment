@@ -1,5 +1,5 @@
 <x-modal id="book_sheet_stock" title="{{ trans('report.book_sheet') }}" titleButton="{{ trans('general.open') }}" can="books_sheets-index">
-    <form action="{{ route('report.book_sheet_stock') }}" method="post" id="book_sheet_stock">
+    <form action="{{ route('report.book-sheet-stock') }}" method="post" id="book_sheet_stock">
         @csrf
         <div class="space-y-4">
             <div>

@@ -44,11 +44,11 @@ class GradesController extends Controller
         }
 
         $data = [
-            'grades' => $gradesQuery->paginate(10),
+            'grades' => $gradesQuery->paginate(config('school.per_page')),
             'users' => User::select('id', 'name')->get(),
         ];
 
-        return view('backend.Grades.Index', get_defined_vars());
+        return view('backend.Grades.Index', compact('data', 'school'));
     }
 
     public function create()
@@ -58,28 +58,28 @@ class GradesController extends Controller
 
     public function store(GradeStoreRequest $request)
     {
-        DB::beginTransaction();
+        $this->authorize('grade-create', Grade::class);
         try {
-            $grade = Grade::create([
-                'name' => $request->Grade_Name,
-                'user_id' => Auth::id(),
-                'school_id' => $this->getSchool()->id,
-            ]);
-            $grade->users()->attach($request->user_id, [
-                'school_id' => $this->getSchool()->id,
-            ]);
-            $this->logActivity(
-                trans('log.actions.added'),
-                trans('log.models.grade.created', [
-                    'value' => $request->Grade_Name,
-                ]),
-            );
-            DB::commit();
+            $this->executeInTransaction(function () use ($request) {
+                $grade = Grade::create([
+                    'name' => $request->Grade_Name,
+                    'user_id' => Auth::id(),
+                    'school_id' => $this->getSchool()->id,
+                ]);
+                $grade->users()->attach($request->user_id, [
+                    'school_id' => $this->getSchool()->id,
+                ]);
+                $this->logActivity(
+                    trans('log.actions.added'),
+                    trans('log.models.grade.created', [
+                        'value' => $request->Grade_Name,
+                    ]),
+                );
+            });
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
         } catch (\Exception $e) {
-            DB::rollBack();
             session()->flash('error', $e->getMessage());
 
             return redirect()->back()->withInput();
@@ -130,33 +130,32 @@ class GradesController extends Controller
 
     public function update(GradeStoreRequest $request)
     {
+        $this->authorize('grade-edit', Grade::class);
         try {
-            DB::beginTransaction();
+            $this->executeInTransaction(function () use ($request) {
+                $grade = Grade::where('id', $request->id)->first();
+                $grade->update([
+                    'name' => $request->name,
+                ]);
+                $syncData = [];
+                foreach ($request->user_id as $userId) {
+                    $syncData[$userId] = [
+                        'school_id' => $this->getSchool()->id,
+                    ];
+                }
 
-            $grade = Grade::where('id', $request->id)->first();
-            $grade->update([
-                'name' => $request->name,
-            ]);
-            $syncData = [];
-            foreach ($request->user_id as $userId) {
-                $syncData[$userId] = [
-                    'school_id' => $this->getSchool()->id,
-                ];
-            }
-
-            $grade->users()->sync($syncData);
-            $this->logActivity(
-                trans('log.actions.updated'),
-                trans('log.models.grade.updated', [
-                    'value' => $request->name,
-                ]),
-            );
-            DB::commit();
+                $grade->users()->sync($syncData);
+                $this->logActivity(
+                    trans('log.actions.updated'),
+                    trans('log.models.grade.updated', [
+                        'value' => $request->name,
+                    ]),
+                );
+            });
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
         } catch (\Exception $e) {
-            DB::rollBack();
             session()->flash('error', $e->getMessage());
 
             return redirect()->back()->withInput();
@@ -168,6 +167,7 @@ class GradesController extends Controller
      */
     public function destroy(string $id, Request $request)
     {
+        $this->authorize('grade-delete', Grade::class);
         $grade = Grade::where('id', $id)->withcount('class_room')->first();
         if ($grade->class_room_count == 0) {
             $grade->delete();
@@ -185,6 +185,6 @@ class GradesController extends Controller
 
         return redirect()
             ->back()
-            ->with('error', trans('grade.cannot_deleted'));
+            ->with('error', trans('Grades.cannot_deleted'));
     }
 }

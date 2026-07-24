@@ -104,7 +104,7 @@
                     classrooms.innerHTML = '<option>{{ trans('general.loading') }}</option>';
                     const grade = this.value;
                     if (grade) {
-                        fetch("{{ URL::to('/ajax/get_classRooms') }}/" + grade)
+                        fetch("{{ URL::to('/ajax/get-class-rooms') }}/" + grade)
                             .then(response => response.json())
                             .then(data => {
                                 classrooms.innerHTML =

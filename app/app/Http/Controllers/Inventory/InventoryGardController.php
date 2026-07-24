@@ -14,7 +14,11 @@ class InventoryGardController extends Controller
 {
     use SchoolTrait;
 
-    public function __construct(protected InventoryService $inventoryService) {}
+    public function __construct(protected InventoryService $inventoryService)
+    {
+        $this->middleware('permission:stocks-income_order|clothes-income_order|books_sheets-income_order', ['only' => ['create', 'store']]);
+        $this->middleware('permission:stocks-inventory_edit|clothes-income_order-update|books_sheets-income_order-update', ['only' => ['edit', 'update']]);
+    }
 
     public function create()
     {
@@ -57,12 +61,11 @@ class InventoryGardController extends Controller
         );
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $school = $this->getSchool();
 
         $validated = $request->validate([
-            'order_id' => 'required|exists:inventory_orders,id',
             'date' => 'nullable|date',
             'notes' => 'nullable|string',
             'items' => 'required|array',
@@ -70,11 +73,11 @@ class InventoryGardController extends Controller
             'items.*.actual_stock' => 'required|numeric|min:0',
         ]);
 
-        $order = InventoryOrder::findOrFail($validated['order_id']);
+        $order = InventoryOrder::findOrFail($id);
 
         $this->inventoryService->submitGard([
             'school_id' => $school->id,
-            'order_id' => $validated['order_id'] ?? null,
+            'order_id' => $id,
             'date' => $validated['date'] ?? null,
             'notes' => $validated['notes'] ?? null,
             'items' => $validated['items'],

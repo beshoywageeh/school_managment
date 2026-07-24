@@ -15,11 +15,11 @@ Route::prefix('permission')
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
-        Route::post('/update', 'update')->name('update');
-        Route::get('/destroy/{id}', 'destroy')->name('delete');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/destroy/{id}', 'destroy')->name('delete');
         Route::get('/show/{id}', 'show')->name('show');
     });
-Route::name('admin_era.')
+Route::name('admin-era.')
     ->prefix('admin-era')
     ->controller(AdminEraController::class)
     ->group(function () {
@@ -33,11 +33,11 @@ Route::name('settings.')
     ->controller(SettingsController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::post('/update', 'update')->name('update');
+        Route::put('/{id}', 'update')->name('update');
         Route::post(
-            '/update_password',
+            '/update-password',
             'update_password',
-        )->name('update_password');
+        )->name('update-password');
     });
 Route::prefix('backup')
     ->name('backup.')
@@ -52,11 +52,12 @@ Route::prefix('backup')
             'delete',
         );
     });
-Route::get('/school_setting', [
+Route::get('/school-setting', [
     SettingsController::class,
     'index',
 ])->name('create-new-school');
 Route::get('/monitor', [
     ActivityLogController::class,
     'index',
-])->name('system-lookup');
+])->name('system-lookup')
+    ->middleware('auth', 'can:monitor-access');

@@ -30,7 +30,23 @@
                             str_contains($item['className'] ?? '', 'red');
                     @endphp
 
-                    @if (($item['type'] ?? 'link') === 'button')
+                    @if (($item['type'] ?? 'link') === 'delete')
+                        <form action="{{ $item['url'] }}" method="POST" class="w-full" x-on:submit="open = false">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                @if (isset($item['onclick'])) onclick="{{ $item['onclick'] }}" @endif
+                                class="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-right transition-colors
+                                    {{ $isDanger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-50' }}
+                                    {{ $item['className'] ?? '' }}">
+                                @if (isset($item['icon']))
+                                    <x-hero-icon name="{{ $item['icon'] }}"
+                                        class="w-5 h-5 {{ $isDanger ? 'text-red-500' : 'text-gray-400' }}" />
+                                @endif
+                                {{ $item['text'] }}
+                            </button>
+                        </form>
+                    @elseif (($item['type'] ?? 'link') === 'button')
                         <button type="button" x-on:click="open = false"
                             @if (isset($item['id'])) id="{{ $item['id'] }}" @endif
                             @if (isset($item['onclick'])) onclick="{{ $item['onclick'] }}" @endif

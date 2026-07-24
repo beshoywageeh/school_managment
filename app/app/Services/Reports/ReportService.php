@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Reports;
 
 use App\Models\AcademicYear;
 use App\Models\ClassRoom;
@@ -17,7 +17,7 @@ class ReportService
     ): Collection {
         return Student::where('grade_id', $gradeId)
             ->where('acadmiecyear_id', $academicYearId)
-            ->with(['parent:id,father_name', 'class_room:id,name'])
+            ->with(['parent:id,father_name', 'classroom:id,name'])
             ->get(['id', 'name', 'gender', 'classroom_id', 'parent_id']);
     }
 

@@ -1,6 +1,6 @@
 @props(['name', 'label' => ''])
 <div class="mb-4">
-    @if($label)
+    @if ($label)
         <label for="{{ $name }}" class="block text-sm font-medium text-gray-700 mb-1">{{ $label }}</label>
     @endif
     <select

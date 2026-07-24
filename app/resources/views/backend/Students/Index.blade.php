@@ -57,7 +57,7 @@
                                     ],
                                     [
                                         'can' => 'fee_invoice-create',
-                                        'url' => route('fee_invoice.create',  'ID_PLACEHOLDER'),
+                                        'url' => route('fee-invoice.create',  'ID_PLACEHOLDER'),
                                         'icon' => 'money',
                                         'text' => trans('general.fee_invoice'),
                                         'className' => 'text-primary hover:bg-primary/10',
@@ -65,7 +65,7 @@
                                     ],
                                     [
                                         'can' => 'ReceiptPayment-create',
-                                        'url' => route('receipt_payment.create',  'ID_PLACEHOLDER'),
+                                        'url' => route('receipt-payment.create',  'ID_PLACEHOLDER'),
                                         'icon' => 'credit-card',
                                         'text' => trans('general.ReceiptPayment'),
                                         'className' => 'text-primary hover:bg-primary/10',
@@ -73,18 +73,10 @@
                                     ],
                                     [
                                         'can' => 'payment_parts-create',
-                                        'url' => route('payment_parts.create',  'ID_PLACEHOLDER'),
+                                        'url' => route('payment-parts.create',  'ID_PLACEHOLDER'),
                                         'icon' => 'credit-card',
                                         'text' => trans('Sidebar.payment_parts'),
                                         'className' => 'text-primary hover:bg-primary/10',
-
-                                    ],
-                                    [
-                                        'can' => 'Students-graduated',
-                                        'url' => route('students.destroy', 'ID_PLACEHOLDER'),
-                                        'icon' => 'graduation-cap',
-                                        'text' => trans('student.graduated'),
-                                        'className' => 'text-indigo-600 hover:bg-indigo-50',
 
                                     ],
                                     ]
@@ -98,6 +90,17 @@
                                     </a>
                                     @endcan
                                     @endforeach
+                                    @can('Students-graduated')
+                                    <form :action="`{{ route('students.destroy', '') }}/${item.id}`" method="POST" class="w-full" x-on:submit="confirmation(event)">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors text-indigo-600 hover:bg-indigo-50">
+                                            <x-hero-icon name="graduation-cap" class="w-5 h-5" />
+                                            {{ trans('student.graduated') }}
+                                        </button>
+                                    </form>
+                                    @endcan
                             </div>
                         </div>
 

@@ -67,3 +67,7 @@
 .animate-shrink {
     animation: shrink linear forwards;
 }
+
+[x-cloak] {
+    display: none !important;
+}

@@ -12,7 +12,9 @@ class StoreItemRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('stocks-create')
+            || $this->user()->can('clothes-create')
+            || $this->user()->can('books_sheets-create');
     }
 
     /**

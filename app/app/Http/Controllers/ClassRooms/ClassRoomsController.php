@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\ClassRooms;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ClassRoomStoreRequest;
+use App\Http\Requests\ClassRoomUpdateRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\AcademicYear;
@@ -48,13 +50,13 @@ class ClassRoomsController extends Controller
             )
             ->when(
                 ! Auth::user()->hasRole('Admin'),
-                fn ($q) => $q->paginate(10),
+                fn ($q) => $q->paginate(config('school.per_page')),
             )
             ->when(Auth::user()->hasRole('Admin'), fn ($q) => $q->get());
 
         $data['grades'] = Grade::get();
 
-        return view('backend.class_rooms.index', get_defined_vars());
+        return view('backend.class-rooms.index', compact('data', 'school'));
     }
 
     /**
@@ -68,7 +70,7 @@ class ClassRoomsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ClassRoomStoreRequest $request)
     {
         // return $request->classroom;
         try {
@@ -115,7 +117,7 @@ class ClassRoomsController extends Controller
                 $current_year,
             )->first();
 
-            return view('backend.class_rooms.show', [
+            return view('backend.class-rooms.show', [
                 'data' => $data,
                 'school' => $data['school'],
             ]);
@@ -129,7 +131,7 @@ class ClassRoomsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(ClassRoomUpdateRequest $request)
     {
         try {
             $class_room = ClassRoom::find($request->id);
@@ -144,7 +146,7 @@ class ClassRoomsController extends Controller
                 ]),
             );
 
-            return redirect()->route('class_rooms.index');
+            return redirect()->route('class-rooms.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -155,7 +157,6 @@ class ClassRoomsController extends Controller
     public function tammen($id)
     {
         try {
-            \DB::beginTransaction();
             $class = ClassRoom::where('id', $id)
                 ->with('students')
                 ->first();
@@ -164,22 +165,21 @@ class ClassRoomsController extends Controller
                     ->back()
                     ->with('info', trans('general.no_students'));
             }
-            $class->students->toQuery()->update(['tameen' => 1]);
-            $class->update(['tameen' => 1]);
-            $this->logActivity(
-                trans('log.actions.updated'),
-                trans('log.models.classroom.tameen_on_class', [
-                    'class' => $class->name,
-                ]),
-            );
-            \DB::commit();
+            $this->executeInTransaction(function () use ($class) {
+                $class->students->toQuery()->update(['tameen' => 1]);
+                $class->update(['tameen' => 1]);
+                $this->logActivity(
+                    trans('log.actions.updated'),
+                    trans('log.models.classroom.tameen_on_class', [
+                        'class' => $class->name,
+                    ]),
+                );
+            });
 
             return redirect()
                 ->back()
                 ->with('success', trans('general.success'));
         } catch (\Exception $e) {
-            \DB::rollback();
-
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
@@ -189,6 +189,7 @@ class ClassRoomsController extends Controller
      */
     public function destroy(string $id, Request $request)
     {
+        $this->authorize('class_rooms-delete', ClassRoom::class);
         try {
             $class_room = ClassRoom::where('id', $id)
                 ->withcount('students')

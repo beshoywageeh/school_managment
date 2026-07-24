@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('fee_invoices', function (Blueprint $table) {
             $table->id();
-            $table->date('invoice_date');
+            $table->date('invoice_date')->index();
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('grade_id');
             $table->unsignedBigInteger('classroom_id');
@@ -22,6 +22,15 @@ return new class extends Migration
             $table->unsignedBigInteger('school_id');
             $table->unsignedBigInteger('user_id');
             $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
+            $table->index(['academic_year_id', 'status']);
+            $table->index(['grade_id', 'status', 'invoice_date']);
+            $table->index([
+                'academic_year_id',
+                'grade_id',
+                'classroom_id',
+                'status',
+            ]);
+            $table->index(['student_id', 'status']);
             $table->timestamps();
             $table->softDeletes();
         });

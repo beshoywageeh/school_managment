@@ -12,7 +12,9 @@ class UpdateItemRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('stocks-update')
+            || $this->user()->can('clothes-update')
+            || $this->user()->can('books_sheets-update');
     }
 
     /**

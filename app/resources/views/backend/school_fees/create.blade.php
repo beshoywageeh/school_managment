@@ -1,6 +1,6 @@
 <x-modal can="schoolfees-create" title="{{ trans('fees.title') }}" titleButton="{{trans('general.new')}}" icon="plus" id="school_fee_create" size="xl">
     <slot>
-        <form action="{{ route('school_fees.store') }}" method="post" id="school_fee_create">
+        <form action="{{ route('school-fees.store') }}" method="post" id="school_fee_create">
             @csrf
             <div class="p-6">
                 @include('backend.msg')

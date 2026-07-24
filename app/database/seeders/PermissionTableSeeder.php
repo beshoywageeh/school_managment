@@ -172,6 +172,9 @@ class PermissionTableSeeder extends Seeder
             ['table' => 'role', 'name' => 'role-delete'],
             ['table' => 'role', 'name' => 'role-info'],
             ['table' => 'settings', 'name' => 'settings-info'],
+            ['table' => 'reports', 'name' => 'reports-view'],
+            ['table' => 'reports', 'name' => 'reports-export'],
+            ['table' => 'security', 'name' => 'monitor-access'],
 
         ];
 

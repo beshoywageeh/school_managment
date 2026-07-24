@@ -7,7 +7,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-6">
-            <form action="{{ route('exchange_bonds.store') }}" method="POST">
+            <form action="{{ route('exchange-bonds.store') }}" method="POST">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div>

@@ -12,7 +12,7 @@ class AcademicYearStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('academic_year-create');
     }
 
     /**

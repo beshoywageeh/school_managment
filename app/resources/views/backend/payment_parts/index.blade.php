@@ -29,14 +29,14 @@
                             <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->index + 1 }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($PaymentPart->date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
-                                <a target="_blank" href="{{ route('payment_parts.edit', $PaymentPart->students->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                <a target="_blank" href="{{ route('payment-parts.edit', $PaymentPart->students->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                     {{ $PaymentPart->students->name }}
                                 </a>
                             </td>
                             <td class="px-6 py-4 text-sm">
                                 @can('payment_parts-status')
                                 <a class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $PaymentPart->status->color() }}"
-                                    href="{{ route('payment_parts.pay', $PaymentPart->id) }}">
+                                    href="{{ route('payment-parts.pay', $PaymentPart->id) }}">
                                     {{ $PaymentPart->status->lang() }}
                                 </a>
                                 @endcan
@@ -46,8 +46,8 @@
                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
 
                                     [
-                                        'type' => 'link',
-                                        'url' => route('payment_parts.destroy', $PaymentPart->id),
+                                        'type' => 'delete',
+                                        'url' => route('payment-parts.destroy', $PaymentPart->id),
                                         'text' => trans('general.delete'),
                                         'icon' => 'ti-trash',
                                         'onclick' => 'confirmation(event)',
@@ -55,14 +55,14 @@
                                     ],
                                     [
                                         'type' => 'link',
-                                        'url' => route('payment_parts.edit', $PaymentPart->id),
+                                        'url' => route('payment-parts.edit', $PaymentPart->id),
                                         'text' => trans('general.edit'),
                                         'icon' => 'ti-pencil',
                                         'can' => 'payment_parts-edit',
                                     ],
                                     [
                                         'type' => 'link',
-                                        'url' => route('payment_parts.pay', $PaymentPart->id),
+                                        'url' => route('payment-parts.pay', $PaymentPart->id),
                                         'text' => trans('general.pay'),
                                         'icon' => 'ti-pencil',
                                         'can' => 'payment_parts-pay',

@@ -131,9 +131,13 @@
                                 <a href="{{ route('inventory.orders.pay', $order->id) }}" class="p-2 text-{{ $order->status?->value === 'paid' ? 'yellow' : 'green' }}-600 hover:bg-{{ $order->status?->value === 'paid' ? 'yellow' : 'green' }}-50 rounded-lg" title="{{ trans('clothes.pay') }}">
                                     <x-hero-icon name="credit-card" class="w-5 h-5" />
                                 </a>
-                                <a href="{{ route('inventory.orders.destroy', $order->id) }}" class="p-2 text-danger hover:bg-danger/10 rounded-lg" onclick="confirmation(event)" title="{{ trans('general.delete') }}">
-                                    <x-hero-icon name="trash" class="w-5 h-5" />
-                                </a>
+                                <form action="{{ route('inventory.orders.destroy', $order->id) }}" method="POST" class="inline" onsubmit="confirmation(event)">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="p-2 text-danger hover:bg-danger/10 rounded-lg" title="{{ trans('general.delete') }}">
+                                        <x-hero-icon name="trash" class="w-5 h-5" />
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>

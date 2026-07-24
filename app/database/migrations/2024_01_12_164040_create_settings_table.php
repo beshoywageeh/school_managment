@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('footer_right')->nullable();
             $table->string('footer_left')->nullable();
             $table->string('slug')->nullable();
+            $table->string('currency')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });

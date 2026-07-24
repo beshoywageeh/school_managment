@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div class="max-w-7xl mx-auto px-4">
-                        <form method="post" action="{{ route('classes.add_students_submit') }}">
+                        <form method="post" action="{{ route('classes.add-students-submit') }}">
                             @csrf
                             <input type="hidden" name="class_id" value="{{ $class->id }}">
                             <div class="flex flex-wrap my-2">

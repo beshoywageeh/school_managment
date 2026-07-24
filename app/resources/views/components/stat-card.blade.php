@@ -44,14 +44,20 @@
     @if ($trend)
         <div class="flex flex-col items-end mr-auto">
             <span class="text-xs {{ $trendDirection === 'up' ? 'text-green-600' : 'text-red-600' }} font-medium">
-                @if ($trendDirection === 'up')▲ @else ▼ @endif
+                @if ($trendDirection === 'up')
+                    ▲
+                @else
+                    ▼
+                @endif
                 {{ $trend }}
             </span>
         </div>
     @endif
     @if ($sparklinePoints)
-        <svg class="w-16 h-8 ml-auto shrink-0" viewBox="0 0 {{ $svgWidth }} {{ $svgHeight }}" preserveAspectRatio="none">
-            <polyline fill="none" stroke="{{ $sparklineColor }}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" points="{{ $sparklinePoints }}" />
+        <svg class="w-16 h-8 ml-auto shrink-0" viewBox="0 0 {{ $svgWidth }} {{ $svgHeight }}"
+            preserveAspectRatio="none">
+            <polyline fill="none" stroke="{{ $sparklineColor }}" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round" points="{{ $sparklinePoints }}" />
         </svg>
     @endif
 </div>

@@ -43,7 +43,7 @@
         </div>
 
         {{-- Body --}}
-        <form action="{{ route('students.import_excel') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('students.import-excel') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="p-5">
                 <label class="flex flex-col items-center justify-center w-full border-2 border-dashed border-gray-200 rounded-xl p-6 bg-gray-50 hover:bg-gray-100 hover:border-blue-300 transition-colors cursor-pointer gap-2">

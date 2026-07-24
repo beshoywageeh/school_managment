@@ -110,6 +110,8 @@ class InventoryOrderController extends Controller
 
     public function store(StoreOrderRequest $request)
     {
+        $this->authorize('stocks-inventory_order-create', InventoryOrder::class);
+
         return DB::transaction(function () use ($request) {
             $order = $this->inventoryService->createOrder(
                 $request->validated(),
@@ -156,9 +158,10 @@ class InventoryOrderController extends Controller
         );
     }
 
-    public function update(UpdateOrderRequest $request)
+    public function update(UpdateOrderRequest $request, $id)
     {
-        $order = InventoryOrder::findOrFail($request->input('order_id'));
+        $this->authorize('stocks-inventory_edit', InventoryOrder::class);
+        $order = InventoryOrder::findOrFail($id);
 
         $this->inventoryService->updateOrder(
             $order,
@@ -183,6 +186,7 @@ class InventoryOrderController extends Controller
 
     public function destroy($id)
     {
+        $this->authorize('stocks-inventory_delete', InventoryOrder::class);
         $order = InventoryOrder::findOrFail($id);
 
         try {

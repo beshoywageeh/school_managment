@@ -21,7 +21,7 @@
                     </svg>
                 </button>
             </div>
-            <form action="{{ route('employees.import_excel') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('employees.import-excel') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="p-6">
                     <div class="flex items-center">

@@ -34,61 +34,56 @@ class SettingsController extends Controller
         $user = Auth::user();
         $academic_years = AcademicYear::where('school_id', $school->id)->get();
 
-        return view('backend.setting.index', get_defined_vars());
+        return view('backend.setting.index', compact('school', 'school_info', 'grades', 'std_count', 'grd_count', 'teach_count', 'user', 'academic_years'));
     }
 
     public function store(NewSchoolRequest $request)
     {
 
-        \Illuminate\Support\Facades\DB::beginTransaction();
         try {
-            $school = new School;
-            $school->name = $request->schoolname;
-            $school->phone = $request->phone;
-            $school->address = $request->address;
-            $school->save();
-            $this->verifyAndStoreImage($request, 'logo', $request->schoolname, 'upload_attachments', $school->id, 'App\Models\School', $request->schoolname);
+            $this->executeInTransaction(function () use ($request) {
+                $school = new School;
+                $school->name = $request->schoolname;
+                $school->phone = $request->phone;
+                $school->address = $request->address;
+                $school->save();
+                $this->verifyAndStoreImage($request, 'logo', $request->schoolname, 'upload_attachments', $school->id, 'App\Models\School', $request->schoolname);
 
-            $user = new User;
-            $user->first_name = $request->first_name;
-            $user->second_name = $request->second_name;
-            $user->email = $request->email;
-            $user->isAdmin = $request->isAdmin;
-            $user->login_allow = $request->loginAllow;
-            $user->password = Hash::make($request->password);
-            $user->save();
-
-            \DB::commit();
+                $user = new User;
+                $user->first_name = $request->first_name;
+                $user->second_name = $request->second_name;
+                $user->email = $request->email;
+                $user->isAdmin = $request->isAdmin;
+                $user->login_allow = $request->loginAllow;
+                $user->password = Hash::make($request->password);
+                $user->save();
+            });
 
             return redirect(route('dashboard'));
         } catch (\Exception $e) {
-            \DB::rollBack();
-
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         try {
-            \DB::beginTransaction();
-            $school = School::findorfail($request->id);
-            $school->name = $request->school_name;
-            $school->phone = $request->school_phone;
-            $school->address = $request->address;
-            $school->heading_right = $request->head_right;
-            $school->footer_right = $request->footer_right;
-            $school->footer_left = $request->footer_left;
-            $school->slug = \Str::slug($school->name);
-            $school->save();
-            $this->verifyAndStoreImage($request, 'logo', $request->school_name, 'upload_attachments', $request->id, 'App\Models\School', $request->school_name);
-            \DB::commit();
+            $this->executeInTransaction(function () use ($request, $id) {
+                $school = School::findorfail($id);
+                $school->name = $request->school_name;
+                $school->phone = $request->school_phone;
+                $school->address = $request->address;
+                $school->heading_right = $request->head_right;
+                $school->footer_right = $request->footer_right;
+                $school->footer_left = $request->footer_left;
+                $school->slug = \Str::slug($school->name);
+                $school->save();
+                $this->verifyAndStoreImage($request, 'logo', $request->school_name, 'upload_attachments', $id, 'App\Models\School', $request->school_name);
+            });
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
         } catch (\Exception $e) {
-            \DB::rollback();
-
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }

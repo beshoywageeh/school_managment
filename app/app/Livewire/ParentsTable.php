@@ -37,7 +37,7 @@ class ParentsTable extends Component
                     );
                 });
             })
-            ->paginate(10);
+            ->paginate(config('school.per_page'));
 
         return view('livewire.parents-table', [
             'students_parents' => $stdParents,

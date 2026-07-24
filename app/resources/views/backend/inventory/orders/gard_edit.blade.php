@@ -9,8 +9,9 @@
             <h4 class="text-lg font-bold text-gray-800">{{ trans('stock.inventory_order') }}</h4>
         </div>
 
-        <form action="{{ route('inventory.gard.update') }}" method="POST">
+        <form action="{{ route('inventory.gard.update', $gard->id) }}" method="POST">
             @csrf
+            @method('PUT')
             <input type="hidden" name="order_id" value="{{ $gard->id ?? '' }}">
             <div class="p-6">
                 <div class="mb-6">

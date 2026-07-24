@@ -5,54 +5,55 @@ use Illuminate\Support\Facades\Route;
 
 Route::name('report.')
     ->prefix('report')
+    ->middleware('can:reports-view')
     ->controller(ReportController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::post('Students_export', 'ExportStudents')->name(
-            'export_student',
+        Route::post('students-export', 'ExportStudents')->name(
+            'export-student',
+        )->middleware('can:reports-export');
+        Route::get('stocks-product', 'StockProducts')->name(
+            'stock-product',
         );
-        Route::get('stocks_product', 'StockProducts')->name(
-            'stock_product',
-        );
-        Route::post('/exception_fee', 'exception_fee')->name(
-            'exception_fee',
-        );
+        Route::post('/exception-fee', 'exception_fee')->name(
+            'exception-fee',
+        )->middleware('can:reports-export');
         Route::post('/stock', 'stock_product')->name('stock');
         Route::post(
-            '/book_sheet_stock',
+            '/book-sheet-stock',
             'book_sheet_stock',
-        )->name('book_sheet_stock');
-        Route::get('/books_sheets', 'books_sheets')->name(
-            'books_sheets',
+        )->name('book-sheet-stock');
+        Route::get('/books-sheets', 'books_sheets')->name(
+            'books-sheets',
         );
         Route::post(
-            '/student_report/{type}',
+            '/student-report/{type}',
             'student_report',
-        )->name('student_report');
-        Route::post('/student_tammen', 'student_tameen')->name(
-            'student_tameen',
+        )->name('student-report');
+        Route::post('/student-tammen', 'student_tameen')->name(
+            'student-tameen',
         );
-        Route::get('/clothes_stock', 'clothes_stocks')->name(
-            'clothes_stocks',
+        Route::get('/clothes-stock', 'clothes_stocks')->name(
+            'clothes-stocks',
         );
-        Route::post('/clothe_stock', 'clothe_stock')->name(
-            'clothes_stock',
+        Route::post('/clothe-stock', 'clothe_stock')->name(
+            'clothes-stock',
         );
-        Route::post('/payment_status', 'payment_status')->name(
-            'payment_status',
+        Route::post('/payment-status', 'payment_status')->name(
+            'payment-status',
         );
-        Route::post('/fees_invoices', 'fees_invoices')->name(
-            'fees_invoices',
+        Route::post('/fees-invoices', 'fees_invoices')->name(
+            'fees-invoices',
         );
         Route::post('/payments', 'payments')->name('payments');
-        Route::post('/payment_parts', 'payment_parts')->name(
-            'payment_parts',
+        Route::post('/payment-parts', 'payment_parts')->name(
+            'payment-parts',
         );
         Route::post('/credit', 'credit')->name('credit');
-        Route::get('/school_fees', 'school_fees')->name(
-            'school_fees',
+        Route::get('/school-fees', 'school_fees')->name(
+            'school-fees',
         );
-        Route::post('/final_year', 'final_year')->name(
-            'final_year',
+        Route::post('/final-year', 'final_year')->name(
+            'final-year',
         );
     });

@@ -1,5 +1,5 @@
 <x-modal id="exception_fee" title="{{ trans('report.excepiton_fee') }}" titleButton="{{ trans('general.open') }}" can="except_fee-list">
-    <form action="{{ route('report.exception_fee') }}" method="post" id="exception_fee">
+    <form action="{{ route('report.exception-fee') }}" method="post" id="exception_fee">
         @csrf
         <div class="space-y-4">
             <div class="grid grid-cols-2 gap-4">

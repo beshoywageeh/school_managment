@@ -1,12 +1,12 @@
 <x-modal id="fees_invoices" title="{{ trans('report.fee_invoice') }}" titleButton="{{ trans('general.open') }}" can="fee_invoice-list">
-    <form action="{{ route('report.fees_invoices') }}" method="post" id="fees_invoices">
+    <form action="{{ route('report.fees-invoices') }}" method="post" id="fees_invoices">
         @csrf
         <div class="space-y-4" x-data="{
             gradeId: '',
             classrooms: [],
             async loadClassrooms() {
                 if (!this.gradeId) { this.classrooms = []; return; }
-                const res = await fetch(`/ajax/get_classRooms/${this.gradeId}`);
+                const res = await fetch(`/ajax/get-class-rooms/${this.gradeId}`);
                 this.classrooms = await res.json();
             }
         }">

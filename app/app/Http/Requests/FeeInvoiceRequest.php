@@ -8,7 +8,7 @@ class FeeInvoiceRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('fee_invoice-create');
     }
 
     public function rules(): array

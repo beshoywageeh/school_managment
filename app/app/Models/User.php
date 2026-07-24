@@ -43,6 +43,7 @@ class User extends Authenticatable
         'isAdmin',
         'login_allow',
         'insurance',
+        'insurance_number',
         'insurance_date',
         'national_id',
         'grade_year',

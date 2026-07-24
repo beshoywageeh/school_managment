@@ -6,7 +6,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         @include('backend.msg')
         <h4 class="text-lg font-bold text-gray-800 mb-4">{{ $Excpetion->name }}</h4>
-        <form id="form-with-multiple-column" class="max-w-full" action="{{ route('except_fee.store') }}"
+        <form id="form-with-multiple-column" class="max-w-full" action="{{ route('except-fee.store') }}"
             method="post">
             @csrf
             <input type="hidden" name="student_id"value="{{ $Excpetion->id }}">

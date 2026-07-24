@@ -24,6 +24,7 @@ Route::prefix(LaravelLocalization::setLocale())
         'localeSessionRedirect',
         'localizationRedirect',
         'localeViewPath',
+        'throttle:web',
     ])
     ->group(function () {
         Route::middleware('auth')->group(function () {
@@ -40,15 +41,15 @@ Route::prefix(LaravelLocalization::setLocale())
             require __DIR__.'/security.php';
 
             Route::group(['prefix' => 'ajax'], function () {
-                Route::get('/get_classRooms/{id}', [
+                Route::get('/get-class-rooms/{id}', [
                     StudentsController::class,
                     'getclasses',
                 ]);
-                Route::get('/get_classRooms_fee/{id}', [
+                Route::get('/get-class-rooms-fee/{id}', [
                     SchoolFeeController::class,
                     'getclasses',
                 ]);
-                Route::get('/get_jobs/{id}', [
+                Route::get('/get-jobs/{id}', [
                     UserController::class,
                     'getjobs',
                 ]);
@@ -61,7 +62,7 @@ Route::prefix(LaravelLocalization::setLocale())
     });
 
 Route::controller(SetupController::class)->group(function () {
-    Route::get('/start_setup', 'showSetupForm')->name('setup');
+    Route::get('/start-setup', 'showSetupForm')->name('setup');
     Route::post('/setup', 'processSetup')->name('config');
 });
 require __DIR__.'/auth.php';

@@ -14,8 +14,8 @@ use App\Models\ReceiptPayment;
 use App\Models\SchoolFee;
 use App\Models\Student;
 use App\Models\StudentAccount;
-use App\Services\Report\PDFExportService;
-use App\Services\Report\ReportService;
+use App\Services\Reports\PDFExportService;
+use App\Services\Reports\ReportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -31,11 +31,11 @@ class ReportController extends Controller
     public function index()
     {
         $school = $this->GetSchool();
-        $user = \Auth::user()->value('id');
+        $user = auth()->id();
         $user_grade = \DB::Table('teacher_grade')
             ->where('teacher_id', $user)
             ->pluck('grade_id');
-        $acadmeic_years = AcademicYear::where('status', 0)->get();
+        $acadmeic_years = AcademicYear::where('status', config('school.academic_year_status'))->get();
         $stocks = InventoryItem::where('type', 'stock')->get();
         $clothes = InventoryItem::where('type', 'clothe')
             ->whereIn('grade_id', $user_grade)
@@ -65,10 +65,8 @@ class ReportController extends Controller
         );
     }
 
-    public function ExportStudents(
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
+    public function ExportStudents(Request $request)
+    {
         $query = Student::select(
             'id',
             'name',
@@ -89,13 +87,15 @@ class ReportController extends Controller
             $query->where('classroom_id', $request->classroom);
         }
         $query->with('grade', 'classroom');
-        $data = $query->get()->groupby('grade.name');
+        $data = $query
+            ->get()
+            ->groupBy(['acd_year.view', 'grade.name', 'classes.name']);
         $school = $this->GetSchool();
 
         $PDFExport->PrintPDF('students', 'stream', $data, 'L', $school);
     }
 
-    public function payment_parts(Request $request, PDFExportService $PDFExport)
+    public function payment_parts(Request $request)
     {
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
@@ -111,25 +111,30 @@ class ReportController extends Controller
         $PDFExport->PrintPDF('payment_parts', 'stream', $data, 'P', $school);
     }
 
-    public function StockProducts(PDFExportService $PDFExport)
+    public function StockProducts()
     {
-        $data['stocks'] = InventoryItem::with('orders')->get();
         $school = $this->GetSchool();
+        $data['stocks'] = InventoryItem::where('school_id', $school->id)
+            ->with('orders')
+            ->get();
         $PDFExport->PrintPDF('stock_product', 'stream', $data, 'P', $school);
     }
 
-    public function clothes_stocks(PDFExportService $PDFExport)
+    public function clothes_stocks()
     {
-        $data = InventoryItem::where('type', 'clothe')
+        $school = $this->GetSchool();
+        $data = InventoryItem::where('school_id', $school->id)
+            ->where('type', 'clothe')
             ->with('orders', 'classroom', 'grade')
             ->get();
-        $school = $this->GetSchool();
         $PDFExport->PrintPDF('clothes_stocks', 'stream', $data, 'P', $school);
     }
 
-    public function books_sheets(PDFExportService $PDFExport)
+    public function books_sheets()
     {
-        $data = InventoryItem::where('type', 'book')
+        $school = $this->GetSchool();
+        $data = InventoryItem::where('school_id', $school->id)
+            ->where('type', 'book')
             ->with('orders', 'classroom', 'grade')
             ->get();
         $school = $this->GetSchool();
@@ -142,20 +147,19 @@ class ReportController extends Controller
         );
     }
 
-    public function clothe_stock(Request $request, PDFExportService $PDFExport)
+    public function clothe_stock(Request $request)
     {
-        $data['stock'] = InventoryItem::where('id', $request->stock)
+        $school = $this->GetSchool();
+        $data['stock'] = InventoryItem::where('school_id', $school->id)
+            ->where('id', $request->stock)
             ->with('orders')
             ->first();
         $data['total'] = $this->calculateTotals($data['stock']);
-        $school = $this->GetSchool();
         $PDFExport->PrintPDF('clothe_stock', 'stream', $data, 'P', $school);
     }
 
-    public function book_sheet_stock(
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
+    public function book_sheet_stock(Request $request)
+    {
         $data['stock'] = InventoryItem::where('id', $request->stock)
             ->with('orders')
             ->first();
@@ -164,7 +168,7 @@ class ReportController extends Controller
         $PDFExport->PrintPDF('book_sheet_stock', 'stream', $data, 'P', $school);
     }
 
-    public function stock_product(Request $request, PDFExportService $PDFExport)
+    public function stock_product(Request $request)
     {
         $data['stock'] = InventoryItem::where('id', $request->stock)
             ->with('orders')
@@ -180,11 +184,8 @@ class ReportController extends Controller
         );
     }
 
-    public function student_report(
-        $type,
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
+    public function student_report($type, Request $request)
+    {
         $year_start = Carbon::now()->format('Y');
         $data['acc'] = AcademicYear::whereYear(
             'year_start',
@@ -232,7 +233,7 @@ class ReportController extends Controller
         }
     }
 
-    public function exception_fee(Request $request, PDFExportService $PDFExport)
+    public function exception_fee(Request $request)
     {
         $data['begin'] = Carbon::parse($request->start_date)->format('Y-m-d');
         $data['end'] = Carbon::parse($request->end_date)->format('Y-m-d');
@@ -247,15 +248,12 @@ class ReportController extends Controller
         $PDFExport->PrintPDF('exception_fee', 'stream', $data, 'P', $school);
     }
 
-    public function payment_status(
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
+    public function payment_status(Request $request)
+    {
         $year = Carbon::now()->format('Y');
-        $data['acc_year'] = AcademicYear::whereYear(
-            'year_start',
-            $year,
-        )->first(['id', 'view']);
+        $data['acc_year'] = AcademicYear::whereYear('year_start', $year)->first(
+            ['id', 'view'],
+        );
 
         $query = FeeInvoice::where('academic_year_id', $data['acc_year']->id)
             ->where('status', $request->payment_status)
@@ -277,7 +275,7 @@ class ReportController extends Controller
         );
     }
 
-    public function payments(Request $request, PDFExportService $PDFExport)
+    public function payments(Request $request)
     {
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
@@ -298,13 +296,12 @@ class ReportController extends Controller
         $PDFExport->PrintPDF('payments', 'stream', $data, 'P', $school);
     }
 
-    public function fees_invoices(Request $request, PDFExportService $PDFExport)
+    public function fees_invoices(Request $request)
     {
         $year = Carbon::now()->format('Y');
-        $data['acc_year'] = AcademicYear::whereYear(
-            'year_start',
-            $year,
-        )->first(['id', 'view']);
+        $data['acc_year'] = AcademicYear::whereYear('year_start', $year)->first(
+            ['id', 'view'],
+        );
 
         // Prepare base query
         $query = FeeInvoice::with([
@@ -357,10 +354,8 @@ class ReportController extends Controller
         $PDFExport->PrintPDF('fee_invoices', 'stream', $data, 'P', $school);
     }
 
-    public function student_tameen(
-        Request $request,
-        PDFExportService $PDFExport,
-    ) {
+    public function student_tameen(Request $request)
+    {
         $data['type'] = $request->type;
         $data['classroom'] = ClassRoom::findorfail($request->classroom_id);
         $date = Carbon::now()->format('Y');
@@ -401,7 +396,7 @@ class ReportController extends Controller
         }
     }
 
-    public function credit(Request $request, PDFExportService $PDFExport)
+    public function credit(Request $request)
     {
         $query = FeeInvoice::where('status', 0)->with(
             'students',
@@ -419,13 +414,12 @@ class ReportController extends Controller
         $PDFExport->PrintPDF('credit', 'stream', $data, 'P', $school);
     }
 
-    public function school_fees(PDFExportService $PDFExport)
+    public function school_fees()
     {
         $date = date('Y');
-        $data['acc_year'] = AcademicYear::whereYear(
-            'year_start',
-            $date,
-        )->first(['id', 'view']);
+        $data['acc_year'] = AcademicYear::whereYear('year_start', $date)->first(
+            ['id', 'view'],
+        );
         $data['school_fees'] = SchoolFee::where(
             'academic_year_id',
             $data['acc_year']->id,
@@ -437,7 +431,7 @@ class ReportController extends Controller
         $PDFExport->PrintPDF('school_fees', 'stream', $data, 'P', $school);
     }
 
-    public function final_year(PDFExportService $PDFExport, Request $request)
+    public function final_year(Request $request)
     {
         $school = $this->GetSchool();
 
@@ -471,32 +465,25 @@ class ReportController extends Controller
             $data['classroom'] = ClassRoom::where('id', '!=', null)->get();
         }
 
-        $data['Students_by_grade'] = (clone $data['Students_query'])
-            ->select('grade_id', \DB::raw('count(*) as student_count'))
-            ->groupBy('grade_id')
-            ->get();
-
-        $data['Students_by_classroom'] = (clone $data['Students_query'])
-            ->select('classroom_id', \DB::raw('count(*) as student_count'))
-            ->groupBy('classroom_id')
-            ->get();
-
-        $data['Students_grouped'] = $data['Students_query']
+        $data['Students_by_grade'] = clone $data['Students_query'];
+        $grouped = (clone $data['Students_query'])
             ->select(
                 'grade_id',
                 'classroom_id',
-                \DB::raw('count(*) as student_count'),
+                DB::raw('count(*) as student_count'),
             )
-            ->with('grade:id,name', 'classroom:id,name')
             ->groupBy('grade_id', 'classroom_id')
             ->get();
 
-        $data['Students_grouped_sum'] = $data['Students_grouped']->sum(
-            'student_count',
-        );
+        $Students_by_grade = $grouped
+            ->groupBy('grade_id')
+            ->map(fn ($g) => $g->sum('student_count'));
+        $Students_by_classroom = $grouped
+            ->groupBy('classroom_id')
+            ->map(fn ($g) => $g->sum('student_count'));
         $date = date('Y');
 
-        $data['acadmic_year'] = AcademicYear::where('status', '0')->first([
+        $data['acadmic_year'] = AcademicYear::where('status', config('school.academic_year_status'))->first([
             'id',
             'view',
         ]);

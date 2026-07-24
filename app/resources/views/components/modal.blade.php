@@ -35,14 +35,15 @@
     ];
 
     // 2. إعداد المقاسات الديناميكية للمودال
-    $sizes = [
-        'sm' => 'max-w-sm', // 384px (مناسب للتنبيهات أو الحذف)
-        'md' => 'max-w-md', // 448px (المقاس الافتراضي - فورم بسيطة)
-        'lg' => 'max-w-lg', // 512px
-        'xl' => 'max-w-xl', // 576px (فورم متوسطة)
-        '2xl' => 'max-w-2xl', // 672px (فورم كبيرة أو تقسيم خانات بجانب بعض)
-        'max' => 'max-w-4xl', // 896px (جداول أو بيانات ضخمة)
-    ][$size] ?? 'max-w-md';
+    $sizes =
+        [
+            'sm' => 'max-w-sm', // 384px (مناسب للتنبيهات أو الحذف)
+            'md' => 'max-w-md', // 448px (المقاس الافتراضي - فورم بسيطة)
+            'lg' => 'max-w-lg', // 512px
+            'xl' => 'max-w-xl', // 576px (فورم متوسطة)
+            '2xl' => 'max-w-2xl', // 672px (فورم كبيرة أو تقسيم خانات بجانب بعض)
+            'max' => 'max-w-4xl', // 896px (جداول أو بيانات ضخمة)
+        ][$size] ?? 'max-w-md';
 @endphp
 
 <div x-data="{ open: false }" x-on:keydown.escape.window="open = false" class="inline-block">
@@ -72,8 +73,8 @@
     <div x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-50 flex items-stretch lg:items-center justify-center bg-black/50 lg:p-4" x-on:click.self="open = false"
-        style="display: none;">
+        class="fixed inset-0 z-50 flex items-stretch lg:items-center justify-center bg-black/50 lg:p-4"
+        x-on:click.self="open = false" style="display: none;">
 
         {{-- تم تغيير كلاس العرض الثابت واستبداله بمتغير الـ $sizes المندمج مع كلاسات التجاوب --}}
         <div x-show="open" x-transition:enter="transition ease-out duration-300"

@@ -11,14 +11,14 @@ Route::name('parents.')
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::get('{id}/edit', 'edit')->name('edit');
-        Route::get('/{id}/destroy', 'destroy')->name(
+        Route::delete('/{id}/destroy', 'destroy')->name(
             'destroy',
         );
         Route::get('/{id}/show', 'show')->name('show');
         Route::post('/store', 'store')->name('store');
-        Route::post('/update', 'update')->name('update');
-        Route::post('/Import_Excel', 'Excel_Import')->name(
-            'import_excel',
+        Route::put('/{id}', 'update')->name('update');
+        Route::post('/import-excel', 'Excel_Import')->name(
+            'import-excel',
         );
     });
 Route::prefix('students')
@@ -28,12 +28,12 @@ Route::prefix('students')
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::get('{id}/edit', 'edit')->name('edit');
-        Route::get('{id}/destroy', 'softDelete')->name(
+        Route::delete('{id}/destroy', 'softDelete')->name(
             'destroy',
         );
         Route::get('/{id}/show', 'show')->name('show');
         Route::post('/store', 'store')->name('store');
-        Route::post('/update', 'update')->name('update');
+        Route::put('/{id}', 'update')->name('update');
         Route::get('/graduated', 'graduated')->name(
             'graduated',
         );
@@ -43,7 +43,7 @@ Route::prefix('students')
         Route::get('/forceDelete/{id}', 'forceDelete')->name(
             'forceDelete',
         );
-        Route::post('/Import_Excel', 'Excel_Import')->name(
-            'import_excel',
+        Route::post('/import-excel', 'Excel_Import')->name(
+            'import-excel',
         );
     });

@@ -9,7 +9,7 @@
         <div class="p-4 border-b border-gray-100 flex justify-between items-center">
             <h4 class="text-lg font-bold text-gray-800">{{ trans('academic_year.title') }}</h4>
             @can('academic_year-create')
-                @include('backend.academic_year.create')
+                @include('backend.academic-year.create')
             @endcan
         </div>
 
@@ -49,18 +49,18 @@
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-1">
                                     @can('academic_year-info')
-                                    <a href="{{ route('academic_year.show', $acadmice_year->id) }}" target="_blank" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.info') }}">
+                                    <a href="{{ route('academic-year.show', $acadmice_year->id) }}" target="_blank" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.info') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </a>
                                     @endcan
                                     @can('academic_year-edit')
-                                    @include('backend.academic_year.edit')
+                                    @include('backend.academic-year.edit')
 
                                     @endcan
                                     @can('academic_year-delete')
-                                    <form action="{{ route('academic_year.destroy', $acadmice_year->id) }}" method="POST" class="inline">
+                                    <form action="{{ route('academic-year.destroy', $acadmice_year->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-2 text-danger hover:bg-danger/10 rounded-lg" onclick="confirmation(event)" title="{{ trans('general.delete') }}">

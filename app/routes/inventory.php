@@ -11,10 +11,6 @@ Route::prefix('inventory')
         Route::prefix('items')
             ->name('items.')
             ->group(function () {
-                Route::get('/{type}', [
-                    InventoryItemController::class,
-                    'index',
-                ])->name('index');
                 Route::post('/store', [
                     InventoryItemController::class,
                     'store',
@@ -23,7 +19,7 @@ Route::prefix('inventory')
                     InventoryItemController::class,
                     'show',
                 ])->name('show');
-                Route::put('/update/{id}', [
+                Route::put('/{id}', [
                     InventoryItemController::class,
                     'update',
                 ])->name('update');
@@ -31,6 +27,10 @@ Route::prefix('inventory')
                     InventoryItemController::class,
                     'destroy',
                 ])->name('destroy');
+                Route::get('/{type}', [
+                    InventoryItemController::class,
+                    'index',
+                ])->name('index');
             });
         Route::prefix('orders')
             ->name('orders.')
@@ -39,10 +39,6 @@ Route::prefix('inventory')
                     InventoryOrderController::class,
                     'show',
                 ])->name('show');
-                Route::get('/{type}', [
-                    InventoryOrderController::class,
-                    'index',
-                ])->name('index');
                 Route::get('/create/{type}', [
                     InventoryOrderController::class,
                     'create',
@@ -55,7 +51,7 @@ Route::prefix('inventory')
                     InventoryOrderController::class,
                     'edit',
                 ])->name('edit');
-                Route::post('/update', [
+                Route::put('/{id}', [
                     InventoryOrderController::class,
                     'update',
                 ])->name('update');
@@ -63,10 +59,14 @@ Route::prefix('inventory')
                     InventoryOrderController::class,
                     'pay',
                 ])->name('pay');
-                Route::get('/{id}/destroy', [
+                Route::delete('/{id}/destroy', [
                     InventoryOrderController::class,
                     'destroy',
                 ])->name('destroy');
+                Route::get('/{type}', [
+                    InventoryOrderController::class,
+                    'index',
+                ])->name('index');
             });
         Route::prefix('gard')
             ->name('gard.')
@@ -83,7 +83,7 @@ Route::prefix('inventory')
                     InventoryGardController::class,
                     'edit',
                 ])->name('edit');
-                Route::post('/update', [
+                Route::put('/{id}', [
                     InventoryGardController::class,
                     'update',
                 ])->name('update');

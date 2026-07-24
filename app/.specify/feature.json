@@ -1,4 +1,1 @@
-{
-  "feature_directory": "specs/004-schedule-enhancement",
-  "impl_plan": "specs/004-schedule-enhancement/plan.md"
-}
+{ "feature_directory": "specs/007-code-review-fixes" }

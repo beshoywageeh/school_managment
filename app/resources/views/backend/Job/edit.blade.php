@@ -25,6 +25,7 @@
             </div>
             <form action="{{ route('jobs.update') }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div class="p-6">
                     <input type="hidden" name="id" :value="form.id">
                     <div class="grid grid-cols-2 gap-4">

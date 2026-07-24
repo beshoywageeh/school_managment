@@ -5,6 +5,7 @@
 @section('content')
     <form id="form-with-multiple-column" class="max-w-full" action="{{ route('parents.update', $parent->id) }}" method="post">
         @csrf
+        @method('PUT')
         <input type="hidden" name="id" value="{{ $parent->id }}">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">

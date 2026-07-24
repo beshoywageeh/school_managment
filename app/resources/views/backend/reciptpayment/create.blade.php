@@ -9,7 +9,7 @@
         books: {{ json_encode($books->map(fn($b) => ['sales_price' => $b->sales_price, 'sales_price_set' => $b->sales_price_set])->values()->toArray()) }}
     })">
         @include('backend.msg')
-        <form id="form-with-multiple-column" autocomplete="off" class="max-w-full" action="{{ route('receipt_payment.store') }}"
+        <form id="form-with-multiple-column" autocomplete="off" class="max-w-full" action="{{ route('receipt-payment.store') }}"
             method="post">
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

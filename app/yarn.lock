@@ -48,15 +48,15 @@
   resolved "https://registry.npmjs.org/@orchidjs/unicode-variants/-/unicode-variants-1.1.2.tgz"
   integrity sha512-5DobW1CHgnBROOEpFlEXytED5OosEWESFvg/VYmH0143oXcijYTprRYJTs+55HzGM4IqxiLFSuqEzu9mPNwVsA==
 
-"@oxc-project/types@=0.130.0":
-  version "0.130.0"
-  resolved "https://registry.npmjs.org/@oxc-project/types/-/types-0.130.0.tgz"
-  integrity sha512-ibD2usx9JRu7f5pu2tMKMI4cpA4NgXJQoYRP4pQ7Pxmn1l6k/53qWtQWZayhYy3X4QZkt90Ot+mJEaeXouio6Q==
+"@oxc-project/types@=0.139.0":
+  version "0.139.0"
+  resolved "https://registry.npmjs.org/@oxc-project/types/-/types-0.139.0.tgz"
+  integrity sha512-r9gHphtCs+1M7J0pw6Sn/hh/Wpa/iQrOOkrNAlVLF/gHq+/CJmHIWKKUUhdWjcD6CIa8idarspCsASiXCXvFUw==
 
-"@rolldown/binding-linux-x64-gnu@1.0.1":
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/@rolldown/binding-linux-x64-gnu/-/binding-linux-x64-gnu-1.0.1.tgz"
-  integrity sha512-XABVmGp9Tg0WspTVvwduTc4fpqy6JnAUrSQe6OuyqD/03nI7r0O9OWUkMIwFrjKAIqolvqoA4ZrJppgwE0Gxmw==
+"@rolldown/binding-linux-x64-gnu@1.1.5":
+  version "1.1.5"
+  resolved "https://registry.npmjs.org/@rolldown/binding-linux-x64-gnu/-/binding-linux-x64-gnu-1.1.5.tgz"
+  integrity sha512-FjcpEKUyJygHgs1o50VYNvkt5+7Le/VEdYt0AkRpkL33MnyQfwr8l5mXwMmfmTbyMPr5vJLC+8/Gd9gXnwU1QQ==
 
 "@rolldown/pluginutils@^1.0.0":
   version "1.0.1"
@@ -246,15 +246,15 @@ follow-redirects@^1.16.0:
   integrity sha512-y5rN/uOsadFT/JfYwhxRS5R7Qce+g3zG97+JrtFZlC9klX/W5hD7iiLzScI4nZqUS7DNUdhPgw4xI8W2LuXlUw==
 
 form-data@^4.0.5:
-  version "4.0.5"
-  resolved "https://registry.npmjs.org/form-data/-/form-data-4.0.5.tgz"
-  integrity sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==
+  version "4.0.6"
+  resolved "https://registry.npmjs.org/form-data/-/form-data-4.0.6.tgz"
+  integrity sha512-vKatAh4SlVfgbv+YtmhiRjhEMJsYpsG1Y2rMQtR+SVSbytsSD1YGzDIcrAJmdFec88u/+VoGmxnl+80gL1tRCQ==
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
     es-set-tostringtag "^2.1.0"
-    hasown "^2.0.2"
-    mime-types "^2.1.12"
+    hasown "^2.0.4"
+    mime-types "^2.1.35"
 
 function-bind@^1.1.2:
   version "1.1.2"
@@ -307,10 +307,10 @@ has-tostringtag@^1.0.2:
   dependencies:
     has-symbols "^1.0.3"
 
-hasown@^2.0.2:
-  version "2.0.3"
-  resolved "https://registry.npmjs.org/hasown/-/hasown-2.0.3.tgz"
-  integrity sha512-ej4AhfhfL2Q2zpMmLo7U1Uv9+PyhIZpgQLGT1F9miIGmiCJIoCgSmczFdrc97mWT4kVY72KA+WnnhJ5pghSvSg==
+hasown@^2.0.2, hasown@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.npmjs.org/hasown/-/hasown-2.0.4.tgz"
+  integrity sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==
   dependencies:
     function-bind "^1.1.2"
 
@@ -377,7 +377,7 @@ mime-db@1.52.0:
   resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz"
   integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
 
-mime-types@^2.1.12:
+mime-types@^2.1.35:
   version "2.1.35"
   resolved "https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz"
   integrity sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==
@@ -390,9 +390,9 @@ ms@^2.1.3:
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
 nanoid@^3.3.12:
-  version "3.3.12"
-  resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.12.tgz"
-  integrity sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ==
+  version "3.3.16"
+  resolved "https://registry.npmjs.org/nanoid/-/nanoid-3.3.16.tgz"
+  integrity sha512-bzlKTyNJ7+LdGIIwy8ijFpIqEQIvafahV7eYykJ8Cvh42EdJeODoJ6gUJXpQJvej1BddH8OqTXZNE/KfbWAu8Q==
 
 picocolors@^1.0.0, picocolors@^1.1.1:
   version "1.1.1"
@@ -409,10 +409,15 @@ picomatch@^2.3.1:
   resolved "https://registry.npmjs.org/picomatch/-/picomatch-4.0.4.tgz"
   integrity sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==
 
-postcss@^8.5.14:
-  version "8.5.15"
-  resolved "https://registry.npmjs.org/postcss/-/postcss-8.5.15.tgz"
-  integrity sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A==
+picomatch@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.npmjs.org/picomatch/-/picomatch-4.0.5.tgz"
+  integrity sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==
+
+postcss@^8.5.17:
+  version "8.5.19"
+  resolved "https://registry.npmjs.org/postcss/-/postcss-8.5.19.tgz"
+  integrity sha512-Mz8SaolMd8nB+G13WkORcxQKHZ/NE4xXevtkJHVuG+guo9/wYKlIMTKAqGdEmYOXR2ijPjTYNHssizdaVSUNdQ==
   dependencies:
     nanoid "^3.3.12"
     picocolors "^1.1.1"
@@ -423,29 +428,29 @@ proxy-from-env@^2.1.0:
   resolved "https://registry.npmjs.org/proxy-from-env/-/proxy-from-env-2.1.0.tgz"
   integrity sha512-cJ+oHTW1VAEa8cJslgmUZrc+sjRKgAKl3Zyse6+PV38hZe/V6Z14TbCuXcan9F9ghlz4QrFr2c92TNF82UkYHA==
 
-rolldown@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/rolldown/-/rolldown-1.0.1.tgz"
-  integrity sha512-X0KQHljNnEkWNqqiz9zJrGunh1B0HgOxLXvnFpCOcadzcy5qohZ3tqMEUg00vncoRovXuK3ZqCT9KnnKzoInFQ==
+rolldown@~1.1.5:
+  version "1.1.5"
+  resolved "https://registry.npmjs.org/rolldown/-/rolldown-1.1.5.tgz"
+  integrity sha512-t9z29cJjXf/vxQ8dyhCSpt6H6aSwHTk8cT5I3iy6SMXuFpk5mB6PL6XfC8PCwrPTx93udwKUm9HRteAlTGBLiA==
   dependencies:
-    "@oxc-project/types" "=0.130.0"
+    "@oxc-project/types" "=0.139.0"
     "@rolldown/pluginutils" "^1.0.0"
   optionalDependencies:
-    "@rolldown/binding-android-arm64" "1.0.1"
-    "@rolldown/binding-darwin-arm64" "1.0.1"
-    "@rolldown/binding-darwin-x64" "1.0.1"
-    "@rolldown/binding-freebsd-x64" "1.0.1"
-    "@rolldown/binding-linux-arm-gnueabihf" "1.0.1"
-    "@rolldown/binding-linux-arm64-gnu" "1.0.1"
-    "@rolldown/binding-linux-arm64-musl" "1.0.1"
-    "@rolldown/binding-linux-ppc64-gnu" "1.0.1"
-    "@rolldown/binding-linux-s390x-gnu" "1.0.1"
-    "@rolldown/binding-linux-x64-gnu" "1.0.1"
-    "@rolldown/binding-linux-x64-musl" "1.0.1"
-    "@rolldown/binding-openharmony-arm64" "1.0.1"
-    "@rolldown/binding-wasm32-wasi" "1.0.1"
-    "@rolldown/binding-win32-arm64-msvc" "1.0.1"
-    "@rolldown/binding-win32-x64-msvc" "1.0.1"
+    "@rolldown/binding-android-arm64" "1.1.5"
+    "@rolldown/binding-darwin-arm64" "1.1.5"
+    "@rolldown/binding-darwin-x64" "1.1.5"
+    "@rolldown/binding-freebsd-x64" "1.1.5"
+    "@rolldown/binding-linux-arm-gnueabihf" "1.1.5"
+    "@rolldown/binding-linux-arm64-gnu" "1.1.5"
+    "@rolldown/binding-linux-arm64-musl" "1.1.5"
+    "@rolldown/binding-linux-ppc64-gnu" "1.1.5"
+    "@rolldown/binding-linux-s390x-gnu" "1.1.5"
+    "@rolldown/binding-linux-x64-gnu" "1.1.5"
+    "@rolldown/binding-linux-x64-musl" "1.1.5"
+    "@rolldown/binding-openharmony-arm64" "1.1.5"
+    "@rolldown/binding-wasm32-wasi" "1.1.5"
+    "@rolldown/binding-win32-arm64-msvc" "1.1.5"
+    "@rolldown/binding-win32-x64-msvc" "1.1.5"
 
 source-map-js@^1.2.1:
   version "1.2.1"
@@ -462,10 +467,10 @@ tapable@^2.3.3:
   resolved "https://registry.npmjs.org/tapable/-/tapable-2.3.3.tgz"
   integrity sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==
 
-tinyglobby@^0.2.12, tinyglobby@^0.2.16:
-  version "0.2.16"
-  resolved "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.16.tgz"
-  integrity sha512-pn99VhoACYR8nFHhxqix+uvsbXineAasWm5ojXoN8xEwK5Kd3/TrhNn1wByuD52UxWRLy8pu+kRMniEi6Eq9Zg==
+tinyglobby@^0.2.12, tinyglobby@^0.2.17:
+  version "0.2.17"
+  resolved "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz"
+  integrity sha512-wXR/dYpcqKmfWpEdZjiKJOwCNFndD0DMnrW/cYjVGttEkBfVgcLFHoNrlj47mjOVic9yyNu65alsgF4NQyTa2g==
   dependencies:
     fdir "^6.5.0"
     picomatch "^4.0.4"
@@ -487,14 +492,14 @@ vite-plugin-full-reload@^1.1.0:
     picomatch "^2.3.1"
 
 "vite@^5.2.0 || ^6 || ^7 || ^8", vite@^8.0.0, vite@^8.0.13:
-  version "8.0.13"
-  resolved "https://registry.npmjs.org/vite/-/vite-8.0.13.tgz"
-  integrity sha512-MFtjBYgzmSxmgA4RAfjIyXWpGe1oALnjgUTzzV7QLx/TKxCzjtMH6Fd9/eVK+5Fg1qNoz5VAwsmMs/NofrmJvw==
+  version "8.1.5"
+  resolved "https://registry.npmjs.org/vite/-/vite-8.1.5.tgz"
+  integrity sha512-7ULLwsCdYx/nRyrpiEwvqb5TFHrMVZyBt+rg/OAXT7rgj/z+DtTDyKFeLAdDkubDVDKD8jOsndmy7m55XcfUsw==
   dependencies:
     lightningcss "^1.32.0"
-    picomatch "^4.0.4"
-    postcss "^8.5.14"
-    rolldown "1.0.1"
-    tinyglobby "^0.2.16"
+    picomatch "^4.0.5"
+    postcss "^8.5.17"
+    rolldown "~1.1.5"
+    tinyglobby "^0.2.17"
   optionalDependencies:
     fsevents "~2.3.3"

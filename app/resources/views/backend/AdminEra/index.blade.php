@@ -27,6 +27,7 @@
                         <form method="post" action="{{ route('employees.update', $employee->id) }}"
                             id="form-{{ $employee->id }}">
                             @csrf
+                            @method('PUT')
                             <tr class="hover:bg-gray-50">
                                 <td class="px-4 py-2 text-center text-gray-600">{{ $loop->iteration }}</td>
                                 <td class="px-4 py-2 text-gray-800">{{ $employee->code }}</td>

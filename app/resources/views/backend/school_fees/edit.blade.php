@@ -1,7 +1,8 @@
 <x-modal can="schoolfees-edit" title="{{ trans('fees.title') }}" icon="pencil" id="school_fee_edit" size="xl" variant="warning">
     <slot>
-        <form id="school_fee_edit" class="max-w-full" action="{{ route('school_fees.update', $fee->id) }}" method="post">
+        <form id="school_fee_edit" class="max-w-full" action="{{ route('school-fees.update', $fee->id) }}" method="post">
             @csrf
+            @method('PUT')
             <input type="hidden" name="id" value="{{ $fee->id }}">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
@@ -42,7 +43,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h4 class="text-lg font-bold text-gray-800 mb-4">{{ trans('fees.title') }} | {{ trans('general.edit') }}</h4>
-        <form id="form-with-multiple-column" class="max-w-full" action="{{ route('school_fees.update', $school_fee->id) }}" method="post">
+        <form id="form-with-multiple-column" class="max-w-full" action="{{ route('school-fees.update', $school_fee->id) }}" method="post">
             @csrf
             <input type="hidden" name="id" value="{{ $school_fee->id }}">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -98,7 +99,7 @@
             const grades = document.querySelector('#grades')
             grades.addEventListener('change', async () => {
                 classrooms.innerHTML = '<option>{{ trans('student.choose_classroom') }}</option>';
-                const response = await fetch(`/ajax/get_classRooms_fee/${grades.value}`)
+                const response = await fetch(`/ajax/get-class-rooms-fee/${grades.value}`)
                 const data = await response.json();
                 data.forEach(class_rooms => {
                     const option = document.createElement('option');

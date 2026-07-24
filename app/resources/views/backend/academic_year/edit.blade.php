@@ -1,6 +1,7 @@
 <x-modal id="editAcademicYear_{{ $acadmice_year->id }}" title="{{ trans('academic_year.title') }} | {{ trans('general.edit') }}" can="academic_year-edit" icon="pencil">
-    <form action="{{ route('academic_year.update') }}" method="post" id="editAcademicYear_{{ $acadmice_year->id }}">
+    <form action="{{ route('academic-year.update', $acadmice_year->id) }}" method="post" id="editAcademicYear_{{ $acadmice_year->id }}">
         @csrf
+        @method('PUT')
         <input type="hidden" name="id" value="{{ $acadmice_year->id }}">
         <div class="px-6 py-5 space-y-4">
             <div class="grid grid-cols-2 gap-3">

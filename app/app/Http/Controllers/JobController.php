@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Jobs_types;
+use App\Http\Requests\JobStoreRequest;
+use App\Http\Requests\JobUpdateRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\Job;
@@ -28,14 +30,14 @@ class JobController extends Controller
         $school = $this->getSchool();
         $jobs_main = Jobs_types::cases();
 
-        return view('backend.Job.index', get_defined_vars());
+        return view('backend.Job.index', compact('school', 'jobs_main'));
     }
 
     public function create()
     {
         $jobs_main = Jobs_types::cases();
 
-        return view('backend.Job.create', get_defined_vars());
+        return view('backend.Job.create', compact('jobs_main'));
     }
 
     public function edit($id)
@@ -43,13 +45,11 @@ class JobController extends Controller
         $job = Job::findOrFail($id);
         $jobs_main = Jobs_types::cases();
 
-        return view('backend.Job.edit', get_defined_vars());
+        return view('backend.Job.edit', compact('job', 'jobs_main'));
     }
 
-    public function store(Request $request)
+    public function store(JobStoreRequest $request)
     {
-        // return $request;
-
         try {
             Job::create([
                 'name' => $request->job_name,
@@ -78,10 +78,8 @@ class JobController extends Controller
         return response()->json($jobs);
     }
 
-    public function update(Request $request)
+    public function update(JobUpdateRequest $request)
     {
-        //    return $request;
-
         try {
             $Job = Job::findOrFail($request->id);
 

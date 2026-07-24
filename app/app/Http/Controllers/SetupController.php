@@ -19,34 +19,33 @@ class SetupController extends Controller
     public function processSetup(Request $request)
     {
 
-        \Illuminate\Support\Facades\DB::beginTransaction();
         try {
+            $email = null;
+            $this->executeInTransaction(function () use ($request, &$email) {
+                $slug = \Str::slug($request->schoolname);
+                $school = new School;
+                $school->name = $request->schoolname;
+                $school->phone = $request->phone;
+                $school->address = $request->address;
+                $school->slug = $slug;
+                $school->save();
+                $this->verifyAndStoreImage($request, 'logo', $slug, 'upload_attachments', $school->id, 'App\Models\School', $request->schoolname);
+                $lastemp = User::latest()->first();
+                $user = new User;
+                $user->code = $lastemp ? str_pad($lastemp->code + 1, 5, '0', STR_PAD_LEFT) : '00001';
+                $user->name = $request->name;
+                $user->email = \Str::slug($request->name).'@'.$slug.'.com';
+                $user->isAdmin = $request->isAdmin;
+                $user->login_allow = $request->loginAllow;
+                $user->password = bcrypt($request->password);
+                $user->school_id = $school->id;
+                $user->save();
+                $user->assignRole('Admin');
+                $email = $user->email;
+            });
 
-            $slug = \Str::slug($request->schoolname);
-            $school = new School;
-            $school->name = $request->schoolname;
-            $school->phone = $request->phone;
-            $school->address = $request->address;
-            $school->slug = $slug;
-            $school->save();
-            $this->verifyAndStoreImage($request, 'logo', $slug, 'upload_attachments', $school->id, 'App\Models\School', $request->schoolname);
-            $lastemp = User::latest()->first();
-            $user = new User;
-            $user->code = $lastemp ? str_pad($lastemp->code + 1, 5, '0', STR_PAD_LEFT) : '00001';
-            $user->name = $request->name;
-            $user->email = \Str::slug($request->name).'@'.$slug.'.com';
-            $user->isAdmin = $request->isAdmin;
-            $user->login_allow = $request->loginAllow;
-            $user->password = bcrypt($request->password);
-            $user->school_id = $school->id;
-            $user->save();
-            $user->assignRole('Admin');
-            \DB::commit();
-
-            return view('auth.login', ['data' => $user->email]);
+            return view('auth.login', ['data' => $email]);
         } catch (\Exception $e) {
-            \DB::rollBack();
-
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }

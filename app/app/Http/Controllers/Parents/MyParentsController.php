@@ -37,7 +37,7 @@ class MyParentsController extends Controller
         $school = $this->getSchool();
         $Mother_Status = MyParent::get('mother_status');
 
-        return view('backend.Parents.create', get_defined_vars());
+        return view('backend.Parents.create', compact('school', 'Mother_Status'));
     }
 
     public function store(ParentsRequest $request)
@@ -66,8 +66,8 @@ class MyParentsController extends Controller
                 'mother_birth_date' => $Mother_Birth_Date,
                 'address' => $request->address,
                 'religion' => $request->religion,
-                'user_id' => \Auth::Id(),
                 'father_learning' => $request->father_learning,
+                'user_id' => \Auth::Id(),
                 'school_id' => \Auth::user()->school_id,
                 'mother_status' => $request->Mother_Status,
             ]);
@@ -84,10 +84,12 @@ class MyParentsController extends Controller
 
     public function show(string $id)
     {
-        $parent = MyParent::where('id', $id)->with(['students'])->first();
+        $parent = MyParent::where('id', $id)->with(['students' => function ($q) {
+            return $q->with(['grade:id,name', 'classroom:id,name', 'StudentAccount']);
+        }])->first();
         $school = $this->getSchool();
 
-        return view('backend.Parents.show', get_defined_vars());
+        return view('backend.Parents.show', compact('parent', 'school'));
     }
 
     public function edit($id)
@@ -96,37 +98,31 @@ class MyParentsController extends Controller
         $school = $this->getSchool();
         $Mother_Status = MyParent::get('mother_status');
 
-        return view('backend.Parents.edit', get_defined_vars());
+        return view('backend.Parents.edit', compact('parent', 'school', 'Mother_Status'));
     }
 
-    public function update(ParentsRequest $request)
+    public function update(Request $request)
     {
+
         try {
-            if ($request->father_birth_date == '') {
-                $Father_Birth_Date = null;
-            } else {
-                $Father_Birth_Date = Carbon::parse($request->father_birth_date);
-            }
-            if ($request->mother_birth_date == '') {
-                $Mother_Birth_Date = null;
-            } else {
-                $Mother_Birth_Date = Carbon::parse($request->mother_birth_date);
-            }
+
             MyParent::find($request->id)->update([
                 'father_name' => $request->father_name,
                 'father_phone' => $request->father_phone,
                 'father_job' => $request->father_job,
                 'father_national_id' => $request->father_national_id,
-                'father_birth_date' => $Father_Birth_Date,
+                'father_birth_date' => Carbon::parse($request->father_birth_date),
                 'mother_name' => $request->mother_name,
                 'mother_phone' => $request->mother_phone,
                 'mother_job' => $request->mother_job,
                 'mother_national_id' => $request->mother_national_id,
-                'mother_birth_date' => $Mother_Birth_Date,
+                'mother_birth_date' => Carbon::parse($request->mother_birth_date),
                 'address' => $request->address,
                 'religion' => $request->religion,
                 'father_learning' => $request->father_learning,
                 'mother_status' => $request->Mother_Status,
+                'user_id' => \Auth::Id(),
+                'school_id' => \Auth::user()->school_id,
             ]);
             $this->logActivity(trans('log.actions.updated'), trans('log.models.parent.updated', ['name' => $request->father_name]));
             session()->flash('success', trans('general.success'));
@@ -143,13 +139,15 @@ class MyParentsController extends Controller
     {
         try {
             $d = MyParent::withCount('Students')->findorfail($id);
-            if ($d->Students_count == 0) {
+            if ($d->Students_count < 0) {
                 $d->delete();
                 $this->logActivity(trans('log.actions.deleted'), trans('log.models.parent.deleted', ['name' => $d->father_name]));
                 session()->flash('success', trans('general.deleted'));
 
-                return redirect()->route('parents.index');
             }
+            session()->flash('info', trans('Parents.cannotdeleteparents'));
+
+            return redirect()->route('parents.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

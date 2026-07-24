@@ -1,5 +1,5 @@
 <x-modal id="payment_parts" title="{{ trans('Sidebar.payment_parts') }}" titleButton="{{ trans('general.open') }}" can="payment_parts-list" size="lg">
-    <form action="{{ route('report.payment_parts') }}" method="post" id="payment_parts">
+    <form action="{{ route('report.payment-parts') }}" method="post" id="payment_parts">
         @csrf
         <div class="space-y-4">
             <div>

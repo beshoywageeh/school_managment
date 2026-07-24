@@ -60,4 +60,7 @@ return [
     'Mother_phone' => 'رقم هاتف الأم',
     'Mother_Status' => 'حالة الأم',
     'address' => 'العنوان',
+    'cannotdeleteparents' => 'لايمكن حذف ولي امر مسجل له أطفال',
+    'student_info' => 'بيانات الطلبة',
+
 ];

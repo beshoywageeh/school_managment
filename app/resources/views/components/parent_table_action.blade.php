@@ -15,10 +15,14 @@
         </a>
     @endcan
     @can('parents-delete')
-        <a href="{{ route('parents.destroy', $parent) }}" x-on:click="open = false" onclick="confirmation(event)"
-            class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-red-600 hover:bg-red-50">
-            <x-hero-icon name="trash" class="w-5 h-5 text-red-500" />
-            {{ trans('general.buttons.delete') }}
-        </a>
+        <form action="{{ route('parents.destroy', $parent) }}" method="POST" class="w-full" x-on:submit="open = false; confirmation(event)">
+            @csrf
+            @method('DELETE')
+            <button type="submit"
+                class="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-right transition-colors text-red-600 hover:bg-red-50">
+                <x-hero-icon name="trash" class="w-5 h-5 text-red-500" />
+                {{ trans('general.buttons.delete') }}
+            </button>
+        </form>
     @endcan
 </x-dropdown-table>

@@ -1,15 +1,16 @@
-<header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 shrink-0" style="border-color: var(--module-primary);">
+<header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 shrink-0"
+    style="border-color: var(--module-primary);">
     <div class="flex items-center gap-4">
         <button type="button" @click="sidebarMobileOpen = !sidebarMobileOpen"
             class="lg:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
-            :aria-label="sidebarMobileOpen ? 'إغلاق القائمة' : 'فتح القائمة'"
-            aria-expanded="false"
+            :aria-label="sidebarMobileOpen ? 'إغلاق القائمة' : 'فتح القائمة'" aria-expanded="false"
             :aria-expanded="sidebarMobileOpen.toString()">
             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
-        <button type="button" @click="sidebarPinned = !sidebarPinned; localStorage.setItem('sidebarPinned', sidebarPinned)"
+        <button type="button"
+            @click="sidebarPinned = !sidebarPinned; localStorage.setItem('sidebarPinned', sidebarPinned)"
             class="hidden lg:flex p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />

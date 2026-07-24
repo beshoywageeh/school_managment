@@ -12,7 +12,15 @@ class UpdateOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('stocks-inventory_edit')
+            || $this->user()->can('clothes-income_order-update')
+            || $this->user()->can('clothes-outcome_order-update')
+            || $this->user()->can('clothes-inventory_order-update')
+            || $this->user()->can('books_sheets-income_order-update')
+            || $this->user()->can('books_sheets-outcome_order-update')
+            || $this->user()->can('books_sheets-inventory_order-update')
+            || $this->user()->can('order-edit')
+            || $this->user()->can('order_out-edit');
     }
 
     /**

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePaymentRequest;
+use App\Http\Requests\UpdatePaymentRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\FeeInvoice;
 use App\Models\PaymentParts;
 use App\Models\Student;
 use App\Services\Finance\FinancialService;
-use Illuminate\Http\Request;
 
 class PaymentPartsController extends Controller
 {
@@ -29,10 +30,10 @@ class PaymentPartsController extends Controller
             'grades',
             'classes',
             'year',
-        ])->paginate(10);
+        ])->paginate(config('school.per_page'));
         $school = $this->getSchool();
 
-        return view('backend.payment_parts.index', get_defined_vars());
+        return view('backend.payment-parts.index', compact('PaymentParts', 'school'));
     }
 
     public function create($id)
@@ -56,7 +57,7 @@ class PaymentPartsController extends Controller
             }
 
             return view(
-                'backend.payment_parts.create',
+                'backend.payment-parts.create',
                 compact('school', 'student'),
             );
         } catch (\Exception $e) {
@@ -66,7 +67,7 @@ class PaymentPartsController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StorePaymentRequest $request)
     {
         try {
             $student = Student::findorfail($request->student_id);
@@ -88,7 +89,7 @@ class PaymentPartsController extends Controller
 
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('payment_parts.index');
+            return redirect()->route('payment-parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -109,7 +110,7 @@ class PaymentPartsController extends Controller
                 ->first();
             $school = $this->getSchool();
 
-            return view('backend.payment_parts.edit', get_defined_vars());
+            return view('backend.payment-parts.edit', compact('paymentParts', 'school'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -117,7 +118,7 @@ class PaymentPartsController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function update(UpdatePaymentRequest $request)
     {
         try {
             $paymentpart = PaymentParts::findorfail($request->id);

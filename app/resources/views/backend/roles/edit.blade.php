@@ -4,8 +4,9 @@
 @endsection
 @section('content')
     <div class="w-full">
-        <form action="{{ route('roles.update') }}" method="post">
+        <form action="{{ route('roles.update', $role->id) }}" method="post">
             @csrf
+            @method('PUT')
             <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                 <input type="hidden" name="id" value="{{ $role->id }}">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">

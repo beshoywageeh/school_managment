@@ -20,11 +20,26 @@
                 <button class="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 text-sm" wire:click="$emit('print')">
                     <i class="ti ti-print"></i> {{ trans('schedules.print') }}
                 </button>
-                <button class="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm" wire:click="autoGenerate">
-                    <i class="ti ti-settings"></i> {{ trans('schedules.auto_generate') }}
-                </button>
-                <button class="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm" wire:click="clearSchedule" onclick="confirm('{{ trans('schedules.clear_confirm') }}') || event.stopImmediatePropagation()">
-                    <i class="ti ti-trash"></i> {{ trans('schedules.clear_schedule') }}
+                <div x-data="{ showConfirm: false }">
+                    <button @click="showConfirm = true" class="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm" wire:loading.attr="disabled" wire:target="autoGenerate">
+                        <span wire:loading.remove wire:target="autoGenerate"><i class="ti ti-settings"></i> {{ trans('schedules.auto_generate') }}</span>
+                        <span wire:loading wire:target="autoGenerate"><i class="ti ti-loader"></i> {{ trans('schedules.generation_summary') }}...</span>
+                    </button>
+                    <template x-if="showConfirm">
+                        <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                            <div class="bg-white rounded-xl shadow-lg p-6 max-w-sm mx-4">
+                                <p class="text-gray-700 mb-4">{{ trans('schedules.auto_generate_confirm') }}</p>
+                                <div class="flex justify-end gap-2">
+                                    <button @click="showConfirm = false" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm">{{ trans('schedules.cancel') }}</button>
+                                    <button @click="showConfirm = false; $wire.autoGenerate()" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm">{{ trans('schedules.auto_generate') }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <button class="px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 text-sm" wire:click="clearSchedule" wire:loading.attr="disabled" wire:target="clearSchedule" onclick="confirm('{{ trans('schedules.clear_confirm') }}') || event.stopImmediatePropagation()">
+                    <span wire:loading.remove wire:target="clearSchedule"><i class="ti ti-trash"></i> {{ trans('schedules.clear_schedule') }}</span>
+                    <span wire:loading wire:target="clearSchedule"><i class="ti ti-loader"></i></span>
                 </button>
 
                 {{-- Print Teacher --}}

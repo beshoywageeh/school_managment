@@ -7,6 +7,7 @@
     <form id="form-with-multiple-column" action="{{ route('employees.update', $user->id) }}" method="post"
         enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         <input type="hidden" name="id" value="{{ $user->id }}">
         <div class="mb-4 flex flex-wrap gap-4">
             <div class="flex-1 min-w-[320px]">
@@ -170,7 +171,7 @@
                     const jobsSelect = document.querySelector('#jobs');
                     if (!workerTypeId) return;
                     jobsSelect.innerHTML = '<option>{{ trans('general.loading') }}</option>';
-                    fetch("{{ URL::to('/ajax/get_jobs') }}/" + workerTypeId)
+                    fetch("{{ URL::to('/ajax/get-jobs') }}/" + workerTypeId)
                         .then(response => response.json())
                         .then(data => {
                             jobsSelect.innerHTML =

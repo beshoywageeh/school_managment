@@ -37,14 +37,14 @@
                                         <x-dropdown-table :buttonText="trans('general.actions')" :items="[
                                             [
                                                 'type' => 'link',
-                                                'url' => route('exchange_bonds.edit', $exchange->id),
+                                                'url' => route('exchange-bonds.edit', $exchange->id),
                                                 'text' => trans('general.edit'),
                                                 'icon' => 'ti-pencil',
                                                 'can' => 'exchange_bonds-edit',
                                             ],
                                             [
-                                                'type' => 'link',
-                                                'url' => route('exchange_bonds.destroy', $exchange->id),
+                                                'type' => 'delete',
+                                                'url' => route('exchange-bonds.destroy', $exchange->id),
                                                 'text' => trans('general.delete'),
                                                 'icon' => 'ti-trash',
                                                 'onclick' => 'confirmation(event)',

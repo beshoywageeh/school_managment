@@ -1,14 +1,14 @@
 <x-modal title="{{ trans('class_rooms.new') }}" icon="plus" class="text-green-600" id="CreateClassRoomForm" can="class_rooms-create" titleButton="{{ trans('class_rooms.new') }}" size="max">
 
     {{-- لاحظ هنا: الـ ID بتاع المودال لازم يطابق الـ ID بتاع الـ Form عشان زرار الـ Submit يشتغل تلقائي --}}
-    <form action="{{ route('class_rooms.store') }}" method="POST" id="CreateClassRoomForm">
+    <form action="{{ route('class-rooms.store') }}" method="POST" id="CreateClassRoomForm">
         @csrf
 
         <div x-data="{
             class_rooms: [{ id: Date.now(), grade_id: '', class_name: '' }],
 
             addRow() {
-                this.class_rooms.push({
+                this.class-rooms.push({
                     id: Date.now() + Math.random(), {{-- لتوليد Key فريد ومميز لكل صف --}}
                     grade_id: '',
                     class_name: ''
@@ -16,8 +16,8 @@
             },
 
             removeRow(index) {
-                if (this.class_rooms.length > 1) {
-                    this.class_rooms.splice(index, 1);
+                if (this.class-rooms.length > 1) {
+                    this.class-rooms.splice(index, 1);
                 }
             }
         }">
@@ -58,7 +58,7 @@
                         <div class="flex items-center justify-between md:justify-start gap-2 h-10">
                             <button type="button" x-on:click="removeRow(index)"
                                 class="h-10 px-3 flex items-center justify-center gap-1 rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors disabled:opacity-30 disabled:hover:bg-transparent"
-                                :disabled="class_rooms.length <= 1">
+                                :disabled="class-rooms.length <= 1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>

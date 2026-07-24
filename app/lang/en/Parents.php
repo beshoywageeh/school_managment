@@ -60,4 +60,6 @@ return [
     'children_count' => 'Children Count',
     'Father_phone' => 'Father Phone',
     'Mother_phone' => 'Mother Phone',
+    'cannotdeleteparents' => 'Cannot delete a parent with registered children',
+    'student_info' => 'Student Info',
 ];

@@ -7,7 +7,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-4 border-b border-gray-100 flex justify-between items-center">
             <h4 class="text-lg font-bold text-gray-800">{{ trans('class_rooms.title') }}</h4>
-            @include('backend.class_rooms.create')
+            @include('backend.class-rooms.create')
 
         </div>
 
@@ -30,7 +30,7 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->iteration }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
-                                <a target="_blank" href="{{ route('class_rooms.show', $class_room->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                <a target="_blank" href="{{ route('class-rooms.show', $class_room->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                     {{ $class_room->name }}
                                 </a>
                                 <span class="text-gray-500"><x-tammen-badge :value="$class_room->tameen"/></span>
@@ -42,15 +42,15 @@
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-1">
                                     @can('class_rooms-info')
-                                    <a href="{{ route('class_rooms.show', $class_room->id) }}" target="_blank" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.info') }}">
+                                    <a href="{{ route('class-rooms.show', $class_room->id) }}" target="_blank" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.info') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </a>
                                     @endcan
-                                    @include('backend.class_rooms.edit')
+                                    @include('backend.class-rooms.edit')
                                     @can('class_rooms-delete')
-                                    <form action="{{ route('class_rooms.destroy', $class_room->id) }}" method="POST" class="inline">
+                                    <form action="{{ route('class-rooms.destroy', $class_room->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="p-2 text-danger hover:bg-danger/10 rounded-lg" x-on:click="window.dispatchEvent(new CustomEvent('show-alert', { detail: {
@@ -67,7 +67,7 @@
                                     </form>
                                     @endcan
                                     @can('class_rooms-tammen')
-                                    <a href="{{ route('class_rooms.tammen', $class_room->id) }}" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.tammen') }}">
+                                    <a href="{{ route('class-rooms.tammen', $class_room->id) }}" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.tammen') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>

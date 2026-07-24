@@ -5,8 +5,9 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         @include('backend.msg')
-        <form id="form-with-multiple-column" class="max-w-full" action="{{ route('ReceiptPayment.update') }}" method="post">
+        <form id="form-with-multiple-column" class="max-w-full" action="{{ route('receipt-payment.update') }}" method="post">
             @csrf
+            @method('PUT')
             <input type="hidden" name="id" value="{{ $recipt_Payment->id }}">
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Recipt_Payments.man') }}</label>

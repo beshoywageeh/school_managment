@@ -1,5 +1,5 @@
 <x-modal id="tammen_1" title="{{ trans('report.student_tammen') }}" titleButton="{{ trans('general.open') }}" can="Students-list">
-    <form action="{{ route('report.student_tameen') }}" method="post" id="tammen_1">
+    <form action="{{ route('report.student-tameen') }}" method="post" id="tammen_1">
         @csrf
         <div class="space-y-4">
             <div>

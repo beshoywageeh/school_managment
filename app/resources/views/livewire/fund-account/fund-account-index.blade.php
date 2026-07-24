@@ -24,8 +24,8 @@
                     <tr>
                         <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase w-12">#</th>
                         <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('general.date') }}</th>
-                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('FundAccount.credit') }}</th>
-                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('FundAccount.debit') }}</th>
+                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('fund_account.credit') }}</th>
+                        <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('fund_account.debit') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -47,15 +47,15 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                <h5 class="text-sm font-medium text-green-700">{{ trans('FundAccount.total_credit') }}</h5>
+                <h5 class="text-sm font-medium text-green-700">{{ trans('fund_account.total_credit') }}</h5>
                 <p class="text-lg font-bold text-green-800 mt-1">{{ Number::currency($accounts->sum('Credit'), 'EGP') }}</p>
             </div>
             <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
-                <h5 class="text-sm font-medium text-yellow-700">{{ trans('FundAccount.total_debit') }}</h5>
+                <h5 class="text-sm font-medium text-yellow-700">{{ trans('fund_account.total_debit') }}</h5>
                 <p class="text-lg font-bold text-yellow-800 mt-1">{{ Number::currency($accounts->sum('Debit'), 'EGP') }}</p>
             </div>
             <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
-                <h5 class="text-sm font-medium text-red-700">{{ trans('FundAccount.grand_total') }}</h5>
+                <h5 class="text-sm font-medium text-red-700">{{ trans('fund_account.grand_total') }}</h5>
                 <p class="text-lg font-bold text-red-800 mt-1">{{ Number::currency($accounts->sum('Debit') - $accounts->sum('Credit'), 'EGP') }}</p>
             </div>
         </div>

@@ -91,6 +91,7 @@ class InventoryItemController extends Controller
 
     public function store(StoreItemRequest $request)
     {
+        $this->authorize('stocks-create', InventoryItem::class);
         $school = $this->getSchool();
         if ($request->classroom_id) {
             $gradeId = ClassRoom::findOrFail($request->classroom_id)
@@ -109,6 +110,7 @@ class InventoryItemController extends Controller
 
     public function update(UpdateItemRequest $request, $id)
     {
+        $this->authorize('stocks-update', InventoryItem::class);
         $item = InventoryItem::findOrFail($id);
 
         $this->inventoryService->updateItem($item, $request->validated());
@@ -120,6 +122,7 @@ class InventoryItemController extends Controller
 
     public function destroy($id)
     {
+        $this->authorize('stocks-delete', InventoryItem::class);
         $item = InventoryItem::findOrFail($id);
 
         try {

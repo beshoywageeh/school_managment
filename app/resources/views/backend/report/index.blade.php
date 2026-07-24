@@ -16,7 +16,7 @@
                     ],
                     [
                         'Name' => trans('report.tammen'),
-                        'Url' => route('report.export_student'),
+                        'Url' => route('report.export-student'),
                         'type' => 'link',
                         'can' => 'Students-list',
                     ],
@@ -36,7 +36,7 @@
                 trans('Sidebar.stores') => [
                     [
                         'Name' => trans('report.stock_product'),
-                        'Url' => route('report.stock_product'),
+                        'Url' => route('report.stock-product'),
                         'type' => 'link',
                         'can' => 'order-index',
                     ],
@@ -48,7 +48,7 @@
                     ],
                     [
                         'Name' => trans('report.clothes_stock'),
-                        'Url' => route('report.clothes_stock'),
+                        'Url' => route('report.clothes-stock'),
                         'type' => 'link',
                         'can' => 'clothes-index',
                     ],
@@ -60,7 +60,7 @@
                     ],
                     [
                         'Name' => trans('report.books_sheets_stocks'),
-                        'Url' => route('report.books_sheets'),
+                        'Url' => route('report.books-sheets'),
                         'type' => 'link',
                         'can' => 'books_sheets-index',
                     ],
@@ -74,7 +74,7 @@
                 trans('Sidebar.accounting') => [
                     [
                         'Name' => trans('Sidebar.schoolfees'),
-                        'Url' => route('report.school_fees'),
+                        'Url' => route('report.school-fees'),
                         'type' => 'link',
                         'can' => 'schoolfees-list',
                     ],

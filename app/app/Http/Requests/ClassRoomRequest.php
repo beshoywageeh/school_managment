@@ -8,7 +8,7 @@ class ClassRoomRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('class_rooms-create');
     }
 
     public function rules(): array

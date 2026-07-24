@@ -7,11 +7,17 @@ use Illuminate\Database\Seeder;
 
 class promotionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        promotion::factory(300)->create();
+        $factory = promotion::factory();
+
+        for ($i = 0; $i < 6; $i++) {
+            $records = [];
+            for ($j = 0; $j < 50; $j++) {
+                $records[] = $factory->make()->getAttributes();
+            }
+            promotion::insert($records);
+            unset($records);
+        }
     }
 }

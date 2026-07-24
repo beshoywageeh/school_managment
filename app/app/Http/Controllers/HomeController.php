@@ -3,22 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\SchoolTrait;
-use App\Models\Grade;
-use App\Models\MyParent;
-use App\Models\PaymentParts;
-use App\Models\ReceiptPayment;
 use App\Models\Student;
-use App\Models\StudentAccount;
 use App\Models\User;
+use App\Services\DashboardService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
     use SchoolTrait;
+
+    public function __construct(
+        private DashboardService $dashboardService,
+    ) {}
 
     public function index()
     {
@@ -27,37 +26,16 @@ class HomeController extends Controller
         $schoolId = $school->id;
         $isAdmin = $user->hasRole('Admin');
 
-        // Get counts based on user role
-        [$students, $parents] = $this->getUserRoleCounts(
-            $user->id,
-            $schoolId,
-            $isAdmin,
-        );
-
-        // Get financial data
-        $financialData = $this->getFinancialData($schoolId);
-
-        // Get other counts
-        $employees = DB::table('users')
-            ->where('school_id', $schoolId)
-            ->where('code', '!=', '000001')
-            ->count();
-
-        // Get grades with classrooms and student counts
-        $grades = Grade::where('school_id', $school->id)
-            ->with([
-                'class_rooms' => function ($query) {
-                    $query->withCount('students');
-                },
-            ])
-            ->where('school_id', $schoolId)
-            ->get();
+        [$students, $parents] = $this->dashboardService->getUserRoleCounts($user->id, $schoolId, $isAdmin);
+        $financialData = $this->dashboardService->getFinancialData($schoolId);
+        $employees = $this->dashboardService->getEmployeeCount($schoolId);
+        $grades = $this->dashboardService->getGradesWithClassrooms($schoolId);
 
         $data['users'] = User::where('school_id', $schoolId)->get();
         $data['grades'] = $grades;
 
-        $chartData = $this->generateChartData($grades);
-        $revenueTrend = $this->getMonthlyRevenueTrend($schoolId);
+        $chartData = $this->dashboardService->generateChartData($grades);
+        $revenueTrend = $this->dashboardService->getMonthlyRevenueTrend($schoolId);
 
         return view(
             'dashboard',
@@ -75,110 +53,6 @@ class HomeController extends Controller
                 $revenueTrend,
             ),
         );
-    }
-
-    /**
-     * Get student and parent counts based on user role
-     */
-    private function getUserRoleCounts(
-        int $userId,
-        int $schoolId,
-        bool $isAdmin,
-    ): array {
-        if ($isAdmin) {
-            $students = Student::where('school_id', $schoolId)->count();
-            $parents = MyParent::where('school_id', $schoolId)->count();
-        } else {
-            $gradeIds = DB::table('teacher_grade')
-                ->where('teacher_id', $userId)
-                ->pluck('grade_id');
-
-            $students = Student::where('school_id', $schoolId)
-                ->whereIn('grade_id', $gradeIds)
-                ->count();
-
-            $parents = MyParent::where('school_id', $schoolId)
-                ->whereIn('student_id', $gradeIds)
-                ->count();
-        }
-
-        return [$students, $parents];
-    }
-
-    /**
-     * Get financial data including today and totals
-     */
-    private function getFinancialData(int $schoolId): array
-    {
-        return [
-            'credit' => StudentAccount::where('type', 'invoice')->sum(
-                'debit',
-            ),
-            'payment_parts' => PaymentParts::where('school_id', $schoolId)
-                ->where('status', 'paid')
-                ->sum('amount'),
-            'payments' => ReceiptPayment::where(
-                'school_id',
-                $schoolId,
-            )->sum('Debit'),
-            // Detailed totals
-            'totalInvoiced' => DB::table('fee_invoices')
-                ->join(
-                    'school__fees',
-                    'fee_invoices.school_fee_id',
-                    '=',
-                    'school__fees.id',
-                )
-                ->where('fee_invoices.school_id', $schoolId)
-                ->whereNull('fee_invoices.deleted_at')
-                ->sum('school__fees.amount'),
-            'totalPaid' => ReceiptPayment::where(
-                'school_id',
-                $schoolId,
-            )->sum('Debit'),
-        ];
-    }
-
-    /**
-     * Get monthly revenue trend for the last 6 months
-     */
-    private function getMonthlyRevenueTrend(int $schoolId): array
-    {
-        $months = [];
-        $revenue = [];
-
-        for ($i = 5; $i >= 0; $i--) {
-            $date = Carbon::now()->subMonths($i);
-            $months[] = $date->format('M Y');
-
-            $revenue[] = ReceiptPayment::where('school_id', $schoolId)
-                ->whereYear('date', $date->year)
-                ->whereMonth('date', $date->month)
-                ->sum('Debit');
-        }
-
-        return [
-            'revenue_trend_labels' => $months,
-            'revenue_trend_data' => $revenue,
-        ];
-    }
-
-    /**
-     * Generate chart data for grades and classrooms
-     */
-    private function generateChartData($grades): array
-    {
-        $chart_labels = [];
-        $chart_data = [];
-
-        foreach ($grades as $index => $grade) {
-            foreach ($grade->class_rooms as $classroom) {
-                $chart_labels[] = "{$grade->name} - {$classroom->name}";
-                $chart_data[] = $classroom->students_count;
-            }
-        }
-
-        return compact('chart_labels', 'chart_data');
     }
 
     public function widgets()
@@ -219,23 +93,14 @@ class HomeController extends Controller
 
     private function adminWidgets(User $user, int $schoolId): JsonResponse
     {
-        [$students, $parents] = $this->getUserRoleCounts($user->id, $schoolId, true);
-        $employees = DB::table('users')
-            ->where('school_id', $schoolId)
-            ->where('code', '!=', '000001')
-            ->count();
-        $financialData = $this->getFinancialData($schoolId);
-        $grades = Grade::where('school_id', $schoolId)
-            ->with(['class_rooms' => function ($q) {
-                $q->withCount('students');
-            }])
-            ->get();
-        $chartData = $this->generateChartData($grades);
-        $revenueTrend = $this->getMonthlyRevenueTrend($schoolId);
-
-        $trendData = $this->calculateTrendData($schoolId);
-
-        $recentActivity = $this->getRecentActivity($schoolId);
+        [$students, $parents] = $this->dashboardService->getUserRoleCounts($user->id, $schoolId, true);
+        $employees = $this->dashboardService->getEmployeeCount($schoolId);
+        $financialData = $this->dashboardService->getFinancialData($schoolId);
+        $grades = $this->dashboardService->getGradesWithClassrooms($schoolId);
+        $chartData = $this->dashboardService->generateChartData($grades);
+        $revenueTrend = $this->dashboardService->getMonthlyRevenueTrend($schoolId);
+        $trendData = $this->dashboardService->calculateTrendData($schoolId);
+        $recentActivity = $this->dashboardService->getRecentActivity($schoolId);
 
         return response()->json([
             'statCards' => [
@@ -248,7 +113,7 @@ class HomeController extends Controller
                 ['route' => route('students.create'), 'icon' => 'graduation-cap', 'label' => __('Sidebar.Students'), 'perm' => 'Students-create'],
                 ['route' => route('parents.create'), 'icon' => 'users', 'label' => __('Sidebar.parents'), 'perm' => 'parents-create'],
                 ['route' => route('grade.index'), 'icon' => 'line-chart', 'label' => __('Sidebar.Grade'), 'perm' => 'grade-list'],
-                ['route' => route('class_rooms.index'), 'icon' => 'building', 'label' => __('Sidebar.Class_Rooms'), 'perm' => 'class_rooms-list'],
+                ['route' => route('class-rooms.index'), 'icon' => 'building', 'label' => __('Sidebar.Class_Rooms'), 'perm' => 'class_rooms-list'],
                 ['route' => route('jobs.create'), 'icon' => 'briefcase', 'label' => __('Sidebar.jobs'), 'perm' => 'jobs-create'],
                 ['route' => route('backup.create'), 'icon' => 'database', 'label' => __('Sidebar.backup'), 'perm' => 'backup-create'],
             ],
@@ -274,15 +139,16 @@ class HomeController extends Controller
 
     private function accountantWidgets(int $schoolId): JsonResponse
     {
-        $financialData = $this->getFinancialData($schoolId);
-        $revenueTrend = $this->getMonthlyRevenueTrend($schoolId);
-        $trendData = $this->calculateTrendData($schoolId);
+        $financialData = $this->dashboardService->getFinancialData($schoolId);
+        $revenueTrend = $this->dashboardService->getMonthlyRevenueTrend($schoolId);
+        $trendData = $this->dashboardService->calculateTrendData($schoolId);
 
-        $recentActivity = ReceiptPayment::where('school_id', $schoolId)
+        $recentActivity = DB::table('recipt__payments')
+            ->where('school_id', $schoolId)
             ->latest()->take(5)->get()->map(fn ($p) => [
                 'icon' => 'credit-card',
                 'description' => __('general.dashboard.payment_received').': '.number_format($p->Debit, 2),
-                'time' => $p->created_at->diffForHumans(),
+                'time' => Carbon::parse($p->created_at)->diffForHumans(),
             ])->values();
 
         return response()->json([
@@ -293,10 +159,10 @@ class HomeController extends Controller
                 ['label' => __('general.dashboard.overdue'), 'value' => '0.00', 'icon' => 'exclamation-circle', 'color' => 'red', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
             ],
             'quickActions' => [
-                ['route' => route('fee_invoice.index'), 'icon' => 'file-text', 'label' => __('general.dashboard.new_invoice'), 'perm' => 'fee_invoice-create'],
-                ['route' => route('receipt_payment.index'), 'icon' => 'credit-card', 'label' => __('general.dashboard.create_receipt'), 'perm' => 'ReceiptPayment-create'],
-                ['route' => route('except_fee.index'), 'icon' => 'minus-circle', 'label' => __('general.dashboard.fee_exceptions'), 'perm' => 'except_fee-list'],
-                ['route' => route('payment_parts.index'), 'icon' => 'arrow-circle-down', 'label' => __('general.dashboard.payment_plans'), 'perm' => 'payment_parts-list'],
+                ['route' => route('fee-invoice.index'), 'icon' => 'file-text', 'label' => __('general.dashboard.new_invoice'), 'perm' => 'fee_invoice-create'],
+                ['route' => route('receipt-payment.index'), 'icon' => 'credit-card', 'label' => __('general.dashboard.create_receipt'), 'perm' => 'ReceiptPayment-create'],
+                ['route' => route('except-fee.index'), 'icon' => 'minus-circle', 'label' => __('general.dashboard.fee_exceptions'), 'perm' => 'except_fee-list'],
+                ['route' => route('payment-parts.index'), 'icon' => 'arrow-circle-down', 'label' => __('general.dashboard.payment_plans'), 'perm' => 'payment_parts-list'],
             ],
             'charts' => [
                 'revenueTrend' => [
@@ -339,8 +205,6 @@ class HomeController extends Controller
             $pendingTasksCount = 0;
         }
 
-        $recentActivity = collect();
-
         return response()->json([
             'statCards' => [
                 ['label' => __('general.dashboard.my_students'), 'value' => $students, 'icon' => 'graduation-cap', 'color' => 'blue', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
@@ -353,141 +217,8 @@ class HomeController extends Controller
                 ['route' => route('grade.index'), 'icon' => 'edit', 'label' => __('general.dashboard.grade_entry'), 'perm' => null],
             ],
             'charts' => [],
-            'recentActivity' => $recentActivity,
+            'recentActivity' => collect(),
             'permissions' => [],
         ]);
-    }
-
-    private function calculateTrendData(int $schoolId): array
-    {
-        $currentMonth = now();
-        $lastMonth = now()->subMonth();
-
-        $trendMetric = function (\Closure $query) use ($currentMonth, $lastMonth) {
-            $current = $query($currentMonth->year, $currentMonth->month);
-            $previous = $query($lastMonth->year, $lastMonth->month);
-            if ($previous == 0) {
-                return ['trend' => $current > 0 ? '+100%' : '0%', 'direction' => $current > 0 ? 'up' : 'down', 'sparkline' => null];
-            }
-            $change = round((($current - $previous) / $previous) * 100);
-
-            return [
-                'trend' => ($change >= 0 ? '+' : '').$change.'%',
-                'direction' => $change >= 0 ? 'up' : 'down',
-                'sparkline' => null,
-            ];
-        };
-
-        $studentsCurrent = Student::where('school_id', $schoolId)
-            ->whereYear('created_at', $currentMonth->year)
-            ->whereMonth('created_at', $currentMonth->month)
-            ->count();
-        $studentsPrevious = Student::where('school_id', $schoolId)
-            ->whereYear('created_at', $lastMonth->year)
-            ->whereMonth('created_at', $lastMonth->month)
-            ->count();
-        $studentsSparkline = $this->buildMonthlyAggregate($schoolId, Student::class, 'created_at');
-
-        $parentsCurrent = MyParent::where('school_id', $schoolId)
-            ->whereYear('created_at', $currentMonth->year)
-            ->whereMonth('created_at', $currentMonth->month)
-            ->count();
-        $parentsPrevious = MyParent::where('school_id', $schoolId)
-            ->whereYear('created_at', $lastMonth->year)
-            ->whereMonth('created_at', $lastMonth->month)
-            ->count();
-        $parentsSparkline = $this->buildMonthlyAggregate($schoolId, MyParent::class, 'created_at');
-
-        $invoicedCurrent = DB::table('fee_invoices')
-            ->join('school__fees', 'fee_invoices.school_fee_id', '=', 'school__fees.id')
-            ->where('fee_invoices.school_id', $schoolId)
-            ->whereNull('fee_invoices.deleted_at')
-            ->whereYear('fee_invoices.created_at', $currentMonth->year)
-            ->whereMonth('fee_invoices.created_at', $currentMonth->month)
-            ->sum('school__fees.amount');
-        $invoicedPrevious = DB::table('fee_invoices')
-            ->join('school__fees', 'fee_invoices.school_fee_id', '=', 'school__fees.id')
-            ->where('fee_invoices.school_id', $schoolId)
-            ->whereNull('fee_invoices.deleted_at')
-            ->whereYear('fee_invoices.created_at', $lastMonth->year)
-            ->whereMonth('fee_invoices.created_at', $lastMonth->month)
-            ->sum('school__fees.amount');
-
-        $collectedCurrent = ReceiptPayment::where('school_id', $schoolId)
-            ->whereYear('date', $currentMonth->year)
-            ->whereMonth('date', $currentMonth->month)
-            ->sum('Debit');
-        $collectedPrevious = ReceiptPayment::where('school_id', $schoolId)
-            ->whereYear('date', $lastMonth->year)
-            ->whereMonth('date', $lastMonth->month)
-            ->sum('Debit');
-
-        $calc = fn ($current, $previous) => [
-            'trend' => $previous == 0
-                ? ($current > 0 ? '+100%' : '0%')
-                : (($change = round((($current - $previous) / $previous) * 100)) >= 0 ? '+'.$change.'%' : $change.'%'),
-            'direction' => ($current - $previous) >= 0 ? 'up' : 'down',
-        ];
-
-        return [
-            'students' => [
-                'trend' => $calc($studentsCurrent, $studentsPrevious)['trend'],
-                'direction' => $calc($studentsCurrent, $studentsPrevious)['direction'],
-                'sparkline' => $studentsSparkline,
-            ],
-            'parents' => [
-                'trend' => $calc($parentsCurrent, $parentsPrevious)['trend'],
-                'direction' => $calc($parentsCurrent, $parentsPrevious)['direction'],
-                'sparkline' => $parentsSparkline,
-            ],
-            'invoiced' => [
-                'trend' => $calc($invoicedCurrent, $invoicedPrevious)['trend'],
-                'direction' => $calc($invoicedCurrent, $invoicedPrevious)['direction'],
-                'sparkline' => null,
-            ],
-            'collected' => [
-                'trend' => $calc($collectedCurrent, $collectedPrevious)['trend'],
-                'direction' => $calc($collectedCurrent, $collectedPrevious)['direction'],
-                'sparkline' => null,
-            ],
-            'pending' => [
-                'trend' => null,
-                'direction' => 'up',
-                'sparkline' => null,
-            ],
-        ];
-    }
-
-    private function buildMonthlyAggregate(int $schoolId, string $modelClass, string $dateColumn): array
-    {
-        $data = [];
-        for ($i = 11; $i >= 0; $i--) {
-            $date = now()->subMonths($i);
-            $count = $modelClass::where('school_id', $schoolId)
-                ->whereYear($dateColumn, $date->year)
-                ->whereMonth($dateColumn, $date->month)
-                ->count();
-            $data[] = $count;
-        }
-
-        return $data;
-    }
-
-    private function getRecentActivity(int $schoolId): Collection
-    {
-        $recentStudents = Student::where('school_id', $schoolId)
-            ->latest()->take(2)->get()->map(fn ($s) => [
-                'icon' => 'graduation-cap',
-                'description' => __('general.dashboard.student_created').': '.$s->name,
-                'time' => $s->created_at->diffForHumans(),
-            ]);
-        $recentPayments = ReceiptPayment::where('school_id', $schoolId)
-            ->latest()->take(3)->get()->map(fn ($p) => [
-                'icon' => 'credit-card',
-                'description' => __('general.dashboard.payment_received').': '.number_format($p->Debit, 2),
-                'time' => $p->created_at->diffForHumans(),
-            ]);
-
-        return $recentStudents->concat($recentPayments)->sortByDesc('time')->take(5)->values();
     }
 }

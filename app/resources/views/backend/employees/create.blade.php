@@ -161,7 +161,7 @@
                     if (!workerTypeId) return;
                     jobsSelect.innerHTML = '<option>{{ trans('general.loading') }}</option>';
 
-                    fetch("{{ URL::to('/ajax/get_jobs') }}/" + workerTypeId)
+                    fetch("{{ URL::to('/ajax/get-jobs') }}/" + workerTypeId)
                         .then(response => response.json())
                         .then(data => {
                             jobsSelect.innerHTML =

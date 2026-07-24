@@ -53,9 +53,9 @@ class SchoolFeeController extends Controller
                 'user:id,name',
                 'year:id,view',
             )
-            ->paginate(10);
+            ->paginate(config('school.per_page'));
 
-        return view('backend.school_fees.index', get_defined_vars());
+        return view('backend.school-fees.index', compact('school', 'grades', 'years', 'academic_years', 'SchoolFees'));
     }
 
     /**
@@ -107,7 +107,7 @@ class SchoolFeeController extends Controller
             });
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('school_fees.index');
+            return redirect()->route('school-fees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
             \Log::channel('error')->error(
@@ -135,7 +135,7 @@ class SchoolFeeController extends Controller
             ->with('classroom:id,name', 'grade:id,name')
             ->get(['code', 'name', 'classroom_id', 'grade_id']);
 
-        return view('backend.school_fees.show', get_defined_vars());
+        return view('backend.school-fees.show', compact('school', 'school_fee', 'students'));
     }
 
     /**
@@ -158,14 +158,14 @@ class SchoolFeeController extends Controller
                 trans('log.models.SchoolFee.updated', [
                     'amount' => \Number::currency(
                         $request->amount,
-                        'EGP',
+                        config('school.currency'),
                         'ar',
                     ),
                 ]),
             );
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('school_fees.index');
+            return redirect()->route('school-fees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -185,7 +185,7 @@ class SchoolFeeController extends Controller
                 trans('log.models.SchoolFee.deleted', [
                     'amount' => \Number::currency(
                         $fee->amount,
-                        'EGP',
+                        config('school.currency'),
                         'ar',
                     ),
                 ]),
@@ -193,7 +193,7 @@ class SchoolFeeController extends Controller
             $fee->delete();
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('school_fees.index');
+            return redirect()->route('school-fees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

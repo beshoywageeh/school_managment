@@ -1,7 +1,7 @@
 
 <x-modal can="academic_year-create" title="{{ trans('academic_year.title') }}" titleButton="{{trans('general.new')}}" id="academic_year-create">
     <slot>
-        <form action="{{ route('academic_year.store') }}" method="post" id="academic_year-create">
+        <form action="{{ route('academic-year.store') }}" method="post" id="academic_year-create">
             @csrf
         <div class="px-6 py-5 space-y-4">
             <div class="grid grid-cols-2 gap-3">

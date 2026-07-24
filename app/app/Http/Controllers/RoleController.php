@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleStoreRequest;
+use App\Http\Requests\RoleUpdateRequest;
 use App\Http\Traits\SchoolTrait;
 use DB;
 use Illuminate\Http\Request;
@@ -40,11 +42,9 @@ class RoleController extends Controller
     }
 
     /*** Store a newly created resource in storage.** @param  \Illuminate\Http\Request  $request* @return \Illuminate\Http\Response*/
-    public function store(Request $request)
+    public function store(RoleStoreRequest $request)
     {
-        // return $request;
         try {
-            $this->validate($request, ['name' => 'required|unique:roles,name', 'permission' => 'required']);
             $role = Role::create(['name' => $request->input('name')]);
             $role->syncPermissions($request->input('permission'));
 
@@ -76,11 +76,10 @@ class RoleController extends Controller
     }
 
     /*** Update the specified resource in storage.** @param  \Illuminate\Http\Request  $request* @param  int  $id* @return \Illuminate\Http\Response*/
-    public function update(Request $request)
+    public function update(RoleUpdateRequest $request, $id)
     {
         try {
-            $this->validate($request, ['name' => 'required', 'permission' => 'required']);
-            $role = Role::find($request->id);
+            $role = Role::find($id);
             $role->name = $request->input('name');
             $role->save();
             $role->syncPermissions($request->input('permission'));

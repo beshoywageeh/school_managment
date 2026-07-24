@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('type')->index();
             $table->decimal('debit', 10, 2);
             $table->decimal('credit', 10, 2);
+            $table->index(['academic_year_id', 'type']);
+
             $table->timestamps();
             $table->softDeletes();
         });

@@ -91,7 +91,7 @@
 
     <div class="no-print">
         <button onclick="window.print()">{{ trans('general.print') }}</button>
-        <a href="{{ route('exchange_bonds.index') }}">{{ trans('general.close') }}</a>
+        <a href="{{ route('exchange-bonds.index') }}">{{ trans('general.close') }}</a>
     </div>
 </body>
 

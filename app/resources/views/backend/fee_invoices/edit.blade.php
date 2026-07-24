@@ -5,9 +5,10 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         @include('backend.msg')
-        <form id="form-with-multiple-column" class="max-w-full" action="{{ route('fee_invoice.update') }}"
+        <form id="form-with-multiple-column" class="max-w-full" action="{{ route('fee-invoice.update') }}"
             method="post">
             @csrf
+            @method('PUT')
             <input type="hidden" name="id" value="{{ $fee->id }}">
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">

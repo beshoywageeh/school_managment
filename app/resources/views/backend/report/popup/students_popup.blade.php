@@ -1,12 +1,12 @@
 <x-modal id="students" title="{{ trans('report.students') }}" size="lg" variant="primary" icon="cog" titleButton="{{ trans('general.generate') }}" can="Students-list">
-    <form action="{{ route('report.export_student') }}" method="post" id="students">
+    <form action="{{ route('report.export-student') }}" method="post" id="students">
         @csrf
         <div class="space-y-4" x-data="{
             gradeId: '',
             classrooms: [],
             async loadClassrooms() {
                 if (!this.gradeId) { this.classrooms = []; return; }
-                const res = await fetch(`/ajax/get_classRooms/${this.gradeId}`);
+                const res = await fetch(`/ajax/get-class-rooms/${this.gradeId}`);
                 this.classrooms = await res.json();
             }
         }">

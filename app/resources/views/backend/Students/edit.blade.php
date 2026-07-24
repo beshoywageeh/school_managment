@@ -6,6 +6,7 @@
     <form action="{{ route('students.update', $student->id) }}" method="post">
         <input type="hidden" name="id" value="{{ $student->id }}">
         @csrf
+        @method('PUT')
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h4 class="text-lg font-bold text-gray-800 mb-4">{{ trans('student.student_info') }}</h4>
@@ -91,7 +92,7 @@
                     classrooms.innerHTML = '<option>{{ trans('general.loading') }}</option>';
                     const grade = this.value;
                     if (grade) {
-                        fetch("{{ URL::to('/ajax/get_classRooms') }}" + grade)
+                        fetch("{{ URL::to('/ajax/get-class-rooms') }}" + grade)
                             .then(response => response.json())
                             .then(data => {
                                 classrooms.innerHTML =

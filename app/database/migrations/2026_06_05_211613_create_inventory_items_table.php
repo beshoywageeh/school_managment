@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('unit')->default('piece');
-            $table->enum('type', ['stock', 'clothe', 'book']);
+            $table->enum('type', ['stock', 'clothe', 'book'])->index();
             $table
                 ->enum('category', ['book', 'sheet'])
                 ->nullable()
@@ -43,6 +43,8 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('users')
                 ->nullOnDelete();
+            $table->index(['type', 'grade_id']);
+            $table->index(['type', 'school_id']);
             $table->timestamps();
             $table->softDeletes();
         });

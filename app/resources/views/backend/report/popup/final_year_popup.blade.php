@@ -1,5 +1,5 @@
 <x-modal id="final_year" title="{{ trans('report.finalyear.title') }}" titleButton="{{ trans('general.open') }}" can="fee_invoice-list">
-    <form action="{{ route('report.final_year') }}" method="post" id="final_year">
+    <form action="{{ route('report.final-year') }}" method="post" id="final_year">
         @csrf
         <div class="space-y-4" x-data="{
             gradeId: [],
@@ -10,7 +10,7 @@
                 const map = new Map();
                 for (const id of this.gradeId) {
                     if (!id || id === '0') continue;
-                    const res = await fetch('/ajax/get_classRooms/' + id);
+                    const res = await fetch('/ajax/get-class-rooms/' + id);
                     const data = await res.json();
                     data.forEach(c => map.set(c.id, c));
                 }

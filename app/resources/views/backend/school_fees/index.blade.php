@@ -9,7 +9,7 @@
             <h4 class="text-lg font-bold text-gray-800">{{ trans('fees.title') }}</h4>
             @can('schoolfees-create')
 
-                @include('backend.school_fees.create')
+                @include('backend.school-fees.create')
             @endcan
         </div>
 
@@ -45,22 +45,22 @@
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-1">
                                     @can('schoolfees-info')
-                                    <a href="{{ route('school_fees.show', $fee->id) }}" target="_blank" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.info') }}">
+                                    <a href="{{ route('school-fees.show', $fee->id) }}" target="_blank" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.info') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
                                     </a>
                                     @endcan
                                     @can('schoolfees-edit')
-                                        @include('backend.school_fees.edit')
-                                    {{-- <a href="{{ route('school_fees.edit', $fee->id) }}" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.edit') }}">
+                                        @include('backend.school-fees.edit')
+                                    {{-- <a href="{{ route('school-fees.edit', $fee->id) }}" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.edit') }}">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                     </a> --}}
                                     @endcan
                                     @can('schoolfees-delete')
-                                    <form action="{{ route('school_fees.destroy', $fee->id) }}" method="POST" class="inline">
+                                    <form action="{{ route('school-fees.destroy', $fee->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="p-2 text-danger hover:bg-danger/10 rounded-lg" onclick="confirmation(event)" title="{{ trans('general.delete') }}">
@@ -103,7 +103,7 @@
                     classrooms.innerHTML = '<option>{{ trans('general.loading') }}</option>';
                     const grade = this.value;
                     if (grade) {
-                        fetch("{{ URL::to('/ajax/get_classRooms') }}/" + grade)
+                        fetch("{{ URL::to('/ajax/get-class-rooms') }}/" + grade)
                             .then(response => response.json())
                             .then(data => {
                                 classrooms.innerHTML =

@@ -12,7 +12,7 @@ class StudentStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return $this->user()->can('Students-create');
     }
 
     /**

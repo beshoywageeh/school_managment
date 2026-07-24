@@ -57,7 +57,7 @@
                     <span class="text-gray-800 font-medium">{{ $user->name }}</span>
                 </div>
 
-                <form method="post" action="{{ route('settings.update_password') }}">
+                <form method="post" action="{{ route('settings.update-password') }}">
                     @csrf
                     <div class="space-y-3">
                         <div>
@@ -79,10 +79,9 @@
         <div class="lg:col-span-2">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <h2 class="text-xl font-bold text-gray-800 mb-6">{{ trans('setting.school_details') }}</h2>
-                <form action="{{ route('settings.update') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('settings.update', $school_info->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $school_info->id }}">
-
+                    @method('PUT')
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2" for="school-name">{{ trans('setting.name') }}</label>

@@ -23,6 +23,9 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
             $table->unsignedBigInteger('school_fees_id');
+            $table->index(['date', 'status']);
+            $table->index(['student_id', 'status']);
+
             $table->timestamps();
             $table->softDeletes();
         });

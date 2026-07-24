@@ -10,6 +10,7 @@ use App\Http\Middleware\EnsureSetupIsNotCompleted;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\SanitizeInput;
+use App\Http\Middleware\SecurityHeadersMiddleware;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\ValidateSignature;
@@ -57,6 +58,7 @@ class Kernel extends HttpKernel
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
         ConvertArabicDigitsToEnlishMiddleware::class,
+        SecurityHeadersMiddleware::class,
 
     ];
 

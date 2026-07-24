@@ -14,7 +14,7 @@
             <x-smart-table
                 :columns="$columns"
                 :initial-items="$fee_invoices"
-                api-url="{{ route('fee_invoice.index') }}"
+                api-url="{{ route('fee-invoice.index') }}"
             >
 
             </x-smart-table>

@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('inventory_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('auto_number');
+            $table->string('auto_number')->index();
             $table->enum('type', ['inventory', 'sales', 'purchases']);
             $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
             $table->json('gard_items')->nullable();

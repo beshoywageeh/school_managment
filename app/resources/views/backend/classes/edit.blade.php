@@ -1,6 +1,7 @@
 <x-modal can="classes-update" id="class-edit-{{ $class->id }}" title="{{ trans('general.edit') }}" icon="pencil" size="sm" variant="warning">
-    <form action="{{ route('classes.update') }}" method="POST" id="class-edit-{{ $class->id }}" >
+    <form action="{{ route('classes.update', $class->id) }}" method="POST" id="class-edit-{{ $class->id }}" >
         @csrf
+        @method('PUT')
         <input type="hidden" name="id" value="{{ $class->id }}">
             <x-select name="grade_name" label="{{ trans('Grades.title') }}">
                 <option value="" disabled>{{ trans('class_rooms.select_grade') }}</option>

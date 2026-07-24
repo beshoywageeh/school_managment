@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Students;
 
+use App\Enums\Status;
 use App\Enums\Student_Status;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StudentStoreRequest;
@@ -15,8 +16,8 @@ use App\Models\nationality;
 use App\Models\Student;
 use App\Services\Finance\FinancialService;
 use App\Services\Student\StudentImportService;
+use App\Services\Student\StudentQueryService;
 use App\Services\Student\StudentRegeister;
-use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,7 @@ class StudentsController extends Controller
         private FinancialService $StudentFinance,
         private StudentRegeister $StudentCreation,
         private StudentImportService $StudentImportService,
+        private StudentQueryService $studentQuery,
     ) {
         $this->middleware('permission:Students-list', ['only' => ['index', 'show', 'getclasses']]);
         $this->middleware('permission:Students-create', ['only' => ['create', 'store']]);
@@ -47,14 +49,13 @@ class StudentsController extends Controller
         $school = $this->getSchool();
         $gradeOptions = Grade::pluck('name', 'id')->toArray();
 
-        // تم تعديل الـ keys لتطابق أسماء الحقول الناتجة من الـ Select والـ Joins ليعرضها الـ Component مباشرة
         $columns = [
             [
                 'key' => 'name',
                 'label' => trans('student.name'),
                 'sortable' => true,
                 'filter_type' => 'text',
-                'filter_key' => 'students', // مفتاح الفلتر المربوط بـ Axios للكتابة
+                'filter_key' => 'students',
             ],
             [
                 'key' => 'parent_name',
@@ -81,101 +82,8 @@ class StudentsController extends Controller
             ],
         ];
 
-        // 1. بناء الاستعلام والـ Joins الأساسية
-        $query = Student::query()
-            ->join('parents', 'students.parent_id', '=', 'parents.id')
-            ->join('grades', 'students.grade_id', '=', 'grades.id')
-            ->join(
-                'class_rooms',
-                'students.classroom_id',
-                '=',
-                'class_rooms.id',
-            )
-            ->where('students.school_id', $school->id)
-            ->whereNull('students.deleted_at')
-            // جلب مجموع الرسوم ليتوافق مع عمود fees_sum_amount
-            ->withSum('fee_invoice', 'amount');
+        $students = $this->studentQuery->getFilteredQuery($request, $school->id);
 
-        // 2. تطبيق فلاتر البحث والديناميكية القادمة من الـ Axios ($request)
-        if ($request->filled('students')) {
-            $query->where(function ($q) use ($request) {
-                $q->where(
-                    'students.name',
-                    'like',
-                    '%'.$request->students.'%',
-                )
-                    ->orWhere(
-                        'parents.father_name',
-                        'like',
-                        '%'.$request->students.'%',
-                    )
-                    ->orWhere(
-                        'students.address',
-                        'like',
-                        '%'.$request->students.'%',
-                    );
-            });
-        }
-
-        if ($request->filled('grade_id')) {
-            $query->where('students.grade_id', $request->grade_id);
-        }
-
-        // الفلاتر المتقدمة الإضافية (إذا أرسلها Axios مستقبلاً)
-        if ($request->filled('classroom_id')) {
-            $query->where('students.classroom_id', $request->classroom_id);
-        }
-
-        if ($request->filled('birth_date_filter')) {
-            $query->whereDate(
-                'students.birth_date',
-                '>=',
-                Carbon::parse($request->birth_date_filter),
-            );
-        }
-
-        if ($request->filled('joinDateTo')) {
-            $query->whereDate(
-                'students.join_date',
-                '<=',
-                Carbon::parse($request->joinDateTo),
-            );
-        }
-
-        // 3. صلاحيات المعلمين (Teacher Role Check)
-        if (! Auth::user()->hasRole('Admin')) {
-            $gradeIds = DB::table('teacher_grade')
-                ->where('teacher_id', Auth::id())
-                ->pluck('grade_id');
-            $query->whereIn('students.grade_id', $gradeIds);
-        }
-
-        // 4. الترتيب الديناميكي (Sorting)
-        // نحدد حقل الترتيب الافتراضي ليكون حقل واضح لمنع تعارض الأسماء المتشابهة مثل id
-        $sortBy = $request->get('sort_by', 'students.id');
-        $sortOrder = $request->get('sort_order', 'desc');
-
-        // خريطة تحويل لمفاتيح العرض الافتراضية إلى الحقول الحقيقية في الداتابيز عند الترتيب
-        $sortMap = [
-            'name' => 'students.name',
-            'grade_name' => 'grades.name',
-        ];
-
-        $actualSortField = $sortMap[$sortBy] ?? $sortBy;
-        $query->orderBy($actualSortField, $sortOrder);
-
-        // اختيار الحقول وتحديد أسماء مستعارة (Aliases) مطابقة لحقول الـ Component تماماً
-        $query->select([
-            'students.*',
-            'parents.father_name as parent_name',
-            'grades.name as grade_name',
-            'class_rooms.name as classroom_name',
-        ]);
-
-        // 5. الترقيم النهائي والأوحد للبيانات
-        $students = $query->paginate(10);
-
-        // 6. الاستجابة الخاصة بطلب الأجاكس
         if ($request->expectsJson()) {
             return response()->json([
                 'items' => $students->items(),
@@ -186,7 +94,7 @@ class StudentsController extends Controller
             ]);
         }
 
-        return view('backend.Students.Index', get_defined_vars());
+        return view('backend.Students.Index', compact('school', 'gradeOptions', 'columns', 'students'));
     }
 
     /**
@@ -204,7 +112,7 @@ class StudentsController extends Controller
             'father_name',
         ]);
         $acadmice_years = AcademicYear::where('school_id', $school->id)
-            ->where('status', 'false')
+            ->where('status', Status::CLOSE)
             ->get(['id', 'view']);
         $nationalitys = nationality::get(['id', 'name']);
 
@@ -225,6 +133,7 @@ class StudentsController extends Controller
      */
     public function store(StudentStoreRequest $request)
     {
+        $this->authorize('Students-create', Student::class);
         try {
             DB::Transaction(function () use ($request) {
                 $school = $this->getSchool();
@@ -278,7 +187,7 @@ class StudentsController extends Controller
                 ->first();
             $school = $this->getSchool();
 
-            return view('backend.Students.show', get_defined_vars());
+            return view('backend.Students.show', compact('stuudent', 'school'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -297,7 +206,7 @@ class StudentsController extends Controller
             $student = Student::findorfail($id);
             $school = $this->getSchool();
 
-            return view('backend.Students.edit', get_defined_vars());
+            return view('backend.Students.edit', compact('grades', 'parents', 'student', 'school'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -310,6 +219,7 @@ class StudentsController extends Controller
      */
     public function update(StudentStoreRequest $request)
     {
+        $this->authorize('Students-edit', Student::class);
         try {
             $student = Student::findorfail($request->id);
             $student->update([
@@ -357,7 +267,7 @@ class StudentsController extends Controller
             ->get();
         $school = $this->getSchool();
 
-        return view('backend.Students.graduated', get_defined_vars());
+        return view('backend.Students.graduated', compact('students', 'school'));
     }
 
     public function restore($id)
@@ -381,6 +291,7 @@ class StudentsController extends Controller
      */
     public function softDelete(string $id, Request $request)
     {
+        $this->authorize('Students-delete', Student::class);
         try {
             $student = Student::findorfail($id);
             $student->delete();
@@ -403,6 +314,7 @@ class StudentsController extends Controller
 
     public function forceDelete(string $id, Request $request)
     {
+        $this->authorize('Students-delete', Student::class);
         try {
             $student = Student::onlyTrashed()->where('id', $id)->first();
 

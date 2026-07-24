@@ -22,15 +22,13 @@
     get sidebarExpanded() {
         return this.sidebarPinned || this.sidebarHover;
     }
-}"
-@keydown.window.escape="sidebarMobileOpen = false"
-:class="sidebarMobileOpen ? 'overflow-hidden' : ''"
-class="bg-gray-100 font-sans"
-style="--module-primary: {{ $modulePrimary ?? 'var(--color-primary)' }}; --module-bg: {{ $moduleBg ?? 'var(--color-surface)' }};">
+}" @keydown.window.escape="sidebarMobileOpen = false"
+    :class="sidebarMobileOpen ? 'overflow-hidden' : ''" class="bg-gray-100 font-sans"
+    style="--module-primary: {{ $modulePrimary ?? 'var(--color-primary)' }}; --module-bg: {{ $moduleBg ?? 'var(--color-surface)' }};">
     <!-- Skip-to-content link -->
     <a href="#main-content"
-       class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-[9999] focus:bg-white focus:text-gray-900 focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary"
-       aria-label="{{ trans('general.skip_to_content') ?? 'الانتقال إلى المحتوى' }}">
+        class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-[9999] focus:bg-white focus:text-gray-900 focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary"
+        aria-label="{{ trans('general.skip_to_content') ?? 'الانتقال إلى المحتوى' }}">
         {{ trans('general.skip_to_content') ?? 'الانتقال إلى المحتوى' }}
     </a>
 
@@ -41,10 +39,8 @@ style="--module-primary: {{ $modulePrimary ?? 'var(--color-primary)' }}; --modul
 
     <!-- Mobile backdrop -->
     <template x-teleport="body">
-        <div x-show="sidebarMobileOpen"
-            class="fixed inset-0 z-30 bg-black/50 lg:hidden"
-            @click="sidebarMobileOpen = false"
-            x-transition.opacity>
+        <div x-show="sidebarMobileOpen" class="fixed inset-0 z-30 bg-black/50 lg:hidden"
+            @click="sidebarMobileOpen = false" x-transition.opacity>
         </div>
     </template>
 
@@ -52,14 +48,15 @@ style="--module-primary: {{ $modulePrimary ?? 'var(--color-primary)' }}; --modul
     @include('layouts.sidebar')
 
     <!-- Main Content Wrapper -->
-    <div :class="sidebarExpanded ? 'lg:ms-64' : 'lg:ms-16'" class="ms-0 flex flex-col min-h-screen transition-all duration-300">
+    <div :class="sidebarExpanded ? 'lg:ms-64' : 'lg:ms-16'"
+        class="ms-0 flex flex-col min-h-screen transition-all duration-300">
         <x-toasts />
         <x-alert />
         <!-- Header -->
         @include('layouts.header')
         <!-- Content Area -->
         <main id="main-content" class="flex-1 overflow-y-auto p-6 bg-gray-50">
-            <h4 class="text-2xl font-bold text-gray-800">@yield('title')</h4>
+            {{-- <h4 class="text-2xl font-bold text-gray-800">@yield('title')</h4> --}}
 
             @yield('content')
         </main>
