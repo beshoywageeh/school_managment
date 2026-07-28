@@ -6,6 +6,7 @@ use App\Http\Traits\SchoolTrait;
 use App\Models\Student;
 use App\Models\User;
 use App\Services\DashboardService;
+use App\Services\DashboardTrendService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ class HomeController extends Controller
 
     public function __construct(
         private DashboardService $dashboardService,
+        private DashboardTrendService $dashboardTrendService,
     ) {}
 
     public function index()
@@ -97,9 +99,9 @@ class HomeController extends Controller
         $employees = $this->dashboardService->getEmployeeCount($schoolId);
         $financialData = $this->dashboardService->getFinancialData($schoolId);
         $grades = $this->dashboardService->getGradesWithClassrooms($schoolId);
-        $chartData = $this->dashboardService->generateChartData($grades);
-        $revenueTrend = $this->dashboardService->getMonthlyRevenueTrend($schoolId);
-        $trendData = $this->dashboardService->calculateTrendData($schoolId);
+        $chartData = $this->dashboardTrendService->generateChartData($grades);
+        $revenueTrend = $this->dashboardTrendService->getMonthlyRevenueTrend($schoolId);
+        $trendData = $this->dashboardTrendService->calculateTrendData($schoolId);
         $recentActivity = $this->dashboardService->getRecentActivity($schoolId);
 
         return response()->json([
@@ -140,8 +142,8 @@ class HomeController extends Controller
     private function accountantWidgets(int $schoolId): JsonResponse
     {
         $financialData = $this->dashboardService->getFinancialData($schoolId);
-        $revenueTrend = $this->dashboardService->getMonthlyRevenueTrend($schoolId);
-        $trendData = $this->dashboardService->calculateTrendData($schoolId);
+        $revenueTrend = $this->dashboardTrendService->getMonthlyRevenueTrend($schoolId);
+        $trendData = $this->dashboardTrendService->calculateTrendData($schoolId);
 
         $recentActivity = DB::table('recipt__payments')
             ->where('school_id', $schoolId)
@@ -179,9 +181,7 @@ class HomeController extends Controller
 
     private function teacherWidgets(User $user, int $schoolId): JsonResponse
     {
-        $gradeIds = DB::table('teacher_grade')
-            ->where('teacher_id', $user->id)
-            ->pluck('grade_id');
+        $gradeIds = $user->grades()->pluck('grade_id');
 
         $students = Student::where('school_id', $schoolId)
             ->whereIn('grade_id', $gradeIds)

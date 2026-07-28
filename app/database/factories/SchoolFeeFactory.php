@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\AcademicYear;
 use App\Models\ClassRoom;
 use App\Models\Grade;
+use App\Models\School;
 use App\Models\SchoolFee;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -33,7 +34,7 @@ class SchoolFeeFactory extends Factory
             ]),
             'academic_year_id' => AcademicYear::inRandomOrder()->first()
                 ?->id,
-            'school_id' => '1',
+            'school_id' => School::factory(),
         ];
     }
 }

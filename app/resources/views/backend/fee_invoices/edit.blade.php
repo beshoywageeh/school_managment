@@ -13,7 +13,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <x-select name="student_id" label="{{ trans('fee_invoice.name') }}">
-                    <option value="{{ $fee->students->id }}" selected>{{ $fee->students->name }}</option>
+                    <option value="{{ $fee->student->id }}" selected>{{ $fee->student->name }}</option>
                 </x-select>
                 <x-select name="fee" label="{{ trans('fee_invoice.selectschool') }}">
                     <option value="" selected>{{ trans('fee_invoice.selectschool') }}</option>
@@ -25,8 +25,8 @@
                 </x-select>
             </div>
 
-            <input type="hidden" name="grade_id" value="{{ $fee->students->grade_id }}">
-            <input type="hidden" value="{{ $fee->students->classroom_id }}" name="classroom_id">
+            <input type="hidden" name="grade_id" value="{{ $fee->student->grade_id }}">
+            <input type="hidden" value="{{ $fee->student->classroom_id }}" name="classroom_id">
             <div class="flex justify-end">
                 <button class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium" type="submit">{{ trans('general.Submit') }}</button>
             </div>

@@ -48,7 +48,7 @@ Route::prefix('backup')
         Route::get('/download/{file_name}', 'download')->name(
             'download',
         );
-        Route::get('/delete/{file_name}', 'delete')->name(
+        Route::delete('/delete/{file_name}', 'delete')->name(
             'delete',
         );
     });

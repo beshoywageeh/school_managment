@@ -37,10 +37,10 @@ Route::prefix('students')
         Route::get('/graduated', 'graduated')->name(
             'graduated',
         );
-        Route::get('/restore/{id}', 'restore')->name(
+        Route::delete('/restore/{id}', 'restore')->name(
             'restore',
         );
-        Route::get('/forceDelete/{id}', 'forceDelete')->name(
+        Route::delete('/forceDelete/{id}', 'forceDelete')->name(
             'forceDelete',
         );
         Route::post('/import-excel', 'Excel_Import')->name(

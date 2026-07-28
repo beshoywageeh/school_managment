@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Student_Status;
 use App\Enums\user_religion;
 use App\Enums\UserGender;
+use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
 {
-    use HasFactory, SoftDeletes;
+    use BelongsToSchool, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -32,7 +33,6 @@ class Student extends Model
         'code',
         'acadmiecyear_id',
         'nationality_id',
-        'school_id',
     ];
 
     protected $casts = [
@@ -61,12 +61,12 @@ class Student extends Model
         return $this->belongsTo(MyParent::class);
     }
 
-    public function StudentAccount(): HasMany
+    public function studentAccount(): HasMany
     {
         return $this->hasMany(StudentAccount::class, 'student_id', 'id');
     }
 
-    public function Acadmice_year(): BelongsTo
+    public function academicYear(): BelongsTo
     {
         return $this->belongsTo(AcademicYear::class);
     }

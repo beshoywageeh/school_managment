@@ -75,7 +75,7 @@
             </div>
         </div>
         <div class="flex justify-between items-center mb-2 pb-2" style="border-bottom:1px solid black;">
-            <div class="flex-1">{!! $school->heading_right !!}</div>
+            <div class="flex-1">{{ $school->heading_right }}</div>
             <div class="flex-1"></div>
             <div class="flex-1">
                 @if ($school->image == null)

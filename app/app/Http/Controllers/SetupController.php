@@ -18,7 +18,6 @@ class SetupController extends Controller
 
     public function processSetup(Request $request)
     {
-
         try {
             $email = null;
             $this->executeInTransaction(function () use ($request, &$email) {
@@ -29,12 +28,23 @@ class SetupController extends Controller
                 $school->address = $request->address;
                 $school->slug = $slug;
                 $school->save();
-                $this->verifyAndStoreImage($request, 'logo', $slug, 'upload_attachments', $school->id, 'App\Models\School', $request->schoolname);
+                $this->verifyAndStoreImage(
+                    $request,
+                    'logo',
+                    $slug,
+                    'upload_attachments',
+                    $school->id,
+                    "App\Models\School",
+                    $request->schoolname,
+                );
                 $lastemp = User::latest()->first();
                 $user = new User;
-                $user->code = $lastemp ? str_pad($lastemp->code + 1, 5, '0', STR_PAD_LEFT) : '00001';
+                $user->code = $lastemp
+                    ? str_pad($lastemp->code + 1, 5, '0', STR_PAD_LEFT)
+                    : '00001';
                 $user->name = $request->name;
-                $user->email = \Str::slug($request->name).'@'.$slug.'.com';
+                $user->email =
+                    \Str::slug($request->name).'@'.$slug.'.com';
                 $user->isAdmin = $request->isAdmin;
                 $user->login_allow = $request->loginAllow;
                 $user->password = bcrypt($request->password);
@@ -44,9 +54,12 @@ class SetupController extends Controller
                 $email = $user->email;
             });
 
-            return view('auth.login', ['data' => $email]);
+            return redirect()->route('login', ['data' => $email]);
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors(['error' => $e->getMessage()]);
         }
     }
 }

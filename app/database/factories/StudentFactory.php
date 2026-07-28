@@ -9,7 +9,8 @@ use App\Models\AcademicYear;
 use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\MyParent;
-use App\Models\nationality;
+use App\Models\Nationality;
+use App\Models\School;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -50,8 +51,8 @@ class StudentFactory extends Factory
             'religion' => Arr::random(user_religion::cases()),
             'acadmiecyear_id' => AcademicYear::inRandomOrder()->first()
                 ?->id ?? 1,
-            'nationality_id' => nationality::inRandomOrder()->first()?->id ?? 1,
-            'school_id' => '1',
+            'nationality_id' => Nationality::inRandomOrder()->first()?->id ?? 1,
+            'school_id' => School::factory(),
         ];
     }
 }

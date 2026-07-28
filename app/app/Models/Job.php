@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Jobs_types;
+use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Job extends Model
 {
-    use HasFactory, SoftDeletes;
+    use BelongsToSchool, HasFactory, SoftDeletes;
 
     protected $table = 'work_jobs';
 
@@ -20,7 +21,6 @@ class Job extends Model
         'name',
         'created_by',
         'updated_by',
-        'school_id',
     ];
 
     protected $casts = [
@@ -37,7 +37,7 @@ class Job extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function jobs(): BelongsTo
+    public function parentJob(): BelongsTo
     {
         return $this->belongsTo(Job::class, 'main_job_id');
     }

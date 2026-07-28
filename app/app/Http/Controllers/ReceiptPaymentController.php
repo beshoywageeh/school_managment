@@ -11,9 +11,11 @@ use App\Models\Inventory\InventoryItem;
 use App\Models\ReceiptPayment;
 use App\Models\Student;
 use App\Models\StudentAccount;
-use App\Services\Finance\FinancialService;
+use App\Services\AccountingReversalService;
+use App\Services\InventoryPaymentService;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReceiptPaymentController extends Controller
 {
@@ -22,6 +24,8 @@ class ReceiptPaymentController extends Controller
     public function __construct(
         protected FinancialService $FinancialService,
         protected PaymentService $PaymentService,
+        protected AccountingReversalService $accountingReversalService,
+        protected InventoryPaymentService $inventoryPaymentService,
     ) {
         $this->middleware('permission:ReceiptPayment-list', [
             'only' => ['index', 'show'],
@@ -65,9 +69,9 @@ class ReceiptPaymentController extends Controller
                 ->with([
                     'fee_invoice' => fn ($q) => $q
                         ->where('status', 'unpaid')
-                        ->with('fees:id,title,amount'),
+                        ->with('schoolFee:id,title,amount'),
 
-                    'StudentAccount',
+                    'studentAccount',
                     'parts' => fn ($q) => $q->where('status', 'unpaid'),
                     'excption',
                 ])
@@ -108,18 +112,22 @@ class ReceiptPaymentController extends Controller
                 'fee_invoice' => $this->PaymentService->handleFeeInvoice(
                     $request,
                     $this->FinancialService,
+                    $this->getSchool(),
                 ),
                 'payment_parts' => $this->PaymentService->handlePartialPayment(
                     $request,
                     $this->FinancialService,
+                    $this->getSchool(),
                 ),
-                'clothes' => $this->PaymentService->handleClothesPayment(
+                'clothes' => $this->inventoryPaymentService->handleClothesPayment(
                     $request,
                     $this->FinancialService,
+                    $this->getSchool(),
                 ),
-                'books' => $this->PaymentService->handleBooksPayment(
+                'books' => $this->inventoryPaymentService->handleBooksPayment(
                     $request,
                     $this->FinancialService,
+                    $this->getSchool(),
                 ),
                 default => throw new \Exception('Invalid payment type'),
             };
@@ -228,8 +236,13 @@ class ReceiptPaymentController extends Controller
     public function destroy($id)
     {
         try {
-            $ReceiptPayment = ReceiptPayment::findorFail($id);
-            $ReceiptPayment->delete();
+            $ReceiptPayment = ReceiptPayment::with('student')->findorFail($id);
+
+            DB::transaction(function () use ($ReceiptPayment) {
+                $this->accountingReversalService->reverseReceiptEntries($ReceiptPayment);
+                $ReceiptPayment->delete();
+            });
+
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.receipt-payment.deleted', [

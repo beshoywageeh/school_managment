@@ -111,10 +111,11 @@ class InventoryOrderController extends Controller
     public function store(StoreOrderRequest $request)
     {
         $this->authorize('stocks-inventory_order-create', InventoryOrder::class);
+        $school = $this->getSchool();
 
-        return DB::transaction(function () use ($request) {
+        return DB::transaction(function () use ($request, $school) {
             $order = $this->inventoryService->createOrder(
-                $request->validated(),
+                [...$request->validated(), 'school_id' => $school->id],
             );
             $this->inventoryService->createOrderItems(
                 $order,

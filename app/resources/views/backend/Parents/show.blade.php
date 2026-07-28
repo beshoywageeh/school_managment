@@ -65,7 +65,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($student->StudentAccount as $stdAcc)
+                            @forelse ($student->studentAccount as $stdAcc)
                                 <tr class="border-b border-gray-50 hover:bg-gray-50/70 transition-colors">
                                     <td class="py-3 px-5 text-gray-500 text-sm">{{ $stdAcc->created_at->format('Y-m-d') }}</td>
                                     <td class="py-3 px-5 text-gray-700">{{ $stdAcc->type->lang() }}</td>
@@ -86,8 +86,8 @@
                         <tfoot>
                             <tr class="bg-blue-50 border-t-2 border-blue-100">
                                 <td colspan="2" class="py-3 px-5 font-bold text-blue-700 text-right">{{ trans('payment.total') }}</td>
-                                <td class="py-3 px-5 font-bold text-green-700">{{ number_format($student->StudentAccount->sum('credit'), 2) }} {{ trans('general.currency') }}</td>
-                                <td class="py-3 px-5 font-bold text-red-600">{{ number_format($student->StudentAccount->sum('debit'), 2) }} {{ trans('general.currency') }}</td>
+                                <td class="py-3 px-5 font-bold text-green-700">{{ number_format($student->studentAccount->sum('credit'), 2) }} {{ trans('general.currency') }}</td>
+                                <td class="py-3 px-5 font-bold text-red-600">{{ number_format($student->studentAccount->sum('debit'), 2) }} {{ trans('general.currency') }}</td>
                             </tr>
                         </tfoot>
                     </table>

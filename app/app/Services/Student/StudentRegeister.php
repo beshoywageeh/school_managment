@@ -3,17 +3,17 @@
 namespace App\Services\Student;
 
 use App\Http\Traits\LogsActivity;
-use App\Http\Traits\SchoolTrait;
 use App\Models\MyParent;
+use App\Models\School;
 use App\Models\Student;
 use Auth;
 use Carbon\Carbon;
 
 class StudentRegeister
 {
-    use LogsActivity, SchoolTrait;
+    use LogsActivity;
 
-    public function StudentRegeister($request)
+    public function StudentRegeister($request, School $school)
     {
         $parent = MyParent::find($request['parent_id']);
         if (is_null($parent)) {
@@ -21,7 +21,7 @@ class StudentRegeister
                 'father_name' => $request['parent_id'],
                 'religion' => $request['religion'],
                 'user_id' => Auth::id(),
-                'school_id' => $this->getSchool()->id,
+                'school_id' => $school->id,
             ]);
         }
 
@@ -45,7 +45,7 @@ class StudentRegeister
             'acadmiecyear_id' => $request['academic_year'],
             'nationality_id' => $request['nationality'],
             'user_id' => Auth::id(),
-            'school_id' => $this->getSchool()->id,
+            'school_id' => $school->id,
         ]);
         $this->logActivity(
             trans('log.actions.added'),

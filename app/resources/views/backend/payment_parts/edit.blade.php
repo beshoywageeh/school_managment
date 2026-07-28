@@ -16,15 +16,15 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.name') }}</label>
-                    <input value="{{ $paymentParts->students->name }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly />
+                    <input value="{{ $paymentParts->student->name }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.grade') }}</label>
-                    <input value="{{ $paymentParts->grades->name }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly />
+                    <input value="{{ $paymentParts->grade->name }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.class') }}</label>
-                    <input value="{{ $paymentParts->classes->name }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly />
+                    <input value="{{ $paymentParts->classroom->name }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('academic_year.title') }}</label>

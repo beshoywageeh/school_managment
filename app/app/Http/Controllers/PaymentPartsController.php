@@ -25,13 +25,15 @@ class PaymentPartsController extends Controller
 
     public function index()
     {
-        $PaymentParts = PaymentParts::with([
-            'students',
-            'grades',
-            'classes',
-            'year',
-        ])->paginate(config('school.per_page'));
         $school = $this->getSchool();
+        $PaymentParts = PaymentParts::where('school_id', $school->id)
+            ->with([
+                'student',
+                'grade',
+                'classroom',
+                'year',
+            ])
+            ->paginate(config('school.per_page'));
 
         return view('backend.payment-parts.index', compact('PaymentParts', 'school'));
     }
@@ -44,7 +46,7 @@ class PaymentPartsController extends Controller
                 ->where('id', $id)
                 ->with([
                     'fee_invoice' => function ($q) {
-                        $q->where('status', 'unpaid')->with(['fees']);
+                        $q->where('status', 'unpaid')->with(['schoolFee']);
                     },
                     'parent:id,father_name',
                 ])
@@ -128,7 +130,7 @@ class PaymentPartsController extends Controller
             $this->logActivity(
                 trans('log.actions.updated'),
                 trans('log.models.payment_part.updated', [
-                    'name' => $paymentpart->students->name,
+                    'name' => $paymentpart->student->name,
                 ]),
             );
             session()->flash('success', trans('general.success'));
@@ -148,7 +150,7 @@ class PaymentPartsController extends Controller
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.payment_part.deleted', [
-                    'name' => $pay->students->name,
+                    'name' => $pay->student->name,
                 ]),
             );
             $pay->delete();

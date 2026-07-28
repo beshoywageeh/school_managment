@@ -7,7 +7,7 @@ use App\Http\Requests\UpdateExchangeBondRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\AcademicYear;
-use App\Models\Exchange_bond;
+use App\Models\ExchangeBond;
 use App\Models\FundAccount;
 use App\Models\Student;
 use App\Models\StudentAccount;
@@ -29,8 +29,8 @@ class ExchangeBondController extends Controller
     public function index()
     {
         $school = $this->GetSchool();
-        $exchanges = Exchange_bond::where('school_id', $school->id)
-            ->with(['student', 'acadmic_year'])
+        $exchanges = ExchangeBond::where('school_id', $school->id)
+            ->with(['student', 'academicYear'])
             ->get();
 
         return view('backend.exchange_bond.index', compact('school', 'exchanges'));
@@ -39,8 +39,8 @@ class ExchangeBondController extends Controller
     public function create($id)
     {
         $school = $this->GetSchool();
-        $student = Student::withSum('StudentAccount', 'debit')
-            ->withSum('StudentAccount', 'credit')
+        $student = Student::withSum('studentAccount', 'debit')
+            ->withSum('studentAccount', 'credit')
             ->findOrFail($id);
 
         return view('backend.exchange_bond.create', compact('school', 'student'));
@@ -55,7 +55,7 @@ class ExchangeBondController extends Controller
             )->first();
 
             $school = $this->GetSchool();
-            $exchange = $this->StudentAccount->Exchange_bond(
+            $exchange = $this->StudentAccount->exchangeBond(
                 $school,
                 $request,
                 $acc_year->id,
@@ -77,7 +77,7 @@ class ExchangeBondController extends Controller
     public function edit($id)
     {
         $school = $this->GetSchool();
-        $exchange = Exchange_bond::where('id', $id)->with('student')->first();
+        $exchange = ExchangeBond::where('id', $id)->with('student')->first();
 
         return view('backend.exchange_bond.edit', compact('school', 'exchange'));
     }
@@ -87,7 +87,7 @@ class ExchangeBondController extends Controller
         try {
             $this->executeInTransaction(function () use ($request) {
                 $id = $request->id;
-                $exchange = Exchange_bond::find($id);
+                $exchange = ExchangeBond::find($id);
                 $student_account = StudentAccount::where(
                     'exchange_bond_id',
                     $id,
@@ -134,7 +134,7 @@ class ExchangeBondController extends Controller
     public function print($id)
     {
         $school = $this->GetSchool();
-        $exchange = Exchange_bond::where('id', $id)->with('student')->first();
+        $exchange = ExchangeBond::where('id', $id)->with('student')->first();
 
         return view('backend.exchange_bond.print', compact('school', 'exchange'));
     }
@@ -143,7 +143,7 @@ class ExchangeBondController extends Controller
     {
         try {
             $this->executeInTransaction(function () use ($id) {
-                $exchange = Exchange_bond::find($id);
+                $exchange = ExchangeBond::find($id);
                 $student_account = StudentAccount::where(
                     'exchange_bond_id',
                     $id,

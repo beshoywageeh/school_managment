@@ -4,10 +4,13 @@ namespace App\Livewire;
 
 use App\Enums\Jobs_types;
 use App\Http\Traits\LogsActivity;
-use App\Models\classes;
+use App\Models\ClassRoom2;
 use App\Models\Grade;
-use App\Models\schedules as schedules_Managment;
+use App\Models\Schedule as schedules_Managment;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class Schedules extends Component
@@ -34,95 +37,92 @@ class Schedules extends Component
 
     public $printGradeId;
 
-    protected $listeners = ['print' => 'printSchedule', 'refresh' => '$refresh'];
-
     public function mount()
     {
         $this->selectedDay = 'saturday';
     }
 
-    public function autoGenerate()
+    public function autoGenerate(): void
     {
-        $teachers = User::where('type', Jobs_types::TEACHER)->with('grades')->get();
-        $days = ['saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday'];
+        DB::transaction(function () {
+            $teachers = User::where('type', Jobs_types::TEACHER)
+                ->with('grades', 'job')
+                ->get();
+            $days = ['saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday'];
 
-        // Pre-fetch teacher grades and classes
-        $teacherGrades = [];
-        foreach ($teachers as $teacher) {
-            $teacherGrades[$teacher->id] = $teacher->grades->pluck('id')->toArray();
-        }
-
-        $classesByGrade = classes::all()->groupBy('grade_id');
-
-        // Track: teacher_id => ['total' => int, 'daily' => [day => count]]
-        $counts = [];
-        foreach ($teachers as $teacher) {
-            $counts[$teacher->id] = ['total' => 0, 'daily' => []];
-            foreach ($days as $day) {
-                $counts[$teacher->id]['daily'][$day] = 0;
+            $teacherGrades = [];
+            foreach ($teachers as $teacher) {
+                $teacherGrades[$teacher->id] = $teacher->grades->pluck('id')->toArray();
             }
-        }
 
-        // Clear existing schedules first
-        schedules_Managment::query()->delete();
+            $classesByGrade = ClassRoom2::all()->groupBy('grade_id');
 
-        // Iterate: periods -> days -> teachers (ensures even day distribution)
-        for ($period = 1; $period <= 8; $period++) {
-            foreach ($days as $day) {
-                $busyTeachers = schedules_Managment::where('day', $day)
-                    ->where('period', $period)
-                    ->pluck('user_id')
-                    ->toArray();
+            $counts = [];
+            foreach ($teachers as $teacher) {
+                $counts[$teacher->id] = ['total' => 0, 'daily' => []];
+                foreach ($days as $day) {
+                    $counts[$teacher->id]['daily'][$day] = 0;
+                }
+            }
 
-                $busyClasses = schedules_Managment::where('day', $day)
-                    ->where('period', $period)
-                    ->pluck('class_id')
-                    ->toArray();
+            schedules_Managment::query()->delete();
 
-                foreach ($teachers as $teacher) {
-                    if (in_array($teacher->id, $busyTeachers)) {
-                        continue;
-                    }
+            for ($period = 1; $period <= 8; $period++) {
+                foreach ($days as $day) {
+                    $busyTeachers = schedules_Managment::where('day', $day)
+                        ->where('period', $period)
+                        ->pluck('user_id')
+                        ->toArray();
 
-                    $maxLessons = $teacher->lesson_count ?? 24;
-                    $total = $counts[$teacher->id]['total'];
+                    $busyClasses = schedules_Managment::where('day', $day)
+                        ->where('period', $period)
+                        ->pluck('class_id')
+                        ->toArray();
 
-                    if ($total >= $maxLessons) {
-                        continue;
-                    }
+                    foreach ($teachers->sortBy(fn ($t) => $counts[$t->id]['total']) as $teacher) {
+                        if (in_array($teacher->id, $busyTeachers)) {
+                            continue;
+                        }
 
-                    // Find available class from teacher's grades
-                    $possibleGradeIds = $teacherGrades[$teacher->id] ?? [];
-                    $targetClass = null;
+                        $maxLessons = $teacher->lesson_count ?? 24;
+                        $total = $counts[$teacher->id]['total'];
 
-                    foreach ($possibleGradeIds as $gradeId) {
-                        $gradeClasses = $classesByGrade->get($gradeId);
-                        if ($gradeClasses) {
-                            $targetClass = $gradeClasses->first(
-                                fn ($c) => ! in_array($c->id, $busyClasses)
-                            );
-                            if ($targetClass) {
-                                break;
+                        if ($total >= $maxLessons) {
+                            continue;
+                        }
+
+                        $possibleGradeIds = $teacherGrades[$teacher->id] ?? [];
+                        $targetClass = null;
+
+                        foreach ($possibleGradeIds as $gradeId) {
+                            $gradeClasses = $classesByGrade->get($gradeId);
+                            if ($gradeClasses) {
+                                $targetClass = $gradeClasses->first(
+                                    fn ($c) => ! in_array($c->id, $busyClasses)
+                                );
+                                if ($targetClass) {
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    if ($targetClass) {
-                        schedules_Managment::create([
-                            'user_id' => $teacher->id,
-                            'period' => $period,
-                            'class_id' => $targetClass->id,
-                            'job_id' => $teacher->job_id,
-                            'day' => $day,
-                        ]);
-                        $busyClasses[] = $targetClass->id;
-                        $busyTeachers[] = $teacher->id;
-                        $counts[$teacher->id]['total']++;
-                        $counts[$teacher->id]['daily'][$day]++;
+                        if ($targetClass) {
+                            schedules_Managment::create([
+                                'user_id' => $teacher->id,
+                                'period' => $period,
+                                'class_id' => $targetClass->id,
+                                'job_id' => $teacher->job_id,
+                                'day' => $day,
+                            ]);
+                            $busyClasses[] = $targetClass->id;
+                            $busyTeachers[] = $teacher->id;
+                            $counts[$teacher->id]['total']++;
+                            $counts[$teacher->id]['daily'][$day]++;
+                        }
                     }
                 }
             }
-        }
+        });
 
         $this->logActivity(
             trans('log.actions.auto_generated'),
@@ -133,9 +133,9 @@ class Schedules extends Component
         session()->flash('success', trans('general.success'));
     }
 
-    public function clearSchedule()
+    public function clearSchedule(): void
     {
-        schedules_Managment::query()->delete(); // Better to use delete() to support soft deletes if configured
+        schedules_Managment::query()->delete();
         $this->logActivity(trans('log.actions.cleared'), trans('log.models.schedules.cleared'));
         $this->dispatch('alert');
         session()->flash('success', trans('general.success'));
@@ -219,14 +219,39 @@ class Schedules extends Component
         session()->flash('success', trans('general.success'));
     }
 
+    #[Computed]
+    public function teachers(): Collection
+    {
+        return User::where('type', Jobs_types::TEACHER)->with('job')->get();
+    }
+
+    #[Computed]
+    public function schedules(): Collection
+    {
+        return schedules_Managment::where('day', $this->selectedDay)
+            ->with('section:id,title')
+            ->get();
+    }
+
+    #[Computed]
+    public function classesList(): Collection
+    {
+        return ClassRoom2::all();
+    }
+
+    #[Computed]
+    public function gradesList(): Collection
+    {
+        return Grade::all();
+    }
+
     public function render()
     {
-
         return view('livewire.Schedules.Schedules', [
-            'Teachers' => User::where('type', Jobs_types::TEACHER)->with('job')->get(),
-            'Schedules' => schedules_Managment::where('day', $this->selectedDay)->with('section:id,title')->get(),
-            'classes' => classes::all(),
-            'grades' => Grade::all(),
+            'Teachers' => $this->teachers,
+            'Schedules' => $this->schedules,
+            'classes' => $this->classesList,
+            'grades' => $this->gradesList,
         ]);
     }
 }

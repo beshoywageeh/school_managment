@@ -61,19 +61,19 @@
             @yield('content')
         </main>
         @if (session('success'))
-            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: '{{ session('success') }}', type: 'success', sticky: false, duration: 4000, progress: 100 } }))"></div>
+            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: @json(session('success')), type: 'success', sticky: false, duration: 4000, progress: 100 } }))"></div>
         @endif
 
         @if (session('error'))
-            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: '{{ session('error') }}', type: 'danger', sticky: false, duration: 4000, progress: 100 } }))"></div>
+            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: @json(session('error')), type: 'danger', sticky: false, duration: 4000, progress: 100 } }))"></div>
         @endif
 
         @if (session('info'))
-            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: '{{ session('info') }}', type: 'info', sticky: false, duration: 4000, progress: 100 } }))"></div>
+            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: @json(session('info')), type: 'info', sticky: false, duration: 4000, progress: 100 } }))"></div>
         @endif
 
         @if (session('warning'))
-            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: '{{ session('warning') }}', type: 'warning', sticky: false, duration: 4000, progress: 100 } }))"></div>
+            <div x-data x-init="window.dispatchEvent(new CustomEvent('add-toast', { detail: { id: Date.now(), message: @json(session('warning')), type: 'warning', sticky: false, duration: 4000, progress: 100 } }))"></div>
         @endif
         <!-- Footer -->
         @include('layouts.footer')

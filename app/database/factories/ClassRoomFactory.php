@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\ClassRoom;
 use App\Models\Grade;
+use App\Models\School;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -29,7 +30,7 @@ class ClassRoomFactory extends Factory
             ]),
             'grade_id' => Grade::inRandomOrder()->first()?->id ?? 1,
             'user_id' => '1',
-            'school_id' => '1',
+            'school_id' => School::factory(),
         ];
     }
 }

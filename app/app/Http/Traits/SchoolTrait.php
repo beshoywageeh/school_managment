@@ -7,11 +7,14 @@ use Illuminate\Support\Facades\Auth;
 
 trait SchoolTrait
 {
-    public function GetSchool()
+    public function getSchool(?int $schoolId = null): ?School
     {
-        $user = Auth::user()->school_id;
-        $school = School::where('id', $user)->with('image')->first();
+        $schoolId = $schoolId ?? Auth::user()?->school_id;
 
-        return $school;
+        if (! $schoolId) {
+            return null;
+        }
+
+        return School::with('image')->find($schoolId);
     }
 }

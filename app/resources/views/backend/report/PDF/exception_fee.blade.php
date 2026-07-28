@@ -21,7 +21,7 @@
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $fee->date }}</td>
-                        <td>{{ $fee->students->name }}</td>
+                        <td>{{ $fee->student->name }}</td>
                         <td>{{ Number::currency($fee->amount, 'EGP', 'ar') }}</td>
                         <td>{{ $fee->note }}</td>
                     </tr>

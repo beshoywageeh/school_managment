@@ -3,7 +3,7 @@
         <table class="data-table" style="width:100%">
             <tr>
                 <td class="text-center" width="25%">
-                    {!! $school->heading_right ?? '' !!}
+                    {{ $school->heading_right ?? '' }}
                 </td>
                 <td class="text-center" width="50%">
                     @yield('header-center')

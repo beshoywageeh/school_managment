@@ -15,7 +15,7 @@
                         class="block text-sm font-medium text-gray-700 mb-2">{{ trans('login.email') }}</label>
                     <input id="email"
                         class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
-                        type="email" name="email" value="{{ old('email') }}" placeholder="{{ trans('login.email') }}"
+                        type="email" name="email" value="{{ $request->email ?? old('email') }}" placeholder="{{ trans('login.email') }}"
                         required>
                     @error('email')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>

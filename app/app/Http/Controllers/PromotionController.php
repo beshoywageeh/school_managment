@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePromotionRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\AcademicYear;
 use App\Models\Grade;
-use App\Models\promotion;
+use App\Models\Promotion as promotion;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -63,7 +64,7 @@ class PromotionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePromotionRequest $request)
     {
         try {
             $Students = Student::where('grade_id', $request->old_grade)
@@ -98,9 +99,7 @@ class PromotionController extends Controller
                     $this->logActivity(
                         trans('log.actions.promoted'),
                         trans('log.models.promotion.promoted', [
-                            'name' => $Students
-                                ->where('id', $student->id)
-                                ->first()->name,
+                            'name' => $student->name,
                         ]),
                     );
                 }
@@ -145,7 +144,7 @@ class PromotionController extends Controller
     {
         try {
             $this->executeInTransaction(function () use ($id) {
-                $promotions = promotion::findorfail($id);
+                $promotions = promotion::with('student')->findorfail($id);
                 Student::where('id', $promotions->student_id)->update([
                     'classroom_id' => $promotions->from_class,
                     'grade_id' => $promotions->from_grade,

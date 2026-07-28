@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,23 +12,24 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Grade extends Model
 {
-    use HasFactory,SoftDeletes;
+    use BelongsToSchool, HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'user_id',
-        'school_id',
-    ];
+    protected $fillable = ['name', 'user_id'];
 
     // protected $primaryKey = 'id';
     public function user(): BelongsTo
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo("App\Models\User");
     }
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\User', 'teacher_grade', 'grade_id', 'teacher_id');
+        return $this->belongsToMany(
+            "App\Models\User",
+            'teacher_grade',
+            'grade_id',
+            'teacher_id',
+        );
     }
 
     public function class_rooms(): HasMany
@@ -37,7 +39,7 @@ class Grade extends Model
 
     public function students(): HasMany
     {
-        return $this->hasMany('App\Models\Student', 'grade_id');
+        return $this->hasMany("App\Models\Student", 'grade_id');
     }
 
     public function classes(): HasMany
@@ -47,6 +49,6 @@ class Grade extends Model
 
     public function fees(): HasMany
     {
-        return $this->hasMany('App\Models\SchoolFee', 'grade_id');
+        return $this->hasMany("App\Models\SchoolFee", 'grade_id');
     }
 }

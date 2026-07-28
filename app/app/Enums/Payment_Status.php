@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum Payment_Status: string
 {
-    case OPEN = 'unpaid';
+    case OPEN = 'not_paid';
     case CLOSE = 'paid';
 
     public function color(): string

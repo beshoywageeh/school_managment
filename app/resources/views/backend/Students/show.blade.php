@@ -136,7 +136,7 @@
                         {{ trans('payment.history') }}
                     </h3>
                     <span class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-medium">
-                        {{ $student->StudentAccount->count() }} {{ trans('payment.record') }}
+                        {{ $student->studentAccount->count() }} {{ trans('payment.record') }}
                     </span>
                 </div>
                 <div class="overflow-x-auto">
@@ -150,7 +150,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($student->StudentAccount as $account)
+                            @forelse ($student->studentAccount as $account)
                                 <tr class="border-b border-gray-50 hover:bg-gray-50/70 transition-colors">
                                     <td class="py-3 px-5 text-gray-500 text-sm">{{ $account->created_at->format('Y-m-d') }}</td>
                                     <td class="py-3 px-5 text-gray-700">{{ $account->type->lang() }}</td>
@@ -171,8 +171,8 @@
                         <tfoot>
                             <tr class="bg-blue-50 border-t-2 border-blue-100">
                                 <td colspan="2" class="py-3 px-5 font-bold text-blue-700 text-right">{{ trans('payment.total') }}</td>
-                                <td class="py-3 px-5 font-bold text-green-700">{{ number_format($student->StudentAccount->sum('credit'), 2) }} {{ trans('general.currency') }}</td>
-                                <td class="py-3 px-5 font-bold text-red-600">{{ number_format($student->StudentAccount->sum('debit'), 2) }} {{ trans('general.currency') }}</td>
+                                <td class="py-3 px-5 font-bold text-green-700">{{ number_format($student->studentAccount->sum('credit'), 2) }} {{ trans('general.currency') }}</td>
+                                <td class="py-3 px-5 font-bold text-red-600">{{ number_format($student->studentAccount->sum('debit'), 2) }} {{ trans('general.currency') }}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -191,7 +191,7 @@
                 {{-- Print Header --}}
                 <div class="grid grid-cols-3 gap-6 mb-8 items-start">
                     <div class="text-center">
-                        <div class="text-sm leading-relaxed text-gray-700">{!! $school->heading_right !!}</div>
+                        <div class="text-sm leading-relaxed text-gray-700">{{ $school->heading_right }}</div>
                     </div>
                     <div class="text-center">
                         <h2 class="text-2xl font-extrabold text-gray-900 mb-2">{{ trans('general.attendance_request') }}</h2>

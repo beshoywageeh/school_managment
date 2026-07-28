@@ -12,10 +12,12 @@ use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\SchoolFee as school_fee;
 use App\Models\Student;
+use App\Services\AccountingReversalService;
 use App\Services\Finance\FinancialService;
 use App\Services\InvoiceQueryService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FeeInvoiceController extends Controller
 {
@@ -23,6 +25,7 @@ class FeeInvoiceController extends Controller
 
     public function __construct(
         protected InvoiceQueryService $invoiceQueryService,
+        protected AccountingReversalService $accountingReversalService,
     ) {
         $this->middleware('permission:fee_invoice-list', ['only' => ['index', 'show']]);
         $this->middleware('permission:fee_invoice-create', ['only' => ['create', 'store']]);
@@ -131,22 +134,12 @@ class FeeInvoiceController extends Controller
             $this->executeInTransaction(function () use ($List_Fees, $service) {
                 $ac_year = AcademicYear::where('status', config('school.academic_year_status'))->first();
                 foreach ($List_Fees as $list_fee) {
-                    $amount = school_fee::where('id', $list_fee['fee'])->first()
-                        ->amount;
                     $student = Student::findorfail($list_fee['student_id']);
                     $service->FeeInvoice(
                         $student,
                         $list_fee['fee'],
                         $ac_year->id,
                         $this->getSchool()->id,
-                    );
-                    $service->CreateStudentAccount(
-                        $student,
-                        $list_fee['fee'],
-                        $ac_year->id,
-                        'invoice',
-                        0.0,
-                        $amount,
                     );
                 }
                 $this->logActivity(
@@ -172,10 +165,10 @@ class FeeInvoiceController extends Controller
     {
         $school = $this->getSchool();
         $invoice_details = FeeInvoice::where('id', $id)
-            ->with('students', 'fees', 'grades', 'classes')
+            ->with('student', 'schoolFee', 'grade', 'classroom')
             ->first();
         $tafqeet = Numbers::TafqeetMoney(
-            $invoice_details->fees->amount,
+            $invoice_details->schoolFee->amount,
             config('school.currency'),
             'ar',
         );
@@ -189,7 +182,7 @@ class FeeInvoiceController extends Controller
     public function edit(string $id)
     {
         $school = $this->getSchool();
-        $fee = FeeInvoice::where('id', $id)->with('students', 'fees')->first();
+        $fee = FeeInvoice::where('id', $id)->with('student', 'schoolFee')->first();
         $sfees = school_fee::where('grade_id', $fee->grade_id)
             ->where('classroom_id', $fee->classroom_id)
             ->get();
@@ -225,7 +218,7 @@ class FeeInvoiceController extends Controller
                 $this->logActivity(
                     trans('log.actions.updated'),
                     trans('log.models.fee-invoice.updated', [
-                        'name' => $fee->students->name,
+                        'name' => $fee->student->name,
                     ]),
                 );
             });
@@ -246,13 +239,18 @@ class FeeInvoiceController extends Controller
         $this->authorize('fee_invoice-delete', FeeInvoice::class);
         try {
             $fee = FeeInvoice::findorFail($id);
+
+            DB::transaction(function () use ($fee) {
+                $this->accountingReversalService->reverseFeeInvoiceEntries($fee);
+                $fee->delete();
+            });
+
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.fee-invoice.deleted', [
-                    'name' => $fee->students->name,
+                    'name' => $fee->student->name,
                 ]),
             );
-            $fee->delete();
 
             return redirect()
                 ->route('fee-invoice.index')

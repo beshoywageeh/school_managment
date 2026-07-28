@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ExceptionFees extends Model
 {
-    use HasFactory, SoftDeletes;
+    use BelongsToSchool, HasFactory, SoftDeletes;
 
     protected $table = 'excption_fees';
 
@@ -20,7 +21,6 @@ class ExceptionFees extends Model
         'fee_id',
         'academic_year_id',
         'user_id',
-        'school_id',
         'date',
         'amount',
     ];
@@ -30,7 +30,7 @@ class ExceptionFees extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function students(): BelongsTo
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
     }
@@ -47,14 +47,14 @@ class ExceptionFees extends Model
 
     public function classroom(): BelongsTo
     {
-        return $this->belongsTo("App\Models\class_room", 'class_id');
+        return $this->belongsTo(ClassRoom::class, 'class_id');
     }
 
     public function school_fee(): BelongsTo
     {
         return $this->belongsTo(
             "App\Models\SchoolFee",
-            'school_fee_id',
+            'fee_id',
         )->withTrashed();
     }
 }

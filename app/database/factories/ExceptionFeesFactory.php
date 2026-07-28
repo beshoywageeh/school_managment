@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\ExceptionFees;
 use App\Models\FeeInvoice;
+use App\Models\School;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -42,7 +43,7 @@ class ExceptionFeesFactory extends Factory
             },
             'date' => $this->faker->date('Y-m-d'),
             'amount' => $this->faker->numberBetween(100, 500),
-            'school_id' => '1',
+            'school_id' => School::factory(),
             'user_id' => '1',
         ];
     }

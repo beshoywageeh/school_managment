@@ -29,8 +29,8 @@
                             <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->index + 1 }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($PaymentPart->date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
-                                <a target="_blank" href="{{ route('payment-parts.edit', $PaymentPart->students->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
-                                    {{ $PaymentPart->students->name }}
+                                <a target="_blank" href="{{ route('payment-parts.edit', $PaymentPart->student->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    {{ $PaymentPart->student->name }}
                                 </a>
                             </td>
                             <td class="px-6 py-4 text-sm">

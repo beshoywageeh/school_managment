@@ -27,12 +27,12 @@
                 <tr>
                     <td width="5%">{{ $loop->index + 1 }}</td>
                     <td>{{ $credit_item->invoice_date }}</td>
-                    <td>{{ $credit_item->students->name }}</td>
-                    <td>{{ $credit_item->classes->name }}</td>
-                    <td>{{ $credit_item->grades->name }}</td>
+                    <td>{{ $credit_item->student->name }}</td>
+                    <td>{{ $credit_item->classroom->name }}</td>
+                    <td>{{ $credit_item->grade->name }}</td>
                     <td>{{ $credit_item->acd_year->view }}</td>
-                    <td>{{ $credit_item->fees->title }}</td>
-                    <td>{{ Number::currency($credit_item->fees->amount, 'EGP', 'ar') }}</td>
+                    <td>{{ $credit_item->schoolFee->title }}</td>
+                    <td>{{ Number::currency($credit_item->schoolFee->amount, 'EGP', 'ar') }}</td>
                 </tr>
             @endforeach
         </tbody>

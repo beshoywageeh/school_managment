@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\Jobs_types;
 use App\Models\Job;
+use App\Models\School;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
 
@@ -23,7 +24,7 @@ class JobFactory extends Factory
             'name' => $this->faker->sentence(2),
             'type' => Arr::random(Jobs_types::cases()),
             'created_by' => '1',
-            'school_id' => '1',
+            'school_id' => School::factory(),
             'created_at' => now(),
         ];
     }

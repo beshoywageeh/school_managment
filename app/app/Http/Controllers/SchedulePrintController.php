@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Traits\SchoolTrait;
-use App\Models\classes;
+use App\Models\ClassRoom2 as classes;
 use App\Models\Grade;
-use App\Models\schedules;
+use App\Models\Schedule as schedules;
 use App\Models\User;
 
 class SchedulePrintController extends Controller

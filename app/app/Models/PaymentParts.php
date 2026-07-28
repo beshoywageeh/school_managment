@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Payment_Status;
+use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,14 +11,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PaymentParts extends Model
 {
-    use HasFactory, SoftDeletes;
+    use BelongsToSchool, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'student_id',
         'grade_id',
         'class_id',
         'academic_year_id',
-        'school_id',
         'date',
         'amount',
         'status',
@@ -30,17 +30,17 @@ class PaymentParts extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function students(): BelongsTo
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
 
-    public function grades(): BelongsTo
+    public function grade(): BelongsTo
     {
         return $this->belongsTo(Grade::class, 'grade_id');
     }
 
-    public function classes(): BelongsTo
+    public function classroom(): BelongsTo
     {
         return $this->belongsTo(ClassRoom::class, 'class_id');
     }

@@ -590,6 +590,12 @@ return new class extends Migration
                 ->on('work_jobs')
                 ->onDelete('Cascade')
                 ->onUpdate('Cascade');
+            $table
+                ->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('Cascade')
+                ->onUpdate('Cascade');
         });
     }
 
@@ -728,6 +734,7 @@ return new class extends Migration
             $table->dropForeign('user_id');
             $table->dropForeign('classes_id');
             $table->dropForeign('job_id');
+            $table->dropForeign('school_id');
         });
     }
 };

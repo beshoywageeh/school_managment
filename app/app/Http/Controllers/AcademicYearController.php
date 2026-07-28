@@ -76,9 +76,9 @@ class AcademicYearController extends Controller
         ];
         $school = $this->getSchool();
         $users = collect([])
-            ->merge(Student::where('acadmiecyear_id', $acc_year->id)->get())
-            ->merge(MyParent::whereBetween('created_at', $date_range)->get())
-            ->merge(User::whereBetween('created_at', $date_range)->get());
+            ->merge(Student::where('acadmiecyear_id', $acc_year->id)->with(['grade', 'classroom'])->get())
+            ->merge(MyParent::whereBetween('created_at', $date_range)->with('user')->get())
+            ->merge(User::whereBetween('created_at', $date_range)->with('job')->get());
 
         return $users;
     }

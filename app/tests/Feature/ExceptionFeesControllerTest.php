@@ -111,7 +111,7 @@ class ExceptionFeesControllerTest extends TestCase
     public function test_destroy_requires_delete_permission(): void
     {
         $this->actingAs($this->unauthorizedUser);
-        $response = $this->get(route('except-fee.destroy', 1));
+        $response = $this->delete(route('except-fee.destroy', 1));
         $response->assertForbidden();
     }
 
@@ -119,7 +119,7 @@ class ExceptionFeesControllerTest extends TestCase
     {
         $this->givePermission($this->admin, 'except_fee-delete');
         $this->actingAs($this->admin);
-        $response = $this->get(route('except-fee.destroy', 9999));
+        $response = $this->delete(route('except-fee.destroy', 9999));
         $response->assertRedirect();
     }
 }

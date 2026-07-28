@@ -29,9 +29,9 @@
             @foreach ($data['parts'] as $payment)
                 <tr>
                     <td width="5%">{{ $loop->index + 1 }}</td>
-                    <td>{{ $payment->students->name }}</td>
-                    <td>{{ $payment->grades->name }}</td>
-                    <td>{{ $payment->classes->name }}</td>
+                    <td>{{ $payment->student->name }}</td>
+                    <td>{{ $payment->grade->name }}</td>
+                    <td>{{ $payment->classroom->name }}</td>
                     <td>{{ $payment->date }}</td>
                     <td>{{ $payment->status }}</td>
                     <td>{{ Number::currency($payment->amount, 'EGP', 'ar') }}</td>

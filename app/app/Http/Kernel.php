@@ -3,7 +3,6 @@
 namespace App\Http;
 
 use Alkoumi\LaravelArabicNumbers\Http\Middleware\ConvertArabicDigitsToEnlishMiddleware;
-use App\Http\Middleware\AdminIpWhitelist;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\EnsureSetupIsNotCompleted;
@@ -113,7 +112,6 @@ class Kernel extends HttpKernel
         'role' => RoleMiddleware::class,
         'permission' => PermissionMiddleware::class,
         'role_or_permission' => RoleOrPermissionMiddleware::class,
-        'admin.ip' => AdminIpWhitelist::class,
         'sanitize' => SanitizeInput::class,
 
     ];

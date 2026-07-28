@@ -6,6 +6,7 @@ use App\Enums\InventoryOrderStatus;
 use App\Enums\InventoryOrderType;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\Traits\BelongsToSchool;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InventoryOrder extends Model
 {
+    use BelongsToSchool;
     use HasFactory;
     use SoftDeletes;
 
@@ -28,7 +30,6 @@ class InventoryOrder extends Model
         'manual_date',
         'total_amount',
         'notes',
-        'school_id',
         'user_id',
         'date',
     ];

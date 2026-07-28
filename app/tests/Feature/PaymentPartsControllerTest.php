@@ -110,7 +110,7 @@ class PaymentPartsControllerTest extends TestCase
     public function test_destroy_requires_delete_permission(): void
     {
         $this->actingAs($this->unauthorizedUser);
-        $response = $this->get(route('payment-parts.destroy', 1));
+        $response = $this->delete(route('payment-parts.destroy', 1));
         $response->assertForbidden();
     }
 
@@ -118,7 +118,7 @@ class PaymentPartsControllerTest extends TestCase
     {
         $this->givePermission($this->admin, 'payment_parts-delete');
         $this->actingAs($this->admin);
-        $response = $this->get(route('payment-parts.destroy', 9999));
+        $response = $this->delete(route('payment-parts.destroy', 9999));
         $response->assertRedirect();
     }
 }

@@ -38,8 +38,10 @@ class ExceptionFeesController extends Controller
      */
     public function index()
     {
-        $ExceptionFees = ExceptionFees::with('students')->paginate(config('school.per_page'));
         $school = $this->getSchool();
+        $ExceptionFees = ExceptionFees::where('school_id', $school->id)
+            ->with('student')
+            ->paginate(config('school.per_page'));
 
         return view(
             'backend.fee_exception.index',
@@ -54,15 +56,15 @@ class ExceptionFeesController extends Controller
     {
         try {
             $Excpetion = Student::where('id', $id)
-                ->with('StudentAccount')
+                ->with('studentAccount')
                 ->first();
             $fees = FeeInvoice::where('student_id', $id)
                 ->where('status', 'unpaid')
-                ->with('fees')
+                ->with('schoolFee')
                 ->get();
             $balance =
-                $Excpetion->StudentAccount->sum('debit') -
-                $Excpetion->StudentAccount->sum('credit');
+                $Excpetion->studentAccount->sum('debit') -
+                $Excpetion->studentAccount->sum('credit');
 
             $school = $this->getSchool();
             if ($fees->isEmpty() || $balance <= 0) {
@@ -96,8 +98,8 @@ class ExceptionFeesController extends Controller
                 $academic_year = AcademicYear::findorfail(
                     $student->acadmiecyear_id,
                 );
-                $fee = FeeInvoice::with('fees')->findorfail($request->fee_id);
-                if ($request->amount == $fee->fees->amount) {
+                $fee = FeeInvoice::with('schoolFee')->findorfail($request->fee_id);
+                if ($request->amount == $fee->schoolFee->amount) {
                     $fee->delete();
                 }
                 $pay = $studentFinanc->exciption_fee(
@@ -141,7 +143,7 @@ class ExceptionFeesController extends Controller
     {
         try {
             $excptionFees = ExceptionFees::where('student_id', $id)
-                ->with('students', 'academic_year', 'grade', 'classroom')
+                ->with('student', 'academic_year', 'grade', 'classroom')
                 ->get();
             $school = $this->getSchool();
 
@@ -163,7 +165,7 @@ class ExceptionFeesController extends Controller
     {
         try {
             $school = $this->getSchool();
-            $excptionFees = ExceptionFees::where('id', $id)->with('students')->first();
+            $excptionFees = ExceptionFees::where('id', $id)->with('student')->first();
 
             return view(
                 'backend.fee_exception.edit',
@@ -209,7 +211,7 @@ class ExceptionFeesController extends Controller
                 $this->logActivity(
                     trans('log.actions.updated'),
                     trans('log.models.exception_fee.updated', [
-                        'student_name' => $pay->students->name,
+                        'student_name' => $pay->student->name,
                     ]),
                 );
             });
@@ -229,13 +231,13 @@ class ExceptionFeesController extends Controller
     public function destroy($id)
     {
         try {
-            $pay = ExceptionFees::findorfail($id);
+            $pay = ExceptionFees::with('student')->findorfail($id);
 
             $pay->delete();
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.exception_fee.deleted', [
-                    'student_name' => $pay->students->name,
+                    'student_name' => $pay->student->name,
                 ]),
             );
             session()->flash('success', trans('general.success'));

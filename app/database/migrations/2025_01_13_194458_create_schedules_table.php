@@ -16,8 +16,17 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('job_id');
-            $table->enum('day', ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']);
+            $table->enum('day', [
+                'monday',
+                'tuesday',
+                'wednesday',
+                'thursday',
+                'friday',
+                'saturday',
+                'sunday',
+            ]);
             $table->string('period');
+            $table->unsignedBigInteger('school_id');
             $table->timestamps();
             $table->softDeletes();
         });

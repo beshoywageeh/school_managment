@@ -2,18 +2,18 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\Fee_invoice;
+use App\Models\FeeInvoice;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Tests\TestCase;
 
 class FeeInvoiceTest extends TestCase
 {
-    protected Fee_invoice $feeInvoice;
+    protected FeeInvoice $feeInvoice;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->feeInvoice = new Fee_invoice;
+        $this->feeInvoice = new FeeInvoice;
     }
 
     public function test_fee_invoice_uses_specified_table_name(): void
@@ -28,28 +28,28 @@ class FeeInvoiceTest extends TestCase
 
     public function test_fee_invoice_belongs_to_student(): void
     {
-        $relation = $this->feeInvoice->students();
+        $relation = $this->feeInvoice->student();
 
         $this->assertInstanceOf(BelongsTo::class, $relation);
     }
 
     public function test_fee_invoice_belongs_to_grade(): void
     {
-        $relation = $this->feeInvoice->grades();
+        $relation = $this->feeInvoice->grade();
 
         $this->assertInstanceOf(BelongsTo::class, $relation);
     }
 
     public function test_fee_invoice_belongs_to_class(): void
     {
-        $relation = $this->feeInvoice->classes();
+        $relation = $this->feeInvoice->classroom();
 
         $this->assertInstanceOf(BelongsTo::class, $relation);
     }
 
     public function test_fee_invoice_belongs_to_school_fee(): void
     {
-        $relation = $this->feeInvoice->fees();
+        $relation = $this->feeInvoice->schoolFee();
 
         $this->assertInstanceOf(BelongsTo::class, $relation);
     }

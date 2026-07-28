@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Jobs_types;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -38,7 +39,7 @@ class UserFactory extends Factory
             'isAdmin' => '1',
             'login_allow' => '1',
             'password' => \Hash::make('hypervision'),
-            'school_id' => 1,
+            'school_id' => School::factory(),
         ];
     }
 }

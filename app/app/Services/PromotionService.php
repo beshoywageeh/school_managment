@@ -3,21 +3,21 @@
 namespace App\Services;
 
 use App\Http\Traits\LogsActivity;
-use App\Http\Traits\SchoolTrait;
-use App\Models\promotion;
+use App\Models\Promotion;
+use App\Models\School;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class PromotionService
 {
-    use LogsActivity, SchoolTrait;
+    use LogsActivity;
 
-    public function promoteStudents(array $studentIds, int $fromGradeId, int $toGradeId, int $fromClassId, int $toClassId, int $academicYearId): array
+    public function promoteStudents(array $studentIds, int $fromGradeId, int $toGradeId, int $fromClassId, int $toClassId, int $academicYearId, School $school): array
     {
         $students = Student::whereIn('id', $studentIds)->get();
 
-        $result = DB::transaction(function () use ($students, $toGradeId, $toClassId, $academicYearId) {
+        $result = DB::transaction(function () use ($students, $toGradeId, $toClassId, $academicYearId, $school) {
             $updateCount = $students->toQuery()->update([
                 'grade_id' => $toGradeId,
                 'classroom_id' => $toClassId,
@@ -25,7 +25,7 @@ class PromotionService
             ]);
 
             foreach ($students as $student) {
-                promotion::updateOrCreate(
+                Promotion::updateOrCreate(
                     [
                         'student_id' => $student->id,
                         'from_grade' => $student->grade_id,
@@ -36,7 +36,7 @@ class PromotionService
                         'to_class' => $toClassId,
                         'acc_year_from' => $student->acadmiecyear_id,
                         'acc_year_to' => $academicYearId,
-                        'school_id' => $this->getSchool()->id,
+                        'school_id' => $school->id,
                     ]
                 );
             }
@@ -52,7 +52,7 @@ class PromotionService
 
     public function getPromotionsHistory(int $schoolId): Collection
     {
-        return promotion::where('school_id', $schoolId)
+        return Promotion::where('school_id', $schoolId)
             ->with(['students:id,name', 'f_grade:id,name', 'f_class:id,name', 't_grade:id,name', 't_class:id,name'])
             ->get();
     }

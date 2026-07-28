@@ -114,7 +114,7 @@ class ExchangeBondControllerTest extends TestCase
     public function test_destroy_requires_delete_permission(): void
     {
         $this->actingAs($this->unauthorizedUser);
-        $response = $this->get(route('exchange-bonds.destroy', 1));
+        $response = $this->delete(route('exchange-bonds.destroy', 1));
         $response->assertForbidden();
     }
 
@@ -122,7 +122,7 @@ class ExchangeBondControllerTest extends TestCase
     {
         $this->givePermission($this->admin, 'exchange_bonds-delete');
         $this->actingAs($this->admin);
-        $response = $this->get(route('exchange-bonds.destroy', 9999));
+        $response = $this->delete(route('exchange-bonds.destroy', 9999));
         $response->assertRedirect();
     }
 }

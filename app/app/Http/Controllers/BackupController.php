@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
+use App\Jobs\CreateBackupJob;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
-use Log;
 use Spatie\Backup\Commands\ListCommand;
 use Spatie\Backup\Helpers\Format;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
@@ -61,11 +60,8 @@ class BackupController extends Controller
     public function create()
     {
         try {
-            // start the backup process
-            Artisan::call('backup:run', ['--only-db' => 'true']);
-            $output = Artisan::output();
-            // log the results
-            Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n".$output);
+            CreateBackupJob::dispatch();
+
             session()->flash('success', trans('notifications.backup_successful_body', ['application_name' => config('app.name'), 'disk_name' => config('backup.backup.destination.disks')[0]]));
             $this->logActivity(trans('log.actions.added'), trans('log.models.backup.created', ['date' => Carbon::parse()->format('Y-M-d')]));
 
@@ -79,6 +75,7 @@ class BackupController extends Controller
 
     public function download($file_name)
     {
+        $file_name = str_replace(['../', '..\\'], '', $file_name);
         $file = config('backup.backup.name').'/'.$file_name;
         $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
         if ($disk->exists($file)) {
@@ -99,11 +96,25 @@ class BackupController extends Controller
 
     public function delete($file_name)
     {
+        $file_name = str_replace(['../', '..\\'], '', $file_name);
         try {
 
             $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
-            if ($disk->exists(config('backup.backup.name').'/'.$file_name)) {
-                $disk->delete(config('backup.backup.name').'/'.$file_name);
+            $filePath = config('backup.backup.name').'/'.$file_name;
+            if ($disk->exists($filePath)) {
+                $files = collect($disk->files(config('backup.backup.name')))
+                    ->filter(fn ($f) => str_ends_with($f, '.zip'))
+                    ->sortByDesc(fn ($f) => $disk->lastModified($f))
+                    ->values();
+
+                $newestFile = $files->first();
+                if ($newestFile && $newestFile === $filePath) {
+                    session()->flash('error', trans('notifications.backup_is_active'));
+
+                    return redirect()->back();
+                }
+
+                $disk->delete($filePath);
                 session()->flash('success', trans('notifications.cleanup_successful_subject_title'));
                 $this->logActivity(trans('log.actions.deleted'), trans('log.models.backup.deleted', ['date' => Carbon::parse()->format('Y-m-d')]));
 

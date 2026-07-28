@@ -27,19 +27,32 @@ class SettingsController extends Controller
     {
         $school = $this->getSchool();
         $school_info = School::where('id', $school->id)->with('image')->first();
-        $grades = Grade::where('school_id', $school->id)->withCount('students')->get();
+        $grades = Grade::where('school_id', $school->id)
+            ->withCount('students')
+            ->get();
         $std_count = Student::where('school_id', $school->id)->count();
         $grd_count = Grade::where('school_id', $school->id)->count();
         $teach_count = User::where('school_id', $school->id)->count();
         $user = Auth::user();
         $academic_years = AcademicYear::where('school_id', $school->id)->get();
 
-        return view('backend.setting.index', compact('school', 'school_info', 'grades', 'std_count', 'grd_count', 'teach_count', 'user', 'academic_years'));
+        return view(
+            'backend.setting.index',
+            compact(
+                'school',
+                'school_info',
+                'grades',
+                'std_count',
+                'grd_count',
+                'teach_count',
+                'user',
+                'academic_years',
+            ),
+        );
     }
 
     public function store(NewSchoolRequest $request)
     {
-
         try {
             $this->executeInTransaction(function () use ($request) {
                 $school = new School;
@@ -47,7 +60,15 @@ class SettingsController extends Controller
                 $school->phone = $request->phone;
                 $school->address = $request->address;
                 $school->save();
-                $this->verifyAndStoreImage($request, 'logo', $request->schoolname, 'upload_attachments', $school->id, 'App\Models\School', $request->schoolname);
+                $this->verifyAndStoreImage(
+                    $request,
+                    'logo',
+                    $request->schoolname,
+                    'upload_attachments',
+                    $school->id,
+                    "App\Models\School",
+                    $request->schoolname,
+                );
 
                 $user = new User;
                 $user->first_name = $request->first_name;
@@ -61,7 +82,10 @@ class SettingsController extends Controller
 
             return redirect(route('dashboard'));
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors(['error' => $e->getMessage()]);
         }
     }
 
@@ -78,13 +102,24 @@ class SettingsController extends Controller
                 $school->footer_left = $request->footer_left;
                 $school->slug = \Str::slug($school->name);
                 $school->save();
-                $this->verifyAndStoreImage($request, 'logo', $request->school_name, 'upload_attachments', $id, 'App\Models\School', $request->school_name);
+                $this->verifyAndStoreImage(
+                    $request,
+                    'logo',
+                    $request->school_name,
+                    'upload_attachments',
+                    $id,
+                    "App\Models\School",
+                    $request->school_name,
+                );
             });
             session()->flash('success', trans('general.success'));
 
             return redirect()->back();
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+            return redirect()
+                ->back()
+                ->withInput()
+                ->withErrors(['error' => $e->getMessage()]);
         }
     }
 
@@ -97,13 +132,18 @@ class SettingsController extends Controller
             ]);
             $user = Auth::user();
             if (Hash::check($request->old_password, $user->password)) {
-                $user = new User;
-                $user->password = Hash::make($request->new_password);
-                $user->save();
+                $user = User::find(Auth::id());
+                $user->update([
+                    'password' => Hash::make($request->new_password),
+                ]);
 
-                return redirect()->back()->with('success', trans('setting.password_updated'));
+                return redirect()
+                    ->back()
+                    ->with('success', trans('setting.password_updated'));
             } else {
-                return redirect()->back()->with('error', trans('setting.old_password_not_match'));
+                return redirect()
+                    ->back()
+                    ->with('error', trans('setting.old_password_not_match'));
             }
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());

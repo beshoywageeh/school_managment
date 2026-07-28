@@ -7,6 +7,7 @@ use App\Enums\InventoryItemType;
 use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\School;
+use App\Models\Traits\BelongsToSchool;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,13 +18,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InventoryItem extends Model
 {
+    use BelongsToSchool;
     use HasFactory;
     use SoftDeletes;
 
     protected $table = 'inventory_items';
 
     protected $fillable = [
-        'school_id',
         'type',
         'category',
         'name',
@@ -64,7 +65,7 @@ class InventoryItem extends Model
 
     public function scopeActive($query)
     {
-        return $query->whereNull('deleted_at');
+        return $query->where('is_active', true);
     }
 
     public function scopeLowStock($query, $threshold = 10)

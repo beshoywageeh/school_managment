@@ -4,6 +4,7 @@ namespace App\Models\Inventory;
 
 use App\Enums\TransactionType;
 use App\Models\School;
+use App\Models\Traits\BelongsToSchool;
 use App\Models\User;
 use Illuminate\Database\Eloquent\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InventoryTransaction extends Model
 {
+    use BelongsToSchool;
     use HasFactory;
     use SoftDeletes;
 
@@ -24,7 +26,6 @@ class InventoryTransaction extends Model
         'reference_type',
         'reference_id',
         'notes',
-        'school_id',
         'user_id',
     ];
 

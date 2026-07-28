@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\ClassRoom;
 use App\Models\Grade;
-use App\Models\nationality;
+use App\Models\Nationality;
 use App\Models\school_fee;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -76,7 +76,7 @@ class CacheService
         $cacheKey = "nationalities_{$this->schoolId}";
 
         return Cache::remember($cacheKey, $this->cacheTtl, function () {
-            return nationality::orderBy('name')->get(['id', 'name']);
+            return Nationality::orderBy('name')->get(['id', 'name']);
         });
     }
 

@@ -13,12 +13,12 @@ class InvoiceQueryService
         $query = FeeInvoice::query()
             ->where('school_id', $schoolId)
             ->with([
-                'students:id,name',
-                'grades:id,name',
-                'classes:id,name',
+                'student:id,name',
+                'grade:id,name',
+                'classroom:id,name',
                 'acd_year:id,view',
             ])
-            ->withSum('fees', 'amount');
+            ->withSum('schoolFee', 'amount');
 
         $this->applyDynamicFilters($query, $request);
 
@@ -35,7 +35,7 @@ class InvoiceQueryService
     public function applyDynamicFilters($query, Request $request): void
     {
         if ($request->filled('students')) {
-            $query->whereHas('students', function ($q) use ($request) {
+            $query->whereHas('student', function ($q) use ($request) {
                 $q->where('name', 'like', '%'.$request->students.'%');
             });
         }

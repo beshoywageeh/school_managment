@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Payment_Status;
+use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FeeInvoice extends Model
 {
-    use HasFactory, SoftDeletes;
+    use BelongsToSchool, HasFactory, SoftDeletes;
 
     protected $table = 'fee_invoices';
 
@@ -21,7 +22,6 @@ class FeeInvoice extends Model
         'classroom_id',
         'academic_year_id',
         'school_fee_id',
-        'school_id',
         'user_id',
         'status',
     ];
@@ -30,22 +30,22 @@ class FeeInvoice extends Model
         'status' => Payment_Status::class,
     ];
 
-    public function students(): BelongsTo
+    public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
 
-    public function grades(): BelongsTo
+    public function grade(): BelongsTo
     {
         return $this->belongsTo(Grade::class, 'grade_id');
     }
 
-    public function classes(): BelongsTo
+    public function classroom(): BelongsTo
     {
         return $this->belongsTo(ClassRoom::class, 'classroom_id');
     }
 
-    public function fees(): BelongsTo
+    public function schoolFee(): BelongsTo
     {
         return $this->belongsTo(SchoolFee::class, 'school_fee_id');
     }

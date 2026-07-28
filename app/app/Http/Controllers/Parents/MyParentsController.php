@@ -18,11 +18,19 @@ class MyParentsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:parents-list', ['only' => ['index', 'show']]);
-        $this->middleware('permission:parents-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:parents-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:parents-list', [
+            'only' => ['index', 'show'],
+        ]);
+        $this->middleware('permission:parents-create', [
+            'only' => ['create', 'store'],
+        ]);
+        $this->middleware('permission:parents-edit', [
+            'only' => ['edit', 'update'],
+        ]);
         $this->middleware('permission:parents-delete', ['only' => ['destroy']]);
-        $this->middleware('permission:Parents-import_Excel', ['only' => ['Excel_Import']]);
+        $this->middleware('permission:Parents-import_Excel', [
+            'only' => ['Excel_Import'],
+        ]);
     }
 
     public function index()
@@ -37,7 +45,10 @@ class MyParentsController extends Controller
         $school = $this->getSchool();
         $Mother_Status = MyParent::get('mother_status');
 
-        return view('backend.Parents.create', compact('school', 'Mother_Status'));
+        return view(
+            'backend.Parents.create',
+            compact('school', 'Mother_Status'),
+        );
     }
 
     public function store(ParentsRequest $request)
@@ -71,7 +82,12 @@ class MyParentsController extends Controller
                 'school_id' => \Auth::user()->school_id,
                 'mother_status' => $request->Mother_Status,
             ]);
-            $this->logActivity(trans('log.actions.added'), trans('log.models.parent.created', ['name' => $request->father_name]));
+            $this->logActivity(
+                trans('log.actions.added'),
+                trans('log.models.parent.created', [
+                    'name' => $request->father_name,
+                ]),
+            );
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -84,9 +100,17 @@ class MyParentsController extends Controller
 
     public function show(string $id)
     {
-        $parent = MyParent::where('id', $id)->with(['students' => function ($q) {
-            return $q->with(['grade:id,name', 'classroom:id,name', 'StudentAccount']);
-        }])->first();
+        $parent = MyParent::where('id', $id)
+            ->with([
+                'students' => function ($q) {
+                    return $q->with([
+                        'grade:id,name',
+                        'classroom:id,name',
+                        'studentAccount',
+                    ]);
+                },
+            ])
+            ->first();
         $school = $this->getSchool();
 
         return view('backend.Parents.show', compact('parent', 'school'));
@@ -98,25 +122,30 @@ class MyParentsController extends Controller
         $school = $this->getSchool();
         $Mother_Status = MyParent::get('mother_status');
 
-        return view('backend.Parents.edit', compact('parent', 'school', 'Mother_Status'));
+        return view(
+            'backend.Parents.edit',
+            compact('parent', 'school', 'Mother_Status'),
+        );
     }
 
     public function update(Request $request)
     {
-
         try {
-
             MyParent::find($request->id)->update([
                 'father_name' => $request->father_name,
                 'father_phone' => $request->father_phone,
                 'father_job' => $request->father_job,
                 'father_national_id' => $request->father_national_id,
-                'father_birth_date' => Carbon::parse($request->father_birth_date),
+                'father_birth_date' => Carbon::parse(
+                    $request->father_birth_date,
+                ),
                 'mother_name' => $request->mother_name,
                 'mother_phone' => $request->mother_phone,
                 'mother_job' => $request->mother_job,
                 'mother_national_id' => $request->mother_national_id,
-                'mother_birth_date' => Carbon::parse($request->mother_birth_date),
+                'mother_birth_date' => Carbon::parse(
+                    $request->mother_birth_date,
+                ),
                 'address' => $request->address,
                 'religion' => $request->religion,
                 'father_learning' => $request->father_learning,
@@ -124,7 +153,12 @@ class MyParentsController extends Controller
                 'user_id' => \Auth::Id(),
                 'school_id' => \Auth::user()->school_id,
             ]);
-            $this->logActivity(trans('log.actions.updated'), trans('log.models.parent.updated', ['name' => $request->father_name]));
+            $this->logActivity(
+                trans('log.actions.updated'),
+                trans('log.models.parent.updated', [
+                    'name' => $request->father_name,
+                ]),
+            );
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('parents.index');
@@ -139,11 +173,15 @@ class MyParentsController extends Controller
     {
         try {
             $d = MyParent::withCount('Students')->findorfail($id);
-            if ($d->Students_count < 0) {
+            if ($d->Students_count == 0) {
                 $d->delete();
-                $this->logActivity(trans('log.actions.deleted'), trans('log.models.parent.deleted', ['name' => $d->father_name]));
+                $this->logActivity(
+                    trans('log.actions.deleted'),
+                    trans('log.models.parent.deleted', [
+                        'name' => $d->father_name,
+                    ]),
+                );
                 session()->flash('success', trans('general.deleted'));
-
             }
             session()->flash('info', trans('Parents.cannotdeleteparents'));
 

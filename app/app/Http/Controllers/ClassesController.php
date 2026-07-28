@@ -6,8 +6,8 @@ use App\Http\Requests\ClassStoreRequest;
 use App\Http\Requests\ClassUpdateRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
-use App\Models\classes;
 use App\Models\ClassRoom;
+use App\Models\ClassRoom2 as classes;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -98,7 +98,7 @@ class ClassesController extends Controller
             Student::whereIn('id', $request->student_id)->update([
                 'class_id' => $request->class_id,
             ]);
-            $class = classes::findorfail($request->class_id)->first()
+            $class = classes::findorfail($request->class_id)
                 ->title;
             $this->logActivity(
                 trans('log.actions.added'),

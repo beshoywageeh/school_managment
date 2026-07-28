@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\MyParent;
+use App\Models\School;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -35,7 +36,7 @@ class MyParentFactory extends Factory
             'mother_birth_date' => $this->faker->date(),
             'user_id' => '1',
             'slug' => $this->faker->slug(),
-            'school_id' => '1',
+            'school_id' => School::factory(),
         ];
     }
 }

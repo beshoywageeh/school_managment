@@ -37,7 +37,7 @@
                         @forelse($promotions as $promotion)
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->iteration }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $promotion->students->name }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $promotion->student->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $promotion->f_grade->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $promotion->f_class->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $promotion->f_acc->view }}</td>

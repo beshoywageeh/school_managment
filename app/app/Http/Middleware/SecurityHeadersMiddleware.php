@@ -14,7 +14,7 @@ class SecurityHeadersMiddleware
 
         $response->headers->set(
             'Content-Security-Policy',
-            "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:; frame-src 'none'",
+            "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.bunny.net; img-src 'self' data:; connect-src 'self'; font-src 'self' data: https://fonts.bunny.net; frame-src 'none'",
         );
         $response->headers->set(
             'Strict-Transport-Security',

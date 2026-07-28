@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\classes;
 use App\Models\ClassRoom;
+use App\Models\ClassRoom2 as classes;
 use App\Models\Grade;
 use App\Models\Job;
-use App\Models\schedules;
+use App\Models\Schedule as schedules;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;

@@ -10,7 +10,7 @@
                 <table class="data-table" style="width:100%">
                     <tr>
                         <td class="text-center" width="25%">
-                            {!! $school->heading_right !!}
+                            {{ $school->heading_right }}
                         </td>
                         <td class="text-center" width="50%">
                             {{ trans('report.acc_year', ['aa' => $data['acc_year']->view]) }}
@@ -47,7 +47,7 @@
                 @foreach ($students as $student)
                     <tr>
                         <td width="5%">{{ $loop->index + 1 }}</td>
-                        <td>{{ $student->students->name }}</td>
+                        <td>{{ $student->student->name }}</td>
                         <td>{{ $student->note }}</td>
                     </tr>
                 @endforeach

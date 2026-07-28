@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\Status;
 use App\Models\AcademicYear;
+use App\Models\School;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -32,7 +33,7 @@ class AcademicYearFactory extends Factory
             },
             'status' => Arr::random(Status::cases()),
             'created_by' => '1',
-            'school_id' => '1',
+            'school_id' => School::factory(),
         ];
     }
 }

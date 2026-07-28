@@ -11,9 +11,19 @@ class ActivityLogController extends Controller
 {
     use SchoolTrait;
 
+    public function __construct()
+    {
+        $this->middleware('permission:settings-info', ['only' => ['index']]);
+    }
+
     public function index(Request $request)
     {
         $school = $this->getSchool();
+
+        if (! $school) {
+            abort(403, 'Unauthorized');
+        }
+
         $query = ActivityLog::with('user')->where('school_id', $school->id);
 
         if ($request->filled('user_id')) {
@@ -21,7 +31,8 @@ class ActivityLogController extends Controller
         }
 
         if ($request->filled('action')) {
-            $query->where('action', 'like', "%{$request->action}%");
+            $escapedAction = str_replace(['%', '_'], ['\\%', '\\_'], $request->action);
+            $query->where('action', 'like', "%{$escapedAction}%");
         }
 
         if ($request->filled('from_date')) {
@@ -31,10 +42,9 @@ class ActivityLogController extends Controller
         if ($request->filled('to_date')) {
             $query->whereDate('created_at', '<=', $request->to_date);
         }
+
         $data['total'] = (clone $query)->count();
-        $data['today'] = ActivityLog::where('school_id', $school->id)
-            ->whereDate('created_at', today())
-            ->count();
+        $data['today'] = (clone $query)->whereDate('created_at', today())->count();
 
         $activities = $query->paginate(20);
 

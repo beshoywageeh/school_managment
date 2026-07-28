@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FundAccount extends Model
 {
-    use HasFactory;
+    use BelongsToSchool, HasFactory;
 
     protected $table = 'fund_accounts';
 
@@ -17,7 +18,6 @@ class FundAccount extends Model
         'receipt_id',
         'Debit',
         'Credit',
-        'school_id',
         'user_id',
     ];
 
@@ -32,9 +32,9 @@ class FundAccount extends Model
         return $this->belongsTo(ReceiptPayment::class, 'receipt_id');
     }
 
-    public function exchange_bond(): BelongsTo
+    public function exchangeBond(): BelongsTo
     {
-        return $this->belongsTo(Exchange_bond::class, 'exchange_bond_id');
+        return $this->belongsTo(ExchangeBond::class, 'exchange_bond_id');
     }
 
     public function user(): BelongsTo

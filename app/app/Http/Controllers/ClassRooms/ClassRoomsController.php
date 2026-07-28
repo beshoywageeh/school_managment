@@ -13,7 +13,6 @@ use App\Models\Grade;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class ClassRoomsController extends Controller
 {
@@ -30,16 +29,13 @@ class ClassRoomsController extends Controller
 
     public function index()
     {
-        $id = \Auth::id();
         $school = $this->getSchool();
         $query = ClassRoom::where('school_id', $school->id)
             ->with(['user', 'grade'])
             ->withCount('students');
 
         if (! Auth::user()->hasRole('Admin')) {
-            $grade_ids = DB::table('teacher_grade')
-                ->where('teacher_id', $id)
-                ->pluck('grade_id');
+            $grade_ids = Auth::user()->grades()->pluck('grade_id');
             $query->whereIn('grade_id', $grade_ids);
         }
 
@@ -54,7 +50,7 @@ class ClassRoomsController extends Controller
             )
             ->when(Auth::user()->hasRole('Admin'), fn ($q) => $q->get());
 
-        $data['grades'] = Grade::get();
+        $data['grades'] = Grade::where('school_id', $school->id)->get();
 
         return view('backend.class-rooms.index', compact('data', 'school'));
     }

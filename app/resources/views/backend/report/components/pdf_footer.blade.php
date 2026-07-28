@@ -3,13 +3,13 @@
         <table class="data-table" style="width:100%">
             <tr>
                 <td class="text-right" width="20%">
-                    {!! $school->footer_right ?? '' !!}
+                    {{ $school->footer_right ?? '' }}
                 </td>
                 <td class="text-center" width="50%">
                     {PAGENO}
                 </td>
                 <td class="text-left">
-                    {!! $school->footer_left ?? '' !!}
+                    {{ $school->footer_left ?? '' }}
                 </td>
             </tr>
         </table>

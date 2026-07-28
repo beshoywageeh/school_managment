@@ -11,6 +11,51 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ReportService
 {
+    public function getStudentReport(int $type, $request): ?array
+    {
+        $year_start = now()->format('Y');
+        $data['acc'] = AcademicYear::whereYear('year_start', $year_start)->first();
+
+        if (is_null($data['acc'])) {
+            return null;
+        }
+
+        if ($type == 41) {
+            $data['students'] = Student::where('classroom_id', $request->classroom_id)
+                ->where('student_status', 0)
+                ->where('acadmiecyear_id', $data['acc']->id)
+                ->with([
+                    'parent:id,father_name,address',
+                    'grade:id,name',
+                    'classroom:id,name',
+                ])
+                ->orderBy('gender', 'DESC')
+                ->orderBy('name', 'ASC')
+                ->orderBy('religion', 'ASC')
+                ->get([
+                    'id',
+                    'name',
+                    'student_status',
+                    'classroom_id',
+                    'grade_id',
+                    'parent_id',
+                    'national_id',
+                    'religion',
+                    'birth_date',
+                    'birth_at_begin',
+                ])
+                ->chunk(100);
+
+            $data['classroom'] = ClassRoom::where('id', $request->classroom_id)
+                ->with('grade')
+                ->first();
+
+            return $data;
+        }
+
+        return null;
+    }
+
     public function getStudentReportByGrade(
         int $gradeId,
         int $academicYearId,
@@ -29,42 +74,6 @@ class ReportService
             ->where('acadmiecyear_id', $academicYearId)
             ->with(['parent:id,father_name'])
             ->get(['id', 'name', 'gender']);
-    }
-
-    public function getPaymentStatusReport(
-        int $schoolId,
-        int $academicYearId,
-    ): array {
-        $students = Student::where('school_id', $schoolId)
-            ->where('acadmiecyear_id', $academicYearId)
-            ->with([
-                'fee_invoices' => function ($query) {
-                    $query->select('id', 'student_id', 'status', 'amount');
-                },
-            ])
-            ->get(['id', 'name', 'grade_id']);
-
-        return $students
-            ->map(function ($student) {
-                $totalInvoice = $student->fee_invoices->sum('amount');
-                $paidAmount = $student->fee_invoices
-                    ->where('status', 'paid')
-                    ->sum('amount');
-                $remaining = $totalInvoice - $paidAmount;
-
-                return [
-                    'student' => $student->name,
-                    'total' => $totalInvoice,
-                    'paid' => $paidAmount,
-                    'remaining' => $remaining,
-                    'status' => $remaining <= 0
-                            ? 'paid'
-                            : ($paidAmount > 0
-                                ? 'partial'
-                                : 'unpaid'),
-                ];
-            })
-            ->toArray();
     }
 
     public function getFeesInvoicesReport(

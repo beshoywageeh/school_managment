@@ -10,7 +10,6 @@ use App\Models\Grade;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use PDF;
 
 class GradesController extends Controller
@@ -37,9 +36,7 @@ class GradesController extends Controller
         } else {
             $gradesQuery->whereIn(
                 'id',
-                DB::table('teacher_grade')
-                    ->where('teacher_id', Auth::id())
-                    ->pluck('grade_id'),
+                Auth::user()->grades()->pluck('grade_id'),
             );
         }
 

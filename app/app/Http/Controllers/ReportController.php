@@ -13,9 +13,10 @@ use App\Models\PaymentParts;
 use App\Models\ReceiptPayment;
 use App\Models\SchoolFee;
 use App\Models\Student;
-use App\Models\StudentAccount;
+use App\Services\Reports\FinancialReportService;
 use App\Services\Reports\PDFExportService;
 use App\Services\Reports\ReportService;
+use App\Services\Reports\StockReportService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,8 @@ class ReportController extends Controller
     public function __construct(
         private PDFExportService $PDFExport,
         private ReportService $reportService,
+        private StockReportService $stockReportService,
+        private FinancialReportService $financialReportService,
     ) {}
 
     public function index()
@@ -36,13 +39,16 @@ class ReportController extends Controller
             ->where('teacher_id', $user)
             ->pluck('grade_id');
         $acadmeic_years = AcademicYear::where('status', config('school.academic_year_status'))->get();
-        $stocks = InventoryItem::where('type', 'stock')->get();
-        $clothes = InventoryItem::where('type', 'clothe')
+        $stocks = InventoryItem::where('school_id', $school->id)
+            ->where('type', 'stock')
+            ->get();
+        $clothes = InventoryItem::where('school_id', $school->id)
+            ->where('type', 'clothe')
             ->whereIn('grade_id', $user_grade)
-
             ->with('grade:id,name', 'classroom:id,name')
             ->get();
-        $books_sheets = InventoryItem::where('type', 'book')
+        $books_sheets = InventoryItem::where('school_id', $school->id)
+            ->where('type', 'book')
             ->whereIn('grade_id', $user_grade)
             ->with('grade:id,name', 'classroom:id,name')
             ->get();
@@ -67,7 +73,8 @@ class ReportController extends Controller
 
     public function ExportStudents(Request $request)
     {
-        $query = Student::select(
+        $school = $this->GetSchool();
+        $query = Student::where('school_id', $school->id)->select(
             'id',
             'name',
             'grade_id',
@@ -90,24 +97,23 @@ class ReportController extends Controller
         $data = $query
             ->get()
             ->groupBy(['acd_year.view', 'grade.name', 'classes.name']);
-        $school = $this->GetSchool();
 
         $PDFExport->PrintPDF('students', 'stream', $data, 'L', $school);
     }
 
     public function payment_parts(Request $request)
     {
+        $school = $this->GetSchool();
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
-        $query = PaymentParts::whereBetween('date', [
+        $query = PaymentParts::where('school_id', $school->id)->whereBetween('date', [
             $data['from'],
             $data['to'],
-        ])->with('students', 'grades', 'classes');
+        ])->with('student', 'grade', 'classroom');
         if ($request->payment_status != 2) {
             $query->where('payment_status', $request->payment_status);
         }
         $data['parts'] = $query->get();
-        $school = $this->GetSchool();
         $PDFExport->PrintPDF('payment_parts', 'stream', $data, 'P', $school);
     }
 
@@ -150,112 +156,63 @@ class ReportController extends Controller
     public function clothe_stock(Request $request)
     {
         $school = $this->GetSchool();
-        $data['stock'] = InventoryItem::where('school_id', $school->id)
-            ->where('id', $request->stock)
-            ->with('orders')
-            ->first();
-        $data['total'] = $this->calculateTotals($data['stock']);
+        $data = $this->stockReportService->getStockItemReport($school->id, $request->stock, 'clothe');
         $PDFExport->PrintPDF('clothe_stock', 'stream', $data, 'P', $school);
     }
 
     public function book_sheet_stock(Request $request)
     {
-        $data['stock'] = InventoryItem::where('id', $request->stock)
-            ->with('orders')
-            ->first();
-        $data['total'] = $this->calculateTotals($data['stock']);
         $school = $this->GetSchool();
+        $data = $this->stockReportService->getStockItemReport($school->id, $request->stock, 'book');
         $PDFExport->PrintPDF('book_sheet_stock', 'stream', $data, 'P', $school);
     }
 
     public function stock_product(Request $request)
     {
-        $data['stock'] = InventoryItem::where('id', $request->stock)
-            ->with('orders')
-            ->first();
-        $data['stocks'] = $this->calculateTotals($data['stock']);
         $school = $this->GetSchool();
-        $PDFExport->PrintPDF(
-            'stock_product_view',
-            'stream',
-            $data,
-            'P',
-            $school,
-        );
+        $data = $this->stockReportService->getStockItemReport($school->id, $request->stock, 'stock');
+        $data['stocks'] = $data['totals'];
+        $PDFExport->PrintPDF('stock_product_view', 'stream', $data, 'P', $school);
     }
 
     public function student_report($type, Request $request)
     {
-        $year_start = Carbon::now()->format('Y');
-        $data['acc'] = AcademicYear::whereYear(
-            'year_start',
-            $year_start,
-        )->first();
         $school = $this->GetSchool();
-        if (is_null($data['acc'])) {
+        $data = $this->reportService->getStudentReport($type, $request);
+
+        if (is_null($data)) {
             return redirect()
                 ->back()
                 ->with('info', trans('general.noDataToShow'));
         }
-        if ($type == 41) {
-            $data['students'] = Student::where(
-                'classroom_id',
-                $request->classroom_id,
-            )
-                ->where('student_status', 0)
-                ->where('acadmiecyear_id', $data['acc']->id)
-                ->with([
-                    'parent:id,father_name,address',
-                    'grade:id,name',
-                    'classroom:id,name',
-                ])
-                ->orderBy('gender', 'DESC')
-                ->orderBy('name', 'ASC')
-                ->orderBy('religion', 'ASC')
-                ->get([
-                    'id',
-                    'name',
-                    'student_status',
-                    'classroom_id',
-                    'grade_id',
-                    'parent_id',
-                    'national_id',
-                    'religion',
-                    'birth_date',
-                    'birth_at_begin',
-                ])
-                ->chunk(100);
 
-            $data['classroom'] = ClassRoom::where('id', $request->classroom_id)
-                ->with('grade')
-                ->first();
-            $PDFExport->PrintPDF('41', 'stream', $data, 'L', $school);
-        }
+        $PDFExport->PrintPDF('41', 'stream', $data, 'L', $school);
     }
 
     public function exception_fee(Request $request)
     {
+        $school = $this->GetSchool();
         $data['begin'] = Carbon::parse($request->start_date)->format('Y-m-d');
         $data['end'] = Carbon::parse($request->end_date)->format('Y-m-d');
-        $data['exception_list'] = ExceptionFees::whereBetween('date', [
+        $data['exception_list'] = ExceptionFees::where('school_id', $school->id)->whereBetween('date', [
             $data['begin'],
             $data['end'],
         ])
             ->with('students:id,name,parent_id')
             ->get();
-        $school = $this->GetSchool();
 
         $PDFExport->PrintPDF('exception_fee', 'stream', $data, 'P', $school);
     }
 
     public function payment_status(Request $request)
     {
+        $school = $this->GetSchool();
         $year = Carbon::now()->format('Y');
         $data['acc_year'] = AcademicYear::whereYear('year_start', $year)->first(
             ['id', 'view'],
         );
 
-        $query = FeeInvoice::where('academic_year_id', $data['acc_year']->id)
+        $query = FeeInvoice::where('school_id', $school->id)->where('academic_year_id', $data['acc_year']->id)
             ->where('status', $request->payment_status)
             ->with('grades:id,name', 'students:id,name')
             ->select(['student_id', 'grade_id']);
@@ -265,7 +222,6 @@ class ReportController extends Controller
             $query->where('grade_id', $request->grade);
         }
         $data['exp'] = $query->get()->groupBy('grades.name');
-        $school = $this->GetSchool();
         $PDFExport->PrintPDF(
             'payment_status_view',
             'stream',
@@ -277,9 +233,10 @@ class ReportController extends Controller
 
     public function payments(Request $request)
     {
+        $school = $this->GetSchool();
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
-        $data['payment'] = ReceiptPayment::whereBetween('date', [
+        $data['payment'] = ReceiptPayment::where('school_id', $school->id)->whereBetween('date', [
             $data['from'],
             $data['to'],
         ])
@@ -292,19 +249,19 @@ class ReportController extends Controller
                 'acc_year',
             )
             ->get();
-        $school = $this->GetSchool();
         $PDFExport->PrintPDF('payments', 'stream', $data, 'P', $school);
     }
 
     public function fees_invoices(Request $request)
     {
+        $school = $this->GetSchool();
         $year = Carbon::now()->format('Y');
         $data['acc_year'] = AcademicYear::whereYear('year_start', $year)->first(
             ['id', 'view'],
         );
 
         // Prepare base query
-        $query = FeeInvoice::with([
+        $query = FeeInvoice::where('school_id', $school->id)->with([
             'grades:id,name',
             'classes:id,name',
             'students:id,name',
@@ -350,24 +307,25 @@ class ReportController extends Controller
         $data['all'] = $query
             ->get()
             ->groupBy(['acd_year.view', 'grades.name', 'classes.name']);
-        $school = $this->GetSchool();
         $PDFExport->PrintPDF('fee_invoices', 'stream', $data, 'P', $school);
     }
 
     public function student_tameen(Request $request)
     {
+        $school = $this->GetSchool();
         $data['type'] = $request->type;
         $data['classroom'] = ClassRoom::findorfail($request->classroom_id);
         $date = Carbon::now()->format('Y');
         $data['aa'] = AcademicYear::whereyear('year_start', $date)->first();
         $data['students'] = Student::where(
+            'school_id', $school->id,
+        )->where(
             'classroom_id',
             $request->classroom_id,
         )
             ->where('tameen', 1)
             ->with('parent:id,father_phone,address')
             ->get(['name', 'national_id', 'parent_id', 'birth_date', 'gender']);
-        $school = $this->GetSchool();
         if (is_null($data['students'])) {
             return redirect()
                 ->back()
@@ -398,11 +356,12 @@ class ReportController extends Controller
 
     public function credit(Request $request)
     {
-        $query = FeeInvoice::where('status', 0)->with(
-            'students',
-            'grades',
-            'classes',
-            'fees',
+        $school = $this->GetSchool();
+        $query = FeeInvoice::where('school_id', $school->id)->where('status', 0)->with(
+            'student',
+            'grade',
+            'classroom',
+            'schoolFee',
             'acd_year',
         );
 
@@ -410,157 +369,35 @@ class ReportController extends Controller
             $query->where('academic_year_id', $request->acc_year);
         }
         $data['credit'] = $query->get();
-        $school = $this->GetSchool();
         $PDFExport->PrintPDF('credit', 'stream', $data, 'P', $school);
     }
 
     public function school_fees()
     {
+        $school = $this->GetSchool();
         $date = date('Y');
         $data['acc_year'] = AcademicYear::whereYear('year_start', $date)->first(
             ['id', 'view'],
         );
         $data['school_fees'] = SchoolFee::where(
+            'school_id', $school->id,
+        )->where(
             'academic_year_id',
             $data['acc_year']->id,
         )
             ->with(['grade:id,name', 'classroom:id,name'])
             ->get()
             ->groupBy(['grade.name', 'classroom.name']);
-        $school = $this->GetSchool();
         $PDFExport->PrintPDF('school_fees', 'stream', $data, 'P', $school);
     }
 
     public function final_year(Request $request)
     {
         $school = $this->GetSchool();
+        $data = $this->financialReportService->getFinalYearData($request);
 
-        // return $request;
-        $data['Students_query'] = Student::query();
-        if ($request->grade && $request->grade != 0) {
-            $data['Students_query']->whereIn(
-                'grade_id',
-                (array) $request->grade,
-            );
-            $data['grade'] = Grade::whereIn(
-                'id',
-                (array) $request->grade,
-            )->get();
-        }
-        if ($request->classroom && $request->classroom != 0) {
-            $data['Students_query']->whereIn(
-                'classroom_id',
-                (array) $request->classroom,
-            );
-            $data['classroom'] = ClassRoom::whereIn(
-                'id',
-                (array) $request->classroom,
-            )->get();
-        }
-        if ($request->grade == 0 || $request->classroom == 0) {
-            $data['Students_query']
-                ->where('classroom_id', '!=', null)
-                ->where('grade_id', '!=', null);
-            $data['grade'] = Grade::where('id', '!=', null)->get();
-            $data['classroom'] = ClassRoom::where('id', '!=', null)->get();
-        }
-
-        $data['Students_by_grade'] = clone $data['Students_query'];
-        $grouped = (clone $data['Students_query'])
-            ->select(
-                'grade_id',
-                'classroom_id',
-                DB::raw('count(*) as student_count'),
-            )
-            ->groupBy('grade_id', 'classroom_id')
-            ->get();
-
-        $Students_by_grade = $grouped
-            ->groupBy('grade_id')
-            ->map(fn ($g) => $g->sum('student_count'));
-        $Students_by_classroom = $grouped
-            ->groupBy('classroom_id')
-            ->map(fn ($g) => $g->sum('student_count'));
-        $date = date('Y');
-
-        $data['acadmic_year'] = AcademicYear::where('status', config('school.academic_year_status'))->first([
-            'id',
-            'view',
-        ]);
-        if (
-            $request->grade &&
-            $request->grade != 0 &&
-            $request->classroom &&
-            $request->classroom != 0
-        ) {
-            /* Total Payment */
-            $invoices = FeeInvoice::where(
-                'academic_year_id',
-                $data['acadmic_year']->id,
-            )
-                ->whereIn('grade_id', (array) $request->grade)
-                ->whereIn('classroom_id', (array) $request->classroom)
-                ->where('status', 'paid')
-                ->withSum('fees', 'amount')
-                ->get();
-            $data['paid'] = $invoices->sum('fees_sum_amount');
-            /* Detailed Paymeny for each class room */
-            /* Total Student Accounts */
-            $data['students_accounts_query'] = StudentAccount::where(
-                'academic_year_id',
-                $data['acadmic_year']->id,
-            )
-                ->where('type', 'payment')
-                ->whereIn('classroom_id', (array) $request->classroom)
-                ->whereIn('grade_id', (array) $request->grade)
-                ->with(
-                    'grade:id,name',
-                    'classroom:id,name',
-                    'fee:id,status,school_fee_id',
-                )
-                ->get([
-                    'grade_id',
-                    'classroom_id',
-                    'student_id',
-                    'fee_invoices_id',
-                    'debit',
-                    'credit',
-                ])
-                ->groupBy('classroom.name');
-            $data['school_fees'] = SchoolFee::where(
-                'academic_year_id',
-                $data['acadmic_year']->id,
-            )->get();
-            $data['excpetion'] = ExceptionFees::where(
-                'academic_year_id',
-                $data['acadmic_year']->id,
-            )
-                ->whereIn('class_id', $request->classroom)
-                ->whereIn('grade_id', $request->grade)
-                ->with('fees', 'classroom')
-                ->get()
-                ->groupBy('classroom.name');
-        }
-
-        // return $data["students_accounts_query"];
         return view('backend.report.PDF.FinalYear', $data, [
             'school' => $school,
         ]);
-    }
-
-    private function calculateTotals($stocks)
-    {
-        $previousstock = 0;
-        $totals = [];
-
-        foreach ($stocks->orders->sortBy('created_at') as $stock) {
-            $previousstock += $stock->quantity_in - $stock->quantity_out;
-            $totals[$stock->id] = [
-                'stk' => $stock,
-                'total' => $previousstock,
-            ];
-        }
-
-        return $totals;
     }
 }

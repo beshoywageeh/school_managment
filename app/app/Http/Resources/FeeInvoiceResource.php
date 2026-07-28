@@ -14,22 +14,22 @@ class FeeInvoiceResource extends JsonResource
             'invoice_date' => $this->invoice_date?->toDateString(),
             'amount' => $this->amount,
             'status' => $this->status,
-            'student' => $this->whenLoaded('students', fn () => [
-                'id' => $this->students->id,
-                'name' => $this->students->name,
+            'student' => $this->whenLoaded('student', fn () => [
+                'id' => $this->student->id,
+                'name' => $this->student->name,
             ]),
-            'fee' => $this->whenLoaded('fees', fn () => [
-                'id' => $this->fees->id,
-                'title' => $this->fees->title,
-                'amount' => $this->fees->amount,
+            'fee' => $this->whenLoaded('schoolFee', fn () => [
+                'id' => $this->schoolFee->id,
+                'title' => $this->schoolFee->title,
+                'amount' => $this->schoolFee->amount,
             ]),
-            'grade' => $this->whenLoaded('grades', fn () => [
-                'id' => $this->grades->id,
-                'name' => $this->grades->name,
+            'grade' => $this->whenLoaded('grade', fn () => [
+                'id' => $this->grade->id,
+                'name' => $this->grade->name,
             ]),
-            'classroom' => $this->whenLoaded('classes', fn () => [
-                'id' => $this->classes->id,
-                'name' => $this->classes->name,
+            'classroom' => $this->whenLoaded('classroom', fn () => [
+                'id' => $this->classroom->id,
+                'name' => $this->classroom->name,
             ]),
             'academic_year' => $this->whenLoaded('acd_year', fn () => [
                 'id' => $this->acd_year->id,

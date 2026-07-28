@@ -24,7 +24,7 @@
         </div>
         <div class="col-4">
             {{ $school->name }}<br>
-            {!! $school->heading_right !!}
+            {{ $school->heading_right }}
         </div>
     </div>
 </div>

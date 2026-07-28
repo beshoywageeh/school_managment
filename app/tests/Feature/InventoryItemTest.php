@@ -3,8 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Inventory\InventoryItem;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
 class InventoryItemTest extends TestCase
@@ -13,18 +17,61 @@ class InventoryItemTest extends TestCase
 
     protected User $admin;
 
+    protected School $school;
+
     protected function setUp(): void
     {
         parent::setUp();
-        $this->admin = User::factory()->create();
+        $this->app['config']->set('laravellocalization.hideDefaultLocaleInURL', true);
+        $this->app->setLocale('ar');
+        session(['locale' => 'ar']);
+
+        $this->app[PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $this->school = School::factory()->create();
+        $this->admin = User::factory()->create([
+            'school_id' => $this->school->id,
+        ]);
+
+        $this->givePermission(
+            $this->admin,
+            'stocks-index',
+            'stocks-create',
+            'stocks-update',
+            'stocks-delete',
+        );
+
         $this->actingAs($this->admin);
+    }
+
+    protected function givePermission(
+        User $user,
+        string ...$permissions,
+    ): void {
+        $this->app[PermissionRegistrar::class]->forgetCachedPermissions();
+        foreach ($permissions as $permission) {
+            $perm = Permission::firstOrCreate([
+                'name' => $permission,
+                'guard_name' => 'web',
+            ]);
+            $roleName = 'inventory-test-role-'.$permission;
+            $role = Role::firstOrCreate(['name' => $roleName]);
+            $role->givePermissionTo($perm);
+            $user->assignRole($role);
+        }
+        $user->load('roles');
+        $this->app[PermissionRegistrar::class]->forgetCachedPermissions();
     }
 
     public function test_can_list_inventory_items(): void
     {
-        InventoryItem::factory()->count(3)->create();
+        InventoryItem::factory()->count(3)->create([
+            'school_id' => $this->school->id,
+        ]);
 
-        $response = $this->get(route('inventory.items.index'));
+        $response = $this->get(
+            route('inventory.items.index', 'all'),
+        );
 
         $response->assertStatus(200);
     }
@@ -33,13 +80,13 @@ class InventoryItemTest extends TestCase
     {
         $itemData = [
             'name' => 'Test Item',
-            'type' => 'book',
-            'category' => 'stationery',
-            'sales_price' => 100.00,
-            'cost_price' => 50.00,
+            'type' => 'stock',
         ];
 
-        $response = $this->post(route('inventory.items.store'), $itemData);
+        $response = $this->post(
+            route('inventory.items.store'),
+            $itemData,
+        );
 
         $response->assertRedirect();
         $this->assertDatabaseHas('inventory_items', [
@@ -58,20 +105,30 @@ class InventoryItemTest extends TestCase
 
     public function test_can_show_inventory_item(): void
     {
-        $item = InventoryItem::factory()->create();
+        $item = InventoryItem::factory()->create([
+            'school_id' => $this->school->id,
+        ]);
 
-        $response = $this->get(route('inventory.items.show', $item->id));
+        $response = $this->get(
+            route('inventory.items.show', $item->id),
+        );
 
         $response->assertStatus(200);
     }
 
     public function test_can_update_inventory_item(): void
     {
-        $item = InventoryItem::factory()->create();
-
-        $response = $this->put(route('inventory.items.update', $item->id), [
-            'name' => 'Updated Item',
+        $item = InventoryItem::factory()->create([
+            'school_id' => $this->school->id,
         ]);
+
+        $response = $this->put(
+            route('inventory.items.update', $item->id),
+            [
+                'name' => 'Updated Item',
+                'type' => $item->type->value,
+            ],
+        );
 
         $response->assertRedirect();
         $this->assertDatabaseHas('inventory_items', [
@@ -82,12 +139,16 @@ class InventoryItemTest extends TestCase
 
     public function test_can_delete_inventory_item(): void
     {
-        $item = InventoryItem::factory()->create();
+        $item = InventoryItem::factory()->create([
+            'school_id' => $this->school->id,
+        ]);
 
-        $response = $this->delete(route('inventory.items.destroy', $item->id));
+        $response = $this->delete(
+            route('inventory.items.destroy', $item->id),
+        );
 
         $response->assertRedirect();
-        $this->assertDatabaseMissing('inventory_items', [
+        $this->assertSoftDeleted('inventory_items', [
             'id' => $item->id,
         ]);
     }

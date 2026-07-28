@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\FeeInvoice;
+use App\Models\School;
 use App\Models\SchoolFee;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -41,7 +42,7 @@ class FeeInvoiceFactory extends Factory
                     ->first()?->id;
             },
             'invoice_date' => $this->faker->date('Y-m-d'),
-            'school_id' => '1',
+            'school_id' => School::factory(),
             'user_id' => '1',
         ];
     }

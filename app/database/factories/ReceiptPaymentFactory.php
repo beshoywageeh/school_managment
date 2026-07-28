@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\AcademicYear;
 use App\Models\ReceiptPayment;
+use App\Models\School;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -34,7 +35,7 @@ class ReceiptPaymentFactory extends Factory
                 ?->id,
             'Debit' => $this->faker->numberBetween(500, 5000),
             'user_id' => '1',
-            'school_id' => '1',
+            'school_id' => School::factory(),
         ];
     }
 }

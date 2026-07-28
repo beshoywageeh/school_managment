@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Inventory\SubmitGardRequest;
+use App\Http\Requests\UpdateInventoryGardRequest;
 use App\Http\Traits\SchoolTrait;
 use App\Models\Inventory\InventoryItem;
 use App\Models\Inventory\InventoryOrder;
 use App\Services\Inventory\InventoryService;
-use Illuminate\Http\Request;
 
 class InventoryGardController extends Controller
 {
@@ -61,17 +61,11 @@ class InventoryGardController extends Controller
         );
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateInventoryGardRequest $request, $id)
     {
         $school = $this->getSchool();
 
-        $validated = $request->validate([
-            'date' => 'nullable|date',
-            'notes' => 'nullable|string',
-            'items' => 'required|array',
-            'items.*.item_id' => 'required|exists:inventory_items,id',
-            'items.*.actual_stock' => 'required|numeric|min:0',
-        ]);
+        $validated = $request->validated();
 
         $order = InventoryOrder::findOrFail($id);
 

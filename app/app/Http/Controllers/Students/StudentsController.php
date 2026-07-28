@@ -12,7 +12,8 @@ use App\Models\AcademicYear;
 use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\MyParent;
-use App\Models\nationality;
+use App\Models\Nationality;
+use App\Models\SchoolFee;
 use App\Models\Student;
 use App\Services\Finance\FinancialService;
 use App\Services\Student\StudentImportService;
@@ -34,14 +35,30 @@ class StudentsController extends Controller
         private StudentImportService $StudentImportService,
         private StudentQueryService $studentQuery,
     ) {
-        $this->middleware('permission:Students-list', ['only' => ['index', 'show', 'getclasses']]);
-        $this->middleware('permission:Students-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:Students-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:Students-delete', ['only' => ['softDelete', 'forceDelete']]);
-        $this->middleware('permission:Students-graduated', ['only' => ['softDelete']]);
-        $this->middleware('permission:Student-restore', ['only' => ['restore']]);
-        $this->middleware('permission:graduated-list', ['only' => ['graduated']]);
-        $this->middleware('permission:Students-Import_Excel', ['only' => ['Excel_Import']]);
+        $this->middleware('permission:Students-list', [
+            'only' => ['index', 'show', 'getclasses'],
+        ]);
+        $this->middleware('permission:Students-create', [
+            'only' => ['create', 'store'],
+        ]);
+        $this->middleware('permission:Students-edit', [
+            'only' => ['edit', 'update'],
+        ]);
+        $this->middleware('permission:Students-delete', [
+            'only' => ['softDelete', 'forceDelete'],
+        ]);
+        $this->middleware('permission:Students-graduated', [
+            'only' => ['softDelete'],
+        ]);
+        $this->middleware('permission:Student-restore', [
+            'only' => ['restore'],
+        ]);
+        $this->middleware('permission:graduated-list', [
+            'only' => ['graduated'],
+        ]);
+        $this->middleware('permission:Students-Import_Excel', [
+            'only' => ['Excel_Import'],
+        ]);
     }
 
     public function index(Request $request)
@@ -82,7 +99,10 @@ class StudentsController extends Controller
             ],
         ];
 
-        $students = $this->studentQuery->getFilteredQuery($request, $school->id);
+        $students = $this->studentQuery->getFilteredQuery(
+            $request,
+            $school->id,
+        );
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -94,7 +114,10 @@ class StudentsController extends Controller
             ]);
         }
 
-        return view('backend.Students.Index', compact('school', 'gradeOptions', 'columns', 'students'));
+        return view(
+            'backend.Students.Index',
+            compact('school', 'gradeOptions', 'columns', 'students'),
+        );
     }
 
     /**
@@ -103,10 +126,7 @@ class StudentsController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $grades = Grade::where('school_id', $school->id)->get([
-            'id',
-            'name',
-        ]);
+        $grades = Grade::where('school_id', $school->id)->get(['id', 'name']);
         $parents = MyParent::where('school_id', $school->id)->get([
             'id',
             'father_name',
@@ -114,7 +134,7 @@ class StudentsController extends Controller
         $acadmice_years = AcademicYear::where('school_id', $school->id)
             ->where('status', Status::CLOSE)
             ->get(['id', 'view']);
-        $nationalitys = nationality::get(['id', 'name']);
+        $nationalitys = Nationality::get(['id', 'name']);
 
         return view(
             'backend.Students.create',
@@ -137,12 +157,8 @@ class StudentsController extends Controller
         try {
             DB::Transaction(function () use ($request) {
                 $school = $this->getSchool();
-                $data = $this->StudentCreation->StudentRegeister($request);
-                $school_fee = DB::table('school__fees')
-                    ->where(
-                        'academic_year_id',
-                        $data['student']->acadmiecyear_id,
-                    )
+                $data = $this->StudentCreation->StudentRegeister($request, $school);
+                $school_fee = SchoolFee::where('academic_year_id', $data['student']->acadmiecyear_id)
                     ->where('grade_id', $data['student']->grade_id)
                     ->where('classroom_id', $data['student']->classroom_id)
                     ->get();
@@ -179,15 +195,15 @@ class StudentsController extends Controller
                     'classroom:id,name',
                     'parent:id,father_name,mother_name,father_phone,mother_phone,father_job',
                     'nationality',
-                    'StudentAccount',
+                    'studentAccount',
                     'fee_invoice',
                 ])
-                ->withsum('StudentAccount', 'debit')
-                ->withsum('StudentAccount', 'credit')
+                ->withsum('studentAccount', 'debit')
+                ->withsum('studentAccount', 'credit')
                 ->first();
             $school = $this->getSchool();
 
-            return view('backend.Students.show', compact('stuudent', 'school'));
+            return view('backend.Students.show', compact('student', 'school'));
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -201,12 +217,15 @@ class StudentsController extends Controller
     public function edit(string $id)
     {
         try {
-            $grades = Grade::all(['id', 'name']);
-            $parents = MyParent::all(['id', 'father_name']);
-            $student = Student::findorfail($id);
             $school = $this->getSchool();
+            $grades = Grade::where('school_id', $school->id)->get(['id', 'name']);
+            $parents = MyParent::where('school_id', $school->id)->get(['id', 'father_name']);
+            $student = Student::findorfail($id);
 
-            return view('backend.Students.edit', compact('grades', 'parents', 'student', 'school'));
+            return view(
+                'backend.Students.edit',
+                compact('grades', 'parents', 'student', 'school'),
+            );
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -235,8 +254,7 @@ class StudentsController extends Controller
                     $request->std_status,
                 ),
                 'national_id' => $request->national_id,
-                'religion' => MyParent::findorfail($request->parents)
-                    ->religion,
+                'religion' => MyParent::findorfail($request->parents)->religion,
                 'birth_at_begin' => $this->calculateAgeAsOfOctoberFirst(
                     $request->birth_date,
                 ),
@@ -262,12 +280,13 @@ class StudentsController extends Controller
 
     public function graduated()
     {
-        $students = Student::onlyTrashed()
-            ->with('grade', 'classroom')
-            ->get();
+        $students = Student::onlyTrashed()->with('grade', 'classroom')->get();
         $school = $this->getSchool();
 
-        return view('backend.Students.graduated', compact('students', 'school'));
+        return view(
+            'backend.Students.graduated',
+            compact('students', 'school'),
+        );
     }
 
     public function restore($id)
@@ -338,10 +357,7 @@ class StudentsController extends Controller
 
     public function getclasses($id)
     {
-        $class_rooms = ClassRoom::where(
-            'school_id',
-            $this->getSchool()->id,
-        )
+        $class_rooms = ClassRoom::where('school_id', $this->getSchool()->id)
             ->where('grade_id', $id)
             ->get(['id', 'name']);
 

@@ -61,10 +61,10 @@
                                     <tr>
                                         <input type="hidden" name="feeInvoice" value="{{ $feeInvoice->id }}">
                                         <td class="px-4 py-2 text-gray-600">{{ $feeInvoice->invoice_date }}</td>
-                                        <td class="px-4 py-2 text-gray-800">{{ $feeInvoice->fees->title }}</td>
+                                        <td class="px-4 py-2 text-gray-800">{{ $feeInvoice->schoolFee->title }}</td>
                                         @php
                                             $exceptionAmount = $Student->excption->sum('amount');
-                                            $final = $feeInvoice->fees->amount - $exceptionAmount;
+                                            $final = $feeInvoice->schoolFee->amount - $exceptionAmount;
                                         @endphp
                                         <td class="px-4 py-2 text-gray-800 font-medium">{{ $final }}</td>
                                         <td class="px-4 py-2">

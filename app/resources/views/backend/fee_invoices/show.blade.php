@@ -69,7 +69,7 @@
         </div>
         <div class="mb-3 flex flex-wrap">
             <div class="w-full">
-                <h2 class="text-xl font-bold">{{ trans('Recipt_Payments.name') }}: {{ $invoice_details->students->name }}</h2>
+                <h2 class="text-xl font-bold">{{ trans('Recipt_Payments.name') }}: {{ $invoice_details->student->name }}</h2>
             </div>
         </div>
         <div class="mb-3 flex flex-wrap">
@@ -78,7 +78,7 @@
                     <tbody>
                         <tr>
                             <td>{{ trans('Recipt_Payments.amount') }}</td>
-                            <td>{{ Number::currency($invoice_details->fees->amount, in: 'EGP', locale: 'ar') }}</td>
+                            <td>{{ Number::currency($invoice_details->schoolFee->amount, in: 'EGP', locale: 'ar') }}</td>
                         </tr>
                     </tbody>
                 </table>

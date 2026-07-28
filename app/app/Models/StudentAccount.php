@@ -61,12 +61,12 @@ class StudentAccount extends Model
         return $this->belongsTo(FeeInvoice::class, 'fee_invoices_id', 'id');
     }
 
-    public function recipt_payment(): BelongsTo
+    public function receiptPayment(): BelongsTo
     {
         return $this->belongsTo(ReceiptPayment::class);
     }
 
-    public function excpetion(): BelongsTo
+    public function exception(): BelongsTo
     {
         return $this->belongsTo(ExceptionFees::class);
     }

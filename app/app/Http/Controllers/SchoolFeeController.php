@@ -203,10 +203,13 @@ class SchoolFeeController extends Controller
 
     public function getclasses($id)
     {
-        $class_rooms = ClassRoom::where('grade_id', $id)->get([
-            'id',
-            'name',
-        ]);
+        $school = $this->getSchool();
+        $class_rooms = ClassRoom::where('school_id', $school->id)
+            ->where('grade_id', $id)
+            ->get([
+                'id',
+                'name',
+            ]);
 
         return response()->json($class_rooms);
     }

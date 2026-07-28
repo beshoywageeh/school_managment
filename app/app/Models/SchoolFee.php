@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Http\Traits\LogsActivity;
+use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SchoolFee extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use BelongsToSchool, HasFactory, LogsActivity, SoftDeletes;
 
     protected $table = 'school__fees';
 
@@ -22,7 +23,6 @@ class SchoolFee extends Model
         'academic_year_id',
         'description',
         'amount',
-        'school_id',
     ];
 
     protected $casts = ['amount' => 'decimal:2'];
@@ -44,20 +44,14 @@ class SchoolFee extends Model
 
     public function year(): BelongsTo
     {
-        return $this->belongsTo(
-            AcademicYear::class,
-            'academic_year_id',
-            'id',
-        );
+        return $this->belongsTo(AcademicYear::class, 'academic_year_id', 'id');
     }
 
     public function fee_invoices(): HasMany
     {
-        return $this->hasMany(FeeInvoice::class, 'fee_invoice_id');
+        return $this->hasMany(FeeInvoice::class, 'school_fee_id');
     }
 
-    public function students(): HasMany
-    {
-        return $this->hasMany(Student::class, 'school_fee_id');
-    }
+    // Note: Students table has no school_fee_id column - this relationship is broken and removed.
+    // Students are linked to fees via FeeInvoice, not directly.
 }

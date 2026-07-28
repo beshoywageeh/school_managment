@@ -89,7 +89,7 @@ class StudentTest extends TestCase
 
     public function test_student_has_many_student_accounts(): void
     {
-        $relation = $this->student->StudentAccount();
+        $relation = $this->student->studentAccount();
 
         $this->assertInstanceOf(HasMany::class, $relation);
     }

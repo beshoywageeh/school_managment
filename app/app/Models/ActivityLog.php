@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class ActivityLog extends Model
 {
-    use HasFactory;
+    use BelongsToSchool, HasFactory;
 
     protected $table = 'activity_logs';
 
@@ -19,7 +20,6 @@ class ActivityLog extends Model
         'description',
         'ip',
         'user_agent',
-        'school_id',
         'model_type',
         'model_id',
     ];
@@ -37,10 +37,5 @@ class ActivityLog extends Model
     public function subject(): MorphTo
     {
         return $this->morphTo('model_type', 'model_id');
-    }
-
-    public function scopeBySchool($query, $school_id)
-    {
-        return $query->where('school_id', $school_id);
     }
 }

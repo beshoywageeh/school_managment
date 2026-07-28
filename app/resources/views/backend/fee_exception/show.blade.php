@@ -26,7 +26,7 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="px-4 py-2 text-gray-600">{{ $loop->index + 1 }}</td>
                                 <td class="px-4 py-2 text-gray-600">{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
-                                <td class="px-4 py-2 text-gray-800">{{ $ExcptionFee->students->name }}</td>
+                                <td class="px-4 py-2 text-gray-800">{{ $ExcptionFee->student->name }}</td>
                                 <td class="px-4 py-2 text-gray-600">{{ $ExcptionFee->academic_year->view }}</td>
                                 <td class="px-4 py-2 text-gray-600">{{ $ExcptionFee->grade->name }}</td>
                                 <td class="px-4 py-2 text-gray-600">{{ $ExcptionFee->classroom->name }}</td>

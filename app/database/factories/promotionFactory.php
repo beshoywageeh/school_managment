@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\promotion;
+use App\Models\School;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,7 +27,7 @@ class promotionFactory extends Factory
             'from_acc' => $this->faker->numberBetween(1, 3),
             'student_id' => $this->faker->numberBetween(1, 300),
             'user_id' => '1',
-            'school_id' => '1',
+            'school_id' => School::factory(),
         ];
     }
 }
