@@ -175,8 +175,8 @@ class PolicyTest extends TestCase
     {
         $this->givePermission($this->admin, 'stocks-delete');
         $grade = Grade::factory()->create(['school_id' => $this->school->id]);
+        $this->actingAs($this->admin);
         $item = InventoryItem::create([
-            'school_id' => $this->school->id,
             'type' => 'stock',
             'name' => 'Test Delete Item',
             'unit' => 'piece',
@@ -189,15 +189,14 @@ class PolicyTest extends TestCase
             'grade_id' => $grade->id,
             'user_id' => $this->admin->id,
         ]);
-        $this->actingAs($this->admin);
         $this->delete(route('inventory.items.destroy', $item->id))->assertRedirect();
     }
 
     public function test_inventory_item_delete_unauthorized(): void
     {
         $grade = Grade::factory()->create(['school_id' => $this->school->id]);
+        $this->actingAs($this->unauthorizedUser);
         $item = InventoryItem::create([
-            'school_id' => $this->school->id,
             'type' => 'stock',
             'name' => 'Test Delete Item',
             'unit' => 'piece',
@@ -210,7 +209,6 @@ class PolicyTest extends TestCase
             'grade_id' => $grade->id,
             'user_id' => $this->unauthorizedUser->id,
         ]);
-        $this->actingAs($this->unauthorizedUser);
         $this->delete(route('inventory.items.destroy', $item->id))->assertStatus(403);
     }
 
@@ -297,14 +295,13 @@ class PolicyTest extends TestCase
             'grade_id' => $grade->id,
             'school_id' => $this->school->id,
         ]);
+        $this->actingAs($this->admin);
         $class = classes::create([
             'title' => 'Test Class',
             'grade_id' => $grade->id,
             'class_room_id' => $classRoom->id,
-            'school_id' => $this->school->id,
             'user_id' => $this->admin->id,
         ]);
-        $this->actingAs($this->admin);
         $response = $this->delete(route('classes.destroy', $class->id));
         $this->assertNotEquals(403, $response->getStatusCode(), 'Middleware should allow authorized user');
     }
@@ -316,14 +313,13 @@ class PolicyTest extends TestCase
             'grade_id' => $grade->id,
             'school_id' => $this->school->id,
         ]);
+        $this->actingAs($this->unauthorizedUser);
         $class = classes::create([
             'title' => 'Test Class',
             'grade_id' => $grade->id,
             'class_room_id' => $classRoom->id,
-            'school_id' => $this->school->id,
             'user_id' => $this->unauthorizedUser->id,
         ]);
-        $this->actingAs($this->unauthorizedUser);
         $this->delete(route('classes.destroy', $class->id))->assertStatus(403);
     }
 

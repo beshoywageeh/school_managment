@@ -231,6 +231,7 @@
 - [x] T096 Add school_id filtering to 9 ReportController methods — ExportStudents, payment_parts, exception_fee, payments, payment_status, fees_invoices, credit, school_fees, student_tameen (FR-004, partial)
 - [x] T097 Extend reverseReceiptEntries() to also reverse StudentAccount entries and invoice status — currently only reverses FundAccount Credit/Debit (FR-018, partial)
 - [x] T098 Fix pre-existing test failures — tests using GET for DELETE routes, missing school_id in factories, incorrect model references, missing auth setup — achieve SC-013 "all existing tests pass" (FR-052, SC-013)
+- [x] T098a Fix PolicyTest failures — `school_id` removed from `$fillable` (FR-008) but tests called `::create()` before `actingAs()`, so `BelongsToSchool` trait couldn't auto-fill `school_id`. Moved `actingAs()` before `::create()` in 4 test methods (tests/Feature/PolicyTest.php:174,196,292,312)
 - [x] T099 Wire FinancialException into financial operations — class exists but is never imported or used (FR-051, partial)
 - [x] T100 Add Spatie permission middleware to ActivityLogController — currently only has SchoolTrait guard, any authenticated user with a school can view logs (FR-042, partial)
 - [x] T101 Run `vendor/bin/pint --dirty --format agent` after convergence changes
