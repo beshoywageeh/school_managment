@@ -262,7 +262,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/data/projects/laravel_projects/school_managment/app/database/factories/UserFactory.php' => 
     array (
-      0 => '950c5b1ae32fda39a11f5c29e34f01ef12948aca2812a591e36efaa48821b59a',
+      0 => '71578f4e127ae778b848df6e81dc34a4a3bc3e0d572dff84926186808727ba5b',
       1 => 
       array (
         0 => 'database\\factories\\userfactory',

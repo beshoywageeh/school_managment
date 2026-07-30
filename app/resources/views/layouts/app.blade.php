@@ -4,15 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" href="{{ asset('assests/images/logo-icon-dark.png') }}" type="image/png" />
     <title>@yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @include('layouts.header_css')
     @livewireStyles
-    <style>
 
-    </style>
 </head>
 
 <body x-data="{
@@ -24,7 +22,7 @@
     }
 }" @keydown.window.escape="sidebarMobileOpen = false"
     :class="sidebarMobileOpen ? 'overflow-hidden' : ''" class="bg-gray-100 font-sans"
-    style="--module-primary: {{ $modulePrimary ?? 'var(--color-primary)' }}; --module-bg: {{ $moduleBg ?? 'var(--color-surface)' }};">
+    style="--module-primary: {{ $modulePrimary ?? 'var(--color-primary)' }}; --module-bg: {{ $moduleBg ?? 'var(--color-surface)' }}; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);">
     <!-- Skip-to-content link -->
     <a href="#main-content"
         class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-[9999] focus:bg-white focus:text-gray-900 focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary"
@@ -56,8 +54,6 @@
         @include('layouts.header')
         <!-- Content Area -->
         <main id="main-content" class="flex-1 overflow-y-auto p-6 bg-gray-50">
-            {{-- <h4 class="text-2xl font-bold text-gray-800">@yield('title')</h4> --}}
-
             @yield('content')
         </main>
         @if (session('success'))

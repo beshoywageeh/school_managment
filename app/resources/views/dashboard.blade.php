@@ -5,14 +5,14 @@
 @endsection
 
 @section('content')
-<div x-data="dashboardWidgets()" x-init="init()" class="space-y-6"
+<div x-data="dashboardWidgets()" class="space-y-6"
     x-effect="sidebarExpanded !== undefined && $nextTick(() => { studentChart?.resize(); revenueChart?.resize(); })">
     <template x-if="loading">
         <div class="space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <template x-for="i in 4" :key="i">
                     <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-                        <div class="h-20 bg-gray-200 rounded animate-pulse"></div>
+                        <div class="h-20 bg-muted rounded animate-pulse"></div>
                     </div>
                 </template>
             </div>
@@ -20,7 +20,7 @@
     </template>
 
     <template x-if="error">
-        <div class="bg-red-50 border border-red-200 rounded-xl p-6 text-red-700 text-center">
+        <div class="bg-danger/10 border border-danger/20 rounded-xl p-6 text-danger text-center">
             <p x-text="error"></p>
         </div>
     </template>
@@ -29,10 +29,9 @@
         <div class="space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <template x-for="(card, idx) in data.statCards" :key="idx">
-                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex items-center gap-4 border-s-4 w-full"
-                        :class="'border-s-' + card.color + '-500'">
+                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex items-center gap-4 w-full">
                         <div class="w-14 h-14 rounded-xl flex items-center justify-center text-white shrink-0"
-                            :class="'bg-' + card.color + '-500'">
+                            :style="cardBgStyle(card.color)">
                             <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                             </svg>
@@ -44,14 +43,14 @@
                         <template x-if="card.trend">
                             <div class="flex flex-col items-end">
                                 <span class="text-xs font-medium"
-                                    :class="card.trendDirection === 'up' ? 'text-green-600' : 'text-red-600'"
+                                    :class="card.trendDirection === 'up' ? 'text-success' : 'text-danger'"
                                     x-text="(card.trendDirection === 'up' ? '▲ ' : '▼ ') + card.trend">
                                 </span>
                             </div>
                         </template>
                         <template x-if="card.sparklineData && card.sparklineData.length > 0">
                             <svg class="w-16 h-8 ml-auto shrink-0" viewBox="0 0 60 30" preserveAspectRatio="none">
-                                <polyline fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+                                <polyline fill="none" stroke="var(--color-primary, #3b82f6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
                                     :points="sparklinePoints(card.sparklineData)"></polyline>
                             </svg>
                         </template>
@@ -63,8 +62,8 @@
                 <template x-for="(action, idx) in data.quickActions" :key="idx">
                     <a :href="action.route"
                         class="snap-start shrink-0 flex items-center gap-3 px-5 py-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 no-underline text-gray-700 hover:text-gray-900">
-                        <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
-                            <svg class="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                             </svg>
                         </div>
@@ -125,6 +124,27 @@
             studentChart: null,
             revenueChart: null,
 
+            cardColorMap: {
+                blue: '#3b82f6',
+                green: '#22c55e',
+                red: '#ef4444',
+                yellow: '#eab308',
+                cyan: '#06b6d4',
+                amber: '#f59e0b',
+                indigo: '#6366f1',
+                purple: '#a855f7',
+                pink: '#ec4899',
+                teal: '#14b8a6',
+            },
+
+            cardColor(color) {
+                return this.cardColorMap[color] || '#3b82f6';
+            },
+
+            cardBgStyle(color) {
+                return 'background-color: ' + this.cardColor(color);
+            },
+
             init() {
                 this.fetchWidgets();
             },
@@ -153,7 +173,7 @@
                     const options = {
                         chart: { type: 'line', height: 300 },
                         series: [{ name: '{{ trans("report.student_numbers") }}', data: this.data.charts.studentChart.data }],
-                        colors: ['#2563eb'],
+                        colors: ['var(--color-primary, #2563eb)'],
                         xaxis: { categories: this.data.charts.studentChart.labels },
                     };
                     this.studentChart = new ApexCharts(el, options);
@@ -169,7 +189,7 @@
                     const options = {
                         chart: { type: 'bar', height: 300 },
                         series: [{ name: '{{ trans("general.revenue") }}', data: this.data.charts.revenueTrend.data }],
-                        colors: ['#16a34a'],
+                        colors: ['var(--color-success, #16a34a)'],
                         xaxis: { categories: this.data.charts.revenueTrend.labels },
                     };
                     this.revenueChart = new ApexCharts(el, options);

@@ -15,10 +15,10 @@
             <p class="text-3xl font-bold text-gray-900 mt-1" x-text="data?.value ?? '{{ $value }}'">{{ $value }}</p>
             @if ($trendDirection)
                 <div class="flex items-center gap-1 mt-2">
-                    <span class="{{ $trendDirection === 'up' ? 'text-green-600' : 'text-red-600' }}">
+                    <span class="{{ $trendDirection === 'up' ? 'text-success' : 'text-danger' }}">
                         {{ $trendDirection === 'up' ? '↑' : '↓' }}
                     </span>
-                    <span class="text-sm {{ $trendDirection === 'up' ? 'text-green-600' : 'text-red-600' }}">
+                    <span class="text-sm {{ $trendDirection === 'up' ? 'text-success' : 'text-danger' }}">
                         {{ $trend }}
                     </span>
                 </div>

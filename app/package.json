@@ -16,6 +16,7 @@
         "@tailwindcss/vite": "^4.2.1",
         "apexcharts": "^5.11.0",
         "flatpickr": "^4.6.13",
+        "puppeteer": "^25.4.0",
         "tom-select": "^2.6.1"
     }
 }

@@ -5,6 +5,7 @@
     ]"
     class="fixed top-0 start-0 z-40 h-screen bg-gray-900 text-white overflow-hidden transition-all duration-300 flex flex-col translate-x-full lg:translate-x-0"
     @mouseenter="if (!sidebarPinned) sidebarHover = true" @mouseleave="if (!sidebarPinned) sidebarHover = false"
+    @focusin="if (!sidebarPinned) sidebarHover = true" @focusout="if (!sidebarPinned && !$el.contains($event.relatedTarget)) sidebarHover = false"
     dir="rtl">
     <!-- Logo area -->
     <div class="shrink-0 flex items-center justify-center h-16 border-b border-gray-800">
@@ -261,7 +262,7 @@
                     @endphp
                     <a href="{{ route($item['route']) }}" title="{{ trans($item['labelKey']) }}"
                         x-show="!search || '{{ trans($item['labelKey']) }}'.includes(search)"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 {{ $isActive ? 'bg-primary/10 text-primary border-s-3 border-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 {{ $isActive ? 'bg-primary/10 text-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                         <x-hero-icon name="{{ $item['icon'] }}" class="w-5 h-5 shrink-0" />
                         <span x-show="sidebarExpanded" class="text-sm font-medium whitespace-nowrap"
                             x-cloak>{{ trans($item['labelKey']) }}</span>
@@ -301,16 +302,16 @@
                     class="text-xs font-semibold text-gray-400 uppercase tracking-wider">{{ trans('Sidebar.report') }}</span>
             </div>
         </div>
-        <a href="{{ route('report.index') }}"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 {{ request()->is('*reports*') ? 'bg-primary/10 text-primary border-s-3 border-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+        <a href="{{ route('report.index') }}" title="{{ trans('Sidebar.report') }}"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 {{ request()->is('*reports*') ? 'bg-primary/10 text-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
             <x-hero-icon name="bar-chart" class="w-5 h-5 shrink-0" />
             <span x-show="sidebarExpanded" class="text-sm font-medium" x-cloak>{{ trans('Sidebar.report') }}</span>
         </a>
 
         <!-- Admin Era -->
         @if (\Auth::user()->isAdmin)
-            <a href="{{ route('admin-era.index') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 {{ request()->is('*admin-era*') ? 'bg-primary/10 text-primary border-s-3 border-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+            <a href="{{ route('admin-era.index') }}" title="{{ trans('Sidebar.admin_era') }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 {{ request()->is('*admin-era*') ? 'bg-primary/10 text-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
                 <x-hero-icon name="user-secret" class="w-5 h-5 shrink-0" />
                 <span x-show="sidebarExpanded" class="text-sm font-medium"
                     x-cloak>{{ trans('Sidebar.admin_era') }}</span>

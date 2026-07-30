@@ -31,7 +31,7 @@ class InventoryItemController extends Controller
         );
 
         $school = $this->getSchool();
-        $query = InventoryItem::where('school_id', $school->id)
+        $query = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->ByType($type)
             ->with([
                 'grade' => function ($query) {
@@ -57,7 +57,7 @@ class InventoryItemController extends Controller
         $perPage = min((int) request('per_page', 10), 100);
         $items = $query->paginate($perPage);
 
-        $classrooms = ClassRoom::where('school_id', $school->id)
+        $classrooms = ClassRoom::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with([
                 'grade' => function ($query) {
                     $query->select(['id', 'name']);

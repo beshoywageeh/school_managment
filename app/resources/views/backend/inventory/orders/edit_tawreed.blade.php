@@ -71,7 +71,7 @@
                                         <input type="number" step="0.01" name="items[{{ $loop->index }}][quantity_in]" value="{{ $existingItem->quantity_in }}" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none">
                                     </td>
                                     <td class="px-4 py-2 text-center">
-                                        <button type="button" x-on:click="$event.target.closest('tr').remove()" class="p-1.5 text-danger hover:bg-danger/10 rounded-lg">
+                                        <button type="button" x-on:click="$event.target.closest('tr').remove()" class="p-2 text-danger hover:bg-danger/10 rounded-lg">
                                             <x-hero-icon name="trash" class="w-5 h-5" />
                                         </button>
                                     </td>

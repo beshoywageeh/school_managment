@@ -29,7 +29,7 @@ class AcademicYearController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $acadmice_years = AcademicYear::where('school_id', $school->id)->paginate(config('school.per_page'));
+        $acadmice_years = AcademicYear::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->paginate(config('school.per_page'));
 
         return view('backend.academic_year.index', compact('school', 'acadmice_years'));
     }

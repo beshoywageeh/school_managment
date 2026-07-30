@@ -19,8 +19,8 @@
             @csrf
             @method('DELETE')
             <button type="submit"
-                class="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-right transition-colors text-red-600 hover:bg-red-50">
-                <x-hero-icon name="trash" class="w-5 h-5 text-red-500" />
+                class="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-right transition-colors text-danger hover:bg-danger/10">
+                <x-hero-icon name="trash" class="w-5 h-5 text-danger" />
                 {{ trans('general.buttons.delete') }}
             </button>
         </form>

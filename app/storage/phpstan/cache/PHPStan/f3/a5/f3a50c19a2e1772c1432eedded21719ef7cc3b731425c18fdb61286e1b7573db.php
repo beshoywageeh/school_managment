@@ -176,7 +176,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/data/projects/laravel_projects/school_managment/app/routes/web.php' => 
     array (
-      0 => '000f9be8110347f6cb86a264567e0783edc63ed01fc33ec77397ca08cdc1c337',
+      0 => '4147c3e0effcbc0981eefc17ef5231492054d62d8c945f6b6bcaf60814e6d099',
       1 => 
       array (
       ),

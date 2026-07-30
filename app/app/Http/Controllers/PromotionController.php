@@ -29,7 +29,7 @@ class PromotionController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $promotions = promotion::where('school_id', $school->id)
+        $promotions = promotion::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with(
                 'students:id,name',
                 'f_grade:id,name',
@@ -53,8 +53,8 @@ class PromotionController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $grades = Grade::where('school_id', $school->id)->get();
-        $acc_year = AcademicYear::where('school_id', $school->id)
+        $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
+        $acc_year = AcademicYear::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('status', 0)
             ->get();
 

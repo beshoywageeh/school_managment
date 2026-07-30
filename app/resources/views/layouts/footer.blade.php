@@ -7,7 +7,7 @@
         </div>
         <div class="flex items-center gap-4">
             <a href="https://www.facebook.com/LoopLabsDev" target="_blank"
-                class="text-sm text-blue-600 hover:text-blue-800">
+                class="text-sm text-primary hover:text-primary-dark">
                 {{ trans('footer.dev') }}
             </a>
         </div>

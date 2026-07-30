@@ -23,7 +23,7 @@ class InventoryGardController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $items = InventoryItem::where('school_id', $school->id)
+        $items = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->active()
             ->get();
 
@@ -51,7 +51,7 @@ class InventoryGardController extends Controller
     {
         $school = $this->getSchool();
         $order = InventoryOrder::with('items.itemable')->findOrFail($id);
-        $items = InventoryItem::where('school_id', $school->id)
+        $items = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->active()
             ->get();
 

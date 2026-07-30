@@ -101,7 +101,7 @@ class StudentsController extends Controller
 
         $students = $this->studentQuery->getFilteredQuery(
             $request,
-            $school->id,
+            $this->schoolId(),
         );
 
         if ($request->expectsJson()) {
@@ -126,12 +126,12 @@ class StudentsController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $grades = Grade::where('school_id', $school->id)->get(['id', 'name']);
-        $parents = MyParent::where('school_id', $school->id)->get([
+        $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get(['id', 'name']);
+        $parents = MyParent::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get([
             'id',
             'father_name',
         ]);
-        $acadmice_years = AcademicYear::where('school_id', $school->id)
+        $acadmice_years = AcademicYear::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('status', Status::CLOSE)
             ->get(['id', 'view']);
         $nationalitys = Nationality::get(['id', 'name']);
@@ -218,8 +218,8 @@ class StudentsController extends Controller
     {
         try {
             $school = $this->getSchool();
-            $grades = Grade::where('school_id', $school->id)->get(['id', 'name']);
-            $parents = MyParent::where('school_id', $school->id)->get(['id', 'father_name']);
+            $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get(['id', 'name']);
+            $parents = MyParent::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get(['id', 'father_name']);
             $student = Student::findorfail($id);
 
             return view(

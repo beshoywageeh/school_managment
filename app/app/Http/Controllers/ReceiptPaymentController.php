@@ -12,6 +12,7 @@ use App\Models\ReceiptPayment;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use App\Services\AccountingReversalService;
+use App\Services\Finance\FinancialService;
 use App\Services\InventoryPaymentService;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
@@ -47,7 +48,7 @@ class ReceiptPaymentController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $Recipt_Payments = ReceiptPayment::where('school_id', $school->id)
+        $Recipt_Payments = ReceiptPayment::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with(['student:id,name'])
             ->orderBy('date', 'desc')
             ->paginate(config('school.per_page'));

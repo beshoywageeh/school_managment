@@ -25,19 +25,25 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $school = $this->getSchool();
-        $schoolId = $school->id;
+        $schoolId = $user->isAdmin ? null : $school->id;
         $isAdmin = $user->hasRole('Admin');
 
-        [$students, $parents] = $this->dashboardService->getUserRoleCounts($user->id, $schoolId, $isAdmin);
+        [$students, $parents] = $this->dashboardService->getUserRoleCounts(
+            $user->id,
+            $schoolId,
+            $isAdmin,
+        );
         $financialData = $this->dashboardService->getFinancialData($schoolId);
         $employees = $this->dashboardService->getEmployeeCount($schoolId);
         $grades = $this->dashboardService->getGradesWithClassrooms($schoolId);
 
-        $data['users'] = User::where('school_id', $schoolId)->get();
+        $data['users'] = User::query()->get();
         $data['grades'] = $grades;
 
-        $chartData = $this->dashboardService->generateChartData($grades);
-        $revenueTrend = $this->dashboardService->getMonthlyRevenueTrend($schoolId);
+        $chartData = $this->dashboardTrendService->generateChartData($grades);
+        $revenueTrend = $this->dashboardTrendService->getMonthlyRevenueTrend(
+            $schoolId,
+        );
 
         return view(
             'dashboard',
@@ -61,7 +67,7 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $school = $this->getSchool();
-        $schoolId = $school->id;
+        $schoolId = $user->isAdmin ? null : $school->id;
 
         if ($user->hasRole('Admin')) {
             $admin = $this->adminWidgets($user, $schoolId)->getData(true);
@@ -69,16 +75,32 @@ class HomeController extends Controller
             $teacher = $this->teacherWidgets($user, $schoolId)->getData(true);
 
             return response()->json([
-                'statCards' => array_merge($admin['statCards'], $accountant['statCards'], $teacher['statCards']),
-                'quickActions' => array_merge($admin['quickActions'], $accountant['quickActions'], $teacher['quickActions']),
-                'charts' => array_merge($admin['charts'], $accountant['charts'], $teacher['charts']),
+                'statCards' => array_merge(
+                    $admin['statCards'],
+                    $accountant['statCards'],
+                    $teacher['statCards'],
+                ),
+                'quickActions' => array_merge(
+                    $admin['quickActions'],
+                    $accountant['quickActions'],
+                    $teacher['quickActions'],
+                ),
+                'charts' => array_merge(
+                    $admin['charts'],
+                    $accountant['charts'],
+                    $teacher['charts'],
+                ),
                 'recentActivity' => collect($admin['recentActivity'])
                     ->concat($accountant['recentActivity'])
                     ->concat($teacher['recentActivity'])
                     ->sortByDesc('time')
                     ->take(5)
                     ->values(),
-                'permissions' => array_merge($admin['permissions'], $accountant['permissions'], $teacher['permissions']),
+                'permissions' => array_merge(
+                    $admin['permissions'],
+                    $accountant['permissions'],
+                    $teacher['permissions'],
+                ),
             ]);
         }
 
@@ -93,31 +115,105 @@ class HomeController extends Controller
         return $this->adminWidgets($user, $schoolId);
     }
 
-    private function adminWidgets(User $user, int $schoolId): JsonResponse
+    private function adminWidgets(User $user, ?int $schoolId): JsonResponse
     {
-        [$students, $parents] = $this->dashboardService->getUserRoleCounts($user->id, $schoolId, true);
+        [$students, $parents] = $this->dashboardService->getUserRoleCounts(
+            $user->id,
+            $schoolId,
+            true,
+        );
         $employees = $this->dashboardService->getEmployeeCount($schoolId);
         $financialData = $this->dashboardService->getFinancialData($schoolId);
         $grades = $this->dashboardService->getGradesWithClassrooms($schoolId);
         $chartData = $this->dashboardTrendService->generateChartData($grades);
-        $revenueTrend = $this->dashboardTrendService->getMonthlyRevenueTrend($schoolId);
-        $trendData = $this->dashboardTrendService->calculateTrendData($schoolId);
+        $revenueTrend = $this->dashboardTrendService->getMonthlyRevenueTrend(
+            $schoolId,
+        );
+        $trendData = $this->dashboardTrendService->calculateTrendData(
+            $schoolId,
+        );
         $recentActivity = $this->dashboardService->getRecentActivity($schoolId);
 
         return response()->json([
             'statCards' => [
-                ['label' => __('Sidebar.Students'), 'value' => $students, 'icon' => 'graduation-cap', 'color' => 'blue', 'trend' => $trendData['students']['trend'], 'trendDirection' => $trendData['students']['direction'], 'sparklineData' => $trendData['students']['sparkline']],
-                ['label' => __('Sidebar.parents'), 'value' => $parents, 'icon' => 'users', 'color' => 'green', 'trend' => $trendData['parents']['trend'], 'trendDirection' => $trendData['parents']['direction'], 'sparklineData' => $trendData['parents']['sparkline']],
-                ['label' => __('Sidebar.employees'), 'value' => $employees, 'icon' => 'id-card', 'color' => 'cyan', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
-                ['label' => __('general.Pending_Balance'), 'value' => number_format($financialData['totalInvoiced'] - $financialData['totalPaid'], 2), 'icon' => 'exclamation-circle', 'color' => 'red', 'trend' => $trendData['pending']['trend'], 'trendDirection' => $trendData['pending']['direction'], 'sparklineData' => $trendData['pending']['sparkline']],
+                [
+                    'label' => __('Sidebar.Students'),
+                    'value' => $students,
+                    'icon' => 'graduation-cap',
+                    'color' => 'blue',
+                    'trend' => $trendData['students']['trend'],
+                    'trendDirection' => $trendData['students']['direction'],
+                    'sparklineData' => $trendData['students']['sparkline'],
+                ],
+                [
+                    'label' => __('Sidebar.parents'),
+                    'value' => $parents,
+                    'icon' => 'users',
+                    'color' => 'green',
+                    'trend' => $trendData['parents']['trend'],
+                    'trendDirection' => $trendData['parents']['direction'],
+                    'sparklineData' => $trendData['parents']['sparkline'],
+                ],
+                [
+                    'label' => __('Sidebar.employees'),
+                    'value' => $employees,
+                    'icon' => 'id-card',
+                    'color' => 'cyan',
+                    'trend' => null,
+                    'trendDirection' => null,
+                    'sparklineData' => null,
+                ],
+                [
+                    'label' => __('general.Pending_Balance'),
+                    'value' => number_format(
+                        $financialData['totalInvoiced'] -
+                            $financialData['totalPaid'],
+                        2,
+                    ),
+                    'icon' => 'exclamation-circle',
+                    'color' => 'red',
+                    'trend' => $trendData['pending']['trend'],
+                    'trendDirection' => $trendData['pending']['direction'],
+                    'sparklineData' => $trendData['pending']['sparkline'],
+                ],
             ],
             'quickActions' => [
-                ['route' => route('students.create'), 'icon' => 'graduation-cap', 'label' => __('Sidebar.Students'), 'perm' => 'Students-create'],
-                ['route' => route('parents.create'), 'icon' => 'users', 'label' => __('Sidebar.parents'), 'perm' => 'parents-create'],
-                ['route' => route('grade.index'), 'icon' => 'line-chart', 'label' => __('Sidebar.Grade'), 'perm' => 'grade-list'],
-                ['route' => route('class-rooms.index'), 'icon' => 'building', 'label' => __('Sidebar.Class_Rooms'), 'perm' => 'class_rooms-list'],
-                ['route' => route('jobs.create'), 'icon' => 'briefcase', 'label' => __('Sidebar.jobs'), 'perm' => 'jobs-create'],
-                ['route' => route('backup.create'), 'icon' => 'database', 'label' => __('Sidebar.backup'), 'perm' => 'backup-create'],
+                [
+                    'route' => route('students.create'),
+                    'icon' => 'graduation-cap',
+                    'label' => __('Sidebar.Students'),
+                    'perm' => 'Students-create',
+                ],
+                [
+                    'route' => route('parents.create'),
+                    'icon' => 'users',
+                    'label' => __('Sidebar.parents'),
+                    'perm' => 'parents-create',
+                ],
+                [
+                    'route' => route('grade.index'),
+                    'icon' => 'line-chart',
+                    'label' => __('Sidebar.Grade'),
+                    'perm' => 'grade-list',
+                ],
+                [
+                    'route' => route('class-rooms.index'),
+                    'icon' => 'building',
+                    'label' => __('Sidebar.Class_Rooms'),
+                    'perm' => 'class_rooms-list',
+                ],
+                [
+                    'route' => route('jobs.create'),
+                    'icon' => 'briefcase',
+                    'label' => __('Sidebar.jobs'),
+                    'perm' => 'jobs-create',
+                ],
+                [
+                    'route' => route('backup.create'),
+                    'icon' => 'database',
+                    'label' => __('Sidebar.backup'),
+                    'perm' => 'backup-create',
+                ],
             ],
             'charts' => [
                 'studentChart' => [
@@ -134,37 +230,115 @@ class HomeController extends Controller
                 'canViewStudents' => $user->can('Students-list'),
                 'canViewParents' => $user->can('parents-list'),
                 'canViewEmployees' => $user->can('employees-list'),
-                'canViewFinancials' => $user->hasAnyPermission(['schoolfees-list', 'fee_invoice-list', 'ReceiptPayment-list']),
+                'canViewFinancials' => $user->hasAnyPermission([
+                    'schoolfees-list',
+                    'fee_invoice-list',
+                    'ReceiptPayment-list',
+                ]),
             ],
         ]);
     }
 
-    private function accountantWidgets(int $schoolId): JsonResponse
+    private function accountantWidgets(?int $schoolId): JsonResponse
     {
         $financialData = $this->dashboardService->getFinancialData($schoolId);
-        $revenueTrend = $this->dashboardTrendService->getMonthlyRevenueTrend($schoolId);
-        $trendData = $this->dashboardTrendService->calculateTrendData($schoolId);
+        $revenueTrend = $this->dashboardTrendService->getMonthlyRevenueTrend(
+            $schoolId,
+        );
+        $trendData = $this->dashboardTrendService->calculateTrendData(
+            $schoolId,
+        );
 
-        $recentActivity = DB::table('recipt__payments')
-            ->where('school_id', $schoolId)
-            ->latest()->take(5)->get()->map(fn ($p) => [
-                'icon' => 'credit-card',
-                'description' => __('general.dashboard.payment_received').': '.number_format($p->Debit, 2),
-                'time' => Carbon::parse($p->created_at)->diffForHumans(),
-            ])->values();
+        $recentActivityQuery = DB::table('recipt__payments');
+        if ($schoolId !== null) {
+            $recentActivityQuery->where('school_id', $schoolId);
+        }
+        $recentActivity = $recentActivityQuery
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(
+                fn ($p) => [
+                    'icon' => 'credit-card',
+                    'description' => __('general.dashboard.payment_received').
+                        ': '.
+                        number_format($p->Debit, 2),
+                    'time' => Carbon::parse($p->created_at)->diffForHumans(),
+                ],
+            )
+            ->values();
 
         return response()->json([
             'statCards' => [
-                ['label' => __('general.dashboard.invoiced'), 'value' => number_format($financialData['totalInvoiced'], 2), 'icon' => 'file-text', 'color' => 'blue', 'trend' => $trendData['invoiced']['trend'], 'trendDirection' => $trendData['invoiced']['direction'], 'sparklineData' => $trendData['invoiced']['sparkline']],
-                ['label' => __('general.dashboard.collected'), 'value' => number_format($financialData['totalPaid'], 2), 'icon' => 'credit-card', 'color' => 'green', 'trend' => $trendData['collected']['trend'], 'trendDirection' => $trendData['collected']['direction'], 'sparklineData' => $trendData['collected']['sparkline']],
-                ['label' => __('general.dashboard.pending'), 'value' => number_format($financialData['totalInvoiced'] - $financialData['totalPaid'], 2), 'icon' => 'clock', 'color' => 'amber', 'trend' => $trendData['pending']['trend'], 'trendDirection' => $trendData['pending']['direction'], 'sparklineData' => $trendData['pending']['sparkline']],
-                ['label' => __('general.dashboard.overdue'), 'value' => '0.00', 'icon' => 'exclamation-circle', 'color' => 'red', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
+                [
+                    'label' => __('general.dashboard.invoiced'),
+                    'value' => number_format(
+                        $financialData['totalInvoiced'],
+                        2,
+                    ),
+                    'icon' => 'file-text',
+                    'color' => 'blue',
+                    'trend' => $trendData['invoiced']['trend'],
+                    'trendDirection' => $trendData['invoiced']['direction'],
+                    'sparklineData' => $trendData['invoiced']['sparkline'],
+                ],
+                [
+                    'label' => __('general.dashboard.collected'),
+                    'value' => number_format($financialData['totalPaid'], 2),
+                    'icon' => 'credit-card',
+                    'color' => 'green',
+                    'trend' => $trendData['collected']['trend'],
+                    'trendDirection' => $trendData['collected']['direction'],
+                    'sparklineData' => $trendData['collected']['sparkline'],
+                ],
+                [
+                    'label' => __('general.dashboard.pending'),
+                    'value' => number_format(
+                        $financialData['totalInvoiced'] -
+                            $financialData['totalPaid'],
+                        2,
+                    ),
+                    'icon' => 'clock',
+                    'color' => 'amber',
+                    'trend' => $trendData['pending']['trend'],
+                    'trendDirection' => $trendData['pending']['direction'],
+                    'sparklineData' => $trendData['pending']['sparkline'],
+                ],
+                [
+                    'label' => __('general.dashboard.overdue'),
+                    'value' => '0.00',
+                    'icon' => 'exclamation-circle',
+                    'color' => 'red',
+                    'trend' => null,
+                    'trendDirection' => null,
+                    'sparklineData' => null,
+                ],
             ],
             'quickActions' => [
-                ['route' => route('fee-invoice.index'), 'icon' => 'file-text', 'label' => __('general.dashboard.new_invoice'), 'perm' => 'fee_invoice-create'],
-                ['route' => route('receipt-payment.index'), 'icon' => 'credit-card', 'label' => __('general.dashboard.create_receipt'), 'perm' => 'ReceiptPayment-create'],
-                ['route' => route('except-fee.index'), 'icon' => 'minus-circle', 'label' => __('general.dashboard.fee_exceptions'), 'perm' => 'except_fee-list'],
-                ['route' => route('payment-parts.index'), 'icon' => 'arrow-circle-down', 'label' => __('general.dashboard.payment_plans'), 'perm' => 'payment_parts-list'],
+                [
+                    'route' => route('fee-invoice.index'),
+                    'icon' => 'file-text',
+                    'label' => __('general.dashboard.new_invoice'),
+                    'perm' => 'fee_invoice-create',
+                ],
+                [
+                    'route' => route('receipt-payment.index'),
+                    'icon' => 'credit-card',
+                    'label' => __('general.dashboard.create_receipt'),
+                    'perm' => 'ReceiptPayment-create',
+                ],
+                [
+                    'route' => route('except-fee.index'),
+                    'icon' => 'minus-circle',
+                    'label' => __('general.dashboard.fee_exceptions'),
+                    'perm' => 'except_fee-list',
+                ],
+                [
+                    'route' => route('payment-parts.index'),
+                    'icon' => 'arrow-circle-down',
+                    'label' => __('general.dashboard.payment_plans'),
+                    'perm' => 'payment_parts-list',
+                ],
             ],
             'charts' => [
                 'revenueTrend' => [
@@ -179,11 +353,15 @@ class HomeController extends Controller
         ]);
     }
 
-    private function teacherWidgets(User $user, int $schoolId): JsonResponse
+    private function teacherWidgets(User $user, ?int $schoolId): JsonResponse
     {
         $gradeIds = $user->grades()->pluck('grade_id');
 
-        $students = Student::where('school_id', $schoolId)
+        $studentsQuery = Student::query();
+        if ($schoolId !== null) {
+            $studentsQuery->where('school_id', $schoolId);
+        }
+        $students = $studentsQuery
             ->whereIn('grade_id', $gradeIds)
             ->count();
 
@@ -207,14 +385,53 @@ class HomeController extends Controller
 
         return response()->json([
             'statCards' => [
-                ['label' => __('general.dashboard.my_students'), 'value' => $students, 'icon' => 'graduation-cap', 'color' => 'blue', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
-                ['label' => __('general.dashboard.today_schedule'), 'value' => $todaySchedule, 'icon' => 'calendar-check', 'color' => 'green', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
-                ['label' => __('general.dashboard.pending_tasks'), 'value' => $pendingTasksCount, 'icon' => 'clipboard-list', 'color' => 'amber', 'trend' => null, 'trendDirection' => null, 'sparklineData' => null],
+                [
+                    'label' => __('general.dashboard.my_students'),
+                    'value' => $students,
+                    'icon' => 'graduation-cap',
+                    'color' => 'blue',
+                    'trend' => null,
+                    'trendDirection' => null,
+                    'sparklineData' => null,
+                ],
+                [
+                    'label' => __('general.dashboard.today_schedule'),
+                    'value' => $todaySchedule,
+                    'icon' => 'calendar-check',
+                    'color' => 'green',
+                    'trend' => null,
+                    'trendDirection' => null,
+                    'sparklineData' => null,
+                ],
+                [
+                    'label' => __('general.dashboard.pending_tasks'),
+                    'value' => $pendingTasksCount,
+                    'icon' => 'clipboard-list',
+                    'color' => 'amber',
+                    'trend' => null,
+                    'trendDirection' => null,
+                    'sparklineData' => null,
+                ],
             ],
             'quickActions' => [
-                ['route' => route('classes.index'), 'icon' => 'list-alt', 'label' => __('general.dashboard.my_classes'), 'perm' => null],
-                ['route' => route('grade.index'), 'icon' => 'check-square', 'label' => __('general.dashboard.take_attendance'), 'perm' => null],
-                ['route' => route('grade.index'), 'icon' => 'edit', 'label' => __('general.dashboard.grade_entry'), 'perm' => null],
+                [
+                    'route' => route('classes.index'),
+                    'icon' => 'list-alt',
+                    'label' => __('general.dashboard.my_classes'),
+                    'perm' => null,
+                ],
+                [
+                    'route' => route('grade.index'),
+                    'icon' => 'check-square',
+                    'label' => __('general.dashboard.take_attendance'),
+                    'perm' => null,
+                ],
+                [
+                    'route' => route('grade.index'),
+                    'icon' => 'edit',
+                    'label' => __('general.dashboard.grade_entry'),
+                    'perm' => null,
+                ],
             ],
             'charts' => [],
             'recentActivity' => collect(),

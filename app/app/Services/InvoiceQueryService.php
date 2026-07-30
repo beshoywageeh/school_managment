@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class InvoiceQueryService
 {
-    public function getFilteredQuery(Request $request, int $schoolId): LengthAwarePaginator
+    public function getFilteredQuery(Request $request, ?int $schoolId): LengthAwarePaginator
     {
         $query = FeeInvoice::query()
-            ->where('school_id', $schoolId)
+            ->when($schoolId, fn ($q) => $q->where('school_id', $schoolId))
             ->with([
                 'student:id,name',
                 'grade:id,name',

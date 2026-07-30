@@ -27,7 +27,7 @@ class GradesController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $gradesQuery = Grade::where('school_id', $school->id)
+        $gradesQuery = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with('user')
             ->withCount(['class_rooms', 'students']);
 

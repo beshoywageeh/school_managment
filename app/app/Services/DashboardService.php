@@ -14,72 +14,98 @@ use Illuminate\Support\Collection;
 
 class DashboardService
 {
-    public function getUserRoleCounts(int $userId, int $schoolId, bool $isAdmin): array
+    public function getUserRoleCounts(int $userId, ?int $schoolId = null, bool $isAdmin = false): array
     {
-        if ($isAdmin) {
-            $students = Student::where('school_id', $schoolId)->count();
-            $parents = MyParent::where('school_id', $schoolId)->count();
-        } else {
+        $schoolId !== null
+            ? $students = Student::where('school_id', $schoolId)
+            : $students = Student::query();
+
+        $schoolId !== null
+            ? $parents = MyParent::where('school_id', $schoolId)
+            : $parents = MyParent::query();
+
+        if (! $isAdmin) {
             $gradeIds = User::find($userId)->grades()->pluck('grade_id');
 
-            $students = Student::where('school_id', $schoolId)
-                ->whereIn('grade_id', $gradeIds)
-                ->count();
-
-            $parents = MyParent::where('school_id', $schoolId)
-                ->whereIn('student_id', $gradeIds)
-                ->count();
+            $students->whereIn('grade_id', $gradeIds);
+            $parents->whereIn('student_id', $gradeIds);
         }
 
-        return [$students, $parents];
+        return [$students->count(), $parents->count()];
     }
 
-    public function getFinancialData(int $schoolId): array
+    public function getFinancialData(?int $schoolId = null): array
     {
+        $schoolId !== null
+            ? $paymentParts = PaymentParts::where('school_id', $schoolId)
+            : $paymentParts = PaymentParts::query();
+
+        $schoolId !== null
+            ? $receiptPayments = ReceiptPayment::where('school_id', $schoolId)
+            : $receiptPayments = ReceiptPayment::query();
+
+        $schoolId !== null
+            ? $feeInvoices = FeeInvoice::where('fee_invoices.school_id', $schoolId)
+            : $feeInvoices = FeeInvoice::query();
+
         return [
             'credit' => StudentAccount::where('type', 'invoice')->sum('debit'),
-            'payment_parts' => PaymentParts::where('school_id', $schoolId)
+            'payment_parts' => (clone $paymentParts)
                 ->where('status', 'paid')
                 ->sum('amount'),
-            'payments' => ReceiptPayment::where('school_id', $schoolId)->sum('Debit'),
-            'totalInvoiced' => FeeInvoice::where('school_id', $schoolId)
-                ->whereNull('deleted_at')
+            'payments' => (clone $receiptPayments)->sum('Debit'),
+            'totalInvoiced' => (clone $feeInvoices)
+                ->whereNull('fee_invoices.deleted_at')
                 ->join('school__fees', 'fee_invoices.school_fee_id', '=', 'school__fees.id')
                 ->sum('school__fees.amount'),
-            'totalPaid' => ReceiptPayment::where('school_id', $schoolId)->sum('Debit'),
+            'totalPaid' => (clone $receiptPayments)->sum('Debit'),
         ];
     }
 
-    public function getRecentActivity(int $schoolId): Collection
+    public function getRecentActivity(?int $schoolId = null): Collection
     {
-        $recentStudents = Student::where('school_id', $schoolId)
-            ->latest()->take(2)->get()->map(fn ($s) => [
-                'icon' => 'graduation-cap',
-                'description' => __('general.dashboard.student_created').': '.$s->name,
-                'time' => $s->created_at->diffForHumans(),
-            ]);
-        $recentPayments = ReceiptPayment::where('school_id', $schoolId)
-            ->latest()->take(3)->get()->map(fn ($p) => [
-                'icon' => 'credit-card',
-                'description' => __('general.dashboard.payment_received').': '.number_format($p->Debit, 2),
-                'time' => $p->created_at->diffForHumans(),
-            ]);
+        $schoolId !== null
+            ? $students = Student::where('school_id', $schoolId)
+            : $students = Student::query();
+
+        $schoolId !== null
+            ? $receiptPayments = ReceiptPayment::where('school_id', $schoolId)
+            : $receiptPayments = ReceiptPayment::query();
+
+        $recentStudents = $students->latest()->take(2)->get()->map(fn ($s) => [
+            'icon' => 'graduation-cap',
+            'description' => __('general.dashboard.student_created').': '.$s->name,
+            'time' => $s->created_at->diffForHumans(),
+        ]);
+        $recentPayments = $receiptPayments->latest()->take(3)->get()->map(fn ($p) => [
+            'icon' => 'credit-card',
+            'description' => __('general.dashboard.payment_received').': '.number_format($p->Debit, 2),
+            'time' => $p->created_at->diffForHumans(),
+        ]);
 
         return $recentStudents->concat($recentPayments)->sortByDesc('time')->take(5)->values();
     }
 
-    public function getGradesWithClassrooms(int $schoolId)
+    public function getGradesWithClassrooms(?int $schoolId = null)
     {
-        return Grade::where('school_id', $schoolId)
+        $schoolId !== null
+            ? $grades = Grade::where('school_id', $schoolId)
+            : $grades = Grade::query();
+
+        return $grades
             ->with(['class_rooms' => function ($query) {
                 $query->withCount('students');
             }])
             ->get();
     }
 
-    public function getEmployeeCount(int $schoolId): int
+    public function getEmployeeCount(?int $schoolId = null): int
     {
-        return User::where('school_id', $schoolId)
+        $schoolId !== null
+            ? $users = User::where('school_id', $schoolId)
+            : $users = User::query();
+
+        return $users
             ->where('code', '!=', '000001')
             ->count();
     }

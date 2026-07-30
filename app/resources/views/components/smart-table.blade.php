@@ -173,13 +173,13 @@
                 <div class="flex-1 max-w-xs">
                     <input type="text" x-model="search" @input.debounce.300ms="fetchData(1)"
                         placeholder="{{ trans('general.search') }}" aria-label="{{ trans('general.search') }}"
-                        class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500/30 focus-visible:ring-2 focus-visible:ring-blue-500/30">
+                        class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
                 </div>
             @endif
             @if ($exportUrl)
                 <div>
                     <button @click="exportData()" aria-label="{{ trans('general.buttons.export') }}"
-                        class="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-full text-xs font-semibold transition-all duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-blue-500/30">
+                        class="px-4 py-2 bg-primary text-white hover:bg-primary/90 rounded-full text-xs font-semibold transition-all duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed focus-visible:ring-2 focus-visible:ring-primary/30">
                         {{ trans('general.buttons.export') }}
                     </button>
                 </div>
@@ -196,11 +196,11 @@
                         <input type="text" x-model="filters['{{ $filter['key'] }}']"
                             @input.debounce.300ms="fetchData(1)" placeholder="{{ trans('general.search') }}"
                             aria-label="{{ $filter['label'] }}"
-                            class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500/30 focus-visible:ring-2 focus-visible:ring-blue-500/30">
+                            class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
                     @elseif ($filter['type'] === 'select' && isset($filter['options']))
                         <select x-model="filters['{{ $filter['key'] }}']" @change.debounce.300ms="fetchData(1)"
                             aria-label="{{ $filter['label'] }}"
-                            class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500/30 focus-visible:ring-2 focus-visible:ring-blue-500/30">
+                            class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
                             <option value="">{{ trans('general.all_options') }}</option>
                             @foreach ($filter['options'] as $id => $label)
                                 <option value="{{ $id }}">{{ $label }}</option>
@@ -223,12 +223,12 @@
                                 <input type="text" x-model="filters['{{ $col['filter_key'] }}']"
                                     @input.debounce.300ms="fetchData(1)" placeholder="{{ trans('general.search') }}"
                                     aria-label="{{ $col['label'] }}"
-                                    class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500/30 focus-visible:ring-2 focus-visible:ring-blue-500/30">
+                                    class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
                             @endif
                             @if ($col['filter_type'] === 'select_relation' && isset($col['options']))
                                 <select x-model="filters['{{ $col['filter_key'] }}']"
                                     @change.debounce.300ms="fetchData(1)" aria-label="{{ $col['label'] }}"
-                                    class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500/30 focus-visible:ring-2 focus-visible:ring-blue-500/30">
+                                    class="w-full rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
                                     <option value="">{{ trans('general.all_options') }}</option>
                                     @foreach ($col['options'] as $id => $label)
                                         <option value="{{ $id }}">{{ $label }}</option>
@@ -253,7 +253,7 @@
                                 <input type="checkbox" @change="toggleSelectAll()"
                                     :checked="selectedItems.length === items.length && items.length > 0"
                                     aria-label="{{ trans('general.select_all') }}"
-                                    class="h-4 w-4 rounded border-gray-300 accent-blue-600 focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-0 cursor-pointer">
+                                    class="h-4 w-4 rounded border-gray-300 accent-primary focus:ring-2 focus:ring-primary/30 focus:ring-offset-0 cursor-pointer">
                             </th>
                         @endif
                         <template x-for="col in columns" :key="col.key">
@@ -261,15 +261,15 @@
                                 <template x-if="col.sortable">
                                     <button @click="sortBy(col.key)"
                                         :aria-label="'Sort by ' + col.label + (sort.by === col.key ? ' (' + sort.order + ')' : '')"
-                                        class="flex items-center gap-1 font-bold focus:outline-none hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-150 ease-in-out focus-visible:ring-2 focus-visible:ring-blue-500/30">
+                                        class="flex items-center gap-1 font-bold focus:outline-none hover:text-primary hover:bg-primary/10 rounded-md transition-all duration-150 ease-in-out focus-visible:ring-2 focus-visible:ring-primary/30">
                                         <span x-text="col.label"></span>
                                         <svg x-show="sort.by === col.key && sort.order === 'asc'"
-                                            class="w-3.5 h-3.5 text-blue-600" fill="none" viewBox="0 0 24 24"
+                                            class="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor" stroke-width="2.5">
                                             <path d="M5 15l7-7 7 7" />
                                         </svg>
                                         <svg x-show="sort.by === col.key && sort.order === 'desc'"
-                                            class="w-3.5 h-3.5 text-blue-600" fill="none" viewBox="0 0 24 24"
+                                            class="w-3.5 h-3.5 text-primary" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor" stroke-width="2.5">
                                             <path d="M19 9l-7 7-7-7" />
                                         </svg>
@@ -305,18 +305,18 @@
                     <template x-if="error">
                         <tr>
                             <td :colspan="columns.length + ({{ $selectable ? 1 : 0 }})"
-                                class="text-center py-8 text-red-600" x-text="error"></td>
+                                class="text-center py-8 text-danger" x-text="error"></td>
                         </tr>
                     </template>
                     <template x-for="item in items" :key="item[primaryKey]">
-                        <tr class="hover:bg-blue-50 transition-colors duration-150{{ $rowClickUrl ? ' cursor-pointer' : '' }}"
+                        <tr class="hover:bg-primary/5 transition-colors duration-150{{ $rowClickUrl ? ' cursor-pointer' : '' }}"
                             @if ($rowClickUrl) @click="handleRowClick(item)" @endif>
                             @if ($selectable)
                                 <td class="px-6 py-4">
                                     <input type="checkbox" :checked="selectedItems.includes(item[primaryKey])"
                                         @change="toggleItem(item[primaryKey])"
                                         :aria-label="'Select row ' + item[primaryKey]" @click.stop
-                                        class="h-4 w-4 rounded border-gray-300 accent-blue-600 focus:ring-2 focus:ring-blue-500/30 focus:ring-offset-0 cursor-pointer">
+                                        class="h-4 w-4 rounded border-gray-300 accent-primary focus:ring-2 focus:ring-primary/30 focus:ring-offset-0 cursor-pointer">
                                 </td>
                             @endif
                             <template x-for="col in columns" :key="col.key">
@@ -347,8 +347,8 @@
 
         @if ($selectable)
             <div x-show="selectedItems.length > 0"
-                class="px-6 py-3 bg-blue-50 border-t border-blue-200 flex items-center gap-4" aria-live="polite">
-                <span class="text-sm font-medium text-blue-600" x-text="selectedItems.length + ' selected'"></span>
+                class="px-6 py-3 bg-primary/5 border-t border-primary/20 flex items-center gap-4" aria-live="polite">
+                <span class="text-sm font-medium text-primary" x-text="selectedItems.length + ' selected'"></span>
                 <div>
                     {{ $bulkActions ?? '' }}
                 </div>
@@ -365,7 +365,7 @@
                 @if (count($perPageOptions) > 0)
                     <select x-model.number="pagination.perPage" @change="pagination.current = 1; fetchData(1)"
                         aria-label="{{ trans('general.per_page') }}"
-                        class="text-xs rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500/30 focus-visible:ring-2 focus-visible:ring-blue-500/30">
+                        class="text-xs rounded-lg border border-gray-300 bg-white text-gray-900 shadow-sm focus:border-primary focus:ring-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30">
                         @foreach ($perPageOptions as $option)
                             <option value="{{ $option }}">{{ $option }}</option>
                         @endforeach
@@ -375,20 +375,20 @@
 
             <div class="flex items-center gap-2">
                 <button @click="fetchData(pagination.current - 1)" :disabled="pagination.current === 1 || loading"
-                    class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs font-semibold text-gray-900 hover:bg-gray-50 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-all duration-150 ease-in-out focus-visible:ring-2 focus-visible:ring-blue-500/30"
+                    class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs font-semibold text-gray-900 hover:bg-gray-50 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-all duration-150 ease-in-out focus-visible:ring-2 focus-visible:ring-primary/30"
                     aria-label="{{ trans('general.previous') }}">
                     {{ trans('general.previous') }}
                 </button>
 
                 <span class="text-xs font-medium text-gray-500">
                     صفحة <span x-text="pagination.current"
-                        class="text-blue-600 font-bold"></span>{{ trans('general.of') }} <span
+                        class="text-primary font-bold"></span>{{ trans('general.of') }} <span
                         x-text="pagination.last" class="font-bold"></span>
                 </span>
 
                 <button @click="fetchData(pagination.current + 1)"
                     :disabled="pagination.current === pagination.last || loading"
-                    class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs font-semibold text-gray-900 hover:bg-gray-50 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-all duration-150 ease-in-out focus-visible:ring-2 focus-visible:ring-blue-500/30"
+                    class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs font-semibold text-gray-900 hover:bg-gray-50 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-all duration-150 ease-in-out focus-visible:ring-2 focus-visible:ring-primary/30"
                     aria-label="{{ trans('general.next') }}">
                     {{ trans('general.next') }}
                 </button>

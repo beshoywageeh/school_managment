@@ -19,6 +19,8 @@ use Livewire\Livewire;
  |
  */
 
+require __DIR__.'/auth.php';
+
 Route::prefix(LaravelLocalization::setLocale())
     ->middleware([
         'localeSessionRedirect',
@@ -28,7 +30,10 @@ Route::prefix(LaravelLocalization::setLocale())
     ])
     ->group(function () {
         Route::middleware('auth')->group(function () {
-            Route::get('/api/dashboard/widgets', [HomeController::class, 'widgets'])->name('dashboard.widgets');
+            Route::get('/api/dashboard/widgets', [
+                HomeController::class,
+                'widgets',
+            ])->name('dashboard.widgets');
             Route::get('/', [HomeController::class, 'index'])->name(
                 'dashboard',
             );
@@ -59,13 +64,12 @@ Route::prefix(LaravelLocalization::setLocale())
         Livewire::SetUpdateRoute(function ($handle) {
             return Route::post('/livewire/update', $handle);
         });
+        Route::controller(SetupController::class)->group(function () {
+            Route::get('/start-setup', 'showSetupForm')->name('setup');
+            Route::post('/setup', 'processSetup')->name('config');
+        });
     });
 
-Route::controller(SetupController::class)->group(function () {
-    Route::get('/start-setup', 'showSetupForm')->name('setup');
-    Route::post('/setup', 'processSetup')->name('config');
-});
-require __DIR__.'/auth.php';
 if (config('app.env') == 'local') {
     require __DIR__.'/local.php';
 }

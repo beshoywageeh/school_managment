@@ -1,17 +1,17 @@
 @props(['class' => 'primary', 'type' => 'button'])
 @php
     $classes = match ($class) {
-        'primary' => 'bg-blue-500 text-white hover:bg-blue-600',
+        'primary' => 'bg-primary text-white hover:bg-primary/90',
         'secondary' => 'bg-gray-500 text-white hover:bg-gray-600',
-        'success' => 'bg-green-500 text-white hover:bg-green-600',
-        'danger' => 'bg-red-500 text-white hover:bg-red-600',
-        'warning' => 'bg-yellow-500 text-white hover:bg-yellow-600',
-        'info' => 'bg-cyan-500 text-white hover:bg-cyan-600',
-        'outline-primary' => 'border border-blue-500 text-blue-500 hover:bg-blue-50',
+        'success' => 'bg-success text-white hover:bg-success/90',
+        'danger' => 'bg-danger text-white hover:bg-danger/90',
+        'warning' => 'bg-warning text-white hover:bg-warning/90',
+        'info' => 'bg-info text-white hover:bg-info/90',
+        'outline-primary' => 'border border-primary text-primary hover:bg-primary/10',
         'outline-secondary' => 'border border-gray-500 text-gray-500 hover:bg-gray-50',
-        'outline-success' => 'border border-green-500 text-green-500 hover:bg-green-50',
-        'outline-danger' => 'border border-red-500 text-red-500 hover:bg-red-50',
-        default => 'bg-blue-500 text-white hover:bg-blue-600',
+        'outline-success' => 'border border-success text-success hover:bg-success/10',
+        'outline-danger' => 'border border-danger text-danger hover:bg-danger/10',
+        default => 'bg-primary text-white hover:bg-primary/90',
     };
 @endphp
 <button class="px-4 py-2 rounded-lg font-medium cursor-pointer {{ $classes }}" {{ $attributes }}

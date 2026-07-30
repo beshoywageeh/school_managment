@@ -12,9 +12,9 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-2">
-                <a href="{{ route('inventory.orders.index', ['type' => 'inventory'] + request()->except(['type', 'page'])) }}" class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ $type === 'inventory' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100' }}">{{ trans('stock.income_order') }}</a>
-                <a href="{{ route('inventory.orders.index', ['type' => 'sales'] + request()->except(['type', 'page'])) }}" class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ $type === 'sales' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100' }}">{{ trans('stock.outcome_order') }}</a>
-                <a href="{{ route('inventory.orders.index', ['type' => 'purchases'] + request()->except(['type', 'page'])) }}" class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ $type === 'purchases' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100' }}">{{ trans('stock.gard') }}</a>
+                <a href="{{ route('inventory.orders.index', ['type' => 'inventory'] + request()->except(['type', 'page'])) }}" class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ $type === 'inventory' ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:bg-gray-100' }}">{{ trans('stock.income_order') }}</a>
+                <a href="{{ route('inventory.orders.index', ['type' => 'sales'] + request()->except(['type', 'page'])) }}" class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ $type === 'sales' ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:bg-gray-100' }}">{{ trans('stock.outcome_order') }}</a>
+                <a href="{{ route('inventory.orders.index', ['type' => 'purchases'] + request()->except(['type', 'page'])) }}" class="px-3 py-1.5 text-sm rounded-lg transition-colors {{ $type === 'purchases' ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:bg-gray-100' }}">{{ trans('stock.gard') }}</a>
             </div>
             <a href="{{ route('inventory.orders.create', $type) }}" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 flex items-center gap-2">
                 <x-hero-icon name="plus" class="w-5 h-5" />
@@ -74,13 +74,13 @@
                     <tr>
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">#</th>
                         <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
-                            <a href="{{ route('inventory.orders.index', ['type' => $type, 'sort_by' => 'auto_number', 'sort_order' => request('sort_by') === 'auto_number' && request('sort_order') === 'asc' ? 'desc' : 'asc'] + request()->except(['sort_by', 'sort_order', 'page'])) }}" class="flex items-center gap-1 hover:text-blue-600">
+                            <a href="{{ route('inventory.orders.index', ['type' => $type, 'sort_by' => 'auto_number', 'sort_order' => request('sort_by') === 'auto_number' && request('sort_order') === 'asc' ? 'desc' : 'asc'] + request()->except(['sort_by', 'sort_order', 'page'])) }}" class="flex items-center gap-1 hover:text-primary">
                                 {{ trans('orders.num') }}
                                 @if(request('sort_by') === 'auto_number') <span>{{ request('sort_order') === 'asc' ? '↑' : '↓' }}</span> @endif
                             </a>
                         </th>
                         <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
-                            <a href="{{ route('inventory.orders.index', ['type' => $type, 'sort_by' => 'date', 'sort_order' => request('sort_by') === 'date' && request('sort_order') === 'asc' ? 'desc' : 'asc'] + request()->except(['sort_by', 'sort_order', 'page'])) }}" class="flex items-center gap-1 hover:text-blue-600">
+                            <a href="{{ route('inventory.orders.index', ['type' => $type, 'sort_by' => 'date', 'sort_order' => request('sort_by') === 'date' && request('sort_order') === 'asc' ? 'desc' : 'asc'] + request()->except(['sort_by', 'sort_order', 'page'])) }}" class="flex items-center gap-1 hover:text-primary">
                                 {{ trans('general.date') }}
                                 @if(request('sort_by') === 'date') <span>{{ request('sort_order') === 'asc' ? '↑' : '↓' }}</span> @endif
                             </a>
@@ -89,14 +89,14 @@
                         <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('student.title') }}</th>
                         @endif
                         <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">
-                            <a href="{{ route('inventory.orders.index', ['type' => $type, 'sort_by' => 'total_amount', 'sort_order' => request('sort_by') === 'total_amount' && request('sort_order') === 'asc' ? 'desc' : 'asc'] + request()->except(['sort_by', 'sort_order', 'page'])) }}" class="flex items-center gap-1 hover:text-blue-600">
+                            <a href="{{ route('inventory.orders.index', ['type' => $type, 'sort_by' => 'total_amount', 'sort_order' => request('sort_by') === 'total_amount' && request('sort_order') === 'asc' ? 'desc' : 'asc'] + request()->except(['sort_by', 'sort_order', 'page'])) }}" class="flex items-center gap-1 hover:text-primary">
                                 {{ trans('stock.total_price') }}
                                 @if(request('sort_by') === 'total_amount') <span>{{ request('sort_order') === 'asc' ? '↑' : '↓' }}</span> @endif
                             </a>
                         </th>
                         <th class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('general.status') }}</th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">
-                            <a href="{{ route('inventory.orders.index', ['type' => $type, 'sort_by' => 'items_count', 'sort_order' => request('sort_by') === 'items_count' && request('sort_order') === 'asc' ? 'desc' : 'asc'] + request()->except(['sort_by', 'sort_order', 'page'])) }}" class="flex items-center gap-1 hover:text-blue-600">
+                            <a href="{{ route('inventory.orders.index', ['type' => $type, 'sort_by' => 'items_count', 'sort_order' => request('sort_by') === 'items_count' && request('sort_order') === 'asc' ? 'desc' : 'asc'] + request()->except(['sort_by', 'sort_order', 'page'])) }}" class="flex items-center gap-1 hover:text-primary">
                                 {{ trans('orders.product_count') }}
                                 @if(request('sort_by') === 'items_count') <span>{{ request('sort_order') === 'asc' ? '↑' : '↓' }}</span> @endif
                             </a>
@@ -128,7 +128,7 @@
                                 <a href="{{ route('inventory.orders.edit', $order->id) }}" class="p-2 text-primary hover:bg-primary/10 rounded-lg" title="{{ trans('general.edit') }}">
                                     <x-hero-icon name="pencil" class="w-5 h-5" />
                                 </a>
-                                <a href="{{ route('inventory.orders.pay', $order->id) }}" class="p-2 text-{{ $order->status?->value === 'paid' ? 'yellow' : 'green' }}-600 hover:bg-{{ $order->status?->value === 'paid' ? 'yellow' : 'green' }}-50 rounded-lg" title="{{ trans('clothes.pay') }}">
+                                <a href="{{ route('inventory.orders.pay', $order->id) }}" class="p-2 rounded-lg {{ $order->status?->value === 'paid' ? 'text-warning hover:bg-warning/10' : 'text-success hover:bg-success/10' }}" title="{{ trans('clothes.pay') }}">
                                     <x-hero-icon name="credit-card" class="w-5 h-5" />
                                 </a>
                                 <form action="{{ route('inventory.orders.destroy', $order->id) }}" method="POST" class="inline" onsubmit="confirmation(event)">
@@ -144,7 +144,7 @@
                     @empty
                     <tr>
                         <td colspan="{{ $type === 'sales' ? 8 : 7 }}" class="px-6 py-12 text-center">
-                            <div class="bg-blue-50 text-blue-600 px-4 py-3 rounded-lg inline-block">
+                            <div class="bg-primary/5 text-primary px-4 py-3 rounded-lg inline-block">
                                 {{ trans('general.Msg') }}
                             </div>
                         </td>

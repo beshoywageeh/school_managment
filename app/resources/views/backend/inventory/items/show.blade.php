@@ -112,7 +112,7 @@
                                 @empty
                                 <tr>
                                     <td colspan="7" class="px-6 py-12 text-center">
-                                        <div class="bg-blue-50 text-blue-600 px-4 py-3 rounded-lg inline-block">
+                                        <div class="bg-primary/5 text-primary px-4 py-3 rounded-lg inline-block">
                                             {{ trans('general.noDataToShow') }}
                                         </div>
                                     </td>
@@ -130,7 +130,7 @@
                         <h3 class="text-lg font-bold text-gray-800">{{ trans('inventory.current_stock') }}</h3>
                     </div>
                     <div class="p-6 text-center">
-                        <div class="text-4xl font-bold {{ $item->current_stock <= $item->min_stock ? 'text-red-500' : ($item->current_stock <= ($item->max_stock / 2) ? 'text-yellow-500' : 'text-green-500') }}">
+                        <div class="text-4xl font-bold {{ $item->current_stock <= $item->min_stock ? 'text-danger' : ($item->current_stock <= ($item->max_stock / 2) ? 'text-warning' : 'text-success') }}">
                             {{ number_format($item->current_stock, 2) }}
                         </div>
                         <div class="mt-2 text-sm text-gray-500">{{ $item->unit ?? trans('inventory.unit') }}</div>

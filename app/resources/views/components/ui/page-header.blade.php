@@ -7,9 +7,9 @@
     $moduleColors = [
         'default' => 'bg-white border-b border-gray-200',
         'primary' => 'bg-primary text-white',
-        'success' => 'bg-green-600 text-white',
-        'danger' => 'bg-red-600 text-white',
-        'info' => 'bg-blue-600 text-white',
+        'success' => 'bg-success text-white',
+        'danger' => 'bg-danger text-white',
+        'info' => 'bg-info text-white',
     ][$module] ?? 'bg-white border-b border-gray-200';
 
     $titleColor = in_array($module, ['default']) ? 'text-gray-800' : 'text-white';

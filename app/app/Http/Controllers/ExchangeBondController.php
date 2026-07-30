@@ -29,7 +29,7 @@ class ExchangeBondController extends Controller
     public function index()
     {
         $school = $this->GetSchool();
-        $exchanges = ExchangeBond::where('school_id', $school->id)
+        $exchanges = ExchangeBond::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with(['student', 'academicYear'])
             ->get();
 

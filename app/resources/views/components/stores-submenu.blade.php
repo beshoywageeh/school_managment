@@ -5,7 +5,7 @@
     @endphp
     <div x-data="{ stocksOpen: {{ request()->is('*inventory/items/stock*') || request()->is('*inventory/orders*') ? 'true' : 'false' }} }" x-show="!search || '{{ trans('Sidebar.stocks') }}'.includes(search)">
         <button @click="stocksOpen = !stocksOpen" title="{{ trans('Sidebar.stocks') }}"
-            class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all duration-200 {{ $stocksActive ? 'bg-primary/10 text-primary border-s-3 border-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+            class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all duration-200 {{ $stocksActive ? 'bg-primary/10 text-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
             <x-hero-icon name="archive" class="w-5 h-5 shrink-0" />
             <span x-show="sidebarExpanded" class="text-sm font-medium flex-1 text-start"
                 x-cloak>{{ trans('Sidebar.stocks') }}</span>
@@ -49,7 +49,7 @@
     @endphp
     <div x-data="{ clothesOpen: {{ request()->is('*inventory/items/clothe*') ? 'true' : 'false' }} }" x-show="!search || '{{ trans('stock.clothes') }}'.includes(search)">
         <button @click="clothesOpen = !clothesOpen" title="{{ trans('stock.clothes') }}"
-            class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all duration-200 {{ $clothesActive ? 'bg-primary/10 text-primary border-s-3 border-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+            class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all duration-200 {{ $clothesActive ? 'bg-primary/10 text-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
             <x-hero-icon name="shirt" class="w-5 h-5 shrink-0" />
             <span x-show="sidebarExpanded" class="text-sm font-medium flex-1 text-start"
                 x-cloak>{{ trans('stock.clothes') }}</span>
@@ -93,7 +93,7 @@
     @endphp
     <div x-data="{ booksOpen: {{ request()->is('*inventory/items/book*') ? 'true' : 'false' }} }" x-show="!search || '{{ trans('Sidebar.books_sheets') }}'.includes(search)">
         <button @click="booksOpen = !booksOpen" title="{{ trans('Sidebar.books_sheets') }}"
-            class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all duration-200 {{ $booksActive ? 'bg-primary/10 text-primary border-s-3 border-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
+            class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg transition-all duration-200 {{ $booksActive ? 'bg-primary/10 text-primary' : 'text-gray-300 hover:bg-gray-800 hover:text-white' }}">
             <x-hero-icon name="book" class="w-5 h-5 shrink-0" />
             <span x-show="sidebarExpanded" class="text-sm font-medium flex-1 text-start"
                 x-cloak>{{ trans('Sidebar.books_sheets') }}</span>

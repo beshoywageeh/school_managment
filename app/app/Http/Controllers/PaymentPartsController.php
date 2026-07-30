@@ -26,7 +26,7 @@ class PaymentPartsController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $PaymentParts = PaymentParts::where('school_id', $school->id)
+        $PaymentParts = PaymentParts::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with([
                 'student',
                 'grade',
@@ -42,7 +42,7 @@ class PaymentPartsController extends Controller
     {
         try {
             $school = $this->getSchool();
-            $student = Student::where('school_id', $school->id)
+            $student = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
                 ->where('id', $id)
                 ->with([
                     'fee_invoice' => function ($q) {

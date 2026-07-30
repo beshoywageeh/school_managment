@@ -10,13 +10,18 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        function printDiv() {
+        window.printDiv = function() {
             var printContents = document.getElementById('print').innerHTML;
-            var originalContents = document.body.innerHTML;
-            document.body.innerHTML = printContents;
-            window.print();
-            document.body.innerHTML = originalContents;
-        }
+            var win = window.open('', '_blank');
+            win.document.write('<!DOCTYPE html><html><head><title>Print</title>');
+            document.querySelectorAll('link[rel="stylesheet"], style').forEach(function(el) {
+                win.document.write(el.outerHTML);
+            });
+            win.document.write('<' + '/head><body>' + printContents + '<' + '/body></html>');
+            win.document.close();
+            win.focus();
+            win.print();
+        };
         // Initialise TomSelect for select elements
         if (document.getElementById('tom-select')) {
             new TomSelect('#tom-select', {
@@ -45,7 +50,7 @@
             el.textContent = `${date} ${time}`;
         }
 
-        setInterval(updateDateTime, 1000);
+        setInterval(updateDateTime, 30000);
         updateDateTime();
         window.addEventListener('load', function() {
             document.getElementById('pre-loader')?.remove();

@@ -15,13 +15,13 @@ class SchoolScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if (! Auth::check()) {
+        if (! Auth::hasUser()) {
             return;
         }
 
         $user = Auth::user();
 
-        if ($user->is_admin == true) {
+        if ($user->isAdmin == true) {
             return;
         }
 

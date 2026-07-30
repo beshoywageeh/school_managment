@@ -61,7 +61,7 @@
                             @empty
                             <tr>
                                 <td colspan="6" class="px-6 py-12 text-center">
-                                    <div class="bg-blue-50 text-blue-600 px-4 py-3 rounded-lg inline-block">
+                                    <div class="bg-primary/5 text-primary px-4 py-3 rounded-lg inline-block">
                                         {{ trans('general.Msg') }}
                                     </div>
                                 </td>

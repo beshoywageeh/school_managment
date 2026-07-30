@@ -1,7 +1,7 @@
-@props(['messages'])
+@props(['messages', 'id' => null])
 
 @if ($messages)
     @foreach ((array) $messages as $message)
-        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+        <p {{ $id ? "id=$id" : '' }} class="mt-2 text-sm text-danger" role="alert">{{ $message }}</p>
     @endforeach
 @endif

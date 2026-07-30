@@ -30,7 +30,7 @@ class ClassRoomsController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $query = ClassRoom::where('school_id', $school->id)
+        $query = ClassRoom::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with(['user', 'grade'])
             ->withCount('students');
 
@@ -50,7 +50,7 @@ class ClassRoomsController extends Controller
             )
             ->when(Auth::user()->hasRole('Admin'), fn ($q) => $q->get());
 
-        $data['grades'] = Grade::where('school_id', $school->id)->get();
+        $data['grades'] = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
 
         return view('backend.class-rooms.index', compact('data', 'school'));
     }

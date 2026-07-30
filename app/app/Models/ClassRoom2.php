@@ -23,6 +23,7 @@ class ClassRoom2 extends Model
         'class_room_id',
         'tameen',
         'user_id',
+        'school_id',
     ];
 
     protected $casts = [
