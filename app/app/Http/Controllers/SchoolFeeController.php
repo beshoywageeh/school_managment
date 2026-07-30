@@ -35,7 +35,7 @@ class SchoolFeeController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $grades = Grade::where('school_id', $school->id)->get();
+        $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
 
         $years = AcademicYear::where('status', 'active')->get();
         $academic_years = $years->map(function ($year) {
@@ -46,7 +46,7 @@ class SchoolFeeController extends Controller
                     Carbon::parse($year->year_end)->format('Y'),
             ];
         });
-        $SchoolFees = SchoolFee::where('school_id', $school->id)
+        $SchoolFees = SchoolFee::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with(
                 'grade:id,name',
                 'classroom:id,name',
@@ -204,7 +204,7 @@ class SchoolFeeController extends Controller
     public function getclasses($id)
     {
         $school = $this->getSchool();
-        $class_rooms = ClassRoom::where('school_id', $school->id)
+        $class_rooms = ClassRoom::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('grade_id', $id)
             ->get([
                 'id',

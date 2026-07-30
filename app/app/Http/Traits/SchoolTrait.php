@@ -17,4 +17,15 @@ trait SchoolTrait
 
         return School::with('image')->find($schoolId);
     }
+
+    public function schoolId(): ?int
+    {
+        $user = Auth::user();
+
+        if ($user->isAdmin) {
+            return null;
+        }
+
+        return $user->school_id;
+    }
 }

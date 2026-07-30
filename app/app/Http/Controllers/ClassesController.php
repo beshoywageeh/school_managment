@@ -28,7 +28,7 @@ class ClassesController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $class_rooms = ClassRoom::where('school_id', $school->id)
+        $class_rooms = ClassRoom::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with(['grade:id,name'])
             ->get(['id', 'name', 'grade_id'])
             ->groupBy('grade.name');
@@ -83,7 +83,7 @@ class ClassesController extends Controller
                 $q->select('id', 'name');
             },
         ])->findOrFail($request->id, ['id', 'title', 'grade_id', 'class_room_id']);
-        $students = Student::where('school_id', $school->id)
+        $students = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('grade_id', $class->grade_id)
             ->where('classroom_id', $class->class_room_id)
             ->get();

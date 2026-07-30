@@ -24,7 +24,7 @@ class ActivityLogController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        $query = ActivityLog::with('user')->where('school_id', $school->id);
+        $query = ActivityLog::with('user')->when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id));
 
         if ($request->filled('user_id')) {
             $query->where('user_id', $request->user_id);
@@ -48,7 +48,7 @@ class ActivityLogController extends Controller
 
         $activities = $query->paginate(20);
 
-        $users = User::where('school_id', $school->id)->get();
+        $users = User::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
 
         return view(
             'backend.system_monitor.Index',

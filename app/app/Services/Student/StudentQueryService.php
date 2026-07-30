@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\DB;
 
 class StudentQueryService
 {
-    public function getFilteredQuery(Request $request, int $schoolId): LengthAwarePaginator
+    public function getFilteredQuery(Request $request, ?int $schoolId): LengthAwarePaginator
     {
         $query = Student::query()
             ->join('parents', 'students.parent_id', '=', 'parents.id')
             ->join('grades', 'students.grade_id', '=', 'grades.id')
             ->join('class_rooms', 'students.classroom_id', '=', 'class_rooms.id')
-            ->where('students.school_id', $schoolId)
+            ->when($schoolId, fn ($q) => $q->where('students.school_id', $schoolId))
             ->whereNull('students.deleted_at')
             ->withSum('fee_invoice', 'amount')
             ->select([

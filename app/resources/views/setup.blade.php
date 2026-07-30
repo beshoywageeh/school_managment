@@ -19,11 +19,11 @@
         <form action="{{ route('config') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="p-4 border border-blue-200 rounded-xl">
+                <div class="p-4 border border-primary/20 rounded-xl">
                     <h5 class="text-center text-gray-500 font-medium mb-4">{{ trans('install.school_details') }}</h5>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('install.school_name') }}</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 @error('schoolname') border-red-500 @enderror"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 @error('schoolname') border-danger @enderror"
                             name="schoolname" value="{{ old('schoolname') }}"
                             placeholder="{{ trans('install.school_name') }}" />
                         @error('schoolname')
@@ -32,7 +32,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('install.address') }}</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 @error('address') border-red-500 @enderror"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 @error('address') border-danger @enderror"
                             name="address" placeholder="{{ trans('install.address') }}"
                             value="{{ old('address') }}" />
                         @error('address')
@@ -41,7 +41,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('install.phone') }}</label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 @error('phone') border-red-500 @enderror"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 @error('phone') border-danger @enderror"
                             name="phone" value="{{ old('phone') }}"
                             placeholder="{{ trans('install.phone') }}" />
                         @error('phone')
@@ -50,17 +50,17 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('install.logo') }}</label>
-                        <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200" accept="*/image" type="file" name="logo">
+                        <input class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20" accept="*/image" type="file" name="logo">
                         @error('logo')
                             <span class="text-sm text-red-500">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
-                <div class="p-4 border border-blue-200 rounded-xl">
+                <div class="p-4 border border-primary/20 rounded-xl">
                     <h5 class="text-center text-gray-500 font-medium mb-4">{{ trans('install.admin') }}</h5>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('install.name') }} </label>
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 @error('name') border-red-500 @enderror"
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 @error('name') border-danger @enderror"
                             name="name" value="{{ old('name') }}"
                             placeholder="{{ trans('install.name') }} " />
                         @error('name')
@@ -69,7 +69,7 @@
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('install.password') }} </label>
-                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 @error('password') border-red-500 @enderror"
+                        <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 @error('password') border-danger @enderror"
                             name="password" value="{{ old('password') }}"
                             placeholder="{{ trans('install.password') }} " />
                         @error('password')
@@ -82,7 +82,7 @@
             </div>
 
             <div class="mt-8 flex justify-end">
-                <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium">{{ trans('install.register') }}</button>
+                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium">{{ trans('install.register') }}</button>
             </div>
         </form>
     </div>

@@ -176,7 +176,7 @@ class UserController extends Controller
     public function getjobs($id)
     {
         $school = $this->getSchool();
-        $jobs = Job::where('school_id', $school->id)->where('type', $id)->get(['id', 'name']);
+        $jobs = Job::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->where('type', $id)->get(['id', 'name']);
 
         return response()->json($jobs);
     }

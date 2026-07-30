@@ -2,7 +2,7 @@
 
 // odsl-/data/projects/laravel_projects/school_managment/app/app/Http/Controllers/HomeController.php-PHPStan\BetterReflection\Reflection\ReflectionClass-App\Http\Controllers\HomeController
 return \PHPStan\Cache\CacheItem::__set_state(array(
-   'variableKey' => 'v2-6.70.0.3-8.5-013f3e01f5ad73357625ae13ce7bd74a664e5336644a0303eec3a8c16521bd65',
+   'variableKey' => 'v2-6.70.0.3-8.5-fed0d85fa369ed8c8a9d595f48e001636620707ce0d4449c758f703a54b9db53',
    'data' => 
   array (
     'locatedSource' => 
@@ -27,7 +27,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     array (
     ),
     'startLine' => 15,
-    'endLine' => 224,
+    'endLine' => 434,
     'startColumn' => 1,
     'endColumn' => 1,
     'parentClassName' => 'App\\Http\\Controllers\\Controller',
@@ -200,7 +200,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         ),
         'docComment' => NULL,
         'startLine' => 24,
-        'endLine' => 58,
+        'endLine' => 64,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -226,8 +226,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 60,
-        'endLine' => 94,
+        'startLine' => 66,
+        'endLine' => 116,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -265,8 +265,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 96,
-            'endLine' => 96,
+            'startLine' => 118,
+            'endLine' => 118,
             'startColumn' => 35,
             'endColumn' => 44,
             'parameterIndex' => 0,
@@ -291,8 +291,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 96,
-            'endLine' => 96,
+            'startLine' => 118,
+            'endLine' => 118,
             'startColumn' => 47,
             'endColumn' => 59,
             'parameterIndex' => 1,
@@ -313,8 +313,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 96,
-        'endLine' => 140,
+        'startLine' => 118,
+        'endLine' => 240,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -352,8 +352,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 142,
-            'endLine' => 142,
+            'startLine' => 242,
+            'endLine' => 242,
             'startColumn' => 40,
             'endColumn' => 52,
             'parameterIndex' => 0,
@@ -374,8 +374,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 142,
-        'endLine' => 180,
+        'startLine' => 242,
+        'endLine' => 351,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,
@@ -413,8 +413,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 182,
-            'endLine' => 182,
+            'startLine' => 353,
+            'endLine' => 353,
             'startColumn' => 37,
             'endColumn' => 46,
             'parameterIndex' => 0,
@@ -439,8 +439,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
             'attributes' => 
             array (
             ),
-            'startLine' => 182,
-            'endLine' => 182,
+            'startLine' => 353,
+            'endLine' => 353,
             'startColumn' => 49,
             'endColumn' => 61,
             'parameterIndex' => 1,
@@ -461,8 +461,8 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
         array (
         ),
         'docComment' => NULL,
-        'startLine' => 182,
-        'endLine' => 223,
+        'startLine' => 353,
+        'endLine' => 433,
         'startColumn' => 5,
         'endColumn' => 5,
         'couldThrow' => false,

@@ -25,7 +25,7 @@ class DashboardTrendService
         return compact('chart_labels', 'chart_data');
     }
 
-    public function getMonthlyRevenueTrend(int $schoolId): array
+    public function getMonthlyRevenueTrend(?int $schoolId = null): array
     {
         $months = [];
         $revenue = [];
@@ -34,7 +34,11 @@ class DashboardTrendService
             $date = Carbon::now()->subMonths($i);
             $months[] = $date->format('M Y');
 
-            $revenue[] = ReceiptPayment::where('school_id', $schoolId)
+            $query = ReceiptPayment::query();
+            if ($schoolId !== null) {
+                $query->where('school_id', $schoolId);
+            }
+            $revenue[] = $query
                 ->whereYear('date', $date->year)
                 ->whereMonth('date', $date->month)
                 ->sum('Debit');
@@ -46,49 +50,61 @@ class DashboardTrendService
         ];
     }
 
-    public function calculateTrendData(int $schoolId): array
+    public function calculateTrendData(?int $schoolId = null): array
     {
         $currentMonth = now();
         $lastMonth = now()->subMonth();
 
-        $studentsCurrent = Student::where('school_id', $schoolId)
+        $studentsBase = Student::query();
+        $parentsBase = MyParent::query();
+        $feeInvoicesBase = FeeInvoice::query();
+        $receiptBase = ReceiptPayment::query();
+
+        if ($schoolId !== null) {
+            $studentsBase->where('school_id', $schoolId);
+            $parentsBase->where('school_id', $schoolId);
+            $feeInvoicesBase->where('fee_invoices.school_id', $schoolId);
+            $receiptBase->where('school_id', $schoolId);
+        }
+
+        $studentsCurrent = (clone $studentsBase)
             ->whereYear('created_at', $currentMonth->year)
             ->whereMonth('created_at', $currentMonth->month)
             ->count();
-        $studentsPrevious = Student::where('school_id', $schoolId)
+        $studentsPrevious = (clone $studentsBase)
             ->whereYear('created_at', $lastMonth->year)
             ->whereMonth('created_at', $lastMonth->month)
             ->count();
         $studentsSparkline = $this->buildMonthlyAggregate($schoolId, Student::class, 'created_at');
 
-        $parentsCurrent = MyParent::where('school_id', $schoolId)
+        $parentsCurrent = (clone $parentsBase)
             ->whereYear('created_at', $currentMonth->year)
             ->whereMonth('created_at', $currentMonth->month)
             ->count();
-        $parentsPrevious = MyParent::where('school_id', $schoolId)
+        $parentsPrevious = (clone $parentsBase)
             ->whereYear('created_at', $lastMonth->year)
             ->whereMonth('created_at', $lastMonth->month)
             ->count();
         $parentsSparkline = $this->buildMonthlyAggregate($schoolId, MyParent::class, 'created_at');
 
-        $invoicedCurrent = FeeInvoice::where('school_id', $schoolId)
-            ->whereNull('deleted_at')
-            ->whereYear('created_at', $currentMonth->year)
-            ->whereMonth('created_at', $currentMonth->month)
+        $invoicedCurrent = (clone $feeInvoicesBase)
+            ->whereNull('fee_invoices.deleted_at')
+            ->whereYear('fee_invoices.created_at', $currentMonth->year)
+            ->whereMonth('fee_invoices.created_at', $currentMonth->month)
             ->join('school__fees', 'fee_invoices.school_fee_id', '=', 'school__fees.id')
             ->sum('school__fees.amount');
-        $invoicedPrevious = FeeInvoice::where('school_id', $schoolId)
-            ->whereNull('deleted_at')
-            ->whereYear('created_at', $lastMonth->year)
-            ->whereMonth('created_at', $lastMonth->month)
+        $invoicedPrevious = (clone $feeInvoicesBase)
+            ->whereNull('fee_invoices.deleted_at')
+            ->whereYear('fee_invoices.created_at', $lastMonth->year)
+            ->whereMonth('fee_invoices.created_at', $lastMonth->month)
             ->join('school__fees', 'fee_invoices.school_fee_id', '=', 'school__fees.id')
             ->sum('school__fees.amount');
 
-        $collectedCurrent = ReceiptPayment::where('school_id', $schoolId)
+        $collectedCurrent = (clone $receiptBase)
             ->whereYear('date', $currentMonth->year)
             ->whereMonth('date', $currentMonth->month)
             ->sum('Debit');
-        $collectedPrevious = ReceiptPayment::where('school_id', $schoolId)
+        $collectedPrevious = (clone $receiptBase)
             ->whereYear('date', $lastMonth->year)
             ->whereMonth('date', $lastMonth->month)
             ->sum('Debit');
@@ -129,12 +145,16 @@ class DashboardTrendService
         ];
     }
 
-    public function buildMonthlyAggregate(int $schoolId, string $modelClass, string $dateColumn): array
+    public function buildMonthlyAggregate(?int $schoolId, string $modelClass, string $dateColumn): array
     {
         $data = [];
         for ($i = 11; $i >= 0; $i--) {
             $date = now()->subMonths($i);
-            $count = $modelClass::where('school_id', $schoolId)
+            $query = $modelClass::query();
+            if ($schoolId !== null) {
+                $query->where('school_id', $schoolId);
+            }
+            $count = $query
                 ->whereYear($dateColumn, $date->year)
                 ->whereMonth($dateColumn, $date->month)
                 ->count();

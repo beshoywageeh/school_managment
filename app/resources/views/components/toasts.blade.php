@@ -1,10 +1,12 @@
 <div x-data="{ toasts: [] }"
     @add-toast.window="toasts.push($event.detail); if (!$event.detail.sticky) { let t = $event.detail; setTimeout(() => { toasts = toasts.filter(to => to.id !== t.id); }, t.duration || 4000); }"
     @remove-toast.window="toasts = toasts.filter(to => to.id !== $event.detail)"
-    class="fixed bottom-5 right-5 z-50 flex flex-col gap-3 w-96 max-w-full pointer-events-none">
+    class="fixed bottom-5 end-5 z-50 flex flex-col gap-3 w-96 max-w-full pointer-events-none"
+    aria-live="polite" aria-atomic="false">
 
     <template x-for="toast in toasts" :key="toast.id">
-        <div x-transition:enter="transition ease-out duration-300 transform"
+        <div role="alert"
+            x-transition:enter="transition ease-out duration-300 transform"
             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:translate-x-4"
             x-transition:enter-end="opacity-100 translate-y-0 sm:translate-x-0"
             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"
@@ -15,28 +17,28 @@
 
                 <div class="shrink-0">
                     <template x-if="toast.type === 'success'">
-                        <svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        <svg class="h-6 w-6 text-success" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </template>
                     <template x-if="toast.type === 'danger'">
-                        <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        <svg class="h-6 w-6 text-danger" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </template>
                     <template x-if="toast.type === 'warning'">
-                        <svg class="h-6 w-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        <svg class="h-6 w-6 text-warning" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                         </svg>
                     </template>
                     <template x-if="toast.type === 'info'">
-                        <svg class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        <svg class="h-6 w-6 text-info" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.852l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12v-.008z" />
@@ -64,10 +66,10 @@
                 <div class="h-1 w-full bg-gray-100">
                     <div class="h-full animate-shrink" :style="`animation-duration: ${toast.duration || 4000}ms`"
                         :class="{
-                            'bg-green-500': toast.type === 'success',
-                            'bg-red-500': toast.type === 'danger',
-                            'bg-amber-500': toast.type === 'warning',
-                            'bg-blue-500': toast.type === 'info'
+                            'bg-success': toast.type === 'success',
+                            'bg-danger': toast.type === 'danger',
+                            'bg-warning': toast.type === 'warning',
+                            'bg-primary': toast.type === 'info'
                         }">
                     </div>
                 </div>

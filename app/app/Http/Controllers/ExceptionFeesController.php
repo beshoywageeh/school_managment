@@ -39,7 +39,7 @@ class ExceptionFeesController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $ExceptionFees = ExceptionFees::where('school_id', $school->id)
+        $ExceptionFees = ExceptionFees::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with('student')
             ->paginate(config('school.per_page'));
 

@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\promotion;
+use App\Models\Promotion;
 use App\Models\School;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<promotion>
+ * @extends Factory<Promotion>
  */
-class promotionFactory extends Factory
+class PromotionFactory extends Factory
 {
     /**
      * Define the model's default state.

@@ -7,7 +7,7 @@
 
 @php
     $activeClasses = $active
-        ? 'ring-2 ring-green-500 border-green-500 bg-green-50'
+        ? 'ring-2 ring-status-active border-status-active bg-status-active/10'
         : 'border-gray-200 hover:border-gray-300 hover:shadow-md';
 @endphp
 

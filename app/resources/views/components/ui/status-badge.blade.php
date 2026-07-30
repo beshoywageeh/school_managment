@@ -5,17 +5,17 @@
 
 @php
     $dotColors = [
-        'active' => 'bg-green-500',
+        'active' => 'bg-status-active',
         'inactive' => 'bg-gray-400',
-        'excluded' => 'bg-red-500',
-        'primary' => 'bg-blue-500',
+        'excluded' => 'bg-status-excluded',
+        'primary' => 'bg-status-primary',
     ][$status] ?? 'bg-gray-400';
 
     $bgColors = [
-        'active' => 'bg-green-50 text-green-700',
+        'active' => 'bg-status-active/10 text-status-active',
         'inactive' => 'bg-gray-50 text-gray-600',
-        'excluded' => 'bg-red-50 text-red-700',
-        'primary' => 'bg-blue-50 text-blue-700',
+        'excluded' => 'bg-status-excluded/10 text-status-excluded',
+        'primary' => 'bg-status-primary/10 text-status-primary',
     ][$status] ?? 'bg-gray-50 text-gray-600';
 @endphp
 

@@ -38,7 +38,7 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'isAdmin' => '1',
             'login_allow' => '1',
-            'password' => \Hash::make('hypervision'),
+            'password' => \Hash::make('password'),
             'school_id' => School::factory(),
         ];
     }

@@ -27,14 +27,14 @@ class SettingsController extends Controller
     {
         $school = $this->getSchool();
         $school_info = School::where('id', $school->id)->with('image')->first();
-        $grades = Grade::where('school_id', $school->id)
+        $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->withCount('students')
             ->get();
-        $std_count = Student::where('school_id', $school->id)->count();
-        $grd_count = Grade::where('school_id', $school->id)->count();
-        $teach_count = User::where('school_id', $school->id)->count();
+        $std_count = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->count();
+        $grd_count = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->count();
+        $teach_count = User::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->count();
         $user = Auth::user();
-        $academic_years = AcademicYear::where('school_id', $school->id)->get();
+        $academic_years = AcademicYear::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
 
         return view(
             'backend.setting.index',

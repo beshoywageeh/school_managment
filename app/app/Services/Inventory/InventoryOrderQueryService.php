@@ -6,9 +6,9 @@ use App\Models\Inventory\InventoryOrder;
 
 class InventoryOrderQueryService
 {
-    public function getOrders(int $schoolId, ?string $type = null, array $filters = [])
+    public function getOrders(?int $schoolId, ?string $type = null, array $filters = [])
     {
-        $query = InventoryOrder::where('school_id', $schoolId);
+        $query = InventoryOrder::when($schoolId, fn ($q) => $q->where('school_id', $schoolId));
 
         if ($type && $type !== 'all') {
             $query->where('type', $type);

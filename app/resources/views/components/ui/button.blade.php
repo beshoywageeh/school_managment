@@ -9,7 +9,7 @@
     $variantClasses = [
         'primary' => 'bg-primary text-white hover:bg-primary-dark focus:ring-primary/50',
         'secondary' => 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-gray-500/50',
-        'danger' => 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500/50',
+        'danger' => 'bg-danger text-white hover:bg-danger/90 focus:ring-danger/50',
     ][$variant] ?? 'bg-primary text-white hover:bg-primary-dark focus:ring-primary/50';
 @endphp
 

@@ -79,7 +79,7 @@ class FeeInvoiceController extends Controller
             ],
         ];
 
-        $fee_invoices = $this->invoiceQueryService->getFilteredQuery($request, $school->id);
+        $fee_invoices = $this->invoiceQueryService->getFilteredQuery($request, $this->schoolId());
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -102,9 +102,9 @@ class FeeInvoiceController extends Controller
         try {
             $school = $this->getSchool();
             $student = Student::where('id', $student_id)
-                ->where('school_id', $school->id)
+                ->when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
                 ->first();
-            $school_fees = school_fee::where('school_id', $school->id)
+            $school_fees = school_fee::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
                 ->where('grade_id', $student->grade_id)
                 ->where('classroom_id', $student->classroom_id)
                 ->get(['id', 'title', 'amount']);

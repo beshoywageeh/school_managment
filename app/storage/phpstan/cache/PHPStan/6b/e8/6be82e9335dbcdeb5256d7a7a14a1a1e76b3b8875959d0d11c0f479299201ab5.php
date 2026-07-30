@@ -699,7 +699,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/data/projects/laravel_projects/school_managment/app/app/Http/Controllers/HomeController.php' => 
     array (
-      0 => '013f3e01f5ad73357625ae13ce7bd74a664e5336644a0303eec3a8c16521bd65',
+      0 => 'fed0d85fa369ed8c8a9d595f48e001636620707ce0d4449c758f703a54b9db53',
       1 => 
       array (
         0 => 'app\\http\\controllers\\homecontroller',
@@ -886,7 +886,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/data/projects/laravel_projects/school_managment/app/app/Http/Controllers/ReceiptPaymentController.php' => 
     array (
-      0 => 'd067da9c6accd5dff62627cc1aea48485b2fab81d4882d2adb0fa23ea28cd3c4',
+      0 => '95957e5df432b0936e00e05bed8b5cdf9ad062dd1fbc58aedf5cec4772212952',
       1 => 
       array (
         0 => 'app\\http\\controllers\\receiptpaymentcontroller',
@@ -3033,7 +3033,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/data/projects/laravel_projects/school_managment/app/app/Providers/RouteServiceProvider.php' => 
     array (
-      0 => 'afc3dd32b6f55146c404513824b3fc7d336c0d67a70707587658bded0e0dd642',
+      0 => '1867d12beeb3cd84da26c70f5754529cf8a6073d056e5134efff6dceadfffa8f',
       1 => 
       array (
         0 => 'app\\providers\\routeserviceprovider',
@@ -3088,7 +3088,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/data/projects/laravel_projects/school_managment/app/app/Services/DashboardService.php' => 
     array (
-      0 => '31d83272783876e64ef45d4ced5d1196939f3bcea2e8b69cc23209c076630ac2',
+      0 => 'f4de1df32b0331fecc783e431700258be7f1443365e3bb8d0fa3496605e0ba31',
       1 => 
       array (
         0 => 'app\\services\\dashboardservice',
@@ -3818,7 +3818,7 @@ return \PHPStan\Cache\CacheItem::__set_state(array(
     ),
     '/data/projects/laravel_projects/school_managment/app/app/Services/DashboardTrendService.php' => 
     array (
-      0 => '9803649055f39eb07c7ec4adf63164027d8d470b1af4f4f8b35407704c6f4a2e',
+      0 => '1d25b9841de2db1f6c95388b542990fc748bf7489ac2ea98776f44f65ea8c48b',
       1 => 
       array (
         0 => 'app\\services\\dashboardtrendservice',

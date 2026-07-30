@@ -2,7 +2,7 @@
 
 // odsl-/data/projects/laravel_projects/school_managment/app/app/Services/DashboardService.php-PHPStan\BetterReflection\Reflection\ReflectionClass-App\Services\DashboardService
 return \PHPStan\Cache\CacheItem::__set_state(array(
-   'variableKey' => 'v2-6.70.0.3-8.5-31d83272783876e64ef45d4ced5d1196939f3bcea2e8b69cc23209c076630ac2',
+   'variableKey' => 'v2-6.70.0.3-8.5-f4de1df32b0331fecc783e431700258be7f1443365e3bb8d0fa3496605e0ba31',
    'data' => 
   array (
     'locatedSource' => 

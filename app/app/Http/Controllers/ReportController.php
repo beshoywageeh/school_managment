@@ -39,15 +39,15 @@ class ReportController extends Controller
             ->where('teacher_id', $user)
             ->pluck('grade_id');
         $acadmeic_years = AcademicYear::where('status', config('school.academic_year_status'))->get();
-        $stocks = InventoryItem::where('school_id', $school->id)
+        $stocks = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('type', 'stock')
             ->get();
-        $clothes = InventoryItem::where('school_id', $school->id)
+        $clothes = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('type', 'clothe')
             ->whereIn('grade_id', $user_grade)
             ->with('grade:id,name', 'classroom:id,name')
             ->get();
-        $books_sheets = InventoryItem::where('school_id', $school->id)
+        $books_sheets = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('type', 'book')
             ->whereIn('grade_id', $user_grade)
             ->with('grade:id,name', 'classroom:id,name')
@@ -74,7 +74,7 @@ class ReportController extends Controller
     public function ExportStudents(Request $request)
     {
         $school = $this->GetSchool();
-        $query = Student::where('school_id', $school->id)->select(
+        $query = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->select(
             'id',
             'name',
             'grade_id',
@@ -106,7 +106,7 @@ class ReportController extends Controller
         $school = $this->GetSchool();
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
-        $query = PaymentParts::where('school_id', $school->id)->whereBetween('date', [
+        $query = PaymentParts::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->whereBetween('date', [
             $data['from'],
             $data['to'],
         ])->with('student', 'grade', 'classroom');
@@ -120,7 +120,7 @@ class ReportController extends Controller
     public function StockProducts()
     {
         $school = $this->GetSchool();
-        $data['stocks'] = InventoryItem::where('school_id', $school->id)
+        $data['stocks'] = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with('orders')
             ->get();
         $PDFExport->PrintPDF('stock_product', 'stream', $data, 'P', $school);
@@ -129,7 +129,7 @@ class ReportController extends Controller
     public function clothes_stocks()
     {
         $school = $this->GetSchool();
-        $data = InventoryItem::where('school_id', $school->id)
+        $data = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('type', 'clothe')
             ->with('orders', 'classroom', 'grade')
             ->get();
@@ -139,7 +139,7 @@ class ReportController extends Controller
     public function books_sheets()
     {
         $school = $this->GetSchool();
-        $data = InventoryItem::where('school_id', $school->id)
+        $data = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('type', 'book')
             ->with('orders', 'classroom', 'grade')
             ->get();
@@ -194,7 +194,7 @@ class ReportController extends Controller
         $school = $this->GetSchool();
         $data['begin'] = Carbon::parse($request->start_date)->format('Y-m-d');
         $data['end'] = Carbon::parse($request->end_date)->format('Y-m-d');
-        $data['exception_list'] = ExceptionFees::where('school_id', $school->id)->whereBetween('date', [
+        $data['exception_list'] = ExceptionFees::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->whereBetween('date', [
             $data['begin'],
             $data['end'],
         ])
@@ -212,7 +212,7 @@ class ReportController extends Controller
             ['id', 'view'],
         );
 
-        $query = FeeInvoice::where('school_id', $school->id)->where('academic_year_id', $data['acc_year']->id)
+        $query = FeeInvoice::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->where('academic_year_id', $data['acc_year']->id)
             ->where('status', $request->payment_status)
             ->with('grades:id,name', 'students:id,name')
             ->select(['student_id', 'grade_id']);
@@ -236,7 +236,7 @@ class ReportController extends Controller
         $school = $this->GetSchool();
         $data['from'] = Carbon::parse($request->from)->format('Y-m-d');
         $data['to'] = Carbon::parse($request->to)->format('Y-m-d');
-        $data['payment'] = ReceiptPayment::where('school_id', $school->id)->whereBetween('date', [
+        $data['payment'] = ReceiptPayment::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->whereBetween('date', [
             $data['from'],
             $data['to'],
         ])
@@ -261,7 +261,7 @@ class ReportController extends Controller
         );
 
         // Prepare base query
-        $query = FeeInvoice::where('school_id', $school->id)->with([
+        $query = FeeInvoice::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->with([
             'grades:id,name',
             'classes:id,name',
             'students:id,name',
@@ -317,9 +317,7 @@ class ReportController extends Controller
         $data['classroom'] = ClassRoom::findorfail($request->classroom_id);
         $date = Carbon::now()->format('Y');
         $data['aa'] = AcademicYear::whereyear('year_start', $date)->first();
-        $data['students'] = Student::where(
-            'school_id', $school->id,
-        )->where(
+        $data['students'] = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->where(
             'classroom_id',
             $request->classroom_id,
         )
@@ -357,7 +355,7 @@ class ReportController extends Controller
     public function credit(Request $request)
     {
         $school = $this->GetSchool();
-        $query = FeeInvoice::where('school_id', $school->id)->where('status', 0)->with(
+        $query = FeeInvoice::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->where('status', 0)->with(
             'student',
             'grade',
             'classroom',
@@ -379,9 +377,7 @@ class ReportController extends Controller
         $data['acc_year'] = AcademicYear::whereYear('year_start', $date)->first(
             ['id', 'view'],
         );
-        $data['school_fees'] = SchoolFee::where(
-            'school_id', $school->id,
-        )->where(
+        $data['school_fees'] = SchoolFee::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->where(
             'academic_year_id',
             $data['acc_year']->id,
         )

@@ -36,7 +36,7 @@ class InventoryOrderController extends Controller
         );
         $school = $this->getSchool();
 
-        $query = InventoryOrder::where('school_id', $school->id)
+        $query = InventoryOrder::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('type', $type)
             ->with('items.itemable')
             ->withCount('items');
@@ -76,7 +76,7 @@ class InventoryOrderController extends Controller
         $perPage = min((int) request('per_page', 10), 100);
         $orders = $query->paginate($perPage);
 
-        $students = Student::where('school_id', $school->id)->get();
+        $students = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
 
         return view(
             'backend.inventory.orders.index',
@@ -92,10 +92,10 @@ class InventoryOrderController extends Controller
         );
 
         $school = $this->getSchool();
-        $items = InventoryItem::where('school_id', $school->id)
+        $items = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->active()
             ->get();
-        $students = Student::where('school_id', $school->id)->get();
+        $students = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
 
         $viewName = match ($type) {
             'inventory' => 'backend.inventory.orders.create_tawreed',
@@ -143,10 +143,10 @@ class InventoryOrderController extends Controller
     {
         $order = InventoryOrder::with('items.itemable')->findOrFail($id);
         $school = $this->getSchool();
-        $items = InventoryItem::where('school_id', $school->id)
+        $items = InventoryItem::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->active()
             ->get();
-        $students = Student::where('school_id', $school->id)->get();
+        $students = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
 
         $viewName = match ($order->type->value) {
             'inventory' => 'backend.inventory.orders.edit_tawreed',

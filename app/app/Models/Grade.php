@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ClassRoom2 as classes;
 use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

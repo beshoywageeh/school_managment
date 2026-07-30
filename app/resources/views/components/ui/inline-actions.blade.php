@@ -18,8 +18,8 @@
                 aria-label="{{ $action['label'] }}"
                 class="p-1.5 rounded-lg transition-colors
                     {{ $action['variant'] ?? 'text-gray-600 hover:text-primary hover:bg-primary/10' }}
-                    @if (($action['variant'] ?? '') === 'danger') text-red-600 hover:bg-red-50
-                    @elseif (($action['variant'] ?? '') === 'success') text-green-600 hover:bg-green-50
+                    @if (($action['variant'] ?? '') === 'danger') text-danger hover:bg-danger/10
+                    @elseif (($action['variant'] ?? '') === 'success') text-success hover:bg-success/10
                     @else text-gray-600 hover:text-primary hover:bg-primary/10
                     @endif"
                 title="{{ $action['label'] }}">
@@ -61,10 +61,10 @@
                             x-on:click="open = false"
                             aria-label="{{ $action['label'] }}"
                             class="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg text-right transition-colors
-                                {{ ($action['variant'] ?? '') === 'danger' ? 'text-red-600 hover:bg-red-50' : 'text-gray-700 hover:bg-gray-50' }}">
+                                {{ ($action['variant'] ?? '') === 'danger' ? 'text-danger hover:bg-danger/10' : 'text-gray-700 hover:bg-gray-50' }}">
                             @if (isset($action['icon']))
                                 <x-hero-icon name="{{ $action['icon'] }}"
-                                    class="w-4 h-4 {{ ($action['variant'] ?? '') === 'danger' ? 'text-red-500' : 'text-gray-400' }}" />
+                                    class="w-4 h-4 {{ ($action['variant'] ?? '') === 'danger' ? 'text-danger' : 'text-gray-400' }}" />
                             @endif
                             {{ $action['label'] }}
                         </button>

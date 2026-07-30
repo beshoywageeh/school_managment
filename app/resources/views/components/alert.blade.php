@@ -15,11 +15,11 @@
         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full p-6 text-center z-10">
 
-        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-amber-100 mb-4"
+        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-warning/20 mb-4"
             :class="{
-                'bg-amber-100 text-amber-600': type === 'warning',
-                'bg-red-100 text-red-600': type === 'danger',
-                'bg-green-100 text-green-600': type === 'success'
+                'bg-warning/20 text-warning': type === 'warning',
+                'bg-danger/20 text-danger': type === 'danger',
+                'bg-success/20 text-success': type === 'success'
             }">
             <svg class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -38,9 +38,9 @@
             <button @click="if (onConfirm) onConfirm(); isOpen = false" type="button"
                 class="px-4 py-2 rounded-md text-sm font-medium text-white transition"
                 :class="{
-                    'bg-amber-600 hover:bg-amber-700': type === 'warning',
-                    'bg-red-600 hover:bg-red-700': type === 'danger',
-                    'bg-green-600 hover:bg-green-700': type === 'success'
+                    'bg-warning hover:bg-warning/90': type === 'warning',
+                    'bg-danger hover:bg-danger/90': type === 'danger',
+                    'bg-success hover:bg-success/90': type === 'success'
                 }"
                 x-text="confirmButtonText"></button>
         </div>

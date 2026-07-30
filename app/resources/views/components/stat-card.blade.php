@@ -10,14 +10,14 @@
     use Illuminate\Support\Js;
 
     $colorMap = [
-        'blue' => 'border-s-blue-500',
-        'green' => 'border-s-green-500',
-        'amber' => 'border-s-amber-500',
-        'red' => 'border-s-red-500',
-        'purple' => 'border-s-purple-500',
-        'cyan' => 'border-s-cyan-500',
+        'blue' => 'bg-primary/10',
+        'green' => 'bg-success/10',
+        'amber' => 'bg-warning/10',
+        'red' => 'bg-danger/10',
+        'purple' => 'bg-purple-100',
+        'cyan' => 'bg-cyan-100',
     ];
-    $borderColor = $colorMap[$color] ?? 'border-s-blue-500';
+    $tint = $colorMap[$color] ?? 'bg-primary/10';
 
     $svgWidth = 60;
     $svgHeight = 30;
@@ -39,11 +39,11 @@
 @endphp
 
 <div
-    {{ $attributes->merge(['class' => "bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex items-center gap-4 border-s-4 {$borderColor} w-full"]) }}>
+    {{ $attributes->merge(['class' => "bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex items-center gap-4 w-full"]) }}>
     {{ $slot }}
     @if ($trend)
         <div class="flex flex-col items-end mr-auto">
-            <span class="text-xs {{ $trendDirection === 'up' ? 'text-green-600' : 'text-red-600' }} font-medium">
+            <span class="text-xs {{ $trendDirection === 'up' ? 'text-success' : 'text-danger' }} font-medium">
                 @if ($trendDirection === 'up')
                     ▲
                 @else

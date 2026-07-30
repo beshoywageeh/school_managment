@@ -10,17 +10,17 @@
         @method('PUT')
         <input type="hidden" name="id" value="{{ $user->id }}">
         <div class="mb-4 flex flex-wrap gap-4">
-            <div class="flex-1 min-w-[320px]">
+            <div class="flex-1 min-w-[280px] sm:min-w-[320px]">
                 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
                     <div class="p-6">
                         <h4 class="text-lg font-bold mb-4 text-center">{{ trans('employees.personal_info') }}</h4>
 
                         <div class="flex flex-wrap gap-4 mb-4">
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="name" value="{{ old('name', $user->name) }}"
                                     type="text">{{ trans('employees.name') }}</x-input>
                             </div>
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="learning" value="{{ old('learning', $user->learning) }}"
                                     type="text">{{ trans('employees.learning') }}</x-input>
                             </div>
@@ -35,29 +35,29 @@
                                         {{ $year }}</option>
                                 @endforeach
                             </x-select>
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input type="date" name="birth_date"
                                     value="{{ old('birth_date', $user->date_of_birth) }}">{{ trans('employees.birth_date') }}</x-input>
                             </div>
                         </div>
 
                         <div class="flex flex-wrap gap-4 mb-4">
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="phone" value="{{ old('phone', $user->phone) }}"
                                     type="text">{{ trans('employees.phone') }}</x-input>
                             </div>
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="national_id" value="{{ old('national_id', $user->national_id) }}"
                                     type="text">{{ trans('employees.national_id') }}</x-input>
                             </div>
                         </div>
 
                         <div class="flex flex-wrap gap-4 mb-4">
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="sepicality" value="{{ old('sepicality', $user->sepicality ?? '') }}"
                                     type="text">{{ trans('employees.sepicality') }}</x-input>
                             </div>
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="ministry_code"
                                     value="{{ old('ministry_code', $user->ministry_code ?? '') }}"
                                     type="text">{{ trans('employees.ministry_code') }}</x-input>
@@ -65,7 +65,7 @@
                         </div>
 
                         <div class="flex flex-wrap gap-4 mb-4">
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input type="date" name="national_id_expire_date"
                                     value="{{ old('national_id_expire_date', $user->national_id_expire_date ?? '') }}">{{ trans('employees.national_id_expire_date') }}</x-input>
                             </div>
@@ -80,18 +80,18 @@
                 </div>
             </div>
 
-            <div class="flex-1 min-w-[320px]">
+            <div class="flex-1 min-w-[280px] sm:min-w-[320px]">
                 <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-4">
                     <div class="p-6">
                         <h4 class="text-lg font-bold mb-4 text-center">{{ trans('employees.job_info') }}</h4>
 
                         <div class="flex flex-wrap gap-4 mb-4">
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="contract_start_date"
                                     value="{{ old('contract_start_date', $user->contract_start_date ?? '') }}"
                                     type="date">{{ trans('employees.contract_start_date') }}</x-input>
                             </div>
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="date_of_hiring"
                                     value="{{ old('date_of_hiring', $user->date_of_hiring) }}"
                                     type="date">{{ trans('employees.join_date') }}</x-input>
@@ -111,7 +111,7 @@
                                 <option value="0" {{ old('status', $user->status ?? '') == '0' ? 'selected' : '' }}>{{ trans('employees.insur') }}</option>
                                 <option value="1" {{ old('status', $user->status ?? '') == '1' ? 'selected' : '' }}>{{ trans('employees.contracted') }}</option>
                             </x-select>
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="lesson_count"
                                     value="{{ old('lesson_count', $user->lesson_count ?? 24) }}"
                                     type="number">{{ trans('employees.lesson_count') }}</x-input>
@@ -119,12 +119,12 @@
                         </div>
 
                         <div class="flex flex-wrap gap-4 mb-4">
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="insurance_date"
                                     value="{{ old('insurance_date', $user->insurance_date) }}"
                                     type="date">{{ trans('employees.insurance_date') }}</x-input>
                             </div>
-                            <div class="flex-1 min-w-[200px]">
+                            <div class="flex-1 min-w-[160px] sm:min-w-[200px]">
                                 <x-input name="insurance_number"
                                     value="{{ old('insurance_number', $user->insurance_number) }}"
                                     type="text">{{ trans('employees.insurance_number') }}</x-input>

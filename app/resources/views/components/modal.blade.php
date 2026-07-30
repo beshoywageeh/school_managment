@@ -13,25 +13,25 @@
     // 1. إعداد الألوان الديناميكية
     $colors = [
         'success' => [
-            'btn' => 'bg-green-500 hover:bg-green-600 text-white',
-            'icon' => 'text-green-600',
-            'bg' => 'bg-green-50',
+            'btn' => 'bg-success hover:bg-success/90 text-white',
+            'icon' => 'text-success',
+            'bg' => 'bg-success/10',
         ],
-        'danger' => ['btn' => 'bg-red-500 hover:bg-red-600 text-white', 'icon' => 'text-red-600', 'bg' => 'bg-red-50'],
+        'danger' => ['btn' => 'bg-danger hover:bg-danger/90 text-white', 'icon' => 'text-danger', 'bg' => 'bg-danger/10'],
         'info' => [
-            'btn' => 'bg-blue-500 hover:bg-blue-600 text-white',
-            'icon' => 'text-blue-600',
-            'bg' => 'bg-blue-50',
+            'btn' => 'bg-primary hover:bg-primary/90 text-white',
+            'icon' => 'text-primary',
+            'bg' => 'bg-primary/10',
         ],
         'warning' => [
-            'btn' => 'bg-yellow-500 hover:bg-yellow-600 text-white',
-            'icon' => 'text-yellow-600',
-            'bg' => 'bg-yellow-50',
+            'btn' => 'bg-warning hover:bg-warning/90 text-white',
+            'icon' => 'text-warning',
+            'bg' => 'bg-warning/10',
         ],
     ][$variant] ?? [
-        'btn' => 'bg-green-500 hover:bg-green-600 text-white',
-        'icon' => 'text-green-600',
-        'bg' => 'bg-green-50',
+        'btn' => 'bg-success hover:bg-success/90 text-white',
+        'icon' => 'text-success',
+        'bg' => 'bg-success/10',
     ];
 
     // 2. إعداد المقاسات الديناميكية للمودال
