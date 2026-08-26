@@ -2,7 +2,7 @@
 
 namespace App\Services\Student;
 
-use App\Models\Student;
+use App\Repositories\Interface\StudentInterface;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,32 +12,23 @@ use Illuminate\Support\Facades\DB;
 
 class StudentQueryService
 {
-    public function getFilteredQuery(Request $request, ?int $schoolId): LengthAwarePaginator
-    {
-        $query = Student::query()
-            ->join('parents', 'students.parent_id', '=', 'parents.id')
-            ->join('grades', 'students.grade_id', '=', 'grades.id')
-            ->join('class_rooms', 'students.classroom_id', '=', 'class_rooms.id')
-            ->when($schoolId, fn ($q) => $q->where('students.school_id', $schoolId))
-            ->whereNull('students.deleted_at')
-            ->withSum('fee_invoice', 'amount')
-            ->select([
-                'students.*',
-                'parents.father_name as parent_name',
-                'grades.name as grade_name',
-                'class_rooms.name as classroom_name',
-            ]);
+    public function __construct(protected StudentInterface $studentRepo) {}
 
+    public function getFilteredQuery(
+        Request $request,
+        ?int $schoolId,
+    ): LengthAwarePaginator {
+        $query = $this->studentRepo->getAllStudents();
         $this->applyFilters($query, $request);
         $this->applySorts($query, $request);
 
-        return $query->paginate(config('school.per_page'));
+        return $query->latest()->paginate(config('school.per_page'));
     }
 
     public function applyFilters(Builder $query, Request $request): void
     {
         if ($request->filled('students')) {
-            $search = '%'.$request->students.'%';
+            $search = '%' . $request->students . '%';
             $query->where(function ($q) use ($search) {
                 $q->where('students.name', 'like', $search)
                     ->orWhere('parents.father_name', 'like', $search)
@@ -54,11 +45,19 @@ class StudentQueryService
         }
 
         if ($request->filled('birth_date_filter')) {
-            $query->whereDate('students.birth_date', '>=', Carbon::parse($request->birth_date_filter));
+            $query->whereDate(
+                'students.birth_date',
+                '>=',
+                Carbon::parse($request->birth_date_filter),
+            );
         }
 
         if ($request->filled('joinDateTo')) {
-            $query->whereDate('students.join_date', '<=', Carbon::parse($request->joinDateTo));
+            $query->whereDate(
+                'students.join_date',
+                '<=',
+                Carbon::parse($request->joinDateTo),
+            );
         }
 
         if (! Auth::user()->hasRole('Admin')) {

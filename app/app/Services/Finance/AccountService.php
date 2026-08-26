@@ -20,26 +20,43 @@ class AccountService
     private function generateAutoNumber(
         string $modelClass,
         string $column = 'auto_number',
-        int $pad = 6
+        int $pad = 6,
     ): string {
         return DB::transaction(function () use ($modelClass, $column, $pad) {
-            $last = $modelClass::lockForUpdate()->orderBy($column, 'desc')->first();
+            $last = $modelClass::lockForUpdate()
+                ->orderBy($column, 'desc')
+                ->first();
 
-            $nextNumber = $last ? ((int) $last->$column + 1) : 1;
+            $nextNumber = $last ? (int) $last->$column + 1 : 1;
 
             return str_pad($nextNumber, $pad, '0', STR_PAD_LEFT);
         });
     }
 
-    public function createReceipt($amount, $student, $academicYearId, $school_id): ReceiptPayment
-    {
+    public function createReceipt(
+        $amount,
+        $student,
+        $academicYearId,
+        $school_id,
+    ): ReceiptPayment {
         if ($amount <= 0) {
-            throw new FinancialException('Receipt amount must be greater than zero.');
+            throw new FinancialException(
+                'Receipt amount must be greater than zero.',
+            );
         }
 
-        return DB::transaction(function () use ($amount, $student, $academicYearId, $school_id) {
+        return DB::transaction(function () use (
+            $amount,
+            $student,
+            $academicYearId,
+            $school_id,
+        ) {
             $receipt = ReceiptPayment::create([
-                'manual' => $this->generateAutoNumber(ReceiptPayment::class, 'manual', 5),
+                'manual' => $this->generateAutoNumber(
+                    ReceiptPayment::class,
+                    'manual',
+                    5,
+                ),
                 'date' => Carbon::today()->toDateString(),
                 'student_id' => $student->id,
                 'Debit' => $amount,
@@ -52,23 +69,33 @@ class AccountService
                 trans('log.actions.added'),
                 trans('log.models.payment_part.receipt_added', [
                     'name' => $student->name,
-                ])
+                ]),
             );
 
             return $receipt;
         });
     }
 
-    public function createOrUpdateExchangeBond($school, Request $request, $acc_year): ExchangeBond
-    {
+    public function createOrUpdateExchangeBond(
+        $school,
+        Request $request,
+        $acc_year,
+    ): ExchangeBond {
         if ($request->amount <= 0) {
-            throw new FinancialException('Exchange bond amount must be greater than zero.');
+            throw new FinancialException(
+                'Exchange bond amount must be greater than zero.',
+            );
         }
 
         $student = Student::findOrFail($request->student_id);
         $academicYearId = is_object($acc_year) ? $acc_year->id : $acc_year;
 
-        return DB::transaction(function () use ($school, $request, $academicYearId, $student) {
+        return DB::transaction(function () use (
+            $school,
+            $request,
+            $academicYearId,
+            $student,
+        ) {
             $exchange = ExchangeBond::updateOrCreate(
                 ['id' => $request->id],
                 [
@@ -80,7 +107,7 @@ class AccountService
                     'date' => Carbon::today()->toDateString(),
                     'description' => $request->note,
                     'user_id' => auth()->id(),
-                ]
+                ],
             );
 
             $this->createStudentAccount(
@@ -90,7 +117,7 @@ class AccountService
                 type: 'exchange',
                 debit: $request->amount,
                 credit: 0.0,
-                exchange_bond_id: $exchange->id
+                exchange_bond_id: $exchange->id,
             );
 
             $this->fundAccount($school, $exchange->id, 0.0, $request->amount);
@@ -104,7 +131,7 @@ class AccountService
         $exchange = null,
         $Credit = 0.0,
         $Debit = 0.0,
-        $receipt = null
+        $receipt = null,
     ): void {
         FundAccount::create([
             'date' => Carbon::today()->toDateString(),
@@ -126,23 +153,27 @@ class AccountService
         $credit = 0.0,
         $recipt_id = null,
         $excpetion_id = null,
-        $exchange_bond_id = null
+        $exchange_bond_id = null,
     ): void {
         if (! $student) {
-            throw new FinancialException('Cannot create student account without a student.');
+            throw new FinancialException(
+                'Cannot create student account without a student.',
+            );
         }
 
         StudentAccount::create([
             'student_id' => $student->id,
             'grade_id' => $student->grade_id,
             'classroom_id' => $student->classroom_id,
-            'recipt__payments_id' => $recipt_id,
+            'recipt_payments_id' => $recipt_id,
             'fee_invoices_id' => $fee_invoices_id,
-            'excpetion_id' => $excpetion_id,
+            'exception_id' => $excpetion_id,
             'exchange_bond_id' => $exchange_bond_id,
             'date' => Carbon::today()->toDateString(),
             'type' => $type,
-            'academic_year_id' => is_object($acc_year) ? $acc_year->id : $acc_year,
+            'academic_year_id' => is_object($acc_year)
+                ? $acc_year->id
+                : $acc_year,
             'debit' => $debit,
             'credit' => $credit,
         ]);

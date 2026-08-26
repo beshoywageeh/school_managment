@@ -17,7 +17,7 @@
                 </template>
             </div>
         </div>
-    </template>
+    </template> 
 
     <template x-if="error">
         <div class="bg-danger/10 border border-danger/20 rounded-xl p-6 text-danger text-center">

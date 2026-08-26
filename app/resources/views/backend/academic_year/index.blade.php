@@ -9,7 +9,7 @@
         <div class="p-4 border-b border-gray-100 flex justify-between items-center">
             <h4 class="text-lg font-bold text-gray-800">{{ trans('academic_year.title') }}</h4>
             @can('academic_year-create')
-                @include('backend.academic-year.create')
+                @include('backend.academic_year.create')
             @endcan
         </div>
 
@@ -56,7 +56,7 @@
                                     </a>
                                     @endcan
                                     @can('academic_year-edit')
-                                    @include('backend.academic-year.edit')
+                                    @include('backend.academic_year.edit')
 
                                     @endcan
                                     @can('academic_year-delete')

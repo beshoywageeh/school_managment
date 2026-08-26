@@ -25,6 +25,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+
         *,
         *::before,
         *::after {

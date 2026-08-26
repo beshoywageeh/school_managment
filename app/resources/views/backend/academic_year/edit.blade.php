@@ -1,4 +1,4 @@
-<x-modal id="editAcademicYear_{{ $acadmice_year->id }}" title="{{ trans('academic_year.title') }} | {{ trans('general.edit') }}" can="academic_year-edit" icon="pencil">
+<x-modal id="editAcademicYear_{{ $acadmice_year->id }}" title="{{ trans('academic_year.title') }} | {{ trans('general.edit') }}" can="academic_year-edit" icon="pencil" size="md">
     <form action="{{ route('academic-year.update', $acadmice_year->id) }}" method="post" id="editAcademicYear_{{ $acadmice_year->id }}">
         @csrf
         @method('PUT')

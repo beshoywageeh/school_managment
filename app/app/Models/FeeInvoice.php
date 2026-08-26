@@ -47,7 +47,7 @@ class FeeInvoice extends Model
 
     public function schoolFee(): BelongsTo
     {
-        return $this->belongsTo(SchoolFee::class, 'school_fee_id');
+        return $this->belongsTo(SchoolFee::class, 'school_fee_id', 'id');
     }
 
     public function acd_year(): BelongsTo

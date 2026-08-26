@@ -15,7 +15,8 @@
         </a>
     @endcan
     @can('parents-delete')
-        <form action="{{ route('parents.destroy', $parent) }}" method="POST" class="w-full" x-on:submit="open = false; confirmation(event)">
+        <form action="{{ route('parents.destroy', $parent) }}" method="POST" class="w-full"
+            x-on:submit="open = false; confirmation(event)">
             @csrf
             @method('DELETE')
             <button type="submit"

@@ -15,43 +15,61 @@ class AccountingReversalService
         $entries = FundAccount::where('receipt_id', $receipt->id)->get();
 
         if ($entries->isEmpty()) {
-            throw new FinancialException('No fund account entries found for this receipt to reverse.');
+            throw new FinancialException(
+                'No fund account entries found for this receipt to reverse.',
+            );
         }
 
         foreach ($entries as $entry) {
-            $entry->update([
+            $entry->create([
                 'Credit' => $entry->Debit,
                 'Debit' => $entry->Credit,
             ]);
         }
 
-        $studentAccounts = StudentAccount::where('receipt_payment_id', $receipt->id)->get();
-        $invoiceIds = $studentAccounts->pluck('fee_invoices_id')->filter()->unique()->all();
+        $studentAccounts = StudentAccount::where(
+            'receipt_payment_id',
+            $receipt->id,
+        )->get();
+        $invoiceIds = $studentAccounts
+            ->pluck('fee_invoices_id')
+            ->filter()
+            ->unique()
+            ->all();
 
         foreach ($studentAccounts as $account) {
-            $account->update([
+            $account->create([
                 'Debit' => $account->Credit,
                 'Credit' => $account->Debit,
             ]);
         }
 
         if (! empty($invoiceIds)) {
-            FeeInvoice::whereIn('id', $invoiceIds)->update(['status' => 'not_paid']);
+            FeeInvoice::whereIn('id', $invoiceIds)->update([
+                'status' => 'unpaid',
+            ]);
         }
     }
 
     public function reverseFeeInvoiceEntries(FeeInvoice $invoice): void
     {
-        $studentAccounts = StudentAccount::where('fee_invoices_id', $invoice->id)->get();
+        $studentAccounts = StudentAccount::where(
+            'fee_invoices_id',
+            $invoice->id,
+        )->get();
 
         foreach ($studentAccounts as $account) {
-            $account->update([
+            $account->create([
                 'Debit' => $account->Credit,
                 'Credit' => $account->Debit,
             ]);
         }
 
-        $receiptIds = $studentAccounts->pluck('receipt_payment_id')->filter()->unique()->all();
+        $receiptIds = $studentAccounts
+            ->pluck('receipt_payment_id')
+            ->filter()
+            ->unique()
+            ->all();
 
         if (! empty($receiptIds)) {
             $receipts = ReceiptPayment::whereIn('id', $receiptIds)->get();

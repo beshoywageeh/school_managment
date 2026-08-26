@@ -56,4 +56,12 @@ class StudentRegeister
 
         return ['student' => $student, 'parent' => $parent];
     }
+
+    public function StudentCode()
+    {
+        $lastStudent = Student::orderBy('code', 'desc')->first();
+        $code = $lastStudent ? (int) $lastStudent->code + 1 : 1;
+
+        return $code;
+    }
 }

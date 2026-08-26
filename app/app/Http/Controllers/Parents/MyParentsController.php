@@ -11,6 +11,7 @@ use App\Models\MyParent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 class MyParentsController extends Controller
 {
@@ -43,11 +44,10 @@ class MyParentsController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $Mother_Status = MyParent::get('mother_status');
-
+        // $Mother_Status = MyParent::pluck('mother_status');
         return view(
             'backend.Parents.create',
-            compact('school', 'Mother_Status'),
+            compact('school'),
         );
     }
 
@@ -78,8 +78,8 @@ class MyParentsController extends Controller
                 'address' => $request->address,
                 'religion' => $request->religion,
                 'father_learning' => $request->father_learning,
-                'user_id' => \Auth::Id(),
-                'school_id' => \Auth::user()->school_id,
+                'user_id' => Auth::Id(),
+                'school_id' => Auth::user()->school_id,
                 'mother_status' => $request->Mother_Status,
             ]);
             $this->logActivity(
@@ -131,7 +131,7 @@ class MyParentsController extends Controller
     public function update(Request $request)
     {
         try {
-            MyParent::find($request->id)->update([
+            MyParent::findorfail($request->id)->update([
                 'father_name' => $request->father_name,
                 'father_phone' => $request->father_phone,
                 'father_job' => $request->father_job,
@@ -150,8 +150,8 @@ class MyParentsController extends Controller
                 'religion' => $request->religion,
                 'father_learning' => $request->father_learning,
                 'mother_status' => $request->Mother_Status,
-                'user_id' => \Auth::Id(),
-                'school_id' => \Auth::user()->school_id,
+                'user_id' => Auth::Id(),
+                'school_id' => Auth::user()->school_id,
             ]);
             $this->logActivity(
                 trans('log.actions.updated'),
@@ -182,8 +182,10 @@ class MyParentsController extends Controller
                     ]),
                 );
                 session()->flash('success', trans('general.deleted'));
+            } else {
+
+                session()->flash('info', trans('Parents.cannotdeleteparents'));
             }
-            session()->flash('info', trans('Parents.cannotdeleteparents'));
 
             return redirect()->route('parents.index');
         } catch (\Exception $e) {

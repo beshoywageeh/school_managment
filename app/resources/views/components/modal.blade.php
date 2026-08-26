@@ -17,7 +17,11 @@
             'icon' => 'text-success',
             'bg' => 'bg-success/10',
         ],
-        'danger' => ['btn' => 'bg-danger hover:bg-danger/90 text-white', 'icon' => 'text-danger', 'bg' => 'bg-danger/10'],
+        'danger' => [
+            'btn' => 'bg-danger hover:bg-danger/90 text-white',
+            'icon' => 'text-danger',
+            'bg' => 'bg-danger/10',
+        ],
         'info' => [
             'btn' => 'bg-primary hover:bg-primary/90 text-white',
             'icon' => 'text-primary',

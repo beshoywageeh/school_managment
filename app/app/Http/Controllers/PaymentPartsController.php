@@ -10,6 +10,7 @@ use App\Models\FeeInvoice;
 use App\Models\PaymentParts;
 use App\Models\Student;
 use App\Services\Finance\FinancialService;
+use DB;
 
 class PaymentPartsController extends Controller
 {
@@ -17,32 +18,44 @@ class PaymentPartsController extends Controller
 
     public function __construct(private FinancialService $financial_service)
     {
-        $this->middleware('permission:payment_parts-list', ['only' => ['index']]);
-        $this->middleware('permission:payment_parts-create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:payment_parts-edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:payment_parts-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:payment_parts-list', [
+            'only' => ['index'],
+        ]);
+        $this->middleware('permission:payment_parts-create', [
+            'only' => ['create', 'store'],
+        ]);
+        $this->middleware('permission:payment_parts-edit', [
+            'only' => ['edit', 'update'],
+        ]);
+        $this->middleware('permission:payment_parts-delete', [
+            'only' => ['destroy'],
+        ]);
     }
 
     public function index()
     {
         $school = $this->getSchool();
-        $PaymentParts = PaymentParts::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
-            ->with([
-                'student',
-                'grade',
-                'classroom',
-                'year',
-            ])
+        $PaymentParts = PaymentParts::when(
+            $this->schoolId(),
+            fn ($q, $id) => $q->where('school_id', $id),
+        )
+            ->with(['student', 'grade', 'classroom', 'year'])
             ->paginate(config('school.per_page'));
 
-        return view('backend.payment-parts.index', compact('PaymentParts', 'school'));
+        return view(
+            'backend.payment_parts.index',
+            compact('PaymentParts', 'school'),
+        );
     }
 
     public function create($id)
     {
         try {
             $school = $this->getSchool();
-            $student = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
+            $student = Student::when(
+                $this->schoolId(),
+                fn ($q, $id) => $q->where('school_id', $id),
+            )
                 ->where('id', $id)
                 ->with([
                     'fee_invoice' => function ($q) {
@@ -59,7 +72,7 @@ class PaymentPartsController extends Controller
             }
 
             return view(
-                'backend.payment-parts.create',
+                'backend.payment_parts.create',
                 compact('school', 'student'),
             );
         } catch (\Exception $e) {
@@ -72,6 +85,7 @@ class PaymentPartsController extends Controller
     public function store(StorePaymentRequest $request)
     {
         try {
+            DB::beginTransaction();
             $student = Student::findorfail($request->student_id);
             $parts = $request->parts;
             $academic_year = FeeInvoice::where('student_id', $student->id)
@@ -89,10 +103,12 @@ class PaymentPartsController extends Controller
                 );
             });
 
+            DB::commit();
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('payment-parts.index');
+            return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
+            DB::rollBack();
             session()->flash('error', $e->getMessage());
 
             return redirect()->back()->withInput();
@@ -110,9 +126,20 @@ class PaymentPartsController extends Controller
                     'year:id,year_start,year_end',
                 ])
                 ->first();
+            if ($paymentpart->status === 'paid') {
+                session()->flash(
+                    'error',
+                    trans('general.cannot_update_paid_part'),
+                );
+
+                return redirect()->back();
+            }
             $school = $this->getSchool();
 
-            return view('backend.payment-parts.edit', compact('paymentParts', 'school'));
+            return view(
+                'backend.payment_parts.edit',
+                compact('paymentParts', 'school'),
+            );
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -124,6 +151,14 @@ class PaymentPartsController extends Controller
     {
         try {
             $paymentpart = PaymentParts::findorfail($request->id);
+            if ($paymentpart->status === 'paid') {
+                session()->flash(
+                    'error',
+                    trans('general.cannot_update_paid_part'),
+                );
+
+                return redirect()->back();
+            }
             $paymentpart->update([
                 'amount' => $request->amount,
             ]);
@@ -135,7 +170,7 @@ class PaymentPartsController extends Controller
             );
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('payment-parts.index');
+            return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -147,6 +182,14 @@ class PaymentPartsController extends Controller
     {
         try {
             $pay = PaymentParts::findorFail($id);
+            if ($pay->status === 'paid') {
+                session()->flash(
+                    'error',
+                    trans('general.cannot_delete_paid_part'),
+                );
+
+                return redirect()->back();
+            }
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.payment_part.deleted', [
@@ -156,7 +199,7 @@ class PaymentPartsController extends Controller
             $pay->delete();
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('payment-parts.index');
+            return redirect()->route('payment_parts.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 

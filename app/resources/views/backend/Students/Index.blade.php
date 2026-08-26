@@ -76,7 +76,7 @@
                                         'url' => route('payment-parts.create',  'ID_PLACEHOLDER'),
                                         'icon' => 'credit-card',
                                         'text' => trans('Sidebar.payment_parts'),
-                                        'className' => 'text-primary hover:bg-primary/10',
+                                        'className' => 'text-primary hover:bg-primary/10 ',
 
                                     ],
                                     ]

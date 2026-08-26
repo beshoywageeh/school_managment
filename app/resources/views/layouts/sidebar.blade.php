@@ -5,8 +5,8 @@
     ]"
     class="fixed top-0 start-0 z-40 h-screen bg-gray-900 text-white overflow-hidden transition-all duration-300 flex flex-col translate-x-full lg:translate-x-0"
     @mouseenter="if (!sidebarPinned) sidebarHover = true" @mouseleave="if (!sidebarPinned) sidebarHover = false"
-    @focusin="if (!sidebarPinned) sidebarHover = true" @focusout="if (!sidebarPinned && !$el.contains($event.relatedTarget)) sidebarHover = false"
-    dir="rtl">
+    @focusin="if (!sidebarPinned) sidebarHover = true"
+    @focusout="if (!sidebarPinned && !$el.contains($event.relatedTarget)) sidebarHover = false" dir="rtl">
     <!-- Logo area -->
     <div class="shrink-0 flex items-center justify-center h-16 border-b border-gray-800">
         <template x-if="sidebarExpanded">

@@ -20,13 +20,18 @@ class SchoolFeeController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
-    public function __construct(
-        protected FinancialService $financialService,
-    ) {
-        $this->middleware('permission:schoolfees-list', ['only' => ['index', 'show', 'getclasses']]);
-        $this->middleware('permission:schoolfees-create', ['only' => ['store']]);
+    public function __construct(protected FinancialService $financialService)
+    {
+        $this->middleware('permission:schoolfees-list', [
+            'only' => ['index', 'show', 'getclasses'],
+        ]);
+        $this->middleware('permission:schoolfees-create', [
+            'only' => ['store'],
+        ]);
         $this->middleware('permission:schoolfees-edit', ['only' => ['update']]);
-        $this->middleware('permission:schoolfees-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:schoolfees-delete', [
+            'only' => ['destroy'],
+        ]);
     }
 
     /**
@@ -35,7 +40,10 @@ class SchoolFeeController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
+        $grades = Grade::when(
+            $this->schoolId(),
+            fn ($q, $id) => $q->where('school_id', $id),
+        )->get();
 
         $years = AcademicYear::where('status', 'active')->get();
         $academic_years = $years->map(function ($year) {
@@ -46,16 +54,29 @@ class SchoolFeeController extends Controller
                     Carbon::parse($year->year_end)->format('Y'),
             ];
         });
-        $SchoolFees = SchoolFee::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
+        $SchoolFees = SchoolFee::when(
+            $this->schoolId(),
+            fn ($q, $id) => $q->where('school_id', $id),
+        )
             ->with(
                 'grade:id,name',
                 'classroom:id,name',
                 'user:id,name',
                 'year:id,view',
             )
+            ->latest()
             ->paginate(config('school.per_page'));
 
-        return view('backend.school-fees.index', compact('school', 'grades', 'years', 'academic_years', 'SchoolFees'));
+        return view(
+            'backend.school_fees.index',
+            compact(
+                'school',
+                'grades',
+                'years',
+                'academic_years',
+                'SchoolFees',
+            ),
+        );
     }
 
     /**
@@ -69,7 +90,7 @@ class SchoolFeeController extends Controller
                 $schoolFee->grade_id = $request->grade_id;
                 $schoolFee->classroom_id = $request->classroom_id;
                 $schoolFee->user_id = Auth::user()->id;
-                $schoolFee->school_id = $this->getSchool()->id;
+                $schoolFee->school_id = Auth::user()->school_id;
                 $schoolFee->academic_year_id = $request->academic_year_id;
                 $schoolFee->description = $request->description;
                 $schoolFee->amount = $request->amount;
@@ -85,10 +106,7 @@ class SchoolFeeController extends Controller
                     ->where('classroom_id', $request->classroom_id)
                     ->get();
 
-                $students->each(function ($student) use (
-                    $schoolFee,
-                    $request,
-                ) {
+                $students->each(function ($student) use ($schoolFee, $request) {
                     $this->financialService->FeeInvoice(
                         $student,
                         $schoolFee,
@@ -127,15 +145,15 @@ class SchoolFeeController extends Controller
         $school = $this->getSchool();
 
         $school_fee = SchoolFee::findorFail($id);
-        $students = Student::where(
-            'classroom_id',
-            $school_fee->classroom_id,
-        )
+        $students = Student::where('classroom_id', $school_fee->classroom_id)
             ->where('grade_id', $school_fee->grade_id)
             ->with('classroom:id,name', 'grade:id,name')
             ->get(['code', 'name', 'classroom_id', 'grade_id']);
 
-        return view('backend.school-fees.show', compact('school', 'school_fee', 'students'));
+        return view(
+            'backend.school_fees.show',
+            compact('school', 'school_fee', 'students'),
+        );
     }
 
     /**
@@ -204,12 +222,12 @@ class SchoolFeeController extends Controller
     public function getclasses($id)
     {
         $school = $this->getSchool();
-        $class_rooms = ClassRoom::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
+        $class_rooms = ClassRoom::when(
+            $this->schoolId(),
+            fn ($q, $id) => $q->where('school_id', $id),
+        )
             ->where('grade_id', $id)
-            ->get([
-                'id',
-                'name',
-            ]);
+            ->get(['id', 'name']);
 
         return response()->json($class_rooms);
     }

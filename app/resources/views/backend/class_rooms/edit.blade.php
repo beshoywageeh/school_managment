@@ -1,5 +1,5 @@
 <x-modal id="EditClassRoom-{{ $class_room->id }}" title="{{ trans('general.edit') }}" variant="warning" icon="pencil" size="md" can="class_rooms-edit">
-    <form action="{{ route('class-rooms.update') }}" method="POST" id="EditClassRoom-{{ $class_room->id }}">
+    <form action="{{ route('class-rooms.update',$class_room->id) }}" method="POST" id="EditClassRoom-{{ $class_room->id }}">
             @csrf
             @method('PUT') {{-- ممارسة صحيحة في لارافيل عند التحديث --}}
 

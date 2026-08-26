@@ -4,6 +4,7 @@ use Alkoumi\LaravelArabicNumbers\LaravelArabicNumbersServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\AuthServiceProvider;
 use App\Providers\EventServiceProvider;
+use App\Providers\RepositoryServiceProvider;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
@@ -12,7 +13,6 @@ use Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -163,24 +163,27 @@ return [
     |
     */
 
-    'providers' => ServiceProvider::defaultProviders()->merge([
-        /*
-         * Package Service Providers...
-         */
+    'providers' => ServiceProvider::defaultProviders()
+        ->merge([
+            /*
+             * Package Service Providers...
+             */
 
-        /*
-         * Application Service Providers...
-         */
-        AppServiceProvider::class,
-        AuthServiceProvider::class,
+            /*
+             * Application Service Providers...
+             */
+            AppServiceProvider::class,
+            AuthServiceProvider::class,
 
-        // App\Providers\BroadcastServiceProvider::class,
-        EventServiceProvider::class,
-        RouteServiceProvider::class,
-        LaravelMpdfServiceProvider::class,
-        LaravelArabicNumbersServiceProvider::class,
-        PermissionServiceProvider::class,
-    ])->toArray(),
+            // App\Providers\BroadcastServiceProvider::class,
+            EventServiceProvider::class,
+            RouteServiceProvider::class,
+            LaravelMpdfServiceProvider::class,
+            LaravelArabicNumbersServiceProvider::class,
+            PermissionServiceProvider::class,
+            RepositoryServiceProvider::class,
+        ])
+        ->toArray(),
 
     /*
     |--------------------------------------------------------------------------
@@ -193,9 +196,10 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
-        'PDF' => LaravelMpdf::class,
-    ])->toArray(),
-
+    'aliases' => Facade::defaultAliases()
+        ->merge([
+            // 'Example' => App\Facades\Example::class,
+            'PDF' => LaravelMpdf::class,
+        ])
+        ->toArray(),
 ];

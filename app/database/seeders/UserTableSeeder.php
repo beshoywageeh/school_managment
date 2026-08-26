@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\Jobs_types;
 use App\Models\Job;
+use App\Models\School;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -40,6 +41,7 @@ class UserTableSeeder extends Seeder
         $attributes = [
             'email' => $email,
             'name' => $name,
+            'school_id' => School::query()->min('id'),
         ];
 
         if ($type !== null) {
@@ -168,7 +170,7 @@ class UserTableSeeder extends Seeder
                 ['email' => 'admin2@ischool.com', 'name' => 'مدير النظام 2'],
                 ['email' => 'admin3@ischool.com', 'name' => 'مدير النظام 3'],
             )
-            ->create()
+            ->create(['school_id' => School::query()->min('id')])
             ->each(fn ($user) => $user->assignRole($adminRole));
     }
 }

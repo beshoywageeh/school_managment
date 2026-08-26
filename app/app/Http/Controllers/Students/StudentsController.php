@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Students;
 
-use App\Enums\Status;
-use App\Enums\Student_Status;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StudentStoreRequest;
 use App\Http\Traits\LogsActivity;
@@ -15,10 +13,11 @@ use App\Models\MyParent;
 use App\Models\Nationality;
 use App\Models\SchoolFee;
 use App\Models\Student;
+use App\Repositories\Interface\ParentInterface;
+use App\Repositories\Interface\StudentInterface;
 use App\Services\Finance\FinancialService;
 use App\Services\Student\StudentImportService;
 use App\Services\Student\StudentQueryService;
-use App\Services\Student\StudentRegeister;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,10 +29,10 @@ class StudentsController extends Controller
     use LogsActivity, SchoolTrait;
 
     public function __construct(
-        private FinancialService $StudentFinance,
-        private StudentRegeister $StudentCreation,
-        private StudentImportService $StudentImportService,
+        protected ParentInterface $parentRepo,
+        protected StudentInterface $studentRepo,
         private StudentQueryService $studentQuery,
+        protected FinancialService $StudentFinance,
     ) {
         $this->middleware('permission:Students-list', [
             'only' => ['index', 'show', 'getclasses'],
@@ -126,13 +125,19 @@ class StudentsController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get(['id', 'name']);
-        $parents = MyParent::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get([
-            'id',
-            'father_name',
-        ]);
-        $acadmice_years = AcademicYear::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
-            ->where('status', Status::CLOSE)
+        $grades = Grade::when(
+            $this->schoolId(),
+            fn ($q, $id) => $q->where('school_id', $id),
+        )->get(['id', 'name']);
+        $parents = MyParent::when(
+            $this->schoolId(),
+            fn ($q, $id) => $q->where('school_id', $id),
+        )->get(['id', 'father_name']);
+        $acadmice_years = AcademicYear::when(
+            $this->schoolId(),
+            fn ($q, $id) => $q->where('school_id', $id),
+        )
+            ->where('status', 'active')
             ->get(['id', 'view']);
         $nationalitys = Nationality::get(['id', 'name']);
 
@@ -155,26 +160,37 @@ class StudentsController extends Controller
     {
         $this->authorize('Students-create', Student::class);
         try {
-            DB::Transaction(function () use ($request) {
-                $school = $this->getSchool();
-                $data = $this->StudentCreation->StudentRegeister($request, $school);
-                $school_fee = SchoolFee::where('academic_year_id', $data['student']->acadmiecyear_id)
-                    ->where('grade_id', $data['student']->grade_id)
-                    ->where('classroom_id', $data['student']->classroom_id)
-                    ->get();
-                $school_fee->each(function ($fee) use ($data, $school) {
-                    $this->StudentFinance->FeeInvoice(
-                        $data['student'],
-                        $fee,
-                        $data['student']->acadmiecyear_id,
-                        $school->id,
-                    );
-                });
+            DB::beginTransaction();
+            $school = $this->getSchool();
+            $parent = $this->parentRepo->createParent($request);
+            $student = $this->studentRepo->storeStudent($request, $parent);
+            $this->logActivity(
+                trans('log.actions.added'),
+                trans('log.models.student.created', [
+                    'student_name' => $request['student_name'],
+                ]),
+            );
+            $school_fee = SchoolFee::where(
+                'academic_year_id',
+                $student->acadmiecyear_id,
+            )
+                ->where('grade_id', $student->grade_id)
+                ->where('classroom_id', $student->classroom_id)
+                ->get();
+            $school_fee->each(function ($fee) use ($student, $school) {
+                $this->StudentFinance->FeeInvoice(
+                    $student,
+                    $fee,
+                    $student->acadmiecyear_id,
+                    $school->id,
+                );
             });
+            DB::commit();
             session()->flash('success', trans('general.success'));
 
             return redirect()->route('students.index');
         } catch (\Exception $e) {
+            DB::rollback();
             Log::error($e->getMessage());
             session()->flash('error', $e->getMessage());
 
@@ -188,20 +204,8 @@ class StudentsController extends Controller
     public function show(string $id)
     {
         try {
-            $student = Student::where('id', $id)
-                ->with([
-                    'user:id,name',
-                    'grade:id,name',
-                    'classroom:id,name',
-                    'parent:id,father_name,mother_name,father_phone,mother_phone,father_job',
-                    'nationality',
-                    'studentAccount',
-                    'fee_invoice',
-                ])
-                ->withsum('studentAccount', 'debit')
-                ->withsum('studentAccount', 'credit')
-                ->first();
             $school = $this->getSchool();
+            $student = $this->studentRepo->showStudent($id);
 
             return view('backend.Students.show', compact('student', 'school'));
         } catch (\Exception $e) {
@@ -218,8 +222,14 @@ class StudentsController extends Controller
     {
         try {
             $school = $this->getSchool();
-            $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get(['id', 'name']);
-            $parents = MyParent::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get(['id', 'father_name']);
+            $grades = Grade::when(
+                $this->schoolId(),
+                fn ($q, $id) => $q->where('school_id', $id),
+            )->get(['id', 'name']);
+            $parents = MyParent::when(
+                $this->schoolId(),
+                fn ($q, $id) => $q->where('school_id', $id),
+            )->get(['id', 'father_name']);
             $student = Student::findorfail($id);
 
             return view(
@@ -240,28 +250,7 @@ class StudentsController extends Controller
     {
         $this->authorize('Students-edit', Student::class);
         try {
-            $student = Student::findorfail($request->id);
-            $student->update([
-                'name' => $request->student_name,
-                'birth_date' => $request->birth_date,
-                'join_date' => $student->join_date,
-                'gender' => $request->gender,
-                'grade_id' => $request->grade,
-                'parent_id' => $request->parents,
-                'classroom_id' => $request->class_room,
-                'address' => $request->address,
-                'student_status' => Student_Status::fromString(
-                    $request->std_status,
-                ),
-                'national_id' => $request->national_id,
-                'religion' => MyParent::findorfail($request->parents)->religion,
-                'birth_at_begin' => $this->calculateAgeAsOfOctoberFirst(
-                    $request->birth_date,
-                ),
-
-                'nationality_id' => $request->nationality,
-                'user_id' => Auth::Id(),
-            ]);
+            $student = $this->studentRepo->updateStudent($request);
             session()->flash('success', trans('general.success'));
             $this->logActivity(
                 trans('log.actions.updated'),
@@ -284,14 +273,14 @@ class StudentsController extends Controller
         $school = $this->getSchool();
 
         return view(
-            'backend.Students.graduated',
+            'backend.students.graduated',
             compact('students', 'school'),
         );
     }
 
     public function restore($id)
     {
-        $student = Student::where('id', $id)->first();
+        $student = Student::onlyTrashed()->where('id', $id)->first();
         $student->restore();
         $this->logActivity(
             trans('log.actions.restored'),
@@ -301,7 +290,7 @@ class StudentsController extends Controller
         );
 
         return redirect()
-            ->route('Students.index')
+            ->route('students.index')
             ->with('success', trans('general.success'));
     }
 
@@ -335,7 +324,7 @@ class StudentsController extends Controller
     {
         $this->authorize('Students-delete', Student::class);
         try {
-            $student = Student::onlyTrashed()->where('id', $id)->first();
+            $student = Student::onlyTrashed()->findorfail($id);
 
             $this->logActivity(
                 trans('log.actions.deleted'),
@@ -357,7 +346,11 @@ class StudentsController extends Controller
 
     public function getclasses($id)
     {
-        $class_rooms = ClassRoom::where('school_id', $this->getSchool()->id)
+        $class_rooms = ClassRoom::query()
+            ->when(
+                $this->schoolId(),
+                fn ($query, $schoolId) => $query->where('school_id', $schoolId),
+            )
             ->where('grade_id', $id)
             ->get(['id', 'name']);
 

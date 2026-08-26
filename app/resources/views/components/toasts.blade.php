@@ -1,12 +1,11 @@
 <div x-data="{ toasts: [] }"
     @add-toast.window="toasts.push($event.detail); if (!$event.detail.sticky) { let t = $event.detail; setTimeout(() => { toasts = toasts.filter(to => to.id !== t.id); }, t.duration || 4000); }"
     @remove-toast.window="toasts = toasts.filter(to => to.id !== $event.detail)"
-    class="fixed bottom-5 end-5 z-50 flex flex-col gap-3 w-96 max-w-full pointer-events-none"
-    aria-live="polite" aria-atomic="false">
+    class="fixed bottom-5 end-5 z-50 flex flex-col gap-3 w-96 max-w-full pointer-events-none" aria-live="polite"
+    aria-atomic="false">
 
     <template x-for="toast in toasts" :key="toast.id">
-        <div role="alert"
-            x-transition:enter="transition ease-out duration-300 transform"
+        <div role="alert" x-transition:enter="transition ease-out duration-300 transform"
             x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:translate-x-4"
             x-transition:enter-end="opacity-100 translate-y-0 sm:translate-x-0"
             x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100"

@@ -52,7 +52,7 @@ class ClassRoomsController extends Controller
 
         $data['grades'] = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
 
-        return view('backend.class-rooms.index', compact('data', 'school'));
+        return view('backend.class_rooms.index', compact('data', 'school'));
     }
 
     /**

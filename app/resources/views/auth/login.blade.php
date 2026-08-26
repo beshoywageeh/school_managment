@@ -7,7 +7,8 @@
         <div class="p-8">
             <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">{{ trans('login.enter_data') }}</h3>
 
-            <form method="POST" action="{{ route('login') }}" autocomplete="off" x-data="{ loading: false }" x-on:submit="loading = true">
+            <form method="POST" action="{{ route('login') }}" autocomplete="off" x-data="{ loading: false }"
+                x-on:submit="loading = true">
                 @csrf
 
                 <div class="mb-6">
@@ -15,7 +16,7 @@
                         class="block text-sm font-medium text-gray-700 mb-2">{{ trans('login.email') }}</label>
                     <input id="email"
                         class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all @error('email') border-danger focus:border-danger focus:ring-danger/20 @enderror"
-                        type="email" name="email" value="{{  old('email') }}" placeholder="{{ trans('login.email') }}"
+                        type="email" name="email" value="{{ old('email') }}" placeholder="{{ trans('login.email') }}"
                         required @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
                     @error('email')
                         <p id="email-error" class="mt-2 text-sm text-danger" role="alert">{{ $message }}</p>
@@ -34,14 +35,15 @@
                     @enderror
                 </div>
 
-                <button type="submit"
-                    x-bind:disabled="loading"
+                <button type="submit" x-bind:disabled="loading"
                     class="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-60">
                     <span x-show="!loading">{{ trans('login.login') }}</span>
                     <span x-show="loading" class="inline-flex items-center gap-2">
                         <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z">
+                            </path>
                         </svg>
                         {{ trans('login.login') }}
                     </span>

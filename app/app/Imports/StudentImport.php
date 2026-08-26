@@ -9,6 +9,7 @@ use App\Models\ClassRoom;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\Student;
+use App\Services\Student\StudentRegeister;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
@@ -45,8 +46,9 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
     public function __construct(
         int $userId,
         int $schoolId,
-        ?int $academicYearId = null,
-        ?int $nationalityId = null
+        ?int $academicYearId,
+        ?int $nationalityId,
+        protected StudentRegeister $StudentRegeister,
     ) {
         $this->userId = $userId;
         $this->schoolId = $schoolId;
@@ -57,7 +59,7 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
 
         $defaultParent = MyParent::firstOrCreate(
             ['father_name' => 'Default Parent', 'school_id' => $this->schoolId],
-            ['user_id' => $this->userId, 'school_id' => $this->schoolId]
+            ['user_id' => $this->userId, 'school_id' => $this->schoolId],
         );
         $this->defaultParentId = $defaultParent->id;
 
@@ -67,8 +69,7 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
             ->toArray();
         $this->classes = ClassRoom::pluck('id', 'name')->toArray();
 
-        $lastStudent = Student::orderBy('code', 'desc')->first();
-        $this->nextCode = $lastStudent ? (int) $lastStudent->code + 1 : 1;
+        $nextCode = $this->StudentRegeister->StudentCode();
     }
 
     public function onRow(Row $row)
@@ -103,7 +104,9 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
                 ->where('school_id', $this->schoolId)
                 ->exists();
             if ($exists) {
-                Log::info("StudentImport: skipped duplicate national_id {$nationalId} ({$name})");
+                Log::info(
+                    "StudentImport: skipped duplicate national_id {$nationalId} ({$name})",
+                );
 
                 return;
             }
@@ -117,13 +120,16 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
                 $parentId = $this->parents[$parentName];
             } else {
                 $newParent = MyParent::updateOrCreate(
-                    ['father_name' => $parentName, 'school_id' => $this->schoolId],
+                    [
+                        'father_name' => $parentName,
+                        'school_id' => $this->schoolId,
+                    ],
                     [
                         'user_id' => $this->userId,
                         'school_id' => $this->schoolId,
                         'address' => $address,
                         'father_phone' => $parentPhone,
-                    ]
+                    ],
                 );
                 $parentId = $newParent->id;
                 $this->parents[$parentName] = $parentId;
@@ -137,17 +143,23 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
         $statusEnum = Student_Status::fromString($status);
 
         if (! $genderEnum) {
-            Log::warning("StudentImport: invalid gender '{$gender}' for student {$name}");
+            Log::warning(
+                "StudentImport: invalid gender '{$gender}' for student {$name}",
+            );
 
             return;
         }
         if (! $religionEnum) {
-            Log::warning("StudentImport: invalid religion '{$religion}' for student {$name}");
+            Log::warning(
+                "StudentImport: invalid religion '{$religion}' for student {$name}",
+            );
 
             return;
         }
         if (! $statusEnum) {
-            Log::warning("StudentImport: invalid status '{$status}' for student {$name}");
+            Log::warning(
+                "StudentImport: invalid status '{$status}' for student {$name}",
+            );
 
             return;
         }
@@ -161,7 +173,7 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
 
             if (is_numeric($birthDateRaw)) {
                 $birthDate = Carbon::instance(
-                    Date::excelToDateTimeObject((float) $birthDateRaw)
+                    Date::excelToDateTimeObject((float) $birthDateRaw),
                 );
             } else {
                 $birthDate = Carbon::parse($birthDateRaw);
@@ -169,14 +181,15 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
 
             if (is_numeric($joinDateRaw)) {
                 $joinDate = Carbon::instance(
-                    Date::excelToDateTimeObject((float) $joinDateRaw)
+                    Date::excelToDateTimeObject((float) $joinDateRaw),
                 );
             } else {
                 $joinDate = Carbon::parse($joinDateRaw);
             }
-
         } catch (\Exception $e) {
-            Log::error("StudentImport: invalid date for student {$name} — {$e->getMessage()}");
+            Log::error(
+                "StudentImport: invalid date for student {$name} — {$e->getMessage()}",
+            );
 
             return;
         }

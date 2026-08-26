@@ -17,20 +17,31 @@ class InvoiceService
     private function generateAutoNumber(
         string $modelClass,
         string $column = 'auto_number',
-        int $pad = 6
+        int $pad = 6,
     ): string {
         return DB::transaction(function () use ($modelClass, $column, $pad) {
-            $last = $modelClass::lockForUpdate()->orderBy($column, 'desc')->first();
+            $last = $modelClass::lockForUpdate()
+                ->orderBy($column, 'desc')
+                ->first();
 
-            $nextNumber = $last ? ((int) $last->$column + 1) : 1;
+            $nextNumber = $last ? (int) $last->$column + 1 : 1;
 
             return str_pad($nextNumber, $pad, '0', STR_PAD_LEFT);
         });
     }
 
-    public function createFeeInvoice($student, $fee, $acc_year, $school): FeeInvoice
-    {
-        return DB::transaction(function () use ($student, $fee, $acc_year, $school) {
+    public function createFeeInvoice(
+        $student,
+        $fee,
+        $acc_year,
+        $school,
+    ): FeeInvoice {
+        return DB::transaction(function () use (
+            $student,
+            $fee,
+            $acc_year,
+            $school,
+        ) {
             $invoice = FeeInvoice::create([
                 'invoice_date' => Carbon::today()->toDateString(),
                 'student_id' => $student->id,
@@ -40,7 +51,7 @@ class InvoiceService
                 'academic_year_id' => $acc_year,
                 'user_id' => auth()->id(),
                 'school_id' => $school,
-                'status' => 'not_paid',
+                'status' => 'unpaid',
             ]);
 
             $this->logActivity(
@@ -94,8 +105,12 @@ class InvoiceService
         );
     }
 
-    public function createExceptionFee($student, Request $request, $acc_year, $school_id): ExceptionFees
-    {
+    public function createExceptionFee(
+        $student,
+        Request $request,
+        $acc_year,
+        $school_id,
+    ): ExceptionFees {
         return ExceptionFees::create([
             'date' => Carbon::today()->toDateString(),
             'student_id' => $student->id,

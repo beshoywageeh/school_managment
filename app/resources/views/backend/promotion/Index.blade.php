@@ -44,7 +44,7 @@
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $promotion->t_grade->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $promotion->t_class->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $promotion->t_acc->view }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $promotion->created_at->format('d-m-Y') }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ '-'??$promotion->created_at->format('d-m-Y')  }}</td>
                             <td class="px-6 py-4 text-center">
                                 @can('promotion-delete')
                                 <form action="{{ route('promotion.destroy', $promotion->id) }}" method="POST" class="inline">
@@ -68,6 +68,9 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+            <div class="p-4">
+                {{ $promotions->links() }}
             </div>
         @endcan
     </div>

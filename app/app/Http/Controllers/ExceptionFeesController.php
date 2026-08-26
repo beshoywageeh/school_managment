@@ -11,14 +11,16 @@ use App\Models\ExceptionFees;
 use App\Models\FeeInvoice;
 use App\Models\Student;
 use App\Models\StudentAccount;
+use App\Services\AccountingReversalService;
 use App\Services\Finance\FinancialService;
 
 class ExceptionFeesController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
-    public function __construct()
-    {
+    public function __construct(
+        protected AccountingReversalService $accountingReversalService,
+    ) {
         $this->middleware('permission:except_fee-list', [
             'only' => ['index', 'show'],
         ]);
@@ -39,7 +41,10 @@ class ExceptionFeesController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $ExceptionFees = ExceptionFees::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
+        $ExceptionFees = ExceptionFees::when(
+            $this->schoolId(),
+            fn ($q, $id) => $q->where('school_id', $id),
+        )
             ->with('student')
             ->paginate(config('school.per_page'));
 
@@ -62,6 +67,14 @@ class ExceptionFeesController extends Controller
                 ->where('status', 'unpaid')
                 ->with('schoolFee')
                 ->get();
+            if ($id !== $fees->first()->student_id) {
+                return redirect()
+                    ->back()
+                    ->with(
+                        'error',
+                        'The fee invoice does not belong to the specified student.',
+                    );
+            }
             $balance =
                 $Excpetion->studentAccount->sum('debit') -
                 $Excpetion->studentAccount->sum('credit');
@@ -87,8 +100,10 @@ class ExceptionFeesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ExceptionFeeStoreRequest $request, FinancialService $studentFinanc)
-    {
+    public function store(
+        ExceptionFeeStoreRequest $request,
+        FinancialService $studentFinanc,
+    ) {
         try {
             $this->executeInTransaction(function () use (
                 $request,
@@ -98,7 +113,9 @@ class ExceptionFeesController extends Controller
                 $academic_year = AcademicYear::findorfail(
                     $student->acadmiecyear_id,
                 );
-                $fee = FeeInvoice::with('schoolFee')->findorfail($request->fee_id);
+                $fee = FeeInvoice::where('student_id', $student->id)
+                    ->with('schoolFee')
+                    ->findorfail($request->fee_id);
                 if ($request->amount == $fee->schoolFee->amount) {
                     $fee->delete();
                 }
@@ -165,7 +182,9 @@ class ExceptionFeesController extends Controller
     {
         try {
             $school = $this->getSchool();
-            $excptionFees = ExceptionFees::where('id', $id)->with('student')->first();
+            $excptionFees = ExceptionFees::where('id', $id)
+                ->with('student')
+                ->first();
 
             return view(
                 'backend.fee_exception.edit',
@@ -181,8 +200,10 @@ class ExceptionFeesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(ExceptionFeeUpdateRequest $request, FinancialService $service)
-    {
+    public function update(
+        ExceptionFeeUpdateRequest $request,
+        FinancialService $service,
+    ) {
         try {
             $this->executeInTransaction(function () use ($request) {
                 $student = Student::findOrFail($request->student_id);
@@ -232,8 +253,12 @@ class ExceptionFeesController extends Controller
     {
         try {
             $pay = ExceptionFees::with('student')->findorfail($id);
-
-            $pay->delete();
+            \DB::transaction(function () use ($pay) {
+                $this->accountingReversalService->reverseFeeInvoiceEntries(
+                    $pay,
+                );
+                $pay->delete();
+            });
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.exception_fee.deleted', [

@@ -19,6 +19,8 @@ class FundAccount extends Model
         'Debit',
         'Credit',
         'user_id',
+        'exchange_bond_id',
+        'school_id',
     ];
 
     protected $casts = [

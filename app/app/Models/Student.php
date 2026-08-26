@@ -73,7 +73,7 @@ class Student extends Model
 
     public function nationality(): BelongsTo
     {
-        return $this->belongsTo(nationality::class);
+        return $this->belongsTo(Nationality::class);
     }
 
     public function fee_invoice(): HasMany

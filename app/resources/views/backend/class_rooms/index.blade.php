@@ -7,7 +7,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-4 border-b border-gray-100 flex justify-between items-center">
             <h4 class="text-lg font-bold text-gray-800">{{ trans('class_rooms.title') }}</h4>
-            @include('backend.class-rooms.create')
+            @include('backend.class_rooms.create')
 
         </div>
 
@@ -48,7 +48,7 @@
                                         </svg>
                                     </a>
                                     @endcan
-                                    @include('backend.class-rooms.edit')
+                                    @include('backend.class_rooms.edit')
                                     @can('class_rooms-delete')
                                     <form action="{{ route('class-rooms.destroy', $class_room->id) }}" method="POST" class="inline">
                                         @csrf

@@ -39,7 +39,7 @@
 @endphp
 
 <div
-    {{ $attributes->merge(['class' => "bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex items-center gap-4 w-full"]) }}>
+    {{ $attributes->merge(['class' => 'bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex items-center gap-4 w-full']) }}>
     {{ $slot }}
     @if ($trend)
         <div class="flex flex-col items-end mr-auto">

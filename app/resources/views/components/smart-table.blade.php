@@ -217,8 +217,7 @@
                 @foreach ($columns as $col)
                     @if (isset($col['filter_type']))
                         <div>
-                            <label
-                                class="block text-xs font-semibold text-gray-500 mb-1">{{ $col['label'] }}</label>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">{{ $col['label'] }}</label>
                             @if ($col['filter_type'] === 'text')
                                 <input type="text" x-model="filters['{{ $col['filter_key'] }}']"
                                     @input.debounce.300ms="fetchData(1)" placeholder="{{ trans('general.search') }}"
@@ -273,8 +272,8 @@
                                             stroke="currentColor" stroke-width="2.5">
                                             <path d="M19 9l-7 7-7-7" />
                                         </svg>
-                                        <svg x-show="sort.by !== col.key" class="w-3.5 h-3.5 text-gray-300" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <svg x-show="sort.by !== col.key" class="w-3.5 h-3.5 text-gray-300"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                             <path d="M8 7l4-4 4 4M8 17l4 4 4-4" />
                                         </svg>
                                     </button>

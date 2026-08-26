@@ -73,15 +73,11 @@
                             value="{{ old('mother_birth_date') }}">{{ trans('Parents.Mother_Birth_Date') }}</x-input>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('Parents.Mother_Status') }}</label>
-                        <input list="mother_status_list" type="text" name="Mother_Status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                            value="{{ old('Mother_Status') }}">
-                        <datalist id="mother_status_list">
-                            @foreach ($Mother_Status as $status)
-                                <option value="{{ $status->Mother_Status }}">
-                            @endforeach
-                        </datalist>
+                        <x-input name='Mother_Status' value="{{ old('Parents.Mother_Status') }}"
+                            type='text'>{{ trans('Parents.Mother_Status') }}</x-input>
+                    
                     </div>
+                    
                 </div>
             </div>
         </div>

@@ -4,8 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\ClassRoom;
 use App\Models\Grade;
+use App\Models\School;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\str;
+use Illuminate\Support\Str;
 
 class ClassRoomTableSeeder extends Seeder
 {
@@ -15,16 +16,17 @@ class ClassRoomTableSeeder extends Seeder
     public function run(): void
     {
         $class_rooms = ['الصف الاول', 'الصف الثاني', 'الصف الثالث', 'الصف الرابع', 'الصف الخامس', 'الصف السادس'];
-        $grades = Grade::get();
+        $grades = Grade::query()->get();
+        $schoolId = School::query()->min('id');
 
-        foreach ($grades as $grade_id) {
+        foreach ($grades as $grade) {
             foreach ($class_rooms as $name) {
                 ClassRoom::create([
                     'name' => $name,
-                    'grade_id' => $grade_id->id,
+                    'grade_id' => $grade->id,
                     'user_id' => '1',
-                    'slug' => str::slug($name),
-                    'school_id' => '1',
+                    'slug' => Str::slug($name),
+                    'school_id' => $schoolId,
                 ]);
             }
         }

@@ -355,7 +355,7 @@ class ReportController extends Controller
     public function credit(Request $request)
     {
         $school = $this->GetSchool();
-        $query = FeeInvoice::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->where('status', 0)->with(
+        $query = FeeInvoice::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->where('status', 'paid')->with(
             'student',
             'grade',
             'classroom',

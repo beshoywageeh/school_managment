@@ -29,11 +29,11 @@ class ParentsTable extends Component
                         'students',
                         'name',
                         'like',
-                        '%'.$this->search.'%',
+                        '%' . $this->search . '%',
                     )->orWhere(
                         'parents.father_name',
                         'like',
-                        '%'.$this->search.'%',
+                        '%' . $this->search . '%',
                     );
                 });
             })
@@ -56,8 +56,19 @@ class ParentsTable extends Component
 
     public function delete($id)
     {
-        // For delete, I will follow the route defined in web.php, which is a GET request.
-        // In a real application, a POST or DELETE request would be preferred for security and idempotence.
-        return Redirect::route('parents.destroy', $id);
+        $d = MyParent::withCount('Students')->findorfail($id);
+        if ($d->Students_count == 0) {
+            $d->delete();
+            $this->logActivity(
+                trans('log.actions.deleted'),
+                trans('log.models.parent.deleted', [
+                    'name' => $d->father_name,
+                ]),
+            );
+            session()->flash('success', trans('general.deleted'));
+        }
+        session()->flash('info', trans('Parents.cannotdeleteparents'));
+
+        return redirect()->route('parents.index');
     }
 }

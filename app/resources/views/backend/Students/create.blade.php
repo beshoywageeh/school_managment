@@ -107,6 +107,7 @@
                         fetch("{{ URL::to('/ajax/get-class-rooms') }}/" + grade)
                             .then(response => response.json())
                             .then(data => {
+                                console.log(data);
                                 classrooms.innerHTML =
                                     '<option selected disabled>{{ trans('student.choose_classroom') }}</option>';
                                 data.forEach(function(value) {

@@ -23,7 +23,7 @@
                     </svg>
                 </button>
             </div>
-            <form action="{{ route('jobs.update') }}" method="POST">
+            <form action="{{ route('jobs.update','test') }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="p-6">

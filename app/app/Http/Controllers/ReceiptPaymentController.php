@@ -16,6 +16,7 @@ use App\Services\Finance\FinancialService;
 use App\Services\InventoryPaymentService;
 use App\Services\PaymentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ReceiptPaymentController extends Controller
@@ -48,7 +49,10 @@ class ReceiptPaymentController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $Recipt_Payments = ReceiptPayment::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
+        $Recipt_Payments = ReceiptPayment::when(
+            $this->schoolId(),
+            fn ($q, $id) => $q->where('school_id', $id),
+        )
             ->with(['student:id,name'])
             ->orderBy('date', 'desc')
             ->paginate(config('school.per_page'));
@@ -77,10 +81,7 @@ class ReceiptPaymentController extends Controller
                     'excption',
                 ])
                 ->first();
-            $lastPayment = ReceiptPayment::orderBy(
-                'manual',
-                'desc',
-            )->first();
+            $lastPayment = ReceiptPayment::orderBy('manual', 'desc')->first();
             $invoice_manual = $lastPayment
                 ? str_pad($lastPayment->manual + 1, 5, '0', STR_PAD_LEFT)
                 : '00001';
@@ -96,7 +97,15 @@ class ReceiptPaymentController extends Controller
 
             return view(
                 'backend.reciptpayment.create',
-                compact('school', 'Student', 'lastPayment', 'invoice_manual', 'clothes', 'books', 'report_data'),
+                compact(
+                    'school',
+                    'Student',
+                    'lastPayment',
+                    'invoice_manual',
+                    'clothes',
+                    'books',
+                    'report_data',
+                ),
             );
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -128,7 +137,7 @@ class ReceiptPaymentController extends Controller
                 'books' => $this->inventoryPaymentService->handleBooksPayment(
                     $request,
                     $this->FinancialService,
-                    $this->getSchool(),
+                    Auth::user()->school_id,
                 ),
                 default => throw new \Exception('Invalid payment type'),
             };
@@ -137,7 +146,7 @@ class ReceiptPaymentController extends Controller
                 ->route('receipt-payment.create', $request->student_id)
                 ->with('report_data', $report_data);
         } catch (\Exception $e) {
-            \Log::channel('errors')->error($e->getMessage());
+            \Log::channel('errors')->error('Error In '.$e->getMessage());
 
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -157,7 +166,10 @@ class ReceiptPaymentController extends Controller
             $school->currency,
         );
 
-        return view('backend.reciptpayment.print', compact('school', 'report_data'));
+        return view(
+            'backend.reciptpayment.print',
+            compact('school', 'report_data'),
+        );
     }
 
     /**
@@ -171,7 +183,10 @@ class ReceiptPaymentController extends Controller
                 ->first();
             $school = $this->getSchool();
 
-            return view('backend.reciptpayment.edit', compact('recipt_Payment', 'school'));
+            return view(
+                'backend.reciptpayment.edit',
+                compact('recipt_Payment', 'school'),
+            );
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
 
@@ -240,7 +255,9 @@ class ReceiptPaymentController extends Controller
             $ReceiptPayment = ReceiptPayment::with('student')->findorFail($id);
 
             DB::transaction(function () use ($ReceiptPayment) {
-                $this->accountingReversalService->reverseReceiptEntries($ReceiptPayment);
+                $this->accountingReversalService->reverseReceiptEntries(
+                    $ReceiptPayment,
+                );
                 $ReceiptPayment->delete();
             });
 

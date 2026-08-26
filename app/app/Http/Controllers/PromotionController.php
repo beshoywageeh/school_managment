@@ -29,9 +29,9 @@ class PromotionController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $promotions = promotion::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
+        $promotions = promotion::when($this->schoolId(), fn($q, $id) => $q->where('school_id', $id))
             ->with(
-                'students:id,name',
+                'student:id,name',
                 'f_grade:id,name',
                 'f_class:id,name',
                 't_grade:id,name',
@@ -39,7 +39,7 @@ class PromotionController extends Controller
                 't_acc:id,view',
                 'f_acc:id,view',
             )
-            ->get();
+            ->paginate(config('school.per_page'));
 
         return view(
             'backend.promotion.Index',
@@ -53,8 +53,8 @@ class PromotionController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
-        $acc_year = AcademicYear::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
+        $grades = Grade::when($this->schoolId(), fn($q, $id) => $q->where('school_id', $id))->get();
+        $acc_year = AcademicYear::when($this->schoolId(), fn($q, $id) => $q->where('school_id', $id))
             ->where('status', 0)
             ->get();
 
@@ -76,6 +76,11 @@ class PromotionController extends Controller
                     ->back()
                     ->with('error', trans('promotions.no_data'));
             }
+            if ($request->old_grade == $request->new_grade && $request->old_class == $request->new_class) {
+                return redirect()
+                    ->back()
+                    ->with('error', trans('promotions.same_data'));
+            }
 
             $this->executeInTransaction(function () use ($Students, $request) {
                 $Students->toQuery()->update([
@@ -85,17 +90,24 @@ class PromotionController extends Controller
                 ]);
 
                 foreach ($Students as $student) {
-                    promotion::updateOrCreate([
-                        'student_id' => $student->id,
-                        'from_grade' => $request->old_grade,
-                        'from_class' => $request->old_class,
-                        'to_grade' => $request->new_grade,
-                        'to_class' => $request->new_class,
-                        'to_acc' => $request->acc_to,
-                        'from_acc' => $request->acc_from,
-                        'school_id' => $this->getSchool()->id,
-                        'user_id' => auth()->user()->id,
-                    ]);
+                    promotion::updateorCreate(
+                        [
+                            'student_id' => $student->id,
+                            'from_grade' => $request->old_grade,
+                            'from_class' => $request->old_class,
+                        ],
+                        [
+                            'student_id' => $student->id,
+                            'from_grade' => $request->old_grade,
+                            'from_class' => $request->old_class,
+                            'to_grade' => $request->new_grade,
+                            'to_class' => $request->new_class,
+                            'to_acc' => $request->acc_to,
+                            'from_acc' => $request->acc_from,
+                            'school_id' => $this->getSchool()->id,
+                            'user_id' => auth()->user()->id,
+                        ]
+                    );
                     $this->logActivity(
                         trans('log.actions.promoted'),
                         trans('log.models.promotion.promoted', [
@@ -148,6 +160,7 @@ class PromotionController extends Controller
                 Student::where('id', $promotions->student_id)->update([
                     'classroom_id' => $promotions->from_class,
                     'grade_id' => $promotions->from_grade,
+                    'acadmiecyear_id' => $promotions->from_acc,
                 ]);
                 $promotions->delete();
                 $this->logActivity(
