@@ -4,7 +4,7 @@
             @csrf
             <div class="p-6">
                 <div class="mb-4">
-                    <x-input name="Grade_Name" type="text" value="{{ old('Grade_Name') }}">{{ trans('Grades.name') }}</x-input>
+                    <x-input name="name" type="text" value="{{ old('name') }}">{{ trans('Grades.name') }}</x-input>
                 </div>
                 <x-select name="user_id[]" label="{{ trans('Grades.select_res') }}" id="tom-select" multiple>
                     @foreach ($data['users'] as $user)

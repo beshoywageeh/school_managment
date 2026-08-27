@@ -19,4 +19,9 @@ class School extends Model
     {
         return $this->morphOne("App\Models\Image", 'imageable');
     }
+
+    public function getCurrencyAttribute(): string
+    {
+        return config('school.currency', 'EGP');
+    }
 }

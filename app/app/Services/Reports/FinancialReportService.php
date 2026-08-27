@@ -41,8 +41,12 @@ class FinancialReportService
                 'classroom_id',
                 \DB::raw('count(*) as student_count'),
             )
+            ->with('grade:id,name', 'classroom:id,name')
             ->groupBy('grade_id', 'classroom_id')
             ->get();
+
+        $data['Students_grouped'] = $grouped;
+        $data['Students_grouped_sum'] = $grouped->sum('student_count');
 
         $data['Students_by_grade'] = $grouped
             ->groupBy('grade_id')
@@ -94,7 +98,7 @@ class FinancialReportService
                 $data['acadmic_year']->id,
             )->get();
 
-            $data['excpetion'] = ExceptionFees::where(
+            $data['exception_fees'] = ExceptionFees::where(
                 'academic_year_id',
                 $data['acadmic_year']->id,
             )
@@ -116,17 +120,20 @@ class FinancialReportService
             ->where('acadmiecyear_id', $academicYearId)
             ->with([
                 'fee_invoices' => function ($query) {
-                    $query->select('id', 'student_id', 'status', 'amount');
+                    $query->select('id', 'student_id', 'status', 'school_fee_id')
+                        ->with('schoolFee:id,amount');
                 },
             ])
             ->get(['id', 'name', 'grade_id']);
 
         return $students
             ->map(function ($student) {
-                $totalInvoice = $student->fee_invoices->sum('amount');
+                $totalInvoice = $student->fee_invoices->sum(
+                    fn ($invoice) => $invoice->schoolFee?->amount ?? 0,
+                );
                 $paidAmount = $student->fee_invoices
                     ->where('status', 'paid')
-                    ->sum('amount');
+                    ->sum(fn ($invoice) => $invoice->schoolFee?->amount ?? 0);
                 $remaining = $totalInvoice - $paidAmount;
 
                 return [
@@ -135,10 +142,10 @@ class FinancialReportService
                     'paid' => $paidAmount,
                     'remaining' => $remaining,
                     'status' => $remaining <= 0
-                            ? 'paid'
-                            : ($paidAmount > 0
-                                ? 'partial'
-                                : 'unpaid'),
+                        ? 'paid'
+                        : ($paidAmount > 0
+                            ? 'partial'
+                            : 'unpaid'),
                 ];
             })
             ->toArray();

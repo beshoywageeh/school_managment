@@ -43,6 +43,7 @@
 
             <div class="block">
                 <div id="fee_invoice" x-show="paymentType === 'fee_invoice'" x-transition>
+                    <input type="hidden" name="feeInvoice" :value="feeInvoice">
                     <div class="overflow-x-auto">
                         <table class="min-w-full text-sm">
                             <thead class="bg-gray-50">
@@ -59,7 +60,6 @@
                             <tbody class="divide-y divide-gray-100">
                                 @forelse($Student->fee_invoice as $feeInvoice)
                                     <tr>
-                                        <input type="hidden" name="feeInvoice" value="{{ $feeInvoice->id }}">
                                         <td class="px-4 py-2 text-gray-600">{{ $feeInvoice->invoice_date }}</td>
                                         <td class="px-4 py-2 text-gray-800">{{ $feeInvoice->schoolFee->title }}</td>
                                         @php
@@ -70,7 +70,8 @@
                                         <td class="px-4 py-2">
                                             <button
                                                 class="w-full px-3 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
-                                                type="submit">{{ trans('general.full_pay') }}</button>
+                                                type="submit"
+                                                @click="feeInvoice = {{ $feeInvoice->id }}">{{ trans('general.full_pay') }}</button>
                                         </td>
                                     </tr>
                                 @empty
@@ -361,6 +362,7 @@
             document.addEventListener('alpine:init', () => {
                 Alpine.data('payment', (data) => ({
                     paymentType: '',
+                    feeInvoice: '',
                     clothes: data.clothes.map(c => ({
                         sales_price: Number(c.sales_price) || 0,
                         sales_price_set: Number(c.sales_price_set) || 0,
@@ -402,7 +404,7 @@
                         const price = this.clothesActivePrice(index);
                         return (qty * price).toLocaleString('en-EG', {
                             style: 'currency',
-                            currency: 'EGP'
+                            currency: "{{ config('school.currency') }}"
                         });
                     },
                     booksRowTotal(index) {
@@ -410,7 +412,7 @@
                         const price = this.booksActivePrice(index);
                         return (qty * price).toLocaleString('en-EG', {
                             style: 'currency',
-                            currency: 'EGP'
+                            currency: "{{ config('school.currency') }}"
                         });
                     },
                     get clothesTotalPrice() {
@@ -422,7 +424,7 @@
                         }, 0);
                         return total.toLocaleString('en-EG', {
                             style: 'currency',
-                            currency: 'EGP'
+                            currency: "{{ config('school.currency') }}"
                         });
                     },
                     get booksTotalPrice() {
@@ -434,7 +436,7 @@
                         }, 0);
                         return total.toLocaleString('en-EG', {
                             style: 'currency',
-                            currency: 'EGP'
+                            currency: "{{ config('school.currency') }}"
                         });
                     }
                 }));

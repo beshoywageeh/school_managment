@@ -60,7 +60,7 @@ class ExceptionFeesController extends Controller
     public function create($id)
     {
         try {
-            $Excpetion = Student::where('id', $id)
+            $exception = Student::where('id', $id)
                 ->with('studentAccount')
                 ->first();
             $fees = FeeInvoice::where('student_id', $id)
@@ -76,8 +76,8 @@ class ExceptionFeesController extends Controller
                     );
             }
             $balance =
-                $Excpetion->studentAccount->sum('debit') -
-                $Excpetion->studentAccount->sum('credit');
+                $exception->studentAccount->sum('debit') -
+                $exception->studentAccount->sum('credit');
 
             $school = $this->getSchool();
             if ($fees->isEmpty() || $balance <= 0) {
@@ -88,7 +88,7 @@ class ExceptionFeesController extends Controller
 
             return view(
                 'backend.fee_exception.create',
-                compact('Excpetion', 'fees', 'balance', 'school'),
+                compact('exception', 'fees', 'balance', 'school'),
             );
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -219,7 +219,7 @@ class ExceptionFeesController extends Controller
 
                 // Fetch the existing StudentAccount record
                 $std = StudentAccount::where(
-                    'excpetion_id',
+                    'exception_id',
                     $request->id,
                 )->first();
                 $std->credit = $request->amount;
@@ -254,9 +254,8 @@ class ExceptionFeesController extends Controller
         try {
             $pay = ExceptionFees::with('student')->findorfail($id);
             \DB::transaction(function () use ($pay) {
-                $this->accountingReversalService->reverseFeeInvoiceEntries(
-                    $pay,
-                );
+                $this->accountingReversalService->reverseExceptionEntries($pay);
+
                 $pay->delete();
             });
             $this->logActivity(

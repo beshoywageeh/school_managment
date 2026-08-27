@@ -78,7 +78,7 @@
                     <tbody>
                         <tr>
                             <td>{{ trans('Recipt_Payments.amount') }}</td>
-                            <td>{{ Number::currency($invoice_details->schoolFee->amount, in: 'EGP', locale: 'ar') }}</td>
+                            <td>{{ Number::currency($invoice_details->schoolFee->amount, in: config('school.currency'), locale: 'ar') }}</td>
                         </tr>
                     </tbody>
                 </table>

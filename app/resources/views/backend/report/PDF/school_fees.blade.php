@@ -34,14 +34,14 @@
                         <tr>
                             <td width="5%">{{ $loop->index + 1 }}</td>
                             <td>{{ $fee->title }}</td>
-                            <td>{{ Number::currency($fee->amount, 'EGP', 'ar') }}</td>
+                            <td>{{ Number::currency($fee->amount, config('school.currency'), 'ar') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
                         <th colspan="2">{{ trans('report.total') }}</th>
-                        <th colspan="1">{{ Number::currency($fees->sum('amount'), 'EGP', 'ar') }}</th>
+                        <th colspan="1">{{ Number::currency($fees->sum('amount'), config('school.currency'), 'ar') }}</th>
                     </tr>
                 </tfoot>
             </table>

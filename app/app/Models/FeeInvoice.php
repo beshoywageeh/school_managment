@@ -24,6 +24,8 @@ class FeeInvoice extends Model
         'school_fee_id',
         'user_id',
         'status',
+        'school_id',
+
     ];
 
     protected $casts = [

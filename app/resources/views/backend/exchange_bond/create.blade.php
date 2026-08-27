@@ -18,7 +18,7 @@
                         <input name="student_id" value="{{ $student->id }}" type="hidden">
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 mb-2" value="{{ $student->name }}" disabled>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600"
-                            value="{{ Number::Currency($student->student_account_sum_debit - $student->student_account_sum_credit, 'EGP') }}"
+                            value="{{ Number::Currency($student->student_account_sum_debit - $student->student_account_sum_credit, config('school.currency')) }}"
                             disabled>
                     </div>
                     <div>

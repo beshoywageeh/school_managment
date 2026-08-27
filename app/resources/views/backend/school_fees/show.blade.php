@@ -61,7 +61,7 @@
                 <tfoot>
                     <tr>
                         <th class="border border-black px-6 py-6" colspan="4">{{ trans('report.to_colcet') }}</th>
-                        <th  class="border border-black px-6 py-6" >{{ Number::currency($students->count() * $school_fee->amount, 'EGP', 'ar') }}</th>
+                        <th  class="border border-black px-6 py-6" >{{ Number::currency($students->count() * $school_fee->amount, config('school.currency'), 'ar') }}</th>
                     </tr>
                 </tfoot>
             </table>

@@ -33,8 +33,8 @@
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-4 py-3 text-center text-gray-500">{{ $loop->index + 1 }}</td>
                             <td class="px-4 py-3 text-start text-gray-600">{{ $account->date }}</td>
-                            <td class="px-4 py-3 text-start text-green-700 font-medium">{{ Number::currency($account->Credit, 'EGP') }}</td>
-                            <td class="px-4 py-3 text-start text-red-600 font-medium">{{ Number::currency($account->Debit, 'EGP') }}</td>
+                            <td class="px-4 py-3 text-start text-green-700 font-medium">{{ Number::currency($account->Credit, config('school.currency')) }}</td>
+                            <td class="px-4 py-3 text-start text-red-600 font-medium">{{ Number::currency($account->Debit, config('school.currency')) }}</td>
                         </tr>
                     @empty
                         <tr>
@@ -48,15 +48,15 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
                 <h5 class="text-sm font-medium text-green-700">{{ trans('fund_account.total_credit') }}</h5>
-                <p class="text-lg font-bold text-green-800 mt-1">{{ Number::currency($accounts->sum('Credit'), 'EGP') }}</p>
+                <p class="text-lg font-bold text-green-800 mt-1">{{ Number::currency($accounts->sum('Credit'), config('school.currency')) }}</p>
             </div>
             <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
                 <h5 class="text-sm font-medium text-yellow-700">{{ trans('fund_account.total_debit') }}</h5>
-                <p class="text-lg font-bold text-yellow-800 mt-1">{{ Number::currency($accounts->sum('Debit'), 'EGP') }}</p>
+                <p class="text-lg font-bold text-yellow-800 mt-1">{{ Number::currency($accounts->sum('Debit'), config('school.currency')) }}</p>
             </div>
             <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
                 <h5 class="text-sm font-medium text-red-700">{{ trans('fund_account.grand_total') }}</h5>
-                <p class="text-lg font-bold text-red-800 mt-1">{{ Number::currency($accounts->sum('Debit') - $accounts->sum('Credit'), 'EGP') }}</p>
+                <p class="text-lg font-bold text-red-800 mt-1">{{ Number::currency($accounts->sum('Debit') - $accounts->sum('Credit'), config('school.currency')) }}</p>
             </div>
         </div>
     </div>

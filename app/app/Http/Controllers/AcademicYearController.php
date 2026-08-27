@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AcadmiceYearStoreRequest;
+use App\Http\Requests\AcademicYearStoreRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\AcademicYear;
@@ -37,7 +37,7 @@ class AcademicYearController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AcadmiceYearStoreRequest $request)
+    public function store(AcademicYearStoreRequest $request)
     {
 
         try {
@@ -49,7 +49,7 @@ class AcademicYearController extends Controller
                 'year_end' => $year_end,
                 'view' => $view,
                 'created_by' => Auth::id(),
-                'status' => ($request->status) ? 1 : 0,
+                'status' => ($request->status) ? 'active' : 'inactive',
                 'school_id' => $this->getSchool()->id,
 
             ]);
@@ -78,7 +78,9 @@ class AcademicYearController extends Controller
         $users = collect([])
             ->merge(Student::where('acadmiecyear_id', $acc_year->id)->with(['grade', 'classroom'])->get())
             ->merge(MyParent::whereBetween('created_at', $date_range)->with('user')->get())
-            ->merge(User::whereBetween('created_at', $date_range)->with('job')->get());
+            ->merge(User::whereBetween('created_at', $date_range)->with('job')->get())
+            ->sortByDesc('created_at')
+            ->values();
 
         return $users;
     }
@@ -97,7 +99,7 @@ class AcademicYearController extends Controller
             $acadmice_year->year_end = $year_end;
             $acadmice_year->updated_by = Auth::id();
             $acadmice_year->view = $view;
-            $acadmice_year->status = ($request->status) ? 1 : 0;
+            $acadmice_year->status = ($request->status) ? 'active' : 'inactive';
             $acadmice_year->save();
             session()->flash('success', trans('general.success'));
             $this->logActivity(trans('log.actions.updated'), trans('log.models.academic_year.updated', ['view' => $request->view]));

@@ -376,6 +376,7 @@ return new class extends Migration
                 ->on('exchange_bonds')
                 ->onDelete('Cascade')
                 ->onUpdate('Cascade');
+            $table->foreign('school_id')->references('id')->on('schools')->cascadeOnDelete()->cascadeOnUpdate();
         });
         Schema::table('recipt__payments', function (Blueprint $table) {
             $table
@@ -686,6 +687,7 @@ return new class extends Migration
             $table->dropForeign('exception_id');
             $table->dropForeign('exchange_bond_id');
             $table->dropForeign('academic_year_id');
+            $table->dropForeign('school_id');
         });
         Schema::table('recipt__payments', function (Blueprint $table) {
             $table->dropForeign('student_id');

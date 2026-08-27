@@ -7,6 +7,7 @@ use App\Http\Requests\ReceiptPaymentStoreRequest;
 use App\Http\Requests\ReceiptPaymentUpdateRequest;
 use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
+use App\Models\FundAccount;
 use App\Models\Inventory\InventoryItem;
 use App\Models\ReceiptPayment;
 use App\Models\Student;
@@ -217,7 +218,7 @@ class ReceiptPaymentController extends Controller
 
                 // Retrieve the corresponding StudentAccount record
                 $std = StudentAccount::where(
-                    'recipt__payments_id',
+                    'receipt_payment_id',
                     $pay->id,
                 )->firstOrFail();
                 $std->student_id = $request->student_id;
@@ -227,8 +228,15 @@ class ReceiptPaymentController extends Controller
                 $std->grade_id = $info_data->grade_id;
                 $std->classroom_id = $info_data->classroom_id;
                 $std->debit = 0.0;
-                $std->recipt__payments_id = $pay->id;
+                $std->receipt_payment_id = $pay->id;
                 $std->save();
+                /* Fund account */
+                $fund = FundAccount::where('receipt_id', $pay->id)->first();
+                if ($fund) {
+                    $fund->Credit = $request->amount;
+                    $fund->Debit = 0.0;
+                    $fund->save();
+                }
                 $this->logActivity(
                     trans('log.actions.updated'),
                     trans('log.models.receipt-payment.updated', [

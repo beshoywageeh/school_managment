@@ -71,13 +71,13 @@ class FinancialService
         $type,
         $debit = 0.0,
         $credit = 0.0,
-        $recipt_id = null,
-        $excpetion_id = null,
+        $receipt_id = null,
+        $exception_id = null,
         $exchange_bond_id = null
     ): void {
         $this->accountService->createStudentAccount(
             $student, $fee_invoices_id, $acc_year, $type,
-            $debit, $credit, $recipt_id, $excpetion_id, $exchange_bond_id,
+            $debit, $credit, $receipt_id, $exception_id, $exchange_bond_id,
         );
     }
 }

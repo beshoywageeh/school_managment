@@ -30,12 +30,12 @@
                             <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($ReceiptPayment->date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
                                 @can('ReceiptPayment-info')
-                                <a target="_blank" href="{{ route('receipt-payment.show', $ReceiptPayment->student->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                <a target="_blank" href="{{ route('receipt-payment.show', $ReceiptPayment->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                     {{ $ReceiptPayment->student->name }}
                                 </a>
                                 @endcan
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ Number::currency($ReceiptPayment->Debit, 'EGP', 'ar') }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ Number::currency($ReceiptPayment->Debit, config('school.currency'), 'ar') }}</td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-1">
                                     @can('ReceiptPayment-info')

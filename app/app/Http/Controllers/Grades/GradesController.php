@@ -59,7 +59,7 @@ class GradesController extends Controller
         try {
             $this->executeInTransaction(function () use ($request) {
                 $grade = Grade::create([
-                    'name' => $request->Grade_Name,
+                    'name' => $request->name,
                     'user_id' => Auth::id(),
                     'school_id' => $this->getSchool()->id,
                 ]);
@@ -69,7 +69,7 @@ class GradesController extends Controller
                 $this->logActivity(
                     trans('log.actions.added'),
                     trans('log.models.grade.created', [
-                        'value' => $request->Grade_Name,
+                        'value' => $request->name,
                     ]),
                 );
             });
@@ -165,8 +165,8 @@ class GradesController extends Controller
     public function destroy(string $id, Request $request)
     {
         $this->authorize('grade-delete', Grade::class);
-        $grade = Grade::where('id', $id)->withcount('class_room')->first();
-        if ($grade->class_room_count == 0) {
+        $grade = Grade::withcount('class_rooms')->findorfail($id);
+        if ($grade->class_rooms_count == 0) {
             $grade->delete();
             $this->logActivity(
                 trans('log.actions.deleted'),

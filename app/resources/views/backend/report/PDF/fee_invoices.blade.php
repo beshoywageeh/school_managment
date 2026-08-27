@@ -43,14 +43,14 @@
                                 <td>{{ $student->student->name }}</td>
                                 <td>{{ $student->invoice_date }}</td>
                                 <td>{{ $student->status == 0 ? trans('report.unpaid') : trans('report.paid') }}</td>
-                                <td>{{ Number::currency($student->schoolFee->amount, 'EGP', 'ar') }}</td>
+                                <td>{{ Number::currency($student->schoolFee->amount, config('school.currency'), 'ar') }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
                             <th colspan="4">{{ trans('report.total') }}</th>
-                            <th colspan="1">{{ Number::currency($students->sum('fees.amount'), 'EGP', 'ar') }}</th>
+                            <th colspan="1">{{ Number::currency($students->sum(fn ($s) => $s->schoolFee?->amount ?? 0), config('school.currency'), 'ar') }}</th>
                         </tr>
                     </tfoot>
                 </table>

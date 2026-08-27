@@ -15,7 +15,7 @@ class ParentRepository implements ParentInterface
         $parent = MyParent::find($request['parent_id']);
         if (is_null($parent)) {
             $parent = MyParent::Create([
-                'father_name' => $request['parent_id'],
+                'father_name' => $request['father_name'] ?? ($request['parent_name'] ?? ''),
                 'religion' => $request->religion,
                 'user_id' => Auth::id(),
                 'school_id' => Auth::user()->school_id,

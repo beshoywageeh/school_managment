@@ -9,7 +9,7 @@ Route::name('report.')
     ->controller(ReportController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::post('students-export', 'ExportStudents')->name(
+        Route::get('students-export', 'ExportStudents')->name(
             'export-student',
         )->middleware('can:reports-export');
         Route::get('stocks-product', 'StockProducts')->name(

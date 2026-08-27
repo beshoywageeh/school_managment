@@ -113,9 +113,10 @@ class ReportService
 
     public function getAcademicYearsList(): Collection
     {
-        return AcademicYear::orderBy('year', 'desc')->get([
+        return AcademicYear::orderBy('year_start', 'desc')->get([
             'id',
-            'year',
+            'year_start',
+            'year_end',
             'view',
             'status',
         ]);

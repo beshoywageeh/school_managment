@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Http\Traits\LogsActivity;
 use App\Models\MyParent;
 use Illuminate\Support\Facades\Redirect;
 use Livewire\Component;
@@ -9,6 +10,7 @@ use Livewire\WithPagination;
 
 class ParentsTable extends Component
 {
+    use LogsActivity;
     use WithPagination;
 
     public $search = '';
@@ -29,11 +31,11 @@ class ParentsTable extends Component
                         'students',
                         'name',
                         'like',
-                        '%' . $this->search . '%',
+                        '%'.$this->search.'%',
                     )->orWhere(
                         'parents.father_name',
                         'like',
-                        '%' . $this->search . '%',
+                        '%'.$this->search.'%',
                     );
                 });
             })
@@ -66,8 +68,10 @@ class ParentsTable extends Component
                 ]),
             );
             session()->flash('success', trans('general.deleted'));
+        } else {
+
+            session()->flash('info', trans('Parents.cannotdeleteparents'));
         }
-        session()->flash('info', trans('Parents.cannotdeleteparents'));
 
         return redirect()->route('parents.index');
     }

@@ -11,11 +11,15 @@ return new class extends Migration
 
         foreach ($tables as $table) {
             if (Schema::hasColumn($table, 'payed')) {
-                Schema::rename($table, 'payed', 'paid');
+                Schema::table($table, function ($table) {
+                    $table->renameColumn('payed', 'paid');
+                });
             }
 
             if (Schema::hasColumn($table, 'notpayed')) {
-                Schema::rename($table, 'notpayed', 'not_paid');
+                Schema::table($table, function ($table) {
+                    $table->renameColumn('notpayed', 'not_paid');
+                });
             }
         }
     }
@@ -26,11 +30,15 @@ return new class extends Migration
 
         foreach ($tables as $table) {
             if (Schema::hasColumn($table, 'paid')) {
-                Schema::rename($table, 'paid', 'payed');
+                Schema::table($table, function ($table) {
+                    $table->renameColumn('paid', 'payed');
+                });
             }
 
             if (Schema::hasColumn($table, 'not_paid')) {
-                Schema::rename($table, 'not_paid', 'notpayed');
+                Schema::table($table, function ($table) {
+                    $table->renameColumn('not_paid', 'notpayed');
+                });
             }
         }
     }

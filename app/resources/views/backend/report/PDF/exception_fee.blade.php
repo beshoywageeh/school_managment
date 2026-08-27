@@ -22,7 +22,7 @@
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $fee->date }}</td>
                         <td>{{ $fee->student->name }}</td>
-                        <td>{{ Number::currency($fee->amount, 'EGP', 'ar') }}</td>
+                        <td>{{ Number::currency($fee->amount, config('school.currency'), 'ar') }}</td>
                         <td>{{ $fee->note }}</td>
                     </tr>
                 @empty
@@ -32,7 +32,7 @@
             <tfoot>
                 <tr class="text-center text-white bg-dark">
                     <th colspan="3">{{ trans('report.total') }}</th>
-                    <th>{{ Number::currency($data['exception_list']->sum('amount'), 'EGP', 'ar') }}</th>
+                    <th>{{ Number::currency($data['exception_list']->sum('amount'), config('school.currency'), 'ar') }}</th>
                     <th></th>
                 </tr>
             </tfoot>

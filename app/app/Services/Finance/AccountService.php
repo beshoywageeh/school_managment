@@ -96,6 +96,24 @@ class AccountService
             $academicYearId,
             $student,
         ) {
+            $lockedAccounts = StudentAccount::where('student_id', $student->id)
+                ->lockForUpdate()
+                ->get();
+
+            if (! empty($request->id)) {
+                $lockedAccounts = $lockedAccounts
+                    ->where('exchange_bond_id', '!=', (int) $request->id);
+            }
+
+            $available = $lockedAccounts->sum('debit')
+                - $lockedAccounts->sum('credit');
+
+            if ($request->amount > $available) {
+                throw new FinancialException(
+                    'Insufficient balance for this exchange bond.',
+                );
+            }
+
             $exchange = ExchangeBond::updateOrCreate(
                 ['id' => $request->id],
                 [
@@ -110,17 +128,31 @@ class AccountService
                 ],
             );
 
-            $this->createStudentAccount(
-                student: $student,
-                fee_invoices_id: null,
-                acc_year: $academicYearId,
-                type: 'exchange',
-                debit: $request->amount,
-                credit: 0.0,
-                exchange_bond_id: $exchange->id,
-            );
+            $alreadyAccounted = StudentAccount::where(
+                'exchange_bond_id',
+                $exchange->id,
+            )->exists();
 
-            $this->fundAccount($school, $exchange->id, 0.0, $request->amount);
+            if (! $alreadyAccounted) {
+                $this->createStudentAccount(
+                    student: $student,
+                    fee_invoices_id: null,
+                    acc_year: $academicYearId,
+                    type: 'exchange',
+                    debit: $request->amount,
+                    credit: 0.0,
+                    exchange_bond_id: $exchange->id,
+                );
+            }
+
+            $alreadyFunded = FundAccount::where(
+                'exchange_bond_id',
+                $exchange->id,
+            )->exists();
+
+            if (! $alreadyFunded) {
+                $this->fundAccount($school, $exchange->id, $request->amount, 0.0);
+            }
 
             return $exchange;
         });
@@ -151,8 +183,8 @@ class AccountService
         $type,
         $debit = 0.0,
         $credit = 0.0,
-        $recipt_id = null,
-        $excpetion_id = null,
+        $receipt_id = null,
+        $exception_id = null,
         $exchange_bond_id = null,
     ): void {
         if (! $student) {
@@ -165,9 +197,9 @@ class AccountService
             'student_id' => $student->id,
             'grade_id' => $student->grade_id,
             'classroom_id' => $student->classroom_id,
-            'recipt_payments_id' => $recipt_id,
             'fee_invoices_id' => $fee_invoices_id,
-            'exception_id' => $excpetion_id,
+            'receipt_payment_id' => $receipt_id,
+            'exception_id' => $exception_id,
             'exchange_bond_id' => $exchange_bond_id,
             'date' => Carbon::today()->toDateString(),
             'type' => $type,

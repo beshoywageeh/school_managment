@@ -20,6 +20,7 @@ class ReceiptPaymentStoreRequest extends FormRequest
                 'string',
                 'in:fee_invoice,payment_parts,clothes,books',
             ],
+            'amount' => ['required_if:type,fee_invoice,payment_parts', 'numeric', 'min:0.01'],
             'date' => ['date'],
         ];
     }
@@ -41,6 +42,16 @@ class ReceiptPaymentStoreRequest extends FormRequest
             ]),
             'type.in' => trans('validation.in', [
                 'attribute' => trans('receipt.type'),
+            ]),
+            'amount.required' => trans('validation.required', [
+                'attribute' => trans('general.amount'),
+            ]),
+            'amount.numeric' => trans('validation.numeric', [
+                'attribute' => trans('general.amount'),
+            ]),
+            'amount.min' => trans('validation.min.numeric', [
+                'attribute' => trans('general.amount'),
+                'min' => 0.01,
             ]),
 
             'date.date' => trans('validation.date', [

@@ -30,7 +30,7 @@
                         <td>{{ $fee->manual }}</td>
                         <td>{{ $fee->date }}</td>
                         <td>{{ $fee->student->name }}</td>
-                        <td>{{ Number::currency($fee->Debit, 'EGP', 'ar') }}</td>
+                        <td>{{ Number::currency($fee->Debit, config('school.currency'), 'ar') }}</td>
                         <td>{{ $fee->note }}</td>
                     </tr>
                 @empty
@@ -40,7 +40,7 @@
             <tfoot>
                 <tr class="text-center text-white bg-dark">
                     <th colspan="4">{{ trans('report.total') }}</th>
-                    <th>{{ Number::currency($data['daily']->sum('Debit'), 'EGP', 'ar') }}</th>
+                    <th>{{ Number::currency($data['daily']->sum('Debit'), config('school.currency'), 'ar') }}</th>
                     <th></th>
                 </tr>
             </tfoot>

@@ -31,7 +31,7 @@
                                     <td class="px-4 py-2 text-gray-800">{{ $exchange->manual ?? '-' }}</td>
                                     <td class="px-4 py-2 text-gray-600">{{ $exchange->academicYear->view }}</td>
                                     <td class="px-4 py-2 text-gray-800">{{ $exchange->student->name }}</td>
-                                    <td class="px-4 py-2 text-gray-800 font-medium">{{ Number::currency($exchange->amount, 'EGP') }}</td>
+                                    <td class="px-4 py-2 text-gray-800 font-medium">{{ Number::currency($exchange->amount, config('school.currency')) }}</td>
                                     <td class="px-4 py-2 text-gray-600">{{ $exchange->description }}</td>
                                     <td class="px-4 py-2 text-center">
                                         <x-dropdown-table :buttonText="trans('general.actions')" :items="[

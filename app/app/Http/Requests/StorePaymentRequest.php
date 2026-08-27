@@ -16,7 +16,7 @@ class StorePaymentRequest extends FormRequest
         return [
             'student_id' => ['required', 'integer', 'exists:students,id'],
             'parts' => ['required', 'array', 'min:1'],
-            'parts.*.fee_id' => ['required', 'integer', 'exists:school_fees,id'],
+            'parts.*.fee_id' => ['required', 'integer', 'exists:school__fees,id'],
             'parts.*.pay_at' => ['required', 'date'],
             'parts.*.amount' => ['required', 'numeric', 'min:0.01'],
         ];

@@ -30,7 +30,7 @@
                                 <td class="px-4 py-2 text-gray-600">{{ $ExcptionFee->academic_year->view }}</td>
                                 <td class="px-4 py-2 text-gray-600">{{ $ExcptionFee->grade->name }}</td>
                                 <td class="px-4 py-2 text-gray-600">{{ $ExcptionFee->classroom->name }}</td>
-                                <td class="px-4 py-2 text-gray-800 font-medium">{{ Number::currency($ExcptionFee->amount, 'EGP', 'ar') }}</td>
+                                <td class="px-4 py-2 text-gray-800 font-medium">{{ Number::currency($ExcptionFee->amount, config('school.currency'), 'ar') }}</td>
                             </tr>
                         @endforeach
                     </tbody>

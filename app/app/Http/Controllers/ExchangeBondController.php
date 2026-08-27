@@ -11,14 +11,17 @@ use App\Models\ExchangeBond;
 use App\Models\FundAccount;
 use App\Models\Student;
 use App\Models\StudentAccount;
+use App\Services\AccountingReversalService;
 use App\Services\Finance\FinancialService;
 
 class ExchangeBondController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
-    public function __construct(private FinancialService $StudentAccount)
-    {
+    public function __construct(
+        private FinancialService $StudentAccount,
+        private AccountingReversalService $accountingReversalService,
+    ) {
         $this->middleware('permission:exchange_bonds-list', ['only' => ['index']]);
         $this->middleware('permission:exchange_bonds-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:exchange_bonds-edit', ['only' => ['edit', 'update']]);
@@ -31,7 +34,7 @@ class ExchangeBondController extends Controller
         $school = $this->GetSchool();
         $exchanges = ExchangeBond::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with(['student', 'academicYear'])
-            ->get();
+            ->paginate(config('school.per_page', 10));
 
         return view('backend.exchange_bond.index', compact('school', 'exchanges'));
     }
@@ -104,7 +107,7 @@ class ExchangeBondController extends Controller
 
                 $this->StudentAccount->CreateStudentAccount(
                     $exchange->student,
-                    $exchange,
+                    null,
                     AcademicYear::find($exchange->academic_year_id),
                     'exchange',
                     $request->amount - $student_account->debit,
@@ -113,7 +116,8 @@ class ExchangeBondController extends Controller
                     null,
                     $exchange->id,
                 );
-                $FundAccount->Debit = $request->amount;
+                $FundAccount->Debit = 0.0;
+                $FundAccount->Credit = $request->amount;
                 $FundAccount->save();
             });
             $this->LogActivity(
@@ -144,6 +148,13 @@ class ExchangeBondController extends Controller
         try {
             $this->executeInTransaction(function () use ($id) {
                 $exchange = ExchangeBond::find($id);
+
+                if (! $exchange) {
+                    throw new \Exception('Exchange bond not found.');
+                }
+
+                $this->accountingReversalService->reverseExchangeBond($exchange);
+
                 $student_account = StudentAccount::where(
                     'exchange_bond_id',
                     $id,
@@ -153,8 +164,8 @@ class ExchangeBondController extends Controller
                     $id,
                 )->first();
                 $exchange->delete();
-                $student_account->delete();
-                $FundAccount->delete();
+                $student_account?->delete();
+                $FundAccount?->delete();
             });
             $this->LogActivity(
                 trans('log.actions.deleted'),

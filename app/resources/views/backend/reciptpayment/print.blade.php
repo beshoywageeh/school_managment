@@ -31,7 +31,7 @@
                     <tbody>
                         <tr>
                             <td>{{ trans('Recipt_Payments.amount') }}</td>
-                            <td>{{ Number::currency($report_data['recipt']->Debit, in: 'EGP', locale: 'ar') }}</td>
+                            <td>{{ Number::currency($report_data['recipt']->Debit, in: config('school.currency'), locale: 'ar') }}</td>
                         </tr>
                     </tbody>
                 </table>

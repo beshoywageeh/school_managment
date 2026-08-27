@@ -34,14 +34,14 @@
                     <td>{{ $payment->classroom->name }}</td>
                     <td>{{ $payment->date }}</td>
                     <td>{{ $payment->status }}</td>
-                    <td>{{ Number::currency($payment->amount, 'EGP', 'ar') }}</td>
+                    <td>{{ Number::currency($payment->amount, config('school.currency'), 'ar') }}</td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
                 <th colspan="6">{{ trans('report.total') }}</th>
-                <th>{{ Number::currency($data['parts']->sum('amount'), 'EGP', 'ar') }}</th>
+                <th>{{ Number::currency($data['parts']->sum('amount'), config('school.currency'), 'ar') }}</th>
             </tr>
         </tfoot>
     </table>

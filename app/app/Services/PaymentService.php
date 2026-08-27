@@ -11,6 +11,7 @@ use App\Models\ReceiptPayment;
 use App\Models\School;
 use App\Models\Student;
 use App\Services\Finance\FinancialService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,7 +23,7 @@ class PaymentService
         Request $request,
         FinancialService $FinancialService,
         School $school,
-    ): array {
+    ) {
         try {
             $student = Student::findorfail($request->student_id);
             if (! $student) {
@@ -30,16 +31,10 @@ class PaymentService
             }
 
             DB::beginTransaction();
-
             $invoice = FeeInvoice::where('id', $request->feeInvoice)
                 ->where('student_id', $student->id)
                 ->with('schoolFee:id,title,amount')
                 ->first();
-            if ($student->id !== $invoice->student_id) {
-                throw new FinancialException(
-                    'The fee invoice does not belong to the specified student.',
-                );
-            }
             if (! $invoice) {
                 throw new FinancialException('Fee invoice not found.');
             }
@@ -70,8 +65,8 @@ class PaymentService
             $FinancialService->Fund_Account(
                 $school,
                 null,
-                $invoice->schoolFee->amount,
                 0.0,
+                $invoice->schoolFee->amount,
                 $pay->id,
             );
 
@@ -92,12 +87,14 @@ class PaymentService
                 ->first();
             $report_data['tafqeet'] = Numbers::TafqeetMoney(
                 $report_data['recipt']->Debit,
-                'EGP',
+                config('school.currency'),
             );
 
-            return $report_data;
             DB::commit();
+
+            return $report_data;
         } catch (Exception $e) {
+            DB::rollBack();
             session()->flash('error');
             \Log::alert('handleFeeInvoice '.$e->getMessage());
 
@@ -109,7 +106,7 @@ class PaymentService
         Request $request,
         FinancialService $FinancialService,
         School $school,
-    ): array {
+    ) {
         try {
             DB::beginTransaction();
             $student = Student::findorfail($request->student_id);
@@ -125,6 +122,7 @@ class PaymentService
             $parts = PaymentParts::where('student_id', $student->id)
                 ->where('status', 'unpaid')
                 ->orderBy('date')
+                ->lockForUpdate()
                 ->get();
 
             $current_amount = $request->amount * 1;
@@ -153,8 +151,8 @@ class PaymentService
                     $FinancialService->Fund_Account(
                         $school,
                         null,
-                        $part->amount,
                         0.0,
+                        $part->amount,
                         $pay->id,
                     );
 
@@ -167,7 +165,7 @@ class PaymentService
                     $report_data['items'] = [
                         [
                             'date' => $pay->date,
-                            'amount' => $pay->amount,
+                            'amount' => $pay->Debit,
                         ],
                     ];
                     $report_data['tafqeet'] = Numbers::TafqeetMoney(
@@ -179,9 +177,11 @@ class PaymentService
                 }
             }
 
-            return $report_data;
             DB::commit();
+
+            return $report_data;
         } catch (Exception $e) {
+            DB::rollBack();
             session()->flash('error');
             \Log::alert('handleFeeInvoice '.$e->getMessage());
 

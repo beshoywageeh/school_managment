@@ -21,6 +21,7 @@ class FundAccount extends Model
         'user_id',
         'exchange_bond_id',
         'school_id',
+
     ];
 
     protected $casts = [

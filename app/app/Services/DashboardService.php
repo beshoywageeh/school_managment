@@ -48,8 +48,12 @@ class DashboardService
             ? $feeInvoices = FeeInvoice::where('fee_invoices.school_id', $schoolId)
             : $feeInvoices = FeeInvoice::query();
 
+        $schoolId !== null
+            ? $studentAccountCredit = StudentAccount::where('school_id', $schoolId)->where('type', 'invoice')
+            : $studentAccountCredit = StudentAccount::where('type', 'invoice');
+
         return [
-            'credit' => StudentAccount::where('type', 'invoice')->sum('debit'),
+            'credit' => (clone $studentAccountCredit)->sum('debit'),
             'payment_parts' => (clone $paymentParts)
                 ->where('status', 'paid')
                 ->sum('amount'),

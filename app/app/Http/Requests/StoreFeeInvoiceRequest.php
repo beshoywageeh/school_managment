@@ -16,7 +16,7 @@ class StoreFeeInvoiceRequest extends FormRequest
         return [
             'list_fees' => ['required', 'array', 'min:1'],
             'list_fees.*.student_id' => ['required', 'integer', 'exists:students,id'],
-            'list_fees.*.fee' => ['required', 'integer', 'exists:school_fees,id'],
+            'list_fees.*.fee' => ['required', 'integer', 'exists:school__fees,id'],
         ];
     }
 

@@ -74,14 +74,14 @@
 
     <div class="print-row">
         <span class="print-label">{{ trans('exchange_bonds.amount') }}:</span>
-        <span class="print-value">{{ Number::Currency($exchange->amount, 'EGP', 'AR') }}</span>
+        <span class="print-value">{{ Number::Currency($exchange->amount, config('school.currency'), 'AR') }}</span>
     </div>
     <div class="print-row">
-        <span class="print-value">{{ Numbers::TafqeetMoney($exchange->amount, 'EGP') }}</span>
+        <span class="print-value">{{ Numbers::TafqeetMoney($exchange->amount, config('school.currency')) }}</span>
     </div>
     <div class="print-row">
         <span class="print-label">{{ trans('exchange_bonds.note') }}:</span>
-        <span class="print-value">{{ $exchange->note }}</span>
+        <span class="print-value">{{ $exchange->description }}</span>
     </div>
 
     <div class="print-footer">

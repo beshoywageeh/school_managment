@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Enums\Payment_Type;
-use Illuminate\Database\Eloquent\BelongsTo;
+use App\Models\Traits\BelongsToSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StudentAccount extends Model
 {
+    use BelongsToSchool;
     use HasFactory;
     use SoftDeletes;
 
@@ -27,6 +28,8 @@ class StudentAccount extends Model
         'type',
         'debit',
         'credit',
+        'school_id',
+        'exchange_bond_id',
     ];
 
     protected $casts = [
@@ -36,38 +39,43 @@ class StudentAccount extends Model
         'credit' => 'decimal:2',
     ];
 
-    public function student(): BelongsTo
+    public function student()
     {
         return $this->belongsTo(Student::class);
     }
 
-    public function classroom(): BelongsTo
+    public function classroom()
     {
         return $this->belongsTo(ClassRoom::class);
     }
 
-    public function grade(): BelongsTo
+    public function grade()
     {
         return $this->belongsTo(Grade::class);
     }
 
-    public function academic_year(): BelongsTo
+    public function academic_year()
     {
         return $this->belongsTo(AcademicYear::class);
     }
 
-    public function fee(): BelongsTo
+    public function fee()
     {
         return $this->belongsTo(FeeInvoice::class, 'fee_invoices_id', 'id');
     }
 
-    public function receiptPayment(): BelongsTo
+    public function receiptPayment()
     {
         return $this->belongsTo(ReceiptPayment::class);
     }
 
-    public function exception(): BelongsTo
+    public function exception()
     {
         return $this->belongsTo(ExceptionFees::class);
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
     }
 }

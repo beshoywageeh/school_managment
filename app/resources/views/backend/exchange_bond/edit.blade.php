@@ -7,7 +7,7 @@
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-6">
-            <form action="{{ route('exchange-bonds.update') }}" method="POST">
+            <form action="{{ route('exchange-bonds.update', $exchange->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="id" value="{{ $exchange->id }}">
@@ -25,7 +25,7 @@
                     </div>
                 </div>
 
-                <x-textarea name="note" label="{{ trans('exchange_bonds.note') }}" id="note" rows="3">{{ $exchange->note }}</x-textarea>
+                <x-textarea name="note" label="{{ trans('exchange_bonds.note') }}" id="note" rows="3" :value="$exchange->description"></x-textarea>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <button type="submit"

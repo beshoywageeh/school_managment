@@ -23,12 +23,14 @@ class GradeStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'exists:grades,id'],
+            'id' => $this->isMethod('put')
+                ? ['required', 'integer', 'exists:grades,id']
+                : ['nullable'],
             'name' => [
                 'required',
                 'string',
                 'max:255',
-                'unique:grades,name',
+                'unique:grades,name,school_id',
             ],
             'user_id' => ['nullable', 'array', 'exists:users,id'],
         ];

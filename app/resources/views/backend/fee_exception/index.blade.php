@@ -31,7 +31,7 @@
                                     {{ $ExcptionFee->student->name }}
                                 </a>
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ Number::currency($ExcptionFee->amount, 'EGP', 'ar') }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ Number::currency($ExcptionFee->amount, config('school.currency'), 'ar') }}</td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-1">
                                     @can('except_fee-info')

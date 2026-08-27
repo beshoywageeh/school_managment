@@ -12,6 +12,7 @@ use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\SchoolFee as school_fee;
 use App\Models\Student;
+use App\Models\StudentAccount;
 use App\Services\AccountingReversalService;
 use App\Services\Finance\FinancialService;
 use App\Services\InvoiceQueryService;
@@ -252,7 +253,7 @@ class FeeInvoiceController extends Controller
                 $studentAccount->academic_year_id = $ac_year->id;
                 $studentAccount->date = now()->toDateString();
                 $studentAccount->type = 'invoice';
-                $studentAccount->debit = $fee->amount;
+                $studentAccount->debit = $fee->schoolFee?->amount ?? 0;
                 $studentAccount->credit = 0.0;
                 $studentAccount->save();
 

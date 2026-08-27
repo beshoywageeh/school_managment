@@ -32,14 +32,14 @@
                     <td>{{ $credit_item->grade->name }}</td>
                     <td>{{ $credit_item->acd_year->view }}</td>
                     <td>{{ $credit_item->schoolFee->title }}</td>
-                    <td>{{ Number::currency($credit_item->schoolFee->amount, 'EGP', 'ar') }}</td>
+                    <td>{{ Number::currency($credit_item->schoolFee->amount, config('school.currency'), 'ar') }}</td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
                 <th colspan="7">{{ trans('report.total') }}</th>
-                <th>{{ Number::currency($data['credit']->sum('fees.amount'), 'EGP', 'ar') }}</th>
+                <th>{{ Number::currency($data['credit']->sum(fn ($c) => $c->schoolFee?->amount ?? 0), config('school.currency'), 'ar') }}</th>
             </tr>
         </tfoot>
     </table>

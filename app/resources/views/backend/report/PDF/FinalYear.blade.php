@@ -70,7 +70,7 @@
         </table>
         <!-- 2. Fees-->
         <h4 class="text-center section-title gray-row">
-            {{ trans('report.finalyear.pay_head', ['total' => Number::currency($paid, 'EGP', 'AR')]) }}</h4>
+            {{ trans('report.finalyear.pay_head', ['total' => Number::currency($paid, config('school.currency'), 'AR')]) }}</h4>
         <table style="width: 100%;">
             <tr>
                 @foreach ($students_accounts_query as $classroom => $data)
@@ -89,7 +89,7 @@
                                         <tr>
                                             <td>القسط الاول</td>
                                             <td>{{ $data->count('debit') }}</td>
-                                            <td>{{ Number::currency($data->sum('debit'), 'EGP', 'AR') }}</td>
+                                            <td>{{ Number::currency($data->sum('debit'), config('school.currency'), 'AR') }}</td>
 
                                         </tr>
                                     </tbody>
@@ -104,7 +104,7 @@
         <table style="width: 100%;">
             <tr>
 
-                @foreach ($excpetion as $classroom => $data)
+                @foreach ($exception_fees as $classroom => $data)
                     <th>
                         <table class="table-custom">
                             <thead>
@@ -119,7 +119,7 @@
                                 <tr>
 
                                     <td>{{ $data->count('amount') }}</td>
-                                    <td>{{ Number::currency($data->sum('amount'), 'EGP', 'AR') }}</td>
+                                    <td>{{ Number::currency($data->sum('amount'), config('school.currency'), 'AR') }}</td>
                                 </tr>
                         </table>
 

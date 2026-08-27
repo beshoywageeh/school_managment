@@ -14,7 +14,7 @@ class ReceiptPaymentUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'integer', 'exists:recipt__payments,id'],
+            'id' => ['required', 'integer'],
             'student_id' => ['required', 'integer', 'exists:students,id'],
             'amount' => ['required', 'numeric', 'min:0.01'],
         ];
@@ -24,13 +24,13 @@ class ReceiptPaymentUpdateRequest extends FormRequest
     {
         return [
             'id.required' => trans('validation.required', ['attribute' => trans('general.id')]),
-            'id.exists' => trans('validation.exists', ['attribute' => trans('receipt.receipt')]),
+            'id.integer' => trans('validation.integer', ['attribute' => trans('general.id')]),
             'student_id.required' => trans('validation.required', ['attribute' => trans('general.student')]),
             'student_id.integer' => trans('validation.integer', ['attribute' => trans('general.student')]),
             'student_id.exists' => trans('validation.exists', ['attribute' => trans('general.student')]),
             'amount.required' => trans('validation.required', ['attribute' => trans('general.amount')]),
             'amount.numeric' => trans('validation.numeric', ['attribute' => trans('general.amount')]),
-            'amount.min' => trans('validation.min.numeric', ['attribute' => trans('general.amount'), 'min' => 0.01]),
+            'amount.min' => trans('validation.min.numeric', ['attribute' => trans('general.amount')]),
         ];
     }
 }

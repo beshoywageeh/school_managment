@@ -19,6 +19,7 @@ class ReceiptPayment extends Model
         'student_id',
         'user_id',
         'Debit',
+        'school_id',
     ];
 
     protected $casts = ['date' => 'date', 'Debit' => 'decimal:2'];

@@ -7,7 +7,9 @@
 
 ## Clarifications
 
-*No clarifications needed — the remediation plan (docs/remediation-plan.md) provides sufficient detail derived from a comprehensive codebase review.*
+### Session 2026-08-27
+
+- Q: What permission naming granularity should the unified inventory permissions use? → A: Nested convention — `inventory.items.*` and `inventory.orders.*` (index/show/create/update/delete plus gard_create/gard_edit/gard_update), matching the existing implementation and Assumption #4.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -108,7 +110,7 @@ As a developer working on this codebase, I want consistent conventions, cleaned-
 
 **Acceptance Scenarios**:
 
-1. **Given** a developer searches for permission names, **When** reviewing controllers and policies, **Then** all references use unified `inventory.*` naming (not `stocks-*`/`clothes-*`/`books_sheets-*`)
+1. **Given** a developer searches for permission names, **When** reviewing controllers and policies, **Then** all references use the nested unified `inventory.items.*` / `inventory.orders.*` naming (not `stocks-*`/`clothes-*`/`books_sheets-*`)
 2. **Given** a PDF report is generated with zero data items, **When** it renders, **Then** no undefined variable errors occur
 3. **Given** a view iterates over a potentially empty collection, **When** the collection is empty, **Then** a user-friendly "no data" message is shown
 
@@ -206,7 +208,7 @@ As a user of the system, I want translated and accessible interfaces so that I c
 
 **Phase 6: P2 — Maintainability**
 
-- **FR-032**: Legacy permission names (`stocks-*`, `clothes-*`, `books_sheets-*`) MUST be replaced with unified `inventory.*` permission names across all controllers, policies, form requests, and helpers
+- **FR-032**: Legacy permission names (`stocks-*`, `clothes-*`, `books_sheets-*`) MUST be replaced with the nested unified permission names `inventory.items.*` and `inventory.orders.*` across all controllers, policies, form requests, and helpers
 - **FR-033**: Permission duplication MUST be reduced by establishing a single authorization point per action
 - **FR-034**: Dead code files MUST be removed: `ClassRoom2.php`, unused report services
 - **FR-035**: Shared validation rules in `StoreOrderRequest` / `UpdateOrderRequest` MUST be extracted into a base request
