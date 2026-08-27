@@ -3,6 +3,7 @@
 namespace App\Services\Inventory;
 
 use App\Enums\InventoryOrderStatus;
+use App\Enums\InventoryOrderType;
 use App\Models\Inventory\InventoryItem;
 use App\Models\Inventory\InventoryOrder;
 use App\Models\Inventory\InventoryOrderItem;
@@ -26,6 +27,7 @@ class InventoryOrderService
         $prefix = match ($type) {
             'inventory' => 'INV',
             'sales' => 'SRF',
+            'purchases' => 'PUR',
             'gard' => 'GRD',
             default => 'ORD',
         };
@@ -75,7 +77,10 @@ class InventoryOrderService
             $quantityIn = $itemData['quantity_in'] ?? 0;
             $quantityOut = $itemData['quantity_out'] ?? 0;
             $unitPrice = $itemData['unit_price'] ?? 0;
-            $lineTotal = ($quantityIn + $quantityOut) * $unitPrice;
+            $pricedQuantity = $order->type === InventoryOrderType::SALES
+                ? $quantityOut
+                : $quantityIn;
+            $lineTotal = $pricedQuantity * $unitPrice;
 
             InventoryOrderItem::create([
                 'inventory_order_id' => $order->id,

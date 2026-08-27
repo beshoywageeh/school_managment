@@ -16,7 +16,10 @@
         <input type="number" step="0.01" :name="`items[${index}][quantity_in]`" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="{{ trans('stock.quantity') }}">
     </td>
     <td class="px-4 py-2">
-        <input type="number" step="0.01" :name="`items[${index}][quantity_out]`" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="{{ trans('stock.quantity') }}">
+        <input type="number" step="0.01" min="0" :name="`items[${index}][quantity_out]`" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="{{ trans('stock.quantity') }}">
+    </td>
+    <td class="px-4 py-2">
+        <input type="number" step="0.01" min="0" :name="`items[${index}][unit_price]`" class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="{{ trans('stock.price') }}">
     </td>
     <td class="px-4 py-2 text-center">
         <button type="button" x-on:click="items.splice(index, 1)" class="p-2 text-danger hover:bg-danger/10 rounded-lg transition-colors">

@@ -88,6 +88,7 @@ return [
     'inventory_order_type' => [
         'inventory' => 'Inventory',
         'sales' => 'Sales',
+        'purchases' => 'Purchases',
         'gard' => 'Gard',
     ],
     'transaction_type' => [

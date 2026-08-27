@@ -2,9 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Enums\InventoryItemType;
+use App\Exceptions\InventoryException;
 use App\Models\Inventory\InventoryItem;
+use App\Models\Inventory\InventoryOrder;
+use App\Models\Inventory\InventoryOrderItem;
 use App\Models\School;
 use App\Models\User;
+use App\Services\Inventory\InventoryItemService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -74,6 +79,32 @@ class InventoryItemTest extends TestCase
         );
 
         $response->assertStatus(200);
+    }
+
+    public function test_all_type_lists_items_of_all_types(): void
+    {
+        InventoryItem::factory()->create([
+            'school_id' => $this->school->id,
+            'type' => InventoryItemType::STOCK,
+            'name' => 'Stock Item',
+        ]);
+        InventoryItem::factory()->create([
+            'school_id' => $this->school->id,
+            'type' => InventoryItemType::CLOTHE,
+            'name' => 'Clothe Item',
+        ]);
+        InventoryItem::factory()->create([
+            'school_id' => $this->school->id,
+            'type' => InventoryItemType::BOOK,
+            'name' => 'Book Item',
+        ]);
+
+        $response = $this->get(route('inventory.items.index', 'all'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Stock Item');
+        $response->assertSee('Clothe Item');
+        $response->assertSee('Book Item');
     }
 
     public function test_can_create_inventory_item_with_valid_data(): void
@@ -151,5 +182,24 @@ class InventoryItemTest extends TestCase
         $this->assertSoftDeleted('inventory_items', [
             'id' => $item->id,
         ]);
+    }
+
+    public function test_cannot_delete_item_referenced_by_order_items(): void
+    {
+        $item = InventoryItem::factory()->create([
+            'school_id' => $this->school->id,
+        ]);
+
+        InventoryOrderItem::factory()->create([
+            'inventory_order_id' => InventoryOrder::factory()->create([
+                'school_id' => $this->school->id,
+            ]),
+            'itemable_id' => $item->id,
+            'itemable_type' => InventoryItem::class,
+        ]);
+
+        $this->expectException(InventoryException::class);
+
+        app(InventoryItemService::class)->deleteItem($item);
     }
 }

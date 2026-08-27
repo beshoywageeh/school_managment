@@ -11,7 +11,7 @@ enum InventoryOrderStatus: string
     {
         return match ($this) {
             self::NOT_PAID => 'bg-red-100 text-red-700',
-            self::PAID => 'bg-green-100 text-green-700 disabled',
+            self::PAID => 'bg-green-100 text-green-700',
         };
     }
 

@@ -78,6 +78,12 @@ class InventoryItemService
 
     public function deleteItem(InventoryItem $item): bool
     {
+        if ($item->orderItems()->exists()) {
+            throw new InventoryException(
+                'Cannot delete item with existing order items',
+            );
+        }
+
         if ($item->transactions()->exists()) {
             throw new InventoryException(
                 'Cannot delete item with existing transactions',

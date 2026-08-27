@@ -108,6 +108,84 @@ class InventoryOrderTest extends TestCase
         $response->assertRedirect();
     }
 
+    public function test_can_create_purchases_order(): void
+    {
+        $item = InventoryItem::factory()->create([
+            'school_id' => $this->school->id,
+        ]);
+
+        $orderData = [
+            'type' => 'purchases',
+            'date' => now()->toDateString(),
+            'items' => [
+                [
+                    'itemable_id' => $item->id,
+                    'itemable_type' => InventoryItem::class,
+                    'quantity_in' => 10,
+                    'quantity_out' => 0,
+                    'unit_price' => 30.00,
+                ],
+            ],
+        ];
+
+        $this->post(route('inventory.orders.store'), $orderData)
+            ->assertRedirect();
+
+        $order = InventoryOrder::latest('id')->first();
+
+        $this->assertEquals('purchases', $order->type->value);
+        $this->assertStringStartsWith('PUR-', $order->auto_number);
+    }
+
+    public function test_sales_order_total_reflects_unit_price_and_quantity(): void
+    {
+        $item = InventoryItem::factory()->create([
+            'school_id' => $this->school->id,
+            'current_stock' => 100,
+        ]);
+
+        $orderData = [
+            'type' => 'sales',
+            'date' => now()->toDateString(),
+            'items' => [
+                [
+                    'itemable_id' => $item->id,
+                    'itemable_type' => InventoryItem::class,
+                    'quantity_in' => 0,
+                    'quantity_out' => 5,
+                    'unit_price' => 20,
+                ],
+            ],
+        ];
+
+        $this->post(route('inventory.orders.store'), $orderData)
+            ->assertRedirect();
+
+        $order = InventoryOrder::latest('id')->first();
+        $line = $order->items()->first();
+
+        $this->assertEquals(100.0, (float) $order->total_amount);
+        $this->assertEquals(20.0, (float) $line->unit_price);
+        $this->assertEquals(100.0, (float) $line->total);
+    }
+
+    public function test_order_rejects_invalid_itemable_target(): void
+    {
+        $this->post(route('inventory.orders.store'), [
+            'type' => 'inventory',
+            'date' => now()->toDateString(),
+            'items' => [
+                [
+                    'itemable_id' => 999,
+                    'itemable_type' => 'App\Models\SomeOtherModel',
+                    'quantity_in' => 10,
+                    'quantity_out' => 0,
+                    'unit_price' => 5,
+                ],
+            ],
+        ])->assertSessionHasErrors(['items.0.itemable_id', 'items.0.itemable_type']);
+    }
+
     public function test_order_status_starts_as_not_paid(): void
     {
         $order = InventoryOrder::factory()->create([

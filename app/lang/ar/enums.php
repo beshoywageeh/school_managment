@@ -90,6 +90,7 @@ return [
     'inventory_order_type' => [
         'inventory' => 'مخزون',
         'sales' => 'مبيعات',
+        'purchases' => 'مشتريات',
         'gard' => 'جرد',
     ],
     'transaction_type' => [

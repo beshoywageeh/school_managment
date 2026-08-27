@@ -75,7 +75,11 @@ class InventoryItem extends Model
 
     public function scopeByType($query, $type)
     {
-        return $query->where('type', $type);
+        if ($type && $type !== 'all') {
+            return $query->where('type', $type);
+        }
+
+        return $query;
     }
 
     public function scopeByCategory($query, $category)

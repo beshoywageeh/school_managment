@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Inventory;
 
+use App\Models\Inventory\InventoryItem;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreOrderRequest extends FormRequest
 {
@@ -28,17 +30,18 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => 'required|in:inventory,sales,gard',
+            'type' => 'required|in:inventory,sales,purchases,gard',
             'student_id' => 'nullable|exists:students,id',
             'manual_number' => 'nullable|string|max:255',
             'manual_date' => 'nullable|date',
             'notes' => 'nullable|string',
             'date' => 'required|date',
             'items' => 'required|array|min:1',
-            'items.*.itemable_id' => 'required|integer',
-            'items.*.itemable_type' => 'required|string',
+            'items.*.itemable_id' => ['required', 'integer', Rule::exists('inventory_items', 'id')],
+            'items.*.itemable_type' => ['required', Rule::in([InventoryItem::class])],
             'items.*.quantity_in' => 'nullable|numeric|min:0',
             'items.*.quantity_out' => 'nullable|numeric|min:0',
+            'items.*.unit_price' => 'nullable|numeric|min:0',
         ];
     }
 }

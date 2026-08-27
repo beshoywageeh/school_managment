@@ -57,6 +57,7 @@
                                     <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('inventory.type') }}</th>
                                     <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('inventory.name') }}</th>
                                     <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.quantity') }}</th>
+                                    <th class="px-4 py-3 text-start text-xs font-medium text-gray-500 uppercase">{{ trans('stock.price') }}</th>
                                     <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">{{ trans('general.actions') }}</th>
                                 </tr>
                             </thead>
