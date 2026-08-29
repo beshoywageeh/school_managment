@@ -59,12 +59,6 @@ class InventoryTransactionService
             throw new InventoryException('Quantity must be greater than 0');
         }
 
-        if (! $this->canStockOut($item, $quantity)) {
-            throw new InventoryException(
-                'Insufficient stock. Available: '.$item->current_stock,
-            );
-        }
-
         return DB::transaction(function () use (
             $item,
             $quantity,
@@ -72,10 +66,25 @@ class InventoryTransactionService
             $referenceId,
             $notes,
         ) {
-            $newBalance = $item->current_stock - $quantity;
+            $lockedItem = InventoryItem::query()
+                ->whereKey($item->getKey())
+                ->lockForUpdate()
+                ->first();
+
+            if ($lockedItem === null) {
+                throw new InventoryException('Inventory item not found');
+            }
+
+            if ($lockedItem->current_stock < $quantity) {
+                throw new InventoryException(
+                    'Insufficient stock. Available: '.$lockedItem->current_stock,
+                );
+            }
+
+            $newBalance = $lockedItem->current_stock - $quantity;
 
             $transaction = InventoryTransaction::create([
-                'item_id' => $item->id,
+                'item_id' => $lockedItem->id,
                 'type' => 'out',
                 'quantity' => $quantity,
                 'balance' => $newBalance,
@@ -83,10 +92,10 @@ class InventoryTransactionService
                 'reference_id' => $referenceId,
                 'notes' => $notes,
                 'user_id' => Auth::id(),
-                'school_id' => $item->school_id,
+                'school_id' => $lockedItem->school_id,
             ]);
 
-            $item->update(['current_stock' => $newBalance]);
+            $lockedItem->update(['current_stock' => $newBalance]);
 
             return $transaction;
         });

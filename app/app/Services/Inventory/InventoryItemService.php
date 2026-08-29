@@ -50,28 +50,26 @@ class InventoryItemService
 
     public function updateItem(InventoryItem $item, array $data): InventoryItem
     {
-        $item->update(
-            array_filter([
-                'name' => $data['name'] ?? $item->name,
-                'type' => $data['type'] ?? $item->type,
-                'category' => array_key_exists('category', $data)
-                    ? $data['category'] ?? null
-                    : $item->category,
-                'unit' => $data['unit'] ?? $item->unit,
-                'min_stock' => $data['min_stock'] ?? $item->min_stock,
-                'max_stock' => $data['max_stock'] ?? $item->max_stock,
-                'cost_price' => $data['cost_price'] ?? $item->cost_price,
-                'sell_price' => $data['sell_price'] ?? $item->sell_price,
-                'grade_id' => array_key_exists('grade_id', $data)
-                    ? $data['grade_id'] ?? null
-                    : $item->grade_id,
-                'classroom_id' => array_key_exists('classroom_id', $data)
-                    ? $data['classroom_id'] ?? null
-                    : $item->classroom_id,
-                'is_active' => $data['is_active'] ?? $item->is_active,
-                'description' => $data['description'] ?? $item->description,
-            ]),
-        );
+        $attributes = [
+            'name' => array_key_exists('name', $data) ? $data['name'] : $item->name,
+            'type' => array_key_exists('type', $data) ? $data['type'] : $item->type,
+            'unit' => array_key_exists('unit', $data) ? $data['unit'] : $item->unit,
+            'min_stock' => array_key_exists('min_stock', $data) ? $data['min_stock'] : $item->min_stock,
+            'max_stock' => array_key_exists('max_stock', $data) ? $data['max_stock'] : $item->max_stock,
+            'cost_price' => array_key_exists('cost_price', $data) ? $data['cost_price'] : $item->cost_price,
+            'sell_price' => array_key_exists('sell_price', $data) ? $data['sell_price'] : $item->sell_price,
+            'category' => array_key_exists('category', $data) ? ($data['category'] ?? null) : $item->category,
+            'grade_id' => array_key_exists('grade_id', $data) ? ($data['grade_id'] ?? null) : $item->grade_id,
+            'classroom_id' => array_key_exists('classroom_id', $data) ? ($data['classroom_id'] ?? null) : $item->classroom_id,
+            'is_active' => array_key_exists('is_active', $data) ? $data['is_active'] : $item->is_active,
+            'description' => array_key_exists('description', $data) ? ($data['description'] ?? null) : $item->description,
+        ];
+
+        if (array_key_exists('current_stock', $data)) {
+            $attributes['current_stock'] = $data['current_stock'];
+        }
+
+        $item->update($attributes);
 
         return $item;
     }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RoleStoreRequest;
 use App\Http\Requests\RoleUpdateRequest;
 use App\Http\Traits\SchoolTrait;
-use DB;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -93,7 +92,10 @@ class RoleController extends Controller
     /*** Remove the specified resource from storage.** @param  int  $id* @return \Illuminate\Http\Response*/
     public function destroy($id)
     {
-        DB::table('roles')->where('id', $id)->delete();
+        $role = Role::findOrFail($id);
+
+        $role->permissions()->detach();
+        $role->delete();
 
         return redirect()->route('roles.index')->with('success', trans('general.success'));
     }

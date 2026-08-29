@@ -20,7 +20,7 @@ class SettingsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('permission:settings-info', ['only' => ['index']]);
+        $this->middleware('permission:settings-info', ['only' => ['index', 'update']]);
     }
 
     public function index()
@@ -91,17 +91,23 @@ class SettingsController extends Controller
 
     public function update(Request $request, $id)
     {
+        $targetSchool = School::findOrFail($id);
+
+        $user = Auth::user();
+        if (! $user->isAdmin && (int) $targetSchool->id !== (int) $user->school_id) {
+            abort(403, __('settings.cannot_update_other_school'));
+        }
+
         try {
-            $this->executeInTransaction(function () use ($request, $id) {
-                $school = School::findorfail($id);
-                $school->name = $request->school_name;
-                $school->phone = $request->school_phone;
-                $school->address = $request->address;
-                $school->heading_right = $request->head_right;
-                $school->footer_right = $request->footer_right;
-                $school->footer_left = $request->footer_left;
-                $school->slug = \Str::slug($school->name);
-                $school->save();
+            $this->executeInTransaction(function () use ($request, $id, $targetSchool) {
+                $targetSchool->name = $request->school_name;
+                $targetSchool->phone = $request->school_phone;
+                $targetSchool->address = $request->address;
+                $targetSchool->heading_right = $request->head_right;
+                $targetSchool->footer_right = $request->footer_right;
+                $targetSchool->footer_left = $request->footer_left;
+                $targetSchool->slug = \Str::slug($targetSchool->name);
+                $targetSchool->save();
                 $this->verifyAndStoreImage(
                     $request,
                     'logo',
