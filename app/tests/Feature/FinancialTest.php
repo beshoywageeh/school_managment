@@ -5,6 +5,9 @@ namespace Tests\Feature;
 use App\Models\FeeInvoice;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
 class FinancialTest extends TestCase
@@ -16,7 +19,24 @@ class FinancialTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->app['config']->set('laravellocalization.hideDefaultLocaleInURL', true);
+
         $this->admin = User::factory()->create();
+
+        $role = Role::firstOrCreate(['name' => 'financial-test-role']);
+        $permissions = [
+            'fee_invoice-list',
+            'fee_invoice-create',
+            'fee_invoice-delete',
+        ];
+        foreach ($permissions as $name) {
+            $role->givePermissionTo(Permission::firstOrCreate(['name' => $name]));
+        }
+        $this->admin->assignRole($role);
+        $this->admin->load('roles');
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
         $this->actingAs($this->admin);
     }
 
@@ -54,7 +74,7 @@ class FinancialTest extends TestCase
         $response = $this->delete(route('fee-invoice.destroy', $invoice->id));
 
         $response->assertRedirect();
-        $this->assertDatabaseMissing('fee_invoices', [
+        $this->assertSoftDeleted('fee_invoices', [
             'id' => $invoice->id,
         ]);
     }

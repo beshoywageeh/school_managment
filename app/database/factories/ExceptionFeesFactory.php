@@ -21,7 +21,10 @@ class ExceptionFeesFactory extends Factory
     public function definition(): array
     {
         return [
-            'student_id' => Student::inRandomOrder()->first()?->id,
+            'student_id' => function () {
+                return FeeInvoice::query()->inRandomOrder()->value('student_id')
+                    ?? Student::inRandomOrder()->first()?->id;
+            },
             'grade_id' => function (array $attributes) {
                 return Student::find($attributes['student_id'])->grade_id;
             },

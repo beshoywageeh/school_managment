@@ -8,12 +8,16 @@ use App\Models\Student;
 use App\Repositories\Interface\StudentInterface;
 use App\Services\Student\AgeCalculationService;
 use App\Services\Student\StudentRegeister;
+use App\Services\Student\StudentService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class StudentRepository implements StudentInterface
 {
-    public function __construct(public StudentRegeister $StudentRegeister) {}
+    public function __construct(
+        public StudentRegeister $StudentRegeister,
+        public StudentService $studentService,
+    ) {}
 
     public function getAllStudents()
     {
@@ -38,7 +42,7 @@ class StudentRepository implements StudentInterface
 
     public function storeStudent($request, $parent)
     {
-        return Student::create([
+        return $this->studentService->createStudent([
             'code' => $this->StudentRegeister->StudentCode(),
             'name' => $request['name'],
             'birth_date' => $request['birth_date'],

@@ -21,7 +21,7 @@ class GradeFactory extends Factory
     {
 
         return [
-            'name' => $this->faker->unique()->randomElement([
+            'name' => $this->faker->randomElement([
                 'المرحلة الابتدائية', 'المرحلة الاعدادية', 'المرحلة الثانوية', 'مرحلة حضانة',
             ]),
             'user_id' => User::all()->random()->id,

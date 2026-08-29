@@ -82,7 +82,7 @@ class FormRequestTest extends TestCase
     {
         $this->givePermission($this->admin, 'class_rooms-edit');
         $this->actingAs($this->admin);
-        $response = $this->put(route('class-rooms.update'), [
+        $response = $this->put(route('class-rooms.update', 1), [
             'class_name' => 'Test',
             'grade_name' => 1,
         ]);
@@ -93,7 +93,7 @@ class FormRequestTest extends TestCase
     {
         $this->givePermission($this->admin, 'class_rooms-edit');
         $this->actingAs($this->admin);
-        $response = $this->put(route('class-rooms.update'), [
+        $response = $this->put(route('class-rooms.update', 1), [
             'id' => 9999,
             'class_name' => 'Test',
             'grade_name' => 1,

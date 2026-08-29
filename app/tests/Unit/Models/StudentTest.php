@@ -36,7 +36,6 @@ class StudentTest extends TestCase
             'code',
             'acadmiecyear_id',
             'nationality_id',
-            'school_id',
         ];
 
         $this->assertEquals($fillable, $this->student->getFillable());

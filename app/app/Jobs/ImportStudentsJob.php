@@ -17,15 +17,33 @@ class ImportStudentsJob implements ShouldQueue
 
     protected $students;
 
-    public function __construct(array $students)
+    protected $schoolId;
+
+    public function __construct(array $students, ?int $schoolId = null)
     {
         $this->students = $students;
+        $this->schoolId = $schoolId;
     }
 
     public function handle(): void
     {
+        $rows = collect($this->students)
+            ->map(function (array $row): array {
+                if ($this->schoolId !== null) {
+                    $row['school_id'] = $this->schoolId;
+                }
+
+                return $row;
+            })
+            ->filter(fn (array $row): bool => ! empty($row['school_id']))
+            ->all();
+
+        if (empty($rows)) {
+            return;
+        }
+
         try {
-            DB::table('students')->insert($this->students);
+            DB::table('students')->insert($rows);
         } catch (QueryException $e) {
             Log::error('Error inserting students batch: '.$e->getMessage());
             throw new \Exception('Failed to insert students: '.$e->getMessage());

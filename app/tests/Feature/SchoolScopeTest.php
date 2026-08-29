@@ -243,7 +243,7 @@ class SchoolScopeTest extends TestCase
         $this->actingAs($this->userB);
         $response = $this->get(route('students.show', $student->id));
 
-        $response->assertStatus(500);
+        $response->assertRedirect();
         $response->assertDontSee($student->name);
     }
 }

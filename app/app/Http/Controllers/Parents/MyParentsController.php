@@ -10,8 +10,8 @@ use App\Imports\ParentsImport;
 use App\Models\MyParent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MyParentsController extends Controller
 {
@@ -44,6 +44,7 @@ class MyParentsController extends Controller
     public function create()
     {
         $school = $this->getSchool();
+
         // $Mother_Status = MyParent::pluck('mother_status');
         return view(
             'backend.Parents.create',
@@ -197,7 +198,18 @@ class MyParentsController extends Controller
 
     public function Excel_Import(Request $request)
     {
-        //  dd($request->file('file'));
+        $request->validate(
+            [
+                'file' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+            ],
+            [
+                'file.required' => '⚠️ Please select a file to upload',
+                'file.file' => '⚠️ Invalid file format',
+                'file.mimes' => '⚠️ Only Excel files (.xlsx, .xls) are allowed',
+                'file.max' => '⚠️ File size exceeds 10MB limit',
+            ],
+        );
+
         try {
             Excel::import(new ParentsImport, $request->file('file'));
             session()->flash('success', trans('general.success'));

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Traits\SchoolTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,14 +11,18 @@ use Illuminate\Support\Facades\Redirect;
 
 class ProfileController extends Controller
 {
+    use SchoolTrait;
+
     /**
      * Display the user's profile form.
      */
     public function edit(Request $request)
     {
+        $school = $this->getSchool();
 
         return view('backend.profile.edit', [
             'user' => $request->user(),
+            'school' => $school,
         ]);
     }
 

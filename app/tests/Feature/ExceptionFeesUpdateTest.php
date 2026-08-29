@@ -100,16 +100,12 @@ class ExceptionFeesUpdateTest extends TestCase
 
     public function test_exception_update_with_non_existent_id_returns_validation_error(): void
     {
-        dump('PRE_COUNT='.\Illuminate\Support\Facades\DB::table('academic_years')->count());
         $response = $this->put(route('except-fee.update', 9999), [
             'id' => 9999,
             'student_id' => $this->student->id,
             'amount' => 200,
             'acadmic_id' => $this->year->id,
         ]);
-        if ($response->exception) {
-            throw $response->exception;
-        }
         $response->assertSessionHasErrors('id');
 
         $this->assertSame(0, ExceptionFees::count());

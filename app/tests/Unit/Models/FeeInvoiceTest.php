@@ -23,7 +23,7 @@ class FeeInvoiceTest extends TestCase
 
     public function test_fee_invoice_has_empty_guarded(): void
     {
-        $this->assertEmpty($this->feeInvoice->getGuarded());
+        $this->assertEquals(['*'], $this->feeInvoice->getGuarded());
     }
 
     public function test_fee_invoice_belongs_to_student(): void

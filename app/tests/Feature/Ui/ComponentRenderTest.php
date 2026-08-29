@@ -41,7 +41,7 @@ class ComponentRenderTest extends TestCase
         );
 
         $view->assertSee('حذف');
-        $view->assertSee('bg-red-600');
+        $view->assertSee('bg-danger');
     }
 
     public function test_status_badge_component_renders_active(): void
@@ -51,7 +51,7 @@ class ComponentRenderTest extends TestCase
         );
 
         $view->assertSee('نشط');
-        $view->assertSee('bg-green-500');
+        $view->assertSee('bg-status-active');
         $view->assertSee('role="status"', false);
     }
 
@@ -62,7 +62,7 @@ class ComponentRenderTest extends TestCase
         );
 
         $view->assertSee('مستبعد');
-        $view->assertSee('bg-red-500');
+        $view->assertSee('bg-status-excluded');
     }
 
     public function test_data_table_component_renders_with_columns(): void

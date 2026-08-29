@@ -51,7 +51,7 @@ class InvoiceService
                 'academic_year_id' => $acc_year,
                 'user_id' => auth()->id(),
                 'school_id' => $school,
-                'status' => 'unpaid',
+                'status' => 'not_paid',
             ]);
 
             $this->logActivity(

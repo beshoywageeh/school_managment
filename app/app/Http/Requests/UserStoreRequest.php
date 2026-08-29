@@ -31,7 +31,7 @@ class UserStoreRequest extends FormRequest
             'insurance_date' => ['nullable', 'date'],
             'national_id' => ['required', 'string', 'min:14', 'max:14', 'regex:/[0-9]{14}/'],
             'worker_type' => ['required', 'integer'],
-            'grade_year' => ['nullable', 'string', 'max:255'],
+            'grade_year' => ['nullable', 'date_format:Y'],
             'lesson_count' => ['nullable', 'integer'],
             'sepicality' => ['nullable', 'string', 'max:255'],
             'national_id_expire_date' => ['nullable', 'date'],

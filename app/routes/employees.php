@@ -9,9 +9,9 @@ Route::name('profile.')
     ->prefix('profile')
     ->controller(ProfileController::class)
     ->group(function () {
-        Route::get('/profile', 'edit')->name('edit');
-        Route::patch('/profile', 'update')->name('update');
-        Route::delete('/profile', 'destroy')->name('destroy');
+        Route::get('/', 'edit')->name('edit');
+        Route::patch('/', 'update')->name('update');
+        Route::delete('/', 'destroy')->name('destroy');
     });
 
 Route::prefix('jobs')

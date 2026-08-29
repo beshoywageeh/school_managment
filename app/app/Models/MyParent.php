@@ -30,6 +30,7 @@ class MyParent extends Model
         'user_id',
         'father_learning',
         'father_birth_date',
+        'father_birth_location',
         'mother_birth_date',
         'slug',
     ];

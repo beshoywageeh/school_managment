@@ -42,4 +42,38 @@ class UserFactory extends Factory
             'school_id' => School::factory(),
         ];
     }
+
+    /**
+     * Assign a specific school to the user.
+     */
+    public function forSchool(School|int $school): static
+    {
+        $schoolId = $school instanceof School ? $school->id : $school;
+
+        return $this->state(['school_id' => $schoolId]);
+    }
+
+    /**
+     * Make the user a non-admin (regular employee) account.
+     */
+    public function employee(): static
+    {
+        return $this->state(['isAdmin' => '0']);
+    }
+
+    /**
+     * Disable the account's login_allow flag.
+     */
+    public function disabled(): static
+    {
+        return $this->state(['login_allow' => '0']);
+    }
+
+    /**
+     * Create a user without an assigned school (null school_id).
+     */
+    public function withoutSchool(): static
+    {
+        return $this->state(['school_id' => null]);
+    }
 }

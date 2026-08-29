@@ -127,15 +127,15 @@ class StudentsController extends Controller
         $school = $this->getSchool();
         $grades = Grade::when(
             $this->schoolId(),
-            fn ($q, $id) => $q->where('school_id', $id),
+            fn($q, $id) => $q->where('school_id', $id),
         )->get(['id', 'name']);
         $parents = MyParent::when(
             $this->schoolId(),
-            fn ($q, $id) => $q->where('school_id', $id),
+            fn($q, $id) => $q->where('school_id', $id),
         )->get(['id', 'father_name']);
         $acadmice_years = AcademicYear::when(
             $this->schoolId(),
-            fn ($q, $id) => $q->where('school_id', $id),
+            fn($q, $id) => $q->where('school_id', $id),
         )
             ->where('status', 'active')
             ->get(['id', 'view']);
@@ -224,11 +224,11 @@ class StudentsController extends Controller
             $school = $this->getSchool();
             $grades = Grade::when(
                 $this->schoolId(),
-                fn ($q, $id) => $q->where('school_id', $id),
+                fn($q, $id) => $q->where('school_id', $id),
             )->get(['id', 'name']);
             $parents = MyParent::when(
                 $this->schoolId(),
-                fn ($q, $id) => $q->where('school_id', $id),
+                fn($q, $id) => $q->where('school_id', $id),
             )->get(['id', 'father_name']);
             $student = Student::findorfail($id);
 
@@ -349,7 +349,7 @@ class StudentsController extends Controller
         $class_rooms = ClassRoom::query()
             ->when(
                 $this->schoolId(),
-                fn ($query, $schoolId) => $query->where('school_id', $schoolId),
+                fn($query, $schoolId) => $query->where('school_id', $schoolId),
             )
             ->where('grade_id', $id)
             ->get(['id', 'name']);
@@ -361,38 +361,26 @@ class StudentsController extends Controller
         Request $request,
         StudentImportService $studentImportService,
     ) {
-        try {
-            $request->validate(
-                [
-                    'excel' => 'required|file|mimes:xlsx,xls,csv|max:10240',
-                ],
-                [
-                    'excel.required' => '⚠️ Please select a file to upload',
-                    'excel.file' => '⚠️ Invalid file format',
-                    'excel.mimes' => '⚠️ Only Excel files (.xlsx, .xls) are allowed',
-                    'excel.max' => '⚠️ File size exceeds 10MB limit',
-                ],
-            );
+        $request->validate(
+            [
+                'excel' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+            ],
+            [
+                'excel.required' => '⚠️ Please select a file to upload',
+                'excel.file' => '⚠️ Invalid file format',
+                'excel.mimes' => '⚠️ Only Excel files (.xlsx, .xls) are allowed',
+                'excel.max' => '⚠️ File size exceeds 10MB limit',
+            ],
+        );
 
+        try {
             $result = $studentImportService->StudentImport(
                 $request->file('excel'),
                 Auth::user()->id,
                 Auth::user()->school_id,
             );
 
-            if (! empty($result['errors'])) {
-                $errorCount = count($result['errors']);
-                $importedCount = $result['imported'] ?? 0;
-                session()->flash(
-                    'warning',
-                    "✅ Imported {$importedCount} students. ⚠️ {$errorCount} rows failed due to invalid data.",
-                );
-            } else {
-                session()->flash(
-                    'success',
-                    '✅ Students imported successfully!',
-                );
-            }
+            session()->flash('success', $result['message'] ?? 'Import started successfully.');
 
             return redirect()->route('students.index');
         } catch (\NoTypeDetectedException $e) {
@@ -400,7 +388,7 @@ class StudentsController extends Controller
                 'error',
                 '⚠️ Could not read the file. Please ensure it\'s a valid Excel file.',
             );
-            Log::error('Excel import error: '.$e->getMessage());
+            Log::error('Excel import error: ' . $e->getMessage());
 
             return redirect()->back()->withInput();
         } catch (QueryException $e) {
@@ -408,13 +396,13 @@ class StudentsController extends Controller
                 'error',
                 '⚠️ Database error occurred. Please check your data and try again.',
             );
-            Log::error('Student import DB error: '.$e->getMessage());
+            Log::error('Student import DB error: ' . $e->getMessage());
 
             return redirect()->back()->withInput();
         } catch (\Exception $e) {
             session()->flash(
                 'error',
-                '⚠️ An error occurred during import: '.$e->getMessage(),
+                '⚠️ An error occurred during import: ' . $e->getMessage(),
             );
             Log::error($e->getMessage());
 

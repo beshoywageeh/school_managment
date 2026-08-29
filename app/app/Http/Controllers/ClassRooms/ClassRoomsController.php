@@ -113,7 +113,7 @@ class ClassRoomsController extends Controller
                 $current_year,
             )->first();
 
-            return view('backend.class-rooms.show', [
+            return view('backend.class_rooms.show', [
                 'data' => $data,
                 'school' => $data['school'],
             ]);

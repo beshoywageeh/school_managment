@@ -17,7 +17,7 @@ class ExceptionFeeUpdateRequest extends FormRequest
             'id' => ['required', 'integer', 'exists:excption_fees,id'],
             'student_id' => ['required', 'integer', 'exists:students,id'],
             'amount' => ['required', 'numeric', 'min:0.01'],
-            'acadmic_id' => ['required', 'integer', 'exists:academic_years,id'],
+            'acadmic_id' => ['required', 'integer', 'exists:acadmice_years,id'],
         ];
     }
 

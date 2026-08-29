@@ -31,7 +31,7 @@ class DashboardTest extends TestCase
         );
 
         $view->assertSee('المصروفات');
-        $view->assertSee('text-red-600');
+        $view->assertSee('text-danger');
     }
 
     public function test_dashboard_page_example_exists(): void

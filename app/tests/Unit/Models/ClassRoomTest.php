@@ -2,19 +2,19 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\class_room;
+use App\Models\ClassRoom;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Tests\TestCase;
 
 class ClassRoomTest extends TestCase
 {
-    protected class_room $classRoom;
+    protected ClassRoom $classRoom;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->classRoom = new class_room;
+        $this->classRoom = new ClassRoom;
     }
 
     public function test_class_room_has_correct_fillable_attributes(): void
@@ -24,7 +24,6 @@ class ClassRoomTest extends TestCase
             'grade_id',
             'user_id',
             'tameen',
-            'school_id',
         ];
 
         $this->assertEquals($fillable, $this->classRoom->getFillable());

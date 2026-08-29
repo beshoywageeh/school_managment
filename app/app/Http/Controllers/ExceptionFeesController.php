@@ -222,13 +222,16 @@ class ExceptionFeesController extends Controller
                     'exception_id',
                     $request->id,
                 )->first();
-                $std->credit = $request->amount;
-                $std->academic_year_id = $request->acadmic_id;
 
-                $std->grade_id = $student->grade_id;
-                $std->classroom_id = $student->classroom_id;
-                $std->debit = 0.0;
-                $std->save();
+                if ($std) {
+                    $std->credit = $request->amount;
+                    $std->academic_year_id = $request->acadmic_id;
+
+                    $std->grade_id = $student->grade_id;
+                    $std->classroom_id = $student->classroom_id;
+                    $std->debit = 0.0;
+                    $std->save();
+                }
                 $this->logActivity(
                     trans('log.actions.updated'),
                     trans('log.models.exception_fee.updated', [

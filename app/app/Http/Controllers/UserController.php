@@ -183,9 +183,19 @@ class UserController extends Controller
 
     public function Excel_Import(Request $request)
     {
+        $request->validate(
+            [
+                'excel' => 'required|file|mimes:xlsx,xls,csv|max:10240',
+            ],
+            [
+                'excel.required' => '⚠️ Please select a file to upload',
+                'excel.file' => '⚠️ Invalid file format',
+                'excel.mimes' => '⚠️ Only Excel files (.xlsx, .xls) are allowed',
+                'excel.max' => '⚠️ File size exceeds 10MB limit',
+            ],
+        );
+
         try {
-            $path = $request->file('excel')->getRealPath();
-            // Excel::import(new WorkersImport, $path);
             Excel::import(new WorkersImport, $request->file('excel'), null, ExcelExcel::XLSX);
             session()->flash('success', trans('general.success'));
 

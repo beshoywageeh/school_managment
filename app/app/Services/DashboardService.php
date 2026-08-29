@@ -28,7 +28,10 @@ class DashboardService
             $gradeIds = User::find($userId)->grades()->pluck('grade_id');
 
             $students->whereIn('grade_id', $gradeIds);
-            $parents->whereIn('student_id', $gradeIds);
+            $parents->whereHas(
+                'students',
+                fn ($query) => $query->whereIn('grade_id', $gradeIds),
+            );
         }
 
         return [$students->count(), $parents->count()];

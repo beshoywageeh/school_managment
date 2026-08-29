@@ -49,6 +49,8 @@ class UserValidationTest extends TestCase
             'religion' => 1,
             'gender' => 1,
             'type' => 1,
+            'worker_type' => 1,
+            'insurance_number' => '1234567890',
             'national_id' => '12345678901234',
         ], $overrides);
     }

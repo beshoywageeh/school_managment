@@ -2,7 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\AcademicYear;
+use App\Models\ClassRoom;
 use App\Models\FeeInvoice;
+use App\Models\Grade;
+use App\Models\MyParent;
+use App\Models\Nationality;
 use App\Models\School;
 use App\Models\SchoolFee;
 use App\Models\Student;
@@ -20,29 +25,45 @@ class FeeInvoiceFactory extends Factory
      */
     public function definition(): array
     {
+        $school = School::query()->first() ?? School::factory()->create();
+        $academicYear = AcademicYear::factory()->create([
+            'school_id' => $school->id,
+        ]);
+        $grade = Grade::factory()->create([
+            'school_id' => $school->id,
+            'user_id' => '1',
+        ]);
+        $classroom = ClassRoom::factory()->create([
+            'grade_id' => $grade->id,
+            'school_id' => $school->id,
+        ]);
+        $parent = MyParent::factory()->create([
+            'school_id' => $school->id,
+        ]);
+        $nationality = Nationality::create(['name' => 'Nationality-'.$this->faker->word]);
+        $student = Student::factory()->create([
+            'school_id' => $school->id,
+            'grade_id' => $grade->id,
+            'classroom_id' => $classroom->id,
+            'parent_id' => $parent->id,
+            'nationality_id' => $nationality->id,
+            'acadmiecyear_id' => $academicYear->id,
+        ]);
+        $schoolFee = SchoolFee::factory()->create([
+            'school_id' => $school->id,
+            'grade_id' => $grade->id,
+            'classroom_id' => $classroom->id,
+            'academic_year_id' => $academicYear->id,
+        ]);
+
         return [
-            'student_id' => Student::inRandomOrder()->first()?->id,
-            'grade_id' => function (array $attributes) {
-                return Student::find($attributes['student_id'])->grade_id;
-            },
-            'classroom_id' => function (array $attributes) {
-                return Student::find($attributes['student_id'])
-                    ->classroom_id;
-            },
-            'academic_year_id' => function (array $attributes) {
-                return Student::find($attributes['student_id'])
-                    ->acadmiecyear_id;
-            },
-            'school_fee_id' => function (array $attributes) {
-                return SchoolFee::where(
-                    'academic_year_id',
-                    $attributes['academic_year_id'],
-                )
-                    ->inRandomOrder()
-                    ->first()?->id;
-            },
             'invoice_date' => $this->faker->date('Y-m-d'),
-            'school_id' => School::factory(),
+            'student_id' => $student->id,
+            'grade_id' => $grade->id,
+            'classroom_id' => $classroom->id,
+            'academic_year_id' => $academicYear->id,
+            'school_fee_id' => $schoolFee->id,
+            'school_id' => $school->id,
             'user_id' => '1',
         ];
     }

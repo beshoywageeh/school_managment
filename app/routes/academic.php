@@ -56,7 +56,6 @@ Route::prefix('classes')
     ->controller(ClassesController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::put('/{id}', 'update')->name('update');
         Route::get('/add-students/{id}', 'add_students')->name(

@@ -10,6 +10,7 @@ use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\Student;
 use App\Services\Student\StudentRegeister;
+use App\Services\Student\StudentService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
@@ -200,7 +201,7 @@ class StudentImport implements OnEachRow, ShouldQueue, WithChunkReading, WithHea
         $code = str_pad($this->nextCode, 6, '0', STR_PAD_LEFT);
         $this->nextCode++;
 
-        Student::create([
+        app(StudentService::class)->createStudent([
             'code' => $code,
             'name' => $name,
             'birth_date' => $birthDate->format('Y-m-d'),
