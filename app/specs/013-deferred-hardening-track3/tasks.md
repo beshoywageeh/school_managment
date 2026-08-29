@@ -278,3 +278,19 @@ Task: "Apply escapeFormulaCell at export"
 - Commit after each task or logical group.
 - Run `vendor/bin/pint --format agent` before finalizing code changes per Laravel Boost rules.
 - Reconciliation: this file assigns exactly-once all Track 3 work — 012-owned items are referenced (`012 T###`), Track 3-unique items are fully specified here (SCOPE-1, US5 imports, MAINT-1, GUARD-1 keep-disabled test, PERF-1 p95 enforcement).
+
+---
+
+## Phase 11: Convergence
+
+**Purpose**: Close gaps between the Track 3 spec/plan/tasks and the current codebase, surfaced by the `/speckit.converge` assessment (2026-08-29). Where an item is referenced as 012-owned (`012 T###`), the task reconciles so work is assigned exactly once; otherwise it is Track 3 net-new remaining work.
+
+**Ordering**: CRITICAL/HIGH first; each item traces to its source requirement and gap type.
+
+- [ ] T042 CRITICAL [US4] Refactor `RoleController::destroy` to delete the role and its Spatie pivot rows through Eloquent relationships/`detach`/`sync` (cleaning `model_has_roles` and `role_has_permissions`) instead of raw `DB::table('roles')->where('id', $id)->delete()`, adding a test that no orphaned assignment/permission rows remain, per FR-ADMIN-2 / US4 `T019` (contradicts; also a Constitution I raw-SQL violation) in `app/app/Http/Controllers/RoleController.php` and `app/tests/Feature/Quality/RoleCleanupTrack3Test.php`
+- [ ] T043 [US1] Make `InventoryTransactionService::stockOut` atomic by row-locking the `InventoryItem` (`lockForUpdate()` inside `DB::transaction`) before checking available quantity and deducting, so concurrent sells cannot oversell, per FR-INV-1 / US1 `T008` (missing) in `app/app/Services/Inventory/InventoryTransactionService.php` and `app/tests/Feature/Inventory/Track3_StockConcurrencyTest.php`
+- [ ] T044 [US1] Fix `InventoryItemService::updateItem` to persist zero/false item values (price, quantity/`current_stock`, `is_active`) by applying presence-based assignment (`array_key_exists`) instead of `array_filter`/`??` which drops falsy values, per FR-INV-3 / US1 `T009` (contradicts) in `app/app/Services/Inventory/InventoryItemService.php`
+- [ ] T045 [US4] Guard `SettingsController::update` with the settings permission and the acting school scope so a user cannot edit another school's settings by guessing an id (IDOR), per FR-ADMIN-1 / US4 `T018` (contradicts); reconcile with `012 T034` in `app/app/Http/Controllers/SettingsController.php` and `app/tests/Feature/MultiTenancy/SettingsPermissionTest.php`
+- [ ] T046 [US7] Add the additive `2026_08_28_*_track3_*` migration that indexes `parents.father_name` (and any other Track 3-only additive columns), per FR-IDX-1 / `T003` (missing); reconcile with `012 T077` so the column/index is not dropped from either plan; add `tests/Feature/Quality/FatherNameIndexTest.php` (`T034`) in `app/database/migrations/`
+- [ ] T047 [P] [US1/US2/US3/US4] Create the shared multi-school test fixtures (two schools; non-super-admin user with null `school_id`; parent with/without linked students; a role to delete) and a tenant-isolation baseline test, per `T001`/`T005`/`T007` (missing) in `app/database/factories/`, `app/tests/TestCase.php`, and `app/tests/Feature/MultiTenancy/TenantIsolationTest.php`
+- [ ] T048 [P] [US2] Add PERF-1 enforcement + PERF-2 tests: assert core lists (receipts, exchange bonds, promotions, parents) return ≤50 records per page with the p95 budget, and that a fee/accounting write refreshes the affected school's cached figure, per FR-PERF-1/PERF-2 / `T011`/`T012`/`T013` (missing; reconcile with `012 T076`/`012 T078`) in `app/tests/Feature/Performance/ListPaginationTest.php` and `app/tests/Feature/Performance/CacheFreshnessOnWriteTest.php`
