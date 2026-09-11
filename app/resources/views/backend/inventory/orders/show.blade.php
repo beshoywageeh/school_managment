@@ -22,7 +22,7 @@
 
         @if($order->student)
         <div class="mb-4 text-sm text-gray-600">
-            <strong>{{ trans('student.title') }}:</strong> {{ $order->student->name }}
+            <strong>{{ trans('student.title') }}:</strong> {{ $order->student->fullName() }}
         </div>
         @endif
 

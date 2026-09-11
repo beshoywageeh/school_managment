@@ -27,7 +27,7 @@
                 <tr>
                     <td width="5%">{{ $loop->index + 1 }}</td>
                     <td>{{ $credit_item->invoice_date }}</td>
-                    <td>{{ $credit_item->student->name }}</td>
+                    <td>{{ $credit_item->student->fullName() }}</td>
                     <td>{{ $credit_item->classroom->name }}</td>
                     <td>{{ $credit_item->grade->name }}</td>
                     <td>{{ $credit_item->acd_year->view }}</td>

@@ -68,7 +68,7 @@ class AccountService
             $this->logActivity(
                 trans('log.actions.added'),
                 trans('log.models.payment_part.receipt_added', [
-                    'name' => $student->name,
+                    'name' => $student->fullName(),
                 ]),
             );
 

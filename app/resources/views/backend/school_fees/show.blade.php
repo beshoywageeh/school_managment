@@ -48,7 +48,7 @@
 
                             <td class="px-6 py-4 text-center text-sm text-gray-600 border border-black">{{ $loop->index + 1 }}</td>
                             <td class="px-6 py-4 text-sm text-center text-gray-800 font-medium border border-black">{{ $student->code }}</td>
-                            <td class="px-6 py-4 text-sm text-center text-gray-800 font-medium border border-black">{{ $student->name }}</td>
+                            <td class="px-6 py-4 text-sm text-center text-gray-800 font-medium border border-black">{{ $student->fullName() }}</td>
                             <td class="px-6 py-4 text-sm text-center text-gray-800 font-medium border border-black">{{ $student->classroom->name }}</td>
                             <td class="px-6 py-4 text-sm text-center ext-gray-800 font-medium border border-black">{{ $student->grade->name }}</td>
                         </tr>

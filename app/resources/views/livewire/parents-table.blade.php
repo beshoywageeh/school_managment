@@ -33,7 +33,7 @@
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $parent->father_job }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">
                                 @foreach ($parent->Students as $student)
-                                    {{ $student->name }}<br />
+                                    {{ $student->fullName() }}<br />
                                 @endforeach
                             </td>
                             <td class="px-6 py-4 text-center">

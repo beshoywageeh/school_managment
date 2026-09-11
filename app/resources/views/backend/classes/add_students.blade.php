@@ -36,7 +36,7 @@
                                     <label for="">{{ trans('classes.choose_student') }}</label>
                                     <select name="student_id[]" id="" multiple class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all tom-select">
                                         @foreach ($students as $student)
-                                            <option value="{{ $student->id }}">{{ $student->name }}</option>
+                                            <option value="{{ $student->id }}">{{ $student->fullName() }}</option>
                                         @endforeach
                                     </select>
                                 </div>

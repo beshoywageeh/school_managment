@@ -30,7 +30,7 @@
                                     <td class="px-4 py-2 text-center text-gray-600">{{ $loop->index + 1 }}</td>
                                     <td class="px-4 py-2 text-gray-800">{{ $exchange->manual ?? '-' }}</td>
                                     <td class="px-4 py-2 text-gray-600">{{ $exchange->academicYear->view }}</td>
-                                    <td class="px-4 py-2 text-gray-800">{{ $exchange->student->name }}</td>
+                                    <td class="px-4 py-2 text-gray-800">{{ $exchange->student->fullName() }}</td>
                                     <td class="px-4 py-2 text-gray-800 font-medium">{{ Number::currency($exchange->amount, config('school.currency')) }}</td>
                                     <td class="px-4 py-2 text-gray-600">{{ $exchange->description }}</td>
                                     <td class="px-4 py-2 text-center">

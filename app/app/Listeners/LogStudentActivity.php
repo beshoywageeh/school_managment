@@ -45,7 +45,7 @@ class LogStudentActivity implements ShouldQueue
         LogActivityJob::dispatch(
             userId: $student->user_id ?? auth()->id() ?? 0,
             action: $action,
-            description: 'Student '.$action.': '.$student->name,
+            description: 'Student '.$action.': '.$student->fullName(),
             ip: request()->ip() ?? '127.0.0.1',
             userAgent: request()->userAgent(),
             schoolId: $student->school_id,

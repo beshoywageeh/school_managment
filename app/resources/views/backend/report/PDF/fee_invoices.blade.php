@@ -40,7 +40,7 @@
                         @foreach ($students as $student)
                             <tr>
                                 <td width="5%">{{ $loop->index + 1 }}</td>
-                                <td>{{ $student->student->name }}</td>
+                                <td>{{ $student->student->fullName() }}</td>
                                 <td>{{ $student->invoice_date }}</td>
                                 <td>{{ $student->status == 0 ? trans('report.unpaid') : trans('report.paid') }}</td>
                                 <td>{{ Number::currency($student->schoolFee->amount, config('school.currency'), 'ar') }}</td>

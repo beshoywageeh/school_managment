@@ -24,7 +24,7 @@
                 @forelse ($data['students'] as $student)
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
-                        <td>{{ $student->name }}</td>
+                        <td>{{ $student->fullName() }}</td>
                         <td>{{ $student->national_id }}</td>
                         <td>{{ $student->parent->father_phone }}</td>
                         <td></td>

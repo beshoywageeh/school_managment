@@ -2,12 +2,16 @@
     "name": "looplabs/ischool",
     "type": "project",
     "description": "School Manament Web App",
-    "keywords": ["laravel", "framework","School","Management"],
+    "keywords": [
+        "laravel",
+        "framework",
+        "School",
+        "Management"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.4",
         "alkoumi/laravel-arabic-numbers": "^1.1",
-        "barryvdh/laravel-debugbar": "^4.0",
         "carlos-meneses/laravel-mpdf": "^2.1",
         "doctrine/dbal": "^3.10",
         "guzzlehttp/guzzle": "^7.2",
@@ -24,12 +28,14 @@
         "spatie/laravel-permission": "^6.7"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^4.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/boost": "^1.8",
         "laravel/pint": "^1.18",
         "laravel/sail": "^1.18",
         "laravel/telescope": "^5.20",
         "mockery/mockery": "^1.4.4",
+        "morasoft/artisan-ui": "^1.0",
         "nunomaduro/collision": "^7.0",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^10.1",

@@ -52,7 +52,7 @@
                 <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4" dir="rtl">
                     @forelse($parent->students as $student)
                     <div class="flex flex-col gap-1 bg-gray-50 rounded-xl p-4">
-                        <span class="text-gray-800 font-semibold">{{ $student->name }}</span>
+                        <span class="text-gray-800 font-semibold">{{ $student->fullName() }}</span>
 
 
                     <table class="w-full text-sm" dir="rtl">

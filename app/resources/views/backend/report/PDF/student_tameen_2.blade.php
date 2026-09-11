@@ -32,7 +32,7 @@
                     @endphp
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
-                        <td>{{ $student->name }}</td>
+                        <td>{{ $student->fullName() }}</td>
                         <td>{{ $date[2] }}</td>
                         <td>{{ $date[1] }}</td>
                         <td>{{ $date[0] }}</td>

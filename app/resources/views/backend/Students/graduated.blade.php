@@ -22,7 +22,7 @@
                         @forelse ($students as  $student)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->index + 1 }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $student->name }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $student->fullName() }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $student->grade->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $student->classroom->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $student->deleted_at->format('Y') }}</td>

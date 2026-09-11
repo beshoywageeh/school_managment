@@ -135,7 +135,7 @@ class StudentOrderService
                 trans('log.clothes_order.out_order_added_action'),
                 trans('log.clothes_order.out_order_added', [
                     'order_id' => $order->id,
-                    'student_name' => $student->name,
+                    'student_name' => $student->fullName(),
                 ]),
             );
 

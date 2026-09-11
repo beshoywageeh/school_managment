@@ -57,7 +57,7 @@ class InvoiceService
             $this->logActivity(
                 trans('log.actions.added'),
                 trans('log.models.receipt_payment.created', [
-                    'name' => $student->name,
+                    'name' => $student->fullName(),
                     'date' => Carbon::today()->toDateString(),
                 ]),
             );
@@ -100,7 +100,7 @@ class InvoiceService
         $this->logActivity(
             trans('log.actions.added'),
             trans('log.models.payment_part.created', [
-                'name' => $student->name,
+                'name' => $student->fullName(),
             ]),
         );
     }

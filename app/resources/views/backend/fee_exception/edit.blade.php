@@ -15,7 +15,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <x-select name="student_id" label="{{ trans('Recipt_Payments.name') }}" id="tom-select">
-                    <option value="{{ $excptionFees->student->id }}">{{ $excptionFees->student->name }}
+                    <option value="{{ $excptionFees->student->id }}">{{ $excptionFees->student->fullName() }}
                     </option>
                 </x-select>
                 <div>

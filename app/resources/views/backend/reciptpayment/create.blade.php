@@ -37,7 +37,7 @@
 
                 </div>
                 <div>
-                    <span class="block text-center text-lg font-lg text-gray-700 mb-1">{{ $Student->name }}</span>
+                    <span class="block text-center text-lg font-lg text-gray-700 mb-1">{{ $Student->fullName() }}</span>
                 </div>
             </div>
 
@@ -285,7 +285,7 @@
 
             <div class="mb-4">
                 <h2 class="text-xl font-bold text-gray-800">{{ trans('Recipt_Payments.name') }}:
-                    {{ $report_data['recipt']->student->name }}</h2>
+                    {{ $report_data['recipt']->student->fullName() }}</h2>
             </div>
 
             @if (isset($report_data['items']) && count($report_data['items']))

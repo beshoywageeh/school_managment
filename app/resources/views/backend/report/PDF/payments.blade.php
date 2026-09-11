@@ -28,7 +28,7 @@
                     <td width="5%">{{ $loop->index + 1 }}</td>
                     <td>{{ $payment->manual }}</td>
                     <td>{{ $payment->date }}</td>
-                    <td>{{ $payment->student->name }}</td>
+                    <td>{{ $payment->student->fullName() }}</td>
                     <td>{{ $payment->student->classroom->name }}</td>
                     <td>{{ Number::currency($payment->Debit, config('school.currency'), 'ar') }}</td>
                 </tr>

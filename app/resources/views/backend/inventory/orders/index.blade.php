@@ -40,7 +40,7 @@
                 <x-select name="student_id" label="{{ trans('student.title') }}" class="tom-select">
                     <option value="">{{ trans('general.all') }}</option>
                     @foreach($students ?? [] as $student)
-                        <option value="{{ $student->id }}" {{ request('student_id') == $student->id ? 'selected' : '' }}>{{ $student->name }}</option>
+                        <option value="{{ $student->id }}" {{ request('student_id') == $student->id ? 'selected' : '' }}>{{ $student->fullName() }}</option>
                     @endforeach
                 </x-select>
             </div>
@@ -111,7 +111,7 @@
                         <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $order->auto_number }}</td>
                         <td class="px-6 py-4 text-sm text-gray-600">{{ $order->date?->format('Y-m-d') }}</td>
                         @if($type === 'sales')
-                        <td class="px-6 py-4 text-sm text-gray-600">{{ $order->student->name ?? '--' }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">{{ $order->student?->fullName() ?? '--' }}</td>
                         @endif
                         <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ number_format($order->total_amount, 2) }}</td>
                         <td class="px-6 py-4 text-sm">

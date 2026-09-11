@@ -38,6 +38,18 @@ class StudentResource extends JsonResource
             ]),
             'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
+            'grade' => $this->whenLoaded('grade', fn () => [
+                'id' => $this->grade->id,
+                'name' => $this->grade->name,
+            ]),
+            'classroom' => $this->whenLoaded('classroom', fn () => [
+                'id' => $this->classroom->id,
+                'name' => $this->classroom->name,
+            ]),
+            'parent' => $this->whenLoaded('parent', fn () => [
+                'id' => $this->parent->id,
+                'father_name' => $this->parent->father_name,
+            ]),
         ];
     }
 }

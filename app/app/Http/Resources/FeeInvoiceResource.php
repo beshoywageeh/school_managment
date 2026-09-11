@@ -16,7 +16,7 @@ class FeeInvoiceResource extends JsonResource
             'status' => $this->status,
             'student' => $this->whenLoaded('student', fn () => [
                 'id' => $this->student->id,
-                'name' => $this->student->name,
+                'name' => $this->student->fullName(),
             ]),
             'fee' => $this->whenLoaded('schoolFee', fn () => [
                 'id' => $this->schoolFee->id,

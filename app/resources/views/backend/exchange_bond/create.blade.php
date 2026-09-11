@@ -16,7 +16,7 @@
                     <div>
                         <label for="student_id" class="block text-sm font-semibold text-gray-700 mb-1">{{ trans('exchange_bonds.student') }}</label>
                         <input name="student_id" value="{{ $student->id }}" type="hidden">
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 mb-2" value="{{ $student->name }}" disabled>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600 mb-2" value="{{ $student->fullName() }}" disabled>
                         <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600"
                             value="{{ Number::Currency($student->student_account_sum_debit - $student->student_account_sum_credit, config('school.currency')) }}"
                             disabled>

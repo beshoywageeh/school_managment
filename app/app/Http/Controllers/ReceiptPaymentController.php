@@ -240,7 +240,7 @@ class ReceiptPaymentController extends Controller
                 $this->logActivity(
                     trans('log.actions.updated'),
                     trans('log.models.receipt-payment.updated', [
-                        'name' => $request->student->name,
+                        'name' => $request->student->fullName(),
                         'date' => date('Y-m-d'),
                     ]),
                 );
@@ -272,7 +272,7 @@ class ReceiptPaymentController extends Controller
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.receipt-payment.deleted', [
-                    'name' => $ReceiptPayment->student->name,
+                    'name' => $ReceiptPayment->student->fullName(),
                     'date' => date('Y-m-d'),
                 ]),
             );

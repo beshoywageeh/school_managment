@@ -83,7 +83,7 @@ class PaymentService
                 ],
             ];
             $report_data['recipt'] = ReceiptPayment::where('id', $pay->id)
-                ->with(['student:id,name'])
+                ->with(['student'])
                 ->first();
             $report_data['tafqeet'] = Numbers::TafqeetMoney(
                 $report_data['recipt']->Debit,

@@ -69,7 +69,7 @@
         </div>
         <div class="mb-3 flex flex-wrap">
             <div class="w-full">
-                <h2 class="text-xl font-bold">{{ trans('Recipt_Payments.name') }}: {{ $invoice_details->student->name }}</h2>
+                <h2 class="text-xl font-bold">{{ trans('Recipt_Payments.name') }}: {{ $invoice_details->student->fullName() }}</h2>
             </div>
         </div>
         <div class="mb-3 flex flex-wrap">

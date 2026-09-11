@@ -22,7 +22,7 @@
         </div>
         <div class="mb-3 row">
             <div class="col-12">
-                <h2 class="text-xl font-bold">{{ trans('Recipt_Payments.name') }}: {{ $report_data['recipt']->student->name }}</h2>
+                <h2 class="text-xl font-bold">{{ trans('Recipt_Payments.name') }}: {{ $report_data['recipt']->student->fullName() }}</h2>
             </div>
         </div>
         <div class="mb-3 row">

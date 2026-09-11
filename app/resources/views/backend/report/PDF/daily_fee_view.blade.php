@@ -29,7 +29,7 @@
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $fee->manual }}</td>
                         <td>{{ $fee->date }}</td>
-                        <td>{{ $fee->student->name }}</td>
+                        <td>{{ $fee->student->fullName() }}</td>
                         <td>{{ Number::currency($fee->Debit, config('school.currency'), 'ar') }}</td>
                         <td>{{ $fee->note }}</td>
                     </tr>

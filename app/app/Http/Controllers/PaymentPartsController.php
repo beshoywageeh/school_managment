@@ -165,7 +165,7 @@ class PaymentPartsController extends Controller
             $this->logActivity(
                 trans('log.actions.updated'),
                 trans('log.models.payment_part.updated', [
-                    'name' => $paymentpart->student->name,
+                    'name' => $paymentpart->student->fullName(),
                 ]),
             );
             session()->flash('success', trans('general.success'));
@@ -193,7 +193,7 @@ class PaymentPartsController extends Controller
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.payment_part.deleted', [
-                    'name' => $pay->student->name,
+                    'name' => $pay->student->fullName(),
                 ]),
             );
             $pay->delete();

@@ -27,7 +27,7 @@
                     @endphp
                     <tr class="even:bg-gray-50 hover:bg-gray-100">
                         <td class="border border-black px-2 py-1">{{ $loop->iteration }}</td>
-                        <td class="border border-black px-2 py-1 text-right">{{ $student->name }}</td>
+                        <td class="border border-black px-2 py-1 text-right">{{ $student->fullName() }}</td>
                         <td class="border border-black px-2 py-1">{{ \Carbon\Carbon::parse($student->birth_date)->format('d') }}</td>
                         <td class="border border-black px-2 py-1">{{ \Carbon\Carbon::parse($student->birth_date)->format('m') }}</td>
                         <td class="border border-black px-2 py-1">{{ \Carbon\Carbon::parse($student->birth_date)->format('Y') }}</td>

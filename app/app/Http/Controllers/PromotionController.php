@@ -29,7 +29,7 @@ class PromotionController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $promotions = promotion::when($this->schoolId(), fn($q, $id) => $q->where('school_id', $id))
+        $promotions = promotion::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->with(
                 'student:id,name',
                 'f_grade:id,name',
@@ -53,8 +53,8 @@ class PromotionController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $grades = Grade::when($this->schoolId(), fn($q, $id) => $q->where('school_id', $id))->get();
-        $acc_year = AcademicYear::when($this->schoolId(), fn($q, $id) => $q->where('school_id', $id))
+        $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
+        $acc_year = AcademicYear::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
             ->where('status', 0)
             ->get();
 
@@ -111,7 +111,7 @@ class PromotionController extends Controller
                     $this->logActivity(
                         trans('log.actions.promoted'),
                         trans('log.models.promotion.promoted', [
-                            'name' => $student->name,
+                            'name' => $student->fullName(),
                         ]),
                     );
                 }
@@ -166,7 +166,7 @@ class PromotionController extends Controller
                 $this->logActivity(
                     trans('log.actions.canceled'),
                     trans('log.models.promotion.canceled', [
-                        'name' => $promotions->student->name,
+                        'name' => $promotions->student->fullName(),
                     ]),
                 );
             });

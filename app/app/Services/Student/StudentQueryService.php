@@ -28,7 +28,7 @@ class StudentQueryService
     public function applyFilters(Builder $query, Request $request): void
     {
         if ($request->filled('students')) {
-            $search = '%' . $request->students . '%';
+            $search = '%'.$request->students.'%';
             $query->where(function ($q) use ($search) {
                 $q->where('students.name', 'like', $search)
                     ->orWhere('parents.father_name', 'like', $search)

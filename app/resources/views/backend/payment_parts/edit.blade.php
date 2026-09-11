@@ -16,7 +16,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.name') }}</label>
-                    <input value="{{ $paymentParts->student->name }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly />
+                    <input value="{{ $paymentParts->student->fullName() }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" readonly />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">{{ trans('student.grade') }}</label>

@@ -137,7 +137,7 @@ class FinancialReportService
                 $remaining = $totalInvoice - $paidAmount;
 
                 return [
-                    'student' => $student->name,
+                    'student' => $student->fullName(),
                     'total' => $totalInvoice,
                     'paid' => $paidAmount,
                     'remaining' => $remaining,

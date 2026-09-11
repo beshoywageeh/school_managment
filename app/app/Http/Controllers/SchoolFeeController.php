@@ -117,7 +117,7 @@ class SchoolFeeController extends Controller
                     $this->logActivity(
                         trans('log.actions.added'),
                         trans('log.models.SchoolFee.invoice_added', [
-                            'name' => $student->name,
+                            'name' => $student->fullName(),
                             'amount' => $request->amount,
                         ]),
                     );

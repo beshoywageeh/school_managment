@@ -39,6 +39,7 @@ class Student extends Model
         'gender' => UserGender::class,
         'religion' => user_religion::class,
         'student_status' => Student_Status::class,
+
     ];
 
     public function user(): BelongsTo
@@ -89,5 +90,12 @@ class Student extends Model
     public function excption(): HasMany
     {
         return $this->hasMany(ExceptionFees::class);
+    }
+
+    public function fullName(): string
+    {
+        $fatherName = $this->parent?->father_name;
+
+        return $this->name.($fatherName ? ' '.$fatherName : '');
     }
 }

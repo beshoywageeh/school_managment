@@ -22,7 +22,7 @@
                         <select name="student_id" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all tom-select">
                             <option value="">{{ trans('general.choose') }}</option>
                             @foreach($students ?? [] as $student)
-                                <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>{{ $student->name }}</option>
+                                <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>{{ $student->fullName() }}</option>
                             @endforeach
                         </select>
                         <x-input-error :messages="$errors->get('student_id')" />

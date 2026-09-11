@@ -139,7 +139,7 @@ class ExceptionFeesController extends Controller
                 $this->logActivity(
                     trans('log.actions.added'),
                     trans('log.models.exception_fee.created', [
-                        'student_name' => $student->name,
+                        'student_name' => $student->fullName(),
                     ]),
                 );
             });
@@ -235,7 +235,7 @@ class ExceptionFeesController extends Controller
                 $this->logActivity(
                     trans('log.actions.updated'),
                     trans('log.models.exception_fee.updated', [
-                        'student_name' => $pay->student->name,
+                        'student_name' => $pay->student->fullName(),
                     ]),
                 );
             });
@@ -264,7 +264,7 @@ class ExceptionFeesController extends Controller
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.exception_fee.deleted', [
-                    'student_name' => $pay->student->name,
+                    'student_name' => $pay->student->fullName(),
                 ]),
             );
             session()->flash('success', trans('general.success'));

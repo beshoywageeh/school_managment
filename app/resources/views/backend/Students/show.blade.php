@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    {{ trans('student.show') }} | {{ $student->name }}
+    {{ trans('student.show') }} | {{ $student->fullName() }}
 @endsection
 @section('content')
 
@@ -14,7 +14,7 @@
                     <div>
                         <p class="text-blue-200 text-sm mb-1">{{ trans('student.show') }}</p>
                         <h1 class="text-2xl font-bold text-white tracking-wide">
-                            {{ $student->name . ' ' . $student->parent->father_name }}
+                            {{ $student->fullName() }}
                         </h1>
                         <span class="inline-block mt-2 text-xs bg-blue-500/40 text-blue-100 px-3 py-1 rounded-full">
                             {{ $student->grade->name }}
@@ -109,7 +109,7 @@
                 <div class="p-6 grid grid-cols-2 md:grid-cols-4 gap-4" dir="rtl">
                     <div class="flex flex-col gap-1 bg-gray-50 rounded-xl p-4 col-span-2 md:col-span-1">
                         <span class="text-xs text-gray-400 font-medium">{{ trans('student.name') }}</span>
-                        <span class="text-gray-800 font-semibold">{{ $student->name }}</span>
+                        <span class="text-gray-800 font-semibold">{{ $student->fullName() }}</span>
                     </div>
                     <div class="flex flex-col gap-1 bg-gray-50 rounded-xl p-4">
                         <span class="text-xs text-gray-400 font-medium">{{ trans('student.birth_date') }}</span>
@@ -210,7 +210,7 @@
                 <table class="w-full text-sm">
                     @php
                         $rows = [
-                            [trans('student.name'),        $student->name . ' ' . $student->parent->father_name,   trans('student.national_id'),  $student->national_id],
+                            [trans('student.name'),        $student->fullName(),   trans('student.national_id'),  $student->national_id],
                             [trans('student.nationality'), $student->nationality->name,                             trans('student.religion'),     $student->religion->lang()],
                         ];
                     @endphp

@@ -12,12 +12,14 @@ use App\Models\Student;
 use App\Models\StudentAccount;
 use App\Models\User;
 use App\Services\Finance\AccountService;
+use App\Services\Finance\FinancialService;
 use App\Services\Finance\InvoiceService;
 use App\Services\PaymentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
 use Tests\TestCase;
 
@@ -121,7 +123,7 @@ class TreasuryDirectionTest extends TestCase
                 'student_id' => $this->student->id,
                 'feeInvoice' => $invoice->id,
             ]),
-            app(\App\Services\Finance\FinancialService::class),
+            app(FinancialService::class),
             $this->school,
         );
 
@@ -177,7 +179,7 @@ class TreasuryDirectionTest extends TestCase
         );
 
         $this->user->givePermissionTo(
-            \Spatie\Permission\Models\Permission::findOrCreate(
+            Permission::findOrCreate(
                 'exchange_bonds-edit',
                 'web',
             ),
@@ -218,7 +220,7 @@ class TreasuryDirectionTest extends TestCase
         );
 
         $this->user->givePermissionTo(
-            \Spatie\Permission\Models\Permission::findOrCreate(
+            Permission::findOrCreate(
                 'exchange_bonds-edit',
                 'web',
             ),

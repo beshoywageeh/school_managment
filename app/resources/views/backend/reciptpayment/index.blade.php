@@ -31,7 +31,7 @@
                             <td class="px-6 py-4 text-sm text-gray-800">
                                 @can('ReceiptPayment-info')
                                 <a target="_blank" href="{{ route('receipt-payment.show', $ReceiptPayment->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
-                                    {{ $ReceiptPayment->student->name }}
+                                    {{ $ReceiptPayment->student->fullName() }}
                                 </a>
                                 @endcan
                             </td>

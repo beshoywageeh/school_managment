@@ -28,7 +28,7 @@
                             <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
                                 <a target="_blank" href="{{ route('except-fee.show', $ExcptionFee->student->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
-                                    {{ $ExcptionFee->student->name }}
+                                    {{ $ExcptionFee->student->fullName() }}
                                 </a>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ Number::currency($ExcptionFee->amount, config('school.currency'), 'ar') }}</td>

@@ -18,7 +18,7 @@
                     <div>
                         <label for="student_id" class="block text-sm font-semibold text-gray-700 mb-1">{{ trans('exchange_bonds.student') }}</label>
                         <input name="student_id" value="{{ $exchange->student->id }}" type="hidden">
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" value="{{ $exchange->student->name }}" disabled>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-600" value="{{ $exchange->student->fullName() }}" disabled>
                     </div>
                     <div>
                         <x-input name="amount" type="number" step="0.01" value="{{ $exchange->amount }}">{{ trans('exchange_bonds.amount') }}</x-input>

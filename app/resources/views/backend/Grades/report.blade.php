@@ -64,7 +64,7 @@
                         @foreach ($classes->students as $student)
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
-                                <td>{{ $student->name }}</td>
+                                <td>{{ $student->fullName() }}</td>
                                 <td>{{ $student->gender->lang() }}</td>
                                 <td>{{ $student->religion->lang() }}</td>
                                 <td>{{ $student->birth_date }}</td>

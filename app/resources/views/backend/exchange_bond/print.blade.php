@@ -69,7 +69,7 @@
 
     <div class="print-row">
         <span class="print-label">{{ trans('exchange_bonds.student') }}:</span>
-        <span class="print-value">{{ $exchange->student->name }}</span>
+        <span class="print-value">{{ $exchange->student->fullName() }}</span>
     </div>
 
     <div class="print-row">

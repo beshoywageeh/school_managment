@@ -29,7 +29,7 @@
             @foreach ($data['parts'] as $payment)
                 <tr>
                     <td width="5%">{{ $loop->index + 1 }}</td>
-                    <td>{{ $payment->student->name }}</td>
+                    <td>{{ $payment->student->fullName() }}</td>
                     <td>{{ $payment->grade->name }}</td>
                     <td>{{ $payment->classroom->name }}</td>
                     <td>{{ $payment->date }}</td>

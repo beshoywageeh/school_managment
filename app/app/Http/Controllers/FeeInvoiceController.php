@@ -174,7 +174,7 @@ class FeeInvoiceController extends Controller
                 $this->logActivity(
                     trans('log.actions.added'),
                     trans('log.models.fee-invoice.created', [
-                        'name' => $student->name,
+                        'name' => $student->fullName(),
                     ]),
                 );
             });
@@ -260,7 +260,7 @@ class FeeInvoiceController extends Controller
                 $this->logActivity(
                     trans('log.actions.updated'),
                     trans('log.models.fee-invoice.updated', [
-                        'name' => $fee->student->name,
+                        'name' => $fee->student->fullName(),
                     ]),
                 );
             });
@@ -292,7 +292,7 @@ class FeeInvoiceController extends Controller
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.fee-invoice.deleted', [
-                    'name' => $fee->student->name,
+                    'name' => $fee->student->fullName(),
                 ]),
             );
 
