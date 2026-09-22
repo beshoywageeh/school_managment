@@ -138,4 +138,21 @@ class TableSearchTest extends TestCase
         $response->assertSee('ClassMatchSeven');
         $response->assertDontSee('ClassOtherEight');
     }
+
+    public function test_class_rooms_index_filters_by_name(): void
+    {
+        $this->givePermission($this->admin, 'class_rooms-list');
+        Role::firstOrCreate(['name' => 'Admin']);
+        $this->admin->assignRole('Admin');
+        $school = $this->school;
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id, 'name' => 'RoomAlphaNine', 'user_id' => $this->admin->id]);
+        ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id, 'name' => 'RoomBetaZero', 'user_id' => $this->admin->id]);
+
+        $this->actingAs($this->admin);
+        $response = $this->get(route('class-rooms.index', ['search' => 'RoomAlphaNine']));
+        $response->assertOk();
+        $response->assertSee('RoomAlphaNine');
+        $response->assertDontSee('RoomBetaZero');
+    }
 }

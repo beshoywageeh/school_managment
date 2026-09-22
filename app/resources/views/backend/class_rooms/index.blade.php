@@ -11,6 +11,17 @@
 
         </div>
 
+        <x-filters action="{{ route('class-rooms.index') }}" reset="{{ route('class-rooms.index') }}" placeholder="{{ trans('class_rooms.Name') }}">
+            <div>
+                <x-select name="grade_id" label="{{ trans('class_rooms.grades') }}">
+                    <option value="">{{ trans('general.all') }}</option>
+                    @foreach ($data['grades'] as $grade)
+                        <option value="{{ $grade->id }}" {{ request('grade_id') == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                    @endforeach
+                </x-select>
+            </div>
+        </x-filters>
+
         @can('class_rooms-list')
             <div class="overflow-x-auto">
                 <table class="min-w-full" >
@@ -82,7 +93,7 @@
                 </table>
             </div>
             <div class="p-4 border-t border-gray-100">
-                {{ $data['class_rooms']->links() }}
+                {{ $data['class_rooms']->withQueryString()->links() }}
             </div>
         @endcan
     </div>

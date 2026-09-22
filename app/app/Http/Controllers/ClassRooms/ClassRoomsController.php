@@ -39,6 +39,9 @@ class ClassRoomsController extends Controller
             $query->whereIn('grade_id', $grade_ids);
         }
 
+        $query->when(request('search'), fn ($q, $s) => $q->where('name', 'like', "%{$s}%"))
+            ->when(request('grade_id'), fn ($q, $gid) => $q->where('grade_id', $gid));
+
         $data['class_rooms'] = $query
             ->orderBy('grade_id', 'asc')
             ->paginate(config('school.per_page'));
