@@ -63,6 +63,13 @@ class SchoolFeeController extends Controller
             'year:id,view',
         )
             ->latest()
+            ->when(request('search'), function ($q, $s) {
+                $q->where(function ($q) use ($s) {
+                    $q->where('title', 'like', "%{$s}%")
+                        ->orWhere('description', 'like', "%{$s}%");
+                });
+            })
+            ->when(request('grade_id'), fn ($q, $gid) => $q->where('grade_id', $gid))
             ->paginate(config('school.per_page'));
 
         return view(

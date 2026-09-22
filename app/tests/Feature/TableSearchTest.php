@@ -10,6 +10,7 @@ use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\School;
+use App\Models\SchoolFee;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -223,5 +224,22 @@ class TableSearchTest extends TestCase
         $response->assertOk();
         $response->assertSee('InvoiceSearchStudent');
         $response->assertDontSee($invoiceOne->student->name);
+    }
+
+    public function test_school_fees_index_filters_by_title(): void
+    {
+        $this->givePermission($this->admin, 'schoolfees-list');
+        $school = $this->school;
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        $room = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
+        $year = AcademicYear::factory()->create(['school_id' => $school->id]);
+        SchoolFee::factory()->create(['school_id' => $school->id, 'user_id' => $this->admin->id, 'grade_id' => $grade->id, 'classroom_id' => $room->id, 'academic_year_id' => $year->id, 'title' => 'FeeSearchTitle']);
+        SchoolFee::factory()->create(['school_id' => $school->id, 'user_id' => $this->admin->id, 'grade_id' => $grade->id, 'classroom_id' => $room->id, 'academic_year_id' => $year->id, 'title' => 'FeeOtherTitle']);
+
+        $this->actingAs($this->admin);
+        $response = $this->get(route('school-fees.index', ['search' => 'FeeSearchTitle']));
+        $response->assertOk();
+        $response->assertSee('FeeSearchTitle');
+        $response->assertDontSee('FeeOtherTitle');
     }
 }
