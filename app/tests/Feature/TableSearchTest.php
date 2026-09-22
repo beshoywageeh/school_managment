@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\AcademicYear;
 use App\Models\ClassRoom;
 use App\Models\ClassRoom2;
+use App\Models\ExceptionFees;
 use App\Models\ExchangeBond;
 use App\Models\FeeInvoice;
 use App\Models\Grade;
@@ -241,5 +242,26 @@ class TableSearchTest extends TestCase
         $response->assertOk();
         $response->assertSee('FeeSearchTitle');
         $response->assertDontSee('FeeOtherTitle');
+    }
+
+    public function test_exception_fees_index_filters_by_student_name(): void
+    {
+        $this->givePermission($this->admin, 'except_fee-list');
+        $this->actingAs($this->admin);
+        $school = $this->school;
+        $year = AcademicYear::factory()->create(['school_id' => $school->id]);
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        $room = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
+        $parent = MyParent::factory()->create(['school_id' => $school->id]);
+        $studentA = Student::factory()->create(['school_id' => $school->id, 'grade_id' => $grade->id, 'classroom_id' => $room->id, 'parent_id' => $parent->id, 'acadmiecyear_id' => $year->id, 'name' => 'ExceptionSearchStudent']);
+        $studentB = Student::factory()->create(['school_id' => $school->id, 'grade_id' => $grade->id, 'classroom_id' => $room->id, 'parent_id' => $parent->id, 'acadmiecyear_id' => $year->id, 'name' => 'ExceptionOtherStudent']);
+        $invoice = FeeInvoice::factory()->create();
+        ExceptionFees::factory()->create(['student_id' => $studentA->id, 'grade_id' => $grade->id, 'class_id' => $room->id, 'fee_id' => $invoice->id, 'academic_year_id' => $year->id, 'user_id' => $this->admin->id, 'school_id' => $school->id, 'date' => now()->toDateString(), 'amount' => 50]);
+        ExceptionFees::factory()->create(['student_id' => $studentB->id, 'grade_id' => $grade->id, 'class_id' => $room->id, 'fee_id' => $invoice->id, 'academic_year_id' => $year->id, 'user_id' => $this->admin->id, 'school_id' => $school->id, 'date' => now()->toDateString(), 'amount' => 50]);
+
+        $response = $this->get(route('except-fee.index', ['search' => 'ExceptionSearchStudent']));
+        $response->assertOk();
+        $response->assertSee('ExceptionSearchStudent');
+        $response->assertDontSee('ExceptionOtherStudent');
     }
 }

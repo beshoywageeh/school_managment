@@ -43,6 +43,7 @@ class ExceptionFeesController extends Controller
     {
         $school = $this->getSchool();
         $ExceptionFees = ExceptionFees::with('student')
+            ->when(request('search'), fn ($q, $s) => $q->whereHas('student', fn ($sq) => $sq->where('name', 'like', "%{$s}%")))
             ->paginate(config('school.per_page'));
 
         return view(

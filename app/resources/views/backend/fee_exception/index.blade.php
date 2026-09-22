@@ -10,6 +10,8 @@
         </div>
 
         @can('except_fee-list')
+            <x-filters action="{{ route('except-fee.index') }}" reset="{{ route('except-fee.index') }}" placeholder="{{ trans('Recipt_Payments.name') }}"></x-filters>
+
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead class="bg-gray-50">
@@ -24,7 +26,7 @@
                     <tbody class="divide-y divide-gray-100">
                         @foreach($ExceptionFees as $ExcptionFee)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->iteration }}</td>
+                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $ExceptionFees->firstItem() + $loop->index }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($ExcptionFee->date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
                                 <a target="_blank" href="{{ route('except-fee.show', $ExcptionFee->student->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
@@ -73,7 +75,7 @@
                     Showing {{ $ExceptionFees->firstItem() ?? 0 }} to {{ $ExceptionFees->lastItem() ?? 0 }} of {{ $ExceptionFees->total() }} results
                 </div>
                 <div class="flex gap-1">
-                    {{ $ExceptionFees->links() }}
+                    {{ $ExceptionFees->withQueryString()->links() }}
                 </div>
             </div>
             @endif
