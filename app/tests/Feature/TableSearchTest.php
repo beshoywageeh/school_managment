@@ -10,6 +10,7 @@ use App\Models\ExchangeBond;
 use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\MyParent;
+use App\Models\PaymentParts;
 use App\Models\School;
 use App\Models\SchoolFee;
 use App\Models\Student;
@@ -263,5 +264,25 @@ class TableSearchTest extends TestCase
         $response->assertOk();
         $response->assertSee('ExceptionSearchStudent');
         $response->assertDontSee('ExceptionOtherStudent');
+    }
+
+    public function test_payment_parts_index_filters_by_status(): void
+    {
+        $this->givePermission($this->admin, 'payment_parts-list');
+        $this->actingAs($this->admin);
+        $school = $this->school;
+        $year = AcademicYear::factory()->create(['school_id' => $school->id]);
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        $room = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
+        $parent = MyParent::factory()->create(['school_id' => $school->id]);
+        $student = Student::factory()->create(['school_id' => $school->id, 'grade_id' => $grade->id, 'classroom_id' => $room->id, 'parent_id' => $parent->id, 'acadmiecyear_id' => $year->id, 'name' => 'PartStudent']);
+        $schoolFee = SchoolFee::factory()->create(['school_id' => $school->id, 'user_id' => $this->admin->id, 'grade_id' => $grade->id, 'classroom_id' => $room->id, 'academic_year_id' => $year->id]);
+        PaymentParts::create(['student_id' => $student->id, 'grade_id' => $grade->id, 'class_id' => $room->id, 'academic_year_id' => $year->id, 'school_fees_id' => $schoolFee->id, 'user_id' => $this->admin->id, 'date' => now()->toDateString(), 'status' => 'paid', 'amount' => 100]);
+        PaymentParts::create(['student_id' => $student->id, 'grade_id' => $grade->id, 'class_id' => $room->id, 'academic_year_id' => $year->id, 'school_fees_id' => $schoolFee->id, 'user_id' => $this->admin->id, 'date' => now()->toDateString(), 'status' => 'not_paid', 'amount' => 200]);
+
+        $response = $this->get(route('payment-parts.index', ['status' => 'paid']));
+        $response->assertOk();
+        $response->assertSee('100.00');
+        $response->assertDontSee('200.00');
     }
 }

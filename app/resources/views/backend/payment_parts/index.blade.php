@@ -11,6 +11,18 @@
         </div>
 
         @can('payment_parts-list')
+            <x-filters action="{{ route('payment-parts.index') }}" reset="{{ route('payment-parts.index') }}" placeholder="{{ trans('Recipt_Payments.name') }}">
+                <div>
+                    <x-input-label>@lang('PaymentParts.status')</x-input-label>
+                    <select name="status"
+                        class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+                        <option value="">{{ trans('general.all') }}</option>
+                        @foreach ($statuses as $status)
+                            <option value="{{ $status->value }}" {{ request('status') === $status->value ? 'selected' : '' }}>{{ $status->lang() }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </x-filters>
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead class="bg-gray-50">
@@ -26,7 +38,7 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse($PaymentParts as $PaymentPart)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->index + 1 }}</td>
+                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $PaymentParts->firstItem() + $loop->index }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($PaymentPart->date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
                                 <a target="_blank" href="{{ route('payment-parts.edit', $PaymentPart->student->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
@@ -81,7 +93,7 @@
                     Showing {{ $PaymentParts->firstItem() ?? 0 }} to {{ $PaymentParts->lastItem() ?? 0 }} of {{ $PaymentParts->total() }} results
                 </div>
                 <div class="flex gap-1">
-                    {{ $PaymentParts->links() }}
+                    {{ $PaymentParts->withQueryString()->links() }}
                 </div>
             </div>
             @endif

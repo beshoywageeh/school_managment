@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Payment_Status;
 use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
 use App\Http\Traits\LogsActivity;
@@ -36,12 +37,15 @@ class PaymentPartsController extends Controller
     public function index()
     {
         $school = $this->getSchool();
+        $statuses = Payment_Status::cases();
         $PaymentParts = PaymentParts::with(['student', 'grade', 'classroom', 'year'])
+            ->when(request('search'), fn ($q, $s) => $q->whereHas('student', fn ($sq) => $sq->where('name', 'like', "%{$s}%")))
+            ->when(request('status'), fn ($q, $st) => $q->where('status', $st))
             ->paginate(config('school.per_page'));
 
         return view(
             'backend.payment_parts.index',
-            compact('PaymentParts', 'school'),
+            compact('PaymentParts', 'school', 'statuses'),
         );
     }
 
