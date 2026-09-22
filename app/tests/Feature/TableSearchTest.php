@@ -181,4 +181,17 @@ class TableSearchTest extends TestCase
         $response->assertSee('MAN-777');
         $response->assertDontSee('MAN-888');
     }
+
+    public function test_admin_era_filters_by_name(): void
+    {
+        $school = $this->school;
+        User::factory()->create(['school_id' => $school->id, 'name' => 'EmpSearchUser', 'code' => 'E-01', 'email' => 'a@x.test']);
+        User::factory()->create(['school_id' => $school->id, 'name' => 'EmpOtherUser', 'code' => 'E-02', 'email' => 'b@x.test']);
+
+        $this->actingAs($this->admin);
+        $response = $this->get(route('admin-era.index', ['search' => 'EmpSearchUser']));
+        $response->assertOk();
+        $response->assertSee('EmpSearchUser');
+        $response->assertDontSee('EmpOtherUser');
+    }
 }

@@ -6,6 +6,7 @@
 @endpush
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <x-filters action="{{ route('admin-era.index') }}" reset="{{ route('admin-era.index') }}" placeholder="{{ trans('adminera.name') }}"></x-filters>
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
                 <thead class="bg-green-50">
@@ -75,7 +76,7 @@
             </table>
         </div>
         <div class="p-4 border-t border-gray-100">
-            {{ $Employees->links() }}
+            {{ $Employees->withQueryString()->links() }}
         </div>
     </div>
 
