@@ -223,8 +223,11 @@ class StudentsController extends Controller
 
     public function graduated()
     {
-        $students = Student::onlyTrashed()->with('grade', 'classroom')->paginate(config('school.per_page'));
         $school = $this->getSchool();
+        $students = Student::onlyTrashed()
+            ->with('grade', 'classroom')
+            ->when(request('search'), fn ($q, $search) => $q->where('name', 'like', "%{$search}%"))
+            ->paginate(config('school.per_page'));
 
         return view(
             'backend.Students.graduated',

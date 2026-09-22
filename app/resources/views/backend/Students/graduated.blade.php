@@ -5,6 +5,7 @@
 @section('content')
     @include('backend.msg')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <x-filters action="{{ route('students.graduated') }}" reset="{{ route('students.graduated') }}" placeholder="{{ trans('student.name') }}"></x-filters>
         <div class="overflow-x-auto">
             @can('Students-list')
                 <table class="min-w-full">
@@ -63,7 +64,7 @@
             @endcan
         </div>
         <div class="p-4 border-t border-gray-100">
-            {{ $students->links() }}
+            {{ $students->withQueryString()->links() }}
         </div>
     </div>
     @push('scripts')

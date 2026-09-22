@@ -83,4 +83,29 @@ class TableSearchTest extends TestCase
         $response->assertDontSee('UnrelatedStudentXYZ');
         $response->assertSee('students=SearchableStudentOne');
     }
+
+    public function test_graduated_students_filter_by_name(): void
+    {
+        $this->givePermission($this->admin, 'graduated-list', 'Students-list');
+        $school = $this->school;
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        $classroom = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
+        $make = fn (string $name) => Student::factory()->create([
+            'school_id' => $school->id,
+            'grade_id' => $grade->id,
+            'classroom_id' => $classroom->id,
+            'parent_id' => MyParent::factory()->create(['school_id' => $school->id])->id,
+            'name' => $name,
+        ]);
+        $match = $make('GradSearchOne');
+        $other = $make('GradOtherTwo');
+        $match->delete();
+        $other->delete();
+
+        $this->actingAs($this->admin);
+        $response = $this->get(route('students.graduated', ['search' => 'GradSearchOne']));
+        $response->assertOk();
+        $response->assertSee('GradSearchOne');
+        $response->assertDontSee('GradOtherTwo');
+    }
 }
