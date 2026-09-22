@@ -71,7 +71,7 @@ class TableSearchTest extends TestCase
             'name' => $name,
         ]);
         foreach (range(1, 11) as $i) {
-            $make('SearchableStudentOne');
+            $make('SearchableStudentOne'.$i);
         }
         $make('UnrelatedStudentXYZ');
 

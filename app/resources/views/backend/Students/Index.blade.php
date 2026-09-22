@@ -52,8 +52,8 @@
                      <tr @class(['hover:bg-gray-50'])>
                          <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{ $Students->firstItem() + $loop->index }}</td>
                          <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->fullName()}}</td>
-                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->grade->name}}</td>
-                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->classroom->name}}</td>
+                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->grade_name}}</td>
+                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->classroom_name}}</td>
                          <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>
                           <x-dropdown-table :buttonText="trans('general.buttons.action')">
                             @can('Students-info')
