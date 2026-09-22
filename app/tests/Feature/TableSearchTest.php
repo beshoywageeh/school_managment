@@ -11,6 +11,7 @@ use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\PaymentParts;
+use App\Models\ReceiptPayment;
 use App\Models\School;
 use App\Models\SchoolFee;
 use App\Models\Student;
@@ -284,5 +285,23 @@ class TableSearchTest extends TestCase
         $response->assertOk();
         $response->assertSee('100.00');
         $response->assertDontSee('200.00');
+    }
+
+    public function test_receipt_payments_index_filters_by_manual(): void
+    {
+        $this->givePermission($this->admin, 'ReceiptPayment-list');
+        $school = $this->school;
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        $room = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
+        $year = AcademicYear::factory()->create(['school_id' => $school->id]);
+        $student = Student::factory()->create(['school_id' => $school->id, 'grade_id' => $grade->id, 'classroom_id' => $room->id, 'acadmiecyear_id' => $year->id, 'name' => 'ReceiptStudent']);
+        ReceiptPayment::create(['school_id' => $school->id, 'student_id' => $student->id, 'academic_year_id' => $year->id, 'user_id' => $this->admin->id, 'manual' => 'RCP-501', 'Debit' => 150, 'date' => now()->toDateString()]);
+        ReceiptPayment::create(['school_id' => $school->id, 'student_id' => $student->id, 'academic_year_id' => $year->id, 'user_id' => $this->admin->id, 'manual' => 'RCP-502', 'Debit' => 250, 'date' => now()->toDateString()]);
+
+        $this->actingAs($this->admin);
+        $response = $this->get(route('receipt-payment.index', ['search' => 'RCP-501']));
+        $response->assertOk();
+        $response->assertSee('RCP-501');
+        $response->assertDontSee('RCP-502');
     }
 }
