@@ -38,6 +38,7 @@ class PromotionController extends Controller
             't_acc:id,view',
             'f_acc:id,view',
         )
+            ->when(request('search'), fn ($q, $s) => $q->whereHas('student', fn ($sq) => $sq->where('name', 'like', "%{$s}%")))
             ->paginate(config('school.per_page'));
 
         return view(

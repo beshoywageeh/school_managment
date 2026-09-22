@@ -11,6 +11,7 @@ use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\PaymentParts;
+use App\Models\Promotion;
 use App\Models\ReceiptPayment;
 use App\Models\School;
 use App\Models\SchoolFee;
@@ -303,5 +304,41 @@ class TableSearchTest extends TestCase
         $response->assertOk();
         $response->assertSee('RCP-501');
         $response->assertDontSee('RCP-502');
+    }
+
+    public function test_promotions_index_filters_by_student_name(): void
+    {
+        $this->givePermission($this->admin, 'promotion-list');
+        $this->actingAs($this->admin);
+        $school = $this->school;
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        $room = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
+        $year = AcademicYear::factory()->create(['school_id' => $school->id]);
+        $make = fn (string $name) => Student::factory()->create([
+            'school_id' => $school->id,
+            'grade_id' => $grade->id,
+            'classroom_id' => $room->id,
+            'acadmiecyear_id' => $year->id,
+            'name' => $name,
+        ]);
+        $studentA = $make('PromotionSearchStudent');
+        $studentB = $make('PromotionOtherStudent');
+        $create = fn ($student) => Promotion::create([
+            'student_id' => $student->id,
+            'from_grade' => $grade->id,
+            'from_class' => $room->id,
+            'to_grade' => $grade->id,
+            'to_class' => $room->id,
+            'from_acc' => $year->id,
+            'to_acc' => $year->id,
+            'user_id' => $this->admin->id,
+        ]);
+        $create($studentA);
+        $create($studentB);
+
+        $response = $this->get(route('promotion.index', ['search' => 'PromotionSearchStudent']));
+        $response->assertOk();
+        $response->assertSee('PromotionSearchStudent');
+        $response->assertDontSee('PromotionOtherStudent');
     }
 }
