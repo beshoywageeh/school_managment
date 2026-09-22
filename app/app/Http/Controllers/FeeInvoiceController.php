@@ -48,8 +48,8 @@ class FeeInvoiceController extends Controller
     public function index(Request $request)
     {
         $school = $this->getSchool();
-        $feeInvoices = FeeInvoice::with(['student:id,name,parent_id', 'student.parent:id,father_name', 'grade:id,name', 'classroom:id,name', 'acd_year:id,view'])->paginate(config('school.per_page'));
         $gradeOptions = Grade::pluck('name', 'id')->toArray();
+        $feeInvoices = $this->invoiceQueryService->getFilteredQuery($request, $this->schoolId());
 
         return view(
             'backend.fee_invoices.index',

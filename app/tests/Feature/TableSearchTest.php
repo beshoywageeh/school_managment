@@ -6,6 +6,7 @@ use App\Models\AcademicYear;
 use App\Models\ClassRoom;
 use App\Models\ClassRoom2;
 use App\Models\ExchangeBond;
+use App\Models\FeeInvoice;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\School;
@@ -207,5 +208,20 @@ class TableSearchTest extends TestCase
         $response->assertOk();
         $response->assertSee('2020 - 2021');
         $response->assertDontSee('2022 - 2023');
+    }
+
+    public function test_fee_invoices_index_filters_by_student_name(): void
+    {
+        $this->givePermission($this->admin, 'fee_invoice-list');
+        $invoiceOne = FeeInvoice::factory()->create();
+        $invoiceTwo = FeeInvoice::factory()->create();
+        $invoiceTwo->student->update(['name' => 'InvoiceSearchStudent']);
+        $invoiceTwo->student->refresh();
+
+        $this->actingAs($this->admin);
+        $response = $this->get(route('fee-invoice.index', ['students' => 'InvoiceSearchStudent']));
+        $response->assertOk();
+        $response->assertSee('InvoiceSearchStudent');
+        $response->assertDontSee($invoiceOne->student->name);
     }
 }

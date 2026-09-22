@@ -10,6 +10,18 @@
         </div>
 
         @can('fee_invoice-list')
+        <x-filters action="{{ route('fee-invoice.index') }}" reset="{{ route('fee-invoice.index') }}" searchName="students" placeholder="{{ trans('fee_invoice.name') }}">
+            <div>
+                <x-input-label>@lang('fee_invoice.grade')</x-input-label>
+                <select name="grade_id"
+                    class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+                    <option value="">{{ trans('general.all') }}</option>
+                    @foreach ($gradeOptions as $id => $name)
+                        <option value="{{ $id }}" {{ request('grade_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </x-filters>
         <div class="container mx-auto p-6">
     
                 <table class="min-w-full">
@@ -27,7 +39,7 @@
                 <tbody>
                     @forelse ($feeInvoices as $feeInvoice )
                      <tr class="hover:bg-gray-50">
-                         <td class="px-6 py-4 text-center text-sm text-gray-600">{{$loop->index+1}}</td>
+                         <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $feeInvoices->firstItem() + $loop->index }}</td>
                          <td class="px-6 py-4 text-center text-sm text-gray-600">{{$feeInvoice->invoice_date}}</td>
                          <td class="px-6 py-4 text-center text-sm text-gray-600">{{$feeInvoice->student->fullName()}}</td>
                          <td class="px-6 py-4 text-center text-sm text-gray-600">{{Number::currency($feeInvoice->schoolFee->amount,config('school.currency'),'ar')}}</td>
@@ -47,7 +59,7 @@
                 </tbody>
             </table>
             <div>
-                {{ $feeInvoices->links() }}
+                {{ $feeInvoices->withQueryString()->links() }}
             </div>
         </div>
 
