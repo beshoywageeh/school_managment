@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\AcademicYear;
 use App\Models\ClassRoom;
 use App\Models\ClassRoom2;
+use App\Models\ExchangeBond;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\School;
@@ -154,5 +156,29 @@ class TableSearchTest extends TestCase
         $response->assertOk();
         $response->assertSee('RoomAlphaNine');
         $response->assertDontSee('RoomBetaZero');
+    }
+
+    public function test_exchange_bonds_index_filters_by_manual(): void
+    {
+        $this->givePermission($this->admin, 'exchange_bonds-list');
+        $this->actingAs($this->admin);
+        $school = $this->school;
+        $year = AcademicYear::factory()->create(['school_id' => $school->id]);
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        $classroom = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
+        $student = Student::factory()->create([
+            'school_id' => $school->id,
+            'grade_id' => $grade->id,
+            'classroom_id' => $classroom->id,
+            'parent_id' => MyParent::factory()->create(['school_id' => $school->id])->id,
+            'name' => 'BondStudentOne',
+        ]);
+        ExchangeBond::create(['student_id' => $student->id, 'academic_year_id' => $year->id, 'user_id' => $this->admin->id, 'manual' => 'MAN-777', 'amount' => 100, 'description' => 'first', 'date' => now()->toDateString()]);
+        ExchangeBond::create(['student_id' => $student->id, 'academic_year_id' => $year->id, 'user_id' => $this->admin->id, 'manual' => 'MAN-888', 'amount' => 200, 'description' => 'second', 'date' => now()->toDateString()]);
+
+        $response = $this->get(route('exchange-bonds.index', ['search' => 'MAN-777']));
+        $response->assertOk();
+        $response->assertSee('MAN-777');
+        $response->assertDontSee('MAN-888');
     }
 }

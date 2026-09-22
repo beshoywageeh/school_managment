@@ -10,6 +10,7 @@
             <div class="p-4 border-b border-gray-100 flex justify-between items-center">
                 <h4 class="text-lg font-bold text-gray-800">{{ trans('exchange_bonds.title') }}</h4>
             </div>
+            <x-filters action="{{ route('exchange-bonds.index') }}" reset="{{ route('exchange-bonds.index') }}" placeholder="{{ trans('exchange_bonds.manual') }}"></x-filters>
             <div class="p-6">
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm" id="datatable">
@@ -63,7 +64,7 @@
                 </div>
 
                 <div class="mt-4">
-                    {{ $exchanges->links() }}
+                    {{ $exchanges->withQueryString()->links() }}
                 </div>
             </div>
         </div>
