@@ -108,4 +108,17 @@ class TableSearchTest extends TestCase
         $response->assertSee('GradSearchOne');
         $response->assertDontSee('GradOtherTwo');
     }
+
+    public function test_roles_index_filters_by_name(): void
+    {
+        $this->givePermission($this->admin, 'role-list');
+        Role::create(['name' => 'zzsearchrole']);
+        Role::create(['name' => 'zzotherrole']);
+
+        $this->actingAs($this->admin);
+        $response = $this->get(route('roles.index', ['search' => 'zzsearch']));
+        $response->assertOk();
+        $response->assertSee('zzsearchrole');
+        $response->assertDontSee('zzotherrole');
+    }
 }

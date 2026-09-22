@@ -15,6 +15,7 @@
                 </a>
             @endcan
         </div>
+        <x-filters action="{{ route('roles.index') }}" reset="{{ route('roles.index') }}" placeholder="{{ trans('permissions.name') }}"></x-filters>
         <div class="overflow-x-auto">
             <table class="min-w-full">
                 <thead class="bg-gray-50">
@@ -62,7 +63,7 @@
             </table>
         </div>
         <div class="p-4 border-t border-gray-100">
-            {{ $roles->links() }}
+            {{ $roles->withQueryString()->links() }}
         </div>
     </div>
 @endsection
