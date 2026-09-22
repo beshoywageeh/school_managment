@@ -16,6 +16,8 @@ class TableSearchTest extends TestCase
 
     protected User $admin;
 
+    protected School $school;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -23,8 +25,8 @@ class TableSearchTest extends TestCase
         $this->app->setLocale('ar');
         session(['locale' => 'ar']);
 
-        $school = School::factory()->create();
-        $this->admin = User::factory()->create(['school_id' => $school->id]);
+        $this->school = School::factory()->create();
+        $this->admin = User::factory()->create(['school_id' => $this->school->id]);
     }
 
     protected function givePermission(User $user, string ...$permissions): void
@@ -47,5 +49,30 @@ class TableSearchTest extends TestCase
         $this->assertStringContainsString('<form method="GET" action="/x"', $html);
         $this->assertStringContainsString('name="search"', $html);
         $this->assertStringContainsString('Enter-Name', $html);
+    }
+
+    public function test_students_index_filters_by_student_name(): void
+    {
+        $this->givePermission($this->admin, 'Students-list');
+        $school = $this->school;
+        $grade = \App\Models\Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        $classroom = \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
+        $make = fn (string $name) => \App\Models\Student::factory()->create([
+            'school_id' => $school->id,
+            'grade_id' => $grade->id,
+            'classroom_id' => $classroom->id,
+            'parent_id' => \App\Models\MyParent::factory()->create(['school_id' => $school->id])->id,
+            'name' => $name,
+        ]);
+        $make('SearchableStudentOne');
+        $make('UnrelatedStudentXYZ');
+
+        $this->actingAs($this->admin);
+
+        $response = $this->get(route('students.index', ['students' => 'SearchableStudentOne']));
+        $response->assertOk();
+        $response->assertSee('SearchableStudentOne');
+        $response->assertDontSee('UnrelatedStudentXYZ');
+        $response->assertSee('students=SearchableStudentOne');
     }
 }

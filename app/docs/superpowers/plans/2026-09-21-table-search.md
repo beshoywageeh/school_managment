@@ -57,6 +57,8 @@ class TableSearchTest extends TestCase
 
     protected User $admin;
 
+    protected School $school;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -64,8 +66,8 @@ class TableSearchTest extends TestCase
         $this->app->setLocale('ar');
         session(['locale' => 'ar']);
 
-        $school = School::factory()->create();
-        $this->admin = User::factory()->create(['school_id' => $school->id]);
+        $this->school = School::factory()->create();
+        $this->admin = User::factory()->create(['school_id' => $this->school->id]);
     }
 
     protected function givePermission(User $user, string ...$permissions): void
@@ -160,7 +162,7 @@ git commit -m "feat: add shared x-filters search bar component"
     public function test_students_index_filters_by_student_name(): void
     {
         $this->givePermission($this->admin, 'Students-list');
-        $school = $this->admin->school;
+        $school = $this->school;
         $grade = \App\Models\Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
         $classroom = \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
         $make = fn (string $name) => \App\Models\Student::factory()->create([
@@ -274,7 +276,7 @@ git commit -m "feat: server-side search on students index"
 ```php
     public function test_graduated_students_filter_by_name(): void
     {
-        $school = $this->admin->school;
+        $school = $this->school;
         $grade = \App\Models\Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
         $classroom = \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
         $match = \App\Models\Student::factory()->create(['school_id' => $school->id, 'grade_id' => $grade->id, 'classroom_id' => $classroom->id, 'name' => 'GradSearchOne', 'deleted_at' => now()]);
@@ -425,7 +427,7 @@ git commit -m "feat: server-side search on roles index"
     public function test_classes_index_filters_by_title(): void
     {
         $this->givePermission($this->admin, 'classes-list');
-        $school = $this->admin->school;
+        $school = $this->school;
         $grade = \App\Models\Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
         $room = \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
         \App\Models\ClassRoom2::create(['title' => 'ClassMatchSeven', 'grade_id' => $grade->id, 'class_room_id' => $room->id, 'tameen' => 0]);
@@ -538,7 +540,7 @@ git commit -m "feat: server-side search on classes index"
     public function test_class_rooms_index_filters_by_name(): void
     {
         $this->givePermission($this->admin, 'class_rooms-list');
-        $school = $this->admin->school;
+        $school = $this->school;
         $grade = \App\Models\Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
         \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id, 'name' => 'RoomAlphaNine', 'user_id' => $this->admin->id]);
         \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id, 'name' => 'RoomBetaZero', 'user_id' => $this->admin->id]);
@@ -621,7 +623,7 @@ git commit -m "feat: server-side search on class rooms index"
     public function test_exchange_bonds_index_filters_by_manual(): void
     {
         $this->givePermission($this->admin, 'exchange_bonds-list');
-        $school = $this->admin->school;
+        $school = $this->school;
         $year = \App\Models\AcademicYear::factory()->create(['school_id' => $school->id]);
         $student = \App\Models\Student::factory()->create(['school_id' => $school->id, 'name' => 'BondStudentOne']);
         \App\Models\ExchangeBond::create(['student_id' => $student->id, 'academic_year_id' => $year->id, 'user_id' => $this->admin->id, 'manual' => 'MAN-777', 'amount' => 100, 'description' => 'first']);
@@ -698,7 +700,7 @@ git commit -m "feat: server-side search on exchange bonds index"
 ```php
     public function test_admin_era_filters_by_name(): void
     {
-        $school = $this->admin->school;
+        $school = $this->school;
         \App\Models\User::factory()->create(['school_id' => $school->id, 'name' => 'EmpSearchUser', 'code' => 'E-01', 'email' => 'a@x.test']);
         \App\Models\User::factory()->create(['school_id' => $school->id, 'name' => 'EmpOtherUser', 'code' => 'E-02', 'email' => 'b@x.test']);
 
@@ -774,7 +776,7 @@ git commit -m "feat: server-side search on employees (admin era) index"
     public function test_academic_years_index_filters_by_year(): void
     {
         $this->givePermission($this->admin, 'academic_year-list');
-        $school = $this->admin->school;
+        $school = $this->school;
         \App\Models\AcademicYear::factory()->create(['school_id' => $school->id, 'year_start' => '2020-09-01', 'year_end' => '2021-06-30', 'view' => '2020 - 2021']);
         \App\Models\AcademicYear::factory()->create(['school_id' => $school->id, 'year_start' => '2022-09-01', 'year_end' => '2023-06-30', 'view' => '2022 - 2023']);
 
@@ -958,7 +960,7 @@ git commit -m "feat: server-side search on fee invoices index"
     public function test_school_fees_index_filters_by_title(): void
     {
         $this->givePermission($this->admin, 'schoolfees-list');
-        $school = $this->admin->school;
+        $school = $this->school;
         $grade = \App\Models\Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
         $room = \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
         $year = \App\Models\AcademicYear::factory()->create(['school_id' => $school->id]);
@@ -1052,7 +1054,7 @@ git commit -m "feat: server-side search on school fees index"
     public function test_exception_fees_index_filters_by_student_name(): void
     {
         $this->givePermission($this->admin, 'except_fee-list');
-        $school = $this->admin->school;
+        $school = $this->school;
         $grade = \App\Models\Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
         $room = \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
         $studentA = \App\Models\Student::factory()->create(['school_id' => $school->id, 'grade_id' => $grade->id, 'classroom_id' => $room->id, 'name' => 'ExceptionSearchStudent']);
@@ -1132,7 +1134,7 @@ git commit -m "feat: server-side search on exception fees index"
     public function test_payment_parts_index_filters_by_status(): void
     {
         $this->givePermission($this->admin, 'payment_parts-list');
-        $school = $this->admin->school;
+        $school = $this->school;
         $student = \App\Models\Student::factory()->create(['school_id' => $school->id, 'name' => 'PartStudent']);
         \App\Models\PaymentParts::create(['student_id' => $student->id, 'date' => now()->toDateString(), 'status' => 'paid', 'amount' => 100]);
         \App\Models\PaymentParts::create(['student_id' => $student->id, 'date' => now()->toDateString(), 'status' => 'not_paid', 'amount' => 200]);
@@ -1229,7 +1231,7 @@ git commit -m "feat: server-side search on payment parts index"
     public function test_receipt_payments_index_filters_by_manual(): void
     {
         $this->givePermission($this->admin, 'ReceiptPayment-list');
-        $school = $this->admin->school;
+        $school = $this->school;
         $grade = \App\Models\Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
         $room = \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
         $year = \App\Models\AcademicYear::factory()->create(['school_id' => $school->id]);
@@ -1319,7 +1321,7 @@ git commit -m "feat: server-side search on receipt payments index"
     public function test_promotions_index_filters_by_student_name(): void
     {
         $this->givePermission($this->admin, 'promotion-list');
-        $school = $this->admin->school;
+        $school = $this->school;
         $grade = \App\Models\Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
         $room = \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
         $year = \App\Models\AcademicYear::factory()->create(['school_id' => $school->id]);
