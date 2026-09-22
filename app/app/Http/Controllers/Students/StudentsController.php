@@ -64,11 +64,12 @@ class StudentsController extends Controller
     {
         $school = $this->getSchool();
         $gradeOptions = Grade::pluck('name', 'id')->toArray();
-        $Students = Student::with(['grade:id,name', 'classroom:id,name'])->paginate(config('school.per_page'));
+        $classroomOptions = ClassRoom::pluck('name', 'id')->toArray();
+        $Students = $this->studentQuery->getFilteredQuery($request, $this->schoolId());
 
         return view(
             'backend.Students.Index',
-            compact('school', 'gradeOptions', 'Students'),
+            compact('school', 'gradeOptions', 'classroomOptions', 'Students'),
         );
     }
 

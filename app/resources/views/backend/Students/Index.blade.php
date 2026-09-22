@@ -17,6 +17,24 @@
     @can('Students-list')
     <div @class(['bg-white', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100', 'overflow-hidden'])>
 
+        <x-filters action="{{ route('students.index') }}" reset="{{ route('students.index') }}" searchName="students" placeholder="{{ trans('student.name') }}">
+            <div>
+                <x-select name="grade_id" label="{{ trans('Grades.title') }}">
+                    <option value="">{{ trans('general.all') }}</option>
+                    @foreach ($gradeOptions as $id => $name)
+                        <option value="{{ $id }}" {{ request('grade_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                    @endforeach
+                </x-select>
+            </div>
+            <div>
+                <x-select name="classroom_id" label="{{ trans('class_rooms.Name') }}">
+                    <option value="">{{ trans('general.all') }}</option>
+                    @foreach ($classroomOptions as $id => $name)
+                        <option value="{{ $id }}" {{ request('classroom_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                    @endforeach
+                </x-select>
+            </div>
+        </x-filters>
         <div @class(['container', 'mx-auto', 'p-6'])>
                <table @class(['min-w-full'])>
                     <thead @class(['bg-gray-50'])>
@@ -32,7 +50,7 @@
                 <tbody>
                     @forelse ($Students as $Student )
                      <tr @class(['hover:bg-gray-50'])>
-                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$loop->index+1}}</td>
+                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{ $Students->firstItem() + $loop->index }}</td>
                          <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->fullName()}}</td>
                          <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->grade->name}}</td>
                          <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->classroom->name}}</td>
@@ -99,7 +117,7 @@
                     @endforelse
                 </tbody>
             </table>
-            <div>{{$Students->links()}}</div>
+            <div>{{ $Students->withQueryString()->links() }}</div>
            
                              
             </div>

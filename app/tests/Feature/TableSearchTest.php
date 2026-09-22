@@ -2,7 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\ClassRoom;
+use App\Models\Grade;
+use App\Models\MyParent;
 use App\Models\School;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
@@ -54,17 +58,21 @@ class TableSearchTest extends TestCase
     public function test_students_index_filters_by_student_name(): void
     {
         $this->givePermission($this->admin, 'Students-list');
+        Role::firstOrCreate(['name' => 'Admin']);
+        $this->admin->assignRole('Admin');
         $school = $this->school;
-        $grade = \App\Models\Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
-        $classroom = \App\Models\ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
-        $make = fn (string $name) => \App\Models\Student::factory()->create([
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        $classroom = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
+        $make = fn (string $name) => Student::factory()->create([
             'school_id' => $school->id,
             'grade_id' => $grade->id,
             'classroom_id' => $classroom->id,
-            'parent_id' => \App\Models\MyParent::factory()->create(['school_id' => $school->id])->id,
+            'parent_id' => MyParent::factory()->create(['school_id' => $school->id])->id,
             'name' => $name,
         ]);
-        $make('SearchableStudentOne');
+        foreach (range(1, 11) as $i) {
+            $make('SearchableStudentOne');
+        }
         $make('UnrelatedStudentXYZ');
 
         $this->actingAs($this->admin);
