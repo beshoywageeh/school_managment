@@ -11,6 +11,25 @@
                 @include('backend.classes.create')
         </div>
 
+        <x-filters action="{{ route('classes.index') }}" reset="{{ route('classes.index') }}" placeholder="{{ trans('classes.name') }}">
+            <div>
+                <x-select name="grade_id" label="{{ trans('classes.grades') }}">
+                    <option value="">{{ trans('general.all') }}</option>
+                    @foreach ($grades as $grade)
+                        <option value="{{ $grade->id }}" {{ request('grade_id') == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                    @endforeach
+                </x-select>
+            </div>
+            <div>
+                <x-select name="class_room_id" label="{{ trans('classes.classroom') }}">
+                    <option value="">{{ trans('general.all') }}</option>
+                    @foreach ($class_room_list as $room)
+                        <option value="{{ $room->id }}" {{ request('class_room_id') == $room->id ? 'selected' : '' }}>{{ $room->name }}</option>
+                    @endforeach
+                </x-select>
+            </div>
+        </x-filters>
+
         @can('classes-list')
             <div class="overflow-x-auto">
                 <table class="min-w-full">
@@ -85,7 +104,7 @@
                 </table>
             </div>
             <div class="p-4 border-t border-gray-100">
-                {{ $classes->links() }}
+                {{ $classes->withQueryString()->links() }}
             </div>
         @endcan
     </div>

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\ClassRoom;
+use App\Models\ClassRoom2;
 use App\Models\Grade;
 use App\Models\MyParent;
 use App\Models\School;
@@ -120,5 +121,21 @@ class TableSearchTest extends TestCase
         $response->assertOk();
         $response->assertSee('zzsearchrole');
         $response->assertDontSee('zzotherrole');
+    }
+
+    public function test_classes_index_filters_by_title(): void
+    {
+        $this->givePermission($this->admin, 'classes-list');
+        $school = $this->school;
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => '1']);
+        $room = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id]);
+        ClassRoom2::create(['title' => 'ClassMatchSeven', 'school_id' => $school->id, 'user_id' => $this->admin->id, 'grade_id' => $grade->id, 'class_room_id' => $room->id, 'tameen' => 0]);
+        ClassRoom2::create(['title' => 'ClassOtherEight', 'school_id' => $school->id, 'user_id' => $this->admin->id, 'grade_id' => $grade->id, 'class_room_id' => $room->id, 'tameen' => 0]);
+
+        $this->actingAs($this->admin);
+        $response = $this->get(route('classes.index', ['search' => 'ClassMatchSeven']));
+        $response->assertOk();
+        $response->assertSee('ClassMatchSeven');
+        $response->assertDontSee('ClassOtherEight');
     }
 }
