@@ -14,6 +14,7 @@
         </div>
 
         @can('academic_year-list')
+            <x-filters action="{{ route('academic-year.index') }}" reset="{{ route('academic-year.index') }}" placeholder="{{ trans('academic_year.view') }}"></x-filters>
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead class="bg-gray-50">
@@ -92,7 +93,7 @@
                     Showing {{ $acadmice_years->firstItem() ?? 0 }} to {{ $acadmice_years->lastItem() ?? 0 }} of {{ $acadmice_years->total() }} results
                 </div>
                 <div class="flex gap-1">
-                    {{ $acadmice_years->links() }}
+                    {{ $acadmice_years->withQueryString()->links() }}
                 </div>
             </div>
             @endif

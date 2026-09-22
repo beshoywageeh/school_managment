@@ -194,4 +194,18 @@ class TableSearchTest extends TestCase
         $response->assertSee('EmpSearchUser');
         $response->assertDontSee('EmpOtherUser');
     }
+
+    public function test_academic_years_index_filters_by_year(): void
+    {
+        $this->givePermission($this->admin, 'academic_year-list');
+        $school = $this->school;
+        AcademicYear::factory()->create(['school_id' => $school->id, 'year_start' => '2020-09-01', 'year_end' => '2021-06-30', 'view' => '2020 - 2021']);
+        AcademicYear::factory()->create(['school_id' => $school->id, 'year_start' => '2022-09-01', 'year_end' => '2023-06-30', 'view' => '2022 - 2023']);
+
+        $this->actingAs($this->admin);
+        $response = $this->get(route('academic-year.index', ['search' => '2020']));
+        $response->assertOk();
+        $response->assertSee('2020 - 2021');
+        $response->assertDontSee('2022 - 2023');
+    }
 }
