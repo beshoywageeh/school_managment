@@ -36,8 +36,6 @@ class UserController extends Controller
     {
         $school = $this->getSchool();
 
-        // $jobs=job::all()->groupBy('type');
-        // return $jobs;
         return view('backend.employees.Index', compact('school'));
     }
 

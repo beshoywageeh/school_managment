@@ -34,7 +34,7 @@ class ClassesController extends Controller
             ->groupBy('grade.name');
         $classes = classes::with(['grade:id,name', 'class_room:id,name'])
             ->withCount('students')
-            ->get(['id', 'title', 'class_room_id', 'grade_id', 'tameen']);
+            ->paginate(config('school.per_page'), ['id', 'title', 'class_room_id', 'grade_id', 'tameen']);
 
         // return $classes;
         return view('backend.classes.index', compact('school', 'class_rooms', 'classes'));
@@ -83,8 +83,7 @@ class ClassesController extends Controller
                 $q->select('id', 'name');
             },
         ])->findOrFail($request->id, ['id', 'title', 'grade_id', 'class_room_id']);
-        $students = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
-            ->where('grade_id', $class->grade_id)
+        $students = Student::where('grade_id', $class->grade_id)
             ->where('classroom_id', $class->class_room_id)
             ->get();
 
@@ -172,7 +171,6 @@ class ClassesController extends Controller
         $students = Student::where('class_id', $class->id)->update([
             'tameen' => 1,
         ]);
-        // $class->update(['tameen'=>1]);
         $c = classes::findorfail($class->id)->first();
         $c->update(['tameen' => 1]);
         $this->logActivity(
@@ -192,7 +190,7 @@ class ClassesController extends Controller
         try {
             $class = classes::findorfail($id);
             $student = Student::where('class_id', $id)->count();
-            if ($student > 0) {
+            if ($student !== 0) {
                 return redirect()
                     ->back()
                     ->with('info', trans('classes.cant_delete'));

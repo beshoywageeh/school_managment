@@ -45,7 +45,6 @@ class MyParentsController extends Controller
     {
         $school = $this->getSchool();
 
-        // $Mother_Status = MyParent::pluck('mother_status');
         return view(
             'backend.Parents.create',
             compact('school'),

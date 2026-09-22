@@ -27,7 +27,7 @@
                         <tbody class="divide-y divide-gray-100">
                             @forelse ($exchanges as $exchange)
                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 text-center text-gray-600">{{ $loop->index + 1 }}</td>
+                                    <td class="px-4 py-2 text-center text-gray-600">{{ $exchanges->firstItem() + $loop->index }}</td>
                                     <td class="px-4 py-2 text-gray-800">{{ $exchange->manual ?? '-' }}</td>
                                     <td class="px-4 py-2 text-gray-600">{{ $exchange->academicYear->view }}</td>
                                     <td class="px-4 py-2 text-gray-800">{{ $exchange->student->fullName() }}</td>
@@ -60,6 +60,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                <div class="mt-4">
+                    {{ $exchanges->links() }}
                 </div>
             </div>
         </div>

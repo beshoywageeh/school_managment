@@ -13,6 +13,7 @@ use App\Models\Student;
 use App\Models\StudentAccount;
 use App\Services\AccountingReversalService;
 use App\Services\Finance\FinancialService;
+use Illuminate\Support\Facades\DB;
 
 class ExceptionFeesController extends Controller
 {
@@ -41,11 +42,7 @@ class ExceptionFeesController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $ExceptionFees = ExceptionFees::when(
-            $this->schoolId(),
-            fn ($q, $id) => $q->where('school_id', $id),
-        )
-            ->with('student')
+        $ExceptionFees = ExceptionFees::with('student')
             ->paginate(config('school.per_page'));
 
         return view(
@@ -256,7 +253,7 @@ class ExceptionFeesController extends Controller
     {
         try {
             $pay = ExceptionFees::with('student')->findorfail($id);
-            \DB::transaction(function () use ($pay) {
+            DB::transaction(function () use ($pay) {
                 $this->accountingReversalService->reverseExceptionEntries($pay);
 
                 $pay->delete();

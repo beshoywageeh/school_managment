@@ -40,32 +40,14 @@ class ClassRoomsController extends Controller
         }
 
         $data['class_rooms'] = $query
-            ->when(
-                Auth::user()->hasRole('Admin'),
-                fn ($q) => $q->orderBy('grade_id', 'asc'),
-            )
-            ->when(
-                ! Auth::user()->hasRole('Admin'),
-                fn ($q) => $q->paginate(config('school.per_page')),
-            )
-            ->when(Auth::user()->hasRole('Admin'), fn ($q) => $q->get());
+            ->orderBy('grade_id', 'asc')
+            ->paginate(config('school.per_page'));
 
         $data['grades'] = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
 
         return view('backend.class_rooms.index', compact('data', 'school'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(ClassRoomStoreRequest $request)
     {
         // return $request->classroom;
@@ -74,7 +56,7 @@ class ClassRoomsController extends Controller
                 ClassRoom::create([
                     'name' => $class['class_name'],
                     'grade_id' => $class['grade_id'],
-                    'user_id' => \Auth::Id(),
+                    'user_id' => Auth::Id(),
                     'school_id' => $this->getSchool()->id,
                 ]);
                 $this->logActivity(

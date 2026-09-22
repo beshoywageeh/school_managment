@@ -24,7 +24,7 @@ class RoleController extends Controller
     /*** Display a listing of the resource.** @return \Illuminate\Http\Response*/
     public function index(Request $request)
     {
-        $roles = Role::orderBy('id', 'DESC')->withCount('permissions')->get();
+        $roles = Role::orderBy('id', 'DESC')->withCount('permissions')->paginate(config('school.per_page'));
         $school = $this->getSchool();
 
         return view('backend.roles.index', compact('roles', 'school'));

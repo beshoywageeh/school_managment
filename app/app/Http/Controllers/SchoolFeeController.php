@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Alkoumi\LaravelArabicNumbers\Numbers;
 use App\Http\Requests\StoreSchoolFeeRequest;
 use App\Http\Requests\UpdateSchoolFeeRequest;
 use App\Http\Traits\LogsActivity;
@@ -15,6 +16,7 @@ use App\Services\Finance\FinancialService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class SchoolFeeController extends Controller
 {
@@ -54,16 +56,12 @@ class SchoolFeeController extends Controller
                     Carbon::parse($year->year_end)->format('Y'),
             ];
         });
-        $SchoolFees = SchoolFee::when(
-            $this->schoolId(),
-            fn ($q, $id) => $q->where('school_id', $id),
+        $SchoolFees = SchoolFee::with(
+            'grade:id,name',
+            'classroom:id,name',
+            'user:id,name',
+            'year:id,view',
         )
-            ->with(
-                'grade:id,name',
-                'classroom:id,name',
-                'user:id,name',
-                'year:id,view',
-            )
             ->latest()
             ->paginate(config('school.per_page'));
 
@@ -128,7 +126,7 @@ class SchoolFeeController extends Controller
             return redirect()->route('school-fees.index');
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
-            \Log::channel('error')->error(
+            Log::channel('error')->error(
                 'Error creating school fee: '.$e->getMessage(),
                 ['stack' => $e->getTraceAsString()],
             );
@@ -174,7 +172,7 @@ class SchoolFeeController extends Controller
             $this->logActivity(
                 trans('log.actions.updated'),
                 trans('log.models.SchoolFee.updated', [
-                    'amount' => \Number::currency(
+                    'amount' => Number::currency(
                         $request->amount,
                         config('school.currency'),
                         'ar',
@@ -201,7 +199,7 @@ class SchoolFeeController extends Controller
             $this->logActivity(
                 trans('log.actions.deleted'),
                 trans('log.models.SchoolFee.deleted', [
-                    'amount' => \Number::currency(
+                    'amount' => Numbers::currency(
                         $fee->amount,
                         config('school.currency'),
                         'ar',
@@ -222,11 +220,7 @@ class SchoolFeeController extends Controller
     public function getclasses($id)
     {
         $school = $this->getSchool();
-        $class_rooms = ClassRoom::when(
-            $this->schoolId(),
-            fn ($q, $id) => $q->where('school_id', $id),
-        )
-            ->where('grade_id', $id)
+        $class_rooms = ClassRoom::where('grade_id', $id)
             ->get(['id', 'name']);
 
         return response()->json($class_rooms);

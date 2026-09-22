@@ -15,7 +15,7 @@ class AdminEraController extends Controller
     public function Index()
     {
         $school = $this->getSchool();
-        $Employees = User::with('roles:id')->get(['id', 'code', 'type', 'name', 'email', 'isAdmin', 'login_allow', 'password']);
+        $Employees = User::with('roles:id')->paginate(config('school.per_page'), ['id', 'code', 'type', 'name', 'email', 'isAdmin', 'login_allow', 'password']);
         $Permissions = Role::get();
 
         return view('backend.AdminEra.index', compact('school', 'Employees', 'Permissions'));

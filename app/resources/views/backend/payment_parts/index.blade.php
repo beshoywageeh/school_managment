@@ -35,13 +35,12 @@
                             </td>
                             <td class="px-6 py-4 text-sm">
                                 @can('payment_parts-status')
-                                <a class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $PaymentPart->status->color() }}"
-                                    href="{{ route('payment-parts.pay', $PaymentPart->id) }}">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $PaymentPart->status->color() }}">
                                     {{ $PaymentPart->status->lang() }}
-                                </a>
+                                </span>
                                 @endcan
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ number_format($PaymentPart->amount, 2) }}&nbsp;ج.م</td>
+                            <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ Number::currency($PaymentPart->amount, 'EGP','ar') }}</td>
                             <td class="px-6 py-4 text-center">
                                 <x-dropdown-table :buttonText="trans('general.actions')" :items="[
 
@@ -59,14 +58,7 @@
                                         'text' => trans('general.edit'),
                                         'icon' => 'ti-pencil',
                                         'can' => 'payment_parts-edit',
-                                    ],
-                                    [
-                                        'type' => 'link',
-                                        'url' => route('payment-parts.pay', $PaymentPart->id),
-                                        'text' => trans('general.pay'),
-                                        'icon' => 'ti-pencil',
-                                        'can' => 'payment_parts-pay',
-                                    ],
+                                    ]
                                 ]" />
                             </td>
                         </tr>

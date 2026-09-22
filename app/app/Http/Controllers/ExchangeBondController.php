@@ -32,8 +32,7 @@ class ExchangeBondController extends Controller
     public function index()
     {
         $school = $this->GetSchool();
-        $exchanges = ExchangeBond::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
-            ->with(['student', 'academicYear'])
+        $exchanges = ExchangeBond::with(['student', 'academicYear'])
             ->paginate(config('school.per_page', 10));
 
         return view('backend.exchange_bond.index', compact('school', 'exchanges'));

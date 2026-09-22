@@ -29,16 +29,15 @@ class PromotionController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $promotions = promotion::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
-            ->with(
-                'student:id,name',
-                'f_grade:id,name',
-                'f_class:id,name',
-                't_grade:id,name',
-                't_class:id,name',
-                't_acc:id,view',
-                'f_acc:id,view',
-            )
+        $promotions = promotion::with(
+            'student:id,name',
+            'f_grade:id,name',
+            'f_class:id,name',
+            't_grade:id,name',
+            't_class:id,name',
+            't_acc:id,view',
+            'f_acc:id,view',
+        )
             ->paginate(config('school.per_page'));
 
         return view(
@@ -53,9 +52,8 @@ class PromotionController extends Controller
     public function create()
     {
         $school = $this->getSchool();
-        $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))->get();
-        $acc_year = AcademicYear::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
-            ->where('status', 0)
+        $grades = Grade::get();
+        $acc_year = AcademicYear::where('status', 0)
             ->get();
 
         return view('backend.promotion.create', compact('school', 'grades', 'acc_year'));
@@ -88,8 +86,7 @@ class PromotionController extends Controller
                     'grade_id' => $request->new_grade,
                     'acadmiecyear_id' => $request->acc_to,
                 ]);
-
-                foreach ($Students as $student) {
+                $Students->each(function ($student) use ($request) {
                     promotion::updateorCreate(
                         [
                             'student_id' => $student->id,
@@ -114,7 +111,7 @@ class PromotionController extends Controller
                             'name' => $student->fullName(),
                         ]),
                     );
-                }
+                });
             });
 
             return redirect()

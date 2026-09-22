@@ -10,6 +10,8 @@
         jobs: [],
         loading: false,
         tableVisible: false,
+        jobsBaseUrl: '',
+        jobsPagination: { current: 1, last: 1 },
         canEdit: @json(auth()->user()->can('jobs-edit')),
         canDelete: @json(auth()->user()->can('jobs-delete')),
         async fetchJobs(url) {
@@ -17,13 +19,24 @@
             this.tableVisible = false;
             try {
                 const response = await fetch(url);
-                this.jobs = await response.json();
+                const data = await response.json();
+                this.jobs = data.data ?? (Array.isArray(data) ? data : []);
+                this.jobsPagination = {
+                    current: data.current_page ?? 1,
+                    last: data.last_page ?? 1,
+                    perPage: data.per_page ?? 10,
+                };
+                this.jobsBaseUrl = url;
                 this.tableVisible = true;
             } catch (error) {
                 console.error('Error fetching jobs:', error);
             } finally {
                 this.loading = false;
             }
+        },
+        loadJobsPage(page) {
+            const separator = this.jobsBaseUrl.includes('?') ? '&' : '?';
+            this.fetchJobs(this.jobsBaseUrl + separator + 'page=' + page);
         },
         editJob(job) {
             window.dispatchEvent(new CustomEvent('open-modal-edit-job', {
@@ -99,7 +112,7 @@
                     <tbody>
                         <template x-for="(job, index) in jobs" :key="job.id">
                             <tr>
-                                <td class="px-4 py-2 text-center text-sm text-gray-600" x-text="index + 1"></td>
+                                <td class="px-4 py-2 text-center text-sm text-gray-600" x-text="(jobsPagination.current - 1) * jobsPagination.perPage + index + 1"></td>
                                 <td class="px-4 py-2 text-sm text-gray-800" x-text="job.name"></td>
                                 <td class="px-4 py-2 text-center text-sm text-gray-600" x-text="job.users_count"></td>
                                 <td class="px-4 py-2 text-center">
@@ -127,6 +140,25 @@
                         </tr>
                     </tbody>
                 </table>
+                <div x-show="jobsPagination.last > 1"
+                    class="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-gray-50">
+                    <span class="text-xs font-medium text-gray-500">
+                        صفحة <span x-text="jobsPagination.current" class="text-primary font-bold"></span> من <span
+                            x-text="jobsPagination.last" class="font-bold"></span>
+                    </span>
+                    <div class="flex items-center gap-2">
+                        <button @click="loadJobsPage(jobsPagination.current - 1)"
+                            :disabled="jobsPagination.current === 1 || loading"
+                            class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs font-semibold text-gray-900 hover:bg-gray-50 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-all duration-150 ease-in-out">
+                            {{ trans('general.previous') }}
+                        </button>
+                        <button @click="loadJobsPage(jobsPagination.current + 1)"
+                            :disabled="jobsPagination.current === jobsPagination.last || loading"
+                            class="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-xs font-semibold text-gray-900 hover:bg-gray-50 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-all duration-150 ease-in-out">
+                            {{ trans('general.next') }}
+                        </button>
+                    </div>
+                </div>
                 @include('backend.Job.edit')
             </div>
         </div>

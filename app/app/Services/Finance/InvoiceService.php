@@ -93,7 +93,7 @@ class InvoiceService
             'amount' => $amount,
             'academic_year_id' => $acc_year,
             'school_id' => $school,
-            'user_id' => auth()->id(),
+            'user_id' => \Auth::id(),
             'status' => $status,
         ]);
 

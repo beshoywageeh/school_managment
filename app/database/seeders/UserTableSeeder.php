@@ -106,10 +106,23 @@ class UserTableSeeder extends Seeder
 
         // ── Role: Director (oversight & read permissions) ────
         $directorRole = $this->createRole('Director', [
-            'classes', 'class_rooms', 'grade', 'academic_year',
-            'employees', 'teacher_schedaule', 'Students', 'schoolfees',
-            'role', 'jobs', 'settings', 'store', 'order_store',
-            'clothes', 'clothes-order', 'books_sheets', 'books_sheets-order',
+            'classes',
+            'class_rooms',
+            'grade',
+            'academic_year',
+            'employees',
+            'teacher_schedaule',
+            'Students',
+            'schoolfees',
+            'role',
+            'jobs',
+            'settings',
+            'store',
+            'order_store',
+            'clothes',
+            'clothes-order',
+            'books_sheets',
+            'books_sheets-order',
         ], $permissionsByTable);
 
         $this->createUser(
@@ -122,8 +135,12 @@ class UserTableSeeder extends Seeder
 
         // ── Role: Accountant (financial permissions) ─────────
         $accountantRole = $this->createRole('Accountant', [
-            'schoolfees', 'fee_invoice', 'except_fee',
-            'payment_parts', 'ReceiptPayment', 'exchange_bonds',
+            'schoolfees',
+            'fee_invoice',
+            'except_fee',
+            'payment_parts',
+            'ReceiptPayment',
+            'exchange_bonds',
             'StudentAccount',
         ], $permissionsByTable);
 
@@ -137,8 +154,12 @@ class UserTableSeeder extends Seeder
 
         // ── Role: Teacher (classroom & student permissions) ──
         $teacherRole = $this->createRole('Teacher', [
-            'classes', 'class_rooms', 'grade',
-            'Students', 'promotion', 'teacher_schedaule',
+            'classes',
+            'class_rooms',
+            'grade',
+            'Students',
+            'promotion',
+            'teacher_schedaule',
         ], $permissionsByTable);
 
         $this->createUser(
@@ -151,8 +172,12 @@ class UserTableSeeder extends Seeder
 
         // ── Role: Storekeeper (inventory permissions) ────────
         $storekeeperRole = $this->createRole('Storekeeper', [
-            'store', 'order_store', 'clothes', 'clothes-order',
-            'books_sheets', 'books_sheets-order',
+            'store',
+            'order_store',
+            'clothes',
+            'clothes-order',
+            'books_sheets',
+            'books_sheets-order',
         ], $permissionsByTable);
 
         $this->createUser(

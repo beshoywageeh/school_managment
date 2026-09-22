@@ -27,7 +27,7 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse($classes as $class)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->iteration }}</td>
+                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $classes->firstItem() + $loop->index }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
                                 <a href="{{ route('classes.show', $class) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                     {{ $class->title }}
@@ -83,6 +83,9 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+            <div class="p-4 border-t border-gray-100">
+                {{ $classes->links() }}
             </div>
         @endcan
     </div>
