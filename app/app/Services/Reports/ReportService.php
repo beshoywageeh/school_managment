@@ -2,6 +2,7 @@
 
 namespace App\Services\Reports;
 
+use App\Enums\Student_Status;
 use App\Models\AcademicYear;
 use App\Models\ClassRoom;
 use App\Models\FeeInvoice;
@@ -11,10 +12,23 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ReportService
 {
+    /**
+     * Resolve the academic year flagged active by the system settings.
+     *
+     * This is the single convention every year-scoped report uses; it never
+     * falls back to the current calendar year, because an inactive period may
+     * still be the one the school is reporting on.
+     */
+    public function activeAcademicYear(): ?AcademicYear
+    {
+        return AcademicYear::query()
+            ->where('status', config('school.academic_year_status'))
+            ->first();
+    }
+
     public function getStudentReport(int $type, $request): ?array
     {
-        $year_start = now()->format('Y');
-        $data['acc'] = AcademicYear::whereYear('year_start', $year_start)->first();
+        $data['acc'] = $this->activeAcademicYear();
 
         if (is_null($data['acc'])) {
             return null;
@@ -22,7 +36,7 @@ class ReportService
 
         if ($type == 41) {
             $data['students'] = Student::where('classroom_id', $request->classroom_id)
-                ->where('student_status', 0)
+                ->where('student_status', Student_Status::NEW->value)
                 ->where('acadmiecyear_id', $data['acc']->id)
                 ->with([
                     'parent:id,father_name,address',
@@ -46,9 +60,14 @@ class ReportService
                 ])
                 ->chunk(100);
 
-            $data['classroom'] = ClassRoom::where('id', $request->classroom_id)
+            $data['classroom'] = ClassRoom::query()
+                ->where('id', $request->classroom_id)
                 ->with('grade')
                 ->first();
+
+            if (is_null($data['classroom'])) {
+                return null;
+            }
 
             return $data;
         }

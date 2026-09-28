@@ -50,8 +50,8 @@
                         <td>{{ $age[1] ?? '-' }}</td>
                         <td>{{ $age[2] ?? '-' }}</td>
                         <td>{{ $stud->gender->lang() }}</td>
-                        <td>{{ $stud->parent->father_name }}</td>
-                        <td>{{ $stud->parent->address }}</td>
+                        <td>{{ optional($stud->parent)->father_name ?? '' }}</td>
+                        <td>{{ optional($stud->parent)->address ?? '' }}</td>
                     </tr>
                 @endforeach
             </tbody>

@@ -31,7 +31,7 @@
                             <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>{{ $data['stock']->name }}</td>
-                                <td>{{ $data['stock']->opening_qty_date }}</td>
+                                <td>{{ $data['stock']->opening_date?->format('Y-m-d') }}</td>
                                 <td colspan="4">
                                     <h6>{{ trans('report.opening_stock') }}
                                         &nbsp;&nbsp;===========>&nbsp;&nbsp;{{ number_format($data['stock']->opening_qty, 2) }}
@@ -41,12 +41,12 @@
                         @endif
                         <tr>
                             <td>{{ $loop->index + 1 }}</td>
-                            <td>{{ $order['stk']->auto_number }}</td>
+                            <td>{{ $order['stk']->order?->auto_number }}</td>
                             <td>{{ $order['stk']->created_at->format('Y-m-d') }}</td>
                             <td>
-                                @if ($order['stk']->type == '1')
+                                @if ($order['stk']->order?->type === \App\Enums\InventoryOrderType::PURCHASES)
                                     {{ trans('report.inorder') }}
-                                @elseif($order['stk']->type == '2')
+                                @elseif ($order['stk']->order?->type === \App\Enums\InventoryOrderType::SALES)
                                     {{ trans('report.outorder') }}
                                 @else
                                     {{ trans('report.inventory') }}

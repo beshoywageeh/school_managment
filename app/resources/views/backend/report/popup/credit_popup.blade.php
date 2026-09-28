@@ -7,7 +7,7 @@
                 <select name="acc_year" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
                     <option value="" selected disabled>{{ trans('general.academic_year') }}</option>
                     <option value="0">{{ trans('general.all') }}</option>
-                    @foreach ($acadmeic_years as $acc_year)
+                    @foreach ($academic_years as $acc_year)
                         <option value="{{ $acc_year->id }}">{{ $acc_year->view }}</option>
                     @endforeach
                 </select>
