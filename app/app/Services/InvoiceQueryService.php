@@ -13,7 +13,8 @@ class InvoiceQueryService
         $query = FeeInvoice::query()
             ->when($schoolId, fn ($q) => $q->where('school_id', $schoolId))
             ->with([
-                'student:id,name',
+                'student:id,name,parent_id',
+                'student.parent:id,father_name',
                 'grade:id,name',
                 'classroom:id,name',
                 'acd_year:id,view',

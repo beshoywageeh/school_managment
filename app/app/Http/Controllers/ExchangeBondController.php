@@ -32,8 +32,14 @@ class ExchangeBondController extends Controller
     public function index()
     {
         $school = $this->GetSchool();
-        $exchanges = ExchangeBond::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
-            ->with(['student', 'academicYear'])
+        $exchanges = ExchangeBond::with(['student', 'academicYear'])
+            ->when(request('search'), function ($q, $s) {
+                $q->where(function ($q) use ($s) {
+                    $q->where('manual', 'like', "%{$s}%")
+                        ->orWhere('description', 'like', "%{$s}%")
+                        ->orWhereHas('student', fn ($sq) => $sq->where('name', 'like', "%{$s}%"));
+                });
+            })
             ->paginate(config('school.per_page', 10));
 
         return view('backend.exchange_bond.index', compact('school', 'exchanges'));

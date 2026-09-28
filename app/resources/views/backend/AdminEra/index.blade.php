@@ -6,6 +6,7 @@
 @endpush
 @section('content')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <x-filters action="{{ route('admin-era.index') }}" reset="{{ route('admin-era.index') }}" placeholder="{{ trans('adminera.name') }}"></x-filters>
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
                 <thead class="bg-green-50">
@@ -29,7 +30,7 @@
                             @csrf
                             @method('PUT')
                             <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2 text-center text-gray-600">{{ $loop->iteration }}</td>
+                                <td class="px-4 py-2 text-center text-gray-600">{{ $Employees->firstItem() + $loop->index }}</td>
                                 <td class="px-4 py-2 text-gray-800">{{ $employee->code }}</td>
                                 <td class="px-4 py-2 text-gray-800 font-medium">{{ $employee->name }}</td>
                                 <td class="px-4 py-2">
@@ -73,6 +74,9 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        <div class="p-4 border-t border-gray-100">
+            {{ $Employees->withQueryString()->links() }}
         </div>
     </div>
 

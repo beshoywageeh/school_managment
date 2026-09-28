@@ -5,6 +5,7 @@
 @section('content')
     @include('backend.msg')
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <x-filters action="{{ route('students.graduated') }}" reset="{{ route('students.graduated') }}" placeholder="{{ trans('student.name') }}"></x-filters>
         <div class="overflow-x-auto">
             @can('Students-list')
                 <table class="min-w-full">
@@ -21,7 +22,7 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse ($students as  $student)
                             <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->index + 1 }}</td>
+                                <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $students->firstItem() + $loop->index }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $student->fullName() }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $student->grade->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $student->classroom->name }}</td>
@@ -61,6 +62,9 @@
                     </tbody>
                 </table>
             @endcan
+        </div>
+        <div class="p-4 border-t border-gray-100">
+            {{ $students->withQueryString()->links() }}
         </div>
     </div>
     @push('scripts')

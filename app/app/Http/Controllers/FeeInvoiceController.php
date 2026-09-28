@@ -49,63 +49,11 @@ class FeeInvoiceController extends Controller
     {
         $school = $this->getSchool();
         $gradeOptions = Grade::pluck('name', 'id')->toArray();
-
-        $columns = [
-            [
-                'key' => 'invoice_date',
-                'label' => trans('fee_invoice.date'),
-                'sortable' => true,
-            ],
-            [
-                'key' => 'student.name',
-                'label' => trans('fee_invoice.name'),
-                'filter_type' => 'text',
-                'filter_key' => 'students',
-                'sortable' => false,
-            ],
-            [
-                'key' => 'schoolFee.amount',
-                'label' => trans('fee_invoice.debit'),
-                'sortable' => false,
-            ],
-            [
-                'key' => 'grade.name',
-                'label' => trans('fee_invoice.grade'),
-                'filter_type' => 'select_relation',
-                'filter_key' => 'grade_id',
-                'options' => $gradeOptions,
-                'sortable' => true,
-            ],
-            [
-                'key' => 'classroom.name',
-                'label' => trans('fee_invoice.class'),
-                'sortable' => false,
-            ],
-            [
-                'key' => 'acd_year.view',
-                'label' => trans('fee_invoice.acadmic'),
-                'sortable' => false,
-            ],
-        ];
-
-        $fee_invoices = $this->invoiceQueryService->getFilteredQuery(
-            $request,
-            $this->schoolId(),
-        );
-
-        if ($request->expectsJson()) {
-            return response()->json([
-                'items' => $fee_invoices->items(),
-                'pagination' => [
-                    'current_page' => $fee_invoices->currentPage(),
-                    'last_page' => $fee_invoices->lastPage(),
-                ],
-            ]);
-        }
+        $feeInvoices = $this->invoiceQueryService->getFilteredQuery($request, $this->schoolId());
 
         return view(
             'backend.fee_invoices.index',
-            compact('school', 'gradeOptions', 'columns', 'fee_invoices'),
+            compact('school', 'gradeOptions', 'feeInvoices'),
         );
     }
 
@@ -117,17 +65,10 @@ class FeeInvoiceController extends Controller
         try {
             $school = $this->getSchool();
             $student = Student::where('id', $student_id)
-                ->when(
-                    $this->schoolId(),
-                    fn ($q, $id) => $q->where('school_id', $id),
-                )
                 ->first();
-            $school_fees = school_fee::when(
-                $this->schoolId(),
-                fn ($q, $id) => $q->where('school_id', $id),
-            )
-                ->where('grade_id', $student->grade_id)
+            $school_fees = school_fee::where('grade_id', $student->grade_id)
                 ->where('classroom_id', $student->classroom_id)
+
                 ->get(['id', 'title', 'amount']);
 
             if (! $student || $school_fees->count() == 0) {
@@ -164,6 +105,7 @@ class FeeInvoiceController extends Controller
                 )->first();
                 foreach ($List_Fees as $list_fee) {
                     $student = Student::findorfail($list_fee['student_id']);
+
                     $service->FeeInvoice(
                         $student,
                         $list_fee['fee'],

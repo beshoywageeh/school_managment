@@ -73,7 +73,7 @@ class JobController extends Controller
      */
     public function show($id)
     {
-        $jobs = Job::where('type', $id)->withCount('users')->get();
+        $jobs = Job::where('type', $id)->withCount('users')->paginate(10);
 
         return response()->json($jobs);
     }

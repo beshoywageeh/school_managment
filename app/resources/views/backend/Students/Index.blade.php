@@ -4,10 +4,10 @@
 @endsection
 @section('content')
     @include('backend.msg')
-    <div class="flex align-items-center justify-end rounded p-4 bg-white gap-2 mb-4 shadow">
+    <div @class(['flex', 'align-items-center', 'justify-end', 'rounded', 'p-4', 'bg-white', 'gap-2', 'mb-4', 'shadow'])>
         @can('Students-create')
-        <a href="{{ route('students.create') }}" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors cursor-pointer bg-primary text-white hover:bg-primary/90">
-            <x-hero-icon name="plus" class="w-4 h-4" />
+        <a href="{{ route('students.create') }}" @class(['flex', 'items-center', 'gap-2', 'px-3', 'py-2', 'text-sm', 'rounded-lg', 'transition-colors', 'cursor-pointer', 'bg-primary', 'text-white', 'hover:bg-primary/90'])>
+            <x-hero-icon name="plus" @class(['w-4', 'h-4']) />
             {{ trans('general.new') }}</a>
         @endcan
         @can('Students-Import_Excel')
@@ -15,98 +15,113 @@
         @endcan
     </div>
     @can('Students-list')
-        <div class="container mx-auto p-6">
-            <x-smart-table
-                :columns="$columns"
-                :initial-items="$students"
-                api-url="{{ route('students.index') }}"
-                >
-                    <x-slot:actions>
+    <div @class(['bg-white', 'rounded-xl', 'shadow-sm', 'border', 'border-gray-100', 'overflow-hidden'])>
 
-                        <div class="relative inline-block" x-data="{ open: false }" x-on:click.outside="open = false">
-
-                            <button type="button" x-on:click="open = !open" :aria-expanded="open"
-                                class="inline-flex items-center gap-1.5 h-8 px-3 bg-primary hover:bg-primary/90 active:bg-primary text-white text-sm font-medium rounded-lg transition-colors select-none cursor-pointer">
-                               {{trans('general.actions')}}
-                                <svg x-bind:class="open ? 'rotate-180' : ''" class="w-3.5 h-3.5 transition-transform duration-200" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
-
-                            <div x-show="open" x-transition
-                                class="absolute right-0 mt-1 min-w-[180px] bg-white border-gray-200 rounded-xl z-50 p-1 origin-top-right shadow-lg"
-                                style="display: none;">
-                                    @php
-                                    $links=[
-                                    [
-                                        'can' => 'Students-info',
-                                        'url' => route('students.show', 'ID_PLACEHOLDER'),
-                                        'icon' => 'information-circle',
-                                        'text' => trans('general.buttons.view'),
-
-                                        'className' => 'text-primary hover:bg-primary/10',
-                                    ],
-                                    [
-                                        'can' => 'Students-edit',
-                                        'url' => route('students.edit', 'ID_PLACEHOLDER'),
-                                        'icon' => 'pencil',
-                                        'text' => trans('general.buttons.edit'),
-
-                                        'className' => 'text-primary hover:bg-primary/10',
-                                    ],
-                                    [
-                                        'can' => 'fee_invoice-create',
-                                        'url' => route('fee-invoice.create',  'ID_PLACEHOLDER'),
-                                        'icon' => 'money',
-                                        'text' => trans('general.fee_invoice'),
-                                        'className' => 'text-primary hover:bg-primary/10',
-
-                                    ],
-                                    [
-                                        'can' => 'ReceiptPayment-create',
-                                        'url' => route('receipt-payment.create',  'ID_PLACEHOLDER'),
-                                        'icon' => 'credit-card',
-                                        'text' => trans('general.ReceiptPayment'),
-                                        'className' => 'text-primary hover:bg-primary/10',
-
-                                    ],
-                                    [
-                                        'can' => 'payment_parts-create',
-                                        'url' => route('payment-parts.create',  'ID_PLACEHOLDER'),
-                                        'icon' => 'credit-card',
-                                        'text' => trans('Sidebar.payment_parts'),
-                                        'className' => 'text-primary hover:bg-primary/10 ',
-
-                                    ],
-                                    ]
-                                    @endphp
-                                    @foreach($links as $link)
-                                        @can($link['can'])
-                                    <a :href="'{{ $link['url'] }}'.replace('ID_PLACEHOLDER', item.id)"
-                                       class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors {{ $link['className'] ?? '' }}">
-                                       <x-hero-icon name="{{ $link['icon'] }}" class="w-5 h-5" />
-                                       {{ $link['text'] }}
+        <x-filters action="{{ route('students.index') }}" reset="{{ route('students.index') }}" searchName="students" placeholder="{{ trans('student.name') }}">
+            <div>
+                <x-select name="grade_id" label="{{ trans('Grades.title') }}">
+                    <option value="">{{ trans('general.all') }}</option>
+                    @foreach ($gradeOptions as $id => $name)
+                        <option value="{{ $id }}" {{ request('grade_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                    @endforeach
+                </x-select>
+            </div>
+            <div>
+                <x-select name="classroom_id" label="{{ trans('class_rooms.Name') }}">
+                    <option value="">{{ trans('general.all') }}</option>
+                    @foreach ($classroomOptions as $id => $name)
+                        <option value="{{ $id }}" {{ request('classroom_id') == $id ? 'selected' : '' }}>{{ $name }}</option>
+                    @endforeach
+                </x-select>
+            </div>
+        </x-filters>
+        <div @class(['container', 'mx-auto', 'p-6'])>
+               <table @class(['min-w-full'])>
+                    <thead @class(['bg-gray-50'])>
+                    <tr>
+                         <th @class(['px-6', 'py-3', 'text-center', 'text-xs', 'font-medium', 'text-gray-500', 'uppercase'])>#</th>
+                         <th @class(['px-6', 'py-3', 'text-center', 'text-xs', 'font-medium', 'text-gray-500', 'uppercase'])>{{trans('student.name')}}</th>
+                         <th @class(['px-6', 'py-3', 'text-center', 'text-xs', 'font-medium', 'text-gray-500', 'uppercase'])>{{trans('Grades.title')}}</th>
+                         <th @class(['px-6', 'py-3', 'text-center', 'text-xs', 'font-medium', 'text-gray-500', 'uppercase'])>{{trans('class_rooms.name')}}</th>
+                         <th @class(['px-6', 'py-3', 'text-center', 'text-xs', 'font-medium', 'text-gray-500', 'uppercase'])>{{trans('general.actions')}}</th>
+                         
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($Students as $Student )
+                     <tr @class(['hover:bg-gray-50'])>
+                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{ $Students->firstItem() + $loop->index }}</td>
+                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->fullName()}}</td>
+                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->grade_name}}</td>
+                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>{{$Student->classroom_name}}</td>
+                         <td @class(['px-6', 'py-4', 'text-center', 'text-sm', 'text-gray-600'])>
+                          <x-dropdown-table :buttonText="trans('general.buttons.action')">
+                            @can('Students-info')
+                            <a href="{{ route('students.show', $Student->id) }}"
+                                        @class(['flex', 'items-center', 'gap-2', 'px-3', 'py-2', 'text-sm', 'rounded-lg', 'text-gray-700', 'hover:bg-gray-50'])>
+                                        <x-hero-icon name="information-circle" @class(['w-5', 'h-5', 'text-gray-400']) />
+                                        {{ trans('general.buttons.view') }}
                                     </a>
-                                    @endcan
-                                    @endforeach
-                                    @can('Students-graduated')
-                                    <form :action="`{{ route('students.destroy', '') }}/${item.id}`" method="POST" class="w-full" x-on:submit="confirmation(event)">
+                            @endcan
+                              @can('Students-edit')
+                            <a href="{{ route('students.edit', $Student->id) }}"
+                                        @class(['flex', 'items-center', 'gap-2', 'px-3', 'py-2', 'text-sm', 'rounded-lg', 'text-gray-700', 'hover:bg-gray-50'])>
+                                        <x-hero-icon name="pencil" @class(['w-5', 'h-5', 'text-gray-400']) />
+                                        {{ trans('general.buttons.edit') }}
+                                    </a>
+                            @endcan
+                            @can('fee_invoice-create')
+                            <a href="{{ route('fee-invoice.create', $Student->id) }}"
+                                        @class(['flex', 'items-center', 'gap-2', 'px-3', 'py-2', 'text-sm', 'rounded-lg', 'text-gray-700', 'hover:bg-gray-50'])>
+                                        <x-hero-icon name="money" @class(['w-5', 'h-5', 'text-gray-400']) />
+                                        {{ trans('general.fee_invoice') }}
+                                    </a>
+                            @endcan
+                                 @can('ReceiptPayment-create')
+                            <a href="{{ route('receipt-payment.create', $Student->id) }}"
+                                        @class(['flex', 'items-center', 'gap-2', 'px-3', 'py-2', 'text-sm', 'rounded-lg', 'text-gray-700', 'hover:bg-gray-50'])>
+                                        <x-hero-icon name="credit-card" @class(['w-5', 'h-5', 'text-gray-400']) />
+                                        {{ trans('general.ReceiptPayment') }}
+                                    </a>
+                            @endcan 
+                            @can('payment_parts-create')
+                            <a href="{{ route('payment-parts.create', $Student->id) }}"
+                                        @class(['flex', 'items-center', 'gap-2', 'px-3', 'py-2', 'text-sm', 'rounded-lg', 'text-gray-700', 'hover:bg-gray-50'])>
+                                        <x-hero-icon name="credit-card" @class(['w-5', 'h-5', 'text-gray-400']) />
+                                        {{ trans('PaymentParts.title') }}
+                                    </a>
+                            @endcan
+                             @can('Students-graduated')
+                                    <form :action="`{{ route('students.destroy', '') }}/${item.id}`" method="POST" @class(['w-full']) x-on:submit="confirmation(event)">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                            class="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors text-indigo-600 hover:bg-indigo-50">
-                                            <x-hero-icon name="graduation-cap" class="w-5 h-5" />
+                                            @class(['w-full', 'flex', 'items-center', 'gap-2', 'px-3', 'py-2', 'text-sm', 'rounded-lg', 'transition-colors', 'text-indigo-600', 'hover:bg-indigo-50'])>
+                                            <x-hero-icon name="graduation-cap" @class(['w-5', 'h-5']) />
                                             {{ trans('student.graduated') }}
                                         </button>
                                     </form>
                                     @endcan
-                            </div>
-                        </div>
+                        </x-dropdown-table>
 
-                        </x-slot:actions>
-                </x-smart-table>
+                         </td>
+                        </tr>
+                    @empty
+                          <tr>
+                            <td colspan="10" @class(['px-6', 'py-12', 'text-center'])>
+                                <div @class(['bg-blue-50', 'text-blue-600', 'px-4', 'py-3', 'rounded-lg', 'inline-block'])>
+                                    {{ trans('general.Msg') }}
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+            <div>{{ $Students->withQueryString()->links() }}</div>
+           
+                             
             </div>
-        @endcan
+        </div>
+            @endcan
 
 @endsection

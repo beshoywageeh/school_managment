@@ -23,6 +23,7 @@ class AcademicYearStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'year_start' => 'required|date|unique:acadmice_years,year_start,school_id',
             'year_end' => 'required|date|unique:acadmice_years,year_end,school_id',
         ];
     }

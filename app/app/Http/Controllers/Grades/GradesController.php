@@ -8,16 +8,17 @@ use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\Grade;
 use App\Models\User;
+use App\Services\Reports\PDFExportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PDF;
 
 class GradesController extends Controller
 {
     use LogsActivity, SchoolTrait;
 
-    public function __construct()
-    {
+    public function __construct(
+        private PDFExportService $PDFExportService
+    ) {
         $this->middleware('permission:grade-list', ['only' => ['index', 'show']]);
         $this->middleware('permission:grade-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:grade-edit', ['only' => ['edit', 'update']]);
@@ -46,11 +47,6 @@ class GradesController extends Controller
         ];
 
         return view('backend.Grades.Index', compact('data', 'school'));
-    }
-
-    public function create()
-    {
-        //
     }
 
     public function store(GradeStoreRequest $request)
@@ -94,25 +90,9 @@ class GradesController extends Controller
                 ->with(['class_rooms', 'class_rooms.students'])
                 ->withCount(['class_rooms', 'students'])
                 ->first();
+            $pdf = $this->PDFExportService->PrintPDF('backend.Grades.report', 'stream', $data, 'P', $data['school']);
 
-            $pdf = PDF::loadView(
-                'backend.Grades.report',
-                ['data' => $data],
-                [],
-                [
-                    'format' => 'A4',
-                    'default_font_size' => 10,
-                    'margin_left' => 2,
-                    'margin_right' => 2,
-                    'margin_top' => 2,
-                    'margin_bottom' => 2,
-                    'margin_header' => 2,
-                    'margin_footer' => 2,
-                    'orientation' => 'P',
-                ],
-            );
-
-            return $pdf->stream($data['report_data']->name.'.pdf');
+            return $pdf;
         } catch (\Exception $e) {
             \Log::error('PDF Generation failed: '.$e->getMessage());
 
@@ -122,8 +102,6 @@ class GradesController extends Controller
             );
         }
     }
-
-    public function edit(string $id) {}
 
     public function update(GradeStoreRequest $request)
     {

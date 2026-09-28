@@ -41,7 +41,7 @@
                     @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $stud->name }}</td>
+                        <td>{{ $stud->fullName() }}</td>
                         <td>{{ $stud->student_status->lang() }}</td>
                         <td>{{ $stud->religion == null ? ' - ' : $stud->religion->lang() }}</td>
                         <td>{{ $stud->national_id }}</td>

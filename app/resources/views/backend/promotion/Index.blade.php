@@ -17,6 +17,7 @@
         </div>
 
         @can('promotion-list')
+            <x-filters action="{{ route('promotion.index') }}" reset="{{ route('promotion.index') }}" placeholder="{{ trans('promotions.student') }}"></x-filters>
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead class="bg-gray-50">
@@ -36,7 +37,7 @@
                     <tbody class="divide-y divide-gray-100">
                         @forelse($promotions as $promotion)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->iteration }}</td>
+                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $promotions->firstItem() + $loop->index }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800 font-medium">{{ $promotion->student->fullName() }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $promotion->f_grade->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $promotion->f_class->name }}</td>
@@ -70,7 +71,7 @@
                 </table>
             </div>
             <div class="p-4">
-                {{ $promotions->links() }}
+                {{ $promotions->withQueryString()->links() }}
             </div>
         @endcan
     </div>

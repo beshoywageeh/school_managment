@@ -8,6 +8,7 @@ use App\Http\Traits\LogsActivity;
 use App\Http\Traits\SchoolTrait;
 use App\Models\ClassRoom;
 use App\Models\ClassRoom2 as classes;
+use App\Models\Grade;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -32,12 +33,17 @@ class ClassesController extends Controller
             ->with(['grade:id,name'])
             ->get(['id', 'name', 'grade_id'])
             ->groupBy('grade.name');
+        $class_room_list = $class_rooms->flatten();
+        $grades = Grade::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
+            ->get(['id', 'name']);
         $classes = classes::with(['grade:id,name', 'class_room:id,name'])
             ->withCount('students')
-            ->get(['id', 'title', 'class_room_id', 'grade_id', 'tameen']);
+            ->when(request('search'), fn ($q, $s) => $q->where('title', 'like', "%{$s}%"))
+            ->when(request('grade_id'), fn ($q, $gid) => $q->where('grade_id', $gid))
+            ->when(request('class_room_id'), fn ($q, $cid) => $q->where('class_room_id', $cid))
+            ->paginate(config('school.per_page'), ['id', 'title', 'class_room_id', 'grade_id', 'tameen']);
 
-        // return $classes;
-        return view('backend.classes.index', compact('school', 'class_rooms', 'classes'));
+        return view('backend.classes.index', compact('school', 'class_rooms', 'class_room_list', 'grades', 'classes'));
     }
 
     public function store(ClassStoreRequest $request)
@@ -83,8 +89,7 @@ class ClassesController extends Controller
                 $q->select('id', 'name');
             },
         ])->findOrFail($request->id, ['id', 'title', 'grade_id', 'class_room_id']);
-        $students = Student::when($this->schoolId(), fn ($q, $id) => $q->where('school_id', $id))
-            ->where('grade_id', $class->grade_id)
+        $students = Student::where('grade_id', $class->grade_id)
             ->where('classroom_id', $class->class_room_id)
             ->get();
 
@@ -172,7 +177,6 @@ class ClassesController extends Controller
         $students = Student::where('class_id', $class->id)->update([
             'tameen' => 1,
         ]);
-        // $class->update(['tameen'=>1]);
         $c = classes::findorfail($class->id)->first();
         $c->update(['tameen' => 1]);
         $this->logActivity(
@@ -192,7 +196,7 @@ class ClassesController extends Controller
         try {
             $class = classes::findorfail($id);
             $student = Student::where('class_id', $id)->count();
-            if ($student > 0) {
+            if ($student !== 0) {
                 return redirect()
                     ->back()
                     ->with('info', trans('classes.cant_delete'));

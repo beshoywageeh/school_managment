@@ -21,8 +21,10 @@ class SchoolFee extends Model
         'classroom_id',
         'user_id',
         'academic_year_id',
+        'title',
         'description',
         'amount',
+        'school_id',
     ];
 
     protected $casts = ['amount' => 'decimal:2'];

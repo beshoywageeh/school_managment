@@ -22,6 +22,7 @@ class PaymentParts extends Model
         'amount',
         'status',
         'school_fees_id',
+        'user_id',
     ];
 
     protected $casts = [

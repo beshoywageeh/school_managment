@@ -48,6 +48,10 @@
     <!-- Main Content Wrapper -->
     <div :class="sidebarExpanded ? 'lg:ms-64' : 'lg:ms-16'"
         class="ms-0 flex flex-col min-h-screen transition-all duration-300">
+        @if (session('error'))
+            
+        <div class="bg-red-300 text-red-950">{{session('message')}}</div>
+        @endif
         <x-toasts />
         <x-alert />
         <!-- Header -->

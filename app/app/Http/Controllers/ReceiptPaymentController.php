@@ -56,6 +56,12 @@ class ReceiptPaymentController extends Controller
         )
             ->with(['student:id,name'])
             ->orderBy('date', 'desc')
+            ->when(request('search'), function ($q, $s) {
+                $q->where(function ($q) use ($s) {
+                    $q->where('manual', 'like', "%{$s}%")
+                        ->orWhereHas('student', fn ($sq) => $sq->where('name', 'like', "%{$s}%"));
+                });
+            })
             ->paginate(config('school.per_page'));
 
         return view(

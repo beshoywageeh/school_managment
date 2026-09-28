@@ -25,8 +25,13 @@ class StudentController extends Controller
     {
         try {
             $student = Student::create($request->all());
+            $array = [
+                'data' => $posts,
+                'message' => 'return data',
+                'status' => 200,
+            ];
 
-            return response()->json($student, 201);
+            return response()->json($array);
         } catch (Exception $e) {
             return response()->json($e->getMessage(), 500);
         }

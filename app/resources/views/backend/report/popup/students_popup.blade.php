@@ -1,6 +1,5 @@
 <x-modal id="students" title="{{ trans('report.students') }}" size="lg" variant="primary" icon="cog" titleButton="{{ trans('general.generate') }}" can="Students-list">
-    <form action="{{ route('report.export-student') }}" method="post" id="students">
-        @csrf
+    <form action="{{ route('report.export-student') }}" method="get" id="students">
         <div class="space-y-4" x-data="{
             gradeId: '',
             classrooms: [],

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Payment_Status;
 use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
 use App\Http\Traits\LogsActivity;
@@ -10,7 +11,8 @@ use App\Models\FeeInvoice;
 use App\Models\PaymentParts;
 use App\Models\Student;
 use App\Services\Finance\FinancialService;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PaymentPartsController extends Controller
 {
@@ -35,36 +37,31 @@ class PaymentPartsController extends Controller
     public function index()
     {
         $school = $this->getSchool();
-        $PaymentParts = PaymentParts::when(
-            $this->schoolId(),
-            fn ($q, $id) => $q->where('school_id', $id),
-        )
-            ->with(['student', 'grade', 'classroom', 'year'])
+        $statuses = Payment_Status::cases();
+        $PaymentParts = PaymentParts::with(['student', 'grade', 'classroom', 'year'])
+            ->when(request('search'), fn ($q, $s) => $q->whereHas('student', fn ($sq) => $sq->where('name', 'like', "%{$s}%")))
+            ->when(request('status'), fn ($q, $st) => $q->where('status', $st))
             ->paginate(config('school.per_page'));
 
         return view(
             'backend.payment_parts.index',
-            compact('PaymentParts', 'school'),
+            compact('PaymentParts', 'school', 'statuses'),
         );
     }
 
     public function create($id)
     {
+
         try {
             $school = $this->getSchool();
-            $student = Student::when(
-                $this->schoolId(),
-                fn ($q, $id) => $q->where('school_id', $id),
-            )
-                ->where('id', $id)
+            $student = Student::where('id', $id)
                 ->with([
                     'fee_invoice' => function ($q) {
-                        $q->where('status', 'unpaid')->with(['schoolFee']);
+                        $q->where('status', 'not_paid')->with(['schoolFee']);
                     },
                     'parent:id,father_name',
                 ])
                 ->first();
-
             if ($student->fee_invoice->count() == 0) {
                 session()->flash('info', trans('general.noInvoiceToPart'));
 
@@ -77,6 +74,7 @@ class PaymentPartsController extends Controller
             );
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
+            Log::channel('error')->error($e->getMessage());
 
             return redirect()->back();
         }
@@ -89,9 +87,8 @@ class PaymentPartsController extends Controller
             $student = Student::findorfail($request->student_id);
             $parts = $request->parts;
             $academic_year = FeeInvoice::where('student_id', $student->id)
-                ->where('status', 'unpaid')
                 ->first('academic_year_id');
-            $parts->each(function ($part) use ($student, $academic_year) {
+            foreach ($parts as $part) {
                 $this->financial_service->PaymentParts(
                     $student,
                     $part['fee_id'],
@@ -101,15 +98,16 @@ class PaymentPartsController extends Controller
                     $part['amount'],
                     'unpaid',
                 );
-            });
+            }
 
             DB::commit();
             session()->flash('success', trans('general.success'));
 
-            return redirect()->route('payment_parts.index');
+            return $this->index();
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', $e->getMessage());
+            Log::alert($e->getMessage());
 
             return redirect()->back()->withInput();
         }
@@ -126,7 +124,7 @@ class PaymentPartsController extends Controller
                     'year:id,year_start,year_end',
                 ])
                 ->first();
-            if ($paymentpart->status === 'paid') {
+            if ($paymentParts->status === 'paid') {
                 session()->flash(
                     'error',
                     trans('general.cannot_update_paid_part'),

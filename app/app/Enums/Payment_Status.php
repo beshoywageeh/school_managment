@@ -23,4 +23,22 @@ enum Payment_Status: string
             self::CLOSE => trans('enums.payment_status.paid'),
         };
     }
+
+    /**
+     * Map a report payment-status filter to the DB enum values it selects.
+     *
+     * The "unpaid" filter covers all outstanding amounts (unpaid + not_paid);
+     * "paid" covers only the paid status; "all"/unknown input yields null
+     * (meaning: no status clause is applied).
+     *
+     * @return array{0: 'unpaid', 1: 'not_paid'}|array{0: 'paid'}|null
+     */
+    public static function filterValues(string $filter): ?array
+    {
+        return match ($filter) {
+            'unpaid' => [self::OPEN->value, self::NOT_PAID->value],
+            'paid' => [self::CLOSE->value],
+            default => null,
+        };
+    }
 }

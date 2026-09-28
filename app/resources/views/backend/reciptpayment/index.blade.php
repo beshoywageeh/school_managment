@@ -10,6 +10,8 @@
         </div>
 
         @can('ReceiptPayment-list')
+            <x-filters action="{{ route('receipt-payment.index') }}" reset="{{ route('receipt-payment.index') }}" placeholder="{{ trans('Recipt_Payments.manual') }}"></x-filters>
+
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead class="bg-gray-50">
@@ -25,7 +27,7 @@
                     <tbody class="divide-y divide-gray-100">
                         @foreach($Recipt_Payments as $ReceiptPayment)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->iteration }}</td>
+                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $Recipt_Payments->firstItem() + $loop->index }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $ReceiptPayment->manual }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ \Carbon\Carbon::parse($ReceiptPayment->date)->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
@@ -77,7 +79,7 @@
                     Showing {{ $Recipt_Payments->firstItem() ?? 0 }} to {{ $Recipt_Payments->lastItem() ?? 0 }} of {{ $Recipt_Payments->total() }} results
                 </div>
                 <div class="flex gap-1">
-                    {{ $Recipt_Payments->links() }}
+                    {{ $Recipt_Payments->withQueryString()->links() }}
                 </div>
             </div>
             @endif

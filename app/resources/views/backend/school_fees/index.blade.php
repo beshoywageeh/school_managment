@@ -14,6 +14,18 @@
         </div>
 
         @can('schoolfees-list')
+            <x-filters action="{{ route('school-fees.index') }}" reset="{{ route('school-fees.index') }}" placeholder="{{ trans('fees.title') }}">
+                <div>
+                    <x-input-label>@lang('fees.grade')</x-input-label>
+                    <select name="grade_id"
+                        class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+                        <option value="">{{ trans('general.all') }}</option>
+                        @foreach ($grades as $grade)
+                            <option value="{{ $grade->id }}" {{ request('grade_id') == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </x-filters>
             <div class="overflow-x-auto">
                 <table class="min-w-full">
                     <thead class="bg-gray-50">
@@ -89,7 +101,7 @@
             @if($SchoolFees->hasPages())
 
                 <div class="mx-4 my-4">
-                    {{ $SchoolFees->links('vendor.pagination.tailwind') }}
+                    {{ $SchoolFees->withQueryString()->links('vendor.pagination.tailwind') }}
                 </div>
             @endif
         @endcan

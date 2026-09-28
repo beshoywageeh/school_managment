@@ -64,58 +64,12 @@ class StudentsController extends Controller
     {
         $school = $this->getSchool();
         $gradeOptions = Grade::pluck('name', 'id')->toArray();
-
-        $columns = [
-            [
-                'key' => 'name',
-                'label' => trans('student.name'),
-                'sortable' => true,
-                'filter_type' => 'text',
-                'filter_key' => 'students',
-            ],
-            [
-                'key' => 'parent_name',
-                'label' => trans('student.parent_name'),
-                'sortable' => true,
-            ],
-            [
-                'key' => 'grade_name',
-                'label' => trans('fee_invoice.grade'),
-                'filter_type' => 'select_relation',
-                'filter_key' => 'grade_id',
-                'options' => $gradeOptions,
-                'sortable' => true,
-            ],
-            [
-                'key' => 'classroom_name',
-                'label' => trans('fee_invoice.class'),
-                'sortable' => false,
-            ],
-            [
-                'key' => 'actions',
-                'label' => trans('general.actions'),
-                'sortable' => false,
-            ],
-        ];
-
-        $students = $this->studentQuery->getFilteredQuery(
-            $request,
-            $this->schoolId(),
-        );
-
-        if ($request->expectsJson()) {
-            return response()->json([
-                'items' => $students->items(),
-                'pagination' => [
-                    'current_page' => $students->currentPage(),
-                    'last_page' => $students->lastPage(),
-                ],
-            ]);
-        }
+        $classroomOptions = ClassRoom::pluck('name', 'id')->toArray();
+        $Students = $this->studentQuery->getFilteredQuery($request, $this->schoolId());
 
         return view(
             'backend.Students.Index',
-            compact('school', 'gradeOptions', 'columns', 'students'),
+            compact('school', 'gradeOptions', 'classroomOptions', 'Students'),
         );
     }
 
@@ -269,11 +223,14 @@ class StudentsController extends Controller
 
     public function graduated()
     {
-        $students = Student::onlyTrashed()->with('grade', 'classroom')->get();
         $school = $this->getSchool();
+        $students = Student::onlyTrashed()
+            ->with('grade', 'classroom')
+            ->when(request('search'), fn ($q, $search) => $q->where('name', 'like', "%{$search}%"))
+            ->paginate(config('school.per_page'));
 
         return view(
-            'backend.students.graduated',
+            'backend.Students.graduated',
             compact('students', 'school'),
         );
     }

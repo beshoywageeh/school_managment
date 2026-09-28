@@ -11,6 +11,17 @@
 
         </div>
 
+        <x-filters action="{{ route('class-rooms.index') }}" reset="{{ route('class-rooms.index') }}" placeholder="{{ trans('class_rooms.Name') }}">
+            <div>
+                <x-select name="grade_id" label="{{ trans('class_rooms.grades') }}">
+                    <option value="">{{ trans('general.all') }}</option>
+                    @foreach ($data['grades'] as $grade)
+                        <option value="{{ $grade->id }}" {{ request('grade_id') == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                    @endforeach
+                </x-select>
+            </div>
+        </x-filters>
+
         @can('class_rooms-list')
             <div class="overflow-x-auto">
                 <table class="min-w-full" >
@@ -28,7 +39,7 @@
                     <tbody class="divide-y divide-gray-100">
                         @foreach($data['class_rooms'] as $class_room)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $loop->iteration }}</td>
+                            <td class="px-6 py-4 text-center text-sm text-gray-600">{{ $data['class_rooms']->firstItem() + $loop->index }}</td>
                             <td class="px-6 py-4 text-sm text-gray-800">
                                 <a target="_blank" href="{{ route('class-rooms.show', $class_room->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
                                     {{ $class_room->name }}
@@ -80,6 +91,9 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="p-4 border-t border-gray-100">
+                {{ $data['class_rooms']->withQueryString()->links() }}
             </div>
         @endcan
     </div>

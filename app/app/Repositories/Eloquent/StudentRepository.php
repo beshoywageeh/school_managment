@@ -17,6 +17,7 @@ class StudentRepository implements StudentInterface
     public function __construct(
         public StudentRegeister $StudentRegeister,
         public StudentService $studentService,
+        public AgeCalculationService $age_calculation
     ) {}
 
     public function getAllStudents()
@@ -55,7 +56,7 @@ class StudentRepository implements StudentInterface
             'national_id' => $request['national_id'],
             'student_status' => $request['student_status'],
             'religion' => $parent->religion ?? $request['religion'],
-            'birth_at_begin' => new AgeCalculationService()->calculateAgeAsOfOctoberFirst(
+            'birth_at_begin' => $this->age_calculation->calculateAgeAsOfOctoberFirst(
                 $request['birth_date'],
             ),
             'acadmiecyear_id' => $request['academic_year'],
@@ -84,7 +85,7 @@ class StudentRepository implements StudentInterface
             ),
             'national_id' => $request->national_id,
             'religion' => MyParent::findorfail($request->parents)->religion,
-            'birth_at_begin' => new AgeCalculationService()->calculateAgeAsOfOctoberFirst(
+            'birth_at_begin' => $this->age_calculation->calculateAgeAsOfOctoberFirst(
                 $request->birth_date,
             ),
 
