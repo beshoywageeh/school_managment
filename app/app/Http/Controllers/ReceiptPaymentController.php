@@ -52,14 +52,14 @@ class ReceiptPaymentController extends Controller
         $school = $this->getSchool();
         $Recipt_Payments = ReceiptPayment::when(
             $this->schoolId(),
-            fn ($q, $id) => $q->where('school_id', $id),
+            fn($q, $id) => $q->where('school_id', $id),
         )
             ->with(['student:id,name'])
             ->orderBy('date', 'desc')
             ->when(request('search'), function ($q, $s) {
                 $q->where(function ($q) use ($s) {
                     $q->where('manual', 'like', "%{$s}%")
-                        ->orWhereHas('student', fn ($sq) => $sq->where('name', 'like', "%{$s}%"));
+                        ->orWhereHas('student', fn($sq) => $sq->where('name', 'like', "%{$s}%"));
                 });
             })
             ->paginate(config('school.per_page'));
@@ -79,12 +79,12 @@ class ReceiptPaymentController extends Controller
             $school = $this->getSchool();
             $Student = Student::where('id', $id)
                 ->with([
-                    'fee_invoice' => fn ($q) => $q
-                        ->where('status', 'unpaid')
+                    'fee_invoice' => fn($q) => $q
+                        ->where('status', 'not_paid')
                         ->with('schoolFee:id,title,amount'),
 
                     'studentAccount',
-                    'parts' => fn ($q) => $q->where('status', 'unpaid'),
+                    'parts' => fn($q) => $q->where('status', 'unpaid'),
                     'excption',
                 ])
                 ->first();
@@ -153,7 +153,7 @@ class ReceiptPaymentController extends Controller
                 ->route('receipt-payment.create', $request->student_id)
                 ->with('report_data', $report_data);
         } catch (\Exception $e) {
-            \Log::channel('errors')->error('Error In '.$e->getMessage());
+            \Log::channel('errors')->error('Error In ' . $e->getMessage());
 
             return redirect()->back()->with('error', $e->getMessage());
         }

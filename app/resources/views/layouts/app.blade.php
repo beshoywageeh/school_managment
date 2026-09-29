@@ -53,8 +53,8 @@
         <!-- Header -->
         @include('layouts.header')
         <!-- Content Area -->
-        <x-msg/>
         <main id="main-content" class="flex-1 overflow-y-auto p-6 bg-gray-50">
+            <x-msg />
             @yield('content')
         </main>
         @if (session('success'))

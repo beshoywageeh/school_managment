@@ -265,6 +265,66 @@
     </div>
     @if ($report_data)
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mt-6" id="print">
+
+            <div class="flex items-start justify-between pb-4 mb-4 border-b border-gray-200">
+                <div>
+                    @if ($school->image)
+                        <img src="{{ asset('storage/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
+                            alt="{{ $school->name }}" class="h-12">
+                    @else
+                        <img src="{{ asset('assests/images/logo-icon-dark.png') }}" alt="Ischool" class="h-12">
+                    @endif
+                </div>
+                <div class="text-left">
+                    <h1 class="text-2xl font-bold text-gray-900">{{ trans('Recipt_Payments.title') }}</h1>
+                    <p class="text-sm text-gray-500">{{ trans('general.created_at') }}:
+                        {{ $report_data['recipt']->date }}</p>
+                    <p class="text-sm text-gray-500">{{ trans('Recipt_Payments.man') }}:
+                        {{ $report_data['recipt']->manual }}</p>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h2 class="text-xl font-bold text-gray-800">{{ trans('Recipt_Payments.name') }}:
+                    {{ $report_data['recipt']->student->fullName() }}</h2>
+            </div>
+
+            @if (isset($report_data['items']) && count($report_data['items']))
+                <div class="mb-4 overflow-x-auto">
+                    <table class="w-full text-center border border-gray-200 rounded-lg overflow-hidden">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                @foreach ($report_data['columns'] as $key => $label)
+                                    <th class="px-4 py-2 text-sm font-medium text-gray-600">{{ $label }}</th>
+                                @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($report_data['items'] as $item)
+                                <tr class="border-b border-gray-200">
+                                    @foreach ($report_data['columns'] as $key => $label)
+                                        <td class="px-4 py-2 text-sm text-gray-800">{{ $item[$key] ?? '' }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+            <div class="text-center mb-4">
+                <h2 class="text-xl font-bold text-gray-700">{{ $report_data['tafqeet'] }}</h2>
+            </div>
+
+            <div class="flex justify-end mt-6 pt-4 border-t border-gray-200 mb-80">
+                <h5 class="text-sm font-medium text-gray-600">{{ trans('Recipt_Payments.sign') }}</h5>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <hr>
+            <br>
             <div class="flex items-start justify-between pb-4 mb-4 border-b border-gray-200">
                 <div>
                     @if ($school->image)
@@ -318,14 +378,15 @@
                 <h5 class="text-sm font-medium text-gray-600">{{ trans('Recipt_Payments.sign') }}</h5>
             </div>
 
+
             <div class="flex justify-center mt-6">
                 <button id="print_btn" onclick="window.print()"
                     class="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
                     {{ trans('general.print') }}
                 </button>
             </div>
-        </div>
 
+        </div>
         @push('css')
             <style>
                 @media print {
