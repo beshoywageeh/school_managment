@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::name('report.')
     ->prefix('report')
-    ->middleware('can:reports-view')
+    ->middleware(['can:reports-view', 'sanitize'])
     ->controller(ReportController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');

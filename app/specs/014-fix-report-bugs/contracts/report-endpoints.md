@@ -9,23 +9,23 @@ Contract for all report routes in `routes/reports.php` (group prefix `report/`, 
 | # | Method | URI | Route name | Permission | Controller action | Output |
 |---|---|---|---|---|---|---|
 | 1 | GET | `report/index` | `report.index` | `reports-view` | `index` | Blade screen |
-| 2 | GET | `report/students-export` | `report.students.export` | `reports-export` | `ExportStudents` | PDF inline |
-| 3 | POST | `report/exception-fee` | `report.exception.fee` | `reports-export` | `exception_fee` | PDF inline |
+| 2 | GET | `report/students-export` | `report.export-student` | `reports-export` | `ExportStudents` | PDF inline |
+| 3 | POST | `report/exception-fee` | `report.exception-fee` | `reports-export` | `exception_fee` | PDF inline |
 | 4 | POST | `report/stock` | `report.stock` | `reports-export` `[add]` | `stock_product` | PDF inline |
-| 5 | POST | `report/book-sheet-stock` | `report.book.sheet.stock` | `reports-export` `[add]` | `book_sheet_stock` | PDF inline |
-| 6 | POST | `report/clothe-stock` | `report.clothe.stock` | `reports-export` `[add]` | `clothe_stock` | PDF inline |
-| 7 | GET | `report/stocks-product` | `report.stocks.product` | `reports-export` `[add]` | `StockProducts` | PDF inline |
-| 8 | GET | `report/books-sheets` | `report.books.sheets` | `reports-export` `[add]` | `books_sheets` | PDF inline |
-| 9 | GET | `report/clothes-stock` | `report.clothes.stocks` | `reports-export` `[add]` | `clothes_stocks` | PDF inline |
-| 10 | POST | `report/payment-status` | `report.payment.status` | `reports-export` `[add]` | `payment_status` | PDF inline |
-| 11 | POST | `report/fees-invoices` | `report.fees.invoices` | `reports-export` `[add]` | `fees_invoices` | PDF inline |
+| 5 | POST | `report/book-sheet-stock` | `report.book-sheet-stock` | `reports-export` `[add]` | `book_sheet_stock` | PDF inline |
+| 6 | POST | `report/clothe-stock` | `report.clothes-stock` | `reports-export` `[add]` | `clothe_stock` | PDF inline |
+| 7 | GET | `report/stocks-product` | `report.stock-product` | `reports-export` `[add]` | `StockProducts` | PDF inline |
+| 8 | GET | `report/books-sheets` | `report.books-sheets` | `reports-export` `[add]` | `books_sheets` | PDF inline |
+| 9 | GET | `report/clothes-stock` | `report.clothes-stocks` | `reports-export` `[add]` | `clothes_stocks` | PDF inline |
+| 10 | POST | `report/payment-status` | `report.payment-status` | `reports-export` `[add]` | `payment_status` | PDF inline |
+| 11 | POST | `report/fees-invoices` | `report.fees-invoices` | `reports-export` `[add]` | `fees_invoices` | PDF inline |
 | 12 | POST | `report/payments` | `report.payments` | `reports-export` `[add]` | `payments` | PDF inline |
-| 13 | POST | `report/payment-parts` | `report.payment.parts` | `reports-export` `[add]` | `payment_parts` | PDF inline |
+| 13 | POST | `report/payment-parts` | `report.payment-parts` | `reports-export` `[add]` | `payment_parts` | PDF inline |
 | 14 | POST | `report/credit` | `report.credit` | `reports-export` `[add]` | `credit` | PDF inline |
-| 15 | GET | `report/school-fees` | `report.school.fees` | `reports-export` `[add]` | `school_fees` | PDF inline |
-| 16 | POST | `report/final-year` | `report.final.year` | `reports-export` `[add]` | `final_year` | PDF inline |
-| 17 | POST | `report/student-tammen` | `report.student.tameen` | `reports-export` `[add]` | `student_tameen` | PDF inline |
-| 18 | POST | `report/student-report/{type}` | `report.student` | `reports-export` `[add]` | `student_report` | PDF inline |
+| 15 | GET | `report/school-fees` | `report.school-fees` | `reports-export` `[add]` | `school_fees` | PDF inline |
+| 16 | POST | `report/final-year` | `report.final-year` | `reports-export` `[add]` | `final_year` | HTML preview (owner-approved exception) |
+| 17 | POST | `report/student-tammen` | `report.student-tameen` | `reports-export` `[add]` | `student_tameen` | PDF inline |
+| 18 | POST | `report/student-report/{type}` | `report.student-report` | `reports-export` `[add]` | `student_report` | PDF inline |
 
 ## Input contracts
 
@@ -40,7 +40,7 @@ Per-action input/validation as defined in **data-model.md → Per-action input v
 
 | Outcome | Behavior |
 |---|---|
-| Success | `return $this->PDFExport->PrintPDF(view, type, data, orientation, heading)` — mPDF `Destination::INLINE` stream (D-06) |
+| Success | `return $this->PDFExport->PrintPDF(view, type, data, orientation, heading)` — mPDF `Destination::INLINE` stream (D-06); **exception**: `final_year` returns `view('backend.report.PDF.FinalYear', …)` as an in-browser HTML preview (owner decision 2026-09-29 — output column row 16) |
 | Validation failure | Redirect back with errors (`FormRequest`) — standard UI flash |
 | No data (empty result / no active academic year / no matching item) | Redirect back with existing "no data" flash — never a 500 (D-04) |
 | Unknown stock item / unknown report type | `abort(404)` (D-04) |

@@ -13,7 +13,9 @@ use App\Models\SchoolFee;
 use App\Models\Student;
 use App\Models\StudentAccount;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class FinancialReportService
 {
@@ -44,8 +46,8 @@ class FinancialReportService
     public function getFinalYearData($request): array
     {
         $year = $this->reportService->activeAcademicYear();
-        $gradeId = $this->filterId($request, 'grade');
-        $classroomId = $this->filterId($request, 'classroom');
+        $gradeIds = $this->filterIds($request, 'grade');
+        $classroomIds = $this->filterIds($request, 'classroom');
 
         $data = [
             'Students_query' => Student::query()
@@ -65,20 +67,20 @@ class FinancialReportService
         ];
 
         $studentsQuery = $data['Students_query'];
-        if ($gradeId !== null) {
-            $studentsQuery->where('grade_id', $gradeId);
-            $data['grade'] = Grade::where('id', $gradeId)->get();
+        if ($gradeIds !== null) {
+            $studentsQuery->whereIn('grade_id', $gradeIds);
+            $data['grade'] = Grade::whereIn('id', $gradeIds)->get();
         }
-        if ($classroomId !== null) {
-            $studentsQuery->where('classroom_id', $classroomId);
-            $data['classroom'] = ClassRoom::where('id', $classroomId)->get();
+        if ($classroomIds !== null) {
+            $studentsQuery->whereIn('classroom_id', $classroomIds);
+            $data['classroom'] = ClassRoom::whereIn('id', $classroomIds)->get();
         }
 
         $grouped = (clone $studentsQuery)
             ->select(
                 'grade_id',
                 'classroom_id',
-                \DB::raw('count(*) as student_count'),
+                DB::raw('count(*) as student_count'),
             )
             ->with('grade:id,name', 'classroom:id,name')
             ->groupBy('grade_id', 'classroom_id')
@@ -94,17 +96,24 @@ class FinancialReportService
             ->map(fn ($g) => $g->sum('student_count'));
 
         if ($year !== null) {
-            $data['paid'] = FeeInvoice::where('academic_year_id', $year->id)
-                ->when($gradeId !== null, fn ($q) => $q->where('grade_id', $gradeId))
-                ->when($classroomId !== null, fn ($q) => $q->where('classroom_id', $classroomId))
-                ->where('status', Payment_Status::CLOSE->value)
-                ->withSum('schoolFee', 'amount')
-                ->get()
-                ->sum('school_fee_sum_amount');
+            // Single aggregate query instead of ->withSum()->get()->sum(),
+            // which hydrated every invoice just to add up a single number.
+            $schoolFeeTable = SchoolFee::query()->getModel()->getTable();
+
+            $data['paid'] = (float) FeeInvoice::query()
+                ->withoutGlobalScope(SoftDeletingScope::class)
+                ->leftJoin($schoolFeeTable, "{$schoolFeeTable}.id", '=', 'fee_invoices.school_fee_id')
+                ->where('fee_invoices.academic_year_id', $year->id)
+                ->when($gradeIds !== null, fn ($q) => $q->whereIn('fee_invoices.grade_id', $gradeIds))
+                ->when($classroomIds !== null, fn ($q) => $q->whereIn('fee_invoices.classroom_id', $classroomIds))
+                ->where('fee_invoices.status', Payment_Status::CLOSE->value)
+                ->whereNull('fee_invoices.deleted_at')
+                ->whereNull("{$schoolFeeTable}.deleted_at")
+                ->sum("{$schoolFeeTable}.amount");
 
             $data['school_fees'] = SchoolFee::where('academic_year_id', $year->id)
-                ->when($gradeId !== null, fn ($q) => $q->where('grade_id', $gradeId))
-                ->when($classroomId !== null, fn ($q) => $q->where('classroom_id', $classroomId))
+                ->when($gradeIds !== null, fn ($q) => $q->whereIn('grade_id', $gradeIds))
+                ->when($classroomIds !== null, fn ($q) => $q->whereIn('classroom_id', $classroomIds))
                 ->get();
 
             $data['students_accounts_query'] = StudentAccount::where(
@@ -112,8 +121,8 @@ class FinancialReportService
                 $year->id,
             )
                 ->where('type', Payment_Type::PAYMENT->value)
-                ->when($gradeId !== null, fn ($q) => $q->where('grade_id', $gradeId))
-                ->when($classroomId !== null, fn ($q) => $q->where('classroom_id', $classroomId))
+                ->when($gradeIds !== null, fn ($q) => $q->whereIn('grade_id', $gradeIds))
+                ->when($classroomIds !== null, fn ($q) => $q->whereIn('classroom_id', $classroomIds))
                 ->with(
                     'grade:id,name',
                     'classroom:id,name',
@@ -133,8 +142,8 @@ class FinancialReportService
                 'academic_year_id',
                 $year->id,
             )
-                ->when($gradeId !== null, fn ($q) => $q->where('grade_id', $gradeId))
-                ->when($classroomId !== null, fn ($q) => $q->where('class_id', $classroomId))
+                ->when($gradeIds !== null, fn ($q) => $q->whereIn('grade_id', $gradeIds))
+                ->when($classroomIds !== null, fn ($q) => $q->whereIn('class_id', $classroomIds))
                 ->with('school_fee', 'classroom')
                 ->get()
                 ->groupBy('classroom.name');
@@ -144,64 +153,27 @@ class FinancialReportService
     }
 
     /**
-     * Normalize a nullable report filter input: "0"/absent → null (no clause).
+     * Normalize a nullable multi-select report filter.
+     *
+     * Accepts a single id or a list of ids (multi-selects post `grade[]`) and
+     * drops the "0" sentinel that the "All" option sends, so the caller can
+     * treat "no real selection" and "no filter" as the same thing.
+     *
+     * @return list<int>|null Null when no real id was selected.
      */
-    private function filterId($request, string $key): ?int
+    private function filterIds($request, string $key): ?array
     {
         $value = $request->input($key);
 
-        if ($value === null || $value === '' || (int) $value === 0) {
+        if ($value === null || $value === '' || $value === []) {
             return null;
         }
 
-        return (int) $value;
-    }
+        $ids = array_values(array_filter(
+            array_map('intval', (array) $value),
+            fn (int $id): bool => $id > 0,
+        ));
 
-    /**
-     * @return array{
-     *   student: string,
-     *   total: float,
-     *   paid: float,
-     *   remaining: float,
-     *   status: 'paid'|'partial'|'unpaid',
-     * }[]
-     */
-    public function getPaymentStatusReport(
-        int $schoolId,
-        int $academicYearId,
-    ): array {
-        $students = Student::where('school_id', $schoolId)
-            ->where('acadmiecyear_id', $academicYearId)
-            ->with([
-                'fee_invoices' => function ($query) {
-                    $query->select('id', 'student_id', 'status', 'school_fee_id')
-                        ->with('schoolFee:id,amount');
-                },
-            ])
-            ->get(['id', 'name', 'grade_id']);
-
-        return $students
-            ->map(function ($student) {
-                $totalInvoice = $student->fee_invoices->sum(
-                    fn ($invoice) => $invoice->schoolFee?->amount ?? 0,
-                );
-                $paidAmount = $student->fee_invoices
-                    ->where('status', Payment_Status::CLOSE->value)
-                    ->sum(fn ($invoice) => $invoice->schoolFee?->amount ?? 0);
-                $remaining = $totalInvoice - $paidAmount;
-
-                return [
-                    'student' => $student->fullName(),
-                    'total' => $totalInvoice,
-                    'paid' => $paidAmount,
-                    'remaining' => $remaining,
-                    'status' => $remaining <= 0
-                        ? 'paid'
-                        : ($paidAmount > 0
-                            ? 'partial'
-                            : 'unpaid'),
-                ];
-            })
-            ->toArray();
+        return $ids === [] ? null : $ids;
     }
 }

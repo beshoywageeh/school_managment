@@ -12,7 +12,7 @@ use App\Models\PaymentParts;
 use App\Models\ReceiptPayment;
 use App\Models\SchoolFee;
 use App\Models\Student;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 class FinancialReportsTest extends ReportTestCase
 {
@@ -68,11 +68,10 @@ class FinancialReportsTest extends ReportTestCase
         $fx = $this->financialFixture($school);
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data, $orientation) use ($fx) {
+            ->withArgs(function ($view, $data, $orientation) use ($fx) {
                 return $view === 'backend.report.PDF.credit'
-                    && $type === 'stream'
                     && $orientation === 'P'
                     && is_array($data)
                     && array_key_exists('credit', $data)
@@ -90,7 +89,7 @@ class FinancialReportsTest extends ReportTestCase
         $school = $this->school();
         $this->actingAsReportUser($school);
 
-        $this->mockPdfExport()->shouldNotReceive('PrintPDF');
+        $this->mockPdfExport()->shouldNotReceive('printPdf');
 
         $this->post(route('report.credit'), ['acc_year' => 0])
             ->assertRedirect()
@@ -104,11 +103,10 @@ class FinancialReportsTest extends ReportTestCase
         $fx = $this->financialFixture($school);
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($fx) {
+            ->withArgs(function ($view, $data) use ($fx) {
                 return $view === 'backend.report.PDF.school_fees'
-                    && $type === 'stream'
                     && is_array($data)
                     && array_key_exists('school_fees', $data)
                     && $data['school_fees'] instanceof Collection
@@ -126,7 +124,7 @@ class FinancialReportsTest extends ReportTestCase
         $school = $this->school();
         $this->actingAsReportUser($school);
 
-        $this->mockPdfExport()->shouldNotReceive('PrintPDF');
+        $this->mockPdfExport()->shouldNotReceive('printPdf');
 
         $this->get(route('report.school-fees'))
             ->assertRedirect()
@@ -168,9 +166,9 @@ class FinancialReportsTest extends ReportTestCase
         ]);
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($inside, $onEnd) {
+            ->withArgs(function ($view, $data) use ($inside, $onEnd) {
                 return $view === 'backend.report.PDF.payments'
                     && is_array($data)
                     && array_key_exists('payment', $data)
@@ -190,7 +188,7 @@ class FinancialReportsTest extends ReportTestCase
         $school = $this->school();
         $this->actingAsReportUser($school);
 
-        $this->mockPdfExport()->shouldNotReceive('PrintPDF');
+        $this->mockPdfExport()->shouldNotReceive('printPdf');
 
         $this->post(route('report.payments'), [
             'from' => now()->subDays(10)->toDateString(),
@@ -209,9 +207,9 @@ class FinancialReportsTest extends ReportTestCase
         $paid = $this->createPart($fx, 'paid');
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($unpaid, $notPaid, $paid) {
+            ->withArgs(function ($view, $data) use ($unpaid, $notPaid, $paid) {
                 $ids = $data['parts']->pluck('id')->all();
 
                 return $view === 'backend.report.PDF.payments_part'
@@ -239,9 +237,9 @@ class FinancialReportsTest extends ReportTestCase
         $paid = $this->createPart($fx, 'paid');
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($unpaid, $paid) {
+            ->withArgs(function ($view, $data) use ($unpaid, $paid) {
                 $ids = $data['parts']->pluck('id')->all();
 
                 return $view === 'backend.report.PDF.payments_part'
@@ -263,9 +261,9 @@ class FinancialReportsTest extends ReportTestCase
         $fx = $this->financialFixture($school);
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($fx) {
+            ->withArgs(function ($view, $data) use ($fx) {
                 return $view === 'backend.report.PDF.payment_status_view'
                     && is_array($data)
                     && array_key_exists('exp', $data)
@@ -290,9 +288,9 @@ class FinancialReportsTest extends ReportTestCase
         $paid = $this->invoiceWithStatus($fx, 'paid');
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($unpaid, $notPaid, $paid) {
+            ->withArgs(function ($view, $data) use ($unpaid, $notPaid, $paid) {
                 $ids = $data['exp']->flatten()->pluck('id')->all();
 
                 return $view === 'backend.report.PDF.payment_status_view'
@@ -311,7 +309,7 @@ class FinancialReportsTest extends ReportTestCase
         $school = $this->school();
         $this->actingAsReportUser($school);
 
-        $this->mockPdfExport()->shouldNotReceive('PrintPDF');
+        $this->mockPdfExport()->shouldNotReceive('printPdf');
 
         $this->post(route('report.payment-status'), ['payment_status' => 'all'])
             ->assertRedirect()
@@ -328,9 +326,9 @@ class FinancialReportsTest extends ReportTestCase
         $paid = $this->invoiceWithStatus($fx, 'paid');
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($fx, $paid) {
+            ->withArgs(function ($view, $data) use ($fx, $paid) {
                 $ids = $data['all']->flatten()->flatten()->pluck('id')->all();
 
                 return $view === 'backend.report.PDF.fee_invoices'
@@ -376,9 +374,9 @@ class FinancialReportsTest extends ReportTestCase
         ]);
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($feeOnEnd) {
+            ->withArgs(function ($view, $data) use ($feeOnEnd) {
                 return $view === 'backend.report.PDF.exception_fee'
                     && is_array($data)
                     && array_key_exists('exception_list', $data)
@@ -397,7 +395,7 @@ class FinancialReportsTest extends ReportTestCase
         $school = $this->school();
         $this->actingAsReportUser($school);
 
-        $this->mockPdfExport()->shouldNotReceive('PrintPDF');
+        $this->mockPdfExport()->shouldNotReceive('printPdf');
 
         $this->post(route('report.exception-fee'), ['start_date' => now()->toDateString()])
             ->assertSessionHasErrors('end_date');

@@ -39,11 +39,10 @@ class InventoryReportsTest extends ReportTestCase
         $fx = $this->inventoryFixture($school, 'stock');
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($fx) {
+            ->withArgs(function ($view, $data) use ($fx) {
                 return $view === 'backend.report.PDF.stock_product_view'
-                    && $type === 'stream'
                     && isset($data['stock'], $data['stocks'])
                     && $data['stock']->id === $fx['item']->id
                     && isset($data['stocks'][$fx['order']->id])
@@ -62,7 +61,7 @@ class InventoryReportsTest extends ReportTestCase
         $fx = $this->inventoryFixture($school, 'clothe');
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
             ->withArgs(function ($view, $data) use ($fx) {
                 return $view === 'backend.report.PDF.clothe_stock'
@@ -82,7 +81,7 @@ class InventoryReportsTest extends ReportTestCase
         $fx = $this->inventoryFixture($school, 'book');
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
             ->withArgs(function ($view, $data) use ($fx) {
                 return $view === 'backend.report.PDF.book_sheet_stock'
@@ -124,7 +123,7 @@ class InventoryReportsTest extends ReportTestCase
         $this->inventoryFixture($school, 'stock');
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
             ->withArgs(function ($view, $data) {
                 return $view === 'backend.report.PDF.stock_product'
@@ -143,13 +142,13 @@ class InventoryReportsTest extends ReportTestCase
         $this->inventoryFixture($school, 'stock');
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
             ->withArgs(function ($view, $data) {
                 return $view === 'backend.report.PDF.clothes_stocks'
                     && isset($data['clothes'])
                     && $data['clothes']->isNotEmpty()
-                    && $data['clothes']->every(fn ($item) => $item->type === 'clothe');
+                    && $data['clothes']->every(fn ($item) => $item->type->value === 'clothe');
             });
 
         $this->get(route('report.clothes-stocks'))->assertOk();
@@ -163,12 +162,12 @@ class InventoryReportsTest extends ReportTestCase
         $this->inventoryFixture($school, 'clothe');
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
             ->withArgs(function ($view, $data) {
                 return $view === 'backend.report.PDF.books_sheets_stocks'
                     && $data->isNotEmpty()
-                    && $data->every(fn ($item) => $item->type === 'book');
+                    && $data->every(fn ($item) => $item->type->value === 'book');
             });
 
         $this->get(route('report.books-sheets'))->assertOk();

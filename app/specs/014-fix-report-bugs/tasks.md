@@ -226,3 +226,16 @@ With multiple developers (file-conflict note above applies):
 - Stop at any checkpoint to validate story independently
 - Avoid: vague tasks, same-file conflicts (controller tasks within a story are sequential), cross-story dependencies that break independence
 - Data-model invariants (research D-01…D-09) are encoded in the tests above — do not merge a story whose tests are RED
+
+---
+
+## Phase 7: Convergence
+
+**Origin**: `/speckit.converge` run on 2026-09-29 after `/speckit.implement`. All implementation tasks (T004–T039) are checked; the below captures the remaining verification work and the artifact/code reconciliation gaps the code review surfaced.
+
+- [X] T043 [P] Run the FULL test suite to green evidence and record the result — `php artisan test --compact` (constitution V "run the full suite before marking a feature complete") after the final `database/factories/GradeFactory.php`/`SchoolFeeFactory.php` and `app/Services/Reports/PDFExportService.php` changes (sub-suites verified: 49 report tests, 7 GradeCrudTest, 3 SeederCoherenceTest); fix any residual failure (missing)
+- [X] T044 [P] Run the per-story verification suites for completeness of T018/T026/T038 — `php artisan test --compact tests/Feature/Reports/FinancialReportsTest.php`, `tests/Feature/Reports/InventoryReportsTest.php`, and `tests/Feature/Reports/StudentReportsTest.php tests/Feature/Reports/FinalYearReportTest.php tests/Feature/Reports/ReportAuthorizationTest.php`; note that `Contract verification (T040)` must compare by URI + permission, not by dotted route names (missing)
+- [X] T045 Amend `app/specs/014-fix-report-bugs/contracts/report-endpoints.md` row 16 (`final_year` output) and `app/specs/014-fix-report-bugs/spec.md` Assumptions + SC-001 wording to record the owner-approved HTML-view exception — implement now returns `view('backend.report.PDF.FinalYear')` from `final_year()`, never a PDF, and the contract must not keep asserting PDF (contradicts)
+- [X] T046 Document the `withoutGlobalScope(SoftDeletingScope::class)` exemption in `app/specs/014-fix-report-bugs/plan.md` Complexity Tracking (or the review doc) — `FinancialReportService::getFinalYearData()` removes only the soft-delete scope (school boundary intact, explicit `whereNull('deleted_at')` guards) but plan.md forbids `withoutGlobalScopes`; a constitution-compliant justification is required (contradicts)
+- [X] T047 [P] Align `app/specs/014-fix-report-bugs/contracts/report-endpoints.md` Route-name column with the implemented hyphen route names (`report.export-student`, `report.stock-product`, `report.book-sheet-stock`, `report.payment-status`, `report.student-tameen`, etc.) so the T040 route-list diff is unambiguous (partial)
+- [ ] T048 [P] Run the DB-dependent verification once the MySQL `db` host is reachable — quickstart.md §2 tinker checks against real data (D-09 `students.tameen` value space; `fee_invoices`/`payment_parts` status value spaces; active-year resolution) and quickstart.md §5 SC-005 perf check (students export for ~5,000 students < 10 s); adjust the D-09 `where('tameen', 'active')` mapping if real data differs (missing)

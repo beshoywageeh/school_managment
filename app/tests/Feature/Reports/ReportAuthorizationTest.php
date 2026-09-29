@@ -102,7 +102,7 @@ class ReportAuthorizationTest extends ReportTestCase
     public function test_export_students_accessible_with_both_permissions(): void
     {
         $school = $this->school();
-        $adminId = auth()->id();
+        $adminId = $this->actingAsReportUser($school, ['reports-view', 'reports-export'])->id;
         $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => $adminId]);
         $classroom = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id, 'user_id' => $adminId]);
         $parent = MyParent::factory()->create(['school_id' => $school->id]);
@@ -115,10 +115,43 @@ class ReportAuthorizationTest extends ReportTestCase
             'acadmiecyear_id' => $year->id,
             'user_id' => $adminId,
         ]);
-        $this->actingAsReportUser($school, ['reports-view', 'reports-export']);
 
-        $this->mockPdfExport()->shouldReceive('PrintPDF')->once();
+        $this->mockPdfExport()->shouldReceive('printPdf')->andReturn(response('mock-pdf'))->once()->andReturn(response('mock-pdf'));
 
         $this->get(route('report.export-student'))->assertOk();
+    }
+
+    public function test_reports_manage_grants_both_view_and_export(): void
+    {
+        $school = $this->school();
+        $adminId = $this->actingAsReportUser($school, ['reports-manage'])->id;
+        $grade = Grade::factory()->create(['school_id' => $school->id, 'user_id' => $adminId]);
+        $classroom = ClassRoom::factory()->create(['grade_id' => $grade->id, 'school_id' => $school->id, 'user_id' => $adminId]);
+        $parent = MyParent::factory()->create(['school_id' => $school->id]);
+        $year = $this->activeAcademicYear($school);
+        Student::factory()->create([
+            'school_id' => $school->id,
+            'grade_id' => $grade->id,
+            'classroom_id' => $classroom->id,
+            'parent_id' => $parent->id,
+            'acadmiecyear_id' => $year->id,
+            'user_id' => $adminId,
+        ]);
+
+        $this->mockPdfExport()->shouldReceive('printPdf')->andReturn(response('mock-pdf'))->once()->andReturn(response('mock-pdf'));
+
+        $this->get(route('report.index'))->assertOk();
+        $this->get(route('report.export-student'))->assertOk();
+    }
+
+    public function test_reports_view_does_not_grant_export(): void
+    {
+        $school = $this->school();
+        $this->actingAsReportUser($school, ['reports-view']);
+
+        $this->mockPdfExport()->shouldNotReceive('printPdf');
+
+        $this->get(route('report.index'))->assertOk();
+        $this->get(route('report.export-student'))->assertForbidden();
     }
 }

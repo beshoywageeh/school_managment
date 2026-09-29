@@ -17,6 +17,7 @@ class PaymentStatusReportRequest extends FormRequest
         return [
             'payment_status' => ['required', 'string', 'in:all,unpaid,paid'],
             'grade' => ['nullable', 'integer'],
+            'classroom' => ['nullable', 'integer'],
         ];
     }
 
@@ -26,6 +27,7 @@ class PaymentStatusReportRequest extends FormRequest
             'payment_status.required' => trans('validation.required', ['attribute' => trans('report.payment_status')]),
             'payment_status.in' => trans('validation.in', ['attribute' => trans('report.payment_status')]),
             'grade.integer' => trans('validation.integer', ['attribute' => trans('general.grade')]),
+            'classroom.integer' => trans('validation.integer', ['attribute' => trans('report.classroom')]),
         ];
     }
 }

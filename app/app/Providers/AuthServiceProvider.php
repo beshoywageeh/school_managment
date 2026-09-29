@@ -16,9 +16,11 @@ use App\Policies\FeeInvoicePolicy;
 use App\Policies\GradePolicy;
 use App\Policies\InventoryItemPolicy;
 use App\Policies\InventoryOrderPolicy;
+use App\Policies\ReportPolicy;
 use App\Policies\StudentPolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -40,9 +42,16 @@ class AuthServiceProvider extends ServiceProvider
 
     /**
      * Register any authentication / authorization services.
+     *
+     * Report abilities are delegated to {@see ReportPolicy} instead of relying
+     * on the raw permission name. Spatie registers a `Gate::before` hook that
+     * grants any ability the user holds directly, so these definitions act as
+     * the fallback: they run when the before-hook declines, which is what makes
+     * the `reports-manage` bypass in the policy reachable.
      */
     public function boot(): void
     {
-        //
+        Gate::define('reports-view', [ReportPolicy::class, 'view']);
+        Gate::define('reports-export', [ReportPolicy::class, 'export']);
     }
 }

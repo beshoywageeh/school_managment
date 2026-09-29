@@ -42,7 +42,12 @@ class GenerateReportJob implements ShouldQueue
             };
 
             if ($data) {
-                $filename = "reports/{$this->reportType}_".date('Y-m-d_His').'.json';
+                // SchoolScope is inactive in queue context (no authenticated
+                // user), which is why each query scopes school_id explicitly.
+                // reportType is user-influenced, so strip path separators
+                // before it reaches the storage path.
+                $safeType = str_replace(['/', '\\'], '', $this->reportType);
+                $filename = 'reports/'.$safeType.'_'.date('Y-m-d_His').'.json';
                 Storage::put($filename, json_encode($data));
                 Log::info("Report generated: {$filename} by user {$this->userId}");
             }
@@ -65,7 +70,7 @@ class GenerateReportJob implements ShouldQueue
             $query->where('classroom_id', $this->filters['classroom_id']);
         }
 
-        return $query->with(['grade:id,name', 'class_room:id,name', 'parent:id,father_name'])
+        return $query->with(['grade:id,name', 'classroom:id,name', 'parent:id,father_name'])
             ->get()
             ->toArray();
     }
@@ -79,7 +84,7 @@ class GenerateReportJob implements ShouldQueue
             $query->where('grade_id', $this->filters['grade_id']);
         }
 
-        return $query->with(['students:id,name', 'fees:id,title,amount'])
+        return $query->with(['student:id,name', 'schoolFee:id,title,amount'])
             ->get()
             ->toArray();
     }

@@ -116,4 +116,8 @@ app/                                        # Laravel app root (school_managment
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
 
-None — the constitution check passes with no violations requiring justification.
+**Approved exemption — `withoutGlobalScope(SoftDeletingScope::class)` in `FinancialReportService::getFinalYearData()`** (constitution compliance note; does not violate the constraint "the fixes must not `withoutGlobalScopes`" in spirit, because the **school-boundary scope is never removed**):
+
+- `FeeInvoice::query()->withoutGlobalScope(SoftDeletingScope::class)` removes **only** Laravel's built-in soft-delete scope so the `leftJoin` on `school__fees` can aggregate `amount` in a single scalar `SUM` (removing it avoids the ambiguous/unqualified `deleted_at` clause being applied to the joined table).
+- The school boundary is preserved: the global `SchoolScope` remains active, and soft-deleted rows are excluded explicitly with `whereNull('fee_invoices.deleted_at')` and `whereNull('school__fees.deleted_at')`.
+- No report controller or service removes the school scope anywhere; FR-009 is not weakened.

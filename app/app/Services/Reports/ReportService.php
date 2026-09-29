@@ -5,8 +5,6 @@ namespace App\Services\Reports;
 use App\Enums\Student_Status;
 use App\Models\AcademicYear;
 use App\Models\ClassRoom;
-use App\Models\FeeInvoice;
-use App\Models\Grade;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -57,8 +55,7 @@ class ReportService
                     'religion',
                     'birth_date',
                     'birth_at_begin',
-                ])
-                ->chunk(100);
+                ]);
 
             $data['classroom'] = ClassRoom::query()
                 ->where('id', $request->classroom_id)
@@ -73,61 +70,6 @@ class ReportService
         }
 
         return null;
-    }
-
-    public function getStudentReportByGrade(
-        int $gradeId,
-        int $academicYearId,
-    ): Collection {
-        return Student::where('grade_id', $gradeId)
-            ->where('acadmiecyear_id', $academicYearId)
-            ->with(['parent:id,father_name', 'classroom:id,name'])
-            ->get(['id', 'name', 'gender', 'classroom_id', 'parent_id']);
-    }
-
-    public function getStudentReportByClass(
-        int $classId,
-        int $academicYearId,
-    ): Collection {
-        return Student::where('classroom_id', $classId)
-            ->where('acadmiecyear_id', $academicYearId)
-            ->with(['parent:id,father_name'])
-            ->get(['id', 'name', 'gender']);
-    }
-
-    public function getFeesInvoicesReport(
-        int $schoolId,
-        ?int $gradeId = null,
-        ?int $academicYearId = null,
-    ): Collection {
-        $query = FeeInvoice::where('school_id', $schoolId)->with([
-            'students:id,name',
-            'fees:id,title,amount',
-        ]);
-
-        if ($gradeId) {
-            $query->where('grade_id', $gradeId);
-        }
-
-        if ($academicYearId) {
-            $query->where('academic_year_id', $academicYearId);
-        }
-
-        return $query->get();
-    }
-
-    public function getGradesWithCounts(int $schoolId): Collection
-    {
-        return Grade::where('school_id', $schoolId)
-            ->withCount(['students', 'class_rooms'])
-            ->get(['id', 'name']);
-    }
-
-    public function getClassRoomsWithCounts(int $gradeId): Collection
-    {
-        return ClassRoom::where('grade_id', $gradeId)
-            ->withCount('students')
-            ->get(['id', 'name', 'grade_id']);
     }
 
     public function getAcademicYearsList(): Collection

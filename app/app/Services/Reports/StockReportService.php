@@ -4,7 +4,6 @@ namespace App\Services\Reports;
 
 use App\Models\Inventory\InventoryItem;
 use App\Models\Inventory\InventoryOrderItem;
-use Illuminate\Database\Eloquent\Collection;
 
 class StockReportService
 {
@@ -32,14 +31,6 @@ class StockReportService
             'stock' => $stock,
             'totals' => $this->calculateTotals($stock),
         ];
-    }
-
-    public function getStockItemsByType(int $schoolId, string $type): Collection
-    {
-        return InventoryItem::where('school_id', $schoolId)
-            ->where('type', $type)
-            ->with('orders', 'classroom', 'grade')
-            ->get();
     }
 
     /**

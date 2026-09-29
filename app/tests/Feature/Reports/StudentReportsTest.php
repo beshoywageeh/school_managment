@@ -43,11 +43,10 @@ class StudentReportsTest extends ReportTestCase
         $fx = $this->studentFixture($school);
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($fx) {
+            ->withArgs(function ($view, $data) use ($fx) {
                 return $view === 'backend.report.PDF.students'
-                    && $type === 'stream'
                     && $data instanceof Collection
                     && $data->has($fx['grade']->name)
                     && $data->first()->pluck('id')->contains($fx['student']->id);
@@ -63,7 +62,7 @@ class StudentReportsTest extends ReportTestCase
         $fx = $this->studentFixture($school);
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
             ->withArgs(function ($view, $data) use ($fx) {
                 return $view === 'backend.report.PDF.students'
@@ -94,11 +93,10 @@ class StudentReportsTest extends ReportTestCase
         $fx = $this->studentFixture($school);
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
-            ->withArgs(function ($view, $type, $data) use ($fx) {
+            ->withArgs(function ($view, $data) use ($fx) {
                 return $view === 'backend.report.PDF.41'
-                    && $type === 'stream'
                     && isset($data['students'], $data['classroom'], $data['acc'])
                     && $data['students']->pluck('id')->contains($fx['student']->id)
                     && $data['classroom']->id === $fx['classroom']->id;
@@ -136,7 +134,7 @@ class StudentReportsTest extends ReportTestCase
         $fx = $this->studentFixture($school);
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
             ->withArgs(function ($view, $data) use ($fx) {
                 return $view === 'backend.report.PDF.student_tameen_1'
@@ -158,7 +156,7 @@ class StudentReportsTest extends ReportTestCase
         $fx = $this->studentFixture($school);
 
         $this->mockPdfExport()
-            ->shouldReceive('PrintPDF')
+            ->shouldReceive('printPdf')->andReturn(response('mock-pdf'))
             ->once()
             ->withArgs(fn ($view) => $view === 'backend.report.PDF.student_tameen_2');
 

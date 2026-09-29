@@ -90,7 +90,7 @@ class GradesController extends Controller
                 ->with(['class_rooms', 'class_rooms.students'])
                 ->withCount(['class_rooms', 'students'])
                 ->first();
-            $pdf = $this->PDFExportService->PrintPDF('backend.Grades.report', 'stream', $data, 'P', $data['school']);
+            $pdf = $this->PDFExportService->printPdf('backend.Grades.report', $data, 'P', $data['school']);
 
             return $pdf;
         } catch (\Exception $e) {

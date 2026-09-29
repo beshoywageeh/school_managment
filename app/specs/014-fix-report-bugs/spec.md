@@ -113,7 +113,7 @@ As a school admin, I want the student-facing reports — students export, studen
 
 ### Measurable Outcomes
 
-- **SC-001**: 100% of report actions return either a valid PDF or a clear "no data / not found" message; across all report types and every tested filter combination, no report action produces a server error.
+- **SC-001**: 100% of report actions return either a valid PDF, the approved HTML preview for the final-year report, or a clear "no data / not found" message; across all report types and every tested filter combination, no report action produces a server error.
 - **SC-002**: 100% of populated reports display populated group headings (academic year, grade, classroom) — no report renders with blank or mislabeled section headings.
 - **SC-003**: Filter correctness is 100% — for every tested filter combination, the returned records match exactly the selected date range, grade, classroom, and payment status.
 - **SC-004**: In 100% of edge cases (no matching records, no active academic year, invalid item id), the user receives a clear message rather than a blank page or an error.
@@ -124,7 +124,7 @@ As a school admin, I want the student-facing reports — students export, studen
 
 - Full remediation of all defects found in the report-module analysis (critical, medium, and minor) is in scope; this is a fixes-only effort, with no new reports added.
 - Existing report screens, routes, and PDF views are retained and corrected in place; the section/column structure of each report is not redesigned.
-- PDF remains the output format for all report exports, streamed for viewing in the browser.
+- PDF remains the output format for all report exports, streamed for viewing in the browser — with **one approved exception**: the final-year report renders as an in-browser HTML preview (owner decision, 2026-09-29); all other report exports stream a PDF.
 - The existing school-boundary scoping must be preserved and never weakened by the fixes.
 - The correct academic year for a report is the one flagged active in the system settings — using the same convention as the dashboard and inventory screens.
 - The intended grouping of each report (for example listing students grouped by grade) is preserved; the fixes only make it render accurately.
