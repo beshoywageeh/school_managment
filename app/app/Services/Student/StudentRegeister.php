@@ -6,13 +6,14 @@ use App\Http\Traits\LogsActivity;
 use App\Models\MyParent;
 use App\Models\School;
 use App\Models\Student;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Services\Student\AgeCalculationService;
 
 class StudentRegeister
 {
     use LogsActivity;
-
+    public function __construct(public AgeCalculationService $ageCalculation) {}
     public function StudentRegeister($request, School $school)
     {
         $parent = MyParent::find($request['parent_id']);
@@ -39,7 +40,7 @@ class StudentRegeister
             'national_id' => $request['national_id'],
             'student_status' => $request['student_status'],
             'religion' => $parent->religion ?? $request['religion'],
-            'birth_at_begin' => new AgeCalculationService()->calculateAgeAsOfOctoberFirst(
+            'birth_at_begin' => $this->ageCalculation->calculateAgeAsOfOctoberFirst(
                 $request['birth_date'],
             ),
             'acadmiecyear_id' => $request['academic_year'],
