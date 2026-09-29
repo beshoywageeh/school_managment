@@ -22,8 +22,8 @@ class SchoolFeeFactory extends Factory
     public function definition(): array
     {
         return [
-            'grade_id' => Grade::all('id')->random(),
-            'classroom_id' => ClassRoom::all('id')->random(),
+            'grade_id' => Grade::inRandomOrder()->value('id'),
+            'classroom_id' => ClassRoom::inRandomOrder()->value('id'),
             'user_id' => '1',
             'description' => $this->faker->words(1, true),
             'amount' => $this->faker->numberBetween('1000', '8000'),

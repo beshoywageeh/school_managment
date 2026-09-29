@@ -19,8 +19,8 @@
             <tr>
                 <td>{{ $loop->index + 1 }}</td>
                 <td>{{ $clothe->name }}</td>
-                <td>{{ $clothe->grade->name }}</td>
-                <td>{{ $clothe->classroom->name }}</td>
+                <td>{{ $clothe->grade?->name ?? ' - ' }}</td>
+                <td>{{ $clothe->classroom?->name ?? ' - ' }}</td>
                 <td>{{ $clothe->orders->sum('quantity_in') + $clothe->opening_qty - $clothe->orders->sum('quantity_out') }}
                 </td>
             </tr>

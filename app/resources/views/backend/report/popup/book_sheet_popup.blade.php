@@ -4,11 +4,11 @@
         <div class="space-y-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ trans('report.stock') }}</label>
-                <select name="stock_id" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all tom-select">
+                <select name="stock" class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all tom-select">
                     <option selected disabled>{{ trans('report.select_stock') }}</option>
                     @foreach ($books_sheets as $stock)
                         <option value="{{ $stock->id }}">
-                            {{ $stock->grade->name . ' - ' . $stock->classroom->name . ' - ' . $stock->name }}
+                            {{ $stock->grade?->name . ' - ' . $stock->classroom?->name . ' - ' . $stock->name }}
                         </option>
                     @endforeach
                 </select>

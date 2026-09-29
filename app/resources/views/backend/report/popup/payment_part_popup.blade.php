@@ -5,9 +5,9 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">{{ trans('general.from') }} - {{ trans('general.to') }}</label>
                 <div class="flex items-center gap-2">
-                    <input type="text" class="flex-1 rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" name="from" placeholder="{{ trans('general.from') }}">
+                    <input type="date" class="flex-1 rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" name="from">
                     <span class="text-gray-500">-</span>
-                    <input class="flex-1 rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" type="text" name="to" placeholder="{{ trans('general.to') }}">
+                    <input type="date" class="flex-1 rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" name="to">
                 </div>
             </div>
             <div>

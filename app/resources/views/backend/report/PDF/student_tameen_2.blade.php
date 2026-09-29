@@ -36,8 +36,8 @@
                         <td>{{ $date[2] }}</td>
                         <td>{{ $date[1] }}</td>
                         <td>{{ $date[0] }}</td>
-                        <td>{{ $student->gender->lang() }}</td>
-                        <td>{{ $student->parent->address }}</td>
+                        <td>{{ $student->gender?->lang() ?? ' - ' }}</td>
+                        <td>{{ $student->parent?->address ?? ' - ' }}</td>
                         <td></td>
                     </tr>
                 @empty

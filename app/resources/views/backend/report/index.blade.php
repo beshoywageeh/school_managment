@@ -38,7 +38,7 @@
                         'Name' => trans('report.stock_product'),
                         'Url' => route('report.stock-product'),
                         'type' => 'link',
-                        'can' => 'order-index',
+                        'can' => 'stocks-index',
                     ],
                     [
                         'Name' => trans('report.stock'),

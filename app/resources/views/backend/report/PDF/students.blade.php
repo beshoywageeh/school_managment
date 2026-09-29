@@ -42,16 +42,16 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $stud->fullName() }}</td>
-                        <td>{{ $stud->religion->lang() }}</td>
-                        <td>{{ $stud->student_status->lang() }}</td>
+                        <td>{{ $stud->religion?->lang() ?? ' - ' }}</td>
+                        <td>{{ $stud->student_status?->lang() ?? ' - ' }}</td>
                         <td>{{ $stud->national_id }}</td>
                         <td>{{ $stud->birth_date }}</td>
                         <td>{{ $age[0] ?? '-' }}</td>
                         <td>{{ $age[1] ?? '-' }}</td>
                         <td>{{ $age[2] ?? '-' }}</td>
-                        <td>{{ $stud->gender->lang() }}</td>
-                        <td>{{ optional($stud->parent)->father_name ?? '' }}</td>
-                        <td>{{ optional($stud->parent)->address ?? '' }}</td>
+                        <td>{{ $stud->gender?->lang() ?? ' - ' }}</td>
+                        <td>{{ $stud->parent?->father_name ?? '' }}</td>
+                        <td>{{ $stud->parent?->address ?? '' }}</td>
                     </tr>
                 @endforeach
             </tbody>

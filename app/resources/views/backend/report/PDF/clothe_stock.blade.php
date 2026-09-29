@@ -58,7 +58,7 @@
                 <th>{{ number_format($data['stock']->orders->sum('quantity_in') + $data['stock']->opening_qty, 2) }}
                 </th>
                 <th>{{ number_format($data['stock']->orders->sum('quantity_out'), 2) }}</th>
-                <th>{{ number_format($order['total'] + $data['stock']->opening_qty, 2) }}</th>
+                <th>{{ number_format($data['stock']->opening_qty + $data['stock']->orders->sum('quantity_in') - $data['stock']->orders->sum('quantity_out'), 2) }}</th>
             </tr>
         </tfoot>
     </table>

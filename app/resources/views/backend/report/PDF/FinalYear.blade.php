@@ -40,7 +40,7 @@
                 </td>
                 <td width="30%" class="school-logo">
                     @if ($school->image)
-                        <img src="{{ storage_path('app/attachments/schools/' . $school->slug . '/' . $school->image->filename) }}"
+                        <img src="{{ storage_path('app/attachments/schools/' . $school->slug . '/' . $school->image?->filename) }}"
                             style="height: 80px;" alt="Logo">
                     @else
                         <h2>{{ $school->name }}</h2>
@@ -55,7 +55,7 @@
                 <tr>
                     <th>{{ trans('report.general.count') }}</th>
                     @foreach ($Students_grouped as $grade_stat)
-                        <th> {{ trans('report.general.total') . ' ' . $grade_stat->classroom->name }}</th>
+                        <th> {{ trans('report.general.total') . ' ' . $grade_stat->classroom?->name . ' - ' . $grade_stat->grade?->name }}</th>
                     @endforeach
                 </tr>
             </thead>
@@ -88,7 +88,7 @@
                                     <tbody>
                                         <tr>
                                             <td>القسط الاول</td>
-                                            <td>{{ $data->count('debit') }}</td>
+                                            <td>{{ $data->count() }}</td>
                                             <td>{{ Number::currency($data->sum('debit'), config('school.currency'), 'AR') }}</td>
 
                                         </tr>
@@ -118,7 +118,7 @@
                             <tbody>
                                 <tr>
 
-                                    <td>{{ $data->count('amount') }}</td>
+                                    <td>{{ $data->count() }}</td>
                                     <td>{{ Number::currency($data->sum('amount'), config('school.currency'), 'AR') }}</td>
                                 </tr>
                         </table>

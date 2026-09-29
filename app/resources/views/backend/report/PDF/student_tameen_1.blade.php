@@ -26,7 +26,7 @@
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $student->fullName() }}</td>
                         <td>{{ $student->national_id }}</td>
-                        <td>{{ $student->parent->father_phone }}</td>
+                        <td>{{ $student->parent?->father_phone ?? ' - ' }}</td>
                         <td></td>
                         <td></td>
                         <td></td>
